@@ -55,6 +55,45 @@ This conversion is performed during the *cmake* process.
 
 This will generate the VM in *build/dist/*
 
+Debug in Visual Studio Code
+---------------------------
+Visual Studio Code (VS Code) offers integrated support for debugging tools.
+For using gdb (or lldb) in our project it is 1st recommended to download:
+-the extension for c/c++ in VS Code.
+-a debugger (gdb for example), optionnal add the debugger to your path variable
+
+Open your project as a workspace in VS Code.
+In the menu bar (top bar) choose Debug>>Add configuration.
+It will generate a .vscode folder in your workspace with a launch.json file.
+The content of the launch.json file is:
+{
+    "version": "0.2.0",
+    "configurations": [   
+        {
+            "name": "Name of your configuration", <<=(ex: Launch gdb)
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}\\build\\dist\\PharoConsole.exe", <<=generated to this path by default
+            "args": ["path/to/the/image/you/want/to/open"], <<=(ex: ${workspaceFolder}\\Pharo\\images\\TestImage\\TestImage.image)
+            "stopAtEntry": true, <<=to have a breakpoint at the start of the program
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false, <<= to use the internal console of VSCode
+            "MIMode": "gdb", <<= lldb if you want to use lldb
+            "miDebuggerPath": "path/to/your/debbuger", <<=(ex: .\\Git\\mingw64\\bin\\gdb.exe or lldb.exe)
+            "setupCommands": [
+                {
+                    "description": "Activer l'impression en mode Pretty pour gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        }
+    ]
+}
+See https://code.visualstudio.com/docs/cpp/launch-json-reference for more configuration.
+Save your file and choose start debugging (your configuration) :).
+
 Source Directory Structure
 --------------------------
 
