@@ -59,13 +59,16 @@ Debug in Visual Studio Code
 ---------------------------
 Visual Studio Code (VS Code) offers integrated support for debugging tools.
 For using gdb (or lldb) in our project it is 1st recommended to download:
+
 -the extension for c/c++ in VS Code.
 -a debugger (gdb for example), optionnal add the debugger to your path variable
 
-Open your project as a workspace in VS Code.
-In the menu bar (top bar) choose Debug>>Add configuration.
-It will generate a .vscode folder in your workspace with a launch.json file.
-The content of the launch.json file is:
+Steps: 
+
+-Open your project as a workspace in VS Code.
+-In the menu bar (top bar) choose Debug>>Add configuration.
+-It will generate a .vscode folder in your workspace with a launch.json file.
+-The content of the launch.json file is:
 ```{
     "version": "0.2.0",
     "configurations": [   
