@@ -66,7 +66,7 @@ Open your project as a workspace in VS Code.
 In the menu bar (top bar) choose Debug>>Add configuration.
 It will generate a .vscode folder in your workspace with a launch.json file.
 The content of the launch.json file is:
-{
+```{
     "version": "0.2.0",
     "configurations": [   
         {
@@ -91,6 +91,7 @@ The content of the launch.json file is:
         }
     ]
 }
+```
 See https://code.visualstudio.com/docs/cpp/launch-json-reference for more configuration.
 Save your file and choose start debugging (your configuration) :).
 
