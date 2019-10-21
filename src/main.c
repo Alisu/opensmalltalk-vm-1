@@ -59,26 +59,27 @@ int main(int argc, char* argv[], char** env){
 	LOG_SIZEOF(float);
 	LOG_SIZEOF(double);
 
-	pthread_attr_t tattr;
-	pthread_t thread_id;
+	pthread_attr_t tattr [2];
+	pthread_t thread_id [2];
 
-	pthread_attr_init(&tattr);
+	 for (int i= 0; i<2; i++){
+		pthread_attr_init(&tattr);
 
-	size_t size;
-	pthread_attr_getstacksize(&tattr, &size);
+		size_t size;
+		pthread_attr_getstacksize(&tattr, &size);
 
-	printf("%ld\n", size);
+		//printf("%ld\n", size);
 
-    if(pthread_attr_setstacksize(&tattr, size*4)){
-		perror("Thread attr");
-    }
+   	 	if(pthread_attr_setstacksize(&tattr, size*4)){
+			perror("Thread attr");
+   	 	}
 
-	if(pthread_create(&thread_id, &tattr, runThread, &parameters)){
-		perror("Thread creation");
-	}
+		if(pthread_create(&thread_id, &tattr, runThread, &parameters)){
+			perror("Thread creation");
+		}
 
-	pthread_detach(thread_id);
-
+		pthread_detach(thread_id);
+ 	}
 	void* module = ioLoadModule("PThreadedPlugin");
 
 	pworker_newSpawning = getModuleSymbol(module, "worker_newSpawning");

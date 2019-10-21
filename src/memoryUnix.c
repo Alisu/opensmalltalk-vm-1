@@ -140,6 +140,61 @@ char *uxGrowMemoryBy(char *oldLimit, sqInt delta) {
 	return heap + heapSize;
 }
 
+/*To delete afterwards, tests for loading 2 image */
+
+usqInt
+sqMyLittleAllocateMemory(usqInt minHeapSize, usqInt desiredHeapSize, void* addr)
+{
+	if (heap) {
+		logError("uxAllocateMemory: already called\n");
+		exit(1);
+	}
+	pageSize= getpagesize();
+	pageMask= ~(pageSize - 1);
+
+  heapLimit= valign(max(desiredHeapSize, 1));
+
+  while ((!heap) && (heapLimit >= minHeapSize)) {
+      if (MAP_FAILED == (heap= mmap(addr, heapLimit, MAP_PROT, MAP_FLAGS, devZero, 0))) {
+	  heap= 0;
+	  heapLimit= valign(heapLimit / 4 * 3);
+	}
+  }
+
+  if (!heap) {
+      logError("uxAllocateMemory: failed to allocate at least %lld bytes)\n", (long long)minHeapSize);
+      return (usqInt)malloc(desiredHeapSize);
+  }
+
+  heapSize= heapLimit;
+
+  if (overallocateMemory)
+    uxShrinkMemoryBy(heap + heapLimit, heapLimit - desiredHeapSize);
+
+  return (usqInt)heap;
+}
+
+char *uxGrowMemoryBy(char *oldLimit, sqInt delta) {
+	int newSize = min(valign(oldLimit - heap + delta), heapLimit);
+	int newDelta = newSize - heapSize;
+	assert(0 == (newDelta & ~pageMask));
+	assert(0 == (newSize & ~pageMask));
+	assert(newDelta >= 0);
+	if (newDelta) {
+		if (overallocateMemory) {
+			char *base = heap + heapSize;
+			if (MAP_FAILED
+					== mmap(base, newDelta, MAP_PROT, MAP_FLAGS | MAP_FIXED,
+							devZero, heapSize)) {
+				perror("mmap");
+				return oldLimit;
+			}
+		}
+		heapSize += newDelta;
+		assert(0 == (heapSize & ~pageMask));
+	}
+	return heap + heapSize;
+}
 
 /* shrink the heap by delta bytes.  answer the new end of memory. */
 

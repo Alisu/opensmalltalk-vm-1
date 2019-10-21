@@ -21,7 +21,8 @@ set(EXTRACTED_SOURCES
 set(VM_FRONTEND_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/main.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/parameters.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/winOpenFileDialog.cpp)
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/winOpenFileDialog.cpp
+    )
 
 macro(add_third_party_dependencies_per_platform)
     add_third_party_dependency("pixman-0.34.0" "build/vm")
@@ -69,6 +70,8 @@ macro(add_required_libs_per_platform)
 
    target_link_libraries(${VM_LIBRARY_NAME} winmm)
    target_link_libraries(${VM_LIBRARY_NAME} DbgHelp)
+   target_link_libraries(${VM_LIBRARY_NAME} pthread)
+
    target_link_libraries(${VM_EXECUTABLE_NAME} Ole32)
    target_link_libraries(${VM_EXECUTABLE_NAME} comctl32)
    target_link_libraries(${VM_EXECUTABLE_NAME} uuid)
