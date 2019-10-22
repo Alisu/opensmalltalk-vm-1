@@ -35,7 +35,7 @@ endif()
 
 project(PharoVM)
 
-set(FLAVOUR CoInterpreterWithQueueFFI CACHE STRING "The kind of VM to generate. Possible values: StackVM, CogVM, CoInterpreterWithQueueFFI")
+set(FLAVOUR StackVM CACHE STRING "The kind of VM to generate. Possible values: StackVM, CogVM, CoInterpreterWithQueueFFI")
 
 if(FLAVOUR MATCHES "StackVM")
   set(VMSOURCEFILES ${CMAKE_CURRENT_BINARY_DIR}/generated/vm/src/gcc3x-interp.c)
@@ -129,6 +129,8 @@ set(OPTIMIZATION_FLAGS "")
 
 set(CMAKE_C_FLAGS "-g ${COMMON_FLAGS} ${OPTIMIZATION_FLAGS} -DNDEBUG -DDEBUGVM=0 -target x86_64-pc-windows-gnu")
 set(CMAKE_CXX_FLAGS "-g ${COMMON_FLAGS} ${OPTIMIZATION_FLAGS} -DNDEBUG -DDEBUGVM=0 -target x86_64-pc-windows-gnu")
+
+add_definitions(-DUSE_GLOBAL_STRUCT=1)
 
 add_definitions(-DIMMUTABILITY=1)
 add_definitions(-DCOGMTVM=0)
