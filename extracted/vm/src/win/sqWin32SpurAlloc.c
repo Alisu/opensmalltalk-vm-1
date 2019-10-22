@@ -83,6 +83,52 @@ sqAllocateMemory(usqInt minHeapSize, usqInt desiredHeapSize)
 	return alloc;
 }
 
+/************************************************************************/
+/* sqAllocateMemory: Test for 2 images			                        */
+/************************************************************************/
+void *
+sqMyLittleAllocateMemory(usqInt minHeapSize, usqInt desiredHeapSize, void * addr)
+{
+	char *hint, *address, *alloc;
+	usqIntptr_t alignment;
+	sqInt allocBytes;
+	SYSTEM_INFO sysInfo;
+
+	if (pageSize) {
+		sqMessageBox(MB_OK | MB_ICONSTOP, TEXT("VM Error:"),
+					 TEXT("sqAllocateMemory already called"));
+		exit(1);
+	}
+
+	/* determine page boundaries & available address space */
+	GetSystemInfo(&sysInfo);
+	pageSize = sysInfo.dwPageSize;
+	pageMask = ~(pageSize - 1);
+	minAppAddr = sysInfo.lpMinimumApplicationAddress;
+	maxAppAddr = sysInfo.lpMaximumApplicationAddress;
+
+	/* choose a suitable starting point. In MinGW the malloc heap is below the
+	 * program, so take the max of a malloc and something from uninitialized
+	 * data.
+	 */
+	hint = malloc(1);
+	free(hint);
+	hint = max(hint,(char *)&fIsConsole);
+
+	alignment = max(pageSize,1024*1024);
+	address = (char *)(((usqInt)addr + alignment - 1) & ~(alignment - 1));
+
+	alloc = sqAllocateMemorySegmentOfSizeAboveAllocatedSizeInto
+				(roundUpToPage(desiredHeapSize), address, &allocBytes);
+	if (!alloc) {
+		exit(errno);
+		sqMessageBox(MB_OK | MB_ICONSTOP, TEXT("VM Error:"),
+					 TEXT("sqAllocateMemory: initial alloc failed!\n"));
+		exit(1);
+	}
+	return alloc;
+}
+
 #define roundDownToPage(v) ((v)&pageMask)
 #define roundUpToPage(v) (((v)+pageSize-1)&pageMask)
 

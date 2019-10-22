@@ -60,6 +60,7 @@ int loadPharoImage(char* fileName){
 
     if(pthread_mutex_lock(&is.mutex) == 0){
         FILE* imageFile = NULL;
+        size_t debugVar1 = 0;
 
         /* Open the image file. */
         imageFile = fopen(fileName, "rb");
@@ -74,18 +75,17 @@ int loadPharoImage(char* fileName){
             fseek(imageFile, 0, SEEK_END);
              is.imageSize = ftell(imageFile);
             fseek(imageFile, 0, SEEK_SET);
-    
-            printf("After seek end: %d \n",is.imageSize);
 
-            readImageFromFileHeapSizeStartingAt(imageFile, 0, 0);
+            debugVar1 = readImageFromFileHeapSizeStartingAt(imageFile, 0, 0, 0);
+            printf("Allocation: %d \n",debugVar1);
             fclose(imageFile);
         }
         else{
-        /* We try to load the same image another time after the first one here */
-        size_t old_image_size = is.imageSize;
-        printf("Second pass: %d \n",is.imageSize);
-        readImageFromFileHeapSizeStartingAt(imageFile, 0, 0, is.imageSize);
-        fclose(imageFile);
+             /* We try to load the same image another time after the first one here */
+            size_t old_image_size = is.imageSize;
+            debugVar1 =readImageFromFileHeapSizeStartingAt(imageFile, 0, 0, is.imageSize);
+            printf("Allocation: %d \n",debugVar1);
+            fclose(imageFile);
         }
     }
    pthread_mutex_unlock(&(is.mutex));

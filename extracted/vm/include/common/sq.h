@@ -575,7 +575,7 @@ sqInt ioDisableImageWrite(void);
 
 /* Save/restore. */
 /* Read the image from the given file starting at the given image offset */
-size_t readImageFromFileHeapSizeStartingAt(sqImageFile f, usqInt desiredHeapSize, squeakFileOffsetType imageOffset);
+size_t readImageFromFileHeapSizeStartingAt(sqImageFile f, usqInt desiredHeapSize, squeakFileOffsetType imageOffset, size_t OffsetWeWant);
 
 /* Clipboard (cut/copy/paste). */
 sqInt clipboardSize(void);

@@ -82,7 +82,7 @@ void		sqFilenameFromString(char *buffer,sqInt fileIndex, long fileLength);
 #if SPURVM
 extern usqInt sqAllocateMemory(usqInt minHeapSize, usqInt desiredHeapSize);
 # define allocateMemoryMinimumImageFileHeaderSize(heapSize, minimumMemory, fileStream, headerSize, addr) \
-sqAllocateMemory(minimumMemory, heapSize, addr)
+sqMyLittleAllocateMemory(minimumMemory, heapSize, addr)
 # define sqMacMemoryFree() 
 #else
 usqInt sqAllocateMemoryMac(usqInt desiredHeapSize,sqInt minHeapSize, FILE * f,usqInt headersize);

@@ -405,3 +405,188 @@ Process         0x68e2df10 priority 70
         0x68f735f8 s TFWorker(TFRunner)>handleExceptionDuring:
         0x68e32d00 s [] in TFWorker(TFRunner)>executeCallback:
         0x68e32de0 s [] in BlockClosure>newProcess
+
+EXCEPTION_ACCESS_VIOLATION(-1073741819) at 0x0000000064401ca3 - 2019-10-22 09:55:26.827
+
+C:\Users\Alisu\opensmalltalk-vm-1\build\dist\PharoConsole.exe
+Pharo VM version: 5.0-Pharo 8.1.0 built on Oct 21 2019 16:42:43 Compiler: Clang 9.0.0 (tags/RELEASE_900/final) Clang 9.0.0 (tags/RELEASE_900/final) [Production Spur 64-bit VM]
+Built from: CoInterpreterWithQueueFFI VMMaker-CompatibleUserName.1570116818 uuid: d6d44273-bfbd-549d-83c6-a25431fd6e60 Oct 21 2019
+ With:StackToRegisterMappingCogit VMMaker-CompatibleUserName.1570116818 uuid: d6d44273-bfbd-549d-83c6-a25431fd6e60 Oct 21 2019
+ Revision: v8.1.0-alpha-194-g0175c26b3 - Commit: 0175c26b3 - Date: 2019-10-03 17:33:38 +0200
+
+C stack backtrace & registers:
+
+
+Registers:
+ContextFlags: 0x000000000010000f
+	rax 0x000000000000001f rbx 0x000000000290f350 rcx 0x000000000290ebf0 rdx 0x0000000000000004
+	rdi 0x00000000644c2330 rsi 0x00000000644c2330 rbp 0x0000000000000000 rsp 0x000000000290eb30
+	r8  0x000000000290e80a r9  0x00000000644ba6ba r10 0xffffffffffffffff r11 0x0000000000000000
+	r12 0x0000000000000000 r13 0x00000000002e8000 r14 0x000000000290f350 r15 0x00000000000cbd20
+	rip 0x00000000644a725d
+
+
+C Callstack:
+
+[0x0000000064401CA3] getBasePath
+[0x0000000064401D57] getBasePath
+[0x000000006440324C] initPharoVM
+[0x0000000000401574] [0x0000000064944AB4] pthread_create_wrapper
+[0x00007FF97D7FB04A] beginthreadex
+[0x00007FF97D7FB11C] endthreadex
+[0x00007FF97DD47BD4] BaseThreadInitThunk
+[0x00007FF97E94CED1] RtlUserThreadStart
+
+
+All Smalltalk process stacks (active first):
+not a method
+Process          0x6eff640 priority 79
+
+processes at priority 60
+Process          0x6c78f08 priority 60
+         0x6ef4430 s [] in Delay>wait
+         0x6f73888 s BlockClosure>ifCurtailed:
+         0x6f7d5e8 s Delay>wait
+         0x6d840c8 s OSSDL2Driver>eventLoopProcessWithoutPlugin
+         0x6f72f80 s [] in OSSDL2Driver>setupEventLoop
+         0x6c7a530 s [] in BlockClosure>newProcess
+
+processes at priority 40
+Process          0x40b0268 priority 40
+         0x6eff4d0 s Process>resume
+         0x6f7cc30 s BlockClosure>forkAt:
+         0x6f86520 s SessionManager>snapshot:andQuit:
+         0x6faa538 s [] in SmalltalkImage>snapshot:andQuit:
+         0x6fc1340 s CurrentExecutionEnvironment class>activate:for:
+         0x6fc6850 s DefaultExecutionEnvironment(ExecutionEnvironment)>beActiveDuring:
+         0x6fc91a0 s DefaultExecutionEnvironment class>beActiveDuring:
+         0x6fc6908 s SmalltalkImage>snapshot:andQuit:
+         0x6fc9258 s [] in ToolShortcutsCategory>saveImage
+         0x6fcb498 s BlockClosure>cull:
+         0x6fcc1e8 s BlockClosure>cull:cull:
+         0x6fccc28 s BlockClosure>cull:cull:cull:
+         0x6fcd3c0 s KMCategoryBinding>completeMatch:buffer:
+         0x6fcd738 s [] in KMKeymap>notifyCompleteMatchTo:buffer:
+         0x6fcda50 s Array(SequenceableCollection)>do:
+         0x6fcdcc8 s KMKeymap>notifyCompleteMatchTo:buffer:
+         0x6fcddf8 s KMKeymap>onMatchWith:notify:andDo:
+         0x6fcdf10 s [] in ToolShortcutsCategory(KMCategory)>onMatchWith:notify:andDo:
+         0x6fce048 s Set>do:
+         0x6fce250 s ToolShortcutsCategory(KMCategory)>onMatchWith:notify:andDo:
+         0x6fce460 s KMCategoryBinding>verifyMatchWith:notifying:thenDoing:
+         0x6fce138 s [] in KMDispatcher>dispatch:inCategories:
+         0x6fce320 s OrderedCollection>do:
+         0x6fce578 s KMDispatcher>dispatch:inCategories:
+         0x6fce6b0 s KMGlobalDispatcher>dispatch:
+         0x6fce7e8 s [] in KMDispatchChain>dispatch:
+         0x6fce950 s KMDispatchChain>do:
+         0x6fceab0 s KMDispatchChain>dispatch:
+         0x6fcebc8 s KMDispatcher>dispatchKeystroke:
+         0x6fcece0 s FTTableMorph(Morph)>dispatchKeystrokeForEvent:
+         0x6fcedf8 s FTTableMorph(Morph)>handleKeystrokeWithKeymappings:
+         0x6fcef10 s KMShortcutHandler>handleKeystroke:inMorph:
+         0x6fcf010 s FTTableMorph(Morph)>handleKeystroke:
+         0x6fcf110 s KeyboardEvent>sentTo:
+         0x6fcf210 s FTTableMorph(Morph)>handleEvent:
+         0x6fcf310 s FTTableMorph(Morph)>handleFocusEvent:
+         0x6fcf410 s [] in HandMorph>sendFocusEvent:to:clear:
+         0x6fcf510 s BlockClosure>on:do:
+         0x6fcf658 s WorldMorph>becomeActiveDuring:
+         0x6fcf748 s HandMorph>sendFocusEvent:to:clear:
+         0x6fcf848 s HandMorph>sendEvent:focus:clear:
+         0x6fcf968 s HandMorph>sendKeyboardEvent:
+         0x6fcfa68 s HandMorph>handleEvent:
+         0x6fcfb68 s [] in OSWindowMorphicEventHandler>dispatchMorphicEvent:
+         0x6fcfc68 s WorldState>runStepMethodsIn:
+         0x6fcfd90 s WorldMorph>runStepMethods
+         0x6fcff48 s WorldState>doOneCycleNowFor:
+         0x6fd0048 s WorldState>doOneCycleFor:
+         0x6fd0148 s WorldMorph>doOneCycle
+         0x6fd0248 s WorldMorph class>doOneCycle
+         0x40a61c0 s [] in MorphicUIManager>spawnNewProcess
+         0x40a6298 s [] in BlockClosure>newProcess
+
+processes at priority 10
+Process          0x6c78f58 priority 10
+         0x6cf4bf0 s ProcessorScheduler class>idleProcess
+         0x6f730f0 s [] in ProcessorScheduler class>startUp
+         0x6c7a5e8 s [] in BlockClosure>newProcess
+
+suspended processes
+Process          0x6c796a8 priority 50
+         0x6cf4638 s WeakArray class>finalizationProcess
+         0x6f73038 s [] in WeakArray class>restartFinalizationProcess
+         0x6c7acd8 s [] in BlockClosure>newProcess
+
+Process          0x3ae4c78 priority 60
+         0x3ae9db0 s InputEventFetcher>waitForInput
+         0x3b1d9e8 s InputEventFetcher>eventLoop
+         0x3b227d0 s [] in InputEventFetcher>installEventLoop
+         0x3b25238 s [] in BlockClosure>newProcess
+
+Process          0x68d1d88 priority 70
+         0x68dc670 s [] in TFCallbackQueue>forkCallbackProcess
+         0x68ee9f0 s [] in BlockClosure>newProcess
+
+Process Result of allocation: 67655352 
+         0x6c053a0 priority 31
+         0x6d84898 s AtomicSharedQueue>waitForNewItems
+         0x6e326f8 s AtomicSharedQueue>next
+         0x6f731a8 s [] in ClyDataSourceUpdateScheduler>processQueue
+         0x6c4f448 s BlockClosure>repeat
+         0x6c57cf8 s ClyDataSourceUpdateScheduler>processQueue
+         0x6c62040 s [] in ClyDataSourceUpdateScheduler>ensureRunning
+         0x6c683d0 s [] in BlockClosure>newProcess
+
+Process          0x6c78eb8 priority 60
+         0x6cf4568 s SmalltalkImage>lowSpaceWatcher
+         0x6d8ae98 s [] in SmalltalkImage>installLowSpaceWatcher
+         0x6cdd788 s [] in BlockClosure>newProcess
+
+Process          0x6d961c8 priority 40
+         0x6da5db0 s TFExternalAsyncCall>doExecuteOn:
+         0x6f73260 s [] in TFExternalAsyncCall>executeOn:
+         0x6f7d080 s BlockClosure>ensure:
+         0x6e32828 s TFExternalAsyncCall>executeOn:
+         0x6f73318 s TFWorker(TFRunner)>invokeFunction:withArguments:
+         0x6f7d138 s TFCallbacksTest>callCallback:
+         0x6f86898 s [] in TFCallbacksTest>testCallbackNotRespectingLIFOOrderFailsReturn
+         0x6e32908 s [] in BlockClosure>newProcess
+
+Process          0x6d96218 priority 40
+         0x6da5e68 s TFExternalAsyncCall>doExecuteOn:
+         0x6f733d0 s [] in TFExternalAsyncCall>executeOn:
+         0x6f7d1f0 s BlockClosure>ensure:
+         0x6e32a28 s TFExternalAsyncCall>executeOn:
+         0x6f73488 s TFWorker(TFRunner)>invokeFunction:withArguments:
+         0x6f7d2a8 s TFCallbacksTest>callCallback:
+         0x6f86950 s [] in TFCallbacksTest>testCallbackNotRespectingLIFOOrderFailsReturn
+         0x6e32b08 s [] in BlockClosure>newProcess
+
+Process          0x6d96268 priority 40
+         0x6da5f20 s TFExternalAsyncCall>doExecuteOn:
+         0x6f72e10 s [] in TFExternalAsyncCall>executeOn:
+         0x6f7cf10 s BlockClosure>ensure:
+         0x6e32530 s TFExternalAsyncCall>executeOn:
+         0x6f72ec8 s TFWorker(TFRunner)>invokeFunction:withArguments:
+         0x6f7cfc8 s TFCallbacksTest>callCallback:
+         0x6f867e0 s [] in TFCallbacksTest>testCallbackFromOldSessionFailsReturn
+         0x6e32610 s [] in BlockClosure>newProcess
+
+Process          0x6e2df10 priority 70
+         0x6e2f0c8 s [] in TFCallbacksTest>testCallbackNotRespectingLIFOOrderFailsReturn
+         0x6f73540 s TFCallbackInvocation>execute
+         0x6f7d360 s [] in TFWorker(TFRunner)>executeCallback:
+         0x6f86a08 s BlockClosure>on:do:
+         0x6e32c48 s TFTestCallbackExceptionHandler>handleExceptionDuring:
+         0x6f735f8 s TFWorker(TFRunner)>handleExceptionDuring:
+         0x6e32d00 s [] in TFWorker(TFRunner)>executeCallback:
+         0x6e32de0 s [] in BlockClosure>newProcess
+
+Process          0x5c22260 priority 80
+         0x6ef4248 s DelaySemaphoreScheduler(DelayBasicScheduler)>suspendAtTimingPriority
+         0x6813278 s [] in DelaySemaphoreScheduler(DelayBasicScheduler)>runBackendLoopAtTimingPriority
+         0x6813490 s BlockClosure>ensure:
+         0x5b360d8 s DelaySemaphoreScheduler(DelayBasicScheduler)>runBackendLoopAtTimingPriority
+         0x68131c0 s [] in DelaySemaphoreScheduler(DelayBasicScheduler)>startTimerEventLoopPriority:
+         0x5b361b0 s [] in BlockClosure>newProcess

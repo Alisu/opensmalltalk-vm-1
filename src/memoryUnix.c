@@ -140,7 +140,7 @@ char *uxGrowMemoryBy(char *oldLimit, sqInt delta) {
 	return heap + heapSize;
 }
 
-/*To delete afterwards, tests for loading 2 image */
+/*To delete afterwards, tests for loading 2 images */
 
 usqInt
 sqMyLittleAllocateMemory(usqInt minHeapSize, usqInt desiredHeapSize, void* addr)
