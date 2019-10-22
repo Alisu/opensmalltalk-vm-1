@@ -1787,7 +1787,7 @@ StackInterpreter class >> mustBeGlobal: var [
 			'deferDisplayUpdates' 'extraVMMemory'
 			'showSurfaceFn' 'displayBits' 'displayWidth' 'displayHeight' 'displayDepth'
 			'desiredNumStackPages' 'desiredEdenBytes'
-			'breakLookupClassTag' 'breakSelector' 'breakSelectorLength' 'sendTrace' 'checkAllocFiller' 'checkedPluginName'
+			'breakLookupClassTag' 'breakSelector' 'breakSelectorLength' 'sendTrace' 'checkedPluginName'
 			'reenterInterpreter' 'suppressHeartbeatFlag' 'ffiExceptionResponse'
 			'debugCallbackInvokes' 'debugCallbackPath' 'debugCallbackReturns') includes: var)
 	   or: [ "This allows slow machines to define bytecodeSetSelector as 0
@@ -2026,7 +2026,7 @@ StackInterpreter class >> requiredMethodNames: options [
 		primitiveFail primitiveFailFor: primitiveFlushExternalPrimitives printAllStacks printCallStack printContext:
 			printExternalHeadFrame printFramesInPage: printFrame: printHeadFrame printMemory printOop:
 				printStackPages printStackPageList printStackPagesInUse printStackPageListInUse
-		readableFormat: readImageFromFile:HeapSize:StartingAt:
+		readableFormat: readImageFromFile:HeapSize:StartingAt:offset:
 		setFullScreenFlag: setInterruptKeycode: setInterruptPending: setInterruptCheckChain:
 			setSavedWindowSize: success:
 		validInstructionPointer:inMethod:framePointer:) asSet.
@@ -2524,6 +2524,25 @@ StackInterpreter >> allocateMemory: heapSize minimum: minimumMemory imageFile: f
 							Minimum: minimumMemory
 							ImageFile: fileStream
 							HeaderSize: headerSize)
+]
+
+{ #category : #'image save/restore' }
+StackInterpreter >> allocateMemory: heapSize minimum: minimumMemory imageFile: fileStream headerSize: headerSize address: anAddress [
+	"Translate to C function call with (case sensitive) camelCase. The purpose of this
+	 method is to document the translation.
+	 The default implementation is sqAllocateMemory(minimumMemory, heapSize). This may
+	 be redefined to make use of the image file and header size parameters for efficient
+	 implementation with mmap().
+	 See CCodeGenerator>>writeDefaultMacrosOn: which specifies a default implementation."
+
+	<inline: true>
+	<returnTypeC: #'char *'>
+	<var: #fileStream type: #sqImageFile>
+	^self pointerForOop: (self
+							allocateMemory: heapSize
+							Minimum: minimumMemory
+							ImageFile: fileStream
+							HeaderSize: headerSize _: anAddress)
 ]
 
 { #category : #'compiled methods' }
@@ -19231,7 +19250,7 @@ StackInterpreter >> quinaryInlinePrimitive: primIndex [
 ]
 
 { #category : #'image save/restore' }
-StackInterpreter >> readImageFromFile: f HeapSize: desiredHeapSize StartingAt: imageOffset [
+StackInterpreter >> readImageFromFile: f HeapSize: desiredHeapSize StartingAt: imageOffset offset: offsetWeWant [
 	"Read an image from the given file stream, allocating an amount of memory to its object heap.
 	
 	 V3: desiredHeapSize is the total size of the heap.  Fail if the image has an unknown format or
@@ -19252,7 +19271,7 @@ StackInterpreter >> readImageFromFile: f HeapSize: desiredHeapSize StartingAt: i
 
 	| headerStart headerSize headerFlags dataSize oldBaseAddr swapBytes
 	  minimumMemory bytesRead bytesToShift heapSize firstSegSize
-	  hdrEdenBytes hdrMaxExtSemTabSize hdrNumStackPages allocationReserve |
+	  hdrEdenBytes hdrMaxExtSemTabSize hdrNumStackPages allocationReserve anAddress |
 	<var: #f type: #sqImageFile>
 	<var: #heapSize type: #usqInt>
 	<var: #dataSize type: #'size_t'>
@@ -19336,12 +19355,14 @@ StackInterpreter >> readImageFromFile: f HeapSize: desiredHeapSize StartingAt: i
 			 heapSize < minimumMemory ifTrue:
 				[self insufficientMemorySpecifiedError]].
 
+	anAddress := objectMemory memory + offsetWeWant.
+
 	"allocate a contiguous block of memory for the Squeak heap"
 	objectMemory memory: (self
 								allocateMemory: heapSize
 								minimum: minimumMemory
 								imageFile: f
-								headerSize: headerSize) asUnsignedInteger.
+								headerSize: headerSize address: anAddress) asUnsignedInteger.
 	objectMemory memory ifNil: [self insufficientMemoryAvailableError].
 
 	objectMemory
@@ -19359,7 +19380,7 @@ StackInterpreter >> readImageFromFile: f HeapSize: desiredHeapSize StartingAt: i
 	self ensureImageFormatIsUpToDate: swapBytes.
 
 	"compute difference between old and new memory base addresses"
-	bytesToShift := objectMemory memoryBaseForImageRead - oldBaseAddr.
+	bytesToShift := objectMemory memoryBaseForImageRead - oldBaseAddr + offsetWeWant.
 	self initializeInterpreter: bytesToShift.  "adjusts all oops to new location"
 	^dataSize
 ]

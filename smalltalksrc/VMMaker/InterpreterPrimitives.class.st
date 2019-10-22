@@ -258,7 +258,7 @@ InterpreterPrimitives >> initialize [
 
 { #category : #initialization }
 InterpreterPrimitives >> initializeInterpreter: bytesToShift [
-	sHEAFn := self ioLoadFunction: 'secHasEnvironmentAccess' From: 'SecurityPlugin'
+	
 ]
 
 { #category : #'object access primitives' }
