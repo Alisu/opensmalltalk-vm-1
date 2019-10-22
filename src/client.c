@@ -27,7 +27,8 @@ void mtfsfi(unsigned long long fpscr)
 int loadPharoImage(char* fileName);
 
 EXPORT(int) initPharoVM(char* image, char** vmParams, int vmParamCount, char** imageParams, int imageParamCount){
-	initGlobalStructure();
+	
+    initGlobalStructure();
 
 	//Unix Initialization specific
 	fldcw(0x12bf);	/* signed infinity, round to nearest, REAL8, disable intrs, disable signals */
@@ -76,14 +77,14 @@ int loadPharoImage(char* fileName){
              is.imageSize = ftell(imageFile);
             fseek(imageFile, 0, SEEK_SET);
 
-            debugVar1 = readImageFromFileHeapSizeStartingAt(imageFile, 0, 0, 0);
+            debugVar1 = readImageFromFileHeapSizeStartingAtoffset(imageFile, 0, 0, 0);
             printf("Allocation: %d \n",debugVar1);
             fclose(imageFile);
         }
         else{
              /* We try to load the same image another time after the first one here */
             size_t old_image_size = is.imageSize;
-            debugVar1 =readImageFromFileHeapSizeStartingAt(imageFile, 0, 0, is.imageSize);
+            debugVar1 =readImageFromFileHeapSizeStartingAtoffset(imageFile, 0, 0, is.imageSize);
             printf("Allocation: %d \n",debugVar1);
             fclose(imageFile);
         }

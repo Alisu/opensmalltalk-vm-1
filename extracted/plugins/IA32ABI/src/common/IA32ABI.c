@@ -922,7 +922,7 @@ primFree(void)
 EXPORT(sqInt)
 primInIOProcessEventsFlagAddress(void)
 {
-    extern int inIOProcessEvents;
+    static int inIOProcessEvents;
 
 	methodReturnValue((BytesPerWord == 8
 		? positive64BitIntegerFor(((usqInt)((&inIOProcessEvents))))

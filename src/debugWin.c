@@ -190,8 +190,11 @@ void printSymbolInfo(STACKFRAME64 *frame, FILE* output){
 			fprintf(output, " (%s:%d)", line.FileName, line.LineNumber);
 		}
 		fprintf(output, "\n");
+
+#if COGVm
 	}else{
 		printCogMethodFor(frame->AddrPC.Offset);
+#endif
 	}
 
 }
