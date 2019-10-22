@@ -13,7 +13,7 @@ int runThread(void* p){
 		logError("Error opening image file: %s\n", parameters->imageFile);
 		exit(-1);
 	}
-	runInterpreter();
+	//runInterpreter();
 }
 
 void* mainThreadWorker = NULL;
@@ -62,7 +62,7 @@ int main(int argc, char* argv[], char** env){
 	pthread_attr_t tattr [2];
 	pthread_t thread_id [2];
 
-	 for (int i= 0; i<1; i++){
+	 for (int i= 0; i<2; i++){
 		pthread_attr_init(&tattr);
 
 		size_t size;

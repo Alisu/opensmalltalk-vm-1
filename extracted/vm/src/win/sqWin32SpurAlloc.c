@@ -94,11 +94,11 @@ sqMyLittleAllocateMemory(usqInt minHeapSize, usqInt desiredHeapSize, void * addr
 	sqInt allocBytes;
 	SYSTEM_INFO sysInfo;
 
-	if (pageSize) {
+	/*if (pageSize) {
 		sqMessageBox(MB_OK | MB_ICONSTOP, TEXT("VM Error:"),
 					 TEXT("sqAllocateMemory already called"));
 		exit(1);
-	}
+	}*/
 
 	/* determine page boundaries & available address space */
 	GetSystemInfo(&sysInfo);
