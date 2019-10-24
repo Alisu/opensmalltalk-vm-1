@@ -78,14 +78,12 @@ int loadPharoImage(char* fileName){
             fseek(imageFile, 0, SEEK_SET);
 
             debugVar1 = readImageFromFileHeapSizeStartingAtoffset(imageFile, 0, 0, 0);
-            printf("Allocation: %d \n",debugVar1);
             fclose(imageFile);
         }
         else{
              /* We try to load the same image another time after the first one here */
             size_t old_image_size = is.imageSize;
-            debugVar1 =readImageFromFileHeapSizeStartingAtoffset(imageFile, 0, 0, is.imageSize);
-            printf("Allocation: %d \n",debugVar1);
+            debugVar1 =readImageFromFileHeapSizeStartingAtoffset(imageFile, 0, 0, is.imageSize + 2^30);
             fclose(imageFile);
         }
     }

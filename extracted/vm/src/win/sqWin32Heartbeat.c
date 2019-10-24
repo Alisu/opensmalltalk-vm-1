@@ -304,8 +304,8 @@ heartbeat()
 	}
 	else
 		heartbeats += 1;
-	checkHighPriorityTickees(utcMicrosecondClock);
-	forceInterruptCheckFromHeartbeat();
+//	checkHighPriorityTickees(utcMicrosecondClock);
+//	forceInterruptCheckFromHeartbeat();
 }
 
 static DWORD WINAPI

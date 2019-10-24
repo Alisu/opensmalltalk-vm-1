@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <pthread.h>
+#include <windows.h>
 #include <pharoClient.h>
 #include <pharo.h>
+#define MAX_THREADS 2
 
 int runThread(void* p){
 
@@ -13,20 +14,13 @@ int runThread(void* p){
 		logError("Error opening image file: %s\n", parameters->imageFile);
 		exit(-1);
 	}
-	//runInterpreter();
+	
+	runInterpreter();
 }
 
-void* mainThreadWorker = NULL;
-
-void* getMainThreadWorker(){
-	return mainThreadWorker;
-}
-
+extern void setMyCurrentThread(DWORD thread, size_t index);
 
 int main(int argc, char* argv[], char** env){
-
-	void*(*pworker_newSpawning)(int);
-	void*(*pworker_run)(void*);
 
 	installErrorHandlers();
 
@@ -34,12 +28,25 @@ int main(int argc, char* argv[], char** env){
 	setProcessEnvironmentVector(env);
 
 
-	VM_PARAMETERS parameters;
+	VM_PARAMETERS* parameters;
 	char buffer[4096+1];
 
-	parseArguments(argc, argv, &parameters);
+	// Allocate memory for thread data.
+	parameters = (VM_PARAMETERS *) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY,
+    sizeof(VM_PARAMETERS));
 
-	logInfo("Opening Image: %s\n", parameters.imageFile);
+    if( parameters == NULL )
+    {
+        // If the array allocation fails, the system is out of memory
+        // so there is no point in trying to print an error message.
+        // Just terminate execution.
+        ExitProcess(2);
+    }
+
+
+	parseArguments(argc, argv, parameters);
+
+	logInfo("Opening Image: %s\n", parameters->imageFile);
 
 	//This initialization is required because it makes awful, awful, awful code to calculate
 	//the location of the machine code.
@@ -58,40 +65,51 @@ int main(int argc, char* argv[], char** env){
 	LOG_SIZEOF(sqLong);
 	LOG_SIZEOF(float);
 	LOG_SIZEOF(double);
+       
+    DWORD   dwThreadIdArray[MAX_THREADS];
+    HANDLE  hThreadArray[MAX_THREADS]; 
 
-	pthread_attr_t tattr [2];
-	pthread_t thread_id [2];
+    // Create 2 worker threads.
 
-	 for (int i= 0; i<2; i++){
-		pthread_attr_init(&tattr);
+    for( int i=0; i<MAX_THREADS; i++ )
+    {
+    	DWORD  dwThread;	
+ 		hThreadArray[i] = CreateThread( 
+            NULL,                   // default security attributes
+            4000000,                      // use default stack size  
+            runThread,       		// thread function name
+            parameters,          	// argument to thread function 
+            0,                      // use default creation flags 
+            &dwThread);
+		setMyCurrentThread(dwThread , i);
+		dwThreadIdArray[i]=dwThread;
 
-		size_t size;
-		pthread_attr_getstacksize(&tattr, &size);
+        // Check the return value for success.
+        // If CreateThread fails, terminate execution. 
+        // This will automatically clean up threads and memory. 
 
-		//printf("%ld\n", size);
+        if (hThreadArray[i] == NULL) 
+        {
+           //ErrorHandler(TEXT("CreateThread"));
+           ExitProcess(3);
+        }
+    } // End of main thread creation loop.
 
-   	 	if(pthread_attr_setstacksize(&tattr, size*4)){
-			perror("Thread attr");
-   	 	}
+    // Wait until all threads have terminated.
 
-		if(pthread_create(&thread_id, &tattr, runThread, &parameters)){
-			perror("Thread creation");
-		}
+    WaitForMultipleObjects(MAX_THREADS, hThreadArray, TRUE, INFINITE);
 
-		pthread_detach(thread_id);
- 	}
-	void* module = ioLoadModule("PThreadedPlugin");
+    // Close all thread handles and free memory allocations.
 
-	pworker_newSpawning = getModuleSymbol(module, "worker_newSpawning");
-	pworker_run = getModuleSymbol(module, "worker_run");
-
-	logInfo("worker_newSpawning: %p worker_run: %p\n",pworker_newSpawning, pworker_run);
-
-	mainThreadWorker = pworker_newSpawning(false);
-
-	logInfo("worker: %p ", mainThreadWorker);
-
-	pworker_run(mainThreadWorker);
+    for(int i=0; i<MAX_THREADS; i++)
+    {
+        CloseHandle(hThreadArray[i]);
+	}
+    if(parameters != NULL)
+     {
+        HeapFree(GetProcessHeap(), 0, parameters);
+        parameters = NULL;    // Ensure address is not reused.
+    }	
 }
 
 void printVersion(){
