@@ -76,10 +76,10 @@ int main(int argc, char* argv[], char** env){
     	DWORD  dwThread;	
  		hThreadArray[i] = CreateThread( 
             NULL,                   // default security attributes
-            4000000,                      // use default stack size  
+            41943040,                      // use default stack size  
             runThread,       		// thread function name
             parameters,          	// argument to thread function 
-            0,                      // use default creation flags 
+            STACK_SIZE_PARAM_IS_A_RESERVATION,                      // use default creation flags 
             &dwThread);
 		setMyCurrentThread(dwThread , i);
 		dwThreadIdArray[i]=dwThread;
