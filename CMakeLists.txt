@@ -16,7 +16,7 @@ get_git_date(GIT_COMMIT_DATE)
 set(BUILT_FROM "${GIT_DESCRIBE} - Commit: ${GIT_COMMIT_HASH} - Date: ${GIT_COMMIT_DATE}")
 message(STATUS ${BUILT_FROM})
 
-if (((CMAKE_HOST_UNIX) AND (${CMAKE_HOST_SYSTEM_NAME} MATCHES "CYGWIN*")) OR WIN)
+if (((CMAKE_HOST_UNIX) AND (${CMAKE_HOST_SYSTEM_NAME} MATCHES "CYGWIN*")))
   message(STATUS "Building on CYGWIN CMAKE: Adapting paths")
   set(CYGWIN 1)
   set(WIN 1)
@@ -126,9 +126,6 @@ elseif(UNIX)
 endif()
 
 set(OPTIMIZATION_FLAGS "")
-
-set(CMAKE_C_FLAGS "-g ${COMMON_FLAGS} ${OPTIMIZATION_FLAGS} -DNDEBUG -DDEBUGVM=0 -target x86_64-pc-windows-gnu")
-set(CMAKE_CXX_FLAGS "-g ${COMMON_FLAGS} ${OPTIMIZATION_FLAGS} -DNDEBUG -DDEBUGVM=0 -target x86_64-pc-windows-gnu")
 
 add_definitions(-DUSE_GLOBAL_STRUCT=1)
 

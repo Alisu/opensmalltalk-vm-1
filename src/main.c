@@ -16,23 +16,12 @@ int runThread(void* p){
 	//runInterpreter();
 }
 
-void* mainThreadWorker = NULL;
-
-void* getMainThreadWorker(){
-	return mainThreadWorker;
-}
-
-
 int main(int argc, char* argv[], char** env){
-
-	void*(*pworker_newSpawning)(int);
-	void*(*pworker_run)(void*);
 
 	installErrorHandlers();
 
 	setProcessArguments(argc, argv);
 	setProcessEnvironmentVector(env);
-
 
 	VM_PARAMETERS parameters;
 	char buffer[4096+1];
@@ -66,32 +55,23 @@ int main(int argc, char* argv[], char** env){
 		pthread_attr_init(&tattr);
 
 		size_t size;
-		pthread_attr_getstacksize(&tattr, &size);
+		pthread_attr_getstacksize(&tattr[i], &size);
 
 		//printf("%ld\n", size);
 
-   	 	if(pthread_attr_setstacksize(&tattr, size*4)){
+   	 	if(pthread_attr_setstacksize(&tattr[i], size*4)){
 			perror("Thread attr");
    	 	}
 
-		if(pthread_create(&thread_id, &tattr, runThread, &parameters)){
+		if(pthread_create(&thread_id[i], &tattr[i], runThread, &parameters)){
 			perror("Thread creation");
 		}
 
-		pthread_detach(thread_id);
  	}
-	void* module = ioLoadModule("PThreadedPlugin");
-
-	pworker_newSpawning = getModuleSymbol(module, "worker_newSpawning");
-	pworker_run = getModuleSymbol(module, "worker_run");
-
-	logInfo("worker_newSpawning: %p worker_run: %p\n",pworker_newSpawning, pworker_run);
-
-	mainThreadWorker = pworker_newSpawning(false);
-
-	logInfo("worker: %p ", mainThreadWorker);
-
-	pworker_run(mainThreadWorker);
+	for (i = 0; i < 2; i++)
+   	{
+      	pthread_join (thread_id [i], NULL);
+   	}
 }
 
 void printVersion(){
