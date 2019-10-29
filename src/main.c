@@ -13,7 +13,7 @@ int runThread(void* p){
 		logError("Error opening image file: %s\n", parameters->imageFile);
 		exit(-1);
 	}
-	//runInterpreter();
+	runInterpreter();
 }
 
 int main(int argc, char* argv[], char** env){
@@ -49,28 +49,28 @@ int main(int argc, char* argv[], char** env){
 	LOG_SIZEOF(double);
 
 	pthread_attr_t tattr [2];
-	pthread_t thread_id [2];
+	pthread_t thread_id;
 
-	 for (int i= 0; i<2; i++){
+	 for (int i= 0; i<1; i++){
 		pthread_attr_init(&tattr);
 
 		size_t size;
-		pthread_attr_getstacksize(&tattr[i], &size);
+		pthread_attr_getstacksize(&tattr, &size);
 
 		//printf("%ld\n", size);
 
-   	 	if(pthread_attr_setstacksize(&tattr[i], size*4)){
+   	 	if(pthread_attr_setstacksize(&tattr, size*4)){
 			perror("Thread attr");
    	 	}
 
-		if(pthread_create(&thread_id[i], &tattr[i], runThread, &parameters)){
+		if(pthread_create(&thread_id, &tattr, runThread, &parameters)){
 			perror("Thread creation");
 		}
 
  	}
-	for (i = 0; i < 2; i++)
+	for (int i = 0; i < 1; i++)
    	{
-      	pthread_join (thread_id [i], NULL);
+      	pthread_join (thread_id, NULL);
    	}
 }
 

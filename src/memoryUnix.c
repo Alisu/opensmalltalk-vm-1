@@ -174,28 +174,6 @@ sqMyLittleAllocateMemory(usqInt minHeapSize, usqInt desiredHeapSize, void* addr)
   return (usqInt)heap;
 }
 
-char *uxGrowMemoryBy(char *oldLimit, sqInt delta) {
-	int newSize = min(valign(oldLimit - heap + delta), heapLimit);
-	int newDelta = newSize - heapSize;
-	assert(0 == (newDelta & ~pageMask));
-	assert(0 == (newSize & ~pageMask));
-	assert(newDelta >= 0);
-	if (newDelta) {
-		if (overallocateMemory) {
-			char *base = heap + heapSize;
-			if (MAP_FAILED
-					== mmap(base, newDelta, MAP_PROT, MAP_FLAGS | MAP_FIXED,
-							devZero, heapSize)) {
-				perror("mmap");
-				return oldLimit;
-			}
-		}
-		heapSize += newDelta;
-		assert(0 == (heapSize & ~pageMask));
-	}
-	return heap + heapSize;
-}
-
 /* shrink the heap by delta bytes.  answer the new end of memory. */
 
 char *uxShrinkMemoryBy(char *oldLimit, sqInt delta) {
