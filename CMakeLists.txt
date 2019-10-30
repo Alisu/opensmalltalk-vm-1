@@ -32,7 +32,7 @@ endif()
 
 project(PharoVM)
 
-set(FLAVOUR CoInterpreterWithQueueFFI CACHE STRING "The kind of VM to generate. Possible values: StackVM, CogVM, CoInterpreterWithQueueFFI")
+set(FLAVOUR StackVM CACHE STRING "The kind of VM to generate. Possible values: StackVM, CogVM, CoInterpreterWithQueueFFI")
 
 if(FLAVOUR MATCHES "StackVM")
   set(VMSOURCEFILES ${CMAKE_CURRENT_BINARY_DIR}/generated/vm/src/gcc3x-interp.c)
@@ -81,7 +81,7 @@ if(WIN)
 
 
 #    if(NOT MSVC)
-        set(COMMON_FLAGS "-fwrapv -fdeclspec -msse2 -ggdb2 -m64 -mno-rtd -mms-bitfields -O2 -momit-leaf-frame-pointer -funroll-loops -D_MT -fno-builtin-printf -fno-builtin-putchar -fno-builtin-fprintf -Wall -Wno-unused-variable -fno-optimize-sibling-calls")
+        set(COMMON_FLAGS "-fwrapv -fdeclspec -msse2 -ggdb2 -m64 -mno-rtd -mms-bitfields -O0 -momit-leaf-frame-pointer -funroll-loops -D_MT -fno-builtin-printf -fno-builtin-putchar -fno-builtin-fprintf -Wall -Wno-unused-variable -fno-optimize-sibling-calls")
 #    endif()
 
     set(OS_TYPE "Win32")
@@ -105,7 +105,7 @@ elseif(UNIX)
 
     add_definitions(-DLSB_FIRST=1)
 
-    set(COMMON_FLAGS "-O2")
+    set(COMMON_FLAGS "-O0")
 
     set(OS_TYPE "unix")
     if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
@@ -130,6 +130,8 @@ set(CMAKE_CXX_FLAGS "-g ${COMMON_FLAGS} ${OPTIMIZATION_FLAGS} -DNDEBUG -DDEBUGVM
 add_definitions(-DIMMUTABILITY=1)
 add_definitions(-DCOGMTVM=0)
 add_definitions(-DPharoVM=1)
+add_definitions(-DUSE_GLOBAL_STRUCT=1)
+add_definitions(-DUSE_GLOBAL_STRUCT_REG=1)
 
 #We require that VM_LABEL does nothing.
 #We should actually cleanup all the places where this is set/used in the VM

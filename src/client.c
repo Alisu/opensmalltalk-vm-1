@@ -1,5 +1,6 @@
 #include "pharo.h"
 #include "pharoClient.h"
+#include <pthread.h>
 
 #if defined(__GNUC__) && ( defined(i386) || defined(__i386) || defined(__i386__)  \
 			|| defined(i486) || defined(__i486) || defined (__i486__) \
@@ -23,6 +24,11 @@ void mtfsfi(unsigned long long fpscr)
 #   define mtfsfi(fpscr)
 #endif
 
+struct isParametersSet{
+    size_t initialized;
+    pthread_mutex_t mutex;
+};
+
 int loadPharoImage(char* fileName);
 
 EXPORT(int) initPharoVM(char* image, char** vmParams, int vmParamCount, char** imageParams, int imageParamCount){
@@ -39,9 +45,14 @@ EXPORT(int) initPharoVM(char* image, char** vmParams, int vmParamCount, char** i
 	ioInitExternalSemaphores();
 
 	aioInit();
-
-	setPharoCommandLineParameters(vmParams, vmParamCount, imageParams, imageParamCount);
-
+    static struct isParametersSet ips = {0, PTHREAD_MUTEX_INITIALIZER};
+    if(pthread_mutex_lock(&ips.mutex) == 0){
+        if(ips.initialized==0){
+	        setPharoCommandLineParameters(vmParams, vmParamCount, imageParams, imageParamCount);
+            ips.initialized++;
+        }
+    }
+    pthread_mutex_unlock(&(ips.mutex));
 	return loadPharoImage(image);
 }
 
@@ -68,10 +79,7 @@ int loadPharoImage(char* fileName){
     readImageFromFileHeapSizeStartingAt(imageFile, 0, 0);
     fclose(imageFile);
 
-    char* fullImageName = alloca(FILENAME_MAX);
-	fullImageName = getFullPath(fileName, fullImageName, FILENAME_MAX);
-
-    setImageName(fullImageName);
+    setImageName(fileName);
 
     return true;
 }

@@ -89,17 +89,19 @@ sqMakeMemoryNotExecutableFromTo(unsigned long startAddr, unsigned long endAddr)
 usqInt
 sqAllocateMemory(usqInt minHeapSize, usqInt desiredHeapSize)
 {
-	if (heap) {
+	/*if (heap) {
 		logError("uxAllocateMemory: already called\n");
 		exit(1);
-	}
+	}*/
 	pageSize= getpagesize();
 	pageMask= ~(pageSize - 1);
+
+	static off_t offsetWeWant = 0;
 
   heapLimit= valign(max(desiredHeapSize, 1));
 
   while ((!heap) && (heapLimit >= minHeapSize)) {
-      if (MAP_FAILED == (heap= mmap(0, heapLimit, MAP_PROT, MAP_FLAGS, devZero, 0))) {
+      if (MAP_FAILED == (heap= mmap(0, heapLimit, MAP_PROT, MAP_FLAGS, devZero, offsetWeWant))) {
 	  heap= 0;
 	  heapLimit= valign(heapLimit / 4 * 3);
 	}
@@ -114,6 +116,8 @@ sqAllocateMemory(usqInt minHeapSize, usqInt desiredHeapSize)
 
   if (overallocateMemory)
     uxShrinkMemoryBy(heap + heapLimit, heapLimit - desiredHeapSize);
+
+	offsetWeWant = (off_t) heapLimit;
 
   return (usqInt)heap;
 }
@@ -214,4 +218,3 @@ sqAllocateMemorySegmentOfSizeAboveAllocatedSizeInto(sqInt size, void *minAddress
 	}
 	return 0;
 }
-
