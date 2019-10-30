@@ -414,7 +414,8 @@ Class {
 		'statIdleUsecs',
 		'debugCallbackPath',
 		'debugCallbackReturns',
-		'debugCallbackInvokes'
+		'debugCallbackInvokes',
+		'myCurrentThread'
 	],
 	#classVars : [
 		'AccessModifierPrivate',
@@ -525,7 +526,8 @@ StackInterpreter class >> declareCVarsIn: aCCodeGenerator [
 		var: #interpreterProxy  type: #'struct VirtualMachine*'.
 	aCCodeGenerator
 		declareVar: #sendTrace type: 'volatile int';
-		declareVar: #byteCount type: #usqInt.
+		declareVar: #byteCount type: #usqInt;
+		declareVar: #myCurrentThread type: 'pthread_t'.
 	"These need to be pointers or unsigned."
 	self declareC: #(instructionPointer method newMethod)
 		as: #usqInt
@@ -1787,7 +1789,7 @@ StackInterpreter class >> mustBeGlobal: var [
 			'deferDisplayUpdates' 'extraVMMemory'
 			'showSurfaceFn' 'displayBits' 'displayWidth' 'displayHeight' 'displayDepth'
 			'desiredNumStackPages' 'desiredEdenBytes'
-			'breakLookupClassTag' 'breakSelector' 'breakSelectorLength' 'sendTrace' 'checkAllocFiller' 'checkedPluginName'
+			'breakLookupClassTag' 'breakSelector' 'breakSelectorLength' 'sendTrace' 'checkedPluginName'
 			'reenterInterpreter' 'suppressHeartbeatFlag' 'ffiExceptionResponse'
 			'debugCallbackInvokes' 'debugCallbackPath' 'debugCallbackReturns') includes: var)
 	   or: [ "This allows slow machines to define bytecodeSetSelector as 0
@@ -2029,6 +2031,8 @@ StackInterpreter class >> requiredMethodNames: options [
 		readableFormat: readImageFromFile:HeapSize:StartingAt:
 		setFullScreenFlag: setInterruptKeycode: setInterruptPending: setInterruptCheckChain:
 			setSavedWindowSize: success:
+		returnGlobalStructForCurrentThread
+		setMyCurrentThread:_:
 		validInstructionPointer:inMethod:framePointer:) asSet.
 
 	"Nice to actually have all the primitives available"
@@ -4469,7 +4473,7 @@ StackInterpreter >> checkForEventsMayContextSwitch: mayContextSwitch [
 StackInterpreter >> checkForLastObjectOverwrite [
 	<doNotGenerate>
 	| freeStart |
-	checkAllocFiller ifTrue: 
+	self checkAllocFiller ifTrue: 
 		[self assert: ((freeStart := objectMemory freeStart) >= objectMemory scavengeThreshold
 					  or: [(objectMemory longAt: freeStart) = freeStart])]
 ]
@@ -16325,7 +16329,7 @@ StackInterpreter >> marryFrame: theFP SP: theSP copyTemps: copyTemps [
 { #category : #'primitive support' }
 StackInterpreter >> maybeFailForLastObjectOverwrite [
 	<inline: true>
-	checkAllocFiller ifTrue: 
+	self checkAllocFiller ifTrue: 
 		[(objectMemory freeStart < objectMemory scavengeThreshold
 		  and: [(objectMemory longAt: objectMemory freeStart) ~= objectMemory freeStart]) ifTrue:
 			[self primitiveFailFor: PrimErrWritePastObject]]
@@ -19751,6 +19755,19 @@ StackInterpreter >> returnFalse [
 	self commonReturn
 ]
 
+{ #category : #utilities }
+StackInterpreter >> returnGlobalStructForCurrentThread [
+	<returnTypeC: #'struct foo *'>
+	self
+		cCode:'
+	pthread_t selfThread = pthread_self();
+	for(int i=0; i<2; i++){
+		if(all_threads_global[i].MyCurrentThread==selfThread){
+			return &all_threads_global[i];
+		}
+	}'
+]
+
 { #category : #'return bytecodes' }
 StackInterpreter >> returnNil [
 	localReturnValue := objectMemory nilObject.
@@ -20298,6 +20315,16 @@ StackInterpreter >> setMethodClassAssociationOf: methodPointer to: anObject [
 		storePointer: (objectMemory literalCountOf: methodPointer) + LiteralStart - 1
 		ofObject: methodPointer
 		withValue: anObject
+]
+
+{ #category : #simulation }
+StackInterpreter >> setMyCurrentThread: aThread _: index [
+	<var: #aThread type: 'pthread_t'>
+	<var: #index type: 'size_t'>
+
+	self
+		cCode: 'all_threads_global[index].MyCurrentThread=aThread;'
+		inSmalltalk: [ myCurrentThread := aThread ]
 ]
 
 { #category : #'plugin primitive support' }

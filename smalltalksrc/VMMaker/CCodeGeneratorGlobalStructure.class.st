@@ -122,7 +122,8 @@ CCodeGeneratorGlobalStructure >> emitCVariablesOn: aStream [
 		nextPutAll: '# define DECL_MAYBE_SQ_GLOBAL_STRUCT register struct foo * foo = &fum;'; cr;
 		nextPutAll: '# define DECL_MAYBE_VOLATILE_SQ_GLOBAL_STRUCT volatile register struct foo * foo = &fum;'; cr;
 		nextPutAll: '#endif';cr;
-		nextPutAll: '# define GIV(interpreterInstVar) (foo->interpreterInstVar)'; cr;
+		nextPutAll: 'struct foo  all_threads_global[2];'; cr;
+		nextPutAll: '# define GIV(interpreterInstVar) (returnGlobalStructForCurrentThread()->interpreterInstVar)'; cr;
 		nextPutAll: '#else'; cr;
 		nextPutAll: '# define DECL_MAYBE_SQ_GLOBAL_STRUCT /* oh, no mr bill! */'; cr;
 		nextPutAll: '# define DECL_MAYBE_VOLATILE_SQ_GLOBAL_STRUCT /* oh no, mr bill! */'; cr;
