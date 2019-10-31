@@ -101,7 +101,7 @@ sqAllocateMemory(usqInt minHeapSize, usqInt desiredHeapSize)
   heapLimit= valign(max(desiredHeapSize, 1));
 
   while ((!heap) && (heapLimit >= minHeapSize)) {
-      if (MAP_FAILED == (heap= mmap(0, heapLimit, MAP_PROT, MAP_FLAGS, devZero, offsetWeWant))) {
+      if (MAP_FAILED == (heap= mmap(offsetWeWant, heapLimit, MAP_PROT, MAP_FLAGS, devZero, 0))) {
 	  heap= 0;
 	  heapLimit= valign(heapLimit / 4 * 3);
 	}
@@ -117,7 +117,7 @@ sqAllocateMemory(usqInt minHeapSize, usqInt desiredHeapSize)
   if (overallocateMemory)
     uxShrinkMemoryBy(heap + heapLimit, heapLimit - desiredHeapSize);
 
-	offsetWeWant = (off_t) heapLimit;
+	offsetWeWant = (off_t) heapSize;
 
   return (usqInt)heap;
 }

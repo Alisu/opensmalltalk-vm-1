@@ -131,7 +131,7 @@ add_definitions(-DIMMUTABILITY=1)
 add_definitions(-DCOGMTVM=0)
 add_definitions(-DPharoVM=1)
 add_definitions(-DUSE_GLOBAL_STRUCT=1)
-add_definitions(-DUSE_GLOBAL_STRUCT_REG=1)
+add_definitions(-DUSE_GLOBAL_STRUCT_REG=0)
 
 #We require that VM_LABEL does nothing.
 #We should actually cleanup all the places where this is set/used in the VM
