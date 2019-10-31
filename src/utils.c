@@ -300,7 +300,10 @@ char** getPluginPaths(){
 sqInt
 ioExitWithErrorCode(int errorCode)
 {
-    exit(errorCode);
+	int* returnValue = malloc(sizeof(int));
+	*returnValue = errorCode;
+
+    pthread_exit(returnValue);
 }
 
 /* New filename converting function; used by the interpreterProxy function

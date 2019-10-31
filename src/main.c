@@ -55,8 +55,11 @@ int main(int argc, char* argv[]){
 		setMyCurrentThread(thread_id[i], i);
 	}
 
+	int * threadReturn; 
+
 	for(int i = 0; i < 2; i++){
-		pthread_join(thread_id[i], NULL);
+		pthread_join(thread_id[i], &threadReturn);
+		logInfo("Thread %d returned with: %d", i, *threadReturn);
 	}
 }
 
