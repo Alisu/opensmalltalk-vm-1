@@ -26,7 +26,7 @@ TVariableNode >> bindVariablesIn: aDictionary [
 
 { #category : #'C code generation' }
 TVariableNode >> emitCCodeOn: aStream level: level generator: aCodeGen [
-
+	name = #primitiveFunctionPointer ifTrue:[ aStream << 'GIV(primitiveFunctionPointer)'. ^self].
 	aStream nextPutAll: (name = 'nil'
 						ifTrue: [aCodeGen cLiteralFor: nil]
 						ifFalse: [aCodeGen returnPrefixFromVariable: name]).

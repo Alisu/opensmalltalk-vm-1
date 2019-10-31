@@ -527,7 +527,9 @@ StackInterpreter class >> declareCVarsIn: aCCodeGenerator [
 	aCCodeGenerator
 		declareVar: #sendTrace type: 'volatile int';
 		declareVar: #byteCount type: #usqInt;
-		declareVar: #myCurrentThread type: 'pthread_t'.
+		declareVar: #myCurrentThread type: 'pthread_t';
+		var: #primitiveFunctionPointer declareC: 'void (*primitiveFunctionPointer)()'.
+		
 	"These need to be pointers or unsigned."
 	self declareC: #(instructionPointer method newMethod)
 		as: #usqInt
@@ -592,8 +594,6 @@ StackInterpreter class >> declareCVarsIn: aCCodeGenerator [
 		var: #displayBits type: #'void *'.
 	self declareC: #(displayWidth displayHeight displayDepth) as: #int in: aCCodeGenerator.
 	aCCodeGenerator
-		var: #primitiveFunctionPointer
-			declareC: 'void (*primitiveFunctionPointer)()';
 		var: #externalPrimitiveTable
 			declareC: 'void (*externalPrimitiveTable[MaxExternalPrimitiveTableSize + 1 /* ', (MaxExternalPrimitiveTableSize + 1) printString, ' */])(void)';
 		var: #interruptCheckChain
@@ -19762,7 +19762,7 @@ StackInterpreter >> returnGlobalStructForCurrentThread [
 		cCode:'
 	pthread_t selfThread = pthread_self();
 	for(int i=0; i<2; i++){
-		if(all_threads_global[i].MyCurrentThread==selfThread){
+		if(all_threads_global[i].myCurrentThread==selfThread){
 			return &all_threads_global[i];
 		}
 	}'
@@ -20323,7 +20323,7 @@ StackInterpreter >> setMyCurrentThread: aThread _: index [
 	<var: #index type: 'size_t'>
 
 	self
-		cCode: 'all_threads_global[index].MyCurrentThread=aThread;'
+		cCode: 'all_threads_global[index].myCurrentThread=aThread;'
 		inSmalltalk: [ myCurrentThread := aThread ]
 ]
 
