@@ -78,8 +78,8 @@ Deprecated:
 
  */
 
-
 typedef struct {
+  
 	char* imageFile;
 	char isDefaultImage;
 	char hasBeenSelectedByUser;
@@ -91,4 +91,9 @@ typedef struct {
 	int imageParamsCount;
 } VM_PARAMETERS;
 
-void parseArguments(int argc, char* argv[], VM_PARAMETERS * parameters);
+typedef struct {
+  int numberOfImage;
+  VM_PARAMETERS * vmparameters;
+} VM_OVERALL_PARAMETERS;
+
+void parseArguments(int argc, char* argv[], VM_OVERALL_PARAMETERS * parameters);

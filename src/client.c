@@ -46,16 +46,16 @@ EXPORT(int) initPharoVM(char* image, char** vmParams, int vmParamCount, char** i
 
 	aioInit();
     /*
-    TODO handle correctly this function for threaded interpreter
+    TODO handle correctly setPharoCommandLineParameters() function for threaded interpreter*/
     
     static struct isParametersSet ips = {0, PTHREAD_MUTEX_INITIALIZER};
     if(pthread_mutex_lock(&ips.mutex) == 0){
-        if(ips.initialized==0){*/
+        if(ips.initialized==0){
 	        setPharoCommandLineParameters(vmParams, vmParamCount, imageParams, imageParamCount);
-            /*ips.initialized++;
+            ips.initialized++;
         }
     }
-    pthread_mutex_unlock(&(ips.mutex));*/
+    pthread_mutex_unlock(&(ips.mutex));
 	return loadPharoImage(image);
 }
 
