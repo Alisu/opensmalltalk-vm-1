@@ -1375,6 +1375,8 @@ extern void setFullScreenFlag(sqInt value);
 EXPORT(void (*setInterruptCheckChain(void (*aFunction)(void)))()) ;
 extern void setInterruptKeycode(sqInt value);
 extern void setInterruptPending(sqInt value);
+extern void setNumberOfImage (int numberImages);
+extern void initializeAllGlobalsStruct(int numberImages);
 extern void setMyCurrentThread(pthread_t aThread, size_t index);
 extern void setNextWakeupUsecs(usqLong value);
 extern void setSavedWindowSize(sqInt value);
@@ -1688,7 +1690,8 @@ _iss void (*primitiveFunctionPointer)();
 # define DECL_MAYBE_SQ_GLOBAL_STRUCT register struct foo * foo = &fum;
 # define DECL_MAYBE_VOLATILE_SQ_GLOBAL_STRUCT volatile register struct foo * foo = &fum;
 #endif
-struct foo  all_threads_global[2];
+int numberOfImage;
+struct foo * all_threads_global;
 # define GIV(interpreterInstVar) (returnGlobalStructForCurrentThread()->interpreterInstVar)
 #else
 # define DECL_MAYBE_SQ_GLOBAL_STRUCT /* oh, no mr bill! */
@@ -61695,6 +61698,7 @@ readableFormat(sqInt imageVersion)
 	 || (0);
 }
 
+static pthread_mutex_t mutex=PTHREAD_MUTEX_INITIALIZER;
 
 /*	Read an image from the given file stream, allocating an amount of memory
 	to its object heap.
@@ -61988,9 +61992,15 @@ readImageFromFileHeapSizeStartingAt(sqImageFile f, usqInt desiredHeapSize, squea
 	heapSize = (heapSize1 & ((1ULL << bit) - 1)
 		? (((heapSize1 | ((1ULL << bit) - 1)) - ((1ULL << bit) - 1))) + (1ULL << bit)
 		: heapSize1);
-	/* begin memory: */
-	aValue = ((usqInt)(pointerForOop(allocateMemoryMinimumImageFileHeaderSize(heapSize, minimumMemory, f, headerSize))));
-	GIV(memory) = aValue;
+
+	/**We want this section to be done one thread at a time else there is the possibility that we allocate ther same memory space for 2 threads**/
+//	if(pthread_mutex_lock(&mutex) == 0){
+		/* begin memory: */
+		aValue = ((usqInt)(pointerForOop(allocateMemoryMinimumImageFileHeaderSize(heapSize, minimumMemory, f, headerSize))));
+		GIV(memory) = aValue;
+//	}
+//	pthread_mutex_unlock(&mutex);
+
 	if (!(memory())) {
 		insufficientMemoryAvailableError();
 	}
@@ -62001,7 +62011,9 @@ readImageFromFileHeapSizeStartingAt(sqImageFile f, usqInt desiredHeapSize, squea
 		unableToReadImageError();
 	}
 	ensureImageFormatIsUpToDate(swapBytes);
+
 	bytesToShift = GIV(oldSpaceStart) - oldBaseAddr;
+	printf("BytesToShift=%d\n",bytesToShift);
 	/* begin initializeInterpreter: */
 	interpreterProxy = sqGetInterpreterProxy();
 	dummyReferToProxy();
@@ -62668,17 +62680,19 @@ returnAsThroughCallbackContext(sqInt returnTypeOop, VMCallbackContext *vmCallbac
 }
 
 	/* StackInterpreter>>#returnGlobalStructForCurrentThread */
-struct foo *
-returnGlobalStructForCurrentThread(void)
-{   DECL_MAYBE_SQ_GLOBAL_STRUCT
-	
-	pthread_t selfThread = pthread_self();
-	for(int i=0; i<2; i++){
-		if(all_threads_global[i].myCurrentThread==selfThread){
-			return &all_threads_global[i];
+	/**The returnGlobalStructForCurrentThread() function allows interopability but this is slow.
+	 * We should now use parameters.numberOfImage instead of hardcoded 2 in the loop.
+	 * As long as pthread give ordered threadID we can use offset instead but we cannot spawn new thread.**/
+
+	struct foo * returnGlobalStructForCurrentThread(void)
+	{   DECL_MAYBE_SQ_GLOBAL_STRUCT
+		pthread_t selfThread = pthread_self();
+		for(int i=0; i<numberOfImage; i++){
+			if(pthread_equal(all_threads_global[i].myCurrentThread,selfThread)){
+				return &all_threads_global[i];
+			}
 		}
-	}
-	return 0;
+		return 0;
 }
 
 
@@ -63228,6 +63242,17 @@ setMyCurrentThread(pthread_t aThread, size_t index)
 {   DECL_MAYBE_SQ_GLOBAL_STRUCT
 	all_threads_global[index].myCurrentThread=aThread;
 }
+
+void setNumberOfImage (int numberImages){
+	numberOfImage = numberImages;
+}
+
+void initializeAllGlobalsStruct(int numberImages){
+	setNumberOfImage(numberImages);
+	all_threads_global = malloc(sizeof(struct foo) * numberImages);
+}
+
+
 
 	/* StackInterpreter>>#setNextWakeupUsecs: */
 void

@@ -20,6 +20,8 @@ int runThread(void* parameters){
 }
 
 extern void setMyCurrentThread(pthread_t thread, size_t index);
+extern void setNumberOfImage (int numberImages);
+
 
 int main(int argc, char* argv[]){
 
@@ -35,12 +37,13 @@ int main(int argc, char* argv[]){
 	osCogStackPageHeadroom();
 
 	int numberOfImage = parameters.numberOfImage;
+	initializeAllGlobalsStruct(numberOfImage);
 
 	pthread_attr_t tattr;
 
 	pthread_attr_init(&tattr);
 
-	pthread_t thread_id[2];
+	pthread_t thread_id[numberOfImage];
 
 	size_t size;
 	pthread_attr_getstacksize(&tattr, &size);

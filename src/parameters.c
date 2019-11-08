@@ -18,16 +18,12 @@ int endsWithImage( char *string )
 }
 
 int * findImageNameIndex(int argc, char* argv[], VM_OVERALL_PARAMETERS* parameters){
-
-	int * result = malloc(sizeof(int) * 2);
+	/*We know that the number of image cannot exceed argc, we are too lazy to realloc in the right size after*/
+	int * result = malloc(sizeof(int)*argc);
 	int j= 0;
 	//The first parameters is the executable name
 	for(int i=1; i < argc; i ++){
 		if(strcmp(argv[i], "--") == 0 || endsWithImage(argv[i])==0){
-			if(j==2){
-				//pritnf("No more than 2 images is supported at the moment: \n");
-				break;
-			}
 			result[j]= i;
 			j++;
 		}
@@ -124,25 +120,21 @@ int isConsole(){
 #endif
 }
 
-void processImageFileName(VM_OVERALL_PARAMETERS* parameters){
-	for(int i = 0; i<parameters->numberOfImage; i++){
-		if(parameters->vmparameters[i].isDefaultImage){
-			if(!fileExists(parameters->vmparameters[i].imageFile)){
-				if(!openFileDialog("Choose image file", "", "image", &(parameters->vmparameters[i].imageFile), DEFAULT_IMAGE_NAME)){
-					printUsage();
-					exit(1);
-				}
-
-				parameters->vmparameters[i].hasBeenSelectedByUser = true;
+void processImageFileName(VM_PARAMETERS* parameters){
+	if(parameters->isDefaultImage){
+		if(!fileExists(parameters->imageFile)){
+			if(!openFileDialog("Choose image file", "", "image", &(parameters->imageFile), DEFAULT_IMAGE_NAME)){					
+				printUsage();
+				exit(1);
 			}
+			parameters->hasBeenSelectedByUser = true;
 		}
-		//If there are no parameters, we are next to the launch of the VM, we need to add the interactive flag
+	}		//If there are no parameters, we are next to the launch of the VM, we need to add the interactive flag
 		//As we always have two parameters (the --headless)
-		if(parameters->vmparameters[i].vmParamsCount == 2 && parameters->vmparameters[i].imageParamsCount == 0 && !isConsole()){
-			parameters->vmparameters[i].imageParams = malloc(sizeof(void*));
-			parameters->vmparameters[i].imageParamsCount = 1;
-			parameters->vmparameters[i].imageParams[0] = "--interactive";
-		}
+	if(parameters->vmParamsCount == 2 && parameters->imageParamsCount == 0 && !isConsole()){			
+		parameters->imageParams = malloc(sizeof(void*));
+		parameters->imageParamsCount = 1;
+		parameters->imageParams[0] = "--interactive";
 	}
 }
 
@@ -228,10 +220,14 @@ void parseArguments(int argc, char* argv[], VM_OVERALL_PARAMETERS* parameters){
 	fullPath = alloca(FILENAME_MAX);
 	fullPath = getFullPath(argv[0], fullPath, FILENAME_MAX);
 	setVMPath(fullPath);
+	
+	//We process the parameters for each image
+	for(int i = 0; i<parameters->numberOfImage; i++){
 
-	processImageFileName(parameters);
+		processImageFileName(&parameters->vmparameters[i]);
 
-	processVMOptions(parameters);
+		processVMOptions(&parameters->vmparameters[i]);
 
-	logParameters(parameters);
+		logParameters(&parameters->vmparameters[i]);
+	}
 }

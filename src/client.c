@@ -55,8 +55,11 @@ EXPORT(int) initPharoVM(char* image, char** vmParams, int vmParamCount, char** i
             ips.initialized++;
         }
     }
+	int r = loadPharoImage(image);
+
     pthread_mutex_unlock(&(ips.mutex));
-	return loadPharoImage(image);
+
+    return r;
 }
 
 EXPORT(void) runInterpreter(){
