@@ -527,8 +527,8 @@ StackInterpreter class >> declareCVarsIn: aCCodeGenerator [
 	aCCodeGenerator
 		declareVar: #sendTrace type: 'volatile int';
 		declareVar: #byteCount type: #usqInt;
-		declareVar: #myCurrentThread type: 'pthread_t';
-		var: #primitiveFunctionPointer declareC: 'void (*primitiveFunctionPointer)()'.
+		declareVar: #myCurrentThread type: 'pthread_t'.
+		"var: #primitiveFunctionPointer type: 'void (*)()'."
 		
 	"These need to be pointers or unsigned."
 	self declareC: #(instructionPointer method newMethod)

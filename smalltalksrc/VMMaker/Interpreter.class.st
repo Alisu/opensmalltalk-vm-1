@@ -148,7 +148,7 @@ Interpreter class >> declareCVarsIn: aCCodeGenerator [
 		declareC: 'void *primitiveTable[MaxPrimitiveIndex + 2 /* ', (MaxPrimitiveIndex +2) printString, ' */] = ',	self primitiveTableString.
 	aCCodeGenerator
 		var: #primitiveFunctionPointer
-		declareC: 'void *primitiveFunctionPointer'.	"use a better type than void *, apparently - tpr"
+		declareC: 'void *primitiveFunctionPointer'.	
 	aCCodeGenerator
 		var: #methodCache
 		declareC: 'sqIntptr_t methodCache[MethodCacheSize + 1 /* ', (MethodCacheSize + 1) printString, ' */]'.

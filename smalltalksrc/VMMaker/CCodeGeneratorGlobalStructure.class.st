@@ -112,6 +112,7 @@ CCodeGeneratorGlobalStructure >> emitCVariablesOn: aStream [
 							[target nextPutAll: (inStruct ifTrue: ['_iss '] ifFalse: ['static '])]].
 				target nextPutAll: decl; nextPut: $;; cr]].
 	structure
+		nextPutAll: '_iss void (*primitiveFunctionPointer)();';cr;
 		nextPutAll: '#undef _iss'; cr;
 		nextPutAll: '#if SQ_USE_GLOBAL_STRUCT'; cr;
 		nextPutAll: ' } fum;'; cr;
@@ -202,6 +203,7 @@ CCodeGeneratorGlobalStructure >> placeInStructure: var [
 	(check includes: $() ifTrue: [^false].
 	(check includesSubstring: 'static') ifTrue: [^false].
 	(check includesSubstring: 'volatile') ifTrue: [^false].
+	(var includesSubstring: 'primitiveFunctionPointer') ifTrue: [^false].
 
 	^(vmClass mustBeGlobal: var) not
 ]
