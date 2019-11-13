@@ -1,0 +1,1 @@
+PharoVMMaker generate: #StackVM outputDirectory: '.'
