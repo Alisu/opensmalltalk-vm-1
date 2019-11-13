@@ -2726,13 +2726,12 @@ CCodeGenerator >> generateNot: msgNode on: aStream indent: level [
 	self emitCExpression: msgNode receiver on: aStream indent: level
 ]
 
-{ #category : #'C translation' }
+{ #category : #public }
 CCodeGenerator >> generateNotEqual: msgNode on: aStream indent: level [
-	"Generate the C code for this message onto the given stream."
-
-	self emitCExpression: msgNode receiver on: aStream indent: level.
-	aStream nextPutAll: ' != '.
-	self emitCExpression: msgNode args first on: aStream indent: level
+    "Generate the C code for this message onto the given stream."
+    self emitCExpression: msgNode receiver on: aStream indent: level.
+    aStream nextPutAll: ' != '.
+    self emitCExpression: msgNode args first on: aStream indent: level
 ]
 
 { #category : #'C translation' }
@@ -2802,6 +2801,13 @@ CCodeGenerator >> generatePreIncrement: msgNode on: aStream indent: level [
 	aStream nextPutAll: '++'.
 	aStream nextPutAll: (self returnPrefixFromVariable: varNode name).
 
+]
+
+{ #category : #'C translation support' }
+CCodeGenerator >> generatePrimitiveFunctionPointer: msgNode on: aStream indent: level [
+    aStream nextPutAll: 'GIV(primitiveFunctionPointer())'.
+    aStream nextPut: $(.
+    aStream nextPut: $)
 ]
 
 { #category : #'C translation' }
@@ -3469,6 +3475,8 @@ CCodeGenerator >> initializeCTranslationDictionary [
 	
 	translationDict := Dictionary new: 200.
 	pairs := #(
+	#primitiveFunctionPointer #generatePrimitiveFunctionPointer:on:indent:
+	
 	#&				#generateAnd:on:indent:
 	#|				#generateOr:on:indent:
 	#abs			#generateAbs:on:indent:

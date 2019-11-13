@@ -123,6 +123,37 @@ StackInterpreterPrimitives >> markFrame: theFPInt [
 		put: ((stackPages longAt: theFPInt + FoxFrameFlags) bitOr: 2)
 ]
 
+{ #category : #'object access primitives' }
+StackInterpreterPrimitives >> newImageLocation: anImageLocation withArguments: anArrayOfArgs [
+	<var: #aThread type: 'pthread_t'>
+	<var: #index type: 'size_t'>
+
+	self cCode: '
+	numberOfImage = numberOfImage++;
+	
+	//Pointers to the old struc will be lost
+	
+	growAllGlobalsStruct(numberOfImage);
+	
+	pthread_attr_t tattr;
+
+	pthread_attr_init(&tattr);
+
+	pthread_t thread_id;
+
+	size_t size;
+	pthread_attr_getstacksize(&tattr, &size);
+
+   if(pthread_attr_setstacksize(&tattr, size*4)){
+		perror("Thread attr");
+   }
+	
+	if(pthread_create(&thread_id, &tattr, loadAndExecute, &param){
+			perror("Thread creation");
+		}
+	setMyCurrentThread(thread_id,numberOfImage - 1);'
+]
+
 { #category : #'primitive support' }
 StackInterpreterPrimitives >> noInlineLoadFloatOrIntFrom: floatOrInt [
 	<inline: #never>

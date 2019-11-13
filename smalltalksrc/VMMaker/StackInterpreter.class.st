@@ -2033,6 +2033,9 @@ StackInterpreter class >> requiredMethodNames: options [
 			setSavedWindowSize: success:
 		returnGlobalStructForCurrentThread
 		setMyCurrentThread:_:
+		setNumberOfImage:
+		initializeAllGlobalsStruct:
+		
 		validInstructionPointer:inMethod:framePointer:) asSet.
 
 	"Nice to actually have all the primitives available"
@@ -8076,6 +8079,16 @@ StackInterpreter >> getWord32FromFile: aFile swap: swapFlag [
 		ifFalse: [w]
 ]
 
+{ #category : #simulation }
+StackInterpreter >> growAllGlobalsStruct: numberImages [
+	<var: #numberImages type: 'size_t'>
+
+	self
+		cCode: 
+		'setNumberOfImage(numberImages);
+		 all_threads_global = realloc(sizeof(struct foo) * numberImages);'
+]
+
 { #category : #'message sending' }
 StackInterpreter >> handleForwardedSelectorFaultFor: selectorOop [
 	"Handle a send fault that is due to a send using a forwarded selector.
@@ -8522,6 +8535,15 @@ StackInterpreter >> initialize [
 	statForceInterruptCheck := statStackOverflow := statCheckForEvents :=
 	statProcessSwitch := statIOProcessEvents := statStackPageDivorce :=
 	statIdleUsecs := 0
+]
+
+{ #category : #simulation }
+StackInterpreter >> initializeAllGlobalsStruct: numberImages [
+	<var: #numberImages type: 'int'>
+
+	self
+		cCode: 'setNumberOfImage(numberImages);
+	all_threads_global = malloc(sizeof(struct foo) * numberImages);'
 ]
 
 { #category : #initialization }
@@ -10067,6 +10089,49 @@ StackInterpreter >> literalCountOfAlternateHeader: headerPointer [
 StackInterpreter >> literalCountOfOriginalHeader: headerPointer [
 	<inline: true>
 	^(headerPointer >> 10) bitAnd: 16rFF
+]
+
+{ #category : #'process primitive support' }
+StackInterpreter >> loadAndExecute: aFileLocation [
+	<var: #aFileLocation type: 'char*'>
+	
+	self cCode: '
+	initGlobalStructure;
+	ioInitTime();
+
+   ioVMThread = ioCurrentOSThread();
+	ioInitExternalSemaphores();
+
+	aioInit();
+	static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+	if(pthread_mutex_lock(&mutex) == 0){
+	
+		FILE* imageFile = NULL;
+
+   		/* Open the image file. */
+   		imageFile = fopen(aFileLocation, "rb");
+   		if(!imageFile){
+    		perror("Opening Image");
+       	return false;
+    	}
+	
+    	/* Get the size of the image file*/
+    	fseek(imageFile, 0, SEEK_END);
+    	imageSize = ftell(imageFile);
+    	fseek(imageFile, 0, SEEK_SET);
+
+    	readImageFromFileHeapSizeStartingAt(imageFile, 0, 0);
+    	fclose(imageFile);
+
+    	setImageName(fileName);
+	}
+
+    interpret();	
+	'
+
+
+
+
 ]
 
 { #category : #'bitblt support' }
@@ -19757,15 +19822,17 @@ StackInterpreter >> returnFalse [
 
 { #category : #utilities }
 StackInterpreter >> returnGlobalStructForCurrentThread [
+""
 	<returnTypeC: #'struct foo *'>
 	self
 		cCode:'
-	pthread_t selfThread = pthread_self();
-	for(int i=0; i<2; i++){
-		if(all_threads_global[i].myCurrentThread==selfThread){
-			return &all_threads_global[i];
+		pthread_t selfThread = pthread_self();
+		for(int i=0; i<numberOfImage; i++){
+			if(pthread_equal(all_threads_global[i].myCurrentThread,selfThread)){
+				return &all_threads_global[i];
+			}
 		}
-	}'
+		return 0;'
 ]
 
 { #category : #'return bytecodes' }
@@ -20332,6 +20399,14 @@ StackInterpreter >> setNextWakeupUsecs: value [
 	<api>
 	<var: #value type: #usqLong>
 	nextWakeupUsecs := value
+]
+
+{ #category : #simulation }
+StackInterpreter >> setNumberOfImage: numberImages [
+	<var: #numberImages type: 'int'>
+
+	self
+		cCode: 'numberOfImage = numberImages'
 ]
 
 { #category : #'plugin primitive support' }
