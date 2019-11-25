@@ -1473,7 +1473,7 @@ StackInterpreter class >> initializePrimitiveTable [
 		(120 primitiveCalloutToFFI)
 		(121 primitiveImageName)
 		(122 primitiveNoop)					"Blue Book: primitiveImageVolume"
-		(123 primitiveFail)	"was primitiveValueUninterruptably"
+		(123 primitiveOpenNewImage)					"was primitiveValueUninterruptably"
 		(124 primitiveLowSpaceSemaphore)
 		(125 primitiveSignalAtBytesLeft)
 
@@ -2034,7 +2034,11 @@ StackInterpreter class >> requiredMethodNames: options [
 		returnGlobalStructForCurrentThread
 		setMyCurrentThread:_:
 		setNumberOfImage:
+		getNumberOfImage
+		getThreadsID
 		initializeAllGlobalsStruct:
+		growAllGlobalsStruct:
+		loadAndExecute:
 		
 		validInstructionPointer:inMethod:framePointer:) asSet.
 
@@ -8009,6 +8013,14 @@ StackInterpreter >> getNextWakeupUsecs [
 	^nextWakeupUsecs
 ]
 
+{ #category : #thInter }
+StackInterpreter >> getNumberOfImage [
+	<returnTypeC: #int>
+
+	self
+		cCode: 'return numberOfImage;'
+]
+
 { #category : #'plugin primitive support' }
 StackInterpreter >> getSavedWindowSize [
 	^savedWindowSize
@@ -8060,6 +8072,14 @@ StackInterpreter >> getThisSessionID [
 	^globalSessionID
 ]
 
+{ #category : #thInter }
+StackInterpreter >> getThreadsID [
+	<returnTypeC: 'pthread_t *'>
+
+	self
+		cCode: 'return thread_id;'
+]
+
 { #category : #'image save/restore' }
 StackInterpreter >> getWord32FromFile: aFile swap: swapFlag [
 	"Answer the next 32 bit word read from aFile, byte-swapped according to the swapFlag."
@@ -8079,14 +8099,16 @@ StackInterpreter >> getWord32FromFile: aFile swap: swapFlag [
 		ifFalse: [w]
 ]
 
-{ #category : #simulation }
+{ #category : #thInter }
 StackInterpreter >> growAllGlobalsStruct: numberImages [
-	<var: #numberImages type: 'size_t'>
+	<var: #numberImages type: 'int'>
 
 	self
 		cCode: 
-		'setNumberOfImage(numberImages);
-		 all_threads_global = realloc(sizeof(struct foo) * numberImages);'
+		'//Pointers to the old struc will be lost
+	all_threads_global = realloc(all_threads_global, sizeof(struct foo) * numberImages);
+	thread_id = realloc(thread_id, sizeof(pthread_t) * numberImages);'
+		inSmalltalk: [ self growAllGlobalsStruct: numberImages ]
 ]
 
 { #category : #'message sending' }
@@ -8537,13 +8559,16 @@ StackInterpreter >> initialize [
 	statIdleUsecs := 0
 ]
 
-{ #category : #simulation }
+{ #category : #thInter }
 StackInterpreter >> initializeAllGlobalsStruct: numberImages [
 	<var: #numberImages type: 'int'>
 
 	self
-		cCode: 'setNumberOfImage(numberImages);
-	all_threads_global = malloc(sizeof(struct foo) * numberImages);'
+		cCode: '
+	setNumberOfImage(numberImages);
+	all_threads_global = malloc(sizeof(struct foo) * numberImages);
+	thread_id = malloc(sizeof(pthread_t) * numberImages);'
+	inSmalltalk: [ self initializeAllGlobalsStruct: numberImages ]
 ]
 
 { #category : #initialization }
@@ -10091,43 +10116,45 @@ StackInterpreter >> literalCountOfOriginalHeader: headerPointer [
 	^(headerPointer >> 10) bitAnd: 16rFF
 ]
 
-{ #category : #'process primitive support' }
-StackInterpreter >> loadAndExecute: aFileLocation [
-	<var: #aFileLocation type: 'char*'>
+{ #category : #thInter }
+StackInterpreter >> loadAndExecute: anArrayOfArgs [
+	"<var: #anArrayOfArgs type: 'sqInt'>"
 	
 	self cCode: '
-	initGlobalStructure;
+	//Preinit
 	ioInitTime();
 
    ioVMThread = ioCurrentOSThread();
 	ioInitExternalSemaphores();
 
 	aioInit();
+	
+	/*Param init
+	char * params[]= {"eval","10","factorial"};
+	 
+	setImageParams(3, params);*/
+		
+	//Open image and create globals
 	static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 	if(pthread_mutex_lock(&mutex) == 0){
-	
 		FILE* imageFile = NULL;
 
    		/* Open the image file. */
-   		imageFile = fopen(aFileLocation, "rb");
+   		imageFile = fopen("/Users/theo/Documents/Pharo/images/TestImage2/TestImage2.image", "rb");
    		if(!imageFile){
     		perror("Opening Image");
-       	return false;
+       	return;
     	}
-	
-    	/* Get the size of the image file*/
-    	fseek(imageFile, 0, SEEK_END);
-    	imageSize = ftell(imageFile);
-    	fseek(imageFile, 0, SEEK_SET);
 
     	readImageFromFileHeapSizeStartingAt(imageFile, 0, 0);
     	fclose(imageFile);
-
-    	setImageName(fileName);
+	   setImageName("/Users/theo/Documents/Pharo/images/TestImage2/TestImage2.image"); 
 	}
-
-    interpret();	
+		pthread_mutex_unlock(&mutex);
+		interpret();
 	'
+	
+
 
 
 
@@ -10146,6 +10173,47 @@ StackInterpreter >> loadBitBltFrom: bb [
 	fn := self ioLoadFunction: 'loadBitBltFrom' From: 'BitBltPlugin'.
 	fn = 0 ifTrue: [^self primitiveFail].
 	^self cCode: '((sqInt (*)(sqInt))fn)(bb)'
+]
+
+{ #category : #thInter }
+StackInterpreter >> loadImageAndExecute: aFileLocation [
+	<var: #aFileLocation type: 'char*'>
+	
+" self cCode: [ 
+		self preInitImage.
+		self createMutexLock:[self openAndReadImage: aFileLocation].
+		self interpret]."
+	
+	self cCode: '
+	ioInitTime();
+
+   ioVMThread = ioCurrentOSThread();
+	ioInitExternalSemaphores();
+
+	aioInit();
+	
+	static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+	if(pthread_mutex_lock(&mutex) == 0){
+		FILE* imageFile = NULL;
+
+   		/* Open the image file. */
+   		imageFile = fopen(aFileLocation, "rb");
+   		if(!imageFile){
+    		perror("Opening Image");
+       	return;
+    	}
+
+    	readImageFromFileHeapSizeStartingAt(imageFile, 0, 0);
+    	fclose(imageFile);
+	   setImageName(aFileLocation); 
+	}
+		pthread_mutex_unlock(&mutex);
+		interpret();'
+
+
+
+
+
 ]
 
 { #category : #initialization }
@@ -16905,6 +16973,35 @@ StackInterpreter >> nativeStackSize [
 	^ 4 *1024 * 1024
 ]
 
+{ #category : #thInter }
+StackInterpreter >> newImageWithArguments: anArrayOfArgs [
+	<var: #anArrayOfArgs type: 'sqInt'>
+
+	self cCode: '
+	pthread_attr_t tattr;
+
+	pthread_attr_init(&tattr);
+
+	size_t size;
+	pthread_attr_getstacksize(&tattr, &size);
+
+   if(pthread_attr_setstacksize(&tattr, size*4)){
+		perror("Thread attr");
+   }
+	
+	//Pointers to the old struc will be lost
+	
+	growAllGlobalsStruct(numberOfImage + 1);
+	
+	if(pthread_create(&thread_id[numberOfImage], &tattr, loadAndExecute, NULL)){
+			perror("Thread creation");
+		}
+	setMyCurrentThread(thread_id[numberOfImage],numberOfImage);
+	int oldNumber = numberOfImage;
+	numberOfImage = numberOfImage + 1;
+	'
+]
+
 { #category : #'compiled methods' }
 StackInterpreter >> noAssertHeaderOf: methodPointer [
 	^objectMemory fetchPointer: HeaderIndex ofObject: methodPointer
@@ -17117,6 +17214,27 @@ StackInterpreter >> okayInterpreterObjects [
 		].
 	].
 	self okayStackZone.
+]
+
+{ #category : #thInter }
+StackInterpreter >> openAndReadImage: aFileLocation [
+	<var: #aFileLocation type: 'char*'>
+	
+	self cCode:'
+		FILE* imageFile = NULL;
+
+   		/* Open the image file. */
+   		imageFile = fopen(aFileLocation, "rb");
+   		if(!imageFile){
+    		perror("Opening Image");
+       	return;
+    	}
+
+    	readImageFromFileHeapSizeStartingAt(imageFile, 0, 0);
+    	fclose(imageFile);
+	   setImageName(aFileLocation); 	
+	'
+	inSmalltalk: [ self openAndReadImage: aFileLocation ]
 ]
 
 { #category : #'simulation support' }
@@ -17389,6 +17507,20 @@ StackInterpreter >> preGCAction: gcModeArg [
 	(gcModeArg = GCModeFull
 	 and: [objectMemory hasSpurMemoryManagerAPI]) ifTrue:
 		[self flushMethodCache]
+]
+
+{ #category : #thInter }
+StackInterpreter >> preInitImage [
+"I am not really sure all this is necessary but for now i will do it since it works"
+
+	self cCode: '
+	ioInitTime();
+
+   ioVMThread = ioCurrentOSThread();
+	ioInitExternalSemaphores();
+
+	aioInit();'
+	inSmalltalk: [ self preInitImage. ]
 ]
 
 { #category : #'primitive support' }
@@ -19820,7 +19952,7 @@ StackInterpreter >> returnFalse [
 	self commonReturn
 ]
 
-{ #category : #utilities }
+{ #category : #thInter }
 StackInterpreter >> returnGlobalStructForCurrentThread [
 ""
 	<returnTypeC: #'struct foo *'>
@@ -19832,7 +19964,8 @@ StackInterpreter >> returnGlobalStructForCurrentThread [
 				return &all_threads_global[i];
 			}
 		}
-		return 0;'
+		logError("Global structure for current thread not found\n");
+		exit(1);'
 ]
 
 { #category : #'return bytecodes' }
@@ -20384,7 +20517,7 @@ StackInterpreter >> setMethodClassAssociationOf: methodPointer to: anObject [
 		withValue: anObject
 ]
 
-{ #category : #simulation }
+{ #category : #thInter }
 StackInterpreter >> setMyCurrentThread: aThread _: index [
 	<var: #aThread type: 'pthread_t'>
 	<var: #index type: 'size_t'>
@@ -20406,7 +20539,7 @@ StackInterpreter >> setNumberOfImage: numberImages [
 	<var: #numberImages type: 'int'>
 
 	self
-		cCode: 'numberOfImage = numberImages'
+		cCode: 'numberOfImage = numberImages;'
 ]
 
 { #category : #'plugin primitive support' }

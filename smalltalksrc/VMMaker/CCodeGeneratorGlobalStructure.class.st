@@ -125,6 +125,7 @@ CCodeGeneratorGlobalStructure >> emitCVariablesOn: aStream [
 		nextPutAll: '#endif';cr;
 		nextPutAll: 'int numberOfImage;'; cr;
 		nextPutAll: 'struct foo * all_threads_global;'; cr;
+		nextPutAll: 'pthread_t * thread_id;'; cr;
 		nextPutAll: '# define GIV(interpreterInstVar) (returnGlobalStructForCurrentThread()->interpreterInstVar)'; cr;
 		nextPutAll: '#else'; cr;
 		nextPutAll: '# define DECL_MAYBE_SQ_GLOBAL_STRUCT /* oh, no mr bill! */'; cr;
