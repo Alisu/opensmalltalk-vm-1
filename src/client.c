@@ -24,10 +24,6 @@ void mtfsfi(unsigned long long fpscr)
 #   define mtfsfi(fpscr)
 #endif
 
-struct isParametersSet{
-    size_t initialized;
-    pthread_mutex_t mutex;
-};
 
 int loadPharoImage(char* fileName);
 
@@ -45,19 +41,23 @@ EXPORT(int) initPharoVM(char* image, char** vmParams, int vmParamCount, char** i
 	ioInitExternalSemaphores();
 
 	aioInit();
-    /*
-    TODO handle correctly setPharoCommandLineParameters() function for threaded interpreter*/
-    
-    static struct isParametersSet ips = {0, PTHREAD_MUTEX_INITIALIZER};
-    if(pthread_mutex_lock(&ips.mutex) == 0){
-        if(ips.initialized==0){
-	        setPharoCommandLineParameters(vmParams, vmParamCount, imageParams, imageParamCount);
-            ips.initialized++;
-        }
-    }
-	int r = loadPharoImage(image);
+   
+    /* WARNING setPharoCommandLineParameters() may not be handled correctly function for threaded interpreter*/
 
-    pthread_mutex_unlock(&(ips.mutex));
+    pthread_mutex_t mutex= PTHREAD_MUTEX_INITIALIZER;
+    int r =0;
+   
+    if(pthread_mutex_lock(&mutex) == 0){
+        
+        /**
+         * setting vm param and image param;
+         *  in fact vm params is the same for all the images else we will have a problem with the vm 
+         * or with image with not the rights vm params**/
+	    setPharoCommandLineParameters(vmParams, vmParamCount, imageParams, imageParamCount);
+        /**loading the image and allocating ressource for it done in a the mutex to not call mmap in the same time and have the same memory allocated**/
+	    r = loadPharoImage(image);
+    }
+    pthread_mutex_unlock(&mutex);
 
     return r;
 }

@@ -1205,11 +1205,14 @@ extern sqInt getFullScreenFlag(void);
 extern sqInt getInterruptKeycode(void);
 extern sqInt getInterruptPending(void);
 extern usqLong getNextWakeupUsecs(void);
+extern int getNumberOfImage(void);
 extern sqInt getSavedWindowSize(void);
 static sqInt getSnapshotScreenSize(void);
 extern sqInt * getStackPointer(void);
 extern sqInt getThisSessionID(void);
+extern pthread_t * getThreadsID(void);
 static sqInt NoDbgRegParms getWord32FromFileswap(sqImageFile aFile, sqInt swapFlag);
+extern void growAllGlobalsStruct(int numberImages);
 static sqInt NoDbgRegParms handleForwardedSelectorFaultFor(sqInt selectorOop);
 static sqInt NoDbgRegParms handleForwardedSendFaultForTag(sqInt classTag);
 static sqInt NoDbgRegParms handleSpecialSelectorSendFaultForfpsp(sqInt obj, char *theFP, char *theSP);
@@ -1220,6 +1223,9 @@ static sqInt NoDbgRegParms ifCurrentStackPageHasValidHeadPointers(StackPage *the
 static usqInt NoDbgRegParms iframeMethod(char *theFP);
 extern void ifValidWriteBackStackPointersSaveTo(void *theCFP, void *theCSP, char **savedFPP, char **savedSPP);
 extern sqInt includesBehaviorThatOf(sqInt aClass, sqInt aSuperclass);
+extern void initializeAllGlobalsStruct(int numberImages);
+extern void initA();
+extern int * getA();
 static sqInt NoDbgRegParms instructionPointerForFramecurrentFPcurrentIP(char *spouseFP, char *currentFP, sqInt instrPtr);
 static sqInt NeverInline interpreterAllocationReserveBytes(void);
 extern void ioFilenamefromStringofLengthresolveAliases(char *aCharBuffer, char *aFilenameString, sqInt filenameLength, sqInt aBoolean);
@@ -1246,6 +1252,7 @@ extern sqInt isKindOf(sqInt oop, char *className);
 extern sqInt isMemberOf(sqInt oop, char *className);
 static sqInt NoDbgRegParms lengthOfNameOfClass(sqInt classOop);
 extern sqInt literalofMethod(sqInt offset, sqInt methodPointer);
+extern void loadAndExecute(sqInt anArrayOfArgs);
 extern sqInt loadBitBltFrom(sqInt bb);
 extern void loadInitialContext(void);
 extern void longPrintOop(sqInt oop);
@@ -1283,6 +1290,7 @@ static sqInt NoDbgRegParms methodUsesPrimitiveErrorCode(sqInt aMethodObj);
 EXPORT(void) moduleUnloaded(char *aModuleName);
 static char * NoDbgRegParms moveFramesInthroughtoPage(StackPage *oldPage, char *theFP, StackPage *newPage);
 static char * NoDbgRegParms nameOfClass(sqInt classOop);
+static void NoDbgRegParms newImageWithArguments(sqInt anArrayOfArgs);
 static sqInt NoDbgRegParms noInlineTemporaryin(sqInt offset, char *theFP);
 static sqInt NoDbgRegParms noInlineTemporaryinput(sqInt offset, char *theFP, sqInt valueOop);
 static sqInt NoDbgRegParms noMarkedContextsOnPage(StackPage *thePage);
@@ -1375,10 +1383,9 @@ extern void setFullScreenFlag(sqInt value);
 EXPORT(void (*setInterruptCheckChain(void (*aFunction)(void)))()) ;
 extern void setInterruptKeycode(sqInt value);
 extern void setInterruptPending(sqInt value);
-extern void setNumberOfImage (int numberImages);
-extern void initializeAllGlobalsStruct(int numberImages);
 extern void setMyCurrentThread(pthread_t aThread, size_t index);
 extern void setNextWakeupUsecs(usqLong value);
+extern void setNumberOfImage(int numberImages);
 extern void setSavedWindowSize(sqInt value);
 static void setSignalLowSpaceFlagAndSaveProcess(void);
 static void NoDbgRegParms setTraceFlagOnContextsFramesPageIfNeeded(sqInt aContext);
@@ -1468,6 +1475,7 @@ static void primitiveInstVarAtPut(void);
 EXPORT(sqInt) primitiveLongRunningPrimitive(void);
 EXPORT(sqInt) primitiveLongRunningPrimitiveSemaphore(void);
 static void primitiveObjectPointsTo(void);
+static void primitiveOpenNewImage(void);
 static void primitivePerform(void);
 static void primitivePin(void);
 EXPORT(void) primitiveSetGCSemaphore(void);
@@ -1692,6 +1700,7 @@ _iss void (*primitiveFunctionPointer)();
 #endif
 int numberOfImage;
 struct foo * all_threads_global;
+pthread_t * thread_id;
 # define GIV(interpreterInstVar) (returnGlobalStructForCurrentThread()->interpreterInstVar)
 #else
 # define DECL_MAYBE_SQ_GLOBAL_STRUCT /* oh, no mr bill! */
@@ -1707,6 +1716,7 @@ register struct foo * foo asm(fooxstr(USE_GLOBAL_STRUCT_REG));
 static struct foo * foo = &fum;
 #endif
 #endif
+static sqInt primitiveFunctionPointer;
 sqInt checkForLeaks;
 sqInt debugCallbackPath;
 void * displayBits;
@@ -1856,7 +1866,7 @@ static void (*primitiveTable[MaxPrimitiveIndex + 2 /* 577 */])(void) = {
 	/* 120 */ primitiveCalloutToFFI,
 	/* 121 */ primitiveImageName,
 	/* 122 */ primitiveNoop,
-	/* 123 */ (void (*)(void))0,
+	/* 123 */ primitiveOpenNewImage,
 	/* 124 */ primitiveLowSpaceSemaphore,
 	/* 125 */ primitiveSignalAtBytesLeft,
 	/* 126 */ primitiveDeferDisplayUpdates,
@@ -2317,7 +2327,7 @@ static signed char primitiveAccessorDepthTable[MaxPrimitiveIndex + 2 /* 577 */] 
 /*60*/	0, 0, 0,-1,-1,-1,-1,-1, 0, 0,-1,-1, 0, 1, 1, 0, 0, 0, 0, 0,
 /*80*/	-1,-1,-1, 0,-1,-1, 0, 0, 1,-1,-1, 0, 0, 0, 0,-1,-1,-1, 0, 0,
 /*100*/	1, 1, 3, 2,-1,-1,-1,-1,-1,-1, 0, 0,-1,-1,-1, 1,-1,-1, 1, 0,
-/*120*/	-1, 0,-1,-1, 0, 0, 0, 0, 0,-1,-1,-1, 1, 0, 0,-1, 0,-1,-1,-1,
+/*120*/	-1, 0,-1, 0, 0, 0, 0, 0, 0,-1,-1,-1, 1, 0, 0,-1, 0,-1,-1,-1,
 /*140*/	-1, 1,-1, 1, 0,-1,-1,-1, 0, 0,-1,-1,-1,-1,-1,-1,-1,-1, 1, 1,
 /*160*/	0, 0,-1, 0, 0,-1,-1,-1, 1, 0, 0, 1,-1, 1, 1,-1,-1,-1,-1,-1,
 /*180*/	0,-1,-1, 0, 0, 0, 1, 1, 1, 0,-1,-1,-1,-1,-1, 1, 2,-1,-1,-1,
@@ -55305,6 +55315,14 @@ getNextWakeupUsecs(void)
 	return GIV(nextWakeupUsecs);
 }
 
+	/* StackInterpreter>>#getNumberOfImage */
+int
+getNumberOfImage(void)
+{
+	return numberOfImage;
+	return 0;
+}
+
 	/* StackInterpreter>>#getSavedWindowSize */
 sqInt
 getSavedWindowSize(void)
@@ -55350,6 +55368,12 @@ getThisSessionID(void)
 	return GIV(globalSessionID);
 }
 
+	/* StackInterpreter>>#getThreadsID */
+pthread_t *
+getThreadsID(void)
+{
+	return thread_id;
+}
 
 /*	Answer the next 32 bit word read from aFile, byte-swapped according to the
 	swapFlag. 
@@ -55366,6 +55390,15 @@ getWord32FromFileswap(sqImageFile aFile, sqInt swapFlag)
 	return (swapFlag
 		? SQ_SWAP_4_BYTES(w)
 		: w);
+}
+
+	/* StackInterpreter>>#growAllGlobalsStruct: */
+void
+growAllGlobalsStruct(int numberImages)
+{
+	//Pointers to the old struc will be lost
+	all_threads_global = realloc(all_threads_global, sizeof(struct foo) * numberImages);
+	thread_id = realloc(thread_id, sizeof(pthread_t) * numberImages);
 }
 
 
@@ -55703,6 +55736,15 @@ includesBehaviorThatOf(sqInt aClass, sqInt aSuperclass)
 	return 0;
 }
 
+	/* StackInterpreter>>#initializeAllGlobalsStruct: */
+void
+initializeAllGlobalsStruct(int numberImages)
+{
+	
+	setNumberOfImage(numberImages);
+	all_threads_global = malloc(sizeof(struct foo) * numberImages);
+	thread_id = malloc(sizeof(pthread_t) * numberImages);
+}
 
 /*	Answer the bytecode pc object (i.e. SmallInteger) for an active frame. The
 	bytecode pc is derived from the frame's pc. If the frame is the top frame
@@ -56281,6 +56323,48 @@ literalofMethod(sqInt offset, sqInt methodPointer)
 {
 	/* begin fetchPointer:ofObject: */
 	return longAt((methodPointer + BaseHeaderSize) + (((sqInt)((usqInt)((offset + LiteralStart)) << (shiftForWord())))));
+}
+
+
+/*	<var: #anArrayOfArgs type: 'sqInt'> */
+
+	/* StackInterpreter>>#loadAndExecute: */
+void
+loadAndExecute(sqInt anArrayOfArgs)
+{
+	
+	//Preinit
+	ioInitTime();
+
+   ioVMThread = ioCurrentOSThread();
+	ioInitExternalSemaphores();
+
+	aioInit();
+	
+	/*Param init
+	char * params[]= {"eval","10","factorial"};
+	 
+	setImageParams(3, params);*/
+		
+	//Open image and create globals
+	static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+	if(pthread_mutex_lock(&mutex) == 0){
+		FILE* imageFile = NULL;
+
+   		/* Open the image file. */
+   		imageFile = fopen("/Users/theo/Documents/Pharo/images/TestImage2/TestImage2.image", "rb");
+   		if(!imageFile){
+    		perror("Opening Image");
+       	return;
+    	}
+
+    	readImageFromFileHeapSizeStartingAt(imageFile, 0, 0);
+    	fclose(imageFile);
+	   setImageName("/Users/theo/Documents/Pharo/images/TestImage2/TestImage2.image"); 
+	}
+		pthread_mutex_unlock(&mutex);
+		interpret();
+	
 }
 
 
@@ -58331,6 +58415,35 @@ nameOfClass(sqInt classOop)
 		return "bad class";
 	}
 	return firstIndexableField(maybeNameOop);
+}
+
+	/* StackInterpreter>>#newImageWithArguments: */
+static void NoDbgRegParms
+newImageWithArguments(sqInt anArrayOfArgs)
+{
+	
+	pthread_attr_t tattr;
+
+	pthread_attr_init(&tattr);
+
+	size_t size;
+	pthread_attr_getstacksize(&tattr, &size);
+
+   if(pthread_attr_setstacksize(&tattr, size*4)){
+		perror("Thread attr");
+   }
+	
+	//Pointers to the old struc will be lost
+	
+	growAllGlobalsStruct(numberOfImage + 1);
+	
+	if(pthread_create(&thread_id[numberOfImage], &tattr, loadAndExecute, NULL)){
+			perror("Thread creation");
+		}
+	setMyCurrentThread(thread_id[numberOfImage],numberOfImage);
+	int oldNumber = numberOfImage;
+	numberOfImage = numberOfImage + 1;
+	
 }
 
 	/* StackInterpreter>>#noInlineTemporary:in: */
@@ -61698,7 +61811,6 @@ readableFormat(sqInt imageVersion)
 	 || (0);
 }
 
-static pthread_mutex_t mutex=PTHREAD_MUTEX_INITIALIZER;
 
 /*	Read an image from the given file stream, allocating an amount of memory
 	to its object heap.
@@ -61992,15 +62104,9 @@ readImageFromFileHeapSizeStartingAt(sqImageFile f, usqInt desiredHeapSize, squea
 	heapSize = (heapSize1 & ((1ULL << bit) - 1)
 		? (((heapSize1 | ((1ULL << bit) - 1)) - ((1ULL << bit) - 1))) + (1ULL << bit)
 		: heapSize1);
-
-	/**We want this section to be done one thread at a time else there is the possibility that we allocate ther same memory space for 2 threads**/
-//	if(pthread_mutex_lock(&mutex) == 0){
-		/* begin memory: */
-		aValue = ((usqInt)(pointerForOop(allocateMemoryMinimumImageFileHeaderSize(heapSize, minimumMemory, f, headerSize))));
-		GIV(memory) = aValue;
-//	}
-//	pthread_mutex_unlock(&mutex);
-
+	/* begin memory: */
+	aValue = ((usqInt)(pointerForOop(allocateMemoryMinimumImageFileHeaderSize(heapSize, minimumMemory, f, headerSize))));
+	GIV(memory) = aValue;
 	if (!(memory())) {
 		insufficientMemoryAvailableError();
 	}
@@ -62011,9 +62117,7 @@ readImageFromFileHeapSizeStartingAt(sqImageFile f, usqInt desiredHeapSize, squea
 		unableToReadImageError();
 	}
 	ensureImageFormatIsUpToDate(swapBytes);
-
 	bytesToShift = GIV(oldSpaceStart) - oldBaseAddr;
-	printf("BytesToShift=%d\n",bytesToShift);
 	/* begin initializeInterpreter: */
 	interpreterProxy = sqGetInterpreterProxy();
 	dummyReferToProxy();
@@ -62679,20 +62783,23 @@ returnAsThroughCallbackContext(sqInt returnTypeOop, VMCallbackContext *vmCallbac
 	return 1;
 }
 
-	/* StackInterpreter>>#returnGlobalStructForCurrentThread */
-	/**The returnGlobalStructForCurrentThread() function allows interopability but this is slow.
-	 * We should now use parameters.numberOfImage instead of hardcoded 2 in the loop.
-	 * As long as pthread give ordered threadID we can use offset instead but we cannot spawn new thread.**/
 
-	struct foo * returnGlobalStructForCurrentThread(void)
-	{   DECL_MAYBE_SQ_GLOBAL_STRUCT
+/*	 */
+
+	/* StackInterpreter>>#returnGlobalStructForCurrentThread */
+struct foo *
+returnGlobalStructForCurrentThread(void)
+{   DECL_MAYBE_SQ_GLOBAL_STRUCT
+	
 		pthread_t selfThread = pthread_self();
 		for(int i=0; i<numberOfImage; i++){
 			if(pthread_equal(all_threads_global[i].myCurrentThread,selfThread)){
 				return &all_threads_global[i];
 			}
 		}
-		return 0;
+		logError("Global structure for current thread not found\n");
+		exit(1);
+	return 0;
 }
 
 
@@ -63243,22 +63350,18 @@ setMyCurrentThread(pthread_t aThread, size_t index)
 	all_threads_global[index].myCurrentThread=aThread;
 }
 
-void setNumberOfImage (int numberImages){
-	numberOfImage = numberImages;
-}
-
-void initializeAllGlobalsStruct(int numberImages){
-	setNumberOfImage(numberImages);
-	all_threads_global = malloc(sizeof(struct foo) * numberImages);
-}
-
-
-
 	/* StackInterpreter>>#setNextWakeupUsecs: */
 void
 setNextWakeupUsecs(usqLong value)
 {   DECL_MAYBE_SQ_GLOBAL_STRUCT
 	GIV(nextWakeupUsecs) = value;
+}
+
+	/* StackInterpreter>>#setNumberOfImage: */
+void
+setNumberOfImage(int numberImages)
+{
+	numberOfImage = numberImages;
 }
 
 	/* StackInterpreter>>#setSavedWindowSize: */
@@ -69873,6 +69976,28 @@ primitiveObjectPointsTo(void)
 	/* begin pop:thenPushBool: */
 	longAtput((sp5 = GIV(stackPointer) + ((2 - 1) * BytesPerWord)), GIV(falseObj));
 	GIV(stackPointer) = sp5;
+}
+
+
+/*	Start a new thread allocating new space; loading an image and running an
+	interpreter on it
+ */
+
+	/* StackInterpreterPrimitives>>#primitiveOpenNewImage */
+static void
+primitiveOpenNewImage(void)
+{   DECL_MAYBE_SQ_GLOBAL_STRUCT
+    sqInt imageArguments;
+
+	/* begin stackTop */
+	imageArguments = longAt(GIV(stackPointer));
+	if (!(((imageArguments & (tagMask())) == 0)
+		 && (((((usqInt) (longAt(imageArguments))) >> (formatShift())) & (formatMask())) == 2 /* arrayFormat */))) {
+		/* begin primitiveFailFor: */
+		(GIV(primFailCode) = PrimErrBadArgument);
+		return;
+	}
+	newImageWithArguments(imageArguments);
 }
 
 	/* StackInterpreterPrimitives>>#primitivePerform */

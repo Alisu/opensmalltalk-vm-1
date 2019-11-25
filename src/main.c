@@ -1,10 +1,8 @@
 #include <stdio.h>
-#include <stdio.h>
 #include <stdlib.h>
 
 #include <pharoClient.h>
 #include <pharo.h>
-
 
 int loadAndExecuteVM(VM_PARAMETERS* parameters){
 
@@ -19,8 +17,11 @@ int runThread(void* parameters){
 	loadAndExecuteVM((VM_PARAMETERS*) parameters);
 }
 
+
 extern void setMyCurrentThread(pthread_t thread, size_t index);
 extern void setNumberOfImage (int numberImages);
+extern void initializeAllGlobalsStruct(int numberImages);
+extern pthread_t * getThreadsID(void);
 
 
 int main(int argc, char* argv[]){
@@ -43,7 +44,7 @@ int main(int argc, char* argv[]){
 
 	pthread_attr_init(&tattr);
 
-	pthread_t thread_id[numberOfImage];
+	pthread_t * thread_id = getThreadsID();
 
 	size_t size;
 	pthread_attr_getstacksize(&tattr, &size);
@@ -63,7 +64,7 @@ int main(int argc, char* argv[]){
 
 	int * threadReturn; 
 
-	for(int i = 0; i < numberOfImage; i++){
+	for(int i = 0; i < 	getNumberOfImage(); i++){
 		pthread_join(thread_id[i], &threadReturn);
 		logInfo("Thread %d returned with: %d", i, *threadReturn);
 	}
