@@ -279,7 +279,7 @@ void copyParams(int newCount, char** new, int* oldCount, char*** old){
 	}
 }
 
-void setImageParams(int newCount, char** new){
+void setImParams(int newCount, char** new){
 	//Releasing the old params
 	if(imageParamsCount > 0){
 		for(int i=0; i < imageParamsCount; i++){
@@ -300,6 +300,24 @@ void setImageParams(int newCount, char** new){
 	}
 }
 
+void setImageParams(char* params){
+
+	char ** args = malloc(sizeof(char *) * 1);
+	int count = 0;
+	char * pch;
+
+	pch = strtok (params," ");
+  	while (pch != NULL)
+ 	{
+		args[count]= pch;
+   	 	count ++;
+		args = realloc(args, sizeof(char *) * (count + 1));
+	
+    	pch = strtok (NULL, " ");
+  	}
+	
+	setImParams(count, args);
+	}
 
 void setPharoCommandLineParameters(char** newVMParams, int newVMParamsCount, char** newImageParams, int newImageParamsCount){
 	copyParams(newVMParamsCount, newVMParams, &vmParamsCount, &vmParams);
