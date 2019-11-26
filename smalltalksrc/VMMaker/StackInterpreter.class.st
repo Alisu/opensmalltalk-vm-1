@@ -10117,9 +10117,14 @@ StackInterpreter >> literalCountOfOriginalHeader: headerPointer [
 ]
 
 { #category : #thInter }
-StackInterpreter >> loadAndExecute: anArrayOfArgs [
-	"<var: #anArrayOfArgs type: 'sqInt'>"
+StackInterpreter >> loadAndExecute: imageParameters [
+	<var: #imageParameters type: 'char **'>
 	
+	" self cCode: [ 
+		self preInitImage.
+		self createMutexLock:[self openAndReadImage: aFileLocation].
+		self interpret]."
+	 
 	self cCode: '
 	//Preinit
 	ioInitTime();
@@ -10129,10 +10134,9 @@ StackInterpreter >> loadAndExecute: anArrayOfArgs [
 
 	aioInit();
 	
-	/*Param init
-	char * params[]= {"eval","10","factorial"};
+	/*Param init*/
 	 
-	setImageParams(3, params);*/
+	setImageParams(imageParameters[1]);
 		
 	//Open image and create globals
 	static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
@@ -10140,7 +10144,7 @@ StackInterpreter >> loadAndExecute: anArrayOfArgs [
 		FILE* imageFile = NULL;
 
    		/* Open the image file. */
-   		imageFile = fopen("/Users/theo/Documents/Pharo/images/TestImage2/TestImage2.image", "rb");
+   		imageFile = fopen(imageParameters[0], "rb");
    		if(!imageFile){
     		perror("Opening Image");
        	return;
@@ -10148,7 +10152,7 @@ StackInterpreter >> loadAndExecute: anArrayOfArgs [
 
     	readImageFromFileHeapSizeStartingAt(imageFile, 0, 0);
     	fclose(imageFile);
-	   setImageName("/Users/theo/Documents/Pharo/images/TestImage2/TestImage2.image"); 
+	   setImageName(imageParameters[0]); 
 	}
 		pthread_mutex_unlock(&mutex);
 		interpret();
@@ -10173,47 +10177,6 @@ StackInterpreter >> loadBitBltFrom: bb [
 	fn := self ioLoadFunction: 'loadBitBltFrom' From: 'BitBltPlugin'.
 	fn = 0 ifTrue: [^self primitiveFail].
 	^self cCode: '((sqInt (*)(sqInt))fn)(bb)'
-]
-
-{ #category : #thInter }
-StackInterpreter >> loadImageAndExecute: aFileLocation [
-	<var: #aFileLocation type: 'char*'>
-	
-" self cCode: [ 
-		self preInitImage.
-		self createMutexLock:[self openAndReadImage: aFileLocation].
-		self interpret]."
-	
-	self cCode: '
-	ioInitTime();
-
-   ioVMThread = ioCurrentOSThread();
-	ioInitExternalSemaphores();
-
-	aioInit();
-	
-	static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
-	if(pthread_mutex_lock(&mutex) == 0){
-		FILE* imageFile = NULL;
-
-   		/* Open the image file. */
-   		imageFile = fopen(aFileLocation, "rb");
-   		if(!imageFile){
-    		perror("Opening Image");
-       	return;
-    	}
-
-    	readImageFromFileHeapSizeStartingAt(imageFile, 0, 0);
-    	fclose(imageFile);
-	   setImageName(aFileLocation); 
-	}
-		pthread_mutex_unlock(&mutex);
-		interpret();'
-
-
-
-
-
 ]
 
 { #category : #initialization }
@@ -16971,6 +16934,42 @@ StackInterpreter >> nativeStackPointerIn: theFP put: valueOopPointer [
 StackInterpreter >> nativeStackSize [
 	"4 MB native stack size"
 	^ 4 *1024 * 1024
+]
+
+{ #category : #thInter }
+StackInterpreter >> newImage: imagePath WithArguments: imageArgs [
+	<var: #imageArgs type: 'char *'>
+	<var: #imagePath type: 'char *'>
+
+	self cCode: '	
+	char **params = malloc(sizeof(char *) * 2);
+	params [ 0 ] = imagePath;
+	params [ 1 ] = imageArgs;
+	
+	printf ("Launching imageAt: %s which is gonna: %s\n", params[0], params[1]);	
+	
+	pthread_attr_t tattr;
+
+	pthread_attr_init(&tattr);
+
+	size_t size;
+	pthread_attr_getstacksize(&tattr, &size);
+
+   if(pthread_attr_setstacksize(&tattr, size*4)){
+		perror("Thread attr");
+   }
+	
+	//Pointers to the old struc will be lost
+	
+	growAllGlobalsStruct(numberOfImage + 1);
+	
+	if(pthread_create(&thread_id[numberOfImage], &tattr, loadAndExecute, params)){
+			perror("Thread creation");
+		}
+	setMyCurrentThread(thread_id[numberOfImage],numberOfImage);
+	int oldNumber = numberOfImage;
+	numberOfImage = numberOfImage + 1;
+	'
 ]
 
 { #category : #thInter }

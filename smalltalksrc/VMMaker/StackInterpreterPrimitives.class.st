@@ -1180,12 +1180,10 @@ StackInterpreterPrimitives >> primitiveObjectPointsTo [
 StackInterpreterPrimitives >> primitiveOpenNewImage [
 	"Start a new thread allocating new space; loading an image and running an interpreter on it"	
 		
-	|imageArguments|
-	
-	imageArguments := self stackTop.
-	(objectMemory isArray: imageArguments) ifFalse:
-		[^self primitiveFailFor: PrimErrBadArgument].
-	self newImageWithArguments: imageArguments.
+	|imagePath imageArguments|
+	imagePath :=  self cStringOrNullFor: (self stackValue: 1).
+	imageArguments := self cStringOrNullFor: (self stackTop).
+	self newImage: imagePath WithArguments: imageArguments.
 	
 
 ]
