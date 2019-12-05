@@ -3,6 +3,7 @@
 
 #include <pharoClient.h>
 #include <pharo.h>
+#include <sys/queue.h>
 
 int loadAndExecuteVM(VM_PARAMETERS* parameters){
 
@@ -22,13 +23,22 @@ extern void setMyCurrentThread(pthread_t thread, size_t index);
 extern void setNumberOfImage (int numberImages);
 extern void initializeAllGlobalsStruct(int numberImages);
 extern pthread_t * getThreadsID(void);
+extern void initQueue (void);
 
+struct node
+{
+    char * c;
+    // This macro does the magic to point to other nodes
+    TAILQ_ENTRY(node) nodes;
+};
 
 int main(int argc, char* argv[]){
 
 	VM_OVERALL_PARAMETERS parameters;
 
 	parseArguments(argc, argv, &parameters);
+
+	initQueue();
 
 	//logInfo("Opening Image: %s\n", parameters.imageFile);
 
@@ -68,6 +78,7 @@ int main(int argc, char* argv[]){
 		pthread_join(thread_id[i], &threadReturn);
 		logInfo("Thread %d returned with: %d", i, *threadReturn);
 	}
+
 }
 
 void printVersion(){
