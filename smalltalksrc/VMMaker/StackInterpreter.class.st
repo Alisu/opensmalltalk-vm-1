@@ -518,7 +518,8 @@ StackInterpreter class >> declareCVarsIn: aCCodeGenerator [
 		addHeaderFile:'<wchar.h> /* for wint_t */';
 		addHeaderFile:'"vmCallback.h"';
 		addHeaderFile:'"sqMemoryFence.h"';
-		addHeaderFile:'"dispdbg.h"'.
+		addHeaderFile:'"dispdbg.h"';
+		addHeaderFile:'<sys/queue.h>'.
 	LowcodeVM ifTrue: [ aCCodeGenerator addHeaderFile:'"sqLowcodeFFI.h"'].
 
 	vmClass declareInterpreterVersionIn: aCCodeGenerator defaultName: 'Stack'.
@@ -1508,7 +1509,12 @@ StackInterpreter class >> initializePrimitiveTable [
 		(149 primitiveGetAttribute)
 
 		"Were File Primitives (150-169) - NO LONGER INDEXED"
-		(150 157 primitiveFail)
+		"Queue primitive"
+		(150 primitiveFirstInQueue)
+		(151 primitiveInsertTailInQueue)
+		(152 primitiveIsEmptyInQueue)
+		(153 primitiveRemoveInQueue)
+		(154 157 primitiveFail)
 		(158 primitiveCompareWith)
 		(159 primitiveHashMultiply)
 		(160 primitiveAdoptInstance)
@@ -2039,6 +2045,11 @@ StackInterpreter class >> requiredMethodNames: options [
 		initializeAllGlobalsStruct:
 		growAllGlobalsStruct:
 		loadAndExecute:
+		insertTail:InQueue:
+		firstInQueue:
+		isEmptyQueue:
+		removeFirstInQueue:
+		initQueue
 		
 		validInstructionPointer:inMethod:framePointer:) asSet.
 
@@ -7208,6 +7219,20 @@ StackInterpreter >> firstBytecodeOfAlternateHeader: methodHeader method: theMeth
 	 + objectMemory baseHeaderSize
 ]
 
+{ #category : #thInterCom }
+StackInterpreter >> firstInQueue: aQueue [
+
+<returnTypeC: 'char *'>
+<var: #aQueue type: 'struct queue *'>	
+
+	self
+		cCode: '
+		struct node * ret = TAILQ_FIRST(aQueue);
+		return ret->aString;
+		'
+		inSmalltalk: [ self firstInQueue: aQueue ]
+]
+
 { #category : #'plugin primitive support' }
 StackInterpreter >> floatArg: index [
 	"Like #stackFloatValue: but access method arguments left-to-right"
@@ -8021,6 +8046,21 @@ StackInterpreter >> getNumberOfImage [
 		cCode: 'return numberOfImage;'
 ]
 
+{ #category : #thInterCom }
+StackInterpreter >> getQueue: aName [
+<var: #aName type: 'char *'>	
+<returnTypeC: 'struct queue *'>
+	self
+		cCode: '
+		if(strcmp(aName, "in")==0){
+			return &queueIn;
+		}else{
+			return &queueOut;
+		}
+		'
+		inSmalltalk: [ self getQueue: aName ]
+]
+
 { #category : #'plugin primitive support' }
 StackInterpreter >> getSavedWindowSize [
 	^savedWindowSize
@@ -8426,6 +8466,17 @@ StackInterpreter >> initExtensions [
 	BytecodeSetHasExtensions ifTrue: [extA := numExtB := extB := 0]
 ]
 
+{ #category : #thInterCom }
+StackInterpreter >> initQueue [
+
+	self
+		cCode: '
+		TAILQ_INIT(&queueIn);
+		TAILQ_INIT(&queueOut);
+		'
+		inSmalltalk: [ self initQueue ]
+]
+
 { #category : #'object memory support' }
 StackInterpreter >> initStackPageGC [
 	"GC of pages.  Throwing away all stack pages on full GC is simple but dangerous
@@ -8712,6 +8763,20 @@ StackInterpreter >> inlineLookupInNSMethodCacheSel: selector classTag: classTag 
 			^true	"found entry in cache; done"].
 
 	^false
+]
+
+{ #category : #thInterCom }
+StackInterpreter >> insertTail: aString InQueue: aQueue [
+	<var: #aString type: 'char *'>
+	<var: #aQueue type: 'struct queue *'>	
+
+	self
+		cCode: 'struct node * addToQueue = malloc(sizeof(struct node));
+		addToQueue->aString = aString;
+		TAILQ_INSERT_TAIL(aQueue, addToQueue, nodes);
+		addToQueue = NULL;
+		'
+		inSmalltalk: [ self insertTail: aString InQueue: aQueue ]
 ]
 
 { #category : #'frame access' }
@@ -9585,6 +9650,19 @@ StackInterpreter >> isCog [
 StackInterpreter >> isEmptyList: aLinkedList [
 	self assert: (objectMemory isForwarded: aLinkedList) not.
 	^ (objectMemory fetchPointer: FirstLinkIndex ofObject: aLinkedList) = objectMemory nilObject
+]
+
+{ #category : #thInterCom }
+StackInterpreter >> isEmptyQueue: aQueue [
+<returnTypeC: 'bool'>
+<var: #aQueue type: 'struct queue *'>	
+	
+
+	self
+		cCode: '
+		return TAILQ_EMPTY(aQueue);
+		'
+		inSmalltalk: [ self isEmptyQueue: aQueue ]
 ]
 
 { #category : #'compiled methods' }
@@ -16940,6 +17018,8 @@ StackInterpreter >> nativeStackSize [
 StackInterpreter >> newImage: imagePath WithArguments: imageArgs [
 	<var: #imageArgs type: 'char *'>
 	<var: #imagePath type: 'char *'>
+	<returnTypeC: #int>
+	
 
 	self cCode: '	
 	char **params = malloc(sizeof(char *) * 2);
@@ -16967,8 +17047,8 @@ StackInterpreter >> newImage: imagePath WithArguments: imageArgs [
 			perror("Thread creation");
 		}
 	setMyCurrentThread(thread_id[numberOfImage],numberOfImage);
-	int oldNumber = numberOfImage;
 	numberOfImage = numberOfImage + 1;
+	return (numberOfImage - 1);
 	'
 ]
 
@@ -19684,6 +19764,33 @@ StackInterpreter >> remoteIsInstVarAccess [
 	<api>
 	<cmacro>
 	^ 128 "1 << 7"
+]
+
+{ #category : #thInterCom }
+StackInterpreter >> remove: anElement InQueue: aQueue [
+<var: #aQueue type: 'struct queue *'>	
+<var: #anElement type: ' struct node *'>	
+
+	self
+		cCode: '
+		TAILQ_REMOVE(aQueue, anElement, nodes);
+		free(anElement);
+		'
+		inSmalltalk: [ self remove: anElement InQueue: aQueue ]
+]
+
+{ #category : #thInterCom }
+StackInterpreter >> removeFirstInQueue: aQueue [
+<var: #aQueue type: 'struct queue *'>	
+<var: #anElement type: ' struct node *'>	
+
+	self
+		cCode: '
+		struct node * anElement = TAILQ_FIRST(aQueue);
+		TAILQ_REMOVE(aQueue, anElement, nodes);
+		free(anElement);
+		'
+		inSmalltalk: [ self removeFirstInQueue: aQueue ]
 ]
 
 { #category : #'process primitive support' }

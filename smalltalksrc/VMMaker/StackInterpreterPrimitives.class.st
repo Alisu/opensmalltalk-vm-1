@@ -893,6 +893,22 @@ StackInterpreterPrimitives >> primitiveFindNextUnwindContext [
 	self pop: 2 thenPush: handlerOrNilOrZero
 ]
 
+{ #category : #QueueCom }
+StackInterpreterPrimitives >> primitiveFirstInQueue [
+	"Start a new thread allocating new space; loading an image and running an interpreter on it"			
+	|aQueue retString sz s |
+	
+	aQueue := self cStringOrNullFor: (self stackTop).	
+	retString := self firstInQueue: (self getQueue: aQueue).
+	sz := self strlen: retString.
+	s := objectMemory instantiateClass: (objectMemory splObj: ClassByteString) indexableSize: sz.
+	1 to: sz do:
+		[:i | objectMemory byteAt: s + objectMemory baseHeaderSize + i - 1 put: (retString at: i -1)].
+	self pop: 2 thenPush: s
+	
+
+]
+
 { #category : #'system control primitives' }
 StackInterpreterPrimitives >> primitiveFlushCacheByMethod [
 	"The receiver is a compiledMethod.  Clear all entries in the method lookup cache that refer to this method, presumably because it has been redefined, overridden or removed."
@@ -1028,6 +1044,18 @@ StackInterpreterPrimitives >> primitiveIncrementalGC [
 	super primitiveIncrementalGC
 ]
 
+{ #category : #QueueCom }
+StackInterpreterPrimitives >> primitiveInsertTailInQueue [
+	"Start a new thread allocating new space; loading an image and running an interpreter on it"	
+		
+	|anElement aQueue|
+	anElement :=  self cStringOrNullFor: (self stackValue: 1).
+	aQueue := self cStringOrNullFor: (self stackTop).	
+	self insertTail: anElement InQueue: (self getQueue: aQueue)
+	
+
+]
+
 { #category : #'object access primitives' }
 StackInterpreterPrimitives >> primitiveInstVarAt [
 	| index rcvr hdr fmt totalLength fixedFields value |
@@ -1078,6 +1106,18 @@ StackInterpreterPrimitives >> primitiveInstVarAtPut [
 		ifTrue: [self externalInstVar: index - 1 ofContext: rcvr put: newValue]
 		ifFalse: [self subscript: rcvr with: index storing: newValue format: fmt].
 	self pop: argumentCount + 1 thenPush: newValue
+]
+
+{ #category : #QueueCom }
+StackInterpreterPrimitives >> primitiveIsEmptyInQueue [
+	"Start a new thread allocating new space; loading an image and running an interpreter on it"		
+	|aQueue aBool|
+	
+	aQueue := self cStringOrNullFor: (self stackTop).	
+	aBool := self isEmptyQueue: (self getQueue: aQueue).
+	self pop: 2 thenPushBool: aBool
+	
+
 ]
 
 { #category : #'process primitives' }
@@ -1183,7 +1223,7 @@ StackInterpreterPrimitives >> primitiveOpenNewImage [
 	|imagePath imageArguments|
 	imagePath :=  self cStringOrNullFor: (self stackValue: 1).
 	imageArguments := self cStringOrNullFor: (self stackTop).
-	self newImage: imagePath WithArguments: imageArguments.
+	self pop: 3 thenPushInteger: (self newImage: imagePath WithArguments: imageArguments).
 	
 
 ]
@@ -1270,6 +1310,31 @@ StackInterpreterPrimitives >> primitivePin [
 					[^self primitiveFailFor: PrimErrNoMemory]]].
 	
 	self pop: argumentCount + 1 thenPush: wasPinned
+]
+
+{ #category : #QueueCom }
+StackInterpreterPrimitives >> primitiveRemoveFirstInQueue [
+	"Start a new thread allocating new space; loading an image and running an interpreter on it"	
+		
+	|aQueue|
+	aQueue := self cStringOrNullFor: (self stackTop).	
+	self removeFirstInQueue: (self getQueue: aQueue)
+	
+	
+
+]
+
+{ #category : #QueueCom }
+StackInterpreterPrimitives >> primitiveRemoveInQueue [
+	"Start a new thread allocating new space; loading an image and running an interpreter on it"	
+		
+	|anElement aQueue|
+	anElement := self cStringOrNullFor: (self stackValue:1).
+	aQueue := self cStringOrNullFor: (self stackTop).	
+	self remove: anElement InQueue: (self getQueue: aQueue)
+	
+	
+
 ]
 
 { #category : #'memory space primitives' }
