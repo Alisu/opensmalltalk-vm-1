@@ -118166,3 +118166,38 @@ wait signal ] in SessionManager>>snapshot:andQuit:
 Processor terminateActive ] in BlockClosure>>newProcess
 -------------------------------------------------------------------------------
 
+
+*** Warning: Warning: This package depends on the following classes:
+  VMStructType
+  VMThreadingConstants
+  VMBasicConstants
+You must resolve these dependencies before you will be able to load these definitions: 
+  MockEmptyVMStruct
+  MockEmptyVMStruct>>#instVarNamesAndTypesForTranslationDo:
+  MockEmptyVMStructWithRedefinedStructName
+  MockEmptyVMStructWithRedefinedStructName>>#structTypeName
+  VMMTTests
+  VMMTTests>>#runCaseManaged
+  VMMTTests>>#setUp
+  VMMTTests>>#testAssignableThreadIsNotVMOwner
+  VMMTTests>>#testAssignableThreadIsWilling
+  VMMTTests>>#testDisownOnRelinquishPutsVMInRelinquishingState
+  VMMTTests>>#testDisownRemembersLastDisownedThread
+  VMMTTests>>#testDisownVMReleasesVM
+  VMMTTests>>#testDisownVMSetsCurrentThreadToUnavailable
+  VMMTTests>>#testHeartbeatReleasesVMWhenNoProcessIsWilling
+  VMMTTests>>#testHeartbeatWakesUpWaitingVMThread
+  VMMTTests>>#testInitialThreadIsAssignableOrInVM
+  VMMTTests>>#testInitialVMHasManyThreads
+  VMMTTests>>#testInitialVMHasNoDisowningVMThread
+  VMMTTests>>#testInitialVMThreadsAreUinitialized
+  VMMTTests>>#testOwnFreeVMOwnsSameThread
+  VMMTTests>>#testPreemptedProcessIsMarkedInExternalCode
+  VMMTTests>>#testPreemptedProcessSetsCurrentMethodInThread
+  VMMTTests>>#testPreemptedVMThreadHasPreemptedProcessPriority
+  VMMTTests>>#testPreemptedVMThreadIsListedInAWOLProcesses
+  VMMTTests>>#testPreemptedVMThreadIsTemporarilyAffinedToProcess
+  VMMTTests>>#testTryOwningOwnedVMLeavesThreadInWaitingState
+  VMMTTests>>#testWantingThreadIsWilling
+  VMMTTests>>#testWantingThreadIsWillingOverAssignableThread
+

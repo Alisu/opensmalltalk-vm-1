@@ -49,6 +49,7 @@ static unsigned long long utcStartMicroseconds; /* for the ioMSecs clock. */
 static long long vmGMTOffset = 0;
 static unsigned long long frequencyMeasureStart = 0;
 static unsigned long heartbeats;
+int GIVToUse = 0;
 
 #define microToMilliseconds(usecs) ((((usecs) - utcStartMicroseconds) \
 									/ MicrosecondsPerMillisecond) \
@@ -366,6 +367,18 @@ beatStateMachine(void *careLess)
 	}
 	beatState = dead;
 	return 0;
+}
+
+int returnGIVNumberForHearbeat(){
+
+	return GIVToUse;
+
+}
+
+void setIOHeartbeatGIVToUse(anInteger){
+
+	GIVToUse =  anInteger;	
+
 }
 
 void

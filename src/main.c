@@ -23,22 +23,12 @@ extern void setMyCurrentThread(pthread_t thread, size_t index);
 extern void setNumberOfImage (int numberImages);
 extern void initializeAllGlobalsStruct(int numberImages);
 extern pthread_t * getThreadsID(void);
-extern void initQueue (void);
-
-struct node
-{
-    char * c;
-    // This macro does the magic to point to other nodes
-    TAILQ_ENTRY(node) nodes;
-};
 
 int main(int argc, char* argv[]){
 
 	VM_OVERALL_PARAMETERS parameters;
 
 	parseArguments(argc, argv, &parameters);
-
-	initQueue();
 
 	//logInfo("Opening Image: %s\n", parameters.imageFile);
 
@@ -50,27 +40,11 @@ int main(int argc, char* argv[]){
 	int numberOfImage = parameters.numberOfImage;
 	initializeAllGlobalsStruct(numberOfImage);
 
-	pthread_attr_t tattr;
-
-	pthread_attr_init(&tattr);
+	setMyCurrentThread(pthread_self(), 0);
+	runThread(&parameters.vmparameters[0]);
+	
 
 	pthread_t * thread_id = getThreadsID();
-
-	size_t size;
-	pthread_attr_getstacksize(&tattr, &size);
-
-	//printf("%ld\n", size);
-
-    if(pthread_attr_setstacksize(&tattr, size*4)){
-		perror("Thread attr");
-    }
-
-	for(int i = 0; i < numberOfImage; i++){
-		if(pthread_create(&thread_id[i], &tattr, runThread, &parameters.vmparameters[i])){
-			perror("Thread creation");
-		}
-		setMyCurrentThread(thread_id[i], i);
-	}
 
 	int * threadReturn; 
 
@@ -78,7 +52,6 @@ int main(int argc, char* argv[]){
 		pthread_join(thread_id[i], &threadReturn);
 		logInfo("Thread %d returned with: %d", i, *threadReturn);
 	}
-
 }
 
 void printVersion(){

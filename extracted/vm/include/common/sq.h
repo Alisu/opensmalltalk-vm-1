@@ -294,6 +294,8 @@ extern sqOSThread ioVMThread;
 
 #if STACKVM
 /* Event polling via periodic heartbeat thread. */
+int returnGIVNumberForHearbeat();
+void setIOHeartbeatGIVToUse(int);
 void  ioInitHeartbeat(void);
 int   ioHeartbeatMilliseconds(void);
 void  ioSetHeartbeatMilliseconds(int);
