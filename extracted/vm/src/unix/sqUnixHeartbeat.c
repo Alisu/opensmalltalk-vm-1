@@ -49,7 +49,15 @@ static unsigned long long utcStartMicroseconds; /* for the ioMSecs clock. */
 static long long vmGMTOffset = 0;
 static unsigned long long frequencyMeasureStart = 0;
 static unsigned long heartbeats;
-int GIVToUse = 0;
+
+static int numberOfHeartbeat = 0;
+// we could use only a pthread
+struct assocThreadGiv {
+	pthread_t hbThread;
+	int GIVToUse;
+};
+
+struct assocThreadGiv * mapThreadGIV;
 
 #define microToMilliseconds(usecs) ((((usecs) - utcStartMicroseconds) \
 									/ MicrosecondsPerMillisecond) \
@@ -288,6 +296,7 @@ heartbeat()
 	else
 		heartbeats += 1;
 	//checkHighPriorityTickees(utcMicrosecondClock);
+	int GIVToUse = returnGIVNumberForHearbeat();
 	forceInterruptCheckFromHeartbeatV2(GIVToUse);
 
 	errno = saved_errno;
@@ -370,15 +379,40 @@ beatStateMachine(void *careLess)
 }
 
 int returnGIVNumberForHearbeat(){
-
-	return GIVToUse;
-
+	pthread_t selfThread = pthread_self();		
+	for(int i=0; i<numberOfHeartbeat; i++){
+		if(pthread_equal(mapThreadGIV[i].hbThread,selfThread)){
+			return mapThreadGIV[i].GIVToUse;
+		}
+	}
+	return giveMeAGIV();
+	logError("Global structure for current thread not found\n");
+	exit(1);
 }
+
+int giveMeAGIV(){
+	pthread_t selfThread = pthread_self();		
+	for(int i=0; i<numberOfHeartbeat; i++){
+		if(pthread_equal(mapThreadGIV[i].hbThread, NULL)){
+			mapThreadGIV[i].hbThread = selfThread;
+			return mapThreadGIV[i].GIVToUse;
+		}
+	}
+	logError("More heartbeat than interpreter are runned ?\n");
+	exit(1);
+}
+
+
+void initOrGrowMapThreadGIV(){
+	numberOfHeartbeat++;
+	mapThreadGIV = realloc(mapThreadGIV, sizeof(struct assocThreadGiv) * numberOfHeartbeat);
+	}
 
 void setIOHeartbeatGIVToUse(anInteger){
 
-	GIVToUse =  anInteger;	
-
+	initOrGrowMapThreadGIV();
+	mapThreadGIV[numberOfHeartbeat - 1].GIVToUse = anInteger;
+	mapThreadGIV[numberOfHeartbeat - 1].hbThread = NULL;
 }
 
 void
