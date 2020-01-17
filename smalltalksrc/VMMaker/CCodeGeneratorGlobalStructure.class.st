@@ -83,10 +83,7 @@ CCodeGeneratorGlobalStructure >> emitCVariablesOn: aStream [
 
 	structure := WriteStream on: (String new: 32768).
 	nonstruct := WriteStream on: (String new: 32768).
-	aStream nextPutAll: 'struct node{'; cr;
-	nextPutAll: 'char * aString;'; cr;
-	nextPutAll: 'TAILQ_ENTRY(node) nodes;'; cr;
-	nextPutAll: '};'; cr.
+
 	aStream nextPutAll: '/*** Variables ***/'; cr.
 	structure
 		nextPutAll: '#if SQ_USE_GLOBAL_STRUCT'; cr;
@@ -130,7 +127,6 @@ CCodeGeneratorGlobalStructure >> emitCVariablesOn: aStream [
 		nextPutAll: 'int numberOfImage;'; cr;
 		nextPutAll: 'struct foo * all_threads_global;'; cr;
 		nextPutAll: 'pthread_t * thread_id;'; cr;
-		nextPutAll: 'TAILQ_HEAD(queue, node) queueIn, queueOut;'; cr;
 		nextPutAll: '# define GIV(interpreterInstVar) (returnGlobalStructForCurrentThread()->interpreterInstVar)'; cr;
 		nextPutAll: '#else'; cr;
 		nextPutAll: '# define DECL_MAYBE_SQ_GLOBAL_STRUCT /* oh, no mr bill! */'; cr;

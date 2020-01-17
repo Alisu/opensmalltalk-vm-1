@@ -415,7 +415,10 @@ Class {
 		'debugCallbackPath',
 		'debugCallbackReturns',
 		'debugCallbackInvokes',
-		'myCurrentThread'
+		'myCurrentThread',
+		'mutexForFetchBytecode',
+		'isStepable',
+		'step'
 	],
 	#classVars : [
 		'AccessModifierPrivate',
@@ -519,7 +522,8 @@ StackInterpreter class >> declareCVarsIn: aCCodeGenerator [
 		addHeaderFile:'"vmCallback.h"';
 		addHeaderFile:'"sqMemoryFence.h"';
 		addHeaderFile:'"dispdbg.h"';
-		addHeaderFile:'<sys/queue.h>'.
+		addHeaderFile:'<errno.h>'
+		.
 	LowcodeVM ifTrue: [ aCCodeGenerator addHeaderFile:'"sqLowcodeFFI.h"'].
 
 	vmClass declareInterpreterVersionIn: aCCodeGenerator defaultName: 'Stack'.
@@ -528,7 +532,11 @@ StackInterpreter class >> declareCVarsIn: aCCodeGenerator [
 	aCCodeGenerator
 		declareVar: #sendTrace type: 'volatile int';
 		declareVar: #byteCount type: #usqInt;
-		declareVar: #myCurrentThread type: 'pthread_t'.
+		declareVar: #myCurrentThread type: 'pthread_t';
+		declareVar: #mutexForFetchBytecode type:'pthread_mutex_t';
+		declareVar: #step type: 'pthread_cond_t';
+		declareVar: #isStepable type: 'int'
+		.
 		"var: #primitiveFunctionPointer type: 'void (*)()'."
 		
 	"These need to be pointers or unsigned."
@@ -1510,11 +1518,12 @@ StackInterpreter class >> initializePrimitiveTable [
 
 		"Were File Primitives (150-169) - NO LONGER INDEXED"
 		"Queue primitive"
-		(150 primitiveFirstInQueue)
-		(151 primitiveInsertTailInQueue)
-		(152 primitiveIsEmptyInQueue)
-		(153 primitiveRemoveInQueue)
-		(154 157 primitiveFail)
+		(150 primitiveNextInInterpreter)
+		(151 primitiveTopFrameInInterpreter)
+		(152 primitiveNilObjectInInterpreter)
+		(153 primitiveGIVElementOfInterpreter)
+		(154 primitivePrintOop)
+		(155 157 primitiveFail)
 		(158 primitiveCompareWith)
 		(159 primitiveHashMultiply)
 		(160 primitiveAdoptInstance)
@@ -2038,6 +2047,7 @@ StackInterpreter class >> requiredMethodNames: options [
 		setFullScreenFlag: setInterruptKeycode: setInterruptPending: setInterruptCheckChain:
 			setSavedWindowSize: success:
 		returnGlobalStructForCurrentThread
+		returnGlobalStructFor:
 		setMyCurrentThread:_:
 		setNumberOfImage:
 		getNumberOfImage
@@ -2045,13 +2055,16 @@ StackInterpreter class >> requiredMethodNames: options [
 		initializeAllGlobalsStruct:
 		growAllGlobalsStruct:
 		loadAndExecute:
-		insertTail:InQueue:
-		firstInQueue:
-		isEmptyQueue:
-		removeFirstInQueue:
-		initQueue
+		initMutexForFetchNextBytecode:andCond:
+		mutexLock:andCond:
+		mutexUnlock:andCond:
+		returnGIVNumberForCurrentThread
+		forceInterruptCheckFromHeartbeatV2:
+		forceInterruptCheckV2:
+		readImageFromFile:HeapSize:StartingAtV2:
 		
 		validInstructionPointer:inMethod:framePointer:) asSet.
+
 
 	"Nice to actually have all the primitives available"
 	requiredList addAll: (self primitiveTable select: [:each| each isSymbol]).
@@ -2496,6 +2509,27 @@ StackInterpreter >> addressCouldBeClassObj: maybeClassObj [
 	<inline: false>
 	^(objectMemory addressCouldBeObj: maybeClassObj)
 	  and: [self objCouldBeClassObj: maybeClassObj]
+]
+
+{ #category : #thInterCom }
+StackInterpreter >> addressOf: GIVElement inGIV: interpreterIndex [
+<var: #interpreterIndex type: 'int'>
+<var: #GIVElement type: 'char *'>
+<var: #ptr type: #'sqInt *'>
+	
+	| externalAddress  ptr desiredGIV |
+	desiredGIV := self returnGlobalStructFor: interpreterIndex.
+	externalAddress := objectMemory 
+			instantiateClass: objectMemory classExternalAddress 
+			indexableSize: BytesPerWord.
+	ptr := objectMemory firstIndexableField: externalAddress.	
+
+	(GIVElement strcmp: 'method') = 0 ifTrue:[ptr at: 0 put:  (self cCode:'desiredGIV->method'). ^externalAddress].
+	(GIVElement strcmp: 'nilObj') = 0 ifTrue:[ptr at: 0 put:  (self cCode:'desiredGIV->nilObj'). ^externalAddress].
+	(GIVElement strcmp: 'instructionPointer') = 0 ifTrue:[ptr at: 0 put:  (self cCode:'desiredGIV->instructionPointer'). ^externalAddress].
+	(GIVElement strcmp: 'specialObjectsOop') = 0 ifTrue:[ptr at: 0 put:  (self cCode:'desiredGIV->specialObjectsOop'). ^externalAddress].
+	(GIVElement strcmp: 'oldSpaceStart') = 0 ifTrue:[ptr at: 0 put:  (self cCode:'desiredGIV->oldSpaceStart'). ^externalAddress].		
+	^nil
 ]
 
 { #category : #'debug support' }
@@ -6785,9 +6819,17 @@ StackInterpreter >> fetchInteger: fieldIndex ofObject: objectPointer [
 StackInterpreter >> fetchNextBytecode [
 	"This method fetches the next instruction (bytecode). Each bytecode method is responsible for fetching the next bytecode, preferably as early as possible to allow the memory system time to process the request before the next dispatch."
 
+	isStepable
+		ifTrue: [ self lockFetchNextBytecode.
+			self
+				printLocalSP: localSP
+				LocalFP: localSP
+				LocalIP: localIP
+				CurrentBytecode: currentBytecode.
+			self printCallStack ].
 	MULTIPLEBYTECODESETS
-		ifTrue: [currentBytecode := self fetchByte + bytecodeSetSelector]
-		ifFalse: [currentBytecode := self fetchByte]
+		ifTrue: [ currentBytecode := self fetchByte + bytecodeSetSelector ]
+		ifFalse: [ currentBytecode := self fetchByte ]
 ]
 
 { #category : #'frame access' }
@@ -7219,20 +7261,6 @@ StackInterpreter >> firstBytecodeOfAlternateHeader: methodHeader method: theMeth
 	 + objectMemory baseHeaderSize
 ]
 
-{ #category : #thInterCom }
-StackInterpreter >> firstInQueue: aQueue [
-
-<returnTypeC: 'char *'>
-<var: #aQueue type: 'struct queue *'>	
-
-	self
-		cCode: '
-		struct node * ret = TAILQ_FIRST(aQueue);
-		return ret->aString;
-		'
-		inSmalltalk: [ self firstInQueue: aQueue ]
-]
-
 { #category : #'plugin primitive support' }
 StackInterpreter >> floatArg: index [
 	"Like #stackFloatValue: but access method arguments left-to-right"
@@ -7624,6 +7652,65 @@ StackInterpreter >> forceInterruptCheckFromHeartbeat [
 		 self forceInterruptCheck]
 ]
 
+{ #category : #thInter }
+StackInterpreter >> forceInterruptCheckFromHeartbeatV2: GIVNumber [
+	<var: #GIVNumber type: 'int'>
+	self
+		cCode:
+			'	
+		if (!suppressHeartbeatFlag) {
+			/* begin checkForLongRunningPrimitive */
+			if (returnGlobalStructFor(GIVNumber)->longRunningPrimitiveCheckSemaphore == null) {
+				goto l1;
+			}
+			if ((returnGlobalStructFor(GIVNumber)->longRunningPrimitiveStartUsecs > 0)
+			 && (returnGlobalStructFor(GIVNumber)->longRunningPrimitiveCheckMethod == returnGlobalStructFor(GIVNumber)->newMethod)
+		 	&& (returnGlobalStructFor(GIVNumber)->longRunningPrimitiveCheckSequenceNumber == returnGlobalStructFor(GIVNumber)->statCheckForEvents)) {
+				returnGlobalStructFor(GIVNumber)->longRunningPrimitiveStopUsecs = ioUTCMicroseconds();
+				assert(returnGlobalStructFor(GIVNumber)->longRunningPrimitiveStopUsecs > returnGlobalStructFor(GIVNumber)->longRunningPrimitiveStartUsecs);
+				goto l1;
+			}
+			if (returnGlobalStructFor(GIVNumber)->longRunningPrimitiveStopUsecs == 0) {
+				returnGlobalStructFor(GIVNumber)->longRunningPrimitiveCheckSequenceNumber = returnGlobalStructFor(GIVNumber)->statCheckForEvents;
+				returnGlobalStructFor(GIVNumber)->longRunningPrimitiveCheckMethod = returnGlobalStructFor(GIVNumber)->newMethod;
+				returnGlobalStructFor(GIVNumber)->longRunningPrimitiveStartUsecs = ioUTCMicroseconds();
+				sqLowLevelMFence();
+			}
+			l1:	/* end checkForLongRunningPrimitive */;
+			forceInterruptCheckV2(GIVNumber);
+	}'
+]
+
+{ #category : #thInter }
+StackInterpreter >> forceInterruptCheckV2: GIVNumber [
+	<var: #GIVNumber type: 'int'>
+	<returnTypeC: #int>
+	| thePage iccFunc |
+	<inline: false>
+	<var: #thePage type: #'StackPage *'>
+	<var: #iccFunc declareC: 'void (*iccFunc)()'>
+	
+	self
+		cCode:
+			'	
+	if (returnGlobalStructFor(GIVNumber)->stackLimit == 0) {
+		return null;
+	}
+	thePage = returnGlobalStructFor(GIVNumber)->stackPage;
+	if ((thePage != null)
+	 && (thePage != 0)) {
+		(thePage->stackLimit = ((char *) (((usqInt) -1))));
+	}
+	/* begin allOnesAsCharStar */
+	returnGlobalStructFor(GIVNumber)->stackLimit = ((char *) (((usqInt) -1)));
+	sqLowLevelMFence();
+	if (((iccFunc = interruptCheckChain)) != null) {
+		iccFunc();
+	}
+	returnGlobalStructFor(GIVNumber)->statForceInterruptCheck += 1;
+	return 0;'
+]
+
 { #category : #'frame access' }
 StackInterpreter >> frameCallerContext: theFP [
 	<inline: true>
@@ -7982,6 +8069,14 @@ StackInterpreter >> getErrorObjectFromPrimFailCode [
 	^objectMemory integerObjectOf: primFailCode
 ]
 
+{ #category : #thInter }
+StackInterpreter >> getFP: aGiv [
+<returnTypeC: 'char *'>
+<var: #aGiv type: 'struct foo *'>
+
+	self cCode: 'return aGiv->framePointer;' inSmalltalk: [ self getFP: aGiv ]
+]
+
 { #category : #'plugin primitive support' }
 StackInterpreter >> getFullScreenFlag [
 	^fullScreenFlag
@@ -8046,19 +8141,12 @@ StackInterpreter >> getNumberOfImage [
 		cCode: 'return numberOfImage;'
 ]
 
-{ #category : #thInterCom }
-StackInterpreter >> getQueue: aName [
-<var: #aName type: 'char *'>	
-<returnTypeC: 'struct queue *'>
-	self
-		cCode: '
-		if(strcmp(aName, "in")==0){
-			return &queueIn;
-		}else{
-			return &queueOut;
-		}
-		'
-		inSmalltalk: [ self getQueue: aName ]
+{ #category : #thInter }
+StackInterpreter >> getSP: aGiv [
+<returnTypeC: 'char *'>
+<var: #aGiv type: 'struct foo *'>
+
+	self cCode: 'return aGiv->stackPointer;' inSmalltalk: [ self getFP: aGiv ]
 ]
 
 { #category : #'plugin primitive support' }
@@ -8467,14 +8555,51 @@ StackInterpreter >> initExtensions [
 ]
 
 { #category : #thInterCom }
-StackInterpreter >> initQueue [
+StackInterpreter >> initMutexForFetchNextBytecode: aMutex [
+	<var: #aMutex type: 'pthread_mutex_t'>
+	
 
-	self
-		cCode: '
-		TAILQ_INIT(&queueIn);
-		TAILQ_INIT(&queueOut);
-		'
-		inSmalltalk: [ self initQueue ]
+	self cCode: '
+	pthread_t selfThread = pthread_self();
+	if(pthread_mutex_init(&aMutex, NULL) != 0){
+		printf("Mutex init error: %s\n", strerror(errno));
+		exit(1);
+	}
+	//Init so we can use the first interpreter normally but he can become stepable too
+	if(pthread_equal(returnGlobalStructFor(0)->myCurrentThread,selfThread)){
+		GIV(isStepable) = 0;
+	}else{
+		GIV(isStepable) = 1;
+	};
+	'
+	inSmalltalk: [ self initMutexForFetchNextBytecode: aMutex ]
+]
+
+{ #category : #thInterCom }
+StackInterpreter >> initMutexForFetchNextBytecode: aMutex andCond: aCond [
+	<var: #aMutex type: 'pthread_mutex_t *'>
+	<var: #aCond type: 'pthread_cond_t *'>
+
+	self cCode: '
+	pthread_t selfThread = pthread_self();
+	if(pthread_mutex_init(aMutex, NULL) != 0){
+		printf("Mutex init error: %s\n", strerror(errno));
+		exit(1);
+	}
+	
+	if(pthread_cond_init(aCond, NULL) != 0){
+		printf("Mutex init error: %s\n", strerror(errno));
+		exit(1);
+	}
+	
+	//Init so we can use the first interpreter normally but he can become stepable too
+	if(pthread_equal(returnGlobalStructFor(0)->myCurrentThread,selfThread)){
+		GIV(isStepable) = 0;
+	}else{
+		GIV(isStepable) = 1;
+	};
+	'
+	inSmalltalk: [ self initMutexForFetchNextBytecode: aMutex ]
 ]
 
 { #category : #'object memory support' }
@@ -8531,6 +8656,7 @@ StackInterpreter >> initStackPagesAndInterpret [
 	 C code strings."
 	| stackPageBytes stackPagesBytes theStackMemory |
 	<var: #theStackMemory type: #'void *'>
+
 	stackPageBytes := self stackPageByteSize.
 	stackPagesBytes := self computeStackZoneSize.
 	theStackMemory := self
@@ -8545,6 +8671,7 @@ StackInterpreter >> initStackPagesAndInterpret [
 	"Once the stack pages are initialized we can continue to bootstrap the system."
 	self loadInitialContext.
 	"We're ready for the heartbeat (poll interrupt)"
+	self cCode: 'setIOHeartbeatGIVToUse(returnGIVNumberForCurrentThread());'.
 	self ioInitHeartbeat.
 	self initialEnterSmalltalkExecutive.
 	^nil
@@ -8559,6 +8686,17 @@ StackInterpreter >> initialCleanup [
 	<inline: true>
 	self flushMethodCache.
 	self flushExternalPrimitiveTable
+]
+
+{ #category : #initialization }
+StackInterpreter >> initialCleanup2 [
+	"This used to cope with issues with images written by VMs earlier than 3.6/3.7.
+	 Since we won't be loading such images (being a closure only VM) we only have to
+	 deal with external primitives.  Since references to external plugins in methods are
+	 cleaned up in snapshotCleanUp only initialize the tables, not visit each method."
+	<inline: true>
+	self flushMethodCache.
+	"self flushExternalPrimitiveTable"
 ]
 
 { #category : #initialization }
@@ -8671,6 +8809,31 @@ StackInterpreter >> initializeInterpreter: bytesToShift [
 	super initializeInterpreter: bytesToShift
 ]
 
+{ #category : #initialization }
+StackInterpreter >> initializeInterpreterV2: bytesToShift [
+	"Initialize Interpreter state before starting execution of a new image."
+	interpreterProxy := self sqGetInterpreterProxy.
+	self dummyReferToProxy.
+	objectMemory initializeObjectMemory: bytesToShift.
+	self checkAssumedCompactClasses.
+	self initializeExtraClassInstVarIndices.
+	method := newMethod := objectMemory nilObject.
+	self cCode: '' inSmalltalk:
+		[breakSelectorLength ifNil:
+			[breakSelectorLength := objectMemory minSmallInteger]].
+	methodDictLinearSearchLimit := 8.
+	self initialCleanup2.
+	LowcodeVM ifTrue: [ self setupNativeStack ].
+	profileSemaphore := profileProcess := profileMethod := objectMemory nilObject.
+	interruptKeycode := 2094. 
+	[globalSessionID = 0] whileTrue:
+		[globalSessionID := self
+								cCode: [(self time: #NULL) + self ioMSecs]
+								inSmalltalk: [(Random new next * (SmallInteger maxVal min: 16rFFFFFFFF)) asInteger]].
+	metaAccessorDepth := -2.
+	super initializeInterpreter: bytesToShift
+]
+
 { #category : #'stack pages' }
 StackInterpreter >> initializePageTraceToInvalid: aPage [
 	<var: #aPage type: #'StackPage *'>
@@ -8763,20 +8926,6 @@ StackInterpreter >> inlineLookupInNSMethodCacheSel: selector classTag: classTag 
 			^true	"found entry in cache; done"].
 
 	^false
-]
-
-{ #category : #thInterCom }
-StackInterpreter >> insertTail: aString InQueue: aQueue [
-	<var: #aString type: 'char *'>
-	<var: #aQueue type: 'struct queue *'>	
-
-	self
-		cCode: 'struct node * addToQueue = malloc(sizeof(struct node));
-		addToQueue->aString = aString;
-		TAILQ_INSERT_TAIL(aQueue, addToQueue, nodes);
-		addToQueue = NULL;
-		'
-		inSmalltalk: [ self insertTail: aString InQueue: aQueue ]
 ]
 
 { #category : #'frame access' }
@@ -9440,6 +9589,7 @@ StackInterpreter >> interpret [
 	self browserPluginInitialiseIfNeeded.
 	self internalizeIPandSP.
 	self initExtensions.
+	self cCode: 'initMutexForFetchNextBytecodeandCond(&GIV(mutexForFetchBytecode), &GIV(step));'.
 	self fetchNextBytecode.
 	[true] whileTrue: [self dispatchOn: currentBytecode in: BytecodeTable].
 	localIP := localIP - 1.  "undo the pre-increment of IP before returning"
@@ -9650,19 +9800,6 @@ StackInterpreter >> isCog [
 StackInterpreter >> isEmptyList: aLinkedList [
 	self assert: (objectMemory isForwarded: aLinkedList) not.
 	^ (objectMemory fetchPointer: FirstLinkIndex ofObject: aLinkedList) = objectMemory nilObject
-]
-
-{ #category : #thInterCom }
-StackInterpreter >> isEmptyQueue: aQueue [
-<returnTypeC: 'bool'>
-<var: #aQueue type: 'struct queue *'>	
-	
-
-	self
-		cCode: '
-		return TAILQ_EMPTY(aQueue);
-		'
-		inSmalltalk: [ self isEmptyQueue: aQueue ]
 ]
 
 { #category : #'compiled methods' }
@@ -10216,21 +10353,21 @@ StackInterpreter >> loadAndExecute: imageParameters [
 	 
 	setImageParams(imageParameters[1]);
 		
-	//Open image and create globals
+	/* Open image and create globals. */
 	static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 	if(pthread_mutex_lock(&mutex) == 0){
 		FILE* imageFile = NULL;
 
-   		/* Open the image file. */
+   		/*Open the image file. */
    		imageFile = fopen(imageParameters[0], "rb");
    		if(!imageFile){
     		perror("Opening Image");
        	return;
     	}
 
-    	readImageFromFileHeapSizeStartingAt(imageFile, 0, 0);
+    	readImageFromFileHeapSizeStartingAtV2(imageFile, 0, 0);
     	fclose(imageFile);
-	   setImageName(imageParameters[0]); 
+	   /*setImageName(imageParameters[0]); */
 	}
 		pthread_mutex_unlock(&mutex);
 		interpret();
@@ -10266,6 +10403,15 @@ StackInterpreter >> loadInitialContext [
 	activeProc := self activeProcess.
 	activeContext := objectMemory fetchPointer: SuspendedContextIndex ofObject: activeProc.
 	self marryContextInNewStackPageAndInitializeInterpreterRegisters: activeContext
+]
+
+{ #category : #thInterCom }
+StackInterpreter >> lockFetchNextBytecode [
+
+"localSP and localFP are in the scope of interpret not in GIV"
+	self cCode: '
+	mutexLockandCond(&GIV(mutexForFetchBytecode), &GIV(step));
+	' inSmalltalk: [ self lockFetchNextBytecode.  ]
 ]
 
 { #category : #'debug printing' }
@@ -16896,6 +17042,56 @@ StackInterpreter >> moveFramesIn: oldPage through: theFP toPage: newPage [
 	^newFP
 ]
 
+{ #category : #thInterCom }
+StackInterpreter >> mutexLock: aMutex [
+	<var: #aMutex type: 'pthread_mutex_t'>
+	self
+		cCode: '
+		if(pthread_mutex_lock(&aMutex) != 0){
+			printf("Mutex lock error: %s\n", strerror(errno));
+			abort();
+		};'
+		inSmalltalk: [ self mutexLock: aMutex ]
+]
+
+{ #category : #thInterCom }
+StackInterpreter >> mutexLock: aMutex andCond: aCond [
+	<var: #aMutex type: 'pthread_mutex_t *'>
+	<var: #aCond type: 'pthread_cond_t *'>
+	
+	self
+		cCode: '
+		if(pthread_mutex_lock(aMutex) != 0){
+			printf("Mutex lock error: %s\n", strerror(errno));
+			abort();
+		}
+		if(pthread_cond_wait(aCond, aMutex) != 0){
+			printf("Cond lock error: %s\n", strerror(errno));
+			exit(1);
+		}
+		pthread_mutex_unlock(aMutex);' inSmalltalk: [ self mutexLock: aMutex andCond: aCond ]
+]
+
+{ #category : #thInterCom }
+StackInterpreter >> mutexUnlock: aMutex [
+	<var: #aMutex type: 'pthread_mutex_t'>
+	self
+		cCode: 'pthread_mutex_unlock(&aMutex);'
+		inSmalltalk: [ self mutexUnlock: aMutex ]
+]
+
+{ #category : #thInterCom }
+StackInterpreter >> mutexUnlock: aMutex andCond: aCond [
+	<var: #aMutex type: 'pthread_mutex_t *'>
+	<var: #aCond type: 'pthread_cond_t *'>
+	self
+		cCode: '
+		pthread_mutex_lock(aMutex);
+		pthread_cond_broadcast(aCond);
+		pthread_mutex_unlock(aMutex);'
+		inSmalltalk: [ self mutexUnlock: aMutex andCond: aCond ]
+]
+
 { #category : #'internal interpreter access' }
 StackInterpreter >> nacFetchStackPointerOf: aContext [
 	"A version of fetchStackPointerOf: for use when objects may be forwarded.
@@ -17053,6 +17249,31 @@ StackInterpreter >> newImage: imagePath WithArguments: imageArgs [
 ]
 
 { #category : #thInter }
+StackInterpreter >> newImageWithArguments [
+<returnTypeC: #int>
+
+	self cCode: '
+	pthread_attr_t tattr;
+
+	pthread_attr_init(&tattr);
+
+	size_t size;
+	pthread_attr_getstacksize(&tattr, &size);
+
+   if(pthread_attr_setstacksize(&tattr, size*4)){
+		perror("Thread attr");
+   }
+	
+	//Pointers to the old struc will be lost
+	
+	if(pthread_create(&thread_id[numberOfImage], &tattr, printPouet, NULL)){
+			perror("Thread creation");
+		}
+		return 12;
+	'
+]
+
+{ #category : #thInter }
 StackInterpreter >> newImageWithArguments: anArrayOfArgs [
 	<var: #anArrayOfArgs type: 'sqInt'>
 
@@ -17070,14 +17291,29 @@ StackInterpreter >> newImageWithArguments: anArrayOfArgs [
 	
 	//Pointers to the old struc will be lost
 	
-	growAllGlobalsStruct(numberOfImage + 1);
-	
-	if(pthread_create(&thread_id[numberOfImage], &tattr, loadAndExecute, NULL)){
+	if(pthread_create(&thread_id[numberOfImage], &tattr, printPouet, NULL)){
 			perror("Thread creation");
 		}
-	setMyCurrentThread(thread_id[numberOfImage],numberOfImage);
-	int oldNumber = numberOfImage;
-	numberOfImage = numberOfImage + 1;
+		return 12;
+	'
+]
+
+{ #category : #thInterCom }
+StackInterpreter >> nextInInterpreter: anInt [
+	<var: #anInt type: 'int'>
+	<returnTypeC: #int>
+	
+	self cCode: 
+	'
+	if(pthread_mutex_lock(&returnGlobalStructFor(anInt)->mutexForFetchBytecode) != 0){
+		printf("Mutex lock error: %s\n", strerror(errno));
+		abort();
+	}
+	if(pthread_cond_broadcast(&returnGlobalStructFor(anInt)->step) != 0){
+		printf("Cond broadcast error: %s\n", strerror(errno));
+		exit(1);
+		}
+	pthread_mutex_unlock(&returnGlobalStructFor(anInt)->mutexForFetchBytecode);
 	'
 ]
 
@@ -18474,6 +18710,27 @@ StackInterpreter >> printLikelyImplementorsOfSelector: selector [
 				cr]]
 ]
 
+{ #category : #thInter }
+StackInterpreter >> printLocalSP: anSP LocalFP: anFP LocalIP: anIP CurrentBytecode: byteCode [
+
+<var: #anSP type: 'char *'>
+<var: #anFP type: 'char *'>
+<var: #anIP type: 'char *'>
+<var: #byteCode type: 'sqInt'>
+
+self cCode: 'printf("Step\n");
+	printf("SP: %p\n",(void *) anSP);
+	printf("FP: %p\n",(void *) anFP);
+	printf("IP: %p\n",(void *) anIP);
+	printf("Method: %d\n", GIV(method));
+	/* -baseHeader (8) + 1 0base adresse (overall - 7)*/
+	printf("IP-method: %p %d\n",(void *) GIV(instructionPointer) - GIV(method) - 7, (int) anIP - GIV(method) - 7);
+	printf("Bytecode: %x\n",(char) byteCode);
+	printf("PrimitiveFunctionPointer: %p\n",GIV(primitiveFunctionPointer));
+	'
+	inSmalltalk: [ self printLocalSP: anSP LocalFP: anFP LocalIP: anIP CurrentBytecode: byteCode ]
+]
+
 { #category : #'debug printing' }
 StackInterpreter >> printMethodCache [
 	<api>
@@ -18771,6 +19028,12 @@ StackInterpreter >> printOopShortInner: oop [
 StackInterpreter >> printPageHeadFrame [
 	<inline: false>
 	self printFrame: stackPage headFP WithSP: stackPage headSP
+]
+
+{ #category : #thInter }
+StackInterpreter >> printPouet [
+
+	self cCode:'printf("Pouet \n");'
 ]
 
 { #category : #'debug printing' }
@@ -19644,6 +19907,140 @@ StackInterpreter >> readImageFromFile: f HeapSize: desiredHeapSize StartingAt: i
 	^dataSize
 ]
 
+{ #category : #thInter }
+StackInterpreter >> readImageFromFile: f HeapSize: desiredHeapSize StartingAtV2: imageOffset [
+	"Read an image from the given file stream, allocating an amount of memory to its object heap.
+	
+	 V3: desiredHeapSize is the total size of the heap.  Fail if the image has an unknown format or
+	 requires more than the specified amount of memory.
+
+	 Spur: desiredHeapSize is ignored; this routine will attempt to provide at least extraVMMemory's
+	 ammount of free space after the image is loaded, taking any free space in teh image into account.
+	 extraVMMemory is stored in the image header and is accessible as vmParameterAt: 23.  If
+	 extraVMMemory is 0, the value defaults to the default grow headroom.  Fail if the image has an
+	 unknown format or if sufficient memory cannot be allocated.
+
+	 Details: This method detects when the image was stored on a machine with the opposite byte
+	 ordering from this machine and swaps the bytes automatically. Furthermore, it allows the header
+	 information to start 512 bytes into the file, since some file transfer programs for the Macintosh
+	 apparently prepend a Mac-specific header of this size. Note that this same 512 bytes of prefix
+	 area could also be used to store an exec command on Unix systems, allowing one to launch
+	 Smalltalk by invoking the image name as a command."
+
+	| headerStart headerSize headerFlags dataSize oldBaseAddr swapBytes
+	  minimumMemory bytesRead bytesToShift heapSize firstSegSize
+	  hdrEdenBytes hdrMaxExtSemTabSize hdrNumStackPages allocationReserve |
+	<var: #f type: #sqImageFile>
+	<var: #heapSize type: #usqInt>
+	<var: #dataSize type: #'size_t'>
+	<var: #minimumMemory type: #usqInt>
+	<var: #desiredHeapSize type: #usqInt>
+	<var: #allocationReserve type: #usqInt>
+	<var: #headerStart type: #squeakFileOffsetType>
+	<var: #imageOffset type: #squeakFileOffsetType>
+
+	metaclassNumSlots := 6.	"guess Metaclass instSize"
+	classNameIndex := 6.		"guess (Class instVarIndexFor: 'name' ifAbsent: []) - 1"
+	swapBytes := self checkImageVersionFrom: f startingAt: imageOffset.
+	headerStart := (self sqImageFilePosition: f) - 4.  "record header start position"
+
+	headerSize			:= self getWord32FromFile: f swap: swapBytes.
+	dataSize			:= self getLongFromFile: f swap: swapBytes.
+	oldBaseAddr		:= self getLongFromFile: f swap: swapBytes.
+	objectMemory specialObjectsOop: (self getLongFromFile: f swap: swapBytes).
+	objectMemory lastHash: (self getLongFromFile: f swap: swapBytes). "N.B.  not used."
+	savedWindowSize	:= self getLongFromFile: f swap: swapBytes.
+	headerFlags		:= self getLongFromFile: f swap: swapBytes.
+	self setImageHeaderFlagsFrom: headerFlags.
+	extraVMMemory	:= self getWord32FromFile: f swap: swapBytes.
+	hdrNumStackPages	:= self getShortFromFile: f swap: swapBytes.
+	"4 stack pages is small.  Should be able to run with as few as
+	 three. 4 should be comfortable but slow.  8 is a reasonable
+	 default.  Can be changed via vmParameterAt: 43 put: n.
+	 Can be set as a preference (Info.plist, VM.ini, command line etc).
+	 If desiredNumStackPages is already non-zero then it has been
+	 set as a preference.  Ignore (but preserve) the header's default."
+	numStackPages := desiredNumStackPages ~= 0
+						ifTrue: [desiredNumStackPages]
+						ifFalse: [hdrNumStackPages = 0
+									ifTrue: [self defaultNumStackPages]
+									ifFalse: [hdrNumStackPages]].
+	desiredNumStackPages := hdrNumStackPages.
+	"pad to word boundary.  This slot can be used for anything else that will fit in 16 bits.
+	 It is used for the cog code size in Cog.  Preserve it to be polite to other VMs."
+	theUnknownShort	:= self getShortFromFile: f swap: swapBytes.
+	hdrEdenBytes		:= self getWord32FromFile: f swap: swapBytes.
+	objectMemory edenBytes: (desiredEdenBytes ~= 0
+						ifTrue: [desiredEdenBytes]
+						ifFalse:
+							[hdrEdenBytes = 0
+									ifTrue: [objectMemory defaultEdenBytes]
+									ifFalse: [hdrEdenBytes]]).
+	desiredEdenBytes := hdrEdenBytes.
+	hdrMaxExtSemTabSize := self getShortFromFile: f swap: swapBytes.
+	hdrMaxExtSemTabSize ~= 0 ifTrue:
+		[self setMaxExtSemSizeTo: hdrMaxExtSemTabSize].
+	"pad to word boundary.  This slot can be used for anything else that will fit in 16 bits.
+	 Preserve it to be polite to other VMs."
+	the2ndUnknownShort	:= self getShortFromFile: f swap: swapBytes.
+	firstSegSize := self getLongFromFile: f swap: swapBytes.
+	objectMemory firstSegmentSize: firstSegSize.
+	"compare memory requirements with availability"
+	allocationReserve := self interpreterAllocationReserveBytes.
+	minimumMemory := dataSize
+						+ objectMemory newSpaceBytes
+						+ allocationReserve.
+	objectMemory hasSpurMemoryManagerAPI
+		ifTrue:
+			[| freeOldSpaceInImage headroom |
+			 freeOldSpaceInImage := self getLongFromFile: f swap: swapBytes.
+			 headroom := objectMemory
+							initialHeadroom: extraVMMemory
+							givenFreeOldSpaceInImage: freeOldSpaceInImage.
+			 heapSize := objectMemory roundUpHeapSize:
+						   dataSize
+						+ headroom
+						+ objectMemory newSpaceBytes
+						+ (headroom > allocationReserve
+							ifTrue: [0]
+							ifFalse: [allocationReserve])]
+		ifFalse:
+			[heapSize :=  desiredHeapSize
+						+ objectMemory newSpaceBytes
+						+ (desiredHeapSize - dataSize > allocationReserve
+							ifTrue: [0]
+							ifFalse: [allocationReserve]).
+			 heapSize < minimumMemory ifTrue:
+				[self insufficientMemorySpecifiedError]].
+
+	"allocate a contiguous block of memory for the Squeak heap"
+	objectMemory memory: (self
+								allocateMemory: heapSize
+								minimum: minimumMemory
+								imageFile: f
+								headerSize: headerSize) asUnsignedInteger.
+	objectMemory memory ifNil: [self insufficientMemoryAvailableError].
+
+	objectMemory
+		setHeapBase: objectMemory memory
+		memoryLimit: objectMemory memory + heapSize
+		endOfMemory: objectMemory memory + dataSize.
+
+	"position file after the header"
+	self sqImageFile: f Seek: headerStart + headerSize.
+
+	"read in the image in bulk, then swap the bytes if necessary"
+	bytesRead := objectMemory readHeapFromImageFile: f dataBytes: dataSize.
+	bytesRead ~= dataSize ifTrue: [self unableToReadImageError].
+
+	self ensureImageFormatIsUpToDate: swapBytes.
+
+	"compute difference between old and new memory base addresses"
+	bytesToShift := objectMemory memoryBaseForImageRead - oldBaseAddr.
+	self initializeInterpreterV2: bytesToShift.  "adjusts all oops to new location"
+	^dataSize
+]
+
 { #category : #'image save/restore' }
 StackInterpreter >> readableFormat: imageVersion [
 	"Anwer true if images of the given format are readable by this interpreter.
@@ -19764,33 +20161,6 @@ StackInterpreter >> remoteIsInstVarAccess [
 	<api>
 	<cmacro>
 	^ 128 "1 << 7"
-]
-
-{ #category : #thInterCom }
-StackInterpreter >> remove: anElement InQueue: aQueue [
-<var: #aQueue type: 'struct queue *'>	
-<var: #anElement type: ' struct node *'>	
-
-	self
-		cCode: '
-		TAILQ_REMOVE(aQueue, anElement, nodes);
-		free(anElement);
-		'
-		inSmalltalk: [ self remove: anElement InQueue: aQueue ]
-]
-
-{ #category : #thInterCom }
-StackInterpreter >> removeFirstInQueue: aQueue [
-<var: #aQueue type: 'struct queue *'>	
-<var: #anElement type: ' struct node *'>	
-
-	self
-		cCode: '
-		struct node * anElement = TAILQ_FIRST(aQueue);
-		TAILQ_REMOVE(aQueue, anElement, nodes);
-		free(anElement);
-		'
-		inSmalltalk: [ self removeFirstInQueue: aQueue ]
 ]
 
 { #category : #'process primitive support' }
@@ -20056,6 +20426,34 @@ StackInterpreter >> returnAs: returnTypeOop ThroughCallback: vmCallbackContext C
 StackInterpreter >> returnFalse [
 	localReturnValue := objectMemory falseObject.
 	self commonReturn
+]
+
+{ #category : #thInter }
+StackInterpreter >> returnGIVNumberForCurrentThread [
+	
+	<returnTypeC: #int>
+	self
+		cCode:
+			'
+		pthread_t selfThread = pthread_self();
+		for(int i=0; i<numberOfImage; i++){
+			if(pthread_equal(all_threads_global[i].myCurrentThread,selfThread)){
+				return i;
+			}
+		}
+		logError("Global structure for current thread not found\n");
+		abort();'
+]
+
+{ #category : #thInter }
+StackInterpreter >> returnGlobalStructFor: anInt [
+	""
+
+	<var: #anInt type: 'int'>
+	<returnTypeC: #'struct foo *'>
+	self
+		cCode:
+			'return &all_threads_global[anInt];'
 ]
 
 { #category : #thInter }

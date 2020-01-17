@@ -443,6 +443,22 @@ StackInterpreterPrimitives >> primitiveContextAtPut [
 	self pop: argumentCount + 1 thenPush: value
 ]
 
+{ #category : #toto }
+StackInterpreterPrimitives >> primitiveContextForCurrentFrameInInterpreter [
+
+	| anOop anInt desiredGIV context |
+	anOop := self stackTop.
+	anInt := self integerValueOf: anOop.
+	
+	desiredGIV := self returnGlobalStructFor: anInt.
+	
+	context := self ensureFrameIsMarried: (self cCode:'desiredGIV->framePointer') SP: (self cCode:'desiredGIV->stackPointer').
+	
+	self pop: 2 thenPush: context.
+	
+	 
+]
+
 { #category : #'indexing primitives' }
 StackInterpreterPrimitives >> primitiveContextSize [
 	"Special version of primitiveSize for accessing contexts.
@@ -893,22 +909,6 @@ StackInterpreterPrimitives >> primitiveFindNextUnwindContext [
 	self pop: 2 thenPush: handlerOrNilOrZero
 ]
 
-{ #category : #QueueCom }
-StackInterpreterPrimitives >> primitiveFirstInQueue [
-	"Start a new thread allocating new space; loading an image and running an interpreter on it"			
-	|aQueue retString sz s |
-	
-	aQueue := self cStringOrNullFor: (self stackTop).	
-	retString := self firstInQueue: (self getQueue: aQueue).
-	sz := self strlen: retString.
-	s := objectMemory instantiateClass: (objectMemory splObj: ClassByteString) indexableSize: sz.
-	1 to: sz do:
-		[:i | objectMemory byteAt: s + objectMemory baseHeaderSize + i - 1 put: (retString at: i -1)].
-	self pop: 2 thenPush: s
-	
-
-]
-
 { #category : #'system control primitives' }
 StackInterpreterPrimitives >> primitiveFlushCacheByMethod [
 	"The receiver is a compiledMethod.  Clear all entries in the method lookup cache that refer to this method, presumably because it has been redefined, overridden or removed."
@@ -939,6 +939,22 @@ StackInterpreterPrimitives >> primitiveFullGC [
 
 	self externalWriteBackHeadFramePointers.
 	super primitiveFullGC
+]
+
+{ #category : #toto }
+StackInterpreterPrimitives >> primitiveGIVElementOfInterpreter [
+	<var: #ptr type: #'sqInt *'>
+	
+	| interpreterIndex desiredGIV ptr GIVElement anInt address |
+	anInt := self stackTop.
+	GIVElement :=  self cStringOrNullFor: (self stackValue: 1).
+	interpreterIndex := self integerValueOf: anInt.
+	
+	address := self addressOf: GIVElement inGIV: interpreterIndex.
+	
+	self pop: 3 thenPush: address.
+	
+	 
 ]
 
 { #category : #'system control primitives' }
@@ -1044,18 +1060,6 @@ StackInterpreterPrimitives >> primitiveIncrementalGC [
 	super primitiveIncrementalGC
 ]
 
-{ #category : #QueueCom }
-StackInterpreterPrimitives >> primitiveInsertTailInQueue [
-	"Start a new thread allocating new space; loading an image and running an interpreter on it"	
-		
-	|anElement aQueue|
-	anElement :=  self cStringOrNullFor: (self stackValue: 1).
-	aQueue := self cStringOrNullFor: (self stackTop).	
-	self insertTail: anElement InQueue: (self getQueue: aQueue)
-	
-
-]
-
 { #category : #'object access primitives' }
 StackInterpreterPrimitives >> primitiveInstVarAt [
 	| index rcvr hdr fmt totalLength fixedFields value |
@@ -1108,18 +1112,6 @@ StackInterpreterPrimitives >> primitiveInstVarAtPut [
 	self pop: argumentCount + 1 thenPush: newValue
 ]
 
-{ #category : #QueueCom }
-StackInterpreterPrimitives >> primitiveIsEmptyInQueue [
-	"Start a new thread allocating new space; loading an image and running an interpreter on it"		
-	|aQueue aBool|
-	
-	aQueue := self cStringOrNullFor: (self stackTop).	
-	aBool := self isEmptyQueue: (self getQueue: aQueue).
-	self pop: 2 thenPushBool: aBool
-	
-
-]
-
 { #category : #'process primitives' }
 StackInterpreterPrimitives >> primitiveLongRunningPrimitive [
 	"Primitive. Answer an Array with the current long-running primitive method identified by
@@ -1169,6 +1161,35 @@ StackInterpreterPrimitives >> primitiveLongRunningPrimitiveSemaphore [
 	self pop: 1
 ]
 
+{ #category : #toto }
+StackInterpreterPrimitives >> primitiveNextInInterpreter [
+
+	| anInt anOop |
+	anOop := self stackTop.
+	anInt := self integerValueOf: anOop.
+	self pop: 2 thenPushInteger: (self nextInInterpreter: anInt).
+]
+
+{ #category : #toto }
+StackInterpreterPrimitives >> primitiveNilObjectInInterpreter [
+	<var: #ptr type: #'sqInt *'>
+	
+	| anOop interpreterIndex desiredGIV externalAddressOop ptr |
+	anOop := self stackTop.
+	interpreterIndex := self integerValueOf: anOop.
+	
+	desiredGIV := self returnGlobalStructFor: interpreterIndex.
+	
+	externalAddressOop := objectMemory 
+			instantiateClass: objectMemory classExternalAddress 
+			indexableSize: BytesPerWord.
+	ptr := objectMemory firstIndexableField: externalAddressOop.
+	ptr at: 0 put:  (self cCode:'desiredGIV->nilObj').
+	self pop: 2 thenPush: externalAddressOop.
+	
+	 
+]
+
 { #category : #'object access primitives' }
 StackInterpreterPrimitives >> primitiveObjectPointsTo [
 	"This primitive is assumed to be fast (see e.g. MethodDictionary>>includesKey:) so make it so.
@@ -1216,14 +1237,34 @@ StackInterpreterPrimitives >> primitiveObjectPointsTo [
 	self pop: 2 thenPushBool: false
 ]
 
-{ #category : #'system control primitives' }
+{ #category : #toto }
+StackInterpreterPrimitives >> primitiveOldBaseAddressInInterpreter [
+	<var: #ptr type: #'sqInt *'>
+	
+	| anOop interpreterIndex desiredGIV externalAddressOop ptr |
+	anOop := self stackTop.
+	interpreterIndex := self integerValueOf: anOop.
+	
+	desiredGIV := self returnGlobalStructFor: interpreterIndex.
+	
+	externalAddressOop := objectMemory 
+			instantiateClass: objectMemory classExternalAddress 
+			indexableSize: BytesPerWord.
+	ptr := objectMemory firstIndexableField: externalAddressOop.
+	ptr at: 0 put:  (self cCode:'desiredGIV->oldSpaceStart').
+	self pop: 2 thenPush: externalAddressOop.
+	
+	 
+]
+
+{ #category : #toto }
 StackInterpreterPrimitives >> primitiveOpenNewImage [
 	"Start a new thread allocating new space; loading an image and running an interpreter on it"	
 		
 	|imagePath imageArguments|
 	imagePath :=  self cStringOrNullFor: (self stackValue: 1).
 	imageArguments := self cStringOrNullFor: (self stackTop).
-	self pop: 3 thenPushInteger: (self newImage: imagePath WithArguments: imageArguments).
+	self pop: 3 thenPushInteger: (self newImage: imagePath WithArguments: imageArguments)
 	
 
 ]
@@ -1312,28 +1353,17 @@ StackInterpreterPrimitives >> primitivePin [
 	self pop: argumentCount + 1 thenPush: wasPinned
 ]
 
-{ #category : #QueueCom }
-StackInterpreterPrimitives >> primitiveRemoveFirstInQueue [
-	"Start a new thread allocating new space; loading an image and running an interpreter on it"	
-		
-	|aQueue|
-	aQueue := self cStringOrNullFor: (self stackTop).	
-	self removeFirstInQueue: (self getQueue: aQueue)
+{ #category : #toto }
+StackInterpreterPrimitives >> primitivePrintOop [
+	<var: #ptr type: #'sqInt *'>
+	<var: #externalAddress type: #'sqInt *'>
+	| receiver externalAddress oopToPrint ptr |
+	receiver := self stackTop.
+	externalAddress := self fetchPointer: 0 ofObject: receiver.
 	
-	
-
-]
-
-{ #category : #QueueCom }
-StackInterpreterPrimitives >> primitiveRemoveInQueue [
-	"Start a new thread allocating new space; loading an image and running an interpreter on it"	
-		
-	|anElement aQueue|
-	anElement := self cStringOrNullFor: (self stackValue:1).
-	aQueue := self cStringOrNullFor: (self stackTop).	
-	self remove: anElement InQueue: (self getQueue: aQueue)
-	
-	
+	ptr := objectMemory firstIndexableField: externalAddress.
+	oopToPrint := ptr at: 0.
+	self printOop: oopToPrint.
 
 ]
 
@@ -1853,6 +1883,26 @@ StackInterpreterPrimitives >> primitiveTerminateTo [
 		ifFalse: [objectMemory storePointer: SenderIndex ofObject: thisCtx withValue: aContextOrNil].
 	self pop: 1.
 	self assert: stackPage = stackPages mostRecentlyUsedPage
+]
+
+{ #category : #toto }
+StackInterpreterPrimitives >> primitiveTopFrameInInterpreter [
+	<var: #ptr type: #'sqInt *'>
+	
+	| anOop interpreterIndex desiredGIV externalAddressOop ptr |
+	anOop := self stackTop.
+	interpreterIndex := self integerValueOf: anOop.
+	
+	desiredGIV := self returnGlobalStructFor: interpreterIndex.
+	
+	externalAddressOop := objectMemory 
+			instantiateClass: objectMemory classExternalAddress 
+			indexableSize: BytesPerWord.
+	ptr := objectMemory firstIndexableField: externalAddressOop.
+	ptr at: 0 put: (self cCoerceSimple: (self cCode:'desiredGIV->framePointer') to: #sqInt).
+	self pop: 2 thenPush: externalAddressOop.
+	
+	 
 ]
 
 { #category : #'system control primitives' }
