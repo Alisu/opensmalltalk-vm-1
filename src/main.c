@@ -43,7 +43,6 @@ int main(int argc, char* argv[]){
 	setMyCurrentThread(pthread_self(), 0);
 	runThread(&parameters.vmparameters[0]);
 	
-
 	pthread_t * thread_id = getThreadsID();
 
 	int * threadReturn; 

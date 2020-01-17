@@ -288,7 +288,7 @@ heartbeat()
 	else
 		heartbeats += 1;
 	//checkHighPriorityTickees(utcMicrosecondClock);
-	//forceInterruptCheckFromHeartbeat();
+	forceInterruptCheckFromHeartbeatV2(GIVToUse);
 
 	errno = saved_errno;
 }
