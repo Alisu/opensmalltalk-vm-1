@@ -6820,13 +6820,15 @@ StackInterpreter >> fetchNextBytecode [
 	"This method fetches the next instruction (bytecode). Each bytecode method is responsible for fetching the next bytecode, preferably as early as possible to allow the memory system time to process the request before the next dispatch."
 
 	isStepable
-		ifTrue: [ self lockFetchNextBytecode.
-			self
+		ifTrue: [	self
 				printLocalSP: localSP
 				LocalFP: localSP
 				LocalIP: localIP
 				CurrentBytecode: currentBytecode.
-			self printCallStack ].
+			self externalizeIPandSP.
+			self printCallStack.
+			self lockFetchNextBytecode.
+ ].
 	MULTIPLEBYTECODESETS
 		ifTrue: [ currentBytecode := self fetchByte + bytecodeSetSelector ]
 		ifFalse: [ currentBytecode := self fetchByte ]
