@@ -97,7 +97,7 @@ sqAllocateMemory(usqInt minHeapSize, usqInt desiredHeapSize)
 	pageSize= getpagesize();
 	pageMask= ~(pageSize - 1);
 
-	static off_t offsetWeWant = 0;
+	static void * offsetWeWant = 0;
 
   heapLimit= valign(max(desiredHeapSize, 1));
 
@@ -118,7 +118,7 @@ sqAllocateMemory(usqInt minHeapSize, usqInt desiredHeapSize)
   if (overallocateMemory)
     uxShrinkMemoryBy(heap + heapLimit, heapLimit - desiredHeapSize);
 
-	offsetWeWant += (off_t) (heap + heapSize);
+	offsetWeWant = (void *) (heap + heapSize);
 
   return (usqInt)heap;
 }
