@@ -8234,10 +8234,14 @@ StackInterpreter >> growAllGlobalsStruct: numberImages [
 	<var: #numberImages type: 'int'>
 
 	self
-		cCode: 
-		'//Pointers to the old struc will be lost
+		cCode: 	
+	'if(numberOfImage > 3){
+	//Pointers to the old struc will be lost, in fact realloc does not behave like i expect him to so this whole piece of code does not work
 	all_threads_global = realloc(all_threads_global, sizeof(struct foo) * numberImages);
-	thread_id = realloc(thread_id, sizeof(pthread_t) * numberImages);'
+	/* We should set all memory to null but memset doesnot work here so we just set numSegInfos */
+	memset(&all_threads_global[numberImages], 0, sizeof(struct foo));
+	//all_threads_global[numberImages].numSegInfos = 0;
+	thread_id = realloc(thread_id, sizeof(pthread_t) * numberImages);}'
 		inSmalltalk: [ self growAllGlobalsStruct: numberImages ]
 ]
 
@@ -8757,8 +8761,9 @@ StackInterpreter >> initializeAllGlobalsStruct: numberImages [
 	self
 		cCode: '
 	setNumberOfImage(numberImages);
-	all_threads_global = malloc(sizeof(struct foo) * numberImages);
-	thread_id = malloc(sizeof(pthread_t) * numberImages);'
+	//Allocate directly for 3 images, for Thomas scenario
+	all_threads_global = malloc(sizeof(struct foo) * 3);
+	thread_id = malloc(sizeof(pthread_t) * 3);'
 	inSmalltalk: [ self initializeAllGlobalsStruct: numberImages ]
 ]
 
@@ -17306,16 +17311,17 @@ StackInterpreter >> nextInInterpreter: anInt [
 	<returnTypeC: #int>
 	
 	self cCode: 
-	'
-	if(pthread_mutex_lock(&returnGlobalStructFor(anInt)->mutexForFetchBytecode) != 0){
+	'pthread_mutex_t * mut = &returnGlobalStructFor(anInt)->mutexForFetchBytecode;
+	if(pthread_mutex_lock(mut) != 0){
 		printf("Mutex lock error: %s\n", strerror(errno));
 		abort();
 	}
-	if(pthread_cond_broadcast(&returnGlobalStructFor(anInt)->step) != 0){
+	pthread_cond_t * cond = &returnGlobalStructFor(anInt)->step;
+	if(pthread_cond_broadcast(cond) != 0){
 		printf("Cond broadcast error: %s\n", strerror(errno));
 		exit(1);
 		}
-	pthread_mutex_unlock(&returnGlobalStructFor(anInt)->mutexForFetchBytecode);
+	pthread_mutex_unlock(mut);
 	'
 ]
 
