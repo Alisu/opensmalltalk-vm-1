@@ -8236,9 +8236,10 @@ StackInterpreter >> growAllGlobalsStruct: numberImages [
 	self
 		cCode: 	
 	'if(numberOfImage >= 3){
-	//Pointers to the old struc will be lost, in fact realloc does not behave like i expect him to so this whole piece of code does not work
+	/**Pointers to the old struc will be lost, in fact realloc does not behave like i expect him to so this whole piece of code does not work
+			realloc and pthread_cond_broadcast(aCond) seems to not work well together
+	**/
 	all_threads_global = realloc(all_threads_global, sizeof(struct foo) * numberImages);
-	/* We should set all memory to null but memset is not portable and give us weird behavior here*/
 	memset(&all_threads_global[numberImages-1], 0, sizeof(struct foo));
 	thread_id = realloc(thread_id, sizeof(pthread_t) * numberImages);}'
 		inSmalltalk: [ self growAllGlobalsStruct: numberImages ]
@@ -8761,7 +8762,7 @@ StackInterpreter >> initializeAllGlobalsStruct: numberImages [
 		cCode: '
 	setNumberOfImage(numberImages);
 	//Allocate directly for 3 images, for Thomas scenario
-	all_threads_global = malloc(sizeof(struct foo) * 3);
+	all_threads_global = calloc(sizeof(struct foo), 3);
 	thread_id = malloc(sizeof(pthread_t) * 3);'
 	inSmalltalk: [ self initializeAllGlobalsStruct: numberImages ]
 ]
