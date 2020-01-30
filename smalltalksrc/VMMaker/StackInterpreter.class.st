@@ -534,7 +534,7 @@ StackInterpreter class >> declareCVarsIn: aCCodeGenerator [
 		declareVar: #byteCount type: #usqInt;
 		declareVar: #myCurrentThread type: 'pthread_t';
 		declareVar: #mutexForFetchBytecode type:'pthread_mutex_t';
-		declareVar: #step type: 'pthread_cond_t';
+		declareVar: #step type: 'pthread_cond_t *';
 		declareVar: #isStepable type: 'int'
 		.
 		"var: #primitiveFunctionPointer type: 'void (*)()'."
@@ -8235,13 +8235,12 @@ StackInterpreter >> growAllGlobalsStruct: numberImages [
 
 	self
 		cCode: 	
-	'if(numberOfImage >= 3){
-	/**Pointers to the old struc will be lost, in fact realloc does not behave like i expect him to so this whole piece of code does not work
+	'/**Pointers to the old struc will be lost, in fact realloc does not behave like i expect him to so this whole piece of code does not work
 			realloc and pthread_cond_broadcast(aCond) seems to not work well together
 	**/
 	all_threads_global = realloc(all_threads_global, sizeof(struct foo) * numberImages);
 	memset(&all_threads_global[numberImages-1], 0, sizeof(struct foo));
-	thread_id = realloc(thread_id, sizeof(pthread_t) * numberImages);}'
+	thread_id = realloc(thread_id, sizeof(pthread_t) * numberImages);'
 		inSmalltalk: [ self growAllGlobalsStruct: numberImages ]
 ]
 
@@ -8584,7 +8583,7 @@ StackInterpreter >> initMutexForFetchNextBytecode: aMutex [
 { #category : #thInterCom }
 StackInterpreter >> initMutexForFetchNextBytecode: aMutex andCond: aCond [
 	<var: #aMutex type: 'pthread_mutex_t *'>
-	<var: #aCond type: 'pthread_cond_t *'>
+	<var: #aCond type: 'pthread_cond_t **'>
 
 	self cCode: '
 	pthread_t selfThread = pthread_self();
@@ -8593,9 +8592,10 @@ StackInterpreter >> initMutexForFetchNextBytecode: aMutex andCond: aCond [
 		exit(1);
 	}
 	
-	if(pthread_cond_init(aCond, NULL) != 0){
-		printf("Mutex init error: %s\n", strerror(errno));
-		exit(1);
+	* aCond = malloc(sizeof(pthread_cond_t));
+	if(pthread_cond_init(* aCond, NULL) != 0){
+		printf("Cond init error: %s\n", strerror(errno));
+		abort();
 	}
 	
 	//Init so we can use the first interpreter normally but he can become stepable too
@@ -8762,8 +8762,8 @@ StackInterpreter >> initializeAllGlobalsStruct: numberImages [
 		cCode: '
 	setNumberOfImage(numberImages);
 	//Allocate directly for 3 images, for Thomas scenario
-	all_threads_global = calloc(sizeof(struct foo), 3);
-	thread_id = malloc(sizeof(pthread_t) * 3);'
+	all_threads_global = calloc(sizeof(struct foo), 1);
+	thread_id = malloc(sizeof(pthread_t));'
 	inSmalltalk: [ self initializeAllGlobalsStruct: numberImages ]
 ]
 
@@ -17064,7 +17064,7 @@ StackInterpreter >> mutexLock: aMutex [
 { #category : #thInterCom }
 StackInterpreter >> mutexLock: aMutex andCond: aCond [
 	<var: #aMutex type: 'pthread_mutex_t *'>
-	<var: #aCond type: 'pthread_cond_t *'>
+	<var: #aCond type: 'pthread_cond_t **'>
 	
 	self
 		cCode: '
@@ -17072,9 +17072,9 @@ StackInterpreter >> mutexLock: aMutex andCond: aCond [
 			printf("Mutex lock error: %s\n", strerror(errno));
 			abort();
 		}
-		if(pthread_cond_wait(aCond, aMutex) != 0){
+		if(pthread_cond_wait(* aCond, aMutex) != 0){
 			printf("Cond lock error: %s\n", strerror(errno));
-			exit(1);
+			abort();
 		}
 		pthread_mutex_unlock(aMutex);' inSmalltalk: [ self mutexLock: aMutex andCond: aCond ]
 ]
@@ -17316,7 +17316,7 @@ StackInterpreter >> nextInInterpreter: anInt [
 		printf("Mutex lock error: %s\n", strerror(errno));
 		abort();
 	}
-	pthread_cond_t * cond = &returnGlobalStructFor(anInt)->step;
+	pthread_cond_t * cond = returnGlobalStructFor(anInt)->step;
 	if(pthread_cond_broadcast(cond) != 0){
 		printf("Cond broadcast error: %s\n", strerror(errno));
 		exit(1);
