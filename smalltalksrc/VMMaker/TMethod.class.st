@@ -584,13 +584,7 @@ TMethod >> emitCFunctionPrototype: aStream generator: aCodeGen isPrototype: isPr
 		[aStream
 			nextPutAll: (aCodeGen cFunctionNameFor: selector);
 			nextPut: $(.
-		args isEmpty
-			ifTrue: [aStream nextPutAll: #void]
-			ifFalse:
-				[args
-					do: [:arg| aStream nextPutAll: (self declarationAt: arg)]
-					separatedBy: [aStream nextPutAll: ', ']].
-		aStream nextPut: $)].
+		aCodeGen emitCFunctionPrototypeForMethod: self isPrototype: isPrototype onStream: aStream ].
 	isPrototype ifTrue:
 		[aStream nextPut: $;; cr.
 		 compileTimeOptionPragmas isEmpty ifFalse:
