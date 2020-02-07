@@ -166,5 +166,5 @@ CCodeGeneratorTheoGlobalStructure >> generateDeny: denyMsgNode on: aStream inden
 
 	aStream nextPutAll: 'assert(!('.
 	self emitCExpression: denyMsgNode args first on: aStream.
-	aStream nextPutAll: ',self ))'
+	aStream nextPutAll: '), self)'
 ]
