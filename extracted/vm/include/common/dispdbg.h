@@ -32,25 +32,25 @@
 #endif
 
 #if PRODUCTION && !SENDTRACE /* default for no send breakpoint. */
-# define sendBreakpointreceiver(sel, len, rcvr) 0
-# define mnuBreakpointreceiver(sel, len, rcvr) 0
+# define sendBreakpointreceiver(sel, len, rcvr, self) 0
+# define mnuBreakpointreceiver(sel, len, rcvr, self) 0
 
 #elif SENDTRACE /* send tracing.  */
-# define sendBreakpointreceiver(sel, len, rcvr) do { \
+# define sendBreakpointreceiver(sel, len, rcvr, self) do { \
 	if (sendTrace) \
 		printf("%.*s\n", (int)(len), (char *)(sel)); \
 } while (0)
-# define mnuBreakpointreceiver(sel, len, rcvr) 0
+# define mnuBreakpointreceiver(sel, len, rcvr, self) 0
 
 #elif 0 /* send trace/byte count.  */
-# define sendBreakpointreceiver(sel, len, rcvr) do { \
+# define sendBreakpointreceiver(sel, len, rcvr, self) do { \
 	if (sendTrace) \
 		printf("%u %.*s\n", GIV(byteCount), (int)(len), (char *)(sel)); \
 } while (0)
-# define mnuBreakpointreceiver(sel, len, rcvr) 0
+# define mnuBreakpointreceiver(sel, len, rcvr, self) 0
 
 #else /* breakpoint for assert and debug configurations. */
-# define sendBreakpointreceiver(sel, len, rcvr) do { \
+# define sendBreakpointreceiver(sel, len, rcvr, self) do { \
 	if ((len) == breakSelectorLength \
 	 && !strncmp((char *)(sel), breakSelector, breakSelectorLength)) { \
 		warnSendBreak(); \
@@ -59,7 +59,7 @@
 	if (sendTrace) \
 		printf("%.*s\n", (int)(len), (char *)(sel)); \
 } while (0)
-# define mnuBreakpointreceiver(sel, len, rcvr) do { \
+# define mnuBreakpointreceiver(sel, len, rcvr, self) do { \
 	if ((len) == -breakSelectorLength \
 	 && !strncmp((char *)(sel), breakSelector, -breakSelectorLength)) { \
 		warnMNUBreak(); \

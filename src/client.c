@@ -82,7 +82,7 @@ int loadPharoImage(char* fileName){
     imageSize = ftell(imageFile);
     fseek(imageFile, 0, SEEK_SET);
 
-    readImageFromFileHeapSizeStartingAt(imageFile, 0, 0);
+    readImageFromFileHeapSizeStartingAt(imageFile, 0, 0, 0 /*self?*/);
     fclose(imageFile);
 
     setImageName(fileName);

@@ -75,7 +75,7 @@ void * tryToLoadModuleInPath(char *path, const char *moduleName)
 }
 
 void *
-ioLoadModule(char *pluginName)
+ioLoadModule(char *pluginName, sqInt self)
 {
     void *moduleHandle;
     char** paths = getPluginPaths();
@@ -104,7 +104,7 @@ ioLoadModule(char *pluginName)
 }
 
 sqInt
-ioFreeModule(void *moduleHandle)
+ioFreeModule(void *moduleHandle, sqInt self)
 {
     return freeModuleHandle(moduleHandle);
 }
@@ -112,7 +112,7 @@ ioFreeModule(void *moduleHandle)
 #if SPURVM
 void *
 ioFindExternalFunctionInAccessorDepthInto(char *lookupName, void *moduleHandle,
-											sqInt *accessorDepthPtr)
+											sqInt *accessorDepthPtr, sqInt self)
 #else
 void *
 ioFindExternalFunctionIn(char *lookupName, void *moduleHandle)

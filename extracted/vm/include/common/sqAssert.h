@@ -16,7 +16,7 @@
 #include "debug.h"
 
 #ifdef NDEBUG /* compatible with Mac OS X (FreeBSD) /usr/include/assert.h */
-# define assert(expr) 0 /* hack disabling of asserts.  Better in makefile? */
+# define assert(expr, self) 0 /* hack disabling of asserts.  Better in makefile? */
 # define asserta(expr) (expr)
 # define assertf(msg) 0
 # define assertl(expr,line) 0

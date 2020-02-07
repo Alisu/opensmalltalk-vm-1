@@ -129,7 +129,7 @@ sqInt attributeSize(sqInt id)
 sqInt getAttributeIntoLength(sqInt id, sqInt byteArrayIndex, sqInt length)
 {
     if (length > 0)
-        strncpy(pointerForOop(byteArrayIndex), GetAttributeString(id), length);
+        strncpy(pointerForOop(byteArrayIndex, 0 /*self*/), GetAttributeString(id), length);
     return 0;
 }
 
@@ -185,7 +185,7 @@ sqInt vmPathSize(void){
 }
 
 sqInt vmPathGetLength(sqInt sqVMPathIndex, sqInt length){
-    char *stVMPath= pointerForOop(sqVMPathIndex);
+    char *stVMPath= pointerForOop(sqVMPathIndex, 0);
     int count;
 
     count = strlen(vmPath);
@@ -198,7 +198,7 @@ sqInt vmPathGetLength(sqInt sqVMPathIndex, sqInt length){
 }
 
 sqInt imageNameGetLength(sqInt sqImageNameIndex, sqInt length){
-    char *sqImageName = pointerForOop(sqImageNameIndex);
+    char *sqImageName = pointerForOop(sqImageNameIndex, 0);
     int count;
 
     count= strlen(imageName);
@@ -211,7 +211,7 @@ sqInt imageNameGetLength(sqInt sqImageNameIndex, sqInt length){
 }
 
 sqInt imageNamePutLength(sqInt sqImageNameIndex, sqInt length){
-    char *sqImageName= pointerForOop(sqImageNameIndex);
+    char *sqImageName= pointerForOop(sqImageNameIndex, 0);
     int count;
 
     count = (length >= sizeof(imageName)) ? sizeof(imageName) - 1 : length;

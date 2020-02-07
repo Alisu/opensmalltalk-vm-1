@@ -22,7 +22,7 @@ EXPORT(void) logLevel(int value){
 	max_error_level = value;
 }
 
-void error(char *errorMessage){
+void error(char *errorMessage, sqInt self){
     logError(errorMessage);
     abort();
 }
