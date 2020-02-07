@@ -159,3 +159,12 @@ CCodeGeneratorTheoGlobalStructure >> emitCVariablesOn: aStream [
 		nextPutAll: nonstruct contents;
 		cr
 ]
+
+{ #category : #'C translation' }
+CCodeGeneratorTheoGlobalStructure >> generateDeny: denyMsgNode on: aStream indent: level [
+	"Generate the C code for a deny: expr onto the given stream."
+
+	aStream nextPutAll: 'assert(!('.
+	self emitCExpression: denyMsgNode args first on: aStream.
+	aStream nextPutAll: ',self ))'
+]
