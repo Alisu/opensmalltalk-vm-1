@@ -8,17 +8,18 @@ Class {
 CCodeGeneratorTheoGlobalStructure >> emitCCodeAsFunctionCallOn: aStream level: level method: aMethod [
 	"Translate this message send into a C function call"
 
-	aMethod selector == #break ifTrue:
-		[aStream nextPutAll: '/* send of break elided */'.
-		 ^aMethod].
-
+	aMethod selector == #break
+		ifTrue: [ aStream nextPutAll: '/* send of break elided */'.
+			^ aMethod ].
+	self haltIf: [ aMethod selector = #strcpy: ].
 	"Special case for pluggable modules. Replace messages to interpreterProxy
 	 by interpreterProxy->message(..) if the message is not builtin"
-	(self shouldGenerateAsInterpreterProxySend: aMethod) ifTrue:
-		[(self noteUsedPluginFunction: aMethod selector) ifTrue:
-			[aStream nextPutAll: 'interpreterProxy->']].
-
-	aStream nextPutAll: (self cFunctionNameFor: aMethod selector); nextPut: $(.
+	(self shouldGenerateAsInterpreterProxySend: aMethod)
+		ifTrue: [ (self noteUsedPluginFunction: aMethod selector)
+				ifTrue: [ aStream nextPutAll: 'interpreterProxy->' ] ].
+	aStream
+		nextPutAll: (self cFunctionNameFor: aMethod selector);
+		nextPut: $(.
 
 	"Only include the receiver as the first argument in certain cases.
 	 The receiver is always included if it is an expression.
@@ -26,19 +27,29 @@ CCodeGeneratorTheoGlobalStructure >> emitCCodeAsFunctionCallOn: aStream level: l
 		 If the vmClass says it is an implicit variable, don't include it.
 		 If the variable is 'self' and the method being called is not in
 		 the method set (i.e. it is some external code), don't include it."
-	(aMethod shouldExcludeReceiverAsFirstArgument: self) ifFalse:
-		[(aMethod receiver structTargetKindIn: self) == #struct ifTrue:
-			[aStream nextPut: $&].
-		aMethod receiver emitCCodeOn: aStream level: level generator: self.
-		 aMethod args isEmpty ifFalse:
-			[aStream nextPutAll: ', ']].
+	(aMethod shouldExcludeReceiverAsFirstArgument: self)
+		ifFalse: [ (aMethod receiver structTargetKindIn: self) == #struct
+				ifTrue: [ aStream nextPut: $& ].
+			aMethod receiver emitCCodeOn: aStream level: level generator: self.
+			aMethod args isEmpty
+				ifFalse: [ aStream nextPutAll: ', ' ] ].
 	aMethod args
-		do: [ :arg| arg emitCCodeAsArgumentOn: aStream level: level generator: self]
-		separatedBy: [aStream nextPut: $,; space].
-	aMethod args ifNotEmpty: [aStream nextPut: $,; space].
-	(TVariableNode new setName: #self)
-		emitCCodeAsArgumentOn: aStream level: level generator: self.
-	aStream nextPut: $)
+		do:
+			[ :arg | arg emitCCodeAsArgumentOn: aStream level: level generator: self ]
+		separatedBy: [ aStream
+				nextPut: $,;
+				space ].
+	(self selectorToExclude includes: aMethod selector)
+		ifFalse: [ aMethod args
+				ifNotEmpty: [ aStream
+						nextPut: $,;
+						space ].
+			(TVariableNode new setName: #self)
+				emitCCodeAsArgumentOn: aStream
+				level: level
+				generator: self ].
+	aStream nextPut: $).
+	"self haltIf: [ aStream contents includesSubstring: 'assert(fmt == (ephemeronFormat(self)), self)']."
 ]
 
 { #category : #'C code generator' }
@@ -167,4 +178,41 @@ CCodeGeneratorTheoGlobalStructure >> generateDeny: denyMsgNode on: aStream inden
 	aStream nextPutAll: 'assert(!('.
 	self emitCExpression: denyMsgNode args first on: aStream.
 	aStream nextPutAll: '), self)'
+]
+
+{ #category : #'as yet unclassified' }
+CCodeGeneratorTheoGlobalStructure >> selectorToExclude [
+
+ ^  #(#memcpy:_:_: 
+		#sizeof:
+		#getenv:
+		#free:
+		#strlen:
+		#log
+		#mod:f:
+		#sin
+		#atan
+		#ld:exp:
+		#sqrt
+		#exp
+		#me:ms:et:
+		#f:open:
+		#putchar:
+		#fflush
+		#error: "for commodities"
+		#strncmp:_:_: 
+		#printf:
+		#malloc:
+		#strcpy:_:
+		#strcat:_:
+		#strncpy:_:_:
+		#memmove:_:_:
+		#c:alloc:
+		#re:alloc:
+		#strcmp:
+		#long:jmp:
+		#getchar
+		#setjmp:
+		#alloca:
+		)
 ]
