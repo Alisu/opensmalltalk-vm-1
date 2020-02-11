@@ -43,7 +43,7 @@
 
 #if defined(__GNUC__) || defined(__clang__)
 # if GCC_HAS_BUILTIN_SYNC || defined(__clang__)
-#	define sqLowLevelMFence() __sync_synchronize()
+#	define sqLowLevelMFence(self) __sync_synchronize()
 # elif defined(i386) || defined(__i386) || defined(__i386__) || defined(_X86_)
 #	if defined(__MINGW32__) && !__SSE2__
 	/* Andreas is fond of the gcc 2.95 MINGW but it lacks sse2 support */

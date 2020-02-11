@@ -78,12 +78,12 @@ invalidCompactClassError(char *s) { /* Print a (compact) class index error messa
 # define sigsetjmp(jb,ssmf) setjmp(jb)
 # define siglongjmp(jb,v) longjmp(jb,v)
 #else
-# define sigsetjmp(jb,ssmf) _setjmp(jb)
+# define sigsetjmp(jb,ssmf,self) _setjmp(jb)
 # define siglongjmp(jb,v) _longjmp(jb,v)
 #endif
 
-#define odd(v) ((int)(v)&1)
-#define even(v) (!odd(v))
+#define odd(v, self) ((int)(v)&1)
+#define even(v, self) (!odd(v))
 
 /* end TheoStackInterpreter class>>preambleCCode */
 
@@ -2454,7 +2454,7 @@ volatile int sendTrace;
 #define dispatchFunctionPointer(aFunctionPointer, self) (aFunctionPointer)()
 #define enterSmalltalkExecutive(self) enterSmalltalkExecutiveImplementation()
 #define flush(self) fflush(stdout)
-#define initialEnterSmalltalkExecutive(self) enterSmalltalkExecutiveImplementation()
+#define initialEnterSmalltalkExecutive(self) enterSmalltalkExecutiveImplementation(self)
 #define printFloat(f, self) printf("%g", f)
 #define remoteIsInstVarAccess(self) 128
 #define stackPageFrameBytes(self) (256 * BytesPerWord)
@@ -5027,7 +5027,7 @@ interpret(sqInt self)
 				/* begin storePointerImmutabilityCheck:ofObject:withValue: */
 				
 #        if IMMUTABILITY
-				assert(!((isImmediate(rcvr, self))));
+				assert(!((isImmediate(rcvr, self))), self);
 				if (((((usqInt) (longAt(rcvr, self))) >> (immutableBitShift(self))) & 1) != 0) {
 					/* begin cannotAssign:to:withIndex: */
 					longAtPointerput((localSP -= BytesPerOop), rcvr, self);
@@ -5623,7 +5623,7 @@ interpret(sqInt self)
 				ctxtOrNilOrZero = findMethodWithPrimitiveFromContextUpToContext(198, senderContext, home, self);
 	l897:	/* end findMethodWithPrimitive:FromFP:UpToContext: */;
 				assert(!((onSamePage
- && (ctxtOrNilOrZero == (nilObject(self))))));
+ && (ctxtOrNilOrZero == (nilObject(self))))), self);
 				if (ctxtOrNilOrZero == 0) {
 					/* begin fetchPointer:ofObject: */
 					theMethod = longAt((home + BaseHeaderSize) + (((sqInt)((usqInt)(MethodIndex) << (shiftForWord(self))))), self);
@@ -5960,7 +5960,7 @@ interpret(sqInt self)
 								}
 								fp = callerFP;
 							}
-							error("did not find theFP in stack page", self);
+							error("did not find theFP in stack page");
 							frameAbove = 0;
 	l907:	/* end findFrameAbove:inPage: */;
 							moveFramesInthroughtoPage(thePage, frameAbove, GIV(stackPage), self);
@@ -6079,7 +6079,7 @@ interpret(sqInt self)
 					: 0);
 				if ((GIV(messageSelector) == null)
 				 || (GIV(messageSelector) == GIV(nilObj))) {
-					error("Unknown bytecode", self);
+					error("Unknown bytecode");
 				}
 				/* begin ensureFrameIsMarried:SP: */
 				if ((byteAt((localFP + FoxFrameFlags) + 2, self)) != 0) {
@@ -6184,7 +6184,7 @@ interpret(sqInt self)
 					objOop = longAt(localFP + FoxReceiver, self);
 					
 #          if IMMUTABILITY
-					assert(!((isImmediate(objOop, self))));
+					assert(!((isImmediate(objOop, self))), self);
 					if (((((usqInt) (longAt(objOop, self))) >> (immutableBitShift(self))) & 1) != 0) {
 						/* begin cannotAssign:to:withIndex: */
 						longAtPointerput((localSP -= BytesPerOop), objOop, self);
@@ -6265,7 +6265,7 @@ interpret(sqInt self)
 					/* begin storePointerImmutabilityCheck:ofObject:withValue: */
 					
 #          if IMMUTABILITY
-					assert(!((isImmediate(litVar, self))));
+					assert(!((isImmediate(litVar, self))), self);
 					if (((((usqInt) (longAt(litVar, self))) >> (immutableBitShift(self))) & 1) != 0) {
 						/* begin cannotAssign:to:withIndex: */
 						longAtPointerput((localSP -= BytesPerOop), litVar, self);
@@ -6310,7 +6310,7 @@ interpret(sqInt self)
 					currentBytecode = (byteAtPointer(++localIP, self)) + GIV(bytecodeSetSelector);
 					goto l44;
 				}
-				error("illegal store", self);
+				error("illegal store");
 	l44:	/* end extendedStoreBytecodePop: */;
 			}
 			break;
@@ -6338,7 +6338,7 @@ interpret(sqInt self)
 					objOop = longAt(localFP + FoxReceiver, self);
 					
 #          if IMMUTABILITY
-					assert(!((isImmediate(objOop, self))));
+					assert(!((isImmediate(objOop, self))), self);
 					if (((((usqInt) (longAt(objOop, self))) >> (immutableBitShift(self))) & 1) != 0) {
 						/* begin cannotAssign:to:withIndex: */
 						longAtPointerput((localSP -= BytesPerOop), objOop, self);
@@ -6419,7 +6419,7 @@ interpret(sqInt self)
 					/* begin storePointerImmutabilityCheck:ofObject:withValue: */
 					
 #          if IMMUTABILITY
-					assert(!((isImmediate(litVar, self))));
+					assert(!((isImmediate(litVar, self))), self);
 					if (((((usqInt) (longAt(litVar, self))) >> (immutableBitShift(self))) & 1) != 0) {
 						/* begin cannotAssign:to:withIndex: */
 						longAtPointerput((localSP -= BytesPerOop), litVar, self);
@@ -6464,7 +6464,7 @@ interpret(sqInt self)
 					currentBytecode = (byteAtPointer(++localIP, self)) + GIV(bytecodeSetSelector);
 					goto l57;
 				}
-				error("illegal store", self);
+				error("illegal store");
 	l57:	/* end extendedStoreBytecodePop: */;
 			}
 			break;
@@ -6875,7 +6875,7 @@ interpret(sqInt self)
 							object3 = instructionPointerForFramecurrentFPcurrentIP(spouseFP, localFP, oopForPointer(localIP, self), self);
 							goto l98;
 						}
-						error("bad index", self);
+						error("bad index");
 						object3 = 0;
 	l98:	/* end instVar:ofContext: */;
 						longAtPointerput((localSP -= BytesPerOop), object3, self);
@@ -6947,7 +6947,7 @@ interpret(sqInt self)
 					/* begin storePointerImmutabilityCheck:ofObject:withValue: */
 					
 #          if IMMUTABILITY
-					assert(!((isImmediate(litVar1, self))));
+					assert(!((isImmediate(litVar1, self))), self);
 					if (((((usqInt) (longAt(litVar1, self))) >> (immutableBitShift(self))) & 1) != 0) {
 						/* begin cannotAssign:to:withIndex: */
 						longAtPointerput((localSP -= BytesPerOop), litVar1, self);
@@ -7004,7 +7004,7 @@ interpret(sqInt self)
 				 || (0)))) {
 					/* begin instVar:ofContext:put: */
 					assert(isMarriedOrWidowedContext(obj1, self), self);
-					assert(!((isObjImmutable(obj1, self))));
+					assert(!((isObjImmutable(obj1, self))), self);
 					/* begin writeBackHeadFramePointers */
 					assert(GIV(stackPage) == (mostRecentlyUsedPage(self)), self);
 					/* begin setHeadFP:andSP:inPage: */
@@ -7091,7 +7091,7 @@ interpret(sqInt self)
 					/* begin storePointerImmutabilityCheck:ofObject:withValue: */
 					
 #          if IMMUTABILITY
-					assert(!((isImmediate(obj1, self))));
+					assert(!((isImmediate(obj1, self))), self);
 					if (((((usqInt) (longAt(obj1, self))) >> (immutableBitShift(self))) & 1) != 0) {
 						/* begin cannotAssign:to:withIndex: */
 						longAtPointerput((localSP -= BytesPerOop), obj1, self);
@@ -7379,7 +7379,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 						forceInterruptCheck(self);
 					}
 					if ((GIV(freeStart) + numBytes) > (((eden(self)).limit))) {
-						error("no room in eden for allocateSmallNewSpaceSlots:format:classIndex:", self);
+						error("no room in eden for allocateSmallNewSpaceSlots:format:classIndex:");
 						array = 0;
 						goto l107;
 					}
@@ -7636,7 +7636,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 						forceInterruptCheck(self);
 					}
 					if ((GIV(freeStart) + numBytes) > (((eden(self)).limit))) {
-						error("no room in eden for allocateSmallNewSpaceSlots:format:classIndex:", self);
+						error("no room in eden for allocateSmallNewSpaceSlots:format:classIndex:");
 						newClosure1 = 0;
 						goto l141;
 					}
@@ -8087,7 +8087,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 							/* begin rotateRight: */
 							rot = (rot << 0x3F) + (((usqInt) (((usqInt)rot))) >> 1);
 							bits = rot;
-							memcpy((&value), (&bits), sizeof(value, self), self);
+							memcpy((&value), (&bits), sizeof(value));
 							rcvr1 = value;
 							goto l168;
 						}
@@ -8125,7 +8125,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 							/* begin rotateRight: */
 							rot1 = (rot1 << 0x3F) + (((usqInt) (((usqInt)rot1))) >> 1);
 							bits1 = rot1;
-							memcpy((&value1), (&bits1), sizeof(value1, self), self);
+							memcpy((&value1), (&bits1), sizeof(value1));
 							arg1 = value1;
 							goto l161;
 						}
@@ -8247,7 +8247,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 							/* begin rotateRight: */
 							rot = (rot << 0x3F) + (((usqInt) (((usqInt)rot))) >> 1);
 							bits = rot;
-							memcpy((&value), (&bits), sizeof(value, self), self);
+							memcpy((&value), (&bits), sizeof(value));
 							rcvr1 = value;
 							goto l179;
 						}
@@ -8285,7 +8285,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 							/* begin rotateRight: */
 							rot1 = (rot1 << 0x3F) + (((usqInt) (((usqInt)rot1))) >> 1);
 							bits1 = rot1;
-							memcpy((&value1), (&bits1), sizeof(value1, self), self);
+							memcpy((&value1), (&bits1), sizeof(value1));
 							arg1 = value1;
 							goto l172;
 						}
@@ -8395,7 +8395,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 						/* begin rotateRight: */
 						rot = (rot << 0x3F) + (((usqInt) (((usqInt)rot))) >> 1);
 						bits = rot;
-						memcpy((&value), (&bits), sizeof(value, self), self);
+						memcpy((&value), (&bits), sizeof(value));
 						rcvr1 = value;
 						goto l186;
 					}
@@ -8433,7 +8433,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 						/* begin rotateRight: */
 						rot1 = (rot1 << 0x3F) + (((usqInt) (((usqInt)rot1))) >> 1);
 						bits1 = rot1;
-						memcpy((&value1), (&bits1), sizeof(value1, self), self);
+						memcpy((&value1), (&bits1), sizeof(value1));
 						arg1 = value1;
 						goto l189;
 					}
@@ -8603,7 +8603,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 						/* begin rotateRight: */
 						rot = (rot << 0x3F) + (((usqInt) (((usqInt)rot))) >> 1);
 						bits = rot;
-						memcpy((&value), (&bits), sizeof(value, self), self);
+						memcpy((&value), (&bits), sizeof(value));
 						rcvr1 = value;
 						goto l196;
 					}
@@ -8641,7 +8641,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 						/* begin rotateRight: */
 						rot1 = (rot1 << 0x3F) + (((usqInt) (((usqInt)rot1))) >> 1);
 						bits1 = rot1;
-						memcpy((&value1), (&bits1), sizeof(value1, self), self);
+						memcpy((&value1), (&bits1), sizeof(value1));
 						arg1 = value1;
 						goto l199;
 					}
@@ -8789,7 +8789,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 						/* begin rotateRight: */
 						rot = (rot << 0x3F) + (((usqInt) (((usqInt)rot))) >> 1);
 						bits = rot;
-						memcpy((&value), (&bits), sizeof(value, self), self);
+						memcpy((&value), (&bits), sizeof(value));
 						rcvr1 = value;
 						goto l206;
 					}
@@ -8827,7 +8827,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 						/* begin rotateRight: */
 						rot1 = (rot1 << 0x3F) + (((usqInt) (((usqInt)rot1))) >> 1);
 						bits1 = rot1;
-						memcpy((&value1), (&bits1), sizeof(value1, self), self);
+						memcpy((&value1), (&bits1), sizeof(value1));
 						arg1 = value1;
 						goto l209;
 					}
@@ -8924,7 +8924,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 						/* begin rotateRight: */
 						rot = (rot << 0x3F) + (((usqInt) (((usqInt)rot))) >> 1);
 						bits = rot;
-						memcpy((&value), (&bits), sizeof(value, self), self);
+						memcpy((&value), (&bits), sizeof(value));
 						rcvr1 = value;
 						goto l216;
 					}
@@ -8962,7 +8962,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 						/* begin rotateRight: */
 						rot1 = (rot1 << 0x3F) + (((usqInt) (((usqInt)rot1))) >> 1);
 						bits1 = rot1;
-						memcpy((&value1), (&bits1), sizeof(value1, self), self);
+						memcpy((&value1), (&bits1), sizeof(value1));
 						arg1 = value1;
 						goto l219;
 					}
@@ -9056,7 +9056,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 						/* begin rotateRight: */
 						rot = (rot << 0x3F) + (((usqInt) (((usqInt)rot))) >> 1);
 						bits = rot;
-						memcpy((&value), (&bits), sizeof(value, self), self);
+						memcpy((&value), (&bits), sizeof(value));
 						rcvr1 = value;
 						goto l226;
 					}
@@ -9094,7 +9094,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 						/* begin rotateRight: */
 						rot1 = (rot1 << 0x3F) + (((usqInt) (((usqInt)rot1))) >> 1);
 						bits1 = rot1;
-						memcpy((&value1), (&bits1), sizeof(value1, self), self);
+						memcpy((&value1), (&bits1), sizeof(value1));
 						arg1 = value1;
 						goto l229;
 					}
@@ -9188,7 +9188,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 						/* begin rotateRight: */
 						rot = (rot << 0x3F) + (((usqInt) (((usqInt)rot))) >> 1);
 						bits = rot;
-						memcpy((&value), (&bits), sizeof(value, self), self);
+						memcpy((&value), (&bits), sizeof(value));
 						rcvr1 = value;
 						goto l236;
 					}
@@ -9226,7 +9226,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 						/* begin rotateRight: */
 						rot1 = (rot1 << 0x3F) + (((usqInt) (((usqInt)rot1))) >> 1);
 						bits1 = rot1;
-						memcpy((&value1), (&bits1), sizeof(value1, self), self);
+						memcpy((&value1), (&bits1), sizeof(value1));
 						arg1 = value1;
 						goto l239;
 					}
@@ -9348,7 +9348,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 							/* begin rotateRight: */
 							rot = (rot << 0x3F) + (((usqInt) (((usqInt)rot))) >> 1);
 							bits = rot;
-							memcpy((&value), (&bits), sizeof(value, self), self);
+							memcpy((&value), (&bits), sizeof(value));
 							rcvr1 = value;
 							goto l250;
 						}
@@ -9386,7 +9386,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 							/* begin rotateRight: */
 							rot1 = (rot1 << 0x3F) + (((usqInt) (((usqInt)rot1))) >> 1);
 							bits1 = rot1;
-							memcpy((&value1), (&bits1), sizeof(value1, self), self);
+							memcpy((&value1), (&bits1), sizeof(value1));
 							arg1 = value1;
 							goto l243;
 						}
@@ -9515,7 +9515,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 							/* begin rotateRight: */
 							rot = (rot << 0x3F) + (((usqInt) (((usqInt)rot))) >> 1);
 							bits = rot;
-							memcpy((&value), (&bits), sizeof(value, self), self);
+							memcpy((&value), (&bits), sizeof(value));
 							rcvr1 = value;
 							goto l261;
 						}
@@ -9553,7 +9553,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 							/* begin rotateRight: */
 							rot1 = (rot1 << 0x3F) + (((usqInt) (((usqInt)rot1))) >> 1);
 							bits1 = rot1;
-							memcpy((&value1), (&bits1), sizeof(value1, self), self);
+							memcpy((&value1), (&bits1), sizeof(value1));
 							arg1 = value1;
 							goto l254;
 						}
@@ -9703,7 +9703,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 							forceInterruptCheck(self);
 						}
 						if ((GIV(freeStart) + numBytes) > (((eden(self)).limit))) {
-							error("no room in eden for allocateSmallNewSpaceSlots:format:classIndex:", self);
+							error("no room in eden for allocateSmallNewSpaceSlots:format:classIndex:");
 							pt = 0;
 							goto l271;
 						}
@@ -13396,7 +13396,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 							/* begin rotateRight: */
 							rot = (rot << 0x3F) + (((usqInt) (((usqInt)rot))) >> 1);
 							bits = rot;
-							memcpy((&value), (&bits), sizeof(value, self), self);
+							memcpy((&value), (&bits), sizeof(value));
 							rcvr1 = value;
 							goto l467;
 						}
@@ -13434,7 +13434,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 							/* begin rotateRight: */
 							rot1 = (rot1 << 0x3F) + (((usqInt) (((usqInt)rot1))) >> 1);
 							bits1 = rot1;
-							memcpy((&value1), (&bits1), sizeof(value1, self), self);
+							memcpy((&value1), (&bits1), sizeof(value1));
 							arg1 = value1;
 							goto l460;
 						}
@@ -13556,7 +13556,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 							/* begin rotateRight: */
 							rot = (rot << 0x3F) + (((usqInt) (((usqInt)rot))) >> 1);
 							bits = rot;
-							memcpy((&value), (&bits), sizeof(value, self), self);
+							memcpy((&value), (&bits), sizeof(value));
 							rcvr1 = value;
 							goto l478;
 						}
@@ -13594,7 +13594,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 							/* begin rotateRight: */
 							rot1 = (rot1 << 0x3F) + (((usqInt) (((usqInt)rot1))) >> 1);
 							bits1 = rot1;
-							memcpy((&value1), (&bits1), sizeof(value1, self), self);
+							memcpy((&value1), (&bits1), sizeof(value1));
 							arg1 = value1;
 							goto l471;
 						}
@@ -13704,7 +13704,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 						/* begin rotateRight: */
 						rot = (rot << 0x3F) + (((usqInt) (((usqInt)rot))) >> 1);
 						bits = rot;
-						memcpy((&value), (&bits), sizeof(value, self), self);
+						memcpy((&value), (&bits), sizeof(value));
 						rcvr1 = value;
 						goto l485;
 					}
@@ -13742,7 +13742,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 						/* begin rotateRight: */
 						rot1 = (rot1 << 0x3F) + (((usqInt) (((usqInt)rot1))) >> 1);
 						bits1 = rot1;
-						memcpy((&value1), (&bits1), sizeof(value1, self), self);
+						memcpy((&value1), (&bits1), sizeof(value1));
 						arg1 = value1;
 						goto l488;
 					}
@@ -13911,7 +13911,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 						/* begin rotateRight: */
 						rot = (rot << 0x3F) + (((usqInt) (((usqInt)rot))) >> 1);
 						bits = rot;
-						memcpy((&value), (&bits), sizeof(value, self), self);
+						memcpy((&value), (&bits), sizeof(value));
 						rcvr1 = value;
 						goto l495;
 					}
@@ -13949,7 +13949,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 						/* begin rotateRight: */
 						rot1 = (rot1 << 0x3F) + (((usqInt) (((usqInt)rot1))) >> 1);
 						bits1 = rot1;
-						memcpy((&value1), (&bits1), sizeof(value1, self), self);
+						memcpy((&value1), (&bits1), sizeof(value1));
 						arg1 = value1;
 						goto l498;
 					}
@@ -14097,7 +14097,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 						/* begin rotateRight: */
 						rot = (rot << 0x3F) + (((usqInt) (((usqInt)rot))) >> 1);
 						bits = rot;
-						memcpy((&value), (&bits), sizeof(value, self), self);
+						memcpy((&value), (&bits), sizeof(value));
 						rcvr1 = value;
 						goto l505;
 					}
@@ -14135,7 +14135,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 						/* begin rotateRight: */
 						rot1 = (rot1 << 0x3F) + (((usqInt) (((usqInt)rot1))) >> 1);
 						bits1 = rot1;
-						memcpy((&value1), (&bits1), sizeof(value1, self), self);
+						memcpy((&value1), (&bits1), sizeof(value1));
 						arg1 = value1;
 						goto l508;
 					}
@@ -14232,7 +14232,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 						/* begin rotateRight: */
 						rot = (rot << 0x3F) + (((usqInt) (((usqInt)rot))) >> 1);
 						bits = rot;
-						memcpy((&value), (&bits), sizeof(value, self), self);
+						memcpy((&value), (&bits), sizeof(value));
 						rcvr1 = value;
 						goto l515;
 					}
@@ -14270,7 +14270,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 						/* begin rotateRight: */
 						rot1 = (rot1 << 0x3F) + (((usqInt) (((usqInt)rot1))) >> 1);
 						bits1 = rot1;
-						memcpy((&value1), (&bits1), sizeof(value1, self), self);
+						memcpy((&value1), (&bits1), sizeof(value1));
 						arg1 = value1;
 						goto l518;
 					}
@@ -14364,7 +14364,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 						/* begin rotateRight: */
 						rot = (rot << 0x3F) + (((usqInt) (((usqInt)rot))) >> 1);
 						bits = rot;
-						memcpy((&value), (&bits), sizeof(value, self), self);
+						memcpy((&value), (&bits), sizeof(value));
 						rcvr1 = value;
 						goto l525;
 					}
@@ -14402,7 +14402,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 						/* begin rotateRight: */
 						rot1 = (rot1 << 0x3F) + (((usqInt) (((usqInt)rot1))) >> 1);
 						bits1 = rot1;
-						memcpy((&value1), (&bits1), sizeof(value1, self), self);
+						memcpy((&value1), (&bits1), sizeof(value1));
 						arg1 = value1;
 						goto l528;
 					}
@@ -14496,7 +14496,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 						/* begin rotateRight: */
 						rot = (rot << 0x3F) + (((usqInt) (((usqInt)rot))) >> 1);
 						bits = rot;
-						memcpy((&value), (&bits), sizeof(value, self), self);
+						memcpy((&value), (&bits), sizeof(value));
 						rcvr1 = value;
 						goto l535;
 					}
@@ -14534,7 +14534,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 						/* begin rotateRight: */
 						rot1 = (rot1 << 0x3F) + (((usqInt) (((usqInt)rot1))) >> 1);
 						bits1 = rot1;
-						memcpy((&value1), (&bits1), sizeof(value1, self), self);
+						memcpy((&value1), (&bits1), sizeof(value1));
 						arg1 = value1;
 						goto l538;
 					}
@@ -14656,7 +14656,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 							/* begin rotateRight: */
 							rot = (rot << 0x3F) + (((usqInt) (((usqInt)rot))) >> 1);
 							bits = rot;
-							memcpy((&value), (&bits), sizeof(value, self), self);
+							memcpy((&value), (&bits), sizeof(value));
 							rcvr1 = value;
 							goto l549;
 						}
@@ -14694,7 +14694,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 							/* begin rotateRight: */
 							rot1 = (rot1 << 0x3F) + (((usqInt) (((usqInt)rot1))) >> 1);
 							bits1 = rot1;
-							memcpy((&value1), (&bits1), sizeof(value1, self), self);
+							memcpy((&value1), (&bits1), sizeof(value1));
 							arg1 = value1;
 							goto l542;
 						}
@@ -14823,7 +14823,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 							/* begin rotateRight: */
 							rot = (rot << 0x3F) + (((usqInt) (((usqInt)rot))) >> 1);
 							bits = rot;
-							memcpy((&value), (&bits), sizeof(value, self), self);
+							memcpy((&value), (&bits), sizeof(value));
 							rcvr1 = value;
 							goto l560;
 						}
@@ -14861,7 +14861,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 							/* begin rotateRight: */
 							rot1 = (rot1 << 0x3F) + (((usqInt) (((usqInt)rot1))) >> 1);
 							bits1 = rot1;
-							memcpy((&value1), (&bits1), sizeof(value1, self), self);
+							memcpy((&value1), (&bits1), sizeof(value1));
 							arg1 = value1;
 							goto l553;
 						}
@@ -15011,7 +15011,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 							forceInterruptCheck(self);
 						}
 						if ((GIV(freeStart) + numBytes) > (((eden(self)).limit))) {
-							error("no room in eden for allocateSmallNewSpaceSlots:format:classIndex:", self);
+							error("no room in eden for allocateSmallNewSpaceSlots:format:classIndex:");
 							pt = 0;
 							goto l570;
 						}
@@ -16487,7 +16487,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 				/* begin storePointerImmutabilityCheck:ofObject:withValue: */
 				
 #        if IMMUTABILITY
-				assert(!((isImmediate(rcvr, self))));
+				assert(!((isImmediate(rcvr, self))), self);
 				if (((((usqInt) (longAt(rcvr, self))) >> (immutableBitShift(self))) & 1) != 0) {
 					/* begin cannotAssign:to:withIndex: */
 					longAtPointerput((localSP -= BytesPerOop), rcvr, self);
@@ -16893,7 +16893,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 						object = instructionPointerForFramecurrentFPcurrentIP(spouseFP, localFP, oopForPointer(localIP, self), self);
 						goto l748;
 					}
-					error("bad index", self);
+					error("bad index");
 					object = 0;
 	l748:	/* end instVar:ofContext: */;
 					longAtPointerput((localSP -= BytesPerOop), object, self);
@@ -17044,7 +17044,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 						forceInterruptCheck(self);
 					}
 					if ((GIV(freeStart) + numBytes) > (((eden(self)).limit))) {
-						error("no room in eden for allocateSmallNewSpaceSlots:format:classIndex:", self);
+						error("no room in eden for allocateSmallNewSpaceSlots:format:classIndex:");
 						array = 0;
 						goto l760;
 					}
@@ -17419,7 +17419,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 				 || (0)))) {
 					/* begin instVar:ofContext:put: */
 					assert(isMarriedOrWidowedContext(obj, self), self);
-					assert(!((isObjImmutable(obj, self))));
+					assert(!((isObjImmutable(obj, self))), self);
 					/* begin writeBackHeadFramePointers */
 					assert(GIV(stackPage) == (mostRecentlyUsedPage(self)), self);
 					/* begin setHeadFP:andSP:inPage: */
@@ -17506,7 +17506,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 					/* begin storePointerImmutabilityCheck:ofObject:withValue: */
 					
 #          if IMMUTABILITY
-					assert(!((isImmediate(obj, self))));
+					assert(!((isImmediate(obj, self))), self);
 					if (((((usqInt) (longAt(obj, self))) >> (immutableBitShift(self))) & 1) != 0) {
 						/* begin cannotAssign:to:withIndex: */
 						longAtPointerput((localSP -= BytesPerOop), obj, self);
@@ -17580,7 +17580,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 				/* begin storePointerImmutabilityCheck:ofObject:withValue: */
 				
 #        if IMMUTABILITY
-				assert(!((isImmediate(litVar, self))));
+				assert(!((isImmediate(litVar, self))), self);
 				if (((((usqInt) (longAt(litVar, self))) >> (immutableBitShift(self))) & 1) != 0) {
 					/* begin cannotAssign:to:withIndex: */
 					longAtPointerput((localSP -= BytesPerOop), litVar, self);
@@ -17681,7 +17681,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 				 || (0)))) {
 					/* begin instVar:ofContext:put: */
 					assert(isMarriedOrWidowedContext(obj, self), self);
-					assert(!((isObjImmutable(obj, self))));
+					assert(!((isObjImmutable(obj, self))), self);
 					/* begin writeBackHeadFramePointers */
 					assert(GIV(stackPage) == (mostRecentlyUsedPage(self)), self);
 					/* begin setHeadFP:andSP:inPage: */
@@ -17768,7 +17768,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 					/* begin storePointerImmutabilityCheck:ofObject:withValue: */
 					
 #          if IMMUTABILITY
-					assert(!((isImmediate(obj, self))));
+					assert(!((isImmediate(obj, self))), self);
 					if (((((usqInt) (longAt(obj, self))) >> (immutableBitShift(self))) & 1) != 0) {
 						/* begin cannotAssign:to:withIndex: */
 						longAtPointerput((localSP -= BytesPerOop), obj, self);
@@ -17840,7 +17840,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 				/* begin storePointerImmutabilityCheck:ofObject:withValue: */
 				
 #        if IMMUTABILITY
-				assert(!((isImmediate(litVar, self))));
+				assert(!((isImmediate(litVar, self))), self);
 				if (((((usqInt) (longAt(litVar, self))) >> (immutableBitShift(self))) & 1) != 0) {
 					/* begin cannotAssign:to:withIndex: */
 					longAtPointerput((localSP -= BytesPerOop), litVar, self);
@@ -18028,7 +18028,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 						forceInterruptCheck(self);
 					}
 					if ((GIV(freeStart) + numBytes) > (((eden(self)).limit))) {
-						error("no room in eden for allocateSmallNewSpaceSlots:format:classIndex:", self);
+						error("no room in eden for allocateSmallNewSpaceSlots:format:classIndex:");
 						newClosure1 = 0;
 						goto l833;
 					}
@@ -18145,7 +18145,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 						forceInterruptCheck(self);
 					}
 					if ((GIV(freeStart) + numBytes) > (((eden(self)).limit))) {
-						error("no room in eden for allocateSmallNewSpaceSlots:format:classIndex:", self);
+						error("no room in eden for allocateSmallNewSpaceSlots:format:classIndex:");
 						newClosure1 = 0;
 						goto l853;
 					}
@@ -18554,12 +18554,12 @@ cStringOrNullFor(sqInt oop, sqInt self)
 	if (len == 0) {
 		return 0;
 	}
-	cString = malloc(len + 1, self);
+	cString = malloc(len + 1);
 	if (!(cString)) {
 		GIV(primFailCode) = PrimErrNoCMemory;
 		return 0;
 	}
-	memcpy(cString, firstIndexableField(oop, self), len, self);
+	memcpy(cString, firstIndexableField(oop, self), len);
 	cString[len] = 0;
 	return cString;
 }
@@ -18650,7 +18650,7 @@ isPositiveMachineIntegerObject(sqInt oop, sqInt self)
 	goto l2;
 	l2:	/* end isClassOfNonImm:equalTo:compactClassIndex: */;
 	return ok
-	 && ((numBytesOfBytes(oop, self)) <= (sizeof(usqIntptr_t, self)));
+	 && ((numBytesOfBytes(oop, self)) <= (sizeof(usqIntptr_t)));
 }
 
 
@@ -18755,7 +18755,7 @@ magnitude64BitValueOf(sqInt oop, sqInt self)
 	fmt = (((usqInt) (longAt(oop, self))) >> (formatShift(self))) & (formatMask(self));
 	assert(fmt >= (firstByteFormat(self)), self);
 	sz = ((numSlotsOf(oop, self)) << (shiftForWord(self))) - (fmt & 7);
-	if (sz > (sizeof(sqLong, self))) {
+	if (sz > (sizeof(sqLong))) {
 		/* begin primitiveFail */
 		if (!GIV(primFailCode)) {
 			GIV(primFailCode) = 1;
@@ -18855,7 +18855,7 @@ positive64BitValueOf(sqInt oop, sqInt self)
 	fmt = (((usqInt) (longAt(oop, self))) >> (formatShift(self))) & (formatMask(self));
 	assert(fmt >= (firstByteFormat(self)), self);
 	sz = ((numSlotsOf(oop, self)) << (shiftForWord(self))) - (fmt & 7);
-	if (sz > (sizeof(sqLong, self))) {
+	if (sz > (sizeof(sqLong))) {
 		/* begin primitiveFail */
 		if (!GIV(primFailCode)) {
 			GIV(primFailCode) = 1;
@@ -18927,14 +18927,14 @@ positiveMachineIntegerValueOf(sqInt oop, sqInt self)
 	fmt = (((usqInt) (longAt(oop, self))) >> (formatShift(self))) & (formatMask(self));
 	assert(fmt >= (firstByteFormat(self)), self);
 	bs = ((numSlotsOf(oop, self)) << (shiftForWord(self))) - (fmt & 7);
-	if (bs > (sizeof(usqIntptr_t, self))) {
+	if (bs > (sizeof(usqIntptr_t))) {
 		/* begin primitiveFail */
 		if (!GIV(primFailCode)) {
 			GIV(primFailCode) = 1;
 		}
 		return 0;
 	}
-	if (((sizeof(usqIntptr_t, self)) == 8)
+	if (((sizeof(usqIntptr_t)) == 8)
 	 && (bs > 4)) {
 		return SQ_SWAP_8_BYTES_IF_BIGENDIAN((long64At((oop + BaseHeaderSize) + (0U << 3), self)));
 	}
@@ -19164,7 +19164,7 @@ primitiveArctan(sqInt self)
 	rcvr = floatValueOf(longAt(GIV(stackPointer) + (0 * BytesPerWord), self), self);
 	if (!GIV(primFailCode)) {
 		/* begin stackTopPut: */
-		aValue = floatObjectOf(atan(rcvrself), self);
+		aValue = floatObjectOf(atan(rcvr), self);
 		longAtPointerput(GIV(stackPointer), aValue, self);
 	}
 }
@@ -20128,7 +20128,7 @@ primitiveBitAnd(sqInt self)
 	fmt = (((usqInt) (longAt(oop1, self))) >> (formatShift(self))) & (formatMask(self));
 	assert(fmt >= (firstByteFormat(self)), self);
 	bs = ((numSlotsOf(oop1, self)) << (shiftForWord(self))) - (fmt & 7);
-	if (bs > (sizeof(usqIntptr_t, self))) {
+	if (bs > (sizeof(usqIntptr_t))) {
 		/* begin primitiveFail */
 		if (!GIV(primFailCode)) {
 			GIV(primFailCode) = 1;
@@ -20136,7 +20136,7 @@ primitiveBitAnd(sqInt self)
 		integerArgumentValue = 0;
 		goto l4;
 	}
-	if (((sizeof(usqIntptr_t, self)) == 8)
+	if (((sizeof(usqIntptr_t)) == 8)
 	 && (bs > 4)) {
 		integerArgumentValue = ((usqIntptr_t) (SQ_SWAP_8_BYTES_IF_BIGENDIAN((long64At((oop1 + BaseHeaderSize) + (0U << 3), self)))));
 		goto l4;
@@ -20190,7 +20190,7 @@ primitiveBitAnd(sqInt self)
 	fmt1 = (((usqInt) (longAt(oop2, self))) >> (formatShift(self))) & (formatMask(self));
 	assert(fmt1 >= (firstByteFormat(self)), self);
 	bs1 = ((numSlotsOf(oop2, self)) << (shiftForWord(self))) - (fmt1 & 7);
-	if (bs1 > (sizeof(usqIntptr_t, self))) {
+	if (bs1 > (sizeof(usqIntptr_t))) {
 		/* begin primitiveFail */
 		if (!GIV(primFailCode)) {
 			GIV(primFailCode) = 1;
@@ -20198,7 +20198,7 @@ primitiveBitAnd(sqInt self)
 		integerReceiverValue = 0;
 		goto l8;
 	}
-	if (((sizeof(usqIntptr_t, self)) == 8)
+	if (((sizeof(usqIntptr_t)) == 8)
 	 && (bs1 > 4)) {
 		integerReceiverValue = ((usqIntptr_t) (SQ_SWAP_8_BYTES_IF_BIGENDIAN((long64At((oop2 + BaseHeaderSize) + (0U << 3), self)))));
 		goto l8;
@@ -20312,7 +20312,7 @@ primitiveBitOr(sqInt self)
 	fmt = (((usqInt) (longAt(oop1, self))) >> (formatShift(self))) & (formatMask(self));
 	assert(fmt >= (firstByteFormat(self)), self);
 	bs = ((numSlotsOf(oop1, self)) << (shiftForWord(self))) - (fmt & 7);
-	if (bs > (sizeof(usqIntptr_t, self))) {
+	if (bs > (sizeof(usqIntptr_t))) {
 		/* begin primitiveFail */
 		if (!GIV(primFailCode)) {
 			GIV(primFailCode) = 1;
@@ -20320,7 +20320,7 @@ primitiveBitOr(sqInt self)
 		integerArgumentValue = 0;
 		goto l4;
 	}
-	if (((sizeof(usqIntptr_t, self)) == 8)
+	if (((sizeof(usqIntptr_t)) == 8)
 	 && (bs > 4)) {
 		integerArgumentValue = ((usqIntptr_t) (SQ_SWAP_8_BYTES_IF_BIGENDIAN((long64At((oop1 + BaseHeaderSize) + (0U << 3), self)))));
 		goto l4;
@@ -20374,7 +20374,7 @@ primitiveBitOr(sqInt self)
 	fmt1 = (((usqInt) (longAt(oop2, self))) >> (formatShift(self))) & (formatMask(self));
 	assert(fmt1 >= (firstByteFormat(self)), self);
 	bs1 = ((numSlotsOf(oop2, self)) << (shiftForWord(self))) - (fmt1 & 7);
-	if (bs1 > (sizeof(usqIntptr_t, self))) {
+	if (bs1 > (sizeof(usqIntptr_t))) {
 		/* begin primitiveFail */
 		if (!GIV(primFailCode)) {
 			GIV(primFailCode) = 1;
@@ -20382,7 +20382,7 @@ primitiveBitOr(sqInt self)
 		integerReceiverValue = 0;
 		goto l8;
 	}
-	if (((sizeof(usqIntptr_t, self)) == 8)
+	if (((sizeof(usqIntptr_t)) == 8)
 	 && (bs1 > 4)) {
 		integerReceiverValue = ((usqIntptr_t) (SQ_SWAP_8_BYTES_IF_BIGENDIAN((long64At((oop2 + BaseHeaderSize) + (0U << 3), self)))));
 		goto l8;
@@ -20642,7 +20642,7 @@ primitiveBitXor(sqInt self)
 		fmt = (((usqInt) (longAt(integerArgument, self))) >> (formatShift(self))) & (formatMask(self));
 		assert(fmt >= (firstByteFormat(self)), self);
 		bs = ((numSlotsOf(integerArgument, self)) << (shiftForWord(self))) - (fmt & 7);
-		if (bs > (sizeof(usqIntptr_t, self))) {
+		if (bs > (sizeof(usqIntptr_t))) {
 			/* begin primitiveFail */
 			if (!GIV(primFailCode)) {
 				GIV(primFailCode) = 1;
@@ -20650,7 +20650,7 @@ primitiveBitXor(sqInt self)
 			integerArgumentValue = 0;
 			goto l4;
 		}
-		if (((sizeof(usqIntptr_t, self)) == 8)
+		if (((sizeof(usqIntptr_t)) == 8)
 		 && (bs > 4)) {
 			integerArgumentValue = ((usqIntptr_t) (SQ_SWAP_8_BYTES_IF_BIGENDIAN((long64At((integerArgument + BaseHeaderSize) + (0U << 3), self)))));
 			goto l4;
@@ -20703,7 +20703,7 @@ primitiveBitXor(sqInt self)
 		fmt1 = (((usqInt) (longAt(integerReceiver, self))) >> (formatShift(self))) & (formatMask(self));
 		assert(fmt1 >= (firstByteFormat(self)), self);
 		bs1 = ((numSlotsOf(integerReceiver, self)) << (shiftForWord(self))) - (fmt1 & 7);
-		if (bs1 > (sizeof(usqIntptr_t, self))) {
+		if (bs1 > (sizeof(usqIntptr_t))) {
 			/* begin primitiveFail */
 			if (!GIV(primFailCode)) {
 				GIV(primFailCode) = 1;
@@ -20711,7 +20711,7 @@ primitiveBitXor(sqInt self)
 			integerReceiverValue = 0;
 			goto l8;
 		}
-		if (((sizeof(usqIntptr_t, self)) == 8)
+		if (((sizeof(usqIntptr_t)) == 8)
 		 && (bs1 > 4)) {
 			integerReceiverValue = ((usqIntptr_t) (SQ_SWAP_8_BYTES_IF_BIGENDIAN((long64At((integerReceiver + BaseHeaderSize) + (0U << 3), self)))));
 			goto l8;
@@ -21137,7 +21137,7 @@ primitiveClockLogAddresses(sqInt self)
 	assert(addressCouldBeOop(result, self), self);
 	GIV(remapBuffer)[(GIV(remapBufferCount) += 1)] = result;
 	if (!(GIV(remapBufferCount) <= RemapBufferSize)) {
-		error("remapBuffer overflow", self);
+		error("remapBuffer overflow");
 	}
 	/* begin storePointerUnchecked:ofObject:withValue: */
 	objOop = GIV(remapBuffer)[GIV(remapBufferCount)];
@@ -22083,7 +22083,7 @@ primitiveCopyObject(sqInt self)
 			GIV(primFailCode) = PrimErrBadArgument;
 			return;
 		}
-		memcpy(((void *)(rcvr + BaseHeaderSize)), ((void *)(arg + BaseHeaderSize)), length, self);
+		memcpy(((void *)(rcvr + BaseHeaderSize)), ((void *)(arg + BaseHeaderSize)), length);
 	}
 	else {
 		if (!(isAppropriateForCopyObject(rcvr, self))) {
@@ -22566,7 +22566,7 @@ primitiveExitCriticalSection(sqInt self)
 static void
 primitiveExitToDebugger(sqInt self)
 {
-	error("Exit to debugger at user request", self);
+	error("Exit to debugger at user request");
 }
 
 
@@ -22585,7 +22585,7 @@ primitiveExp(sqInt self)
 	rcvr = floatValueOf(longAt(GIV(stackPointer) + (0 * BytesPerWord), self), self);
 	if (!GIV(primFailCode)) {
 		/* begin stackTopPut: */
-		aValue = floatObjectOf(exp(rcvrself), self);
+		aValue = floatObjectOf(exp(rcvr), self);
 		longAtPointerput(GIV(stackPointer), aValue, self);
 	}
 }
@@ -22738,7 +22738,7 @@ primitiveFailForFFIExceptionat(usqLong exceptionCode, usqInt pc, sqInt self)
 				reapAndResetErrorCodeToheader(GIV(stackPointer), methodHeader, self);
 			}
 		}
-		longjmp(reenterInterpreter, ReturnToInterpreter, self);
+		longjmp(reenterInterpreter, ReturnToInterpreter);
 	}
 	return 0;
 }
@@ -22832,7 +22832,7 @@ primitiveFloatAdd(sqInt self)
 			/* begin rotateRight: */
 			rot = (rot << 0x3F) + (((usqInt) (((usqInt)rot))) >> 1);
 			bits = rot;
-			memcpy((&value), (&bits), sizeof(value, self), self);
+			memcpy((&value), (&bits), sizeof(value));
 			rcvr = value;
 			goto l3;
 		}
@@ -22870,7 +22870,7 @@ primitiveFloatAdd(sqInt self)
 			/* begin rotateRight: */
 			rot1 = (rot1 << 0x3F) + (((usqInt) (((usqInt)rot1))) >> 1);
 			bits1 = rot1;
-			memcpy((&value1), (&bits1), sizeof(value1, self), self);
+			memcpy((&value1), (&bits1), sizeof(value1));
 			arg = value1;
 			goto l6;
 		}
@@ -23068,7 +23068,7 @@ primitiveFloatDivide(sqInt self)
 			/* begin rotateRight: */
 			rot = (rot << 0x3F) + (((usqInt) (((usqInt)rot))) >> 1);
 			bits = rot;
-			memcpy((&value), (&bits), sizeof(value, self), self);
+			memcpy((&value), (&bits), sizeof(value));
 			rcvr = value;
 			goto l3;
 		}
@@ -23106,7 +23106,7 @@ primitiveFloatDivide(sqInt self)
 			/* begin rotateRight: */
 			rot1 = (rot1 << 0x3F) + (((usqInt) (((usqInt)rot1))) >> 1);
 			bits1 = rot1;
-			memcpy((&value1), (&bits1), sizeof(value1, self), self);
+			memcpy((&value1), (&bits1), sizeof(value1));
 			arg = value1;
 			goto l6;
 		}
@@ -23185,7 +23185,7 @@ primitiveFloatEqual(sqInt self)
 			/* begin rotateRight: */
 			rot = (rot << 0x3F) + (((usqInt) (((usqInt)rot))) >> 1);
 			bits = rot;
-			memcpy((&value), (&bits), sizeof(value, self), self);
+			memcpy((&value), (&bits), sizeof(value));
 			rcvr = value;
 			goto l3;
 		}
@@ -23223,7 +23223,7 @@ primitiveFloatEqual(sqInt self)
 			/* begin rotateRight: */
 			rot1 = (rot1 << 0x3F) + (((usqInt) (((usqInt)rot1))) >> 1);
 			bits1 = rot1;
-			memcpy((&value1), (&bits1), sizeof(value1, self), self);
+			memcpy((&value1), (&bits1), sizeof(value1));
 			arg = value1;
 			goto l6;
 		}
@@ -23297,7 +23297,7 @@ primitiveFloatGreaterOrEqual(sqInt self)
 			/* begin rotateRight: */
 			rot = (rot << 0x3F) + (((usqInt) (((usqInt)rot))) >> 1);
 			bits = rot;
-			memcpy((&value), (&bits), sizeof(value, self), self);
+			memcpy((&value), (&bits), sizeof(value));
 			rcvr = value;
 			goto l3;
 		}
@@ -23335,7 +23335,7 @@ primitiveFloatGreaterOrEqual(sqInt self)
 			/* begin rotateRight: */
 			rot1 = (rot1 << 0x3F) + (((usqInt) (((usqInt)rot1))) >> 1);
 			bits1 = rot1;
-			memcpy((&value1), (&bits1), sizeof(value1, self), self);
+			memcpy((&value1), (&bits1), sizeof(value1));
 			arg = value1;
 			goto l6;
 		}
@@ -23409,7 +23409,7 @@ primitiveFloatGreaterThan(sqInt self)
 			/* begin rotateRight: */
 			rot = (rot << 0x3F) + (((usqInt) (((usqInt)rot))) >> 1);
 			bits = rot;
-			memcpy((&value), (&bits), sizeof(value, self), self);
+			memcpy((&value), (&bits), sizeof(value));
 			rcvr = value;
 			goto l3;
 		}
@@ -23447,7 +23447,7 @@ primitiveFloatGreaterThan(sqInt self)
 			/* begin rotateRight: */
 			rot1 = (rot1 << 0x3F) + (((usqInt) (((usqInt)rot1))) >> 1);
 			bits1 = rot1;
-			memcpy((&value1), (&bits1), sizeof(value1, self), self);
+			memcpy((&value1), (&bits1), sizeof(value1));
 			arg = value1;
 			goto l6;
 		}
@@ -23521,7 +23521,7 @@ primitiveFloatLessOrEqual(sqInt self)
 			/* begin rotateRight: */
 			rot = (rot << 0x3F) + (((usqInt) (((usqInt)rot))) >> 1);
 			bits = rot;
-			memcpy((&value), (&bits), sizeof(value, self), self);
+			memcpy((&value), (&bits), sizeof(value));
 			rcvr = value;
 			goto l3;
 		}
@@ -23559,7 +23559,7 @@ primitiveFloatLessOrEqual(sqInt self)
 			/* begin rotateRight: */
 			rot1 = (rot1 << 0x3F) + (((usqInt) (((usqInt)rot1))) >> 1);
 			bits1 = rot1;
-			memcpy((&value1), (&bits1), sizeof(value1, self), self);
+			memcpy((&value1), (&bits1), sizeof(value1));
 			arg = value1;
 			goto l6;
 		}
@@ -23633,7 +23633,7 @@ primitiveFloatLessThan(sqInt self)
 			/* begin rotateRight: */
 			rot = (rot << 0x3F) + (((usqInt) (((usqInt)rot))) >> 1);
 			bits = rot;
-			memcpy((&value), (&bits), sizeof(value, self), self);
+			memcpy((&value), (&bits), sizeof(value));
 			rcvr = value;
 			goto l3;
 		}
@@ -23671,7 +23671,7 @@ primitiveFloatLessThan(sqInt self)
 			/* begin rotateRight: */
 			rot1 = (rot1 << 0x3F) + (((usqInt) (((usqInt)rot1))) >> 1);
 			bits1 = rot1;
-			memcpy((&value1), (&bits1), sizeof(value1, self), self);
+			memcpy((&value1), (&bits1), sizeof(value1));
 			arg = value1;
 			goto l6;
 		}
@@ -23744,7 +23744,7 @@ primitiveFloatMultiply(sqInt self)
 			/* begin rotateRight: */
 			rot = (rot << 0x3F) + (((usqInt) (((usqInt)rot))) >> 1);
 			bits = rot;
-			memcpy((&value), (&bits), sizeof(value, self), self);
+			memcpy((&value), (&bits), sizeof(value));
 			rcvr = value;
 			goto l3;
 		}
@@ -23782,7 +23782,7 @@ primitiveFloatMultiply(sqInt self)
 			/* begin rotateRight: */
 			rot1 = (rot1 << 0x3F) + (((usqInt) (((usqInt)rot1))) >> 1);
 			bits1 = rot1;
-			memcpy((&value1), (&bits1), sizeof(value1, self), self);
+			memcpy((&value1), (&bits1), sizeof(value1));
 			arg = value1;
 			goto l6;
 		}
@@ -23853,7 +23853,7 @@ primitiveFloatNotEqual(sqInt self)
 			/* begin rotateRight: */
 			rot = (rot << 0x3F) + (((usqInt) (((usqInt)rot))) >> 1);
 			bits = rot;
-			memcpy((&value), (&bits), sizeof(value, self), self);
+			memcpy((&value), (&bits), sizeof(value));
 			rcvr = value;
 			goto l3;
 		}
@@ -23891,7 +23891,7 @@ primitiveFloatNotEqual(sqInt self)
 			/* begin rotateRight: */
 			rot1 = (rot1 << 0x3F) + (((usqInt) (((usqInt)rot1))) >> 1);
 			bits1 = rot1;
-			memcpy((&value1), (&bits1), sizeof(value1, self), self);
+			memcpy((&value1), (&bits1), sizeof(value1));
 			arg = value1;
 			goto l6;
 		}
@@ -23964,7 +23964,7 @@ primitiveFloatSubtract(sqInt self)
 			/* begin rotateRight: */
 			rot = (rot << 0x3F) + (((usqInt) (((usqInt)rot))) >> 1);
 			bits = rot;
-			memcpy((&value), (&bits), sizeof(value, self), self);
+			memcpy((&value), (&bits), sizeof(value));
 			rcvr = value;
 			goto l3;
 		}
@@ -24002,7 +24002,7 @@ primitiveFloatSubtract(sqInt self)
 			/* begin rotateRight: */
 			rot1 = (rot1 << 0x3F) + (((usqInt) (((usqInt)rot1))) >> 1);
 			bits1 = rot1;
-			memcpy((&value1), (&bits1), sizeof(value1, self), self);
+			memcpy((&value1), (&bits1), sizeof(value1));
 			arg = value1;
 			goto l6;
 		}
@@ -24364,7 +24364,7 @@ primitiveFractionalPart(sqInt self)
 	rcvr = floatValueOf(longAt(GIV(stackPointer) + (0 * BytesPerWord), self), self);
 	if (!GIV(primFailCode)) {
 		/* begin stackTopPut: */
-		aValue = floatObjectOf(modf(rcvr, (&trunc), self), self);
+		aValue = floatObjectOf(modf(rcvr, (&trunc)), self);
 		longAtPointerput(GIV(stackPointer), aValue, self);
 	}
 }
@@ -24815,8 +24815,8 @@ primitiveGetenv(sqInt self)
 		/* begin primitiveFailFor: */
 		return (GIV(primFailCode) = GIV(primFailCode));
 	}
-	var = getenv(key, self);
-	free(key, self);
+	var = getenv(key);
+	free(key);
 	if (var != 0) {
 		result = stringForCString(var, self);
 		if (!(result)) {
@@ -24877,7 +24877,7 @@ primitiveGetLogDirectory(sqInt self)
 		}
 		return null;
 	}
-	sz = strlen(ptr, self);
+	sz = strlen(ptr);
 	stringOop = instantiateClassindexableSize(splObj(ClassByteString, self), sz, self);
 	for (i = 0; i < sz; i += 1) {
 		byteAtput((stringOop + BaseHeaderSize) + i, ptr[i], self);
@@ -25034,7 +25034,7 @@ primitiveGetWindowLabel(sqInt self)
 		}
 		return null;
 	}
-	sz = strlen(ptr, self);
+	sz = strlen(ptr);
 	labelOop = instantiateClassindexableSize(splObj(ClassByteString, self), sz, self);
 	for (i = 0; i < sz; i += 1) {
 		byteAtput((labelOop + BaseHeaderSize) + i, ptr[i], self);
@@ -25097,7 +25097,7 @@ primitiveGetWindowSize(sqInt self)
 			forceInterruptCheck(self);
 		}
 		if ((GIV(freeStart) + numBytes) > (((eden(self)).limit))) {
-			error("no room in eden for allocateSmallNewSpaceSlots:format:classIndex:", self);
+			error("no room in eden for allocateSmallNewSpaceSlots:format:classIndex:");
 			pointResult = 0;
 			goto l3;
 		}
@@ -26502,7 +26502,7 @@ primitiveListBuiltinModule(sqInt self)
 		GIV(stackPointer) = sp;
 		return;
 	}
-	length = strlen(moduleName, self);
+	length = strlen(moduleName);
 	nameOop = instantiateClassindexableSize(splObj(ClassByteString, self), length, self);
 	for (i = 0; i < length; i += 1) {
 		byteAtput((nameOop + BaseHeaderSize) + i, moduleName[i], self);
@@ -26568,7 +26568,7 @@ primitiveListExternalModule(sqInt self)
 		GIV(stackPointer) = sp;
 		return;
 	}
-	length = strlen(moduleName, self);
+	length = strlen(moduleName);
 	nameOop = instantiateClassindexableSize(splObj(ClassByteString, self), length, self);
 	for (i = 0; i < length; i += 1) {
 		byteAtput((nameOop + BaseHeaderSize) + i, moduleName[i], self);
@@ -26674,7 +26674,7 @@ primitiveLogN(sqInt self)
 	rcvr = floatValueOf(longAt(GIV(stackPointer) + (0 * BytesPerWord), self), self);
 	if (!GIV(primFailCode)) {
 		/* begin stackTopPut: */
-		aValue = floatObjectOf(log(rcvrself), self);
+		aValue = floatObjectOf(log(rcvr), self);
 		longAtPointerput(GIV(stackPointer), aValue, self);
 	}
 }
@@ -26770,7 +26770,7 @@ primitiveMakePoint(sqInt self)
 			forceInterruptCheck(self);
 		}
 		if ((GIV(freeStart) + numBytes) > (((eden(self)).limit))) {
-			error("no room in eden for allocateSmallNewSpaceSlots:format:classIndex:", self);
+			error("no room in eden for allocateSmallNewSpaceSlots:format:classIndex:");
 			pt = 0;
 			goto l2;
 		}
@@ -27017,7 +27017,7 @@ primitiveMousePoint(sqInt self)
 			forceInterruptCheck(self);
 		}
 		if ((GIV(freeStart) + numBytes) > (((eden(self)).limit))) {
-			error("no room in eden for allocateSmallNewSpaceSlots:format:classIndex:", self);
+			error("no room in eden for allocateSmallNewSpaceSlots:format:classIndex:");
 			pointResult = 0;
 			goto l3;
 		}
@@ -27393,7 +27393,7 @@ primitiveNewWithArg(sqInt self)
 	fmt = (((usqInt) (longAt(oop1, self))) >> (formatShift(self))) & (formatMask(self));
 	assert(fmt >= (firstByteFormat(self)), self);
 	bs = ((numSlotsOf(oop1, self)) << (shiftForWord(self))) - (fmt & 7);
-	if (bs > (sizeof(usqIntptr_t, self))) {
+	if (bs > (sizeof(usqIntptr_t))) {
 		/* begin primitiveFail */
 		if (!GIV(primFailCode)) {
 			GIV(primFailCode) = 1;
@@ -27401,7 +27401,7 @@ primitiveNewWithArg(sqInt self)
 		size = 0;
 		goto l9;
 	}
-	if (((sizeof(usqIntptr_t, self)) == 8)
+	if (((sizeof(usqIntptr_t)) == 8)
 	 && (bs > 4)) {
 		size = SQ_SWAP_8_BYTES_IF_BIGENDIAN((long64At((oop1 + BaseHeaderSize) + (0U << 3), self)));
 		goto l9;
@@ -27845,7 +27845,7 @@ primitivePathToUsing(sqInt self)
 	/* begin externalWriteBackHeadFramePointers */
 	assert((GIV(framePointer) - GIV(stackPointer)) < (LargeContextSlots * BytesPerOop), self);
 	assert(GIV(stackPage) == (mostRecentlyUsedPage(self)), self);
-	assert(!((isFree(GIV(stackPage)self))));
+	assert(!((isFree(GIV(stackPage)self))), self);
 	/* begin setHeadFP:andSP:inPage: */
 	assert(GIV(stackPointer) < GIV(framePointer), self);
 	assert((GIV(stackPointer) < ((GIV(stackPage)->baseAddress)))
@@ -29410,7 +29410,7 @@ primitiveScreenSize(sqInt self)
 			forceInterruptCheck(self);
 		}
 		if ((GIV(freeStart) + numBytes) > (((eden(self)).limit))) {
-			error("no room in eden for allocateSmallNewSpaceSlots:format:classIndex:", self);
+			error("no room in eden for allocateSmallNewSpaceSlots:format:classIndex:");
 			pointResult = 0;
 			goto l3;
 		}
@@ -30204,7 +30204,7 @@ primitiveSine(sqInt self)
 	rcvr = floatValueOf(longAt(GIV(stackPointer) + (0 * BytesPerWord), self), self);
 	if (!GIV(primFailCode)) {
 		/* begin stackTopPut: */
-		aValue = floatObjectOf(sin(rcvrself), self);
+		aValue = floatObjectOf(sin(rcvr), self);
 		longAtPointerput(GIV(stackPointer), aValue, self);
 	}
 }
@@ -30450,7 +30450,7 @@ primitiveSmallFloatAdd(sqInt self)
 	/* begin rotateRight: */
 	rot = (rot << 0x3F) + (((usqInt) (((usqInt)rot))) >> 1);
 	bits = rot;
-	memcpy((&value), (&bits), sizeof(value, self), self);
+	memcpy((&value), (&bits), sizeof(value));
 	rcvr = value;
 	/* begin loadFloatOrIntFrom: */
 	floatOrIntOop = longAt(GIV(stackPointer), self);
@@ -30467,7 +30467,7 @@ primitiveSmallFloatAdd(sqInt self)
 			/* begin rotateRight: */
 			rot1 = (rot1 << 0x3F) + (((usqInt) (((usqInt)rot1))) >> 1);
 			bits1 = rot1;
-			memcpy((&value1), (&bits1), sizeof(value1, self), self);
+			memcpy((&value1), (&bits1), sizeof(value1));
 			arg = value1;
 			goto l6;
 		}
@@ -30522,10 +30522,10 @@ primitiveSmallFloatArctan(sqInt self)
 	/* begin rotateRight: */
 	rot = (rot << 0x3F) + (((usqInt) (((usqInt)rot))) >> 1);
 	bits = rot;
-	memcpy((&value), (&bits), sizeof(value, self), self);
+	memcpy((&value), (&bits), sizeof(value));
 	rcvr = value;
 	/* begin stackTopPut: */
-	aValue = floatObjectOf(atan(rcvrself), self);
+	aValue = floatObjectOf(atan(rcvr), self);
 	longAtPointerput(GIV(stackPointer), aValue, self);
 }
 
@@ -30561,7 +30561,7 @@ primitiveSmallFloatDivide(sqInt self)
 	/* begin rotateRight: */
 	rot = (rot << 0x3F) + (((usqInt) (((usqInt)rot))) >> 1);
 	bits = rot;
-	memcpy((&value), (&bits), sizeof(value, self), self);
+	memcpy((&value), (&bits), sizeof(value));
 	rcvr = value;
 	/* begin loadFloatOrIntFrom: */
 	floatOrIntOop = longAt(GIV(stackPointer), self);
@@ -30578,7 +30578,7 @@ primitiveSmallFloatDivide(sqInt self)
 			/* begin rotateRight: */
 			rot1 = (rot1 << 0x3F) + (((usqInt) (((usqInt)rot1))) >> 1);
 			bits1 = rot1;
-			memcpy((&value1), (&bits1), sizeof(value1, self), self);
+			memcpy((&value1), (&bits1), sizeof(value1));
 			arg = value1;
 			goto l6;
 		}
@@ -30647,7 +30647,7 @@ primitiveSmallFloatEqual(sqInt self)
 	/* begin rotateRight: */
 	rot = (rot << 0x3F) + (((usqInt) (((usqInt)rot))) >> 1);
 	bits = rot;
-	memcpy((&value), (&bits), sizeof(value, self), self);
+	memcpy((&value), (&bits), sizeof(value));
 	rcvr = value;
 	/* begin loadFloatOrIntFrom: */
 	floatOrIntOop = longAt(GIV(stackPointer), self);
@@ -30664,7 +30664,7 @@ primitiveSmallFloatEqual(sqInt self)
 			/* begin rotateRight: */
 			rot1 = (rot1 << 0x3F) + (((usqInt) (((usqInt)rot1))) >> 1);
 			bits1 = rot1;
-			memcpy((&value1), (&bits1), sizeof(value1, self), self);
+			memcpy((&value1), (&bits1), sizeof(value1));
 			arg = value1;
 			goto l6;
 		}
@@ -30708,7 +30708,7 @@ primitiveSmallFloatExp(sqInt self)
     sqInt aValue;
 
 	/* begin stackTopPut: */
-	aValue = floatObjectOf(exp(smallFloatValueOf(longAt(GIV(stackPointer), self), self)self), self);
+	aValue = floatObjectOf(exp(smallFloatValueOf(longAt(GIV(stackPointer), self), self)), self);
 	longAtPointerput(GIV(stackPointer), aValue, self);
 }
 
@@ -30757,9 +30757,9 @@ primitiveSmallFloatFractionalPart(sqInt self)
 	/* begin rotateRight: */
 	rot = (rot << 0x3F) + (((usqInt) (((usqInt)rot))) >> 1);
 	bits = rot;
-	memcpy((&value), (&bits), sizeof(value, self), self);
+	memcpy((&value), (&bits), sizeof(value));
 	rcvr = value;
-	frac = modf(rcvr, (&trunc), self);
+	frac = modf(rcvr, (&trunc));
 	/* begin stackTopPut: */
 	aValue = floatObjectOf(frac, self);
 	longAtPointerput(GIV(stackPointer), aValue, self);
@@ -30797,7 +30797,7 @@ primitiveSmallFloatGreaterOrEqual(sqInt self)
 	/* begin rotateRight: */
 	rot = (rot << 0x3F) + (((usqInt) (((usqInt)rot))) >> 1);
 	bits = rot;
-	memcpy((&value), (&bits), sizeof(value, self), self);
+	memcpy((&value), (&bits), sizeof(value));
 	rcvr = value;
 	/* begin loadFloatOrIntFrom: */
 	floatOrIntOop = longAt(GIV(stackPointer), self);
@@ -30814,7 +30814,7 @@ primitiveSmallFloatGreaterOrEqual(sqInt self)
 			/* begin rotateRight: */
 			rot1 = (rot1 << 0x3F) + (((usqInt) (((usqInt)rot1))) >> 1);
 			bits1 = rot1;
-			memcpy((&value1), (&bits1), sizeof(value1, self), self);
+			memcpy((&value1), (&bits1), sizeof(value1));
 			arg = value1;
 			goto l6;
 		}
@@ -30879,7 +30879,7 @@ primitiveSmallFloatGreaterThan(sqInt self)
 	/* begin rotateRight: */
 	rot = (rot << 0x3F) + (((usqInt) (((usqInt)rot))) >> 1);
 	bits = rot;
-	memcpy((&value), (&bits), sizeof(value, self), self);
+	memcpy((&value), (&bits), sizeof(value));
 	rcvr = value;
 	/* begin loadFloatOrIntFrom: */
 	floatOrIntOop = longAt(GIV(stackPointer), self);
@@ -30896,7 +30896,7 @@ primitiveSmallFloatGreaterThan(sqInt self)
 			/* begin rotateRight: */
 			rot1 = (rot1 << 0x3F) + (((usqInt) (((usqInt)rot1))) >> 1);
 			bits1 = rot1;
-			memcpy((&value1), (&bits1), sizeof(value1, self), self);
+			memcpy((&value1), (&bits1), sizeof(value1));
 			arg = value1;
 			goto l6;
 		}
@@ -30961,7 +30961,7 @@ primitiveSmallFloatLessOrEqual(sqInt self)
 	/* begin rotateRight: */
 	rot = (rot << 0x3F) + (((usqInt) (((usqInt)rot))) >> 1);
 	bits = rot;
-	memcpy((&value), (&bits), sizeof(value, self), self);
+	memcpy((&value), (&bits), sizeof(value));
 	rcvr = value;
 	/* begin loadFloatOrIntFrom: */
 	floatOrIntOop = longAt(GIV(stackPointer), self);
@@ -30978,7 +30978,7 @@ primitiveSmallFloatLessOrEqual(sqInt self)
 			/* begin rotateRight: */
 			rot1 = (rot1 << 0x3F) + (((usqInt) (((usqInt)rot1))) >> 1);
 			bits1 = rot1;
-			memcpy((&value1), (&bits1), sizeof(value1, self), self);
+			memcpy((&value1), (&bits1), sizeof(value1));
 			arg = value1;
 			goto l6;
 		}
@@ -31043,7 +31043,7 @@ primitiveSmallFloatLessThan(sqInt self)
 	/* begin rotateRight: */
 	rot = (rot << 0x3F) + (((usqInt) (((usqInt)rot))) >> 1);
 	bits = rot;
-	memcpy((&value), (&bits), sizeof(value, self), self);
+	memcpy((&value), (&bits), sizeof(value));
 	rcvr = value;
 	/* begin loadFloatOrIntFrom: */
 	floatOrIntOop = longAt(GIV(stackPointer), self);
@@ -31060,7 +31060,7 @@ primitiveSmallFloatLessThan(sqInt self)
 			/* begin rotateRight: */
 			rot1 = (rot1 << 0x3F) + (((usqInt) (((usqInt)rot1))) >> 1);
 			bits1 = rot1;
-			memcpy((&value1), (&bits1), sizeof(value1, self), self);
+			memcpy((&value1), (&bits1), sizeof(value1));
 			arg = value1;
 			goto l6;
 		}
@@ -31120,10 +31120,10 @@ primitiveSmallFloatLogN(sqInt self)
 	/* begin rotateRight: */
 	rot = (rot << 0x3F) + (((usqInt) (((usqInt)rot))) >> 1);
 	bits = rot;
-	memcpy((&value), (&bits), sizeof(value, self), self);
+	memcpy((&value), (&bits), sizeof(value));
 	rcvr = value;
 	/* begin stackTopPut: */
-	aValue = floatObjectOf(log(rcvrself), self);
+	aValue = floatObjectOf(log(rcvr), self);
 	longAtPointerput(GIV(stackPointer), aValue, self);
 }
 
@@ -31159,7 +31159,7 @@ primitiveSmallFloatMultiply(sqInt self)
 	/* begin rotateRight: */
 	rot = (rot << 0x3F) + (((usqInt) (((usqInt)rot))) >> 1);
 	bits = rot;
-	memcpy((&value), (&bits), sizeof(value, self), self);
+	memcpy((&value), (&bits), sizeof(value));
 	rcvr = value;
 	/* begin loadFloatOrIntFrom: */
 	floatOrIntOop = longAt(GIV(stackPointer), self);
@@ -31176,7 +31176,7 @@ primitiveSmallFloatMultiply(sqInt self)
 			/* begin rotateRight: */
 			rot1 = (rot1 << 0x3F) + (((usqInt) (((usqInt)rot1))) >> 1);
 			bits1 = rot1;
-			memcpy((&value1), (&bits1), sizeof(value1, self), self);
+			memcpy((&value1), (&bits1), sizeof(value1));
 			arg = value1;
 			goto l6;
 		}
@@ -31239,7 +31239,7 @@ primitiveSmallFloatNotEqual(sqInt self)
 	/* begin rotateRight: */
 	rot = (rot << 0x3F) + (((usqInt) (((usqInt)rot))) >> 1);
 	bits = rot;
-	memcpy((&value), (&bits), sizeof(value, self), self);
+	memcpy((&value), (&bits), sizeof(value));
 	rcvr = value;
 	/* begin loadFloatOrIntFrom: */
 	floatOrIntOop = longAt(GIV(stackPointer), self);
@@ -31256,7 +31256,7 @@ primitiveSmallFloatNotEqual(sqInt self)
 			/* begin rotateRight: */
 			rot1 = (rot1 << 0x3F) + (((usqInt) (((usqInt)rot1))) >> 1);
 			bits1 = rot1;
-			memcpy((&value1), (&bits1), sizeof(value1, self), self);
+			memcpy((&value1), (&bits1), sizeof(value1));
 			arg = value1;
 			goto l6;
 		}
@@ -31313,10 +31313,10 @@ primitiveSmallFloatSine(sqInt self)
 	/* begin rotateRight: */
 	rot = (rot << 0x3F) + (((usqInt) (((usqInt)rot))) >> 1);
 	bits = rot;
-	memcpy((&value), (&bits), sizeof(value, self), self);
+	memcpy((&value), (&bits), sizeof(value));
 	rcvr = value;
 	/* begin stackTopPut: */
-	aValue = floatObjectOf(sin(rcvrself), self);
+	aValue = floatObjectOf(sin(rcvr), self);
 	longAtPointerput(GIV(stackPointer), aValue, self);
 }
 
@@ -31344,11 +31344,11 @@ primitiveSmallFloatSquareRoot(sqInt self)
 	/* begin rotateRight: */
 	rot = (rot << 0x3F) + (((usqInt) (((usqInt)rot))) >> 1);
 	bits = rot;
-	memcpy((&value), (&bits), sizeof(value, self), self);
+	memcpy((&value), (&bits), sizeof(value));
 	rcvr = value;
 	if (rcvr >= 0.0) {
 		/* begin stackTopPut: */
-		aValue = floatObjectOf(sqrt(rcvrself), self);
+		aValue = floatObjectOf(sqrt(rcvr), self);
 		longAtPointerput(GIV(stackPointer), aValue, self);
 	}
 	else {
@@ -31391,7 +31391,7 @@ primitiveSmallFloatSubtract(sqInt self)
 	/* begin rotateRight: */
 	rot = (rot << 0x3F) + (((usqInt) (((usqInt)rot))) >> 1);
 	bits = rot;
-	memcpy((&value), (&bits), sizeof(value, self), self);
+	memcpy((&value), (&bits), sizeof(value));
 	rcvr = value;
 	/* begin loadFloatOrIntFrom: */
 	floatOrIntOop = longAt(GIV(stackPointer), self);
@@ -31408,7 +31408,7 @@ primitiveSmallFloatSubtract(sqInt self)
 			/* begin rotateRight: */
 			rot1 = (rot1 << 0x3F) + (((usqInt) (((usqInt)rot1))) >> 1);
 			bits1 = rot1;
-			memcpy((&value1), (&bits1), sizeof(value1, self), self);
+			memcpy((&value1), (&bits1), sizeof(value1));
 			arg = value1;
 			goto l6;
 		}
@@ -31480,7 +31480,7 @@ primitiveSmallFloatTimesTwoPower(sqInt self)
 			if (arg > twiceMaxExponent) {
 				arg = twiceMaxExponent;
 			}
-			result = floatObjectOf(ldexp(smallFloatValueOf(rcvr, self), ((int) arg), self), self);
+			result = floatObjectOf(ldexp(smallFloatValueOf(rcvr, self), ((int) arg)), self);
 		}
 	}
 	/* begin pop:thenPush: */
@@ -31512,9 +31512,9 @@ primitiveSmallFloatTruncated(sqInt self)
 	/* begin rotateRight: */
 	rot = (rot << 0x3F) + (((usqInt) (((usqInt)rot))) >> 1);
 	bits = rot;
-	memcpy((&value), (&bits), sizeof(value, self), self);
+	memcpy((&value), (&bits), sizeof(value));
 	rcvr = value;
-	modf(rcvr, (&trunc), self);
+	modf(rcvr, (&trunc));
 	if ((((trunc >= (((double) (MinSmallInteger) ))) && (trunc <= (((double) (MaxSmallInteger) )))))
 	 && ((((((usqInt) (((sqInt)trunc))) >> 60) + 1) & 15) <= 1)) {
 		longAtPointerput(GIV(stackPointer), (((usqInt)(((sqInt)trunc)) << 3) | 1), self);
@@ -31621,7 +31621,7 @@ primitiveSquareRoot(sqInt self)
 	if ((!GIV(primFailCode))
 	 && (rcvr >= 0.0)) {
 		/* begin stackTopPut: */
-		aValue = floatObjectOf(sqrt(rcvrself), self);
+		aValue = floatObjectOf(sqrt(rcvr), self);
 		longAtPointerput(GIV(stackPointer), aValue, self);
 	}
 	else {
@@ -32539,18 +32539,18 @@ primitiveSuspend(sqInt self)
 		longAtput((process + BaseHeaderSize) + (((sqInt)((usqInt)(MyListIndex) << (shiftForWord(self))))), myList, self);
 	}
 	/* begin removeProcess:fromList: */
-	assert(!((isForwarded(process, self))));
-	assert(!((isForwarded(myList, self))));
+	assert(!((isForwarded(process, self))), self);
+	assert(!((isForwarded(myList, self))), self);
 	/* begin fetchPointer:ofObject: */
 	firstLink = longAt((myList + BaseHeaderSize) + (((sqInt)((usqInt)(FirstLinkIndex) << (shiftForWord(self))))), self);
 	/* begin fetchPointer:ofObject: */
 	lastLink = longAt((myList + BaseHeaderSize) + (((sqInt)((usqInt)(LastLinkIndex) << (shiftForWord(self))))), self);
-	assert(!((isForwarded(firstLink, self))));
-	assert(!((isForwarded(lastLink, self))));
+	assert(!((isForwarded(firstLink, self))), self);
+	assert(!((isForwarded(lastLink, self))), self);
 	if (process == firstLink) {
 		/* begin fetchPointer:ofObject: */
 		nextLink = longAt((process + BaseHeaderSize) + (((sqInt)((usqInt)(NextLinkIndex) << (shiftForWord(self))))), self);
-		assert(!((isForwarded(nextLink, self))));
+		assert(!((isForwarded(nextLink, self))), self);
 		/* begin storePointer:ofObject:withValue: */
 		assert(!(isForwarded(myList, self)), self);
 		if ((assert(isNonImmediate(myList, self), self),
@@ -32576,7 +32576,7 @@ primitiveSuspend(sqInt self)
 	else {
 		tempLink = firstLink;
 		while (1) {
-			assert(!((isForwarded(tempLink, self))));
+			assert(!((isForwarded(tempLink, self))), self);
 			if (tempLink == GIV(nilObj)) {
 				/* begin primitiveFail */
 				if (!GIV(primFailCode)) {
@@ -32807,7 +32807,7 @@ primitiveTimesTwoPower(sqInt self)
 		}
 	}
 	rcvr = floatValueOf(longAt(GIV(stackPointer) + (1 * BytesPerWord), self), self);
-	result = ldexp(rcvr, ((int) arg), self);
+	result = ldexp(rcvr, ((int) arg));
 	/* begin pop:thenPushFloat: */
 	longAtput((sp = GIV(stackPointer) + ((2 - 1) * BytesPerWord)), floatObjectOf(result, self), self);
 	GIV(stackPointer) = sp;
@@ -32828,7 +32828,7 @@ primitiveTruncated(sqInt self)
 	/* begin stackFloatValue: */
 	rcvr = floatValueOf(longAt(GIV(stackPointer) + (0 * BytesPerWord), self), self);
 	if (!GIV(primFailCode)) {
-		modf(rcvr, (&trunc), self);
+		modf(rcvr, (&trunc));
 		if (((trunc >= (((double) (MinSmallInteger) ))) && (trunc <= (((double) (MaxSmallInteger) ))))) {
 			longAtPointerput(GIV(stackPointer), (((usqInt)(((sqInt)trunc)) << 3) | 1), self);
 		}
@@ -33408,7 +33408,7 @@ signed64BitValueOf(sqInt oop, sqInt self)
 	fmt = (((usqInt) (longAt(oop, self))) >> (formatShift(self))) & (formatMask(self));
 	assert(fmt >= (firstByteFormat(self)), self);
 	sz = ((numSlotsOf(oop, self)) << (shiftForWord(self))) - (fmt & 7);
-	if (sz > (sizeof(sqLong, self))) {
+	if (sz > (sizeof(sqLong))) {
 		/* begin primitiveFail */
 		if (!GIV(primFailCode)) {
 			GIV(primFailCode) = 1;
@@ -33525,14 +33525,14 @@ signedMachineIntegerValueOf(sqInt oop, sqInt self)
 	}
 	bs = numBytes - (((sqInt)((usqInt)((fmt & 1)) << 2)));
 	l6:	/* end numBytesOf: */;
-	if (bs > (sizeof(usqIntptr_t, self))) {
+	if (bs > (sizeof(usqIntptr_t))) {
 		/* begin primitiveFail */
 		if (!GIV(primFailCode)) {
 			GIV(primFailCode) = 1;
 		}
 		return null;
 	}
-	if (((sizeof(sqIntptr_t, self)) == 8)
+	if (((sizeof(sqIntptr_t)) == 8)
 	 && (bs > 4)) {
 		magnitude = SQ_SWAP_8_BYTES_IF_BIGENDIAN((long64At((oop + BaseHeaderSize) + (0U << 3), self)));
 	}
@@ -33541,7 +33541,7 @@ signedMachineIntegerValueOf(sqInt oop, sqInt self)
 		/* ] */
 		magnitude = ((unsigned int) (SQ_SWAP_4_BYTES_IF_BIGENDIAN((long32At((oop + BaseHeaderSize) + (0U << 2), self)))));
 	}
-	limit = (((usqIntptr_t)1)) << (((sizeof(sqIntptr_t, self)) * 8) - 1);
+	limit = (((usqIntptr_t)1)) << (((sizeof(sqIntptr_t)) * 8) - 1);
 	if ((negative
 		? magnitude > limit
 		: magnitude >= limit)) {
@@ -33656,7 +33656,7 @@ initializeStacknumSlotspageSize(char *theStackPages, sqInt stackSlots, sqInt slo
 
 	/* For initialization in the C code. */
 	GIV(stackMemory) = theStackPages;
-	structStackPageSize = sizeof(CogStackPage, self);
+	structStackPageSize = sizeof(CogStackPage);
 	GIV(bytesPerPage) = slotsPerPage * BytesPerWord;
 
 	/* Because stack pages grow down baseAddress is at the top of a stack page and so to avoid
@@ -34390,7 +34390,7 @@ dbgFloatValueOf(sqInt oop, sqInt self)
 			/* begin rotateRight: */
 			rot = (rot << 0x3F) + (((usqInt) (((usqInt)rot))) >> 1);
 			bits = rot;
-			memcpy((&value), (&bits), sizeof(value, self), self);
+			memcpy((&value), (&bits), sizeof(value));
 			return value;
 		}
 	}
@@ -34485,7 +34485,7 @@ floatObjectOf(double aFloat, sqInt self)
 	if (isSmallFloatValue(aFloat, self)) {
 		/* begin smallFloatObjectOf: */
 		assert(isSmallFloatValue(aFloat, self), self);
-		memcpy((&rawFloat), (&aFloat), sizeof(rawFloat, self), self);
+		memcpy((&rawFloat), (&aFloat), sizeof(rawFloat));
 		/* begin rotateLeft: */
 		rot = ((rawFloat >> 0x3F) & 1) + (rawFloat << 1);
 		if (rot > 1) {
@@ -34498,7 +34498,7 @@ floatObjectOf(double aFloat, sqInt self)
 	}
 	/* begin eeInstantiateSmallClassIndex:format:numSlots: */
 	objFormat = firstLongFormat(self);
-	numSlots = (sizeof(double, self)) / BytesPerOop;
+	numSlots = (sizeof(double)) / BytesPerOop;
 	assert((numSlots >= 0)
 	 && ((knownClassAtIndex(ClassFloatCompactIndex, self)) != GIV(nilObj)), self);
 	assert(((objFormat < (firstByteFormat(self))
@@ -34519,7 +34519,7 @@ floatObjectOf(double aFloat, sqInt self)
 			forceInterruptCheck(self);
 		}
 		if ((GIV(freeStart) + numBytes) > (((eden(self)).limit))) {
-			error("no room in eden for allocateSmallNewSpaceSlots:format:classIndex:", self);
+			error("no room in eden for allocateSmallNewSpaceSlots:format:classIndex:");
 			newFloatObj = 0;
 			goto l2;
 		}
@@ -34560,7 +34560,7 @@ floatValueOf(sqInt oop, sqInt self)
 			/* begin rotateRight: */
 			rot = (rot << 0x3F) + (((usqInt) (((usqInt)rot))) >> 1);
 			bits = rot;
-			memcpy((&value), (&bits), sizeof(value, self), self);
+			memcpy((&value), (&bits), sizeof(value));
 			return value;
 		}
 	}
@@ -34873,7 +34873,7 @@ isSmallFloatValue(double aFloat, sqInt self)
     usqLong rawFloat;
 
 	rawFloat = 0;
-	memcpy((&rawFloat), (&aFloat), sizeof(rawFloat, self), self);
+	memcpy((&rawFloat), (&aFloat), sizeof(rawFloat));
 	exponent = (rawFloat >> (smallFloatMantissaBits(self))) & 0x7FF;
 	return (exponent > (smallFloatExponentOffset(self))
 		? exponent <= (0xFF + (smallFloatExponentOffset(self)))
@@ -35042,7 +35042,7 @@ shortentoIndexableSize(sqInt objOop, sqInt indexableSize, sqInt self)
 		copy = newObj;
 	l4:	/* end allocateSlots:format:classIndex: */;
 		if (!(copy)) {
-			error("shorten:toIndexableSize: attempted to shorten to allocationUnit!", self);
+			error("shorten:toIndexableSize: attempted to shorten to allocationUnit!");
 		}
 		for (i = 0; i < numSlots; i += 1) {
 			/* begin storePointerUnchecked:ofObject:withValue: */
@@ -35142,7 +35142,7 @@ smallFloatValueOf(sqInt oop, sqInt self)
 	/* begin rotateRight: */
 	rot = (rot << 0x3F) + (((usqInt) (((usqInt)rot))) >> 1);
 	bits = rot;
-	memcpy((&value), (&bits), sizeof(value, self), self);
+	memcpy((&value), (&bits), sizeof(value));
 	return value;
 }
 
@@ -35398,7 +35398,7 @@ computeRefCountToShrinkRT(sqInt self)
     sqInt referent;
     sqInt referent1;
 
-	memset(population, 0, (sizeof(long, self)) * (MaxRTRefCount + 1), self);
+	memset(population, 0, (sizeof(long)) * (MaxRTRefCount + 1));
 	assert(allNewSpaceObjectsHaveZeroRTRefCount(self), self);
 	/* begin referenceCountRememberedReferents: */
 	for (i1 = 0; i1 < GIV(rememberedSetSize); i1 += 1) {
@@ -35499,7 +35499,7 @@ copyAndForwardMourner(sqInt mourner, sqInt self)
 			: mourner);
 		newStart = GIV(futureSurvivorStart);
 		GIV(futureSurvivorStart) += bytesInObj;
-		memcpy(((void *)newStart), ((void *)startOfSurvivor), bytesInObj, self);
+		memcpy(((void *)newStart), ((void *)startOfSurvivor), bytesInObj);
 		if (GIV(tenureCriterion) == TenureToShrinkRT) {
 			/* begin rtRefCountOf:put: */
 			assert(((0 >= 0) && (0 <= MaxRTRefCount)), self);
@@ -35585,7 +35585,7 @@ copyAndForward(sqInt survivor, sqInt self)
 			: survivor);
 		newStart = GIV(futureSurvivorStart);
 		GIV(futureSurvivorStart) += bytesInObj;
-		memcpy(((void *)newStart), ((void *)startOfSurvivor), bytesInObj, self);
+		memcpy(((void *)newStart), ((void *)startOfSurvivor), bytesInObj);
 		if (GIV(tenureCriterion) == TenureToShrinkRT) {
 			/* begin rtRefCountOf:put: */
 			assert(((0 >= 0) && (0 <= MaxRTRefCount)), self);
@@ -35651,10 +35651,10 @@ copyToOldSpacebytesformat(sqInt survivor, sqInt bytesInObject, sqInt formatOfSur
 		growOldSpaceByAtLeast(0, self);
 		newStart = allocateOldSpaceChunkOfBytes(bytesInObject, self);
 		if (!(newStart)) {
-			error("out of memory", self);
+			error("out of memory");
 		}
 	}
-	memcpy(((void *)newStart), ((void *)startOfSurvivor), bytesInObject, self);
+	memcpy(((void *)newStart), ((void *)startOfSurvivor), bytesInObject);
 	newOop = newStart + (survivor - startOfSurvivor);
 	if (GIV(tenureCriterion) >= (((TenureToShrinkRT < MarkOnTenure) ? TenureToShrinkRT : MarkOnTenure))) {
 		if (GIV(tenureCriterion) == TenureToShrinkRT) {
@@ -35765,7 +35765,7 @@ growRememberedSet(sqInt self)
 		newObj = obj2;
 		if (!(newObj)) {
 			if (!(growOldSpaceByAtLeast(numSlots + 1024, self))) {
-				error("could not grow remembered set", self);
+				error("could not grow remembered set");
 			}
 			/* begin allocatePinnedSlots: */
 			nSlots = numSlots + 1024;
@@ -35969,7 +35969,7 @@ noUnfiredEphemeronsAtEndOfRememberedSet(sqInt self)
 void
 openScavengeLog(sqInt self)
 {   DECL_MAYBE_SQ_GLOBAL_STRUCT
-	GIV(scavengeLog) = fopen("scavenge.log", "a+", self);
+	GIV(scavengeLog) = fopen("scavenge.log", "a+");
 }
 
 
@@ -35984,7 +35984,7 @@ printRememberedSet(sqInt self)
 	for (i = 0; i < GIV(rememberedSetSize); i += 1) {
 		printNum(i, self);
 		/* begin space */
-		putchar(' ', self);
+		putchar(' ');
 		shortPrintOop(GIV(rememberedSet)[i], self);
 	}
 }
@@ -36090,7 +36090,7 @@ processEphemerons(sqInt self)
 				longAtput((ephemeron + BaseHeaderSize) + (0U << (shiftForWord(self))), valuePointer, self);
 			}
 			assert(!(((isScavengeSurvivor(key, self))
- && (isEphemeron(ephemeron, self)))));
+ && (isEphemeron(ephemeron, self)))), self);
 			if (scavengeReferentsOf(ephemeron, self)) {
 
 				/* keep in set */
@@ -36153,7 +36153,7 @@ processEphemerons(sqInt self)
 				longAtput((ephemeron1 + BaseHeaderSize) + (0U << (shiftForWord(self))), valuePointer1, self);
 			}
 			assert(!(((isScavengeSurvivor(key1, self))
- && (isEphemeron(ephemeron1, self)))));
+ && (isEphemeron(ephemeron1, self)))), self);
 			((void) (scavengeReferentsOf(ephemeron1, self)));
 			oldCorpse = ephemeronCorpse;
 			/* begin nextCorpseOrNil: */
@@ -36331,9 +36331,9 @@ sqInt
 remember(sqInt objOop, sqInt self)
 {   DECL_MAYBE_SQ_GLOBAL_STRUCT
 	assert(isNonImmediate(objOop, self), self);
-	assert(!((isYoungObject(objOop, self))));
-	assert(!((isRemembered(objOop, self))));
-	assert(!((isInRememberedSet(objOop, self))));
+	assert(!((isYoungObject(objOop, self))), self);
+	assert(!((isRemembered(objOop, self))), self);
+	assert(!((isInRememberedSet(objOop, self))), self);
 	/* begin setIsRememberedOf:to: */
 	longAtput(objOop, (longAt(objOop, self)) | (1U << (rememberedBitShift(self))), self);
 	if (GIV(rememberedSetSize) >= GIV(rememberedSetLimit)) {
@@ -36425,7 +36425,7 @@ scavengeLoop(sqInt self)
 		/* begin externalWriteBackHeadFramePointers */
 		assert((GIV(framePointer) - GIV(stackPointer)) < (LargeContextSlots * BytesPerOop), self);
 		assert(GIV(stackPage) == (mostRecentlyUsedPage(self)), self);
-		assert(!((isFree(GIV(stackPage)self))));
+		assert(!((isFree(GIV(stackPage)self))), self);
 		/* begin setHeadFP:andSP:inPage: */
 		assert(GIV(stackPointer) < GIV(framePointer), self);
 		assert((GIV(stackPointer) < ((GIV(stackPage)->baseAddress)))
@@ -36761,7 +36761,7 @@ writeScavengeLog(sqInt self)
 		? "\ttenure below 0x%" PRIxSQINT "/%" PRIdSQINT " %s refct %" PRIdSQINT "\n"
 		: "\ttenure below 0x%" PRIxSQINT "/%" PRIdSQINT " %s\n"), (GIV(scavengeLogRecord).tTenureThreshold), (GIV(scavengeLogRecord).tTenureThreshold), policyNames[(GIV(scavengeLogRecord).tTenureCriterion)], (GIV(scavengeLogRecord).tRefCountToShrinkRT), self);
 	fprintf(GIV(scavengeLog), "\tsurvivor bytes: 0x%" PRIxSQINT "/%" PRIdSQINT " rem set: %" PRIdSQINT " tenured: %" PRIdSQINT " usecs: %" PRIdSQINT "\n", (GIV(scavengeLogRecord).eSurvivorBytes), (GIV(scavengeLogRecord).eSurvivorBytes), (GIV(scavengeLogRecord).eRememberedSetSize), ((GIV(scavengeLogRecord).eStatTenures)) - ((GIV(scavengeLogRecord).sStatTenures)), GIV(statSGCDeltaUsecs), self);
-	fflush(GIV(scavengeLog)self);
+	fflush(GIV(scavengeLog));
 }
 
 
@@ -38057,7 +38057,7 @@ allocateNewSpaceSlotsformatclassIndex(sqInt numSlots, sqInt formatField, sqInt c
 			forceInterruptCheck(self);
 		}
 		if ((GIV(freeStart) + numBytes) > (((eden(self)).limit))) {
-			error("no room in eden for allocateNewSpaceSlots:format:classIndex:", self);
+			error("no room in eden for allocateNewSpaceSlots:format:classIndex:");
 			return 0;
 		}
 	}
@@ -38755,7 +38755,7 @@ becomewithtwoWaycopyHash(sqInt array1, sqInt array2, sqInt twoWayFlag, sqInt cop
 		/* begin externalWriteBackHeadFramePointers */
 		assert((GIV(framePointer) - GIV(stackPointer)) < (LargeContextSlots * BytesPerOop), self);
 		assert(GIV(stackPage) == (mostRecentlyUsedPage(self)), self);
-		assert(!((isFree(GIV(stackPage)self))));
+		assert(!((isFree(GIV(stackPage)self))), self);
 		/* begin setHeadFP:andSP:inPage: */
 		assert(GIV(stackPointer) < GIV(framePointer), self);
 		assert((GIV(stackPointer) < ((GIV(stackPage)->baseAddress)))
@@ -38924,7 +38924,7 @@ becomewithtwoWaycopyHash(sqInt array1, sqInt array2, sqInt twoWayFlag, sqInt cop
 				 && (oopisLessThan(obj21, GIV(newSpaceLimit), self)))) {
 					GIV(becomeEffectsFlags) = GIV(becomeEffectsFlags) | OldBecameNewFlag;
 				}
-				assert(!((isOopForwarded(obj21, self))));
+				assert(!((isOopForwarded(obj21, self))), self);
 				/* begin followField:ofObject: */
 				objOop4 = longAt((array1 + BaseHeaderSize) + (((sqInt)((usqInt)(i1) << (shiftForWord(self))))), self);
 				if (((objOop4 & (tagMask(self))) == 0)
@@ -39127,7 +39127,7 @@ checkHeapFreeSpaceIntegrity(sqInt self)
 				print(" to non-free ", self);
 				printHex(GIV(freeLists)[i], self);
 				/* begin cr */
-				printf("\n", self);
+				printf("\n");
 				ok = 0;
 			}
 		}
@@ -39151,7 +39151,7 @@ checkHeapFreeSpaceIntegrity(sqInt self)
 			printHex(objOop, self);
 			print(" is free", self);
 			/* begin cr */
-			printf("\n", self);
+			printf("\n");
 			ok = 0;
 		}
 		else {
@@ -39167,7 +39167,7 @@ checkHeapFreeSpaceIntegrity(sqInt self)
 						printHex(fieldOop, self);
 						print(" is free", self);
 						/* begin cr */
-						printf("\n", self);
+						printf("\n");
 						ok = 0;
 					}
 				}
@@ -39200,7 +39200,7 @@ checkHeapFreeSpaceIntegrity(sqInt self)
 			printHex(objOop, self);
 			print(" is free", self);
 			/* begin cr */
-			printf("\n", self);
+			printf("\n");
 			ok = 0;
 		}
 		else {
@@ -39216,7 +39216,7 @@ checkHeapFreeSpaceIntegrity(sqInt self)
 						printHex(fieldOop, self);
 						print(" is free", self);
 						/* begin cr */
-						printf("\n", self);
+						printf("\n");
 						ok = 0;
 					}
 				}
@@ -39251,7 +39251,7 @@ checkHeapFreeSpaceIntegrity(sqInt self)
 				printHex(objOop1, self);
 				print(" is unmapped?! ", self);
 				/* begin cr */
-				printf("\n", self);
+				printf("\n");
 				ok = 0;
 			}
 			/* begin fetchPointer:ofFreeChunk: */
@@ -39264,7 +39264,7 @@ checkHeapFreeSpaceIntegrity(sqInt self)
 				printHex(fieldOop, self);
 				print(" is unmapped", self);
 				/* begin cr */
-				printf("\n", self);
+				printf("\n");
 				ok = 0;
 			}
 			if (!(isLilliputianSize(bytesInObject(objOop1, self), self))) {
@@ -39278,7 +39278,7 @@ checkHeapFreeSpaceIntegrity(sqInt self)
 					printHex(fieldOop, self);
 					print(" is unmapped", self);
 					/* begin cr */
-					printf("\n", self);
+					printf("\n");
 					ok = 0;
 				}
 			}
@@ -39295,7 +39295,7 @@ checkHeapFreeSpaceIntegrity(sqInt self)
 						printHex(fieldOop, self);
 						print(" is unmapped", self);
 						/* begin cr */
-						printf("\n", self);
+						printf("\n");
 						ok = 0;
 					}
 				}
@@ -39323,7 +39323,7 @@ checkHeapFreeSpaceIntegrity(sqInt self)
 						printHex(fieldOop, self);
 						print(" is free", self);
 						/* begin cr */
-						printf("\n", self);
+						printf("\n");
 						ok = 0;
 					}
 				}
@@ -39350,7 +39350,7 @@ checkHeapFreeSpaceIntegrity(sqInt self)
 		print(" found ", self);
 		printNum(total, self);
 		/* begin cr */
-		printf("\n", self);
+		printf("\n");
 		ok = 0;
 	}
 	return ok;
@@ -39426,7 +39426,7 @@ checkHeapIntegrityclassIndicesShouldBeValid(sqInt excludeUnmarkedObjs, sqInt cla
 				print(" to non-free ", self);
 				printHex(GIV(freeLists)[i], self);
 				/* begin cr */
-				printf("\n", self);
+				printf("\n");
 				ok = 0;
 			}
 		}
@@ -39450,7 +39450,7 @@ checkHeapIntegrityclassIndicesShouldBeValid(sqInt excludeUnmarkedObjs, sqInt cla
 			printHex(objOop, self);
 			print(" is free", self);
 			/* begin cr */
-			printf("\n", self);
+			printf("\n");
 			ok = 0;
 		}
 		else {
@@ -39461,7 +39461,7 @@ checkHeapIntegrityclassIndicesShouldBeValid(sqInt excludeUnmarkedObjs, sqInt cla
 					printHex(objOop, self);
 					print(" is remembered", self);
 					/* begin cr */
-					printf("\n", self);
+					printf("\n");
 					ok = 0;
 				}
 			}
@@ -39473,7 +39473,7 @@ checkHeapIntegrityclassIndicesShouldBeValid(sqInt excludeUnmarkedObjs, sqInt cla
 					print(" to unmapped ", self);
 					printHex(fieldOop, self);
 					/* begin cr */
-					printf("\n", self);
+					printf("\n");
 					ok = 0;
 				}
 			}
@@ -39505,7 +39505,7 @@ checkHeapIntegrityclassIndicesShouldBeValid(sqInt excludeUnmarkedObjs, sqInt cla
 						? "nil"
 						: "nilObj"), self);
 					/* begin cr */
-					printf("\n", self);
+					printf("\n");
 					ok = 0;
 				}
 				for (fi = 0, iLimiT = ((numPointerSlotsOf(objOop, self)) - 1); fi <= iLimiT; fi += 1) {
@@ -39519,7 +39519,7 @@ checkHeapIntegrityclassIndicesShouldBeValid(sqInt excludeUnmarkedObjs, sqInt cla
 							print(" = ", self);
 							printHex(fieldOop, self);
 							/* begin cr */
-							printf("\n", self);
+							printf("\n");
 							ok = 0;
 						}
 					}
@@ -39553,7 +39553,7 @@ checkHeapIntegrityclassIndicesShouldBeValid(sqInt excludeUnmarkedObjs, sqInt cla
 			printHex(objOop, self);
 			print(" is free", self);
 			/* begin cr */
-			printf("\n", self);
+			printf("\n");
 			ok = 0;
 		}
 		else {
@@ -39564,7 +39564,7 @@ checkHeapIntegrityclassIndicesShouldBeValid(sqInt excludeUnmarkedObjs, sqInt cla
 					printHex(objOop, self);
 					print(" is remembered", self);
 					/* begin cr */
-					printf("\n", self);
+					printf("\n");
 					ok = 0;
 				}
 			}
@@ -39576,7 +39576,7 @@ checkHeapIntegrityclassIndicesShouldBeValid(sqInt excludeUnmarkedObjs, sqInt cla
 					print(" to unmapped ", self);
 					printHex(fieldOop, self);
 					/* begin cr */
-					printf("\n", self);
+					printf("\n");
 					ok = 0;
 				}
 			}
@@ -39608,7 +39608,7 @@ checkHeapIntegrityclassIndicesShouldBeValid(sqInt excludeUnmarkedObjs, sqInt cla
 						? "nil"
 						: "nilObj"), self);
 					/* begin cr */
-					printf("\n", self);
+					printf("\n");
 					ok = 0;
 				}
 				for (fi = 0, iLimiT = ((numPointerSlotsOf(objOop, self)) - 1); fi <= iLimiT; fi += 1) {
@@ -39622,7 +39622,7 @@ checkHeapIntegrityclassIndicesShouldBeValid(sqInt excludeUnmarkedObjs, sqInt cla
 							print(" = ", self);
 							printHex(fieldOop, self);
 							/* begin cr */
-							printf("\n", self);
+							printf("\n");
 							ok = 0;
 						}
 					}
@@ -39658,7 +39658,7 @@ checkHeapIntegrityclassIndicesShouldBeValid(sqInt excludeUnmarkedObjs, sqInt cla
 				printHex(objOop1, self);
 				print(" is mapped?! ", self);
 				/* begin cr */
-				printf("\n", self);
+				printf("\n");
 				ok = 0;
 			}
 			/* begin fetchPointer:ofFreeChunk: */
@@ -39671,7 +39671,7 @@ checkHeapIntegrityclassIndicesShouldBeValid(sqInt excludeUnmarkedObjs, sqInt cla
 				printHex(fieldOop, self);
 				print(" is mapped", self);
 				/* begin cr */
-				printf("\n", self);
+				printf("\n");
 				ok = 0;
 			}
 			if (!(isLilliputianSize(bytesInObject(objOop1, self), self))) {
@@ -39685,7 +39685,7 @@ checkHeapIntegrityclassIndicesShouldBeValid(sqInt excludeUnmarkedObjs, sqInt cla
 					printHex(fieldOop, self);
 					print(" is mapped", self);
 					/* begin cr */
-					printf("\n", self);
+					printf("\n");
 					ok = 0;
 				}
 			}
@@ -39702,7 +39702,7 @@ checkHeapIntegrityclassIndicesShouldBeValid(sqInt excludeUnmarkedObjs, sqInt cla
 						printHex(fieldOop, self);
 						print(" is mapped", self);
 						/* begin cr */
-						printf("\n", self);
+						printf("\n");
 						ok = 0;
 					}
 				}
@@ -39719,7 +39719,7 @@ checkHeapIntegrityclassIndicesShouldBeValid(sqInt excludeUnmarkedObjs, sqInt cla
 						printHex(objOop1, self);
 						print(" is not in remembered table", self);
 						/* begin cr */
-						printf("\n", self);
+						printf("\n");
 						ok = 0;
 					}
 				}
@@ -39731,7 +39731,7 @@ checkHeapIntegrityclassIndicesShouldBeValid(sqInt excludeUnmarkedObjs, sqInt cla
 						print(" to unmapped ", self);
 						printHex(fieldOop, self);
 						/* begin cr */
-						printf("\n", self);
+						printf("\n");
 						ok = 0;
 					}
 					if (((fieldOop & (tagMask(self))) == 0)
@@ -39768,7 +39768,7 @@ checkHeapIntegrityclassIndicesShouldBeValid(sqInt excludeUnmarkedObjs, sqInt cla
 							? "nil"
 							: "nilObj"), self);
 						/* begin cr */
-						printf("\n", self);
+						printf("\n");
 						ok = 0;
 					}
 					for (fi = 0, iLimiT = ((numPointerSlotsOf(objOop1, self)) - 1); fi <= iLimiT; fi += 1) {
@@ -39782,7 +39782,7 @@ checkHeapIntegrityclassIndicesShouldBeValid(sqInt excludeUnmarkedObjs, sqInt cla
 								print(" = ", self);
 								printHex(fieldOop, self);
 								/* begin cr */
-								printf("\n", self);
+								printf("\n");
 								ok = 0;
 							}
 							if (((fieldOop & (tagMask(self))) == 0)
@@ -39799,7 +39799,7 @@ checkHeapIntegrityclassIndicesShouldBeValid(sqInt excludeUnmarkedObjs, sqInt cla
 						printHex(objOop1, self);
 						print(" contains young oop(s)", self);
 						/* begin cr */
-						printf("\n", self);
+						printf("\n");
 						ok = 0;
 					}
 				}
@@ -39826,7 +39826,7 @@ checkHeapIntegrityclassIndicesShouldBeValid(sqInt excludeUnmarkedObjs, sqInt cla
 		print("; #roots ", self);
 		printNum(rememberedSetSize(self), self);
 		/* begin cr */
-		printf("\n", self);
+		printf("\n");
 		flag("no support for remembered set overflow yet");
 	}
 	/* begin rememberedSetWithIndexDo: */
@@ -39838,7 +39838,7 @@ checkHeapIntegrityclassIndicesShouldBeValid(sqInt excludeUnmarkedObjs, sqInt cla
 			print(" = ", self);
 			printHex(obj, self);
 			/* begin cr */
-			printf("\n", self);
+			printf("\n");
 			ok = 0;
 		}
 		else {
@@ -39848,7 +39848,7 @@ checkHeapIntegrityclassIndicesShouldBeValid(sqInt excludeUnmarkedObjs, sqInt cla
 				print(" = ", self);
 				printHex(obj, self);
 				/* begin cr */
-				printf("\n", self);
+				printf("\n");
 				ok = 0;
 			}
 			else {
@@ -39859,7 +39859,7 @@ checkHeapIntegrityclassIndicesShouldBeValid(sqInt excludeUnmarkedObjs, sqInt cla
 					print(" = ", self);
 					printHex(obj, self);
 					/* begin cr */
-					printf("\n", self);
+					printf("\n");
 					ok = 0;
 				}
 			}
@@ -39884,7 +39884,7 @@ checkHeapIntegrityclassIndicesShouldBeValid(sqInt excludeUnmarkedObjs, sqInt cla
 				print(" = ", self);
 				printHex(obj, self);
 				/* begin cr */
-				printf("\n", self);
+				printf("\n");
 				ok = 0;
 			}
 			else {
@@ -39898,7 +39898,7 @@ checkHeapIntegrityclassIndicesShouldBeValid(sqInt excludeUnmarkedObjs, sqInt cla
 						print(" = ", self);
 						printHex(obj, self);
 						/* begin cr */
-						printf("\n", self);
+						printf("\n");
 						ok = 0;
 					}
 				}
@@ -39916,7 +39916,7 @@ checkHeapIntegrityclassIndicesShouldBeValid(sqInt excludeUnmarkedObjs, sqInt cla
 			print(" = ", self);
 			printHex(obj, self);
 			/* begin cr */
-			printf("\n", self);
+			printf("\n");
 			ok = 0;
 		}
 		else {
@@ -39926,7 +39926,7 @@ checkHeapIntegrityclassIndicesShouldBeValid(sqInt excludeUnmarkedObjs, sqInt cla
 				print(" = ", self);
 				printHex(obj, self);
 				/* begin cr */
-				printf("\n", self);
+				printf("\n");
 				ok = 0;
 			}
 		}
@@ -39939,7 +39939,7 @@ checkHeapIntegrityclassIndicesShouldBeValid(sqInt excludeUnmarkedObjs, sqInt cla
 			print(" => ", self);
 			printHex(obj, self);
 			/* begin cr */
-			printf("\n", self);
+			printf("\n");
 			ok = 0;
 		}
 		else {
@@ -39949,7 +39949,7 @@ checkHeapIntegrityclassIndicesShouldBeValid(sqInt excludeUnmarkedObjs, sqInt cla
 				print(" => ", self);
 				printHex(obj, self);
 				/* begin cr */
-				printf("\n", self);
+				printf("\n");
 				ok = 0;
 			}
 		}
@@ -40054,7 +40054,7 @@ checkOopHasOkayClass(usqInt obj, sqInt self)
 		printHex(obj, self);
 		print(" an immediate is not a valid class or behavior", self);
 		/* begin cr */
-		printf("\n", self);
+		printf("\n");
 		return 0;
 	}
 	if (!(okayOop(objClass, self))) {
@@ -40062,7 +40062,7 @@ checkOopHasOkayClass(usqInt obj, sqInt self)
 		printHex(obj, self);
 		print(" class obj is not ok", self);
 		/* begin cr */
-		printf("\n", self);
+		printf("\n");
 		return 0;
 	}
 	if (!((((((usqInt) (longAt(objClass, self))) >> (formatShift(self))) & (formatMask(self))) <= 5 /* lastPointerFormat */)
@@ -40071,7 +40071,7 @@ checkOopHasOkayClass(usqInt obj, sqInt self)
 		printHex(obj, self);
 		print(" a class (behavior) must be a pointers object of size >= 3", self);
 		/* begin cr */
-		printf("\n", self);
+		printf("\n");
 		return 0;
 	}
 	if (((obj & (tagMask(self))) == 0)
@@ -40088,7 +40088,7 @@ checkOopHasOkayClass(usqInt obj, sqInt self)
 		printHex(obj, self);
 		print(" and its class (behavior) formats differ", self);
 		/* begin cr */
-		printf("\n", self);
+		printf("\n");
 		return 0;
 	}
 	return 1;
@@ -40105,7 +40105,7 @@ checkOopIntegritynamed(sqInt obj, char *name, sqInt self)
 	print(" leak ", self);
 	printHex(obj, self);
 	/* begin cr */
-	printf("\n", self);
+	printf("\n");
 	return 0;
 }
 
@@ -40122,7 +40122,7 @@ checkOopIntegritynamedindex(sqInt obj, char *name, sqInt i, sqInt self)
 	print(" = ", self);
 	printHex(obj, self);
 	/* begin cr */
-	printf("\n", self);
+	printf("\n");
 	return 0;
 }
 
@@ -40186,7 +40186,7 @@ classAtIndexput(sqInt classIndex, sqInt objOop, sqInt self)
 	fieldIndex = ((usqInt) classIndex) >> (classTableMajorIndexShift(self));
 	classTablePage = longAt((GIV(hiddenRootsObj) + BaseHeaderSize) + (((sqInt)((usqInt)(fieldIndex) << (shiftForWord(self))))), self);
 	if (classTablePage == GIV(nilObj)) {
-		error("attempt to add class to empty page", self);
+		error("attempt to add class to empty page");
 	}
 	/* begin storePointer:ofObject:withValue: */
 	fieldIndex1 = classIndex & ((1U << (classTableMajorIndexShift(self))) - 1);
@@ -40902,14 +40902,14 @@ copyObjtoAddrstopAtsavedFirstFieldsindex(sqInt objOop, sqInt segAddr, sqInt endS
     sqInt oop;
     sqInt sp;
 
-	assert(!((isCopiedIntoSegment(objOop, self))));
+	assert(!((isCopiedIntoSegment(objOop, self))), self);
 	bodySize = bytesInObject(objOop, self);
 	if (oopisGreaterThanOrEqualTo(segAddr + bodySize, endSeg, self)) {
 		return PrimErrWritePastObject;
 	}
 	memcpy(((void *)segAddr), ((void *)(((byteAt(objOop + 7, self)) == (numSlotsMask(self))
 	? objOop - BaseHeaderSize
-	: objOop))), bodySize, self);
+	: objOop))), bodySize);
 	/* begin objectStartingAt: */
 	numSlots = byteAt(segAddr + 7, self);
 	copy = (numSlots == (numSlotsMask(self))
@@ -41154,11 +41154,11 @@ countMarkedAndUnmarkdObjects(sqInt printFlags, sqInt self)
 	print("n marked: ", self);
 	printNum(nm, self);
 	/* begin cr */
-	printf("\n", self);
+	printf("\n");
 	print("n unmarked: ", self);
 	printNum(nu, self);
 	/* begin cr */
-	printf("\n", self);
+	printf("\n");
 }
 
 
@@ -41383,7 +41383,7 @@ ensureRoomOnObjStackAt(sqInt objStackRootIndex, sqInt self)
 				classIndex = sixtyFourBitLongsClassIndexPun(self);
 				freeOrNewPage = allocateSlotsInOldSpacebytesformatclassIndex(ObjStackPageSlots, (((sqInt)((usqInt)(ObjStackPageSlots) << (shiftForWord(self))))) + (BaseHeaderSize + BaseHeaderSize), formatField, classIndex, self);
 				if (!(freeOrNewPage)) {
-					error("no memory to allocate or extend obj stack", self);
+					error("no memory to allocate or extend obj stack");
 				}
 			}
 			/* begin storePointer:ofObjStack:withValue: */
@@ -41829,7 +41829,7 @@ findStringBeginningWith(char *aCString, sqInt self)
     sqInt prevPrevObj;
     sqInt prevPrevObj1;
 
-	cssz = strlen(aCString, self);
+	cssz = strlen(aCString);
 	/* begin allObjectsDo: */
 	
 	/* After a scavenge eden is empty, futureSpace is empty, and all newSpace objects are
@@ -41847,16 +41847,16 @@ findStringBeginningWith(char *aCString, sqInt self)
 		assert(isEnumerableObjectNoAssert(objOop1, self), self);
 		if ((((((usqInt) (longAt(objOop1, self))) >> (formatShift(self))) & (formatMask(self))) >= (firstByteFormat(self)))
 		 && (((lengthOfformat(objOop1, (((usqInt) (longAt(objOop1, self))) >> (formatShift(self))) & (formatMask(self)), self)) >= cssz)
-		 && ((strncmp(aCString, pointerForOop(objOop1 + BaseHeaderSize, self), cssz, self)) == 0))) {
+		 && ((strncmp(aCString, pointerForOop(objOop1 + BaseHeaderSize, self), cssz)) == 0))) {
 			printHex(objOop1, self);
 			/* begin space */
-			putchar(' ', self);
+			putchar(' ');
 			printNum(lengthOfformat(objOop1, (((usqInt) (longAt(objOop1, self))) >> (formatShift(self))) & (formatMask(self)), self), self);
 			/* begin space */
-			putchar(' ', self);
+			putchar(' ');
 			printOopShort(objOop1, self);
 			/* begin cr */
-			printf("\n", self);
+			printf("\n");
 		}
 		prevPrevObj = prevObj;
 		prevObj = objOop1;
@@ -41883,16 +41883,16 @@ findStringBeginningWith(char *aCString, sqInt self)
 		assert(isEnumerableObjectNoAssert(objOop1, self), self);
 		if ((((((usqInt) (longAt(objOop1, self))) >> (formatShift(self))) & (formatMask(self))) >= (firstByteFormat(self)))
 		 && (((lengthOfformat(objOop1, (((usqInt) (longAt(objOop1, self))) >> (formatShift(self))) & (formatMask(self)), self)) >= cssz)
-		 && ((strncmp(aCString, pointerForOop(objOop1 + BaseHeaderSize, self), cssz, self)) == 0))) {
+		 && ((strncmp(aCString, pointerForOop(objOop1 + BaseHeaderSize, self), cssz)) == 0))) {
 			printHex(objOop1, self);
 			/* begin space */
-			putchar(' ', self);
+			putchar(' ');
 			printNum(lengthOfformat(objOop1, (((usqInt) (longAt(objOop1, self))) >> (formatShift(self))) & (formatMask(self)), self), self);
 			/* begin space */
-			putchar(' ', self);
+			putchar(' ');
 			printOopShort(objOop1, self);
 			/* begin cr */
-			printf("\n", self);
+			printf("\n");
 		}
 		prevPrevObj = prevObj;
 		prevObj = objOop1;
@@ -41920,16 +41920,16 @@ findStringBeginningWith(char *aCString, sqInt self)
 		if (isEnumerableObject(objOop11, self)) {
 			if ((((((usqInt) (longAt(objOop11, self))) >> (formatShift(self))) & (formatMask(self))) >= (firstByteFormat(self)))
 			 && (((lengthOfformat(objOop11, (((usqInt) (longAt(objOop11, self))) >> (formatShift(self))) & (formatMask(self)), self)) >= cssz)
-			 && ((strncmp(aCString, pointerForOop(objOop11 + BaseHeaderSize, self), cssz, self)) == 0))) {
+			 && ((strncmp(aCString, pointerForOop(objOop11 + BaseHeaderSize, self), cssz)) == 0))) {
 				printHex(objOop11, self);
 				/* begin space */
-				putchar(' ', self);
+				putchar(' ');
 				printNum(lengthOfformat(objOop11, (((usqInt) (longAt(objOop11, self))) >> (formatShift(self))) & (formatMask(self)), self), self);
 				/* begin space */
-				putchar(' ', self);
+				putchar(' ');
 				printOopShort(objOop11, self);
 				/* begin cr */
-				printf("\n", self);
+				printf("\n");
 			}
 		}
 		prevPrevObj1 = prevObj1;
@@ -41977,7 +41977,7 @@ findString(char *aCString, sqInt self)
     sqInt prevPrevObj;
     sqInt prevPrevObj1;
 
-	cssz = strlen(aCString, self);
+	cssz = strlen(aCString);
 	/* begin allObjectsDo: */
 	
 	/* After a scavenge eden is empty, futureSpace is empty, and all newSpace objects are
@@ -41995,13 +41995,13 @@ findString(char *aCString, sqInt self)
 		assert(isEnumerableObjectNoAssert(objOop1, self), self);
 		if ((((((usqInt) (longAt(objOop1, self))) >> (formatShift(self))) & (formatMask(self))) >= (firstByteFormat(self)))
 		 && (((lengthOfformat(objOop1, (((usqInt) (longAt(objOop1, self))) >> (formatShift(self))) & (formatMask(self)), self)) == cssz)
-		 && ((strncmp(aCString, pointerForOop(objOop1 + BaseHeaderSize, self), cssz, self)) == 0))) {
+		 && ((strncmp(aCString, pointerForOop(objOop1 + BaseHeaderSize, self), cssz)) == 0))) {
 			printHex(objOop1, self);
 			/* begin space */
-			putchar(' ', self);
+			putchar(' ');
 			printOopShort(objOop1, self);
 			/* begin cr */
-			printf("\n", self);
+			printf("\n");
 		}
 		prevPrevObj = prevObj;
 		prevObj = objOop1;
@@ -42028,13 +42028,13 @@ findString(char *aCString, sqInt self)
 		assert(isEnumerableObjectNoAssert(objOop1, self), self);
 		if ((((((usqInt) (longAt(objOop1, self))) >> (formatShift(self))) & (formatMask(self))) >= (firstByteFormat(self)))
 		 && (((lengthOfformat(objOop1, (((usqInt) (longAt(objOop1, self))) >> (formatShift(self))) & (formatMask(self)), self)) == cssz)
-		 && ((strncmp(aCString, pointerForOop(objOop1 + BaseHeaderSize, self), cssz, self)) == 0))) {
+		 && ((strncmp(aCString, pointerForOop(objOop1 + BaseHeaderSize, self), cssz)) == 0))) {
 			printHex(objOop1, self);
 			/* begin space */
-			putchar(' ', self);
+			putchar(' ');
 			printOopShort(objOop1, self);
 			/* begin cr */
-			printf("\n", self);
+			printf("\n");
 		}
 		prevPrevObj = prevObj;
 		prevObj = objOop1;
@@ -42062,13 +42062,13 @@ findString(char *aCString, sqInt self)
 		if (isEnumerableObject(objOop11, self)) {
 			if ((((((usqInt) (longAt(objOop11, self))) >> (formatShift(self))) & (formatMask(self))) >= (firstByteFormat(self)))
 			 && (((lengthOfformat(objOop11, (((usqInt) (longAt(objOop11, self))) >> (formatShift(self))) & (formatMask(self)), self)) == cssz)
-			 && ((strncmp(aCString, pointerForOop(objOop11 + BaseHeaderSize, self), cssz, self)) == 0))) {
+			 && ((strncmp(aCString, pointerForOop(objOop11 + BaseHeaderSize, self), cssz)) == 0))) {
 				printHex(objOop11, self);
 				/* begin space */
-				putchar(' ', self);
+				putchar(' ');
 				printOopShort(objOop11, self);
 				/* begin cr */
-				printf("\n", self);
+				printf("\n");
 			}
 		}
 		prevPrevObj1 = prevObj1;
@@ -42604,7 +42604,7 @@ fullGC(sqInt self)
 		/* begin externalWriteBackHeadFramePointers */
 		assert((GIV(framePointer) - GIV(stackPointer)) < (LargeContextSlots * BytesPerOop), self);
 		assert(GIV(stackPage) == (mostRecentlyUsedPage(self)), self);
-		assert(!((isFree(GIV(stackPage)self))));
+		assert(!((isFree(GIV(stackPage)self))), self);
 		/* begin setHeadFP:andSP:inPage: */
 		assert(GIV(stackPointer) < GIV(framePointer), self);
 		assert((GIV(stackPointer) < ((GIV(stackPage)->baseAddress)))
@@ -42749,7 +42749,7 @@ growOldSpaceByAtLeast(sqInt minAmmount, sqInt self)
 	ammount = minAmmount + ((BaseHeaderSize * 2) + (2 * BaseHeaderSize));
 
 	/* and grow by at least growHeadroom. */
-	ammount = 1ULL << (highBit(ammount - 1self));
+	ammount = 1ULL << (highBit(ammount - 1, self));
 
 	/* Now apply the maxOldSpaceSize limit, if one is in effect. */
 	ammount = ((ammount < GIV(growHeadroom)) ? GIV(growHeadroom) : ammount);
@@ -43570,7 +43570,7 @@ inOrderPrintFreeTreeprintList(sqInt freeChunk, sqInt printNextList, sqInt self)
 		next = freeChunk;
 		while (((next = longAt((next + BaseHeaderSize) + (0U << (shiftForWord(self))), self))) != 0) {
 			/* begin tab */
-			putchar('	', self);
+			putchar('	');
 			printFreeChunkprintAsTreeNode(next, 0, self);
 		}
 	}
@@ -44158,7 +44158,7 @@ isMaybeFiredEphemeron(sqInt objOop, sqInt self)
 	/* begin isMaybeFiredEphemeronFormat: */
 	format = (((usqInt) (longAt(objOop, self))) >> (formatShift(self))) & (formatMask(self));
 	return (format <= 5 /* lastPointerFormat */)
-	 && (odd(formatself));
+	 && (odd(format, self));
 }
 
 	/* SpurMemoryManager>>#isNonImmediate: */
@@ -44440,9 +44440,9 @@ isValidObjStackPagemyIndexfirstPage(sqInt objStackPage, sqInt myx, sqInt isFirst
 			return 0;
 		}
 		if (!(isValidObjStackPagemyIndex(freeOrNextPage, myx, self))) {
-			ns = malloc(((strlen(GIV(objStackInvalidBecause), self)) + (strlen(", on next page", self))) + 2, self);
-			strcpy(ns, GIV(objStackInvalidBecause), self);
-			GIV(objStackInvalidBecause) = strcat(ns, ", on next page", self);
+			ns = malloc(((strlen(GIV(objStackInvalidBecause))) + (strlen(", on next page"))) + 2);
+			strcpy(ns, GIV(objStackInvalidBecause));
+			GIV(objStackInvalidBecause) = strcat(ns, ", on next page");
 			return 0;
 		}
 		/* begin fetchPointer:ofObject: */
@@ -45420,7 +45420,7 @@ longPrintInstancesWithClassIndex(sqInt classIndex, sqInt self)
 		if (((longAt(objOop1, self)) & (classIndexMask(self))) == classIndex) {
 			longPrintOop(objOop1, self);
 			/* begin cr */
-			printf("\n", self);
+			printf("\n");
 		}
 		prevPrevObj1 = prevObj1;
 		prevObj1 = objOop1;
@@ -45454,7 +45454,7 @@ longPrintInstancesWithClassIndex(sqInt classIndex, sqInt self)
 		if (((longAt(objOop, self)) & (classIndexMask(self))) == classIndex) {
 			longPrintOop(objOop, self);
 			/* begin cr */
-			printf("\n", self);
+			printf("\n");
 		}
 		prevPrevObj = prevObj;
 		prevObj = objOop;
@@ -45481,7 +45481,7 @@ longPrintInstancesWithClassIndex(sqInt classIndex, sqInt self)
 		if (((longAt(objOop, self)) & (classIndexMask(self))) == classIndex) {
 			longPrintOop(objOop, self);
 			/* begin cr */
-			printf("\n", self);
+			printf("\n");
 		}
 		prevPrevObj = prevObj;
 		prevObj = objOop;
@@ -45575,7 +45575,7 @@ longAt((objOop1 + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shiftFor
 					print(" @ ", self);
 					printNum(i, self);
 					/* begin cr */
-					printf("\n", self);
+					printf("\n");
 					prntObj = 1;
 					i = 0;
 				}
@@ -45637,7 +45637,7 @@ longAt((objOop1 + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shiftFor
 					print(" @ ", self);
 					printNum(i, self);
 					/* begin cr */
-					printf("\n", self);
+					printf("\n");
 					prntObj = 1;
 					i = 0;
 				}
@@ -45700,7 +45700,7 @@ longAt((objOop11 + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shiftFo
 						print(" @ ", self);
 						printNum(i, self);
 						/* begin cr */
-						printf("\n", self);
+						printf("\n");
 						prntObj = 1;
 						i = 0;
 					}
@@ -46657,7 +46657,7 @@ markObjects(sqInt objectsShouldBeUnmarkedAndUnmarkedClassesShouldBeExpunged, sqI
 		/* begin externalWriteBackHeadFramePointers */
 		assert((GIV(framePointer) - GIV(stackPointer)) < (LargeContextSlots * BytesPerOop), self);
 		assert(GIV(stackPage) == (mostRecentlyUsedPage(self)), self);
-		assert(!((isFree(GIV(stackPage)self))));
+		assert(!((isFree(GIV(stackPage)self))), self);
 		/* begin setHeadFP:andSP:inPage: */
 		assert(GIV(stackPointer) < GIV(framePointer), self);
 		assert((GIV(stackPointer) < ((GIV(stackPage)->baseAddress)))
@@ -46909,7 +46909,7 @@ markWeaklingsAndMarkAndFireEphemerons(sqInt self)
 				for (i1 = topIndex; i1 >= ((topIndex - numToEnumerateOnThisPage) + 1); i1 += -1) {
 					assert(isWeak(fetchPointerofObject(i1, objStackPage, self), self), self);
 					weakling = longAt((objStackPage + BaseHeaderSize) + (((sqInt)((usqInt)(i1) << (shiftForWord(self))))), self);
-					assert(!((isForwarded(weakling, self))));
+					assert(!((isForwarded(weakling, self))), self);
 					markAndTraceClassOf(weakling, self);
 					for (i = 0, iLimiT = (((assert((formatOf(weakling, self)) == (weakArrayFormat(self)), self),
 /* begin fixedFieldsOfClass: */
@@ -48120,39 +48120,39 @@ okayOop(sqInt signedOop, sqInt self)
 		return 1;
 	}
 	if (!(addressCouldBeObj(oop, self))) {
-		error("oop is not a valid address", self);
+		error("oop is not a valid address");
 		return 0;
 	}
 	if (!(oopisLessThanOrEqualTo(addressAfter(oop, self), GIV(endOfMemory), self))) {
-		error("oop size would make it extend beyond the end of memory", self);
+		error("oop size would make it extend beyond the end of memory");
 		return 0;
 	}
 	if (!(((classIndex = (longAt(oop, self)) & (classIndexMask(self)))) >= (firstClassIndexPun(self)))) {
-		error("oop is a free chunk, or bridge, not an object", self);
+		error("oop is a free chunk, or bridge, not an object");
 		return 0;
 	}
 	if (((byteAt(oop + 7, self)) == (numSlotsMask(self)))
 	 && ((byteAt((oop - BaseHeaderSize) + 7, self)) != (numSlotsMask(self)))) {
-		error("oop header has overflow header word, but overflow word does not have a saturated numSlots field", self);
+		error("oop header has overflow header word, but overflow word does not have a saturated numSlots field");
 		return 0;
 	}
 	fmt = (((usqInt) (longAt(oop, self))) >> (formatShift(self))) & (formatMask(self));
 	if ((fmt == 6) || (fmt == 8)) {
-		error("oop has an unknown format type", self);
+		error("oop has an unknown format type");
 		return 0;
 	}
 	if ((fmt == 7 /* forwardedFormat */) != (classIndex == (isForwardedObjectClassIndexPun(self)))) {
-		error("oop has mis-matched format/classIndex fields; only one of them is the isForwarded value", self);
+		error("oop has mis-matched format/classIndex fields; only one of them is the isForwarded value");
 		return 0;
 	}
 	unusedBits = (1U << 22 /* classIndexFieldWidth */) | (1ULL << (22 /* identityHashFieldWidth */ + 32));
 	if (((long64At(oop, self)) & unusedBits) != 0) {
-		error("some unused header bits are set; should be zero", self);
+		error("some unused header bits are set; should be zero");
 		return 0;
 	}
 	unusedBitsInYoungObjects = ((1U << (greyBitShift(self))) | (1U << (pinnedBitShift(self)))) | (1U << (rememberedBitShift(self)));
 	if (((longAt(oop, self)) & unusedBitsInYoungObjects) != 0) {
-		error("some header bits unused in young objects are set; should be zero", self);
+		error("some header bits unused in young objects are set; should be zero");
 		return 0;
 	}
 	return 1;
@@ -48640,12 +48640,12 @@ printActivationsOf(sqInt aMethodObj, sqInt self)
 		 && (aMethodObj == (longAt((objOop1 + BaseHeaderSize) + (((sqInt)((usqInt)(MethodIndex) << (shiftForWord(self))))), self)))) {
 			printHex(objOop1, self);
 			/* begin space */
-			putchar(' ', self);
+			putchar(' ');
 			printOopShort(objOop1, self);
 			print(" pc ", self);
 			printHex(longAt((objOop1 + BaseHeaderSize) + (((sqInt)((usqInt)(InstructionPointerIndex) << (shiftForWord(self))))), self), self);
 			/* begin cr */
-			printf("\n", self);
+			printf("\n");
 		}
 		prevPrevObj = prevObj;
 		prevObj = objOop1;
@@ -48674,12 +48674,12 @@ printActivationsOf(sqInt aMethodObj, sqInt self)
 		 && (aMethodObj == (longAt((objOop1 + BaseHeaderSize) + (((sqInt)((usqInt)(MethodIndex) << (shiftForWord(self))))), self)))) {
 			printHex(objOop1, self);
 			/* begin space */
-			putchar(' ', self);
+			putchar(' ');
 			printOopShort(objOop1, self);
 			print(" pc ", self);
 			printHex(longAt((objOop1 + BaseHeaderSize) + (((sqInt)((usqInt)(InstructionPointerIndex) << (shiftForWord(self))))), self), self);
 			/* begin cr */
-			printf("\n", self);
+			printf("\n");
 		}
 		prevPrevObj = prevObj;
 		prevObj = objOop1;
@@ -48709,12 +48709,12 @@ printActivationsOf(sqInt aMethodObj, sqInt self)
 			 && (aMethodObj == (longAt((objOop11 + BaseHeaderSize) + (((sqInt)((usqInt)(MethodIndex) << (shiftForWord(self))))), self)))) {
 				printHex(objOop11, self);
 				/* begin space */
-				putchar(' ', self);
+				putchar(' ');
 				printOopShort(objOop11, self);
 				print(" pc ", self);
 				printHex(longAt((objOop11 + BaseHeaderSize) + (((sqInt)((usqInt)(InstructionPointerIndex) << (shiftForWord(self))))), self), self);
 				/* begin cr */
-				printf("\n", self);
+				printf("\n");
 			}
 		}
 		prevPrevObj1 = prevObj1;
@@ -48740,13 +48740,13 @@ printBogons(sqInt self)
 {   DECL_MAYBE_SQ_GLOBAL_STRUCT
 	/* begin printTheBogons: */
 	print("bogon ", self);
-	printf("0x%" PRIxSQINT "", GIV(bogon), self);
+	printf("0x%" PRIxSQINT "", GIV(bogon));
 	/* begin cr */
-	printf("\n", self);
+	printf("\n");
 	print("anomaly ", self);
-	printf("0x%" PRIxSQINT "", GIV(anomaly), self);
+	printf("0x%" PRIxSQINT "", GIV(anomaly));
 	/* begin cr */
-	printf("\n", self);
+	printf("\n");
 }
 
 
@@ -48800,12 +48800,12 @@ printContextReferencesTo(sqInt anOop, sqInt self)
 					print(" @ ", self);
 					printNum(i, self);
 					/* begin space */
-					putchar(' ', self);
+					putchar(' ');
 					printOopShort(objOop1, self);
 					print(" pc ", self);
 					printHex(longAt((objOop1 + BaseHeaderSize) + (((sqInt)((usqInt)(InstructionPointerIndex) << (shiftForWord(self))))), self), self);
 					/* begin cr */
-					printf("\n", self);
+					printf("\n");
 					i = 0;
 				}
 			}
@@ -48841,12 +48841,12 @@ printContextReferencesTo(sqInt anOop, sqInt self)
 					print(" @ ", self);
 					printNum(i, self);
 					/* begin space */
-					putchar(' ', self);
+					putchar(' ');
 					printOopShort(objOop1, self);
 					print(" pc ", self);
 					printHex(longAt((objOop1 + BaseHeaderSize) + (((sqInt)((usqInt)(InstructionPointerIndex) << (shiftForWord(self))))), self), self);
 					/* begin cr */
-					printf("\n", self);
+					printf("\n");
 					i = 0;
 				}
 			}
@@ -48883,12 +48883,12 @@ printContextReferencesTo(sqInt anOop, sqInt self)
 						print(" @ ", self);
 						printNum(i, self);
 						/* begin space */
-						putchar(' ', self);
+						putchar(' ');
 						printOopShort(objOop11, self);
 						print(" pc ", self);
 						printHex(longAt((objOop11 + BaseHeaderSize) + (((sqInt)((usqInt)(InstructionPointerIndex) << (shiftForWord(self))))), self), self);
 						/* begin cr */
-						printf("\n", self);
+						printf("\n");
 						i = 0;
 					}
 				}
@@ -48923,7 +48923,7 @@ printEntity(sqInt oop, sqInt self)
 	printFlags = 0;
 	printHex(oop, self);
 	/* begin space */
-	putchar(' ', self);
+	putchar(' ');
 	if (!(addressCouldBeObj(oop, self))) {
 		print((oop & (tagMask(self))
 			? "immediate"
@@ -48942,25 +48942,25 @@ printEntity(sqInt oop, sqInt self)
 								: ((printFlags = 1),
 									"object"))))), self);
 	/* begin space */
-	putchar(' ', self);
+	putchar(' ');
 	/* begin printHexnpnp: */
 	n1 = byteAt(oop + 7, self);
-	printf("%" PRIxSQINT "", n1, self);
+	printf("%" PRIxSQINT "", n1);
 	print("/", self);
 	/* begin printHexnpnp: */
 	n2 = bytesInObject(oop, self);
-	printf("%" PRIxSQINT "", n2, self);
+	printf("%" PRIxSQINT "", n2);
 	print("/", self);
 	printNum(bytesInObject(oop, self), self);
 	if (printFlags) {
 		/* begin space */
-		putchar(' ', self);
+		putchar(' ');
 		print((((((usqInt) (longAt(oop, self))) >> (formatShift(self))) & (formatMask(self))) <= 15
 			? "f:0"
 			: "f:"), self);
 		/* begin printHexnpnp: */
 		n = (((usqInt) (longAt(oop, self))) >> (formatShift(self))) & (formatMask(self));
-		printf("%" PRIxSQINT "", n, self);
+		printf("%" PRIxSQINT "", n);
 		print((((((usqInt) (longAt(oop, self))) >> (greyBitShift(self))) & 1) != 0
 			? " g"
 			: " ."), self);
@@ -48978,7 +48978,7 @@ printEntity(sqInt oop, sqInt self)
 			: "."), self);
 	}
 	/* begin cr */
-	printf("\n", self);
+	printf("\n");
 }
 
 	/* SpurMemoryManager>>#printForwarders */
@@ -49014,7 +49014,7 @@ printForwarders(sqInt self)
 		if (((longAt(objOop1, self)) & (classIndexMask(self))) == (isForwardedObjectClassIndexPun(self))) {
 			printHex(objOop1, self);
 			/* begin cr */
-			printf("\n", self);
+			printf("\n");
 		}
 		prevPrevObj1 = prevObj1;
 		prevObj1 = objOop1;
@@ -49048,7 +49048,7 @@ printForwarders(sqInt self)
 		if (((longAt(objOop2, self)) & (classIndexMask(self))) == (isForwardedObjectClassIndexPun(self))) {
 			printHex(objOop2, self);
 			/* begin cr */
-			printf("\n", self);
+			printf("\n");
 		}
 		prevPrevObj = prevObj;
 		prevObj = objOop2;
@@ -49075,7 +49075,7 @@ printForwarders(sqInt self)
 		if (((longAt(objOop2, self)) & (classIndexMask(self))) == (isForwardedObjectClassIndexPun(self))) {
 			printHex(objOop2, self);
 			/* begin cr */
-			printf("\n", self);
+			printf("\n");
 		}
 		prevPrevObj = prevObj;
 		prevObj = objOop2;
@@ -49141,7 +49141,7 @@ printFreeChunks(sqInt self)
 			if (!seenNewFreeChunk) {
 				print("NewSpace CONTAINS FREE OBJECT(S)!!", self);
 				/* begin cr */
-				printf("\n", self);
+				printf("\n");
 				seenNewFreeChunk = 1;
 			}
 			/* begin printFreeChunk: */
@@ -49173,7 +49173,7 @@ printFreeChunks(sqInt self)
 			if (!seenNewFreeChunk) {
 				print("NewSpace CONTAINS FREE OBJECT(S)!!", self);
 				/* begin cr */
-				printf("\n", self);
+				printf("\n");
 				seenNewFreeChunk = 1;
 			}
 			/* begin printFreeChunk: */
@@ -49253,7 +49253,7 @@ printFreeChunkprintAsTreeNode(sqInt freeChunk, sqInt printAsTreeNode, sqInt self
 	print("freeChunk ", self);
 	/* begin printHexPtrnp: */
 	n5 = oopForPointer(((void *) freeChunk), self);
-	printf("0x%" PRIxSQINT "", n5, self);
+	printf("0x%" PRIxSQINT "", n5);
 	if (printAsTreeNode) {
 		print((freeChunk == (GIV(freeLists)[0])
 			? " + "
@@ -49262,7 +49262,7 @@ printFreeChunkprintAsTreeNode(sqInt freeChunk, sqInt printAsTreeNode, sqInt self
 		p = ((void *) (addressAfter(freeChunk, self)));
 		/* begin printHexnp: */
 		n = oopForPointer(p, self);
-		printf("0x%" PRIxSQINT "", n, self);
+		printf("0x%" PRIxSQINT "", n);
 	}
 	print(" bytes ", self);
 	printNum(numBytes, self);
@@ -49271,7 +49271,7 @@ printFreeChunkprintAsTreeNode(sqInt freeChunk, sqInt printAsTreeNode, sqInt self
 	p5 = ((void *) (longAt((freeChunk + BaseHeaderSize) + (0U << (shiftForWord(self))), self)));
 	/* begin printHexnp: */
 	n6 = oopForPointer(p5, self);
-	printf("0x%" PRIxSQINT "", n6, self);
+	printf("0x%" PRIxSQINT "", n6);
 	if (!((assert(numBytes >= (BaseHeaderSize + (allocationUnit(self))), self),
 		numBytes == (BaseHeaderSize + 8 /* allocationUnit */)))) {
 		print(" prev ", self);
@@ -49279,7 +49279,7 @@ printFreeChunkprintAsTreeNode(sqInt freeChunk, sqInt printAsTreeNode, sqInt self
 		p1 = ((void *) (longAt((freeChunk + BaseHeaderSize) + (1U << (shiftForWord(self))), self)));
 		/* begin printHexnp: */
 		n1 = oopForPointer(p1, self);
-		printf("0x%" PRIxSQINT "", n1, self);
+		printf("0x%" PRIxSQINT "", n1);
 	}
 	if ((numBytes >= (64 /* numFreeLists */ * 8 /* allocationUnit */))
 	 && (printAsTreeNode)) {
@@ -49288,22 +49288,22 @@ printFreeChunkprintAsTreeNode(sqInt freeChunk, sqInt printAsTreeNode, sqInt self
 		p2 = ((void *) (longAt((freeChunk + BaseHeaderSize) + (2U << (shiftForWord(self))), self)));
 		/* begin printHexnp: */
 		n2 = oopForPointer(p2, self);
-		printf("0x%" PRIxSQINT "", n2, self);
+		printf("0x%" PRIxSQINT "", n2);
 		print(" < ", self);
 		/* begin printHexPtrnp: */
 		p3 = ((void *) (longAt((freeChunk + BaseHeaderSize) + (3U << (shiftForWord(self))), self)));
 		/* begin printHexnp: */
 		n3 = oopForPointer(p3, self);
-		printf("0x%" PRIxSQINT "", n3, self);
+		printf("0x%" PRIxSQINT "", n3);
 		print(" > ", self);
 		/* begin printHexPtrnp: */
 		p4 = ((void *) (longAt((freeChunk + BaseHeaderSize) + (4U << (shiftForWord(self))), self)));
 		/* begin printHexnp: */
 		n4 = oopForPointer(p4, self);
-		printf("0x%" PRIxSQINT "", n4, self);
+		printf("0x%" PRIxSQINT "", n4);
 	}
 	/* begin cr */
-	printf("\n", self);
+	printf("\n");
 }
 
 	/* SpurMemoryManager>>#printFreeListHeads */
@@ -49322,20 +49322,20 @@ printFreeListHeads(sqInt self)
 		}
 		if (((i + 1) % (((usqInt) 32) >> 3 /* logBytesPerOop */)) == 0) {
 			/* begin cr */
-			printf("\n", self);
+			printf("\n");
 		}
 		else {
 			print("  ", self);
 		}
 	}
 	/* begin cr */
-	printf("\n", self);
+	printf("\n");
 	print("mask: ", self);
-	printf("0x%" PRIxSQINT "", GIV(freeListsMask), self);
+	printf("0x%" PRIxSQINT "", GIV(freeListsMask));
 	print(" expected: ", self);
-	printf("0x%" PRIxSQINT "", expectedMask, self);
+	printf("0x%" PRIxSQINT "", expectedMask);
 	/* begin cr */
-	printf("\n", self);
+	printf("\n");
 }
 
 	/* SpurMemoryManager>>#printFreeList: */
@@ -49404,7 +49404,7 @@ printHeaderOf(sqInt objOop, sqInt self)
     usqInt numSlots;
     usqInt numSlots1;
 
-	printf("0x%" PRIxSQINT "", objOop, self);
+	printf("0x%" PRIxSQINT "", objOop);
 	if ((numSlotsOfAny(objOop, self)) >= (numSlotsMask(self))) {
 		print(" hdr16 slotf ", self);
 		/* begin printHexnp: */
@@ -49412,12 +49412,12 @@ printHeaderOf(sqInt objOop, sqInt self)
 		n = (numSlots == (numSlotsMask(self))
 			? ((usqInt) (((usqInt)(((sqInt)((usqInt)((longAt((objOop - 8 /* allocationUnit */) - BaseHeaderSize, self))) << 8)))))) >> 8
 			: numSlots);
-		printf("0x%" PRIxSQINT "", n, self);
+		printf("0x%" PRIxSQINT "", n);
 		print(" slotc ", self);
 		/* begin printHexnp: */
-		printf("0x%" PRIxSQINT "", ((usqInt) (((usqInt)(((sqInt)((usqInt)((longAt(objOop - BaseHeaderSize, self))) << 8)))))) >> 8, self);
+		printf("0x%" PRIxSQINT "", ((usqInt) (((usqInt)(((sqInt)((usqInt)((longAt(objOop - BaseHeaderSize, self))) << 8)))))) >> 8);
 		/* begin space */
-		putchar(' ', self);
+		putchar(' ');
 	}
 	else {
 		print(" hdr8 slots ", self);
@@ -49426,49 +49426,49 @@ printHeaderOf(sqInt objOop, sqInt self)
 		n1 = (numSlots1 == (numSlotsMask(self))
 			? ((usqInt) (((usqInt)(((sqInt)((usqInt)((longAt(objOop - BaseHeaderSize, self))) << 8)))))) >> 8
 			: numSlots1);
-		printf("0x%" PRIxSQINT "", n1, self);
+		printf("0x%" PRIxSQINT "", n1);
 	}
 	/* begin space */
-	putchar(' ', self);
+	putchar(' ');
 	/* begin printChar: */
 	aByte = (((((usqInt) (longAt(objOop, self))) >> (markedBitFullShift(self))) & 1) != 0
 		? 'M'
 		: 'm');
-	putchar(aByte, self);
+	putchar(aByte);
 	/* begin printChar: */
 	aByte1 = (((((usqInt) (longAt(objOop, self))) >> (greyBitShift(self))) & 1) != 0
 		? 'G'
 		: 'g');
-	putchar(aByte1, self);
+	putchar(aByte1);
 	/* begin printChar: */
 	aByte2 = (((((usqInt) (longAt(objOop, self))) >> (pinnedBitShift(self))) & 1) != 0
 		? 'P'
 		: 'p');
-	putchar(aByte2, self);
+	putchar(aByte2);
 	/* begin printChar: */
 	aByte3 = (((((usqInt) (longAt(objOop, self))) >> (rememberedBitShift(self))) & 1) != 0
 		? 'R'
 		: 'r');
-	putchar(aByte3, self);
+	putchar(aByte3);
 	/* begin printChar: */
 	aByte4 = (((((usqInt) (longAt(objOop, self))) >> (immutableBitShift(self))) & 1) != 0
 		? 'I'
 		: 'i');
-	putchar(aByte4, self);
+	putchar(aByte4);
 	print(" hash ", self);
 	/* begin printHexnp: */
 	n2 = (long32At(objOop + 4, self)) & (identityHashHalfWordMask(self));
-	printf("0x%" PRIxSQINT "", n2, self);
+	printf("0x%" PRIxSQINT "", n2);
 	print(" fmt ", self);
 	/* begin printHexnp: */
 	n3 = (((usqInt) (longAt(objOop, self))) >> (formatShift(self))) & (formatMask(self));
-	printf("0x%" PRIxSQINT "", n3, self);
+	printf("0x%" PRIxSQINT "", n3);
 	print(" cidx ", self);
 	/* begin printHexnp: */
 	n4 = (longAt(objOop, self)) & (classIndexMask(self));
-	printf("0x%" PRIxSQINT "", n4, self);
+	printf("0x%" PRIxSQINT "", n4);
 	/* begin cr */
-	printf("\n", self);
+	printf("\n");
 }
 
 	/* SpurMemoryManager>>#printHeaderTypeOf: */
@@ -49488,27 +49488,27 @@ printHeaderTypeOf(sqInt objOop, sqInt self)
 	aByte = (((((usqInt) (longAt(objOop, self))) >> (immutableBitShift(self))) & 1) != 0
 		? 'i'
 		: '.');
-	putchar(aByte, self);
+	putchar(aByte);
 	/* begin printChar: */
 	aByte1 = (((((usqInt) (longAt(objOop, self))) >> (rememberedBitShift(self))) & 1) != 0
 		? 'r'
 		: '.');
-	putchar(aByte1, self);
+	putchar(aByte1);
 	/* begin printChar: */
 	aByte2 = (((((usqInt) (longAt(objOop, self))) >> (pinnedBitShift(self))) & 1) != 0
 		? 'p'
 		: '.');
-	putchar(aByte2, self);
+	putchar(aByte2);
 	/* begin printChar: */
 	aByte3 = (((((usqInt) (longAt(objOop, self))) >> (markedBitFullShift(self))) & 1) != 0
 		? 'm'
 		: '.');
-	putchar(aByte3, self);
+	putchar(aByte3);
 	/* begin printChar: */
 	aByte4 = (((((usqInt) (longAt(objOop, self))) >> (greyBitShift(self))) & 1) != 0
 		? 'g'
 		: '.');
-	putchar(aByte4, self);
+	putchar(aByte4);
 }
 
 
@@ -49566,7 +49566,7 @@ printInstancesWithClassIndex(sqInt classIndex, sqInt self)
 		if (((longAt(objOop1, self)) & (classIndexMask(self))) == classIndex) {
 			printHex(objOop1, self);
 			/* begin cr */
-			printf("\n", self);
+			printf("\n");
 		}
 		prevPrevObj1 = prevObj1;
 		prevObj1 = objOop1;
@@ -49600,7 +49600,7 @@ printInstancesWithClassIndex(sqInt classIndex, sqInt self)
 		if (((longAt(objOop, self)) & (classIndexMask(self))) == classIndex) {
 			printHex(objOop, self);
 			/* begin cr */
-			printf("\n", self);
+			printf("\n");
 		}
 		prevPrevObj = prevObj;
 		prevObj = objOop;
@@ -49627,7 +49627,7 @@ printInstancesWithClassIndex(sqInt classIndex, sqInt self)
 		if (((longAt(objOop, self)) & (classIndexMask(self))) == classIndex) {
 			printHex(objOop, self);
 			/* begin cr */
-			printf("\n", self);
+			printf("\n");
 		}
 		prevPrevObj = prevObj;
 		prevObj = objOop;
@@ -49664,7 +49664,7 @@ printInvalidClassTableEntries(sqInt self)
 	if (!(validClassTableRootPages(self))) {
 		print("class table invalid; cannot print", self);
 		/* begin cr */
-		printf("\n", self);
+		printf("\n");
 		return;
 	}
 	/* begin classTableEntriesDo: */
@@ -49686,7 +49686,7 @@ printInvalidClassTableEntries(sqInt self)
 					print(" => ", self);
 					printHex(classAtIndex(hash, self), self);
 					/* begin cr */
-					printf("\n", self);
+					printf("\n");
 				}
 			}
 		}
@@ -49748,10 +49748,10 @@ printMethodImplementorsOf(sqInt anOop, sqInt self)
 		 && ((maybeSelectorOfMethod(objOop1, self)) == anOop)) {
 			printHex(objOop1, self);
 			/* begin space */
-			putchar(' ', self);
+			putchar(' ');
 			printOopShort(objOop1, self);
 			/* begin cr */
-			printf("\n", self);
+			printf("\n");
 		}
 		prevPrevObj = prevObj;
 		prevObj = objOop1;
@@ -49780,10 +49780,10 @@ printMethodImplementorsOf(sqInt anOop, sqInt self)
 		 && ((maybeSelectorOfMethod(objOop1, self)) == anOop)) {
 			printHex(objOop1, self);
 			/* begin space */
-			putchar(' ', self);
+			putchar(' ');
 			printOopShort(objOop1, self);
 			/* begin cr */
-			printf("\n", self);
+			printf("\n");
 		}
 		prevPrevObj = prevObj;
 		prevObj = objOop1;
@@ -49813,10 +49813,10 @@ printMethodImplementorsOf(sqInt anOop, sqInt self)
 			 && ((maybeSelectorOfMethod(objOop11, self)) == anOop)) {
 				printHex(objOop11, self);
 				/* begin space */
-				putchar(' ', self);
+				putchar(' ');
 				printOopShort(objOop11, self);
 				/* begin cr */
-				printf("\n", self);
+				printf("\n");
 			}
 		}
 		prevPrevObj1 = prevObj1;
@@ -49890,10 +49890,10 @@ longAt((objOop1 + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shiftFor
 					print(" @ ", self);
 					printNum(i, self);
 					/* begin space */
-					putchar(' ', self);
+					putchar(' ');
 					printOopShort(objOop1, self);
 					/* begin cr */
-					printf("\n", self);
+					printf("\n");
 					i = 0;
 				}
 			}
@@ -49934,10 +49934,10 @@ longAt((objOop1 + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shiftFor
 					print(" @ ", self);
 					printNum(i, self);
 					/* begin space */
-					putchar(' ', self);
+					putchar(' ');
 					printOopShort(objOop1, self);
 					/* begin cr */
-					printf("\n", self);
+					printf("\n");
 					i = 0;
 				}
 			}
@@ -49979,10 +49979,10 @@ longAt((objOop11 + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shiftFo
 						print(" @ ", self);
 						printNum(i, self);
 						/* begin space */
-						putchar(' ', self);
+						putchar(' ');
 						printOopShort(objOop11, self);
 						/* begin cr */
-						printf("\n", self);
+						printf("\n");
 						i = 0;
 					}
 				}
@@ -50064,7 +50064,7 @@ printObjectsWithHash(sqInt hash, sqInt self)
 		if (((long32At(objOop1 + 4, self)) & (identityHashHalfWordMask(self))) == hash) {
 			shortPrintOop(objOop1, self);
 			/* begin cr */
-			printf("\n", self);
+			printf("\n");
 		}
 		prevPrevObj1 = prevObj1;
 		prevObj1 = objOop1;
@@ -50098,7 +50098,7 @@ printObjectsWithHash(sqInt hash, sqInt self)
 		if (((long32At(objOop + 4, self)) & (identityHashHalfWordMask(self))) == hash) {
 			shortPrintOop(objOop, self);
 			/* begin cr */
-			printf("\n", self);
+			printf("\n");
 		}
 		prevPrevObj = prevObj;
 		prevObj = objOop;
@@ -50125,7 +50125,7 @@ printObjectsWithHash(sqInt hash, sqInt self)
 		if (((long32At(objOop + 4, self)) & (identityHashHalfWordMask(self))) == hash) {
 			shortPrintOop(objOop, self);
 			/* begin cr */
-			printf("\n", self);
+			printf("\n");
 		}
 		prevPrevObj = prevObj;
 		prevObj = objOop;
@@ -50165,7 +50165,7 @@ printObjStackPagemyIndexpageType(sqInt objStackPage, sqInt myx, sqInt pageType, 
 	if (isFirstPage
 	 || (isNextPage)) {
 		/* begin tab */
-		putchar('	', self);
+		putchar('	');
 		print("topx: ", self);
 		printNum(longAt((objStackPage + BaseHeaderSize) + (((sqInt)((usqInt)(ObjStackTopx) << (shiftForWord(self))))), self), self);
 		print(" next: ", self);
@@ -50175,7 +50175,7 @@ printObjStackPagemyIndexpageType(sqInt objStackPage, sqInt myx, sqInt pageType, 
 			printHex(longAt((objStackPage + BaseHeaderSize) + (((sqInt)((usqInt)(ObjStackFreex) << (shiftForWord(self))))), self), self);
 		}
 		/* begin cr */
-		printf("\n", self);
+		printf("\n");
 	}
 	if (isFirstPage) {
 		/* begin fetchPointer:ofObject: */
@@ -50188,7 +50188,7 @@ printObjStackPagemyIndexpageType(sqInt objStackPage, sqInt myx, sqInt pageType, 
 			 || (page == objStackPage)) {
 				print("circularity in free page list!!", self);
 				/* begin cr */
-				printf("\n", self);
+				printf("\n");
 				page = 0;
 			}
 			freeOrNextPage = page;
@@ -50207,10 +50207,10 @@ printObjStackPagemyIndextag(sqInt objStackPage, sqInt myx, char *pageType, sqInt
 {
 	print(pageType, self);
 	/* begin space */
-	putchar(' ', self);
+	putchar(' ');
 	printHex(objStackPage, self);
 	/* begin space */
-	putchar(' ', self);
+	putchar(' ');
 	print("cx ", self);
 	printNum((longAt(objStackPage, self)) & (classIndexMask(self)), self);
 	print(" (", self);
@@ -50231,7 +50231,7 @@ printObjStackPagemyIndextag(sqInt objStackPage, sqInt myx, char *pageType, sqInt
 		? ") mkd"
 		: ") unmkd"), self);
 	/* begin cr */
-	printf("\n", self);
+	printf("\n");
 }
 
 	/* SpurMemoryManager>>#printObjStack: */
@@ -50241,7 +50241,7 @@ printObjStack(sqInt objStack, sqInt self)
 	if (objStack == GIV(nilObj)) {
 		print("nil", self);
 		/* begin cr */
-		printf("\n", self);
+		printf("\n");
 	}
 	else {
 		printObjStackPagemyIndexpageType(objStack, longAt((objStack + BaseHeaderSize) + (((sqInt)((usqInt)(ObjStackMyx) << (shiftForWord(self))))), self), ObjStackMyx, self);
@@ -50364,7 +50364,7 @@ printOopsExcept(sqInt (*function)(sqInt), sqInt self)
 		printNum(n, self);
 		print(" objects", self);
 		/* begin cr */
-		printf("\n", self);
+		printf("\n");
 	}
 }
 
@@ -50406,13 +50406,13 @@ printOopsFromto(sqInt startAddress, sqInt endAddress, sqInt self)
 			print("skipped empty space from ", self);
 			/* begin printHexPtrnp: */
 			n = oopForPointer(((void *) firstNonEntity), self);
-			printf("0x%" PRIxSQINT "", n, self);
+			printf("0x%" PRIxSQINT "", n);
 			print(" to ", self);
 			/* begin printHexPtrnp: */
 			n1 = oopForPointer(((void *) lastNonEntity), self);
-			printf("0x%" PRIxSQINT "", n1, self);
+			printf("0x%" PRIxSQINT "", n1);
 			/* begin cr */
-			printf("\n", self);
+			printf("\n");
 			/* begin objectStartingAt: */
 			numSlots = byteAt(oop + 7, self);
 			oop = (numSlots == (numSlotsMask(self))
@@ -50538,7 +50538,7 @@ printOopsSuchThat(sqInt (*function)(sqInt), sqInt self)
 		printNum(n, self);
 		print(" objects", self);
 		/* begin cr */
-		printf("\n", self);
+		printf("\n");
 	}
 }
 
@@ -50638,10 +50638,10 @@ printReferencesTo(sqInt anOop, sqInt self)
 				print(" @ ", self);
 				printNum(i, self);
 				/* begin space */
-				putchar(' ', self);
+				putchar(' ');
 				printOopShort(objOop1, self);
 				/* begin cr */
-				printf("\n", self);
+				printf("\n");
 				i = 0;
 			}
 		}
@@ -50717,10 +50717,10 @@ printReferencesTo(sqInt anOop, sqInt self)
 				print(" @ ", self);
 				printNum(i, self);
 				/* begin space */
-				putchar(' ', self);
+				putchar(' ');
 				printOopShort(objOop1, self);
 				/* begin cr */
-				printf("\n", self);
+				printf("\n");
 				i = 0;
 			}
 		}
@@ -50797,10 +50797,10 @@ printReferencesTo(sqInt anOop, sqInt self)
 					print(" @ ", self);
 					printNum(i, self);
 					/* begin space */
-					putchar(' ', self);
+					putchar(' ');
 					printOopShort(objOop11, self);
 					/* begin cr */
-					printf("\n", self);
+					printf("\n");
 					i = 0;
 				}
 			}
@@ -50865,7 +50865,7 @@ pushRemappableOop(sqInt oop, sqInt self)
 	assert(addressCouldBeOop(oop, self), self);
 	GIV(remapBuffer)[(GIV(remapBufferCount) += 1)] = oop;
 	if (!(GIV(remapBufferCount) <= RemapBufferSize)) {
-		error("remapBuffer overflow", self);
+		error("remapBuffer overflow");
 	}
 }
 
@@ -50886,7 +50886,7 @@ queueMourner(sqInt anEphemeronOrWeakArray, sqInt self)
 	 && (((formatOf(anEphemeronOrWeakArray, self)) == (ephemeronFormat(self)))
 	 || ((formatOf(anEphemeronOrWeakArray, self)) == (weakArrayFormat(self)))), self);
 	assert(!((((formatOf(anEphemeronOrWeakArray, self)) == (ephemeronFormat(self)))
- && (isonObjStack(anEphemeronOrWeakArray, GIV(mournQueue), self)))));
+ && (isonObjStack(anEphemeronOrWeakArray, GIV(mournQueue), self)))), self);
 	ensureRoomOnObjStackAt(MournQueueRootIndex, self);
 	/* begin push:onObjStack: */
 	objStack = GIV(mournQueue);
@@ -51224,16 +51224,16 @@ scavengingGCTenuringIf(sqInt tenuringCriterion, sqInt self)
 	assert(GIV(remapBufferCount) == 0, self);
 	if (!(asserta(((((eden(self)).limit)) - GIV(freeStart)) > (interpreterAllocationReserveBytes(self)), self))) {
 		/* begin tab */
-		putchar('	', self);
+		putchar('	');
 		printNum((((eden(self)).limit)) - GIV(freeStart), self);
 		/* begin space */
-		putchar(' ', self);
+		putchar(' ');
 		printNum(interpreterAllocationReserveBytes(self), self);
 		/* begin space */
-		putchar(' ', self);
+		putchar(' ');
 		printNum((interpreterAllocationReserveBytes(self)) - ((((eden(self)).limit)) - GIV(freeStart)), self);
 		/* begin cr */
-		printf("\n", self);
+		printf("\n");
 	}
 	/* begin checkMemoryMap */
 	assert(isYoungObject(GIV(newSpaceStart), self), self);
@@ -51258,7 +51258,7 @@ scavengingGCTenuringIf(sqInt tenuringCriterion, sqInt self)
 		/* begin externalWriteBackHeadFramePointers */
 		assert((GIV(framePointer) - GIV(stackPointer)) < (LargeContextSlots * BytesPerOop), self);
 		assert(GIV(stackPage) == (mostRecentlyUsedPage(self)), self);
-		assert(!((isFree(GIV(stackPage)self))));
+		assert(!((isFree(GIV(stackPage)self))), self);
 		/* begin setHeadFP:andSP:inPage: */
 		assert(GIV(stackPointer) < GIV(framePointer), self);
 		assert((GIV(stackPointer) < ((GIV(stackPage)->baseAddress)))
@@ -51691,8 +51691,8 @@ storeImageSegmentIntooutPointersroots(sqInt segmentWordArrayArg, sqInt outPointe
 	else {
 		arrayOfRoots = arrayOfRootsArg;
 	}
-	assert(!((forwardersIn(outPointerArray, self))));
-	assert(!((forwardersIn(arrayOfRoots, self))));
+	assert(!((forwardersIn(outPointerArray, self))), self);
+	assert(!((forwardersIn(arrayOfRoots, self))), self);
 	arrayOfObjects = objectsReachableFromRoots(arrayOfRoots, self);
 	if (!(arrayOfObjects)) {
 		return PrimErrNoMemory;
@@ -51704,7 +51704,7 @@ storeImageSegmentIntooutPointersroots(sqInt segmentWordArrayArg, sqInt outPointe
 		return PrimErrNoMemory;
 	}
 	assert(allObjectsUnmarked(self), self);
-	assert(!((forwardersIn(arrayOfObjects, self))));
+	assert(!((forwardersIn(arrayOfObjects, self))), self);
 	/* begin moveClassesForwardsIn: */
 
 	/* if > 0, this is the index of the first non-class past the first element. */
@@ -51877,7 +51877,7 @@ storeImageSegmentIntooutPointersroots(sqInt segmentWordArrayArg, sqInt outPointe
 		/* begin fetchPointer:ofObject: */
 		objOop = longAt((arrayOfObjects + BaseHeaderSize) + (((sqInt)((usqInt)(i) << (shiftForWord(self))))), self);
 		assert(!(((isImmediate(objOop, self))
- || (isForwarded(objOop, self)))));
+ || (isForwarded(objOop, self)))), self);
 		newSegAddrOrError = copyObjtoAddrstopAtsavedFirstFieldsindex(objOop, segAddr, endSeg, savedFirstFields, i, self);
 		if (oopisLessThan(newSegAddrOrError, segStart, self)) {
 			return returnrestoringObjectsInupTosavedFirstFields(newSegAddrOrError, arrayOfObjects, i, savedFirstFields, self);
@@ -51944,7 +51944,7 @@ stringForCString(const char *aCString, sqInt self)
     usqInt numBytes;
     sqInt numSlots;
 
-	len = strlen(aCString, self);
+	len = strlen(aCString);
 	/* begin allocateSlots:format:classIndex: */
 	numSlots = (len + (BytesPerWord - 1)) / BytesPerWord;
 	formatField = (firstByteFormat(self)) + ((8 - len) & (BytesPerWord - 1));
@@ -51987,7 +51987,7 @@ stringForCString(const char *aCString, sqInt self)
 	newString = newObj;
 	l2:	/* end allocateSlots:format:classIndex: */;
 	if (newString) {
-		strncpy(((char *) (newString + BaseHeaderSize)), aCString, len, self);
+		strncpy(((char *) (newString + BaseHeaderSize)), aCString, len);
 	}
 	return newString;
 }
@@ -52368,7 +52368,7 @@ unlinkLilliputianChunkindex(sqInt freeChunk, sqInt index, sqInt self)
 		prev = node;
 		node = next;
 	}
-	error("freeChunk not found in lilliputian chunk free list", self);
+	error("freeChunk not found in lilliputian chunk free list");
 	return 0;
 }
 
@@ -52503,7 +52503,7 @@ updateListStartingAt(sqInt freeNode, sqInt self)
 	if (freeNode == 0) {
 		return;
 	}
-	assert(!((isLilliputianSize(bytesInObject(freeNode, self), self))));
+	assert(!((isLilliputianSize(bytesInObject(freeNode, self), self))), self);
 	prev = freeNode;
 	/* begin storePointer:ofFreeChunk:withValue: */
 	fieldIndex2 = 1 /* freeChunkPrevIndex */;
@@ -52822,7 +52822,7 @@ compact(sqInt self)
 				(GIV(savedFirstFieldsSpace).start = highestSuitableFreeBlock + (4 /* freeChunkLargerIndex */ * BytesPerOop));
 				(GIV(savedFirstFieldsSpace).limit = addressAfter(highestSuitableFreeBlock, self));
 				GIV(savedFirstFieldsSpaceNotInOldSpace) = 0;
-				assert(!((savedFirstFieldsSpaceWasAllocated(self))));
+				assert(!((savedFirstFieldsSpaceWasAllocated(self))), self);
 				goto l8;
 			}
 		}
@@ -52834,7 +52834,7 @@ compact(sqInt self)
 	(GIV(savedFirstFieldsSpace).start = ((eden(self)).start));
 	(GIV(savedFirstFieldsSpace).limit = ((eden(self)).limit));
 	GIV(savedFirstFieldsSpaceNotInOldSpace) = 1;
-	assert(!((savedFirstFieldsSpaceWasAllocated(self))));
+	assert(!((savedFirstFieldsSpaceWasAllocated(self))), self);
 	l8:	/* end selectSavedFirstFieldsSpace */;
 	/* begin unpinRememberedSet */
 	objOop4 = longAt((GIV(hiddenRootsObj) + BaseHeaderSize) + (((sqInt)((usqInt)(RememberedSetRootIndex) << (shiftForWord(self))))), self);
@@ -52883,7 +52883,7 @@ compact(sqInt self)
 				(GIV(savedFirstFieldsSpace).start = ((eden(self)).start));
 				(GIV(savedFirstFieldsSpace).limit = ((eden(self)).limit));
 				GIV(savedFirstFieldsSpaceNotInOldSpace) = 1;
-				assert(!((savedFirstFieldsSpaceWasAllocated(self))));
+				assert(!((savedFirstFieldsSpaceWasAllocated(self))), self);
 			}
 			else {
 				/* begin useFreeChunkForSavedFirstFieldsSpace: */
@@ -52891,7 +52891,7 @@ compact(sqInt self)
 				(GIV(savedFirstFieldsSpace).start = largestFreeChunk + (4 /* freeChunkLargerIndex */ * BytesPerOop));
 				(GIV(savedFirstFieldsSpace).limit = addressAfter(largestFreeChunk, self));
 				GIV(savedFirstFieldsSpaceNotInOldSpace) = 0;
-				assert(!((savedFirstFieldsSpaceWasAllocated(self))));
+				assert(!((savedFirstFieldsSpaceWasAllocated(self))), self);
 			}
 		}
 		(GIV(savedFirstFieldsSpace).top = ((GIV(savedFirstFieldsSpace).start)) - BytesPerOop);
@@ -52998,7 +52998,7 @@ copyAndUnmarkMobileObjects(sqInt self)
     usqInt top;
 
 	previousPin = 0;
-	assert(!((isMarked(GIV(firstFreeObject), self))));
+	assert(!((isMarked(GIV(firstFreeObject), self))), self);
 	/* begin startOfObject: */
 	toFinger = ((byteAt(GIV(firstFreeObject) + 7, self)) == (numSlotsMask(self))
 		? GIV(firstFreeObject) - BaseHeaderSize
@@ -53124,7 +53124,7 @@ copyAndUnmarkMobileObjects(sqInt self)
 				start = (numSlots1 == (numSlotsMask(self))
 					? objOop - BaseHeaderSize
 					: objOop);
-				memmove(((void *)toFinger), ((void *)start), bytes, self);
+				memmove(((void *)toFinger), ((void *)start), bytes);
 				/* begin storePointerUnchecked:ofObject:withValue: */
 				assert(!(isOopForwarded(destObj, self)), self);
 				longAtput((destObj + BaseHeaderSize) + (0U << (shiftForWord(self))), longAt(top, self), self);
@@ -53411,7 +53411,7 @@ initializeScanCheckingForFullyCompactedHeap(sqInt self)
 	GIV(firstMobileObject) = (GIV(lastMobileObject) = (GIV(objectAfterLastMobileObject) = null));
 	reinitializeScanFrom(GIV(hiddenRootsObj), self);
 	if (!(GIV(firstFreeObject))) {
-		error("uncompactable heap; no unmarked objects found", self);
+		error("uncompactable heap; no unmarked objects found");
 	}
 	return GIV(firstMobileObject) >= (endOfMemory(self));
 }
@@ -53472,7 +53472,7 @@ planCompactSavingForwarders(sqInt self)
 	if (((GIV(savedFirstFieldsSpace).top)) < ((GIV(savedFirstFieldsSpace).start))) {
 		/* begin logPhase: */
 	}
-	assert(!((isMarked(GIV(firstFreeObject), self))));
+	assert(!((isMarked(GIV(firstFreeObject), self))), self);
 	/* begin startOfObject: */
 	toFinger = ((byteAt(GIV(firstFreeObject) + 7, self)) == (numSlotsMask(self))
 		? GIV(firstFreeObject) - BaseHeaderSize
@@ -53669,7 +53669,7 @@ remapObj(sqInt objOop, sqInt self)
 		resolvedObj = referent;
 	}
 	else {
-		assert(!((isInFutureSpace(objOop, self))));
+		assert(!((isInFutureSpace(objOop, self))), self);
 		resolvedObj = objOop;
 	}
 	if (GIV(gcPhaseInProgress) > 0) {
@@ -54083,7 +54083,7 @@ updatePointers(sqInt self)
 	}
 	l32:	/* end updatePointersInInitialImmobileObjects */;
 	/* begin updatePointersInMobileObjects */
-	assert(!((isMarked(GIV(firstFreeObject), self))));
+	assert(!((isMarked(GIV(firstFreeObject), self))), self);
 	/* begin startOfObject: */
 	toFinger = ((byteAt(GIV(firstFreeObject) + 7, self)) == (numSlotsMask(self))
 		? GIV(firstFreeObject) - BaseHeaderSize
@@ -54380,7 +54380,7 @@ updatePointersInsavedFirstFieldPointer(sqInt obj, sqInt firstFieldPtr, sqInt sel
 			: numSlots);
 		goto l8;
 	}
-	assert(!((fmt == (forwardedFormat(self)))));
+	assert(!((fmt == (forwardedFormat(self)))), self);
 	if (fmt < (firstCompiledMethodFormat(self))) {
 		numPointerSlots = 0;
 		goto l8;
@@ -54657,15 +54657,15 @@ allocateOrExtendSegmentInfos(sqInt self)
 
 	if (GIV(numSegInfos) == 0) {
 		GIV(numSegInfos) = 16;
-		GIV(segments) = calloc(GIV(numSegInfos), sizeof(SpurSegmentInfo, self), self);
+		GIV(segments) = calloc(GIV(numSegInfos), sizeof(SpurSegmentInfo));
 		return;
 	}
 	newNumSegs = GIV(numSegInfos) + 16;
-	GIV(segments) = realloc(GIV(segments), newNumSegs * (sizeof(SpurSegmentInfo, self)), self);
+	GIV(segments) = realloc(GIV(segments), newNumSegs * (sizeof(SpurSegmentInfo)));
 	if (GIV(segments) == 0) {
-		error("out of memory; cannot allocate more segments", self);
+		error("out of memory; cannot allocate more segments");
 	}
-	memset(GIV(segments) + GIV(numSegInfos), 0, (newNumSegs - GIV(numSegInfos)) * (sizeof(SpurSegmentInfo, self)), self);
+	memset(GIV(segments) + GIV(numSegInfos), 0, (newNumSegs - GIV(numSegInfos)) * (sizeof(SpurSegmentInfo)));
 	GIV(numSegInfos) = newNumSegs;
 }
 
@@ -55090,7 +55090,7 @@ readHeapFromImageFiledataBytes(sqImageFile f, sqInt numBytes, sqInt self)
 		(segInfo->segStart = oldBase);
 		(segInfo->segSize = nextSegmentSize);
 		(segInfo->swizzle = newBase - oldBase);
-		bytesRead = sqImageFileRead(pointerForOop(newBase, self), sizeof(char, self), nextSegmentSize, f, self);
+		bytesRead = sqImageFileRead(pointerForOop(newBase, self), sizeof(char), nextSegmentSize, f, self);
 		if (bytesRead > 0) {
 			totalBytesRead += bytesRead;
 		}
@@ -55244,7 +55244,7 @@ shrinkObjectMemory(usqInt delta, sqInt self)
 				goto l1;
 			}
 		}
-		error("segment not found", self);
+		error("segment not found");
 	l1:	/* end indexOfSegment: */;
 		assert(i > 0, self);
 		GIV(totalHeapSizeIncludingBridges) -= (emptySeg->segSize);
@@ -55406,8 +55406,8 @@ addLastLinktoList(sqInt proc, sqInt aList, sqInt self)
 {   DECL_MAYBE_SQ_GLOBAL_STRUCT
     sqInt lastLink;
 
-	assert(!((isForwarded(proc, self))));
-	assert(!((isForwarded(aList, self))));
+	assert(!((isForwarded(proc, self))), self);
+	assert(!((isForwarded(aList, self))), self);
 	assert((fetchPointerofObject(NextLinkIndex, proc, self)) == (nilObject(self)), self);
 	if ((assert(!(isForwarded(aList, self)), self),
 	(longAt((aList + BaseHeaderSize) + (((sqInt)((usqInt)(FirstLinkIndex) << (shiftForWord(self))))), self)) == GIV(nilObj))) {
@@ -55613,23 +55613,23 @@ addressOfinGIV(char *GIVElement, int interpreterIndex, sqInt self)
 	desiredGIV = returnGlobalStructFor(interpreterIndex, self);
 	externalAddress = instantiateClassindexableSize(longAt((GIV(specialObjectsOop) + BaseHeaderSize) + (((sqInt)((usqInt)(ClassExternalAddress) << (shiftForWord(self))))), self), BytesPerWord, self);
 	ptr = firstIndexableField(externalAddress, self);
-	if ((strcmp(GIVElement, "method", self)) == 0) {
+	if ((strcmp(GIVElement, "method")) == 0) {
 		ptr[0] = (desiredGIV->method);
 		return externalAddress;
 	}
-	if ((strcmp(GIVElement, "nilObj", self)) == 0) {
+	if ((strcmp(GIVElement, "nilObj")) == 0) {
 		ptr[0] = (desiredGIV->nilObj);
 		return externalAddress;
 	}
-	if ((strcmp(GIVElement, "instructionPointer", self)) == 0) {
+	if ((strcmp(GIVElement, "instructionPointer")) == 0) {
 		ptr[0] = (desiredGIV->instructionPointer);
 		return externalAddress;
 	}
-	if ((strcmp(GIVElement, "specialObjectsOop", self)) == 0) {
+	if ((strcmp(GIVElement, "specialObjectsOop")) == 0) {
 		ptr[0] = (desiredGIV->specialObjectsOop);
 		return externalAddress;
 	}
-	if ((strcmp(GIVElement, "oldSpaceStart", self)) == 0) {
+	if ((strcmp(GIVElement, "oldSpaceStart")) == 0) {
 		ptr[0] = (desiredGIV->oldSpaceStart);
 		return externalAddress;
 	}
@@ -55801,15 +55801,15 @@ callbackEnter(sqInt *callbackID, sqInt self)
 		transferTo(wakeHighestPriority(self), self);
 	}
 	forceInterruptCheck(self);
-	memcpy(((void *)savedReenterInterpreter), reenterInterpreter, sizeof(jmp_buf, self), self);
-	if ((setjmp(GIV(jmpBuf)[GIV(jmpDepth)], self)) == 0) {
+	memcpy(((void *)savedReenterInterpreter), reenterInterpreter, sizeof(jmp_buf));
+	if ((setjmp(GIV(jmpBuf)[GIV(jmpDepth)])) == 0) {
 
 		/* Fill in callbackID */
 		callbackID[0] = GIV(jmpDepth);
 		enterSmalltalkExecutive(self);
 		assert(0, self);
 	}
-	memcpy(reenterInterpreter, ((void *) savedReenterInterpreter), sizeof(jmp_buf, self), self);
+	memcpy(reenterInterpreter, ((void *) savedReenterInterpreter), sizeof(jmp_buf));
 	putToSleepyieldingIf(memoryActiveProcess(self), GIV(preemptionYields), self);
 	transferTo(GIV(suspendedCallbacks)[GIV(jmpDepth)], self);
 
@@ -55844,7 +55844,7 @@ callbackLeave(sqInt cbID, sqInt self)
 	if (cbID < 1) {
 		return 0;
 	}
-	longjmp(GIV(jmpBuf)[GIV(jmpDepth)], 1, self);
+	longjmp(GIV(jmpBuf)[GIV(jmpDepth)], 1);
 	return null;
 }
 
@@ -56086,7 +56086,7 @@ checkForEventsMayContextSwitch(sqInt mayContextSwitch, sqInt self)
 	/* begin externalWriteBackHeadFramePointers */
 	assert((GIV(framePointer) - GIV(stackPointer)) < (LargeContextSlots * BytesPerOop), self);
 	assert(GIV(stackPage) == (mostRecentlyUsedPage(self)), self);
-	assert(!((isFree(GIV(stackPage)self))));
+	assert(!((isFree(GIV(stackPage)self))), self);
 	/* begin setHeadFP:andSP:inPage: */
 	assert(GIV(stackPointer) < GIV(framePointer), self);
 	assert((GIV(stackPointer) < ((GIV(stackPage)->baseAddress)))
@@ -56216,7 +56216,7 @@ checkImageVersionFromstartingAt(sqImageFile f, squeakFileOffsetType imageOffset,
 	sqImageFileSeek(f, imageOffset, self);
 	/* begin getWord32FromFile:swap: */
 	w2 = 0;
-	sqImageFileRead((&w2), sizeof(int, self), 1, f, self);
+	sqImageFileRead((&w2), sizeof(int), 1, f, self);
 	version = SQ_SWAP_4_BYTES(w2);
 	if ((version == 68021 /* imageFormatVersion */)
 	 || (0)) {
@@ -56228,7 +56228,7 @@ checkImageVersionFromstartingAt(sqImageFile f, squeakFileOffsetType imageOffset,
 		sqImageFileSeek(f, 512, self);
 		/* begin getWord32FromFile:swap: */
 		w = 0;
-		sqImageFileRead((&w), sizeof(int, self), 1, f, self);
+		sqImageFileRead((&w), sizeof(int), 1, f, self);
 		version = w;
 		if ((version == 68021 /* imageFormatVersion */)
 		 || (0)) {
@@ -56237,7 +56237,7 @@ checkImageVersionFromstartingAt(sqImageFile f, squeakFileOffsetType imageOffset,
 		sqImageFileSeek(f, 512, self);
 		/* begin getWord32FromFile:swap: */
 		w1 = 0;
-		sqImageFileRead((&w1), sizeof(int, self), 1, f, self);
+		sqImageFileRead((&w1), sizeof(int), 1, f, self);
 		version = SQ_SWAP_4_BYTES(w1);
 		if ((version == 68021 /* imageFormatVersion */)
 		 || (0)) {
@@ -56250,9 +56250,9 @@ checkImageVersionFromstartingAt(sqImageFile f, squeakFileOffsetType imageOffset,
 	printNum(firstVersion, self);
 	print(").", self);
 	/* begin cr */
-	printf("\n", self);
+	printf("\n");
 	print("Press CR to quit...", self);
-	getchar(self);
+	getchar();
 	ioExitWithErrorCode(1, self);
 	return 0;
 }
@@ -56440,7 +56440,7 @@ longAt((oop + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shiftForWord
 			print("remembered bit is not set in ", self);
 			printHex(oop, self);
 			/* begin cr */
-			printf("\n", self);
+			printf("\n");
 			return 0;
 		}
 		if (isInRememberedSet(oop, self)) {
@@ -56449,7 +56449,7 @@ longAt((oop + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shiftForWord
 		printHex(oop, self);
 		print(" has remembered bit set but is not in remembered set", self);
 		/* begin cr */
-		printf("\n", self);
+		printf("\n");
 		return 0;
 	}
 	return 1;
@@ -56555,7 +56555,7 @@ checkOkayStackZone(sqInt writeBack, sqInt self)
 		/* begin externalWriteBackHeadFramePointers */
 		assert((GIV(framePointer) - GIV(stackPointer)) < (LargeContextSlots * BytesPerOop), self);
 		assert(GIV(stackPage) == (mostRecentlyUsedPage(self)), self);
-		assert(!((isFree(GIV(stackPage)self))));
+		assert(!((isFree(GIV(stackPage)self))), self);
 		/* begin setHeadFP:andSP:inPage: */
 		assert(GIV(stackPointer) < GIV(framePointer), self);
 		assert((GIV(stackPointer) < ((GIV(stackPage)->baseAddress)))
@@ -56959,7 +56959,7 @@ couldBeProcess(sqInt oop, sqInt self)
 static void
 cr(sqInt self)
 {
-	printf("\n", self);
+	printf("\n");
 }
 
 
@@ -57005,7 +57005,7 @@ createActualMessageTo(sqInt lookupClass, sqInt self)
 			forceInterruptCheck(self);
 		}
 		if ((GIV(freeStart) + numBytes) > (((eden(self)).limit))) {
-			error("no room in eden for allocateSmallNewSpaceSlots:format:classIndex:", self);
+			error("no room in eden for allocateSmallNewSpaceSlots:format:classIndex:");
 			argumentArray = 0;
 			goto l4;
 		}
@@ -57034,7 +57034,7 @@ createActualMessageTo(sqInt lookupClass, sqInt self)
 			forceInterruptCheck(self);
 		}
 		if ((GIV(freeStart) + numBytes1) > (((eden(self)).limit))) {
-			error("no room in eden for allocateSmallNewSpaceSlots:format:classIndex:", self);
+			error("no room in eden for allocateSmallNewSpaceSlots:format:classIndex:");
 			message = 0;
 			goto l5;
 		}
@@ -57132,7 +57132,7 @@ divorceAllFrames(sqInt self)
 		/* begin externalWriteBackHeadFramePointers */
 		assert((GIV(framePointer) - GIV(stackPointer)) < (LargeContextSlots * BytesPerOop), self);
 		assert(GIV(stackPage) == (mostRecentlyUsedPage(self)), self);
-		assert(!((isFree(GIV(stackPage)self))));
+		assert(!((isFree(GIV(stackPage)self))), self);
 		/* begin setHeadFP:andSP:inPage: */
 		assert(GIV(stackPointer) < GIV(framePointer), self);
 		assert((GIV(stackPointer) < ((GIV(stackPage)->baseAddress)))
@@ -57991,7 +57991,7 @@ externalInstVarofContext(sqInt offset, sqInt aContext, sqInt self)
 		/* begin externalWriteBackHeadFramePointers */
 		assert((GIV(framePointer) - GIV(stackPointer)) < (LargeContextSlots * BytesPerOop), self);
 		assert(GIV(stackPage) == (mostRecentlyUsedPage(self)), self);
-		assert(!((isFree(GIV(stackPage)self))));
+		assert(!((isFree(GIV(stackPage)self))), self);
 		/* begin setHeadFP:andSP:inPage: */
 		assert(GIV(stackPointer) < GIV(framePointer), self);
 		assert((GIV(stackPointer) < ((GIV(stackPage)->baseAddress)))
@@ -58024,7 +58024,7 @@ externalInstVarofContextput(sqInt index, sqInt maybeMarriedContext, sqInt anOop,
 	/* begin externalWriteBackHeadFramePointers */
 	assert((GIV(framePointer) - GIV(stackPointer)) < (LargeContextSlots * BytesPerOop), self);
 	assert(GIV(stackPage) == (mostRecentlyUsedPage(self)), self);
-	assert(!((isFree(GIV(stackPage)self))));
+	assert(!((isFree(GIV(stackPage)self))), self);
 	/* begin setHeadFP:andSP:inPage: */
 	assert(GIV(stackPointer) < GIV(framePointer), self);
 	assert((GIV(stackPointer) < ((GIV(stackPage)->baseAddress)))
@@ -58034,7 +58034,7 @@ externalInstVarofContextput(sqInt index, sqInt maybeMarriedContext, sqInt anOop,
 	(GIV(stackPage)->headFP = GIV(framePointer));
 	(GIV(stackPage)->headSP = GIV(stackPointer));
 	assert(pageListIsWellFormed(self), self);
-	assert(!((isObjImmutable(maybeMarriedContext, self))));
+	assert(!((isObjImmutable(maybeMarriedContext, self))), self);
 	if (!((((((longAt((maybeMarriedContext + BaseHeaderSize) + (((sqInt)((usqInt)(SenderIndex) << (shiftForWord(self))))), self))) & 7) == 1))
 		 && (!(isWidowedContext(maybeMarriedContext, self))))) {
 		/* begin storePointer:ofObject:withValue: */
@@ -58476,7 +58476,7 @@ findFrameAboveinPage(char *theFP, StackPage *thePage, sqInt self)
 		}
 		fp = callerFP;
 	}
-	error("did not find theFP in stack page", self);
+	error("did not find theFP in stack page");
 	return 0;
 }
 
@@ -58722,7 +58722,7 @@ findSPOfon(char *theFP, StackPage *thePage, sqInt self)
     char *startFrame;
     char *theSP;
 
-	assert(!((isFree(thePage, self))));
+	assert(!((isFree(thePage, self))), self);
 	/* begin findSPOrNilOf:on:startingFrom: */
 	startFrame = (thePage->headFP);
 	if (startFrame == theFP) {
@@ -58753,7 +58753,7 @@ findSPOfon(char *theFP, StackPage *thePage, sqInt self)
 	if (theSP) {
 		return theSP;
 	}
-	error("did not find theFP in stack page", self);
+	error("did not find theFP in stack page");
 	return 0;
 }
 
@@ -58899,7 +58899,7 @@ followForwardingPointersInStackZone(sqInt theBecomeEffectsFlags, sqInt self)
 	/* begin externalWriteBackHeadFramePointers */
 	assert((GIV(framePointer) - GIV(stackPointer)) < (LargeContextSlots * BytesPerOop), self);
 	assert(GIV(stackPage) == (mostRecentlyUsedPage(self)), self);
-	assert(!((isFree(GIV(stackPage)self))));
+	assert(!((isFree(GIV(stackPage)self))), self);
 	/* begin setHeadFP:andSP:inPage: */
 	assert(GIV(stackPointer) < GIV(framePointer), self);
 	assert((GIV(stackPointer) < ((GIV(stackPage)->baseAddress)))
@@ -59084,20 +59084,20 @@ forceInterruptCheckFromHeartbeatV2(int GIVNumber, sqInt self)
 		
 		if (!suppressHeartbeatFlag) {
 			/* begin checkForLongRunningPrimitive */
-			if (returnGlobalStructFor(GIVNumber)->longRunningPrimitiveCheckSemaphore == null) {
+			if (returnGlobalStructFor(GIVNumber, self)->longRunningPrimitiveCheckSemaphore == null) {
 				goto l1;
 			}
-			if ((returnGlobalStructFor(GIVNumber)->longRunningPrimitiveStartUsecs > 0)
-			 && (returnGlobalStructFor(GIVNumber)->longRunningPrimitiveCheckMethod == returnGlobalStructFor(GIVNumber)->newMethod)
-		 	&& (returnGlobalStructFor(GIVNumber)->longRunningPrimitiveCheckSequenceNumber == returnGlobalStructFor(GIVNumber)->statCheckForEvents)) {
-				returnGlobalStructFor(GIVNumber)->longRunningPrimitiveStopUsecs = ioUTCMicroseconds();
-				assert(returnGlobalStructFor(GIVNumber)->longRunningPrimitiveStopUsecs > returnGlobalStructFor(GIVNumber)->longRunningPrimitiveStartUsecs);
+			if ((returnGlobalStructFor(GIVNumber, self)->longRunningPrimitiveStartUsecs > 0)
+			 && (returnGlobalStructFor(GIVNumber, self)->longRunningPrimitiveCheckMethod == returnGlobalStructFor(GIVNumber, self)->newMethod)
+		 	&& (returnGlobalStructFor(GIVNumber, self)->longRunningPrimitiveCheckSequenceNumber == returnGlobalStructFor(GIVNumber, self)->statCheckForEvents)) {
+				returnGlobalStructFor(GIVNumber, self)->longRunningPrimitiveStopUsecs = ioUTCMicroseconds();
+				assert(returnGlobalStructFor(GIVNumber, self)->longRunningPrimitiveStopUsecs > returnGlobalStructFor(GIVNumber, self)->longRunningPrimitiveStartUsecs, self);
 				goto l1;
 			}
-			if (returnGlobalStructFor(GIVNumber)->longRunningPrimitiveStopUsecs == 0) {
-				returnGlobalStructFor(GIVNumber)->longRunningPrimitiveCheckSequenceNumber = returnGlobalStructFor(GIVNumber)->statCheckForEvents;
-				returnGlobalStructFor(GIVNumber)->longRunningPrimitiveCheckMethod = returnGlobalStructFor(GIVNumber)->newMethod;
-				returnGlobalStructFor(GIVNumber)->longRunningPrimitiveStartUsecs = ioUTCMicroseconds();
+			if (returnGlobalStructFor(GIVNumber, self)->longRunningPrimitiveStopUsecs == 0) {
+				returnGlobalStructFor(GIVNumber, self)->longRunningPrimitiveCheckSequenceNumber = returnGlobalStructFor(GIVNumber, self)->statCheckForEvents;
+				returnGlobalStructFor(GIVNumber, self)->longRunningPrimitiveCheckMethod = returnGlobalStructFor(GIVNumber, self)->newMethod;
+				returnGlobalStructFor(GIVNumber, self)->longRunningPrimitiveStartUsecs = ioUTCMicroseconds();
 				sqLowLevelMFence();
 			}
 			l1:	/* end checkForLongRunningPrimitive */;
@@ -59113,21 +59113,21 @@ forceInterruptCheckV2(int GIVNumber, sqInt self)
     StackPage *thePage;
 
 		
-	if (returnGlobalStructFor(GIVNumber)->stackLimit == 0) {
+	if (returnGlobalStructFor(GIVNumber, self)->stackLimit == 0) {
 		return null;
 	}
-	thePage = returnGlobalStructFor(GIVNumber)->stackPage;
+	thePage = returnGlobalStructFor(GIVNumber, self)->stackPage;
 	if ((thePage != null)
 	 && (thePage != 0)) {
 		(thePage->stackLimit = ((char *) (((usqInt) -1))));
 	}
 	/* begin allOnesAsCharStar */
-	returnGlobalStructFor(GIVNumber)->stackLimit = ((char *) (((usqInt) -1)));
+	returnGlobalStructFor(GIVNumber, self)->stackLimit = ((char *) (((usqInt) -1)));
 	sqLowLevelMFence();
 	if (((iccFunc = interruptCheckChain)) != null) {
 		iccFunc();
 	}
-	returnGlobalStructFor(GIVNumber)->statForceInterruptCheck += 1;
+	returnGlobalStructFor(GIVNumber, self)->statForceInterruptCheck += 1;
 	return 0;
 	return 0;
 }
@@ -59374,7 +59374,7 @@ getErrorObjectFromPrimFailCode(sqInt self)
 						forceInterruptCheck(self);
 					}
 					if ((GIV(freeStart) + numBytes) > (((eden(self)).limit))) {
-						error("no room in eden for allocateSmallNewSpaceSlots:format:classIndex:", self);
+						error("no room in eden for allocateSmallNewSpaceSlots:format:classIndex:");
 						clone = 0;
 						goto l5;
 					}
@@ -59515,7 +59515,7 @@ getWord32FromFileswap(sqImageFile aFile, sqInt swapFlag, sqInt self)
     int w;
 
 	w = 0;
-	sqImageFileRead((&w), sizeof(int, self), 1, aFile, self);
+	sqImageFileRead((&w), sizeof(int), 1, aFile, self);
 	return (swapFlag
 		? SQ_SWAP_4_BYTES(w)
 		: w);
@@ -59725,7 +59725,7 @@ handleStackOverflowOrEventAllowContextSwitch(sqInt mayContextSwitch, sqInt self)
 	/* begin checkForStackOverflow */
 	assert((GIV(framePointer) - GIV(stackPointer)) < (LargeContextSlots * BytesPerOop), self);
 	assert(GIV(stackPage) == (mostRecentlyUsedPage(self)), self);
-	assert(!((isFree(GIV(stackPage)self))));
+	assert(!((isFree(GIV(stackPage)self))), self);
 	/* begin setHeadFP:andSP:inPage: */
 	assert(GIV(stackPointer) < GIV(framePointer), self);
 	assert((GIV(stackPointer) < ((GIV(stackPage)->baseAddress)))
@@ -59873,7 +59873,7 @@ void
 initializeAllGlobalsStruct(int numberImages, sqInt self)
 {
 	
-	setNumberOfImage(numberImages);
+	setNumberOfImage(numberImages, self);
 	//Allocate directly for 3 images, for Thomas scenario
 	all_threads_global = calloc(sizeof(struct foo), 1);
 	thread_id = malloc(sizeof(pthread_t));
@@ -59923,7 +59923,7 @@ initializeExtraClassInstVarIndices(sqInt self)
 		if ((((oop & (tagMask(self))) == 0)
 		 && (((((usqInt) (longAt(oop, self))) >> (formatShift(self))) & (formatMask(self))) >= (firstByteFormat(self))))
 		 && (((lengthOfformat(oop, (((usqInt) (longAt(oop, self))) >> (formatShift(self))) & (formatMask(self)), self)) == 5)
-		 && ((strncmp("Array", firstFixedField(oop, self), 5, self)) == 0))) {
+		 && ((strncmp("Array", firstFixedField(oop, self), 5)) == 0))) {
 			GIV(classNameIndex) = i - 1;
 		}
 	}
@@ -59940,7 +59940,7 @@ initMutexForFetchNextBytecode(pthread_mutex_t aMutex, sqInt self)
 		exit(1);
 	}
 	//Init so we can use the first interpreter normally but he can become stepable too
-	if(pthread_equal(returnGlobalStructFor(0)->myCurrentThread,selfThread)){
+	if(pthread_equal(returnGlobalStructFor(0, self)->myCurrentThread,selfThread)){
 		GIV(isStepable) = 0;
 	}else{
 		GIV(isStepable) = 1;
@@ -59966,7 +59966,7 @@ initMutexForFetchNextBytecodeandCond(pthread_mutex_t *aMutex, pthread_cond_t **a
 	}
 	
 	//Init so we can use the first interpreter normally but he can become stepable too
-	if(pthread_equal(returnGlobalStructFor(0)->myCurrentThread,selfThread)){
+	if(pthread_equal(returnGlobalStructFor(0, self)->myCurrentThread,selfThread)){
 		GIV(isStepable) = 0;
 	}else{
 		GIV(isStepable) = 1;
@@ -59994,12 +59994,12 @@ initStackPagesAndInterpret(sqInt self)
 
 	stackPageBytes = stackPageByteSize(self);
 	/* begin computeStackZoneSize */
-	stackPagesBytes = (GIV(numStackPages) * ((sizeof(CogStackPage, self)) + (stackPageByteSize(self)))) + BytesPerWord;
-	theStackMemory = alloca(stackPagesBytes, self);
-	memset(theStackMemory, 0, stackPagesBytes, self);
+	stackPagesBytes = (GIV(numStackPages) * ((sizeof(CogStackPage)) + (stackPageByteSize(self)))) + BytesPerWord;
+	theStackMemory = alloca(stackPagesBytes);
+	memset(theStackMemory, 0, stackPagesBytes);
 	initializeStacknumSlotspageSize(theStackMemory, stackPagesBytes / BytesPerWord, stackPageBytes / BytesPerWord, self);
 	loadInitialContext(self);
-	setIOHeartbeatGIVToUse(returnGIVNumberForCurrentThread());
+	setIOHeartbeatGIVToUse(returnGIVNumberForCurrentThread(self), self);
 	ioInitHeartbeat(self);
 	initialEnterSmalltalkExecutive(self);
 	return null;
@@ -60048,7 +60048,7 @@ instructionPointerForFramecurrentFPcurrentIP(char *spouseFP, char *currentFP, sq
 			}
 			fp = callerFP;
 		}
-		error("did not find theFP in stack page", self);
+		error("did not find theFP in stack page");
 		theFPAbove = 0;
 	l1:	/* end findFrameAbove:inPage: */;
 		theIP = (theFPAbove == 0
@@ -60131,7 +60131,7 @@ isFrameonPage(char *aFrame, StackPage *aPage, sqInt self)
     char *prevFP;
     char *theFP;
 
-	assert(!((isFree(aPage, self))));
+	assert(!((isFree(aPage, self))), self);
 	theFP = (aPage->headFP);
 	prevFP = theFP - BytesPerWord;
 	while (1) {
@@ -60193,7 +60193,7 @@ isLargePositiveIntegerObject(sqInt oop, sqInt self)
 static sqInt NoDbgRegParms
 isLiveContext(sqInt oop, sqInt self)
 {
-	assert(!((isOopForwarded(oop, self))));
+	assert(!((isOopForwarded(oop, self))), self);
 	if (!(((oop & (tagMask(self))) == 0)
 		 && (((longAt(oop, self)) & (classIndexMask(self))) == ClassMethodContextCompactIndex))) {
 		return 0;
@@ -60413,7 +60413,7 @@ isWidowedContext(sqInt aOnceMarriedContext, sqInt self)
 		if (((pointerForOop(longAt(theFrame + FoxSavedFP, self), self)) == shouldBeFrameCallerField)
 		 && ((byteAt((theFrame + FoxFrameFlags) + 2, self)) != 0)) {
 			assert(!(((isFrameonPage(theFrame, thePage, self))
- && (isForwarded(frameContext(theFrame, self), self)))));
+ && (isForwarded(frameContext(theFrame, self), self)))), self);
 			if ((longAt(theFrame + FoxThisContext, self)) == aOnceMarriedContext) {
 
 				/* It is still married! */
@@ -60620,12 +60620,12 @@ loadAndExecute(char **imageParameters, sqInt self)
        	return;
     	}
 
-    	readImageFromFileHeapSizeStartingAtV2(imageFile, 0, 0);
+    	readImageFromFileHeapSizeStartingAtV2(imageFile, 0, 0, self);
     	fclose(imageFile);
 	   /*setImageName(imageParameters[0]); */
 	}
 		pthread_mutex_unlock(&mutex);
-		interpret();
+		interpret(self);
 	
 }
 
@@ -60733,14 +60733,14 @@ longPrintOop(sqInt oop, sqInt self)
 		print(" (", self);
 		/* begin printHexnp: */
 		n = (longAt(oop, self)) & (classIndexMask(self));
-		printf("0x%" PRIxSQINT "", n, self);
+		printf("0x%" PRIxSQINT "", n);
 		print("=>", self);
-		printf("0x%" PRIxSQINT "", class, self);
+		printf("0x%" PRIxSQINT "", class);
 		print(")", self);
 	}
 	fmt = (((usqInt) (longAt(oop, self))) >> (formatShift(self))) & (formatMask(self));
 	print(" format ", self);
-	printf("0x%" PRIxSQINT "", fmt, self);
+	printf("0x%" PRIxSQINT "", fmt);
 	if (fmt > 5 /* lastPointerFormat */) {
 		print(" nbytes ", self);
 		printNum(numBytesOf(oop, self), self);
@@ -60788,13 +60788,13 @@ longPrintOop(sqInt oop, sqInt self)
 	print(" hash ", self);
 	/* begin printHexnp: */
 	n1 = (long32At(oop + 4, self)) & (identityHashHalfWordMask(self));
-	printf("0x%" PRIxSQINT "", n1, self);
+	printf("0x%" PRIxSQINT "", n1);
 	/* begin cr */
-	printf("\n", self);
+	printf("\n");
 	if (((fmt >= (firstByteFormat(self))) && (fmt <= ((firstCompiledMethodFormat(self)) - 1)))) {
 		printStringOf(oop, self);
 		/* begin cr */
-		printf("\n", self);
+		printf("\n");
 		return;
 	}
 	if (((fmt >= (firstLongFormat(self))) && (fmt <= ((firstByteFormat(self)) - 1)))) {
@@ -60802,15 +60802,15 @@ longPrintOop(sqInt oop, sqInt self)
 			/* begin fetchLong32:ofObject: */
 			field32 = ((sqInt) (long32At((oop + BaseHeaderSize) + (((sqInt)((usqInt)(i) << 2))), self)));
 			/* begin space */
-			putchar(' ', self);
+			putchar(' ');
 			printNum(i, self);
 			/* begin space */
-			putchar(' ', self);
+			putchar(' ');
 			printHex(field32, self);
 			/* begin space */
-			putchar(' ', self);
+			putchar(' ');
 			/* begin cr */
-			printf("\n", self);
+			printf("\n");
 		}
 		return;
 	}
@@ -60819,15 +60819,15 @@ longPrintOop(sqInt oop, sqInt self)
 			/* begin fetchLong64:ofObject: */
 			field64 = long64At((oop + BaseHeaderSize) + (((sqInt)((usqInt)(i) << 3))), self);
 			/* begin space */
-			putchar(' ', self);
+			putchar(' ');
 			printNum(i, self);
 			/* begin space */
-			putchar(' ', self);
+			putchar(' ');
 			printHex(field64, self);
 			/* begin space */
-			putchar(' ', self);
+			putchar(' ');
 			/* begin cr */
-			printf("\n", self);
+			printf("\n");
 		}
 		return;
 	}
@@ -60836,15 +60836,15 @@ longPrintOop(sqInt oop, sqInt self)
 			/* begin fetchShort16:ofObject: */
 			field16 = shortAt((oop + BaseHeaderSize) + (((sqInt)((usqInt)(i) << 1))), self);
 			/* begin space */
-			putchar(' ', self);
+			putchar(' ');
 			printNum(i, self);
 			/* begin space */
-			putchar(' ', self);
+			putchar(' ');
 			printHex(field16, self);
 			/* begin space */
-			putchar(' ', self);
+			putchar(' ');
 			/* begin cr */
-			printf("\n", self);
+			printf("\n");
 		}
 		return;
 	}
@@ -60855,13 +60855,13 @@ longPrintOop(sqInt oop, sqInt self)
 			/* begin fetchPointer:ofObject: */
 			fieldOop = longAt((oop + BaseHeaderSize) + (((sqInt)((usqInt)((i - 1)) << (shiftForWord(self))))), self);
 			/* begin space */
-			putchar(' ', self);
+			putchar(' ');
 			printNum(i - 1, self);
 			/* begin space */
-			putchar(' ', self);
+			putchar(' ');
 			printHex(fieldOop, self);
 			/* begin space */
-			putchar(' ', self);
+			putchar(' ');
 			if ((i == 1)
 			 && (((((usqInt) (longAt(oop, self))) >> (formatShift(self))) & (formatMask(self))) >= (firstCompiledMethodFormat(self)))) {
 				/* begin printMethodHeaderOop: */
@@ -60889,7 +60889,7 @@ longPrintOop(sqInt oop, sqInt self)
 				printOopShort(fieldOop, self);
 			}
 			/* begin cr */
-			printf("\n", self);
+			printf("\n");
 		}
 	}
 	if (((((usqInt) (longAt(oop, self))) >> (formatShift(self))) & (formatMask(self))) >= (firstCompiledMethodFormat(self))) {
@@ -60941,19 +60941,19 @@ longPrintOop(sqInt oop, sqInt self)
 			if (column > bytecodesPerLine) {
 				column = 1;
 				/* begin cr */
-				printf("\n", self);
+				printf("\n");
 			}
 		}
 		if (!(column == 1)) {
 			/* begin cr */
-			printf("\n", self);
+			printf("\n");
 		}
 	}
 	else {
 		if (startIP > lastIndex) {
 			print("...", self);
 			/* begin cr */
-			printf("\n", self);
+			printf("\n");
 		}
 	}
 }
@@ -61179,7 +61179,7 @@ lookupMethodInClass(sqInt class, sqInt self)
 		currentClass = objOop1;
 	}
 	if (GIV(messageSelector) == (splObj(SelectorDoesNotUnderstand, self))) {
-		error("Recursive not understood error encountered", self);
+		error("Recursive not understood error encountered");
 	}
 	createActualMessageTo(class, self);
 	/* begin splObj: */
@@ -61504,7 +61504,7 @@ makeBaseFrameFor(sqInt aContext, sqInt self)
 	}
 	theMethod = objOop;
 	if (!((((theIP) & 7) == 1))) {
-		error("context is not resumable", self);
+		error("context is not resumable");
 	}
 	theIP = (theIP >> 3);
 	/* begin followField:ofObject: */
@@ -61677,7 +61677,7 @@ makePointwithxValueyValue(sqInt xValue, sqInt yValue, sqInt self)
 			forceInterruptCheck(self);
 		}
 		if ((GIV(freeStart) + numBytes) > (((eden(self)).limit))) {
-			error("no room in eden for allocateSmallNewSpaceSlots:format:classIndex:", self);
+			error("no room in eden for allocateSmallNewSpaceSlots:format:classIndex:");
 			pointResult = 0;
 			goto l3;
 		}
@@ -62565,7 +62565,7 @@ methodUsesPrimitiveErrorCode(sqInt aMethodObj, sqInt self)
 EXPORT(void)
 moduleUnloaded(char *aModuleName, sqInt self)
 {
-	if ((strcmp(aModuleName, "SurfacePlugin", self)) == 0) {
+	if ((strcmp(aModuleName, "SurfacePlugin")) == 0) {
 
 		/* Surface plugin went away. Should never happen. But  then, who knows */
 		showSurfaceFn = 0;
@@ -63017,7 +63017,7 @@ positive64BitIntegerFor(usqLong integerValue, sqInt self)
 			forceInterruptCheck(self);
 		}
 		if ((GIV(freeStart) + numBytes) > (((eden(self)).limit))) {
-			error("no room in eden for allocateSmallNewSpaceSlots:format:classIndex:", self);
+			error("no room in eden for allocateSmallNewSpaceSlots:format:classIndex:");
 			newLargeInteger = 0;
 			goto l2;
 		}
@@ -63205,7 +63205,7 @@ printActivationNameForSelectorstartClass(sqInt aSelector, sqInt startClass, sqIn
 		 || (startClass == methClass)) {
 			printNameOfClasscount(methClass, 5, self);
 			/* begin printChar: */
-			putchar('>', self);
+			putchar('>');
 			if (!(methClass)) {
 				printStringOf(splObj(SelectorDoesNotUnderstand, self), self);
 				print(" ", self);
@@ -63214,12 +63214,12 @@ printActivationNameForSelectorstartClass(sqInt aSelector, sqInt startClass, sqIn
 		else {
 			printNameOfClasscount(startClass, 5, self);
 			/* begin printChar: */
-			putchar('(', self);
+			putchar('(');
 			printNameOfClasscount(methClass, 5, self);
 			/* begin printChar: */
-			putchar(')', self);
+			putchar(')');
 			/* begin printChar: */
-			putchar('>', self);
+			putchar('>');
 		}
 	}
 	else {
@@ -63372,12 +63372,12 @@ printAllStacks(sqInt self)
 		? longAt((GIV(classTableFirstPage) + BaseHeaderSize) + (((sqInt)((usqInt)(tagBits) << (shiftForWord(self))))), self)
 		: fetchClassOfNonImm(proc, self)), 5, self);
 	/* begin space */
-	putchar(' ', self);
+	putchar(' ');
 	printHex(proc, self);
 	print(" priority ", self);
 	printNum(quickFetchIntegerofObject(PriorityIndex, proc, self), self);
 	/* begin cr */
-	printf("\n", self);
+	printf("\n");
 	printCallStackFP(GIV(framePointer), self);
 	/* begin fetchPointer:ofObject: */
 	objOop3 = longAt((GIV(specialObjectsOop) + BaseHeaderSize) + (((sqInt)((usqInt)(SchedulerAssociation) << (shiftForWord(self))))), self);
@@ -63400,14 +63400,14 @@ printAllStacks(sqInt self)
 		if (!((assert(!(isForwarded(processList, self)), self),
 			(longAt((processList + BaseHeaderSize) + (((sqInt)((usqInt)(FirstLinkIndex) << (shiftForWord(self))))), self)) == GIV(nilObj)))) {
 			/* begin cr */
-			printf("\n", self);
+			printf("\n");
 			print("processes at priority ", self);
 			printNum(pri + 1, self);
 			printProcsOnList(processList, self);
 		}
 	}
 	/* begin cr */
-	printf("\n", self);
+	printf("\n");
 	print("suspended processes", self);
 	/* begin fetchPointer:ofObject: */
 	semaphoreClass = longAt((GIV(specialObjectsOop) + BaseHeaderSize) + (((sqInt)((usqInt)(ClassSemaphore) << (shiftForWord(self))))), self);
@@ -63602,7 +63602,7 @@ printCallStackOfcurrentFP(sqInt aContext, char *currFP, sqInt self)
 					printHex(oopForPointer(theFP, self), self);
 					print(" is on a free page?!", self);
 					/* begin cr */
-					printf("\n", self);
+					printf("\n");
 					return null;
 				}
 				shortPrintFrameAndCallers(theFP, self);
@@ -63627,7 +63627,7 @@ printCallStackOfcurrentFP(sqInt aContext, char *currFP, sqInt self)
 				/* begin printHexPtr: */
 				printHex(oopForPointer(theFP, self), self);
 				/* begin cr */
-				printf("\n", self);
+				printf("\n");
 				return null;
 			}
 		}
@@ -63647,7 +63647,7 @@ printCallStackOfcurrentFP(sqInt aContext, char *currFP, sqInt self)
 void
 printChar(sqInt aByte, sqInt self)
 {
-	putchar(aByte, self);
+	putchar(aByte);
 }
 
 
@@ -63687,12 +63687,12 @@ printContext(sqInt aContext, sqInt self)
 		if (checkIsStillMarriedContextcurrentFP(aContext, GIV(framePointer), self)) {
 			print("married (assuming framePointer valid)", self);
 			/* begin cr */
-			printf("\n", self);
+			printf("\n");
 		}
 		else {
 			print("widowed (assuming framePointer valid)", self);
 			/* begin cr */
-			printf("\n", self);
+			printf("\n");
 		}
 		print("sender   ", self);
 		printNum(sender, self);
@@ -63701,9 +63701,9 @@ printContext(sqInt aContext, sqInt self)
 		printHex(oopForPointer((assert((((sender) & 7) == 1), self),
 		pointerForOop(sender - 1, self)), self), self);
 		/* begin printChar: */
-		putchar(')', self);
+		putchar(')');
 		/* begin cr */
-		printf("\n", self);
+		printf("\n");
 		print("ip       ", self);
 		printNum(ip, self);
 		print(" (", self);
@@ -63711,9 +63711,9 @@ printContext(sqInt aContext, sqInt self)
 		printHex(oopForPointer((assert((((ip) & 7) == 1), self),
 		pointerForOop(ip - 1, self)), self), self);
 		/* begin printChar: */
-		putchar(')', self);
+		putchar(')');
 		/* begin cr */
-		printf("\n", self);
+		printf("\n");
 	}
 	else {
 		print("sender   ", self);
@@ -63727,12 +63727,12 @@ printContext(sqInt aContext, sqInt self)
 			print(" (", self);
 			printNum((ip >> 3), self);
 			/* begin space */
-			putchar(' ', self);
+			putchar(' ');
 			printHex((ip >> 3), self);
 			/* begin printChar: */
-			putchar(')', self);
+			putchar(')');
 			/* begin cr */
-			printf("\n", self);
+			printf("\n");
 		}
 	}
 	/* begin fetchPointer:ofObject: */
@@ -63743,9 +63743,9 @@ printContext(sqInt aContext, sqInt self)
 	print(" (", self);
 	printNum((sp >> 3), self);
 	/* begin printChar: */
-	putchar(')', self);
+	putchar(')');
 	/* begin cr */
-	printf("\n", self);
+	printf("\n");
 	print("method   ", self);
 	/* begin printMethodFieldForPrintContext: */
 	shortPrintOop(longAt((aContext + BaseHeaderSize) + (((sqInt)((usqInt)(MethodIndex) << (shiftForWord(self))))), self), self);
@@ -63758,7 +63758,7 @@ printContext(sqInt aContext, sqInt self)
 		print("       ", self);
 		printNum(i, self);
 		/* begin space */
-		putchar(' ', self);
+		putchar(' ');
 		shortPrintOop(longAt((aContext + BaseHeaderSize) + (((sqInt)((usqInt)((ReceiverIndex + i)) << (shiftForWord(self))))), self), self);
 	}
 }
@@ -63787,7 +63787,7 @@ printFrameAndCallersSPshort(char *theFP, char *theSP, sqInt printShort, sqInt se
 		return null;
 	}
 	/* begin cr */
-	printf("\n", self);
+	printf("\n");
 	printFrameWithSP(theFP, theSP, self);
 	return 0;
 }
@@ -63807,7 +63807,7 @@ printFrameFlagsForFP(char *theFP, sqInt self)
 	printHex(it, self);
 	if (it != 0) {
 		/* begin printChar: */
-		putchar('=', self);
+		putchar('=');
 		printNum(it, self);
 	}
 	print("  numArgs: ", self);
@@ -63819,7 +63819,7 @@ printFrameFlagsForFP(char *theFP, sqInt self)
 		? " isBlock"
 		: " notBlock"), self);
 	/* begin cr */
-	printf("\n", self);
+	printf("\n");
 }
 
 	/* StackInterpreter>>#printFrameOop:at: */
@@ -63834,21 +63834,21 @@ printFrameOopat(char *name, char *address, sqInt self)
 	/* begin printHexPtr: */
 	printHex(oopForPointer(address, self), self);
 	/* begin printChar: */
-	putchar(':', self);
-	for (i = 1, iLimiT = (12 - (strlen(name, self))); i <= iLimiT; i += 1) {
+	putchar(':');
+	for (i = 1, iLimiT = (12 - (strlen(name))); i <= iLimiT; i += 1) {
 		/* begin printChar: */
-		putchar(' ', self);
+		putchar(' ');
 	}
 	print(name, self);
 	print(": ", self);
 	printHex(it, self);
 	/* begin tab */
-	putchar('	', self);
+	putchar('	');
 	/* begin printChar: */
-	putchar('=', self);
+	putchar('=');
 	printOopShort(it, self);
 	/* begin cr */
-	printf("\n", self);
+	printf("\n");
 }
 
 
@@ -63876,12 +63876,12 @@ printFramesOnStackPageListInUse(sqInt self)
 			print("page ", self);
 			/* begin printHexPtrnp: */
 			n = oopForPointer(page, self);
-			printf("0x%" PRIxSQINT "", n, self);
+			printf("0x%" PRIxSQINT "", n);
 			/* begin cr */
-			printf("\n", self);
+			printf("\n");
 			printFramesInPage(page, self);
 			/* begin cr */
-			printf("\n", self);
+			printf("\n");
 		}
 	} while(((page = (page->prevPage))) != (mostRecentlyUsedPage(self)));
 }
@@ -63898,18 +63898,18 @@ printFrameThingandFrameat(char *name, char *theFP, char *address, sqInt self)
 	/* begin printHexPtr: */
 	printHex(oopForPointer(address, self), self);
 	/* begin printChar: */
-	putchar(':', self);
-	len = strlen(name, self);
+	putchar(':');
+	len = strlen(name);
 	for (i = 1; i <= (12 - len); i += 1) {
 		/* begin space */
-		putchar(' ', self);
+		putchar(' ');
 	}
 	print(name, self);
 	print(": ", self);
 	printHex(it, self);
 	if (it != 0) {
 		/* begin printChar: */
-		putchar('=', self);
+		putchar('=');
 		if (it == GIV(nilObj)) {
 			print("nil", self);
 		}
@@ -63921,7 +63921,7 @@ printFrameThingandFrameat(char *name, char *theFP, char *address, sqInt self)
 	/* begin printHexPtr: */
 	printHex(oopForPointer(theFP, self), self);
 	/* begin cr */
-	printf("\n", self);
+	printf("\n");
 }
 
 	/* StackInterpreter>>#printFrameThing:at: */
@@ -63936,18 +63936,18 @@ printFrameThingat(char *name, char *address, sqInt self)
 	/* begin printHexPtr: */
 	printHex(oopForPointer(address, self), self);
 	/* begin printChar: */
-	putchar(':', self);
-	len = strlen(name, self);
+	putchar(':');
+	len = strlen(name);
 	for (i = 1; i <= (12 - len); i += 1) {
 		/* begin space */
-		putchar(' ', self);
+		putchar(' ');
 	}
 	print(name, self);
 	print(": ", self);
 	printHex(it, self);
 	if (it != 0) {
 		/* begin printChar: */
-		putchar('=', self);
+		putchar('=');
 		if (it == GIV(nilObj)) {
 			print("nil", self);
 		}
@@ -63956,7 +63956,7 @@ printFrameThingat(char *name, char *address, sqInt self)
 		}
 	}
 	/* begin cr */
-	printf("\n", self);
+	printf("\n");
 }
 
 	/* StackInterpreter>>#printFrame: */
@@ -63983,7 +63983,7 @@ printFrame(char *theFP, sqInt self)
 		printHex(oopForPointer(theFP, self), self);
 		print(" is not in the stack zone?!", self);
 		/* begin cr */
-		printf("\n", self);
+		printf("\n");
 		return null;
 	}
 	frameAbove = null;
@@ -63999,7 +63999,7 @@ printFrame(char *theFP, sqInt self)
 			printHex(oopForPointer(theFP, self), self);
 			print(" is on a free page?!", self);
 			/* begin cr */
-			printf("\n", self);
+			printf("\n");
 			return null;
 		}
 		if ((thePage != GIV(stackPage))
@@ -64039,7 +64039,7 @@ printFrame(char *theFP, sqInt self)
 	if (!(theSP)) {
 		print("could not find sp; using bogus value", self);
 		/* begin cr */
-		printf("\n", self);
+		printf("\n");
 		/* begin frameReceiverLocation: */
 		theSP = theFP + FoxReceiver;
 	}
@@ -64066,7 +64066,7 @@ printFrameWithSP(char *theFP, char *theSP, sqInt self)
 		printHex(oopForPointer(theFP, self), self);
 		print(" is not in the stack zone?!", self);
 		/* begin cr */
-		printf("\n", self);
+		printf("\n");
 		return null;
 	}
 	/* begin frameMethod: */
@@ -64107,7 +64107,7 @@ printFrameWithSP(char *theFP, char *theSP, sqInt self)
 sqInt
 printHexnp(usqInt n, sqInt self)
 {
-	return printf("0x%" PRIxSQINT "", n, self);
+	return printf("0x%" PRIxSQINT "", n);
 }
 
 
@@ -64202,9 +64202,9 @@ longAt((objOop12 + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shiftFo
 			/* begin fetchPointer:ofObject: */
 			methodClassAssociation = longAt((objOop12 + BaseHeaderSize) + (((sqInt)((usqInt)((offset + LiteralStart)) << (shiftForWord(self))))), self);
 			/* begin printHexnp: */
-			printf("0x%" PRIxSQINT "", objOop12, self);
+			printf("0x%" PRIxSQINT "", objOop12);
 			/* begin space */
-			putchar(' ', self);
+			putchar(' ');
 			/* begin printOopShortInner: */
 			if ((((methodClassAssociation & (tagMask(self))) == 0)
 			 && (((((usqInt) (longAt(methodClassAssociation, self))) >> (formatShift(self))) & (formatMask(self))) <= 5 /* lastPointerFormat */))
@@ -64218,43 +64218,43 @@ longAt((objOop12 + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shiftFo
 			if (oop & (tagMask(self))) {
 				if (oop & (characterTag(self))) {
 					/* begin printChar: */
-					putchar('$', self);
+					putchar('$');
 					/* begin printChar: */
 					aByte = ((usqInt) (((usqInt)oop))) >> (numTagBits(self));
-					putchar(aByte, self);
+					putchar(aByte);
 					/* begin printChar: */
-					putchar('(', self);
+					putchar('(');
 					/* begin printHexnp: */
 					n = ((usqInt) (((usqInt)oop))) >> (numTagBits(self));
-					printf("0x%" PRIxSQINT "", n, self);
+					printf("0x%" PRIxSQINT "", n);
 					/* begin printChar: */
-					putchar(')', self);
+					putchar(')');
 					goto l29;
 				}
 				if ((((oop) & 7) == 1)) {
 					printNum((oop >> 3), self);
 					/* begin printChar: */
-					putchar('(', self);
+					putchar('(');
 					/* begin printHexnp: */
 					n1 = (oop >> 3);
-					printf("0x%" PRIxSQINT "", n1, self);
+					printf("0x%" PRIxSQINT "", n1);
 					/* begin printChar: */
-					putchar(')', self);
+					putchar(')');
 					goto l29;
 				}
 				if (oop & (smallFloatTag(self))) {
 					printFloat(dbgFloatValueOf(oop, self), self);
 					/* begin printChar: */
-					putchar('(', self);
+					putchar('(');
 					/* begin printHexnp: */
-					printf("0x%" PRIxSQINT "", oop, self);
+					printf("0x%" PRIxSQINT "", oop);
 					/* begin printChar: */
-					putchar(')', self);
+					putchar(')');
 					goto l29;
 				}
 				print("unknown immediate ", self);
 				/* begin printHexnp: */
-				printf("0x%" PRIxSQINT "", oop, self);
+				printf("0x%" PRIxSQINT "", oop);
 				goto l29;
 			}
 			if (!(addressCouldBeObj(oop, self))) {
@@ -64279,7 +64279,7 @@ longAt((objOop12 + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shiftFo
 					referent = longAt((referent + BaseHeaderSize) + (0U << (shiftForWord(self))), self);
 				}
 				n2 = referent;
-				printf("0x%" PRIxSQINT "", n2, self);
+				printf("0x%" PRIxSQINT "", n2);
 				goto l29;
 			}
 			if ((((tagBits = oop & (tagMask(self)))) != 0
@@ -64316,34 +64316,34 @@ longAt((objOop12 + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shiftFo
 			}
 			name = nameOfClass(classOop, self);
 			if (nameLen == 10) {
-				if ((strncmp(name, "ByteString", 10, self)) == 0) {
+				if ((strncmp(name, "ByteString", 10)) == 0) {
 					/* begin printChar: */
-					putchar('\'', self);
+					putchar('\'');
 					printStringOf(oop, self);
 					/* begin printChar: */
-					putchar('\'', self);
+					putchar('\'');
 					goto l29;
 				}
-				if ((strncmp(name, "ByteSymbol", 10, self)) == 0) {
+				if ((strncmp(name, "ByteSymbol", 10)) == 0) {
 					/* begin printChar: */
-					putchar('#', self);
+					putchar('#');
 					printStringOf(oop, self);
 					goto l29;
 				}
 			}
 			if ((nameLen == 9)
-			 && ((strncmp(name, "Character", 9, self)) == 0)) {
+			 && ((strncmp(name, "Character", 9)) == 0)) {
 				/* begin printChar: */
-				putchar('$', self);
+				putchar('$');
 				/* begin printChar: */
 				aByte1 = ((longAt((oop + BaseHeaderSize) + (0U << (shiftForWord(self))), self)) >> 3);
-				putchar(aByte1, self);
+				putchar(aByte1);
 				goto l29;
 			}
 			print("a(n) ", self);
 			for (i = 0; i < nameLen; i += 1) {
 				/* begin printChar: */
-				putchar(name[i], self);
+				putchar(name[i]);
 			}
 			if ((((((usqInt) (longAt(oop, self))) >> (formatShift(self))) & (formatMask(self))) <= 5 /* lastPointerFormat */)
 			 && ((((assert(addressCouldBeClassObj(classOop, self), self),
@@ -64383,17 +64383,17 @@ longAt((objOop12 + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shiftFo
 				}
 	l28:	;
 				/* begin space */
-				putchar(' ', self);
+				putchar(' ');
 				printOopShort(longAt((oop + BaseHeaderSize) + (((sqInt)((usqInt)(KeyIndex) << (shiftForWord(self))))), self), self);
 				print(" -> ", self);
 				/* begin printHexnp: */
 				n3 = longAt((oop + BaseHeaderSize) + (((sqInt)((usqInt)(ValueIndex) << (shiftForWord(self))))), self);
-				printf("0x%" PRIxSQINT "", n3, self);
+				printf("0x%" PRIxSQINT "", n3);
 	l27:	;
 			}
 	l29:	/* end printOopShortInner: */;
 			/* begin cr */
-			printf("\n", self);
+			printf("\n");
 		}
 		prevPrevObj = prevObj;
 		prevObj = objOop12;
@@ -64432,9 +64432,9 @@ longAt((objOop12 + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shiftFo
 			/* begin fetchPointer:ofObject: */
 			methodClassAssociation = longAt((objOop12 + BaseHeaderSize) + (((sqInt)((usqInt)((offset + LiteralStart)) << (shiftForWord(self))))), self);
 			/* begin printHexnp: */
-			printf("0x%" PRIxSQINT "", objOop12, self);
+			printf("0x%" PRIxSQINT "", objOop12);
 			/* begin space */
-			putchar(' ', self);
+			putchar(' ');
 			/* begin printOopShortInner: */
 			if ((((methodClassAssociation & (tagMask(self))) == 0)
 			 && (((((usqInt) (longAt(methodClassAssociation, self))) >> (formatShift(self))) & (formatMask(self))) <= 5 /* lastPointerFormat */))
@@ -64448,43 +64448,43 @@ longAt((objOop12 + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shiftFo
 			if (oop & (tagMask(self))) {
 				if (oop & (characterTag(self))) {
 					/* begin printChar: */
-					putchar('$', self);
+					putchar('$');
 					/* begin printChar: */
 					aByte = ((usqInt) (((usqInt)oop))) >> (numTagBits(self));
-					putchar(aByte, self);
+					putchar(aByte);
 					/* begin printChar: */
-					putchar('(', self);
+					putchar('(');
 					/* begin printHexnp: */
 					n = ((usqInt) (((usqInt)oop))) >> (numTagBits(self));
-					printf("0x%" PRIxSQINT "", n, self);
+					printf("0x%" PRIxSQINT "", n);
 					/* begin printChar: */
-					putchar(')', self);
+					putchar(')');
 					goto l32;
 				}
 				if ((((oop) & 7) == 1)) {
 					printNum((oop >> 3), self);
 					/* begin printChar: */
-					putchar('(', self);
+					putchar('(');
 					/* begin printHexnp: */
 					n1 = (oop >> 3);
-					printf("0x%" PRIxSQINT "", n1, self);
+					printf("0x%" PRIxSQINT "", n1);
 					/* begin printChar: */
-					putchar(')', self);
+					putchar(')');
 					goto l32;
 				}
 				if (oop & (smallFloatTag(self))) {
 					printFloat(dbgFloatValueOf(oop, self), self);
 					/* begin printChar: */
-					putchar('(', self);
+					putchar('(');
 					/* begin printHexnp: */
-					printf("0x%" PRIxSQINT "", oop, self);
+					printf("0x%" PRIxSQINT "", oop);
 					/* begin printChar: */
-					putchar(')', self);
+					putchar(')');
 					goto l32;
 				}
 				print("unknown immediate ", self);
 				/* begin printHexnp: */
-				printf("0x%" PRIxSQINT "", oop, self);
+				printf("0x%" PRIxSQINT "", oop);
 				goto l32;
 			}
 			if (!(addressCouldBeObj(oop, self))) {
@@ -64509,7 +64509,7 @@ longAt((objOop12 + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shiftFo
 					referent = longAt((referent + BaseHeaderSize) + (0U << (shiftForWord(self))), self);
 				}
 				n2 = referent;
-				printf("0x%" PRIxSQINT "", n2, self);
+				printf("0x%" PRIxSQINT "", n2);
 				goto l32;
 			}
 			if ((((tagBits = oop & (tagMask(self)))) != 0
@@ -64546,34 +64546,34 @@ longAt((objOop12 + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shiftFo
 			}
 			name = nameOfClass(classOop, self);
 			if (nameLen == 10) {
-				if ((strncmp(name, "ByteString", 10, self)) == 0) {
+				if ((strncmp(name, "ByteString", 10)) == 0) {
 					/* begin printChar: */
-					putchar('\'', self);
+					putchar('\'');
 					printStringOf(oop, self);
 					/* begin printChar: */
-					putchar('\'', self);
+					putchar('\'');
 					goto l32;
 				}
-				if ((strncmp(name, "ByteSymbol", 10, self)) == 0) {
+				if ((strncmp(name, "ByteSymbol", 10)) == 0) {
 					/* begin printChar: */
-					putchar('#', self);
+					putchar('#');
 					printStringOf(oop, self);
 					goto l32;
 				}
 			}
 			if ((nameLen == 9)
-			 && ((strncmp(name, "Character", 9, self)) == 0)) {
+			 && ((strncmp(name, "Character", 9)) == 0)) {
 				/* begin printChar: */
-				putchar('$', self);
+				putchar('$');
 				/* begin printChar: */
 				aByte1 = ((longAt((oop + BaseHeaderSize) + (0U << (shiftForWord(self))), self)) >> 3);
-				putchar(aByte1, self);
+				putchar(aByte1);
 				goto l32;
 			}
 			print("a(n) ", self);
 			for (i = 0; i < nameLen; i += 1) {
 				/* begin printChar: */
-				putchar(name[i], self);
+				putchar(name[i]);
 			}
 			if ((((((usqInt) (longAt(oop, self))) >> (formatShift(self))) & (formatMask(self))) <= 5 /* lastPointerFormat */)
 			 && ((((assert(addressCouldBeClassObj(classOop, self), self),
@@ -64613,17 +64613,17 @@ longAt((objOop12 + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shiftFo
 				}
 	l31:	;
 				/* begin space */
-				putchar(' ', self);
+				putchar(' ');
 				printOopShort(longAt((oop + BaseHeaderSize) + (((sqInt)((usqInt)(KeyIndex) << (shiftForWord(self))))), self), self);
 				print(" -> ", self);
 				/* begin printHexnp: */
 				n3 = longAt((oop + BaseHeaderSize) + (((sqInt)((usqInt)(ValueIndex) << (shiftForWord(self))))), self);
-				printf("0x%" PRIxSQINT "", n3, self);
+				printf("0x%" PRIxSQINT "", n3);
 	l30:	;
 			}
 	l32:	/* end printOopShortInner: */;
 			/* begin cr */
-			printf("\n", self);
+			printf("\n");
 		}
 		prevPrevObj = prevObj;
 		prevObj = objOop12;
@@ -64663,9 +64663,9 @@ longAt((objOop11 + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shiftFo
 				/* begin fetchPointer:ofObject: */
 				methodClassAssociation = longAt((objOop11 + BaseHeaderSize) + (((sqInt)((usqInt)((offset + LiteralStart)) << (shiftForWord(self))))), self);
 				/* begin printHexnp: */
-				printf("0x%" PRIxSQINT "", objOop11, self);
+				printf("0x%" PRIxSQINT "", objOop11);
 				/* begin space */
-				putchar(' ', self);
+				putchar(' ');
 				/* begin printOopShortInner: */
 				if ((((methodClassAssociation & (tagMask(self))) == 0)
 				 && (((((usqInt) (longAt(methodClassAssociation, self))) >> (formatShift(self))) & (formatMask(self))) <= 5 /* lastPointerFormat */))
@@ -64679,43 +64679,43 @@ longAt((objOop11 + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shiftFo
 				if (oop & (tagMask(self))) {
 					if (oop & (characterTag(self))) {
 						/* begin printChar: */
-						putchar('$', self);
+						putchar('$');
 						/* begin printChar: */
 						aByte = ((usqInt) (((usqInt)oop))) >> (numTagBits(self));
-						putchar(aByte, self);
+						putchar(aByte);
 						/* begin printChar: */
-						putchar('(', self);
+						putchar('(');
 						/* begin printHexnp: */
 						n = ((usqInt) (((usqInt)oop))) >> (numTagBits(self));
-						printf("0x%" PRIxSQINT "", n, self);
+						printf("0x%" PRIxSQINT "", n);
 						/* begin printChar: */
-						putchar(')', self);
+						putchar(')');
 						goto l35;
 					}
 					if ((((oop) & 7) == 1)) {
 						printNum((oop >> 3), self);
 						/* begin printChar: */
-						putchar('(', self);
+						putchar('(');
 						/* begin printHexnp: */
 						n1 = (oop >> 3);
-						printf("0x%" PRIxSQINT "", n1, self);
+						printf("0x%" PRIxSQINT "", n1);
 						/* begin printChar: */
-						putchar(')', self);
+						putchar(')');
 						goto l35;
 					}
 					if (oop & (smallFloatTag(self))) {
 						printFloat(dbgFloatValueOf(oop, self), self);
 						/* begin printChar: */
-						putchar('(', self);
+						putchar('(');
 						/* begin printHexnp: */
-						printf("0x%" PRIxSQINT "", oop, self);
+						printf("0x%" PRIxSQINT "", oop);
 						/* begin printChar: */
-						putchar(')', self);
+						putchar(')');
 						goto l35;
 					}
 					print("unknown immediate ", self);
 					/* begin printHexnp: */
-					printf("0x%" PRIxSQINT "", oop, self);
+					printf("0x%" PRIxSQINT "", oop);
 					goto l35;
 				}
 				if (!(addressCouldBeObj(oop, self))) {
@@ -64740,7 +64740,7 @@ longAt((objOop11 + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shiftFo
 						referent = longAt((referent + BaseHeaderSize) + (0U << (shiftForWord(self))), self);
 					}
 					n2 = referent;
-					printf("0x%" PRIxSQINT "", n2, self);
+					printf("0x%" PRIxSQINT "", n2);
 					goto l35;
 				}
 				if ((((tagBits = oop & (tagMask(self)))) != 0
@@ -64777,34 +64777,34 @@ longAt((objOop11 + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shiftFo
 				}
 				name = nameOfClass(classOop, self);
 				if (nameLen == 10) {
-					if ((strncmp(name, "ByteString", 10, self)) == 0) {
+					if ((strncmp(name, "ByteString", 10)) == 0) {
 						/* begin printChar: */
-						putchar('\'', self);
+						putchar('\'');
 						printStringOf(oop, self);
 						/* begin printChar: */
-						putchar('\'', self);
+						putchar('\'');
 						goto l35;
 					}
-					if ((strncmp(name, "ByteSymbol", 10, self)) == 0) {
+					if ((strncmp(name, "ByteSymbol", 10)) == 0) {
 						/* begin printChar: */
-						putchar('#', self);
+						putchar('#');
 						printStringOf(oop, self);
 						goto l35;
 					}
 				}
 				if ((nameLen == 9)
-				 && ((strncmp(name, "Character", 9, self)) == 0)) {
+				 && ((strncmp(name, "Character", 9)) == 0)) {
 					/* begin printChar: */
-					putchar('$', self);
+					putchar('$');
 					/* begin printChar: */
 					aByte1 = ((longAt((oop + BaseHeaderSize) + (0U << (shiftForWord(self))), self)) >> 3);
-					putchar(aByte1, self);
+					putchar(aByte1);
 					goto l35;
 				}
 				print("a(n) ", self);
 				for (i = 0; i < nameLen; i += 1) {
 					/* begin printChar: */
-					putchar(name[i], self);
+					putchar(name[i]);
 				}
 				if ((((((usqInt) (longAt(oop, self))) >> (formatShift(self))) & (formatMask(self))) <= 5 /* lastPointerFormat */)
 				 && ((((assert(addressCouldBeClassObj(classOop, self), self),
@@ -64844,17 +64844,17 @@ longAt((objOop11 + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shiftFo
 					}
 	l34:	;
 					/* begin space */
-					putchar(' ', self);
+					putchar(' ');
 					printOopShort(longAt((oop + BaseHeaderSize) + (((sqInt)((usqInt)(KeyIndex) << (shiftForWord(self))))), self), self);
 					print(" -> ", self);
 					/* begin printHexnp: */
 					n3 = longAt((oop + BaseHeaderSize) + (((sqInt)((usqInt)(ValueIndex) << (shiftForWord(self))))), self);
-					printf("0x%" PRIxSQINT "", n3, self);
+					printf("0x%" PRIxSQINT "", n3);
 	l33:	;
 				}
 	l35:	/* end printOopShortInner: */;
 				/* begin cr */
-				printf("\n", self);
+				printf("\n");
 			}
 		}
 		prevPrevObj1 = prevObj1;
@@ -64926,13 +64926,13 @@ printMethodCacheFor(sqInt thing, sqInt self)
 		 || (addressCouldBeClassObj(classAtIndex(c, self), self)))))) {
 			printNum(i, self);
 			/* begin space */
-			putchar(' ', self);
+			putchar(' ');
 			/* begin printHexnp: */
-			printf("0x%" PRIxSQINT "", i, self);
+			printf("0x%" PRIxSQINT "", i);
 			/* begin cr */
-			printf("\n", self);
+			printf("\n");
 			/* begin tab */
-			putchar('	', self);
+			putchar('	');
 			if (((((usqInt) (longAt(s, self))) >> (formatShift(self))) & (formatMask(self))) >= (firstByteFormat(self))) {
 				printf("%" PRIxSQPTR " %.*s\n", s, (int)(numBytesOf(s)), (char *)firstIndexableField(s));
 			}
@@ -64940,36 +64940,36 @@ printMethodCacheFor(sqInt thing, sqInt self)
 				shortPrintOop(s, self);
 			}
 			/* begin tab */
-			putchar('	', self);
+			putchar('	');
 			if (addressCouldBeClassObj(c, self)) {
 				shortPrintOop(c, self);
 			}
 			else {
 				printNum(c, self);
 				/* begin space */
-				putchar(' ', self);
+				putchar(' ');
 				shortPrintOop(classAtIndex(c, self), self);
 			}
 			/* begin tab */
-			putchar('	', self);
+			putchar('	');
 			shortPrintOop(m, self);
 			/* begin tab */
-			putchar('	', self);
+			putchar('	');
 			if (p > 1024) {
 				/* begin printHexnp: */
-				printf("0x%" PRIxSQINT "", p, self);
+				printf("0x%" PRIxSQINT "", p);
 			}
 			else {
 				printNum(p, self);
 			}
 			/* begin cr */
-			printf("\n", self);
+			printf("\n");
 		}
 	}
 	if (n > 1) {
 		printNum(n, self);
 		/* begin cr */
-		printf("\n", self);
+		printf("\n");
 	}
 }
 
@@ -65001,9 +65001,9 @@ printMethodDictionaryOf(sqInt behavior, sqInt self)
 			printHex(selector, self);
 			print(" => ", self);
 			printHex(meth, self);
-			putchar(')', self);
+			putchar(')');
 			/* begin cr */
-			printf("\n", self);
+			printf("\n");
 		}
 	}
 }
@@ -65033,9 +65033,9 @@ printMethodDictionary(sqInt dictionary, sqInt self)
 			printHex(selector, self);
 			print(" => ", self);
 			printHex(meth, self);
-			putchar(')', self);
+			putchar(')');
 			/* begin cr */
-			printf("\n", self);
+			printf("\n");
 		}
 	}
 }
@@ -65118,43 +65118,43 @@ printOopShort(sqInt oop, sqInt self)
 	if (oop & (tagMask(self))) {
 		if (oop & (characterTag(self))) {
 			/* begin printChar: */
-			putchar('$', self);
+			putchar('$');
 			/* begin printChar: */
 			aByte = ((usqInt) (((usqInt)oop))) >> (numTagBits(self));
-			putchar(aByte, self);
+			putchar(aByte);
 			/* begin printChar: */
-			putchar('(', self);
+			putchar('(');
 			/* begin printHexnp: */
 			n = ((usqInt) (((usqInt)oop))) >> (numTagBits(self));
-			printf("0x%" PRIxSQINT "", n, self);
+			printf("0x%" PRIxSQINT "", n);
 			/* begin printChar: */
-			putchar(')', self);
+			putchar(')');
 			goto l17;
 		}
 		if ((((oop) & 7) == 1)) {
 			printNum((oop >> 3), self);
 			/* begin printChar: */
-			putchar('(', self);
+			putchar('(');
 			/* begin printHexnp: */
 			n1 = (oop >> 3);
-			printf("0x%" PRIxSQINT "", n1, self);
+			printf("0x%" PRIxSQINT "", n1);
 			/* begin printChar: */
-			putchar(')', self);
+			putchar(')');
 			goto l17;
 		}
 		if (oop & (smallFloatTag(self))) {
 			printFloat(dbgFloatValueOf(oop, self), self);
 			/* begin printChar: */
-			putchar('(', self);
+			putchar('(');
 			/* begin printHexnp: */
-			printf("0x%" PRIxSQINT "", oop, self);
+			printf("0x%" PRIxSQINT "", oop);
 			/* begin printChar: */
-			putchar(')', self);
+			putchar(')');
 			goto l17;
 		}
 		print("unknown immediate ", self);
 		/* begin printHexnp: */
-		printf("0x%" PRIxSQINT "", oop, self);
+		printf("0x%" PRIxSQINT "", oop);
 		goto l17;
 	}
 	if (!(addressCouldBeObj(oop, self))) {
@@ -65179,7 +65179,7 @@ printOopShort(sqInt oop, sqInt self)
 			referent = longAt((referent + BaseHeaderSize) + (0U << (shiftForWord(self))), self);
 		}
 		n2 = referent;
-		printf("0x%" PRIxSQINT "", n2, self);
+		printf("0x%" PRIxSQINT "", n2);
 		goto l17;
 	}
 	if ((((tagBits = oop & (tagMask(self)))) != 0
@@ -65216,34 +65216,34 @@ printOopShort(sqInt oop, sqInt self)
 	}
 	name = nameOfClass(classOop, self);
 	if (nameLen == 10) {
-		if ((strncmp(name, "ByteString", 10, self)) == 0) {
+		if ((strncmp(name, "ByteString", 10)) == 0) {
 			/* begin printChar: */
-			putchar('\'', self);
+			putchar('\'');
 			printStringOf(oop, self);
 			/* begin printChar: */
-			putchar('\'', self);
+			putchar('\'');
 			goto l17;
 		}
-		if ((strncmp(name, "ByteSymbol", 10, self)) == 0) {
+		if ((strncmp(name, "ByteSymbol", 10)) == 0) {
 			/* begin printChar: */
-			putchar('#', self);
+			putchar('#');
 			printStringOf(oop, self);
 			goto l17;
 		}
 	}
 	if ((nameLen == 9)
-	 && ((strncmp(name, "Character", 9, self)) == 0)) {
+	 && ((strncmp(name, "Character", 9)) == 0)) {
 		/* begin printChar: */
-		putchar('$', self);
+		putchar('$');
 		/* begin printChar: */
 		aByte1 = ((longAt((oop + BaseHeaderSize) + (0U << (shiftForWord(self))), self)) >> 3);
-		putchar(aByte1, self);
+		putchar(aByte1);
 		goto l17;
 	}
 	print("a(n) ", self);
 	for (i = 0; i < nameLen; i += 1) {
 		/* begin printChar: */
-		putchar(name[i], self);
+		putchar(name[i]);
 	}
 	if ((((((usqInt) (longAt(oop, self))) >> (formatShift(self))) & (formatMask(self))) <= 5 /* lastPointerFormat */)
 	 && ((((assert(addressCouldBeClassObj(classOop, self), self),
@@ -65283,12 +65283,12 @@ printOopShort(sqInt oop, sqInt self)
 		}
 	l8:	;
 		/* begin space */
-		putchar(' ', self);
+		putchar(' ');
 		printOopShort(longAt((oop + BaseHeaderSize) + (((sqInt)((usqInt)(KeyIndex) << (shiftForWord(self))))), self), self);
 		print(" -> ", self);
 		/* begin printHexnp: */
 		n3 = longAt((oop + BaseHeaderSize) + (((sqInt)((usqInt)(ValueIndex) << (shiftForWord(self))))), self);
-		printf("0x%" PRIxSQINT "", n3, self);
+		printf("0x%" PRIxSQINT "", n3);
 	l7:	;
 	}
 	l17:	/* end printOopShortInner: */;
@@ -65320,7 +65320,7 @@ printOop(sqInt oop, sqInt self)
 					? " is misaligned"
 					: whereIs(oop, self)), self),
 			/* begin cr */
-			printf("\n", self));
+			printf("\n"));
 	}
 	if (((longAt(oop, self)) & (classIndexMask(self))) == (isFreeObjectClassIndexPun(self))) {
 		print(" is a free chunk of size ", self);
@@ -65330,7 +65330,7 @@ printOop(sqInt oop, sqInt self)
 		printHex(longAt((oop + BaseHeaderSize) + (0U << (shiftForWord(self))), self), self);
 		printHeaderTypeOf(oop, self);
 		/* begin cr */
-		printf("\n", self);
+		printf("\n");
 		return null;
 	}
 	if (((longAt(oop, self)) & ((classIndexMask(self)) - (isForwardedObjectClassIndexPun(self)))) == 0) {
@@ -65340,17 +65340,17 @@ printOop(sqInt oop, sqInt self)
 		printNum(numSlotsOfAny(oop, self), self);
 		printHeaderTypeOf(oop, self);
 		/* begin cr */
-		printf("\n", self);
+		printf("\n");
 		return null;
 	}
 	print(": a(n) ", self);
 	printNameOfClasscount((cls = fetchClassOfNonImm(oop, self)), 5, self);
 	if (cls == (splObj(ClassFloat, self))) {
 		return (/* begin cr */
-			printf("\n", self),
+			printf("\n"),
 			printFloat(dbgFloatValueOf(oop, self), self),
 			/* begin cr */
-			printf("\n", self));
+			printf("\n"));
 	}
 	fmt = (((usqInt) (longAt(oop, self))) >> (formatShift(self))) & (formatMask(self));
 	if (fmt > 5 /* lastPointerFormat */) {
@@ -65358,7 +65358,7 @@ printOop(sqInt oop, sqInt self)
 		printNum(numBytesOf(oop, self), self);
 	}
 	/* begin cr */
-	printf("\n", self);
+	printf("\n");
 	if (((fmt >= (firstLongFormat(self))) && (fmt <= ((firstCompiledMethodFormat(self)) - 1)))) {
 
 		/* This will answer false if splObj: ClassAlien is nilObject */
@@ -65372,30 +65372,30 @@ printOop(sqInt oop, sqInt self)
 						: " direct @ ")), self);
 			return (printHex(((usqInt)(startOfAlienData(oop, self))), self),
 				/* begin cr */
-				printf("\n", self));
+				printf("\n"));
 		}
 		if (((((((usqInt) (longAt(oop, self))) >> (formatShift(self))) & (formatMask(self))) >= (firstLongFormat(self))) && (((((usqInt) (longAt(oop, self))) >> (formatShift(self))) & (formatMask(self))) <= ((firstShortFormat(self)) - 1)))) {
 			lastIndex = ((64 < ((numBytesOf(oop, self)) / BytesPerWord)) ? 64 : ((numBytesOf(oop, self)) / BytesPerWord));
 			if (lastIndex > 0) {
 				for (index = 1; index <= lastIndex; index += 1) {
 					/* begin space */
-					putchar(' ', self);
+					putchar(' ');
 					printHex(((unsigned int) (long32At((oop + BaseHeaderSize) + (((sqInt)((usqInt)((index - 1)) << 2))), self))), self);
 					if ((index % 5 /* elementsPerPrintOopLine */) == 0) {
 						/* begin cr */
-						printf("\n", self);
+						printf("\n");
 					}
 				}
 				if (!((lastIndex % 5 /* elementsPerPrintOopLine */) == 0)) {
 					/* begin cr */
-					printf("\n", self);
+					printf("\n");
 				}
 			}
 			return 0;
 		}
 		return (printStringOf(oop, self),
 			/* begin cr */
-			printf("\n", self));
+			printf("\n"));
 	}
 	startIP = (((lastPointerOf(oop, self)) + BytesPerOop) - BaseHeaderSize) / BytesPerOop;
 	lastIndex = ((256 < startIP) ? 256 : startIP);
@@ -65403,15 +65403,15 @@ printOop(sqInt oop, sqInt self)
 		for (index = 1; index <= lastIndex; index += 1) {
 			printHex(longAt((oop + BaseHeaderSize) + (((sqInt)((usqInt)((index - 1)) << (shiftForWord(self))))), self), self);
 			/* begin space */
-			putchar(' ', self);
+			putchar(' ');
 			if ((index % 5 /* elementsPerPrintOopLine */) == 0) {
 				/* begin cr */
-				printf("\n", self);
+				printf("\n");
 			}
 		}
 		if (!((lastIndex % 5 /* elementsPerPrintOopLine */) == 0)) {
 			/* begin cr */
-			printf("\n", self);
+			printf("\n");
 		}
 	}
 	if (((((usqInt) (longAt(oop, self))) >> (formatShift(self))) & (formatMask(self))) >= (firstCompiledMethodFormat(self))) {
@@ -65463,19 +65463,19 @@ printOop(sqInt oop, sqInt self)
 			if (column > bytecodesPerLine) {
 				column = 1;
 				/* begin cr */
-				printf("\n", self);
+				printf("\n");
 			}
 		}
 		if (!(column == 1)) {
 			/* begin cr */
-			printf("\n", self);
+			printf("\n");
 		}
 	}
 	else {
 		if (startIP > 64) {
 			print("...", self);
 			/* begin cr */
-			printf("\n", self);
+			printf("\n");
 		}
 	}
 	return 0;
@@ -65490,17 +65490,17 @@ printProcessStack(sqInt aProcess, sqInt self)
     sqInt tagBits;
 
 	/* begin cr */
-	printf("\n", self);
+	printf("\n");
 	printNameOfClasscount((((tagBits = aProcess & (tagMask(self)))) != 0
 		? longAt((GIV(classTableFirstPage) + BaseHeaderSize) + (((sqInt)((usqInt)(tagBits) << (shiftForWord(self))))), self)
 		: fetchClassOfNonImm(aProcess, self)), 5, self);
 	/* begin space */
-	putchar(' ', self);
+	putchar(' ');
 	printHex(aProcess, self);
 	print(" priority ", self);
 	printNum(quickFetchIntegerofObject(PriorityIndex, aProcess, self), self);
 	/* begin cr */
-	printf("\n", self);
+	printf("\n");
 	/* begin followField:ofObject: */
 	objOop = longAt((aProcess + BaseHeaderSize) + (((sqInt)((usqInt)(SuspendedContextIndex) << (shiftForWord(self))))), self);
 	if (((objOop & (tagMask(self))) == 0)
@@ -65580,7 +65580,7 @@ printStackPageList(sqInt self)
 		/* begin printStackPage: */
 		printStackPageuseCount(page, -1, self);
 		/* begin cr */
-		printf("\n", self);
+		printf("\n");
 	} while(((page = (page->prevPage))) != (mostRecentlyUsedPage(self)));
 }
 
@@ -65597,7 +65597,7 @@ printStackPageListInUse(sqInt self)
 		if (!(isFree(page, self))) {
 			printStackPageuseCount(page, (n += 1), self);
 			/* begin cr */
-			printf("\n", self);
+			printf("\n");
 		}
 	} while(((page = (page->prevPage))) != (mostRecentlyUsedPage(self)));
 }
@@ -65614,7 +65614,7 @@ printStackPages(sqInt self)
 		page = stackPageAtpages(i, GIV(pages), self);
 		printStackPageuseCount(page, -1, self);
 		/* begin cr */
-		printf("\n", self);
+		printf("\n");
 	}
 }
 
@@ -65630,7 +65630,7 @@ printStackPagesInUse(sqInt self)
 		if (!(isFree(stackPageAt(i, self), self))) {
 			printStackPageuseCount(stackPageAt(i, self), (n += 1), self);
 			/* begin cr */
-			printf("\n", self);
+			printf("\n");
 		}
 	}
 }
@@ -65661,7 +65661,7 @@ printStackPageuseCount(StackPage *page, sqInt n, sqInt self)
 	print(")  (trace: ", self);
 	printNum((page->trace), self);
 	/* begin printChar: */
-	putchar(')', self);
+	putchar(')');
 	if (isFree(page, self)) {
 		print(" (free)", self);
 	}
@@ -65672,9 +65672,9 @@ printStackPageuseCount(StackPage *page, sqInt n, sqInt self)
 		print(" (LRU)", self);
 	}
 	/* begin cr */
-	printf("\n", self);
+	printf("\n");
 	/* begin tab */
-	putchar('	', self);
+	putchar('	');
 	print("ba: ", self);
 	/* begin printHexPtr: */
 	p3 = (page->baseAddress);
@@ -65693,30 +65693,30 @@ printStackPageuseCount(StackPage *page, sqInt n, sqInt self)
 	printHex(oopForPointer(p6, self), self);
 	if (!(isFree(page, self))) {
 		/* begin cr */
-		printf("\n", self);
+		printf("\n");
 		/* begin tab */
-		putchar('	', self);
+		putchar('	');
 		print("baseFP ", self);
 		/* begin printHexPtr: */
 		p = (page->baseFP);
 		printHex(oopForPointer(p, self), self);
 		/* begin tab */
-		putchar('	', self);
+		putchar('	');
 		print("headFP ", self);
 		/* begin printHexPtr: */
 		p1 = (page->headFP);
 		printHex(oopForPointer(p1, self), self);
 		/* begin tab */
-		putchar('	', self);
+		putchar('	');
 		print("headSP ", self);
 		/* begin printHexPtr: */
 		p2 = (page->headSP);
 		printHex(oopForPointer(p2, self), self);
 	}
 	/* begin cr */
-	printf("\n", self);
+	printf("\n");
 	/* begin tab */
-	putchar('	', self);
+	putchar('	');
 	print("prev ", self);
 	/* begin printHexPtr: */
 	p7 = ((void *) (page->prevPage));
@@ -65724,9 +65724,9 @@ printStackPageuseCount(StackPage *page, sqInt n, sqInt self)
 	print(" (", self);
 	printNum(pageIndexForstackMemorybytesPerPage((((page->prevPage))->realStackLimit), GIV(stackMemory), GIV(bytesPerPage), self), self);
 	/* begin printChar: */
-	putchar(')', self);
+	putchar(')');
 	/* begin tab */
-	putchar('	', self);
+	putchar('	');
 	print("next ", self);
 	/* begin printHexPtr: */
 	p8 = ((void *) (page->nextPage));
@@ -65734,9 +65734,9 @@ printStackPageuseCount(StackPage *page, sqInt n, sqInt self)
 	print(" (", self);
 	printNum(pageIndexForstackMemorybytesPerPage((((page->nextPage))->realStackLimit), GIV(stackMemory), GIV(bytesPerPage), self), self);
 	/* begin printChar: */
-	putchar(')', self);
+	putchar(')');
 	/* begin cr */
-	printf("\n", self);
+	printf("\n");
 }
 
 	/* StackInterpreter>>#printStackReferencesTo: */
@@ -65765,12 +65765,12 @@ printStackReferencesTo(sqInt oop, sqInt self)
 					if (oop == (longAt(theSP, self))) {
 						print("FP: ", self);
 						/* begin printHexnp: */
-						printf("0x%" PRIxSQINT "", ((usqInt) theFP), self);
+						printf("0x%" PRIxSQINT "", ((usqInt) theFP));
 						print(" @ ", self);
 						/* begin printHexnp: */
-						printf("0x%" PRIxSQINT "", ((usqInt) theSP), self);
+						printf("0x%" PRIxSQINT "", ((usqInt) theSP));
 						/* begin cr */
-						printf("\n", self);
+						printf("\n");
 					}
 					theSP += BytesPerWord;
 				}
@@ -65778,19 +65778,19 @@ printStackReferencesTo(sqInt oop, sqInt self)
 					if (oop == (longAt(theFP + FoxThisContext, self))) {
 						print("FP: ", self);
 						/* begin printHexnp: */
-						printf("0x%" PRIxSQINT "", ((usqInt) theFP), self);
+						printf("0x%" PRIxSQINT "", ((usqInt) theFP));
 						print(" CTXT", self);
 						/* begin cr */
-						printf("\n", self);
+						printf("\n");
 					}
 				}
 				if (oop == (longAt(theFP + FoxMethod, self))) {
 					print("FP: ", self);
 					/* begin printHexnp: */
-					printf("0x%" PRIxSQINT "", ((usqInt) theFP), self);
+					printf("0x%" PRIxSQINT "", ((usqInt) theFP));
 					print(" MTHD", self);
 					/* begin cr */
-					printf("\n", self);
+					printf("\n");
 				}
 				if (!(((callerFP = pointerForOop(longAt(theFP + FoxSavedFP, self), self))) != 0)) break;
 				theSP = (theFP + FoxCallerSavedIP) + BytesPerWord;
@@ -65803,12 +65803,12 @@ printStackReferencesTo(sqInt oop, sqInt self)
 				if (oop == (longAt(theSP, self))) {
 					print("FP: ", self);
 					/* begin printHexnp: */
-					printf("0x%" PRIxSQINT "", ((usqInt) theFP), self);
+					printf("0x%" PRIxSQINT "", ((usqInt) theFP));
 					print(" @ ", self);
 					/* begin printHexnp: */
-					printf("0x%" PRIxSQINT "", ((usqInt) theSP), self);
+					printf("0x%" PRIxSQINT "", ((usqInt) theSP));
 					/* begin cr */
-					printf("\n", self);
+					printf("\n");
 				}
 				theSP += BytesPerWord;
 			}
@@ -65858,7 +65858,7 @@ printStringOf(sqInt oop, sqInt self)
 			}
 			/* begin printChar: */
 			aByte = byteAt((oop + BaseHeaderSize) + i, self);
-			putchar(aByte, self);
+			putchar(aByte);
 			i += 1;
 		}
 	}
@@ -65956,7 +65956,7 @@ putLongtoFile(sqInt aLong, sqImageFile aFile, sqInt self)
 {   DECL_MAYBE_SQ_GLOBAL_STRUCT
     sqInt objectsWritten;
 
-	objectsWritten = sqImageFileWrite((&aLong), sizeof(sqInt, self), 1, aFile, self);
+	objectsWritten = sqImageFileWrite((&aLong), sizeof(sqInt), 1, aFile, self);
 	/* begin success: */
 	if (!(objectsWritten == 1)) {
 
@@ -65978,7 +65978,7 @@ putShorttoFile(short aShort, sqImageFile aFile, sqInt self)
 {   DECL_MAYBE_SQ_GLOBAL_STRUCT
     sqInt objectsWritten;
 
-	objectsWritten = sqImageFileWrite((&aShort), sizeof(short, self), 1, aFile, self);
+	objectsWritten = sqImageFileWrite((&aShort), sizeof(short), 1, aFile, self);
 	/* begin success: */
 	if (!(objectsWritten == 1)) {
 
@@ -66242,20 +66242,20 @@ readImageFromFileHeapSizeStartingAtV2(sqImageFile f, usqInt desiredHeapSize, squ
 	headerStart = (sqImageFilePosition(f, self)) - 4;
 	/* begin getWord32FromFile:swap: */
 	w1 = 0;
-	sqImageFileRead((&w1), sizeof(int, self), 1, f, self);
+	sqImageFileRead((&w1), sizeof(int), 1, f, self);
 	headerSize = (swapBytes
 		? SQ_SWAP_4_BYTES(w1)
 		: w1);
 	/* begin getLongFromFile:swap: */
 	w2 = 0;
-	sqImageFileRead((&w2), sizeof(w2, self), 1, f, self);
+	sqImageFileRead((&w2), sizeof(w2), 1, f, self);
 	dataSize = ((sqInt) ((swapBytes
 	? (/* begin byteSwapped: */
 		SQ_SWAP_8_BYTES(w2))
 	: w2)));
 	/* begin getLongFromFile:swap: */
 	w3 = 0;
-	sqImageFileRead((&w3), sizeof(w3, self), 1, f, self);
+	sqImageFileRead((&w3), sizeof(w3), 1, f, self);
 	if (swapBytes) {
 		/* begin byteSwapped: */
 		oldBaseAddr = SQ_SWAP_8_BYTES(w3);
@@ -66265,7 +66265,7 @@ readImageFromFileHeapSizeStartingAtV2(sqImageFile f, usqInt desiredHeapSize, squ
 	}
 	/* begin specialObjectsOop: */
 	w13 = 0;
-	sqImageFileRead((&w13), sizeof(w13, self), 1, f, self);
+	sqImageFileRead((&w13), sizeof(w13), 1, f, self);
 	if (swapBytes) {
 		/* begin byteSwapped: */
 		anObject = SQ_SWAP_8_BYTES(w13);
@@ -66276,7 +66276,7 @@ readImageFromFileHeapSizeStartingAtV2(sqImageFile f, usqInt desiredHeapSize, squ
 	GIV(specialObjectsOop) = anObject;
 	/* begin lastHash: */
 	w14 = 0;
-	sqImageFileRead((&w14), sizeof(w14, self), 1, f, self);
+	sqImageFileRead((&w14), sizeof(w14), 1, f, self);
 	if (swapBytes) {
 		/* begin byteSwapped: */
 		seed = SQ_SWAP_8_BYTES(w14);
@@ -66287,7 +66287,7 @@ readImageFromFileHeapSizeStartingAtV2(sqImageFile f, usqInt desiredHeapSize, squ
 	GIV(lastHash) = seed;
 	/* begin getLongFromFile:swap: */
 	w4 = 0;
-	sqImageFileRead((&w4), sizeof(w4, self), 1, f, self);
+	sqImageFileRead((&w4), sizeof(w4), 1, f, self);
 	if (swapBytes) {
 		/* begin byteSwapped: */
 		GIV(savedWindowSize) = SQ_SWAP_8_BYTES(w4);
@@ -66297,7 +66297,7 @@ readImageFromFileHeapSizeStartingAtV2(sqImageFile f, usqInt desiredHeapSize, squ
 	}
 	/* begin getLongFromFile:swap: */
 	w5 = 0;
-	sqImageFileRead((&w5), sizeof(w5, self), 1, f, self);
+	sqImageFileRead((&w5), sizeof(w5), 1, f, self);
 	if (swapBytes) {
 		/* begin byteSwapped: */
 		headerFlags = SQ_SWAP_8_BYTES(w5);
@@ -66323,13 +66323,13 @@ readImageFromFileHeapSizeStartingAtV2(sqImageFile f, usqInt desiredHeapSize, squ
 	sendWheelEvents = headerFlags & 128;
 	/* begin getWord32FromFile:swap: */
 	w6 = 0;
-	sqImageFileRead((&w6), sizeof(int, self), 1, f, self);
+	sqImageFileRead((&w6), sizeof(int), 1, f, self);
 	extraVMMemory = (swapBytes
 		? SQ_SWAP_4_BYTES(w6)
 		: w6);
 	/* begin getShortFromFile:swap: */
 	w7 = 0;
-	sqImageFileRead((&w7), sizeof(unsigned short, self), 1, f, self);
+	sqImageFileRead((&w7), sizeof(unsigned short), 1, f, self);
 	hdrNumStackPages = (swapBytes
 		? ((((usqInt) w7) >> 8) & 0xFF) | (((sqInt)((usqInt)((w7 & 0xFF)) << 8)))
 		: w7);
@@ -66344,13 +66344,13 @@ readImageFromFileHeapSizeStartingAtV2(sqImageFile f, usqInt desiredHeapSize, squ
 	desiredNumStackPages = hdrNumStackPages;
 	/* begin getShortFromFile:swap: */
 	w8 = 0;
-	sqImageFileRead((&w8), sizeof(unsigned short, self), 1, f, self);
+	sqImageFileRead((&w8), sizeof(unsigned short), 1, f, self);
 	GIV(theUnknownShort) = (swapBytes
 		? ((((usqInt) w8) >> 8) & 0xFF) | (((sqInt)((usqInt)((w8 & 0xFF)) << 8)))
 		: w8);
 	/* begin getWord32FromFile:swap: */
 	w9 = 0;
-	sqImageFileRead((&w9), sizeof(int, self), 1, f, self);
+	sqImageFileRead((&w9), sizeof(int), 1, f, self);
 	hdrEdenBytes = (swapBytes
 		? SQ_SWAP_4_BYTES(w9)
 		: w9);
@@ -66364,7 +66364,7 @@ readImageFromFileHeapSizeStartingAtV2(sqImageFile f, usqInt desiredHeapSize, squ
 	desiredEdenBytes = hdrEdenBytes;
 	/* begin getShortFromFile:swap: */
 	w10 = 0;
-	sqImageFileRead((&w10), sizeof(unsigned short, self), 1, f, self);
+	sqImageFileRead((&w10), sizeof(unsigned short), 1, f, self);
 	hdrMaxExtSemTabSize = (swapBytes
 		? ((((usqInt) w10) >> 8) & 0xFF) | (((sqInt)((usqInt)((w10 & 0xFF)) << 8)))
 		: w10);
@@ -66375,13 +66375,13 @@ readImageFromFileHeapSizeStartingAtV2(sqImageFile f, usqInt desiredHeapSize, squ
 	}
 	/* begin getShortFromFile:swap: */
 	w11 = 0;
-	sqImageFileRead((&w11), sizeof(unsigned short, self), 1, f, self);
+	sqImageFileRead((&w11), sizeof(unsigned short), 1, f, self);
 	GIV(the2ndUnknownShort) = (swapBytes
 		? ((((usqInt) w11) >> 8) & 0xFF) | (((sqInt)((usqInt)((w11 & 0xFF)) << 8)))
 		: w11);
 	/* begin getLongFromFile:swap: */
 	w12 = 0;
-	sqImageFileRead((&w12), sizeof(w12, self), 1, f, self);
+	sqImageFileRead((&w12), sizeof(w12), 1, f, self);
 	if (swapBytes) {
 		/* begin byteSwapped: */
 		firstSegSize = SQ_SWAP_8_BYTES(w12);
@@ -66395,7 +66395,7 @@ readImageFromFileHeapSizeStartingAtV2(sqImageFile f, usqInt desiredHeapSize, squ
 	minimumMemory = (dataSize + GIV(edenBytes)) + allocationReserve;
 	/* begin getLongFromFile:swap: */
 	w = 0;
-	sqImageFileRead((&w), sizeof(w, self), 1, f, self);
+	sqImageFileRead((&w), sizeof(w), 1, f, self);
 	if (swapBytes) {
 		/* begin byteSwapped: */
 		freeOldSpaceInImage = SQ_SWAP_8_BYTES(w);
@@ -66611,20 +66611,20 @@ readImageFromFileHeapSizeStartingAt(sqImageFile f, usqInt desiredHeapSize, squea
 	headerStart = (sqImageFilePosition(f, self)) - 4;
 	/* begin getWord32FromFile:swap: */
 	w1 = 0;
-	sqImageFileRead((&w1), sizeof(int, self), 1, f, self);
+	sqImageFileRead((&w1), sizeof(int), 1, f, self);
 	headerSize = (swapBytes
 		? SQ_SWAP_4_BYTES(w1)
 		: w1);
 	/* begin getLongFromFile:swap: */
 	w2 = 0;
-	sqImageFileRead((&w2), sizeof(w2, self), 1, f, self);
+	sqImageFileRead((&w2), sizeof(w2), 1, f, self);
 	dataSize = ((sqInt) ((swapBytes
 	? (/* begin byteSwapped: */
 		SQ_SWAP_8_BYTES(w2))
 	: w2)));
 	/* begin getLongFromFile:swap: */
 	w3 = 0;
-	sqImageFileRead((&w3), sizeof(w3, self), 1, f, self);
+	sqImageFileRead((&w3), sizeof(w3), 1, f, self);
 	if (swapBytes) {
 		/* begin byteSwapped: */
 		oldBaseAddr = SQ_SWAP_8_BYTES(w3);
@@ -66634,7 +66634,7 @@ readImageFromFileHeapSizeStartingAt(sqImageFile f, usqInt desiredHeapSize, squea
 	}
 	/* begin specialObjectsOop: */
 	w13 = 0;
-	sqImageFileRead((&w13), sizeof(w13, self), 1, f, self);
+	sqImageFileRead((&w13), sizeof(w13), 1, f, self);
 	if (swapBytes) {
 		/* begin byteSwapped: */
 		anObject = SQ_SWAP_8_BYTES(w13);
@@ -66645,7 +66645,7 @@ readImageFromFileHeapSizeStartingAt(sqImageFile f, usqInt desiredHeapSize, squea
 	GIV(specialObjectsOop) = anObject;
 	/* begin lastHash: */
 	w14 = 0;
-	sqImageFileRead((&w14), sizeof(w14, self), 1, f, self);
+	sqImageFileRead((&w14), sizeof(w14), 1, f, self);
 	if (swapBytes) {
 		/* begin byteSwapped: */
 		seed = SQ_SWAP_8_BYTES(w14);
@@ -66656,7 +66656,7 @@ readImageFromFileHeapSizeStartingAt(sqImageFile f, usqInt desiredHeapSize, squea
 	GIV(lastHash) = seed;
 	/* begin getLongFromFile:swap: */
 	w4 = 0;
-	sqImageFileRead((&w4), sizeof(w4, self), 1, f, self);
+	sqImageFileRead((&w4), sizeof(w4), 1, f, self);
 	if (swapBytes) {
 		/* begin byteSwapped: */
 		GIV(savedWindowSize) = SQ_SWAP_8_BYTES(w4);
@@ -66666,7 +66666,7 @@ readImageFromFileHeapSizeStartingAt(sqImageFile f, usqInt desiredHeapSize, squea
 	}
 	/* begin getLongFromFile:swap: */
 	w5 = 0;
-	sqImageFileRead((&w5), sizeof(w5, self), 1, f, self);
+	sqImageFileRead((&w5), sizeof(w5), 1, f, self);
 	if (swapBytes) {
 		/* begin byteSwapped: */
 		headerFlags = SQ_SWAP_8_BYTES(w5);
@@ -66692,13 +66692,13 @@ readImageFromFileHeapSizeStartingAt(sqImageFile f, usqInt desiredHeapSize, squea
 	sendWheelEvents = headerFlags & 128;
 	/* begin getWord32FromFile:swap: */
 	w6 = 0;
-	sqImageFileRead((&w6), sizeof(int, self), 1, f, self);
+	sqImageFileRead((&w6), sizeof(int), 1, f, self);
 	extraVMMemory = (swapBytes
 		? SQ_SWAP_4_BYTES(w6)
 		: w6);
 	/* begin getShortFromFile:swap: */
 	w7 = 0;
-	sqImageFileRead((&w7), sizeof(unsigned short, self), 1, f, self);
+	sqImageFileRead((&w7), sizeof(unsigned short), 1, f, self);
 	hdrNumStackPages = (swapBytes
 		? ((((usqInt) w7) >> 8) & 0xFF) | (((sqInt)((usqInt)((w7 & 0xFF)) << 8)))
 		: w7);
@@ -66713,13 +66713,13 @@ readImageFromFileHeapSizeStartingAt(sqImageFile f, usqInt desiredHeapSize, squea
 	desiredNumStackPages = hdrNumStackPages;
 	/* begin getShortFromFile:swap: */
 	w8 = 0;
-	sqImageFileRead((&w8), sizeof(unsigned short, self), 1, f, self);
+	sqImageFileRead((&w8), sizeof(unsigned short), 1, f, self);
 	GIV(theUnknownShort) = (swapBytes
 		? ((((usqInt) w8) >> 8) & 0xFF) | (((sqInt)((usqInt)((w8 & 0xFF)) << 8)))
 		: w8);
 	/* begin getWord32FromFile:swap: */
 	w9 = 0;
-	sqImageFileRead((&w9), sizeof(int, self), 1, f, self);
+	sqImageFileRead((&w9), sizeof(int), 1, f, self);
 	hdrEdenBytes = (swapBytes
 		? SQ_SWAP_4_BYTES(w9)
 		: w9);
@@ -66733,7 +66733,7 @@ readImageFromFileHeapSizeStartingAt(sqImageFile f, usqInt desiredHeapSize, squea
 	desiredEdenBytes = hdrEdenBytes;
 	/* begin getShortFromFile:swap: */
 	w10 = 0;
-	sqImageFileRead((&w10), sizeof(unsigned short, self), 1, f, self);
+	sqImageFileRead((&w10), sizeof(unsigned short), 1, f, self);
 	hdrMaxExtSemTabSize = (swapBytes
 		? ((((usqInt) w10) >> 8) & 0xFF) | (((sqInt)((usqInt)((w10 & 0xFF)) << 8)))
 		: w10);
@@ -66744,13 +66744,13 @@ readImageFromFileHeapSizeStartingAt(sqImageFile f, usqInt desiredHeapSize, squea
 	}
 	/* begin getShortFromFile:swap: */
 	w11 = 0;
-	sqImageFileRead((&w11), sizeof(unsigned short, self), 1, f, self);
+	sqImageFileRead((&w11), sizeof(unsigned short), 1, f, self);
 	GIV(the2ndUnknownShort) = (swapBytes
 		? ((((usqInt) w11) >> 8) & 0xFF) | (((sqInt)((usqInt)((w11 & 0xFF)) << 8)))
 		: w11);
 	/* begin getLongFromFile:swap: */
 	w12 = 0;
-	sqImageFileRead((&w12), sizeof(w12, self), 1, f, self);
+	sqImageFileRead((&w12), sizeof(w12), 1, f, self);
 	if (swapBytes) {
 		/* begin byteSwapped: */
 		firstSegSize = SQ_SWAP_8_BYTES(w12);
@@ -66764,7 +66764,7 @@ readImageFromFileHeapSizeStartingAt(sqImageFile f, usqInt desiredHeapSize, squea
 	minimumMemory = (dataSize + GIV(edenBytes)) + allocationReserve;
 	/* begin getLongFromFile:swap: */
 	w = 0;
-	sqImageFileRead((&w), sizeof(w, self), 1, f, self);
+	sqImageFileRead((&w), sizeof(w), 1, f, self);
 	if (swapBytes) {
 		/* begin byteSwapped: */
 		freeOldSpaceInImage = SQ_SWAP_8_BYTES(w);
@@ -66964,7 +66964,7 @@ reestablishContextPriorToCallback(sqInt callbackContext, sqInt self)
 	/* begin externalWriteBackHeadFramePointers */
 	assert((GIV(framePointer) - GIV(stackPointer)) < (LargeContextSlots * BytesPerOop), self);
 	assert(GIV(stackPage) == (mostRecentlyUsedPage(self)), self);
-	assert(!((isFree(GIV(stackPage)self))));
+	assert(!((isFree(GIV(stackPage)self))), self);
 	/* begin setHeadFP:andSP:inPage: */
 	assert(GIV(stackPointer) < GIV(framePointer), self);
 	assert((GIV(stackPointer) < ((GIV(stackPage)->baseAddress)))
@@ -67067,13 +67067,13 @@ removeFirstLinkOfList(sqInt aList, sqInt self)
     sqInt valuePointer1;
     sqInt valuePointer2;
 
-	assert(!((isForwarded(aList, self))));
+	assert(!((isForwarded(aList, self))), self);
 	/* begin fetchPointer:ofObject: */
 	first = longAt((aList + BaseHeaderSize) + (((sqInt)((usqInt)(FirstLinkIndex) << (shiftForWord(self))))), self);
 	/* begin fetchPointer:ofObject: */
 	last = longAt((aList + BaseHeaderSize) + (((sqInt)((usqInt)(LastLinkIndex) << (shiftForWord(self))))), self);
-	assert(!((isForwarded(first, self))));
-	assert(!((isForwarded(last, self))));
+	assert(!((isForwarded(first, self))), self);
+	assert(!((isForwarded(last, self))), self);
 	if (first == last) {
 		/* begin storePointerUnchecked:ofObject:withValue: */
 		valuePointer = GIV(nilObj);
@@ -67331,7 +67331,7 @@ returnAsThroughCallbackContext(sqInt returnTypeOop, VMCallbackContext *vmCallbac
 	/* begin externalWriteBackHeadFramePointers */
 	assert((GIV(framePointer) - GIV(stackPointer)) < (LargeContextSlots * BytesPerOop), self);
 	assert(GIV(stackPage) == (mostRecentlyUsedPage(self)), self);
-	assert(!((isFree(GIV(stackPage)self))));
+	assert(!((isFree(GIV(stackPage)self))), self);
 	/* begin setHeadFP:andSP:inPage: */
 	assert(GIV(stackPointer) < GIV(framePointer), self);
 	assert((GIV(stackPointer) < ((GIV(stackPage)->baseAddress)))
@@ -67381,10 +67381,10 @@ returnAsThroughCallbackContext(sqInt returnTypeOop, VMCallbackContext *vmCallbac
 					: 0);
 #        endif /* MULTIPLEBYTECODESETS */
 				/* begin restoreCStackStateForCallbackContext: */
-				memcpy(reenterInterpreter, ((void *)((vmCallbackContext->savedReenterInterpreter))), sizeof(jmp_buf, self), self);
+				memcpy(reenterInterpreter, ((void *)((vmCallbackContext->savedReenterInterpreter))), sizeof(jmp_buf));
 				/* begin assertValidExecutionPointe:r:s: */
 				assertValidExecutionPointersimbarline(GIV(instructionPointer), GIV(framePointer), GIV(stackPointer), !0, __LINE__, self);
-				longjmp((vmCallbackContext->trampoline), (returnTypeOop >> 3), self);
+				longjmp((vmCallbackContext->trampoline), (returnTypeOop >> 3));
 				return 1;
 			}
 			freeStackPage(GIV(stackPage), self);
@@ -67449,12 +67449,12 @@ returnAsThroughCallbackContext(sqInt returnTypeOop, VMCallbackContext *vmCallbac
 	}
 	markStackPageMostRecentlyUsed(thePage, self);
 	/* begin restoreCStackStateForCallbackContext: */
-	memcpy(reenterInterpreter, ((void *)((vmCallbackContext->savedReenterInterpreter))), sizeof(jmp_buf, self), self);
+	memcpy(reenterInterpreter, ((void *)((vmCallbackContext->savedReenterInterpreter))), sizeof(jmp_buf));
 
 	/* N.B. siglongjmp is defined as _longjmp on non-win32 platforms.
 	   This matches the use of _setjmp in ia32abicc.c. */
 	GIV(primitiveFunctionPointer) = (vmCallbackContext->savedPrimFunctionPointer);
-	longjmp((vmCallbackContext->trampoline), (returnTypeOop >> 3), self);
+	longjmp((vmCallbackContext->trampoline), (returnTypeOop >> 3));
 	return 1;
 }
 
@@ -67730,7 +67730,7 @@ sendInvokeCallbackContext(VMCallbackContext *vmCallbackContext, sqInt self)
 	}
 	assert(((debugCallbackInvokes += 1)) > 0, self);
 	/* begin saveCStackStateForCallbackContext: */
-	memcpy(((void *)((vmCallbackContext->savedReenterInterpreter))), reenterInterpreter, sizeof(jmp_buf, self), self);
+	memcpy(((void *)((vmCallbackContext->savedReenterInterpreter))), reenterInterpreter, sizeof(jmp_buf));
 	/* begin push: */
 	object3 = longAt((GIV(specialObjectsOop) + BaseHeaderSize) + (((sqInt)((usqInt)(ClassAlien) << (shiftForWord(self))))), self);
 	longAtput((sp3 = GIV(stackPointer) - BytesPerWord), object3, self);
@@ -67816,7 +67816,7 @@ sendInvokeCallbackContext(VMCallbackContext *vmCallbackContext, sqInt self)
 	/* begin checkForStackOverflow */
 	assert((GIV(framePointer) - GIV(stackPointer)) < (LargeContextSlots * BytesPerOop), self);
 	assert(GIV(stackPage) == (mostRecentlyUsedPage(self)), self);
-	assert(!((isFree(GIV(stackPage)self))));
+	assert(!((isFree(GIV(stackPage)self))), self);
 	/* begin setHeadFP:andSP:inPage: */
 	assert(GIV(stackPointer) < GIV(framePointer), self);
 	assert((GIV(stackPointer) < ((GIV(stackPage)->baseAddress)))
@@ -67970,7 +67970,7 @@ sendInvokeCallbackStackRegistersJmpbuf(sqInt thunkPtr, sqInt stackPtr, sqInt reg
 	/* begin checkForStackOverflow */
 	assert((GIV(framePointer) - GIV(stackPointer)) < (LargeContextSlots * BytesPerOop), self);
 	assert(GIV(stackPage) == (mostRecentlyUsedPage(self)), self);
-	assert(!((isFree(GIV(stackPage)self))));
+	assert(!((isFree(GIV(stackPage)self))), self);
 	/* begin setHeadFP:andSP:inPage: */
 	assert(GIV(stackPointer) < GIV(framePointer), self);
 	assert((GIV(stackPointer) < ((GIV(stackPage)->baseAddress)))
@@ -67996,7 +67996,7 @@ setBreakMNUSelector(char *aString, sqInt self)
 		breakSelectorLength = MinSmallInteger;
 	}
 	else {
-		breakSelectorLength = -(strlen(aString, self));
+		breakSelectorLength = -(strlen(aString));
 	}
 }
 
@@ -68008,7 +68008,7 @@ setBreakSelector(char *aString, sqInt self)
 		breakSelectorLength = MinSmallInteger;
 	}
 	else {
-		breakSelectorLength = strlen(aString, self);
+		breakSelectorLength = strlen(aString);
 	}
 }
 
@@ -68165,7 +68165,7 @@ shortPrintContext(sqInt aContext, sqInt self)
 		printHex(aContext, self);
 		print(" is not a context", self);
 		/* begin cr */
-		printf("\n", self);
+		printf("\n");
 		return null;
 	}
 	printHex(aContext, self);
@@ -68198,7 +68198,7 @@ shortPrintContext(sqInt aContext, sqInt self)
 			: (longAt((home + BaseHeaderSize) + (((sqInt)((usqInt)(ReceiverIndex) << (shiftForWord(self))))), self))), home != aContext, longAt((home + BaseHeaderSize) + (((sqInt)((usqInt)((0 + CtxtTempFrameStart)) << (shiftForWord(self))))), self), self);
 	}
 	/* begin cr */
-	printf("\n", self);
+	printf("\n");
 	return 0;
 }
 
@@ -68242,12 +68242,12 @@ shortPrintFramesOnStackPageListInUse(sqInt self)
 			print("page ", self);
 			/* begin printHexPtrnp: */
 			n = oopForPointer(page, self);
-			printf("0x%" PRIxSQINT "", n, self);
+			printf("0x%" PRIxSQINT "", n);
 			/* begin cr */
-			printf("\n", self);
+			printf("\n");
 			shortPrintFramesInPage(page, self);
 			/* begin cr */
-			printf("\n", self);
+			printf("\n");
 		}
 	} while(((page = (page->prevPage))) != (mostRecentlyUsedPage(self)));
 }
@@ -68263,7 +68263,7 @@ shortPrintFrame(char *theFP, sqInt self)
 		 && ((((((usqInt)theFP)) >= (((usqInt)GIV(stackMemory)))) && ((((usqInt)theFP)) <= (((usqInt)GIV(pages)))))))) {
 		print("invalid frame pointer", self);
 		/* begin cr */
-		printf("\n", self);
+		printf("\n");
 		return null;
 	}
 	/* begin frameReceiver: */
@@ -68271,12 +68271,12 @@ shortPrintFrame(char *theFP, sqInt self)
 	/* begin printHexPtr: */
 	printHex(oopForPointer(theFP, self), self);
 	/* begin space */
-	putchar(' ', self);
+	putchar(' ');
 	printActivationNameForreceiverisBlockfirstTemporary(longAt(theFP + FoxMethod, self), rcvr, (byteAt((theFP + FoxFrameFlags) + 3, self)) != 0, (0 < ((frameNumArgs = byteAt((theFP + FoxFrameFlags) + 1, self)))
 		? longAt((theFP + FoxCallerSavedIP) + ((frameNumArgs) * BytesPerWord), self)
 		: longAt(((theFP + FoxReceiver) - BytesPerWord) + ((frameNumArgs) * BytesPerWord), self)), self);
 	/* begin space */
-	putchar(' ', self);
+	putchar(' ');
 	shortPrintOop(rcvr, self);
 	return 0;
 }
@@ -68298,7 +68298,7 @@ static sqInt NoDbgRegParms
 shortPrintOop(sqInt oop, sqInt self)
 {
 	/* begin printHexnp: */
-	printf("0x%" PRIxSQINT "", oop, self);
+	printf("0x%" PRIxSQINT "", oop);
 	if (oop & (tagMask(self))) {
 		if ((((oop) & 7) == 1)) {
 			printf("=%ld\n", (long)integerValueOf(oop));
@@ -68316,7 +68316,7 @@ shortPrintOop(sqInt oop, sqInt self)
 					? " is misaligned"
 					: whereIs(oop, self)), self),
 			/* begin cr */
-			printf("\n", self));
+			printf("\n"));
 	}
 	if ((((longAt(oop, self)) & (classIndexMask(self))) == (isFreeObjectClassIndexPun(self)))
 	 || (((longAt(oop, self)) & ((classIndexMask(self)) - (isForwardedObjectClassIndexPun(self)))) == 0)) {
@@ -68325,7 +68325,7 @@ shortPrintOop(sqInt oop, sqInt self)
 	print(": a(n) ", self);
 	printNameOfClasscount(fetchClassOfNonImm(oop, self), 5, self);
 	/* begin cr */
-	printf("\n", self);
+	printf("\n");
 	return 0;
 }
 
@@ -68469,7 +68469,7 @@ signed64BitIntegerFor(sqLong integerValue, sqInt self)
 			forceInterruptCheck(self);
 		}
 		if ((GIV(freeStart) + numBytes) > (((eden(self)).limit))) {
-			error("no room in eden for allocateSmallNewSpaceSlots:format:classIndex:", self);
+			error("no room in eden for allocateSmallNewSpaceSlots:format:classIndex:");
 			newLargeInteger = 0;
 			goto l4;
 		}
@@ -68775,7 +68775,7 @@ static void
 space(sqInt self)
 {
 	/* begin printChar: */
-	putchar(' ', self);
+	putchar(' ');
 }
 
 	/* StackInterpreter>>#specialSelector: */
@@ -69410,14 +69410,14 @@ stackPositiveMachineIntegerValue(sqInt offset, sqInt self)
 	fmt = (((usqInt) (longAt(integerPointer, self))) >> (formatShift(self))) & (formatMask(self));
 	assert(fmt >= (firstByteFormat(self)), self);
 	bs = ((numSlotsOf(integerPointer, self)) << (shiftForWord(self))) - (fmt & 7);
-	if (bs > (sizeof(usqIntptr_t, self))) {
+	if (bs > (sizeof(usqIntptr_t))) {
 		/* begin primitiveFail */
 		if (!GIV(primFailCode)) {
 			GIV(primFailCode) = 1;
 		}
 		return 0;
 	}
-	if (((sizeof(usqIntptr_t, self)) == 8)
+	if (((sizeof(usqIntptr_t)) == 8)
 	 && (bs > 4)) {
 		return SQ_SWAP_8_BYTES_IF_BIGENDIAN((long64At((integerPointer + BaseHeaderSize) + (0U << 3), self)));
 	}
@@ -70012,7 +70012,7 @@ synchronousSignal(sqInt aSemaphore, sqInt self)
 		followForwardedObjectFieldstoDepth(aSemaphore, 1, self);
 		proc = longAt((aSemaphore + BaseHeaderSize) + (((sqInt)((usqInt)(FirstLinkIndex) << (shiftForWord(self))))), self);
 	}
-	assert(!((isForwarded(proc, self))));
+	assert(!((isForwarded(proc, self))), self);
 	ctxt = longAt((proc + BaseHeaderSize) + (((sqInt)((usqInt)(SuspendedContextIndex) << (shiftForWord(self))))), self);
 	if (((longAt(ctxt, self)) & ((classIndexMask(self)) - (isForwardedObjectClassIndexPun(self)))) == 0) {
 		/* begin followForwarded: */
@@ -70097,7 +70097,7 @@ transferTo(sqInt newProc, sqInt self)
 	/* begin externalWriteBackHeadFramePointers */
 	assert((GIV(framePointer) - GIV(stackPointer)) < (LargeContextSlots * BytesPerOop), self);
 	assert(GIV(stackPage) == (mostRecentlyUsedPage(self)), self);
-	assert(!((isFree(GIV(stackPage)self))));
+	assert(!((isFree(GIV(stackPage)self))), self);
 	/* begin setHeadFP:andSP:inPage: */
 	assert(GIV(stackPointer) < GIV(framePointer), self);
 	assert((GIV(stackPointer) < ((GIV(stackPage)->baseAddress)))
@@ -70667,7 +70667,7 @@ wakeHighestPriority(sqInt self)
 	/* begin externalWriteBackHeadFramePointers */
 	assert((GIV(framePointer) - GIV(stackPointer)) < (LargeContextSlots * BytesPerOop), self);
 	assert(GIV(stackPage) == (mostRecentlyUsedPage(self)), self);
-	assert(!((isFree(GIV(stackPage)self))));
+	assert(!((isFree(GIV(stackPage)self))), self);
 	/* begin setHeadFP:andSP:inPage: */
 	assert(GIV(stackPointer) < GIV(framePointer), self);
 	assert((GIV(stackPointer) < ((GIV(stackPage)->baseAddress)))
@@ -70723,7 +70723,7 @@ wakeHighestPriority(sqInt self)
 			warning("evicted zombie process from run queue", self);
 		}
 	}
-	error("scheduler could not find a runnable process", self);
+	error("scheduler could not find a runnable process");
 	return null;
 }
 
@@ -71081,7 +71081,7 @@ noInlineLoadFloatOrIntFrom(sqInt floatOrInt, sqInt self)
 			/* begin rotateRight: */
 			rot = (rot << 0x3F) + (((usqInt) (((usqInt)rot))) >> 1);
 			bits = rot;
-			memcpy((&value), (&bits), sizeof(value, self), self);
+			memcpy((&value), (&bits), sizeof(value));
 			return value;
 		}
 		if ((tagBits == (smallIntegerTag(self)))
@@ -71570,7 +71570,7 @@ primitiveClosureCopyWithCopiedValues(sqInt self)
 			forceInterruptCheck(self);
 		}
 		if ((GIV(freeStart) + numBytes) > (((eden(self)).limit))) {
-			error("no room in eden for allocateSmallNewSpaceSlots:format:classIndex:", self);
+			error("no room in eden for allocateSmallNewSpaceSlots:format:classIndex:");
 			newClosure1 = 0;
 			goto l6;
 		}
@@ -71778,7 +71778,7 @@ primitiveContextAt(sqInt self)
 	/* begin externalWriteBackHeadFramePointers */
 	assert((GIV(framePointer) - GIV(stackPointer)) < (LargeContextSlots * BytesPerOop), self);
 	assert(GIV(stackPage) == (mostRecentlyUsedPage(self)), self);
-	assert(!((isFree(GIV(stackPage)self))));
+	assert(!((isFree(GIV(stackPage)self))), self);
 	/* begin setHeadFP:andSP:inPage: */
 	assert(GIV(stackPointer) < GIV(framePointer), self);
 	assert((GIV(stackPointer) < ((GIV(stackPage)->baseAddress)))
@@ -72121,7 +72121,7 @@ primitiveContextAtPut(sqInt self)
 	/* begin externalWriteBackHeadFramePointers */
 	assert((GIV(framePointer) - GIV(stackPointer)) < (LargeContextSlots * BytesPerOop), self);
 	assert(GIV(stackPage) == (mostRecentlyUsedPage(self)), self);
-	assert(!((isFree(GIV(stackPage)self))));
+	assert(!((isFree(GIV(stackPage)self))), self);
 	/* begin setHeadFP:andSP:inPage: */
 	assert(GIV(stackPointer) < GIV(framePointer), self);
 	assert((GIV(stackPointer) < ((GIV(stackPage)->baseAddress)))
@@ -72356,7 +72356,7 @@ primitiveContextSize(sqInt self)
 		/* begin externalWriteBackHeadFramePointers */
 		assert((GIV(framePointer) - GIV(stackPointer)) < (LargeContextSlots * BytesPerOop), self);
 		assert(GIV(stackPage) == (mostRecentlyUsedPage(self)), self);
-		assert(!((isFree(GIV(stackPage)self))));
+		assert(!((isFree(GIV(stackPage)self))), self);
 		/* begin setHeadFP:andSP:inPage: */
 		assert(GIV(stackPointer) < GIV(framePointer), self);
 		assert((GIV(stackPointer) < ((GIV(stackPage)->baseAddress)))
@@ -73623,7 +73623,7 @@ primitiveFindHandlerContext(sqInt self)
 	/* begin externalWriteBackHeadFramePointers */
 	assert((GIV(framePointer) - GIV(stackPointer)) < (LargeContextSlots * BytesPerOop), self);
 	assert(GIV(stackPage) == (mostRecentlyUsedPage(self)), self);
-	assert(!((isFree(GIV(stackPage)self))));
+	assert(!((isFree(GIV(stackPage)self))), self);
 	/* begin setHeadFP:andSP:inPage: */
 	assert(GIV(stackPointer) < GIV(framePointer), self);
 	assert((GIV(stackPointer) < ((GIV(stackPage)->baseAddress)))
@@ -73685,7 +73685,7 @@ primitiveFindNextUnwindContext(sqInt self)
 	/* begin externalWriteBackHeadFramePointers */
 	assert((GIV(framePointer) - GIV(stackPointer)) < (LargeContextSlots * BytesPerOop), self);
 	assert(GIV(stackPage) == (mostRecentlyUsedPage(self)), self);
-	assert(!((isFree(GIV(stackPage)self))));
+	assert(!((isFree(GIV(stackPage)self))), self);
 	/* begin setHeadFP:andSP:inPage: */
 	assert(GIV(stackPointer) < GIV(framePointer), self);
 	assert((GIV(stackPointer) < ((GIV(stackPage)->baseAddress)))
@@ -73852,7 +73852,7 @@ primitiveFullGC(sqInt self)
 	/* begin externalWriteBackHeadFramePointers */
 	assert((GIV(framePointer) - GIV(stackPointer)) < (LargeContextSlots * BytesPerOop), self);
 	assert(GIV(stackPage) == (mostRecentlyUsedPage(self)), self);
-	assert(!((isFree(GIV(stackPage)self))));
+	assert(!((isFree(GIV(stackPage)self))), self);
 	/* begin setHeadFP:andSP:inPage: */
 	assert(GIV(stackPointer) < GIV(framePointer), self);
 	assert((GIV(stackPointer) < ((GIV(stackPage)->baseAddress)))
@@ -74160,7 +74160,7 @@ primitiveIncrementalGC(sqInt self)
 	/* begin externalWriteBackHeadFramePointers */
 	assert((GIV(framePointer) - GIV(stackPointer)) < (LargeContextSlots * BytesPerOop), self);
 	assert(GIV(stackPage) == (mostRecentlyUsedPage(self)), self);
-	assert(!((isFree(GIV(stackPage)self))));
+	assert(!((isFree(GIV(stackPage)self))), self);
 	/* begin setHeadFP:andSP:inPage: */
 	assert(GIV(stackPointer) < GIV(framePointer), self);
 	assert((GIV(stackPointer) < ((GIV(stackPage)->baseAddress)))
@@ -74675,7 +74675,7 @@ primitiveObjectPointsTo(sqInt self)
 				/* begin externalWriteBackHeadFramePointers */
 				assert((GIV(framePointer) - GIV(stackPointer)) < (LargeContextSlots * BytesPerOop), self);
 				assert(GIV(stackPage) == (mostRecentlyUsedPage(self)), self);
-				assert(!((isFree(GIV(stackPage)self))));
+				assert(!((isFree(GIV(stackPage)self))), self);
 				/* begin setHeadFP:andSP:inPage: */
 				assert(GIV(stackPointer) < GIV(framePointer), self);
 				assert((GIV(stackPointer) < ((GIV(stackPage)->baseAddress)))
@@ -75264,7 +75264,7 @@ primitiveSlotAt(sqInt self)
 				/* begin externalWriteBackHeadFramePointers */
 				assert((GIV(framePointer) - GIV(stackPointer)) < (LargeContextSlots * BytesPerOop), self);
 				assert(GIV(stackPage) == (mostRecentlyUsedPage(self)), self);
-				assert(!((isFree(GIV(stackPage)self))));
+				assert(!((isFree(GIV(stackPage)self))), self);
 				/* begin setHeadFP:andSP:inPage: */
 				assert(GIV(stackPointer) < GIV(framePointer), self);
 				assert((GIV(stackPointer) < ((GIV(stackPage)->baseAddress)))
@@ -75504,7 +75504,7 @@ primitiveSlotAtPut(sqInt self)
 	fmt2 = (((usqInt) (longAt(newValue, self))) >> (formatShift(self))) & (formatMask(self));
 	assert(fmt2 >= (firstByteFormat(self)), self);
 	bs = ((numSlotsOf(newValue, self)) << (shiftForWord(self))) - (fmt2 & 7);
-	if (bs > (sizeof(usqIntptr_t, self))) {
+	if (bs > (sizeof(usqIntptr_t))) {
 		/* begin primitiveFail */
 		if (!GIV(primFailCode)) {
 			GIV(primFailCode) = 1;
@@ -75512,7 +75512,7 @@ primitiveSlotAtPut(sqInt self)
 		value = 0;
 		goto l15;
 	}
-	if (((sizeof(usqIntptr_t, self)) == 8)
+	if (((sizeof(usqIntptr_t)) == 8)
 	 && (bs > 4)) {
 		value = SQ_SWAP_8_BYTES_IF_BIGENDIAN((long64At((newValue + BaseHeaderSize) + (0U << 3), self)));
 		goto l15;
@@ -75662,7 +75662,7 @@ primitiveStoreStackp(sqInt self)
 	/* begin externalWriteBackHeadFramePointers */
 	assert((GIV(framePointer) - GIV(stackPointer)) < (LargeContextSlots * BytesPerOop), self);
 	assert(GIV(stackPage) == (mostRecentlyUsedPage(self)), self);
-	assert(!((isFree(GIV(stackPage)self))));
+	assert(!((isFree(GIV(stackPage)self))), self);
 	/* begin setHeadFP:andSP:inPage: */
 	assert(GIV(stackPointer) < GIV(framePointer), self);
 	assert((GIV(stackPointer) < ((GIV(stackPage)->baseAddress)))
@@ -75798,7 +75798,7 @@ primitiveTerminateTo(sqInt self)
 	/* begin externalWriteBackHeadFramePointers */
 	assert((GIV(framePointer) - GIV(stackPointer)) < (LargeContextSlots * BytesPerOop), self);
 	assert(GIV(stackPage) == (mostRecentlyUsedPage(self)), self);
-	assert(!((isFree(GIV(stackPage)self))));
+	assert(!((isFree(GIV(stackPage)self))), self);
 	/* begin setHeadFP:andSP:inPage: */
 	assert(GIV(stackPointer) < GIV(framePointer), self);
 	assert((GIV(stackPointer) < ((GIV(stackPage)->baseAddress)))
@@ -75847,7 +75847,7 @@ primitiveTerminateTo(sqInt self)
 					}
 					fp = callerFP;
 				}
-				error("did not find theFP in stack page", self);
+				error("did not find theFP in stack page");
 				frameAbove = 0;
 	l4:	/* end findFrameAbove:inPage: */;
 				contextsIP = ((usqInt)(pointerForOop(longAt(frameAbove + FoxCallerSavedIP, self), self)));
@@ -75931,7 +75931,7 @@ primitiveTerminateTo(sqInt self)
 						}
 						fp1 = callerFP1;
 					}
-					error("did not find theFP in stack page", self);
+					error("did not find theFP in stack page");
 					frameAbove = 0;
 	l16:	/* end findFrameAbove:inPage: */;
 					assert(frameAbove != 0, self);
@@ -75972,7 +75972,7 @@ primitiveTerminateTo(sqInt self)
 							}
 							fp2 = callerFP2;
 						}
-						error("did not find theFP in stack page", self);
+						error("did not find theFP in stack page");
 						frameAbove = 0;
 	l17:	/* end findFrameAbove:inPage: */;
 						if (frameAbove != 0) {
@@ -76536,7 +76536,7 @@ pruneStackstackp(sqInt stack, sqInt stackp, sqInt self)
 	assert(addressCouldBeOop(oop, self), self);
 	GIV(remapBuffer)[(GIV(remapBufferCount) += 1)] = oop;
 	if (!(GIV(remapBufferCount) <= RemapBufferSize)) {
-		error("remapBuffer overflow", self);
+		error("remapBuffer overflow");
 	}
 	for (i = 1; i < finger; i += 1) {
 		/* begin fetchPointer:ofObject: */
@@ -76561,7 +76561,7 @@ pruneStackstackp(sqInt stack, sqInt stackp, sqInt self)
 				}
 				fp = callerFP;
 			}
-			error("did not find theFP in stack page", self);
+			error("did not find theFP in stack page");
 			theFPAbove = 0;
 	l6:	/* end findFrameAbove:inPage: */;
 			/* begin ensureFrameIsMarried:SP: */

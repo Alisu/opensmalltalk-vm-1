@@ -282,9 +282,9 @@ typedef union { double d; int i[sizeof(double) / sizeof(int)]; } _swapper;
 		((_swapper *)(&doubleVar))->i[0] = *((int *)(intPointerToFloat) + 1); \
 	} while (0)
 # else
-# define storeFloatAtPointerfrom(intPointerToFloat, doubleVar) \
+# define storeFloatAtPointerfrom(intPointerToFloat, doubleVar, self) \
     memcpy((char *)intPointerToFloat,&doubleVar,sizeof(double));
-# define fetchFloatAtPointerinto(intPointerToFloat, doubleVar) \
+# define fetchFloatAtPointerinto(intPointerToFloat, doubleVar, self) \
     memcpy(&doubleVar,(char *)intPointerToFloat,sizeof(double));
 #endif /* !(BigEndianFloats && !VMBIGENDIAN) && !OBJECTS_32BIT_ALIGNED */
 
@@ -293,10 +293,10 @@ typedef union { double d; int i[sizeof(double) / sizeof(int)]; } _swapper;
 # define fetchSingleFloatAtPointerinto(intPointerToFloat, floatVar) \
         do {float __f; memcpy(&__f,(char *)intPointerToFloat,sizeof(float)); floatVar=__f;} while(0)
 
-#define storeFloatAtfrom(i, doubleVar)	storeFloatAtPointerfrom(pointerForOop(i), doubleVar)
-#define fetchFloatAtinto(i, doubleVar)	fetchFloatAtPointerinto(pointerForOop(i), doubleVar)
-#define storeSingleFloatAtfrom(i, floatVar)	storeSingleFloatAtPointerfrom(pointerForOop(i), floatVar)
-#define fetchSingleFloatAtinto(i, floatVar)	fetchSingleFloatAtPointerinto(pointerForOop(i), floatVar)
+#define storeFloatAtfrom(i, doubleVar, self)	storeFloatAtPointerfrom(pointerForOop(i, self), doubleVar, self)
+#define fetchFloatAtinto(i, doubleVar, self)	fetchFloatAtPointerinto(pointerForOop(i, self), doubleVar, self)
+#define storeSingleFloatAtfrom(i, floatVar, self)	storeSingleFloatAtPointerfrom(pointerForOop(i, self), floatVar)
+#define fetchSingleFloatAtinto(i, floatVar, self)	fetchSingleFloatAtPointerinto(pointerForOop(i, self), floatVar)
 
 /* These accessors are for accelerating byte swapping
    whenever intrinsics or other fast functions are available */
@@ -352,8 +352,8 @@ typedef union { double d; int i[sizeof(double) / sizeof(int)]; } _swapper;
 #define flag(foo) 0
 
 /* heap debugging facilities in sqHeapMap.c */
-extern void clearHeapMap(void);
-extern int  heapMapAtWord(void *wordPointer);
-extern void heapMapAtWordPut(void *wordPointer, int bit);
+extern void clearHeapMap(sqInt self);
+extern int  heapMapAtWord(void *wordPointer, sqInt self);
+extern void heapMapAtWordPut(void *wordPointer, int bit, sqInt self);
 
 #endif /* __sqMemoryAccess_h */

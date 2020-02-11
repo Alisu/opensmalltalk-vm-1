@@ -17,12 +17,12 @@
 
 #ifdef NDEBUG /* compatible with Mac OS X (FreeBSD) /usr/include/assert.h */
 # define assert(expr, self) 0 /* hack disabling of asserts.  Better in makefile? */
-# define asserta(expr) (expr)
-# define assertf(msg) 0
-# define assertl(expr,line) 0
-# define assertal(expr,line) (expr)
-# define assertfl(msg,line) 0
-# define eassert(expr) 0 /* hack disabling of asserts.  Better in makefile? */
+# define asserta(expr, self) (expr)
+# define assertf(msg, self) 0
+# define assertl(expr,line, self) 0
+# define assertal(expr,line, self) (expr)
+# define assertfl(msg,line, self) 0
+# define eassert(expr, self) 0 /* hack disabling of asserts.  Better in makefile? */
 # define PRODUCTION 1
 
 #else

@@ -25,7 +25,7 @@ ioForceDisplayUpdate(sqInt self)
 
 sqInt
 ioFormPrint(sqInt bitsAddr, sqInt width, sqInt height, sqInt depth,
-		  double hScale, double vScale, sqInt landscapeFlag, sqInt self)
+		  double hScale, double vScale, sqInt landscapeFlag)
 {
 	UNIMPLEMENTED
 	return 0;
@@ -45,14 +45,14 @@ ioSetFullScreen(sqInt fullScreen, sqInt self)
 }
 
 sqInt
-ioSetCursor(sqInt cursorBitsIndex, sqInt offsetX, sqInt offsetY, sqInt self)
+ioSetCursor(sqInt cursorBitsIndex, sqInt offsetX, sqInt offsetY)
 {
 	UNIMPLEMENTED
 	return 0;
 }
 
 sqInt
-ioSetCursorWithMask(sqInt cursorBitsIndex, sqInt cursorMaskIndex, sqInt offsetX, sqInt offsetY, sqInt self)
+ioSetCursorWithMask(sqInt cursorBitsIndex, sqInt cursorMaskIndex, sqInt offsetX, sqInt offsetY)
 {
 	UNIMPLEMENTED
 	return 0;
@@ -73,7 +73,7 @@ ioHasDisplayDepth(sqInt depth, sqInt self)
 }
 
 sqInt
-ioSetDisplayMode(sqInt width, sqInt height, sqInt depth, sqInt fullscreenFlag, sqInt self)
+ioSetDisplayMode(sqInt width, sqInt height, sqInt depth, sqInt fullscreenFlag)
 {
 	UNIMPLEMENTED
 	return 0;

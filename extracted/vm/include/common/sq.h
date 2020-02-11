@@ -65,13 +65,13 @@
    versions are defined in terms of the ANSI Standard C libraries.
 */
 #define sqImageFile					   FILE *
-#define sqImageFileClose(f)                  		   fclose(f)
-#define sqImageFileOpen(fileName, mode)      		   fopen(fileName, mode)
-#define sqImageFilePosition(f)               		   ftell(f)
-#define sqImageFileRead(ptr, sz, count, f)   		   fread(ptr, sz, count, f)
-#define sqImageFileSeek(f, pos)              		   fseek(f, pos, SEEK_SET)
-#define sqImageFileSeekEnd(f, pos)              	   fseek(f, pos, SEEK_END)
-#define sqImageFileWrite(ptr, sz, count, f)  		   fwrite(ptr, sz, count, f)
+#define sqImageFileClose(f, self)                  		   fclose(f)
+#define sqImageFileOpen(fileName, mode, self)      		   fopen(fileName, mode)
+#define sqImageFilePosition(f, self)               		   ftell(f)
+#define sqImageFileRead(ptr, sz, count, f, self)   		   fread(ptr, sz, count, f)
+#define sqImageFileSeek(f, pos, self)              		   fseek(f, pos, SEEK_SET)
+#define sqImageFileSeekEnd(f, pos, self)              	   fseek(f, pos, SEEK_END)
+#define sqImageFileWrite(ptr, sz, count, f, self)  		   fwrite(ptr, sz, count, f)
 #define sqImageFileStartLocation(fileRef, fileName, size)  0
 
 /* Platform-dependent macros for handling object memory. */
@@ -165,7 +165,7 @@ sqInt ioMicroMSecs(sqInt self);
 #if STACKVM
 extern void forceInterruptCheckFromHeartbeat(sqInt self);
 unsigned volatile long long  ioUTCMicrosecondsNow(sqInt self);
-unsigned volatile long long  ioUTCMicroseconds(sqInt self);
+unsigned volatile long long  ioUTCMicroseconds();
 unsigned volatile long long  ioLocalMicrosecondsNow(sqInt self);
 unsigned volatile long long  ioLocalMicroseconds(sqInt self);
 unsigned          long long  ioUTCStartMicroseconds(sqInt self);
@@ -217,7 +217,7 @@ sqInt sqGetFilenameFromString(char * aCharBuffer, char * aFilenameString, sqInt 
 #ifdef __INTEL_COMPILER 
 #   pragma auto_inline(off)
 #endif
-extern void error(char *s, sqInt self);
+extern void error(char *s);
 #ifdef __INTEL_COMPILER 
 #   pragma auto_inline(on)
 #endif
@@ -239,25 +239,25 @@ extern VM_EXPORT sqInt sendWheelEvents;
 
 sqInt ioBeep(sqInt self);
 sqInt ioExit(sqInt self);
-sqInt ioExitWithErrorCode(int);
+sqInt ioExitWithErrorCode(int, sqInt self);
 sqInt crashInThisOrAnotherThread(sqInt flags, sqInt self);
 sqInt fullDisplayUpdate(sqInt self);
 void  ioNoteDisplayChangedwidthheightdepth(void *bitsOrHandle, int w, int h, int d, sqInt self);
 sqInt ioForceDisplayUpdate(sqInt self);
 sqInt ioFormPrint(sqInt bitsAddr, sqInt width, sqInt height, sqInt depth,
-		  double hScale, double vScale, sqInt landscapeFlag, sqInt self);
+		  double hScale, double vScale, sqInt landscapeFlag);
 sqInt ioSetFullScreen(sqInt fullScreen, sqInt self);
 double ioScreenScaleFactor(sqInt self);
 sqInt ioScreenSize(sqInt self);
 sqInt ioScreenDepth(sqInt self);
 sqInt ioSeconds(sqInt self);
 sqInt ioSecondsNow(sqInt self);
-sqInt ioSetCursor(sqInt cursorBitsIndex, sqInt offsetX, sqInt offsetY, sqInt self);
-sqInt ioSetCursorWithMask(sqInt cursorBitsIndex, sqInt cursorMaskIndex, sqInt offsetX, sqInt offsetY, sqInt self);
+sqInt ioSetCursor(sqInt cursorBitsIndex, sqInt offsetX, sqInt offsetY);
+sqInt ioSetCursorWithMask(sqInt cursorBitsIndex, sqInt cursorMaskIndex, sqInt offsetX, sqInt offsetY);
 sqInt ioShowDisplay(sqInt dispBitsIndex, sqInt width, sqInt height, sqInt depth,
 		    sqInt affectedL, sqInt affectedR, sqInt affectedT, sqInt affectedB, sqInt self);
 sqInt ioHasDisplayDepth(sqInt depth, sqInt self);
-sqInt ioSetDisplayMode(sqInt width, sqInt height, sqInt depth, sqInt fullscreenFlag, sqInt self);
+sqInt ioSetDisplayMode(sqInt width, sqInt height, sqInt depth, sqInt fullscreenFlag);
 char* ioGetLogDirectory(sqInt self);
 sqInt ioSetLogDirectoryOfSize(void* lblIndex, sqInt sz, sqInt self);
 char* ioGetWindowLabel(sqInt self);
@@ -559,11 +559,11 @@ sqInt ioGetNextEvent(sqInputEvent *evt, sqInt self);
 /* Image file and VM path names. */
 extern char imageName[];
 char *getImageName();
-sqInt imageNameGetLength(sqInt sqImageNameIndex, sqInt length);
-sqInt imageNamePutLength(sqInt sqImageNameIndex, sqInt length);
+sqInt imageNameGetLength(sqInt sqImageNameIndex, sqInt length, sqInt self);
+sqInt imageNamePutLength(sqInt sqImageNameIndex, sqInt length, sqInt self);
 sqInt imageNameSize();
 sqInt vmPathSize();
-sqInt vmPathGetLength(sqInt sqVMPathIndex, sqInt length);
+sqInt vmPathGetLength(sqInt sqVMPathIndex, sqInt length, sqInt self);
 
 /* The following was not exported by sq.h but we need it
    since if we don't have CURRENT_VERSION around anymore
@@ -591,15 +591,15 @@ sqInt checkedIntegerValueOf(sqInt intOop, sqInt self);
 void *fetchArrayofObject(sqInt fieldIndex, sqInt objectPointer, sqInt self);
 double fetchFloatofObject(sqInt fieldIndex, sqInt objectPointer, sqInt self);
 sqInt fetchIntegerofObject(sqInt fieldIndex, sqInt objectPointer, sqInt self);
-double floatValueOf(sqInt floatOop);
+double floatValueOf(sqInt floatOop, sqInt self);
 sqInt pop(sqInt nItems, sqInt self);
 sqInt pushInteger(sqInt integerValue, sqInt self);
 sqInt sizeOfSTArrayFromCPrimitive(void *cPtr, sqInt self);
 sqInt storeIntegerofObjectwithValue(sqInt fieldIndex, sqInt objectPointer, sqInt integerValue, sqInt self);
 
 /* System attributes. */
-sqInt attributeSize(sqInt indexNumber);
-sqInt getAttributeIntoLength(sqInt indexNumber, sqInt byteArrayIndex, sqInt length);
+sqInt attributeSize(sqInt indexNumber, sqInt self);
+sqInt getAttributeIntoLength(sqInt indexNumber, sqInt byteArrayIndex, sqInt length, sqInt self);
 
 /*** Pluggable primitive support. ***/
 
