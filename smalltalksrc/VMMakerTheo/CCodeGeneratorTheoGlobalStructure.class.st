@@ -11,7 +11,7 @@ CCodeGeneratorTheoGlobalStructure >> emitCCodeAsFunctionCallOn: aStream level: l
 	aMethod selector == #break
 		ifTrue: [ aStream nextPutAll: '/* send of break elided */'.
 			^ aMethod ].
-	self haltIf: [ aMethod selector = #strcpy: ].
+	"self haltIf: [ aMethod selector = #strcpy: ]."
 	"Special case for pluggable modules. Replace messages to interpreterProxy
 	 by interpreterProxy->message(..) if the message is not builtin"
 	(self shouldGenerateAsInterpreterProxySend: aMethod)
