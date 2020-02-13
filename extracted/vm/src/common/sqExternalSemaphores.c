@@ -95,7 +95,7 @@ static volatile int lowTideA = MaxTide, highTideA = MinTide;
 static volatile int lowTideB = MaxTide, highTideB = MinTide;
 
 int
-ioGetMaxExtSemTableSize(void) { return numSignalRequests; }
+ioGetMaxExtSemTableSize(sqInt self) { return numSignalRequests; }
 
 /* Setting this at any time other than start-up can potentially lose requests.
  * i.e. during the realloc new storage is allocated, the old contents are copied
@@ -106,7 +106,7 @@ ioGetMaxExtSemTableSize(void) { return numSignalRequests; }
  * maximum at start-up and avoid locking altogether.
  */
 void
-ioSetMaxExtSemTableSize(int n)
+ioSetMaxExtSemTableSize(int n, sqInt self)
 {
 #if COGMTVM
   /* initialization is a little different in MT. Hack around assert for now */
@@ -127,9 +127,9 @@ ioSetMaxExtSemTableSize(int n)
 }
 
 void
-ioInitExternalSemaphores(void)
+ioInitExternalSemaphores(sqInt self)
 {
-	ioSetMaxExtSemTableSize(INITIAL_EXT_SEM_TABLE_SIZE);
+	ioSetMaxExtSemTableSize(INITIAL_EXT_SEM_TABLE_SIZE, self);
 }
 
 /* Signal the external semaphore with the given index.  Answer non-zero on
@@ -138,7 +138,7 @@ ioInitExternalSemaphores(void)
  * An index of zero should be and is silently ignored.
  */
 sqInt
-signalSemaphoreWithIndex(sqInt index)
+signalSemaphoreWithIndex(sqInt index, sqInt self)
 {
 	int i = index - 1;
 	int v;
@@ -202,7 +202,7 @@ signalSemaphoreWithIndex(sqInt index)
  * moment externalSemaphoreTableSize is not used.
  */
 sqInt
-doSignalExternalSemaphores(sqInt externalSemaphoreTableSize)
+doSignalExternalSemaphores(sqInt externalSemaphoreTableSize, sqInt self)
 {
 	int i, lowTide, highTide;
 	char switched, signalled = 0;

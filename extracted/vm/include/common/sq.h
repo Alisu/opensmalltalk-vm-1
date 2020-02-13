@@ -72,7 +72,7 @@
 #define sqImageFileSeek(f, pos, self)              		   fseek(f, pos, SEEK_SET)
 #define sqImageFileSeekEnd(f, pos, self)              	   fseek(f, pos, SEEK_END)
 #define sqImageFileWrite(ptr, sz, count, f, self)  		   fwrite(ptr, sz, count, f)
-#define sqImageFileStartLocation(fileRef, fileName, size)  0
+#define sqImageFileStartLocation(fileRef, fileName, size, self)  0
 
 /* Platform-dependent macros for handling object memory. */
 
@@ -152,7 +152,7 @@ extern void sqDeallocateMemorySegmentAtOfSize(void *addr, sqInt sz, sqInt self);
 */
 
 long ioMSecs(sqInt self);
-sqInt ioMicroMSecs(sqInt self);
+sqInt ioMicroMSecs();
 
 /* duplicate the generated definition in the interpreter.  If they differ the
  * compiler will complain and catch it for us.  We use 0x1FFFFFFF instead of
@@ -164,7 +164,7 @@ sqInt ioMicroMSecs(sqInt self);
 
 #if STACKVM
 extern void forceInterruptCheckFromHeartbeat(sqInt self);
-unsigned volatile long long  ioUTCMicrosecondsNow(sqInt self);
+unsigned volatile long long  ioUTCMicrosecondsNow();
 unsigned volatile long long  ioUTCMicroseconds();
 unsigned volatile long long  ioLocalMicrosecondsNow(sqInt self);
 unsigned volatile long long  ioLocalMicroseconds(sqInt self);
@@ -229,7 +229,7 @@ sqInt interpret();
 sqInt primitiveFail();
 sqInt signalSemaphoreWithIndex(sqInt semaIndex, sqInt self);
 sqInt doSignalExternalSemaphores(sqInt, sqInt self);
-sqInt success(sqInt);
+sqInt success(sqInt, sqInt self);
 
 /* Display, mouse, keyboard, time. */
 
@@ -241,7 +241,7 @@ sqInt ioBeep(sqInt self);
 sqInt ioExit(sqInt self);
 sqInt ioExitWithErrorCode(int, sqInt self);
 sqInt crashInThisOrAnotherThread(sqInt flags, sqInt self);
-sqInt fullDisplayUpdate(sqInt self);
+sqInt fullDisplayUpdate();
 void  ioNoteDisplayChangedwidthheightdepth(void *bitsOrHandle, int w, int h, int d, sqInt self);
 sqInt ioForceDisplayUpdate(sqInt self);
 sqInt ioFormPrint(sqInt bitsAddr, sqInt width, sqInt height, sqInt depth,
@@ -366,10 +366,10 @@ void ioTransferTimeslice(sqInt self);
 void  ioProfileStatus(sqInt *running, void **exestartpc, void **exelimitpc,
 					  void **vmhst, long *nvmhbin, void **eahst, long *neahbin, sqInt self);
 void  ioControlProfile(int on, void **vhp, long *nvb, void **ehp, long *neb, sqInt self);
-long  ioControlNewProfile(int on, unsigned long buffer_size, sqInt self);
+long  ioControlNewProfile(int on, unsigned long buffer_size);
 void  ioNewProfileStatus(sqInt *running, long *buffersize, sqInt self);
 long  ioNewProfileSamplesInto(void *sampleBuffer, sqInt self);
-void  ioClearProfile(sqInt self);
+void  ioClearProfile();
 
 /* Power management. */
 
@@ -638,7 +638,7 @@ void *ioLoadModule(char *pluginName, sqInt self);
 	Note in Spur takes an extra parameter which is defaulted to 0.
 */
 #if SPURVM
-void *ioFindExternalFunctionInAccessorDepthInto(char *lookupName, void *moduleHandle, sqInt *accessorDepthPtr, sqInt self);
+void *ioFindExternalFunctionInAccessorDepthInto(char *lookupName, void *moduleHandle, sqInt *accessorDepthPtr);
 # define ioFindExternalFunctionIn(ln,mh) ioFindExternalFunctionInAccessorDepthInto(ln,mh,0)
 #else
 void *ioFindExternalFunctionIn(char *lookupName, void *moduleHandle, sqInt self);

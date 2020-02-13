@@ -18,11 +18,11 @@ int runThread(void* parameters){
 	loadAndExecuteVM((VM_PARAMETERS*) parameters);
 }
 
-
+/*
 extern void setMyCurrentThread(pthread_t thread, size_t index);
 extern void setNumberOfImage (int numberImages);
 extern void initializeAllGlobalsStruct(int numberImages);
-extern pthread_t * getThreadsID(void);
+extern pthread_t * getThreadsID(void);*/
 
 int main(int argc, char* argv[]){
 
@@ -37,17 +37,17 @@ int main(int argc, char* argv[]){
 	//Luckily, it can be cached.
 	osCogStackPageHeadroom();
 
-	int numberOfImage = parameters.numberOfImage;
+	/*int numberOfImage = parameters.numberOfImage;
 	initializeAllGlobalsStruct(numberOfImage);
 
-	setMyCurrentThread(pthread_self(), 0);
+	setMyCurrentThread(pthread_self(), 0);*/
 	runThread(&parameters.vmparameters[0]);
 	
-	pthread_t * thread_id = getThreadsID();
+	pthread_t * thread_id; /*= getThreadsID();*/
 
 	int * threadReturn; 
 
-	for(int i = 0; i < 	getNumberOfImage(); i++){
+	for(int i = 0; i < 1	/*getNumberOfImage()*/; i++){
 		pthread_join(thread_id[i], &threadReturn);
 		logInfo("Thread %d returned with: %d", i, *threadReturn);
 	}

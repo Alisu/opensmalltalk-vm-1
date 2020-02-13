@@ -79,7 +79,7 @@ static unsigned int mlogidx = (unsigned int)-1;
 							if (logClock) mseclog[++mlogidx % LOGSIZE] = (msecs); \
 						} while (0)
 void
-ioGetClockLogSizeUsecsIdxMsecsIdx(sqInt *runInNOutp, void **usecsp, sqInt *uip, void **msecsp, sqInt *mip)
+ioGetClockLogSizeUsecsIdxMsecsIdx(sqInt *runInNOutp, void **usecsp, sqInt *uip, void **msecsp, sqInt *mip, sqInt self)
 {
 	logClock = *runInNOutp;
 	sqLowLevelMFence();
@@ -128,7 +128,7 @@ currentUTCMicroseconds()
 #include "sqAtomicOps.h"
 
 static void
-updateMicrosecondClock()
+updateMicrosecondClock(sqInt self)
 {
 	unsigned long long newUtcMicrosecondClock;
 	unsigned long long newLocalMicrosecondClock;
@@ -156,9 +156,9 @@ updateMicrosecondClock()
 }
 
 void
-ioUpdateVMTimezone()
+ioUpdateVMTimezone(sqInt self)
 {
-	updateMicrosecondClock();
+	updateMicrosecondClock(self);
 #ifdef HAVE_TM_GMTOFF
 	time_t utctt;
 	utctt = (get64(utcMicrosecondClock) - MicrosecondsFrom1901To1970)
@@ -176,7 +176,7 @@ ioUpdateVMTimezone()
 }
 
 sqLong
-ioHighResClock(void)
+ioHighResClock(sqInt self)
 {
   /* return the value of the high performance counter */
   sqLong value = 0;
@@ -220,7 +220,7 @@ unsigned long long
 ioUTCStartMicroseconds() { return utcStartMicroseconds; }
 
 unsigned volatile long long
-ioLocalMicrosecondsNow() { return currentUTCMicroseconds() + vmGMTOffset; };
+ioLocalMicrosecondsNow(sqInt self) { return currentUTCMicroseconds() + vmGMTOffset; };
 
 /* ioMSecs answers the millisecondClock as of the last tick. */
 long
@@ -231,10 +231,10 @@ long ioMicroMSecs(void) { return microToMilliseconds(currentUTCMicroseconds());}
 
 /* returns the local wall clock time */
 sqInt
-ioSeconds(void) { return get64(localMicrosecondClock) / MicrosecondsPerSecond; }
+ioSeconds(sqInt self) { return get64(localMicrosecondClock) / MicrosecondsPerSecond; }
 
 sqInt
-ioSecondsNow(void) { return ioLocalMicrosecondsNow() / MicrosecondsPerSecond; }
+ioSecondsNow(sqInt self) { return ioLocalMicrosecondsNow(self) / MicrosecondsPerSecond; }
 
 sqInt
 ioUTCSeconds(void) { return get64(utcMicrosecondClock) / MicrosecondsPerSecond; }
@@ -248,7 +248,7 @@ ioUTCSecondsNow(void) { return currentUTCMicroseconds() / MicrosecondsPerSecond;
  */
 #if macintoshSqueak
 sqInt
-ioRelinquishProcessorForMicroseconds(sqInt microSeconds)
+ioRelinquishProcessorForMicroseconds(sqInt microSeconds, sqInt self)
 {
     long	realTimeToWait;
 	extern usqLong getNextWakeupUsecs();
@@ -276,19 +276,19 @@ ioRelinquishProcessorForMicroseconds(sqInt microSeconds)
 #endif /* !macintoshSqueak */
 
 void
-ioInitTime(void)
+ioInitTime(sqInt self)
 {
-	ioUpdateVMTimezone(); /* does updateMicrosecondClock as a side-effect */
-	updateMicrosecondClock(); /* this can now compute localUTCMicroseconds */
+	ioUpdateVMTimezone(self); /* does updateMicrosecondClock as a side-effect */
+	updateMicrosecondClock(self); /* this can now compute localUTCMicroseconds */
 	utcStartMicroseconds = utcMicrosecondClock;
 }
 
 static void
-heartbeat()
+heartbeat(sqInt self)
 {
 	int saved_errno = errno;
 
-	updateMicrosecondClock();
+	updateMicrosecondClock(self);
 	if (get64(frequencyMeasureStart) == 0) {
 		set64(frequencyMeasureStart,utcMicrosecondClock);
 		heartbeats = 0;
@@ -296,8 +296,8 @@ heartbeat()
 	else
 		heartbeats += 1;
 	//checkHighPriorityTickees(utcMicrosecondClock);
-	int GIVToUse = returnGIVNumberForHearbeat();
-	forceInterruptCheckFromHeartbeatV2(GIVToUse);
+	int GIVToUse = returnGIVNumberForHearbeat(self);
+	forceInterruptCheckFromHeartbeat(GIVToUse);
 
 	errno = saved_errno;
 }
@@ -318,7 +318,7 @@ static int beatMilliseconds = DEFAULT_BEAT_MS;
 static struct timespec beatperiod = { 0, DEFAULT_BEAT_MS * 1000 * 1000 };
 
 static void *
-beatStateMachine(void *careLess)
+beatStateMachine(void *careLess, sqInt self)
 {
     int er;
 	if ((er = pthread_setschedparam(pthread_self(),
@@ -372,7 +372,7 @@ beatStateMachine(void *careLess)
 				perror("nanosleep");
 				exit(1);
 			}
-		heartbeat();
+		heartbeat(self);
 	}
 	beatState = dead;
 	return 0;
@@ -408,7 +408,7 @@ void initOrGrowMapThreadGIV(){
 	mapThreadGIV = realloc(mapThreadGIV, sizeof(struct assocThreadGiv) * numberOfHeartbeat);
 	}
 
-void setIOHeartbeatGIVToUse(anInteger){
+void setIOHeartbeatGIVToUse(int anInteger, sqInt self){
 
 	initOrGrowMapThreadGIV();
 	mapThreadGIV[numberOfHeartbeat - 1].GIVToUse = anInteger;
@@ -416,7 +416,7 @@ void setIOHeartbeatGIVToUse(anInteger){
 }
 
 void
-ioInitHeartbeat()
+ioInitHeartbeat(sqInt self)
 {
 	int er;
 	struct timespec halfAMo;
@@ -461,7 +461,7 @@ ioInitHeartbeat()
 }
 
 void
-ioSetHeartbeatMilliseconds(int ms)
+ioSetHeartbeatMilliseconds(int ms, sqInt self)
 {
 	beatMilliseconds = ms;
 	beatperiod.tv_sec = beatMilliseconds / 1000;
@@ -475,7 +475,7 @@ ioHeartbeatMilliseconds() { return beatMilliseconds; }
 /* Answer the average heartbeats per second since the stats were last reset.
  */
 unsigned long
-ioHeartbeatFrequency(int resetStats)
+ioHeartbeatFrequency(int resetStats, sqInt self)
 {
 	unsigned long duration = (ioUTCMicroseconds() - get64(frequencyMeasureStart))
 						/ MicrosecondsPerSecond;

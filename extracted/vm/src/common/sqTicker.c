@@ -194,7 +194,7 @@ addHighPriorityTickee(void (*tickee)(void), unsigned periodms)
 }
 
 void
-checkHighPriorityTickees(usqLong utcMicrosecondClock)
+checkHighPriorityTickees(usqLong utcMicrosecondClock, sqInt self)
 {
 	int i;
 

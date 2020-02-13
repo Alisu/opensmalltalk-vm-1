@@ -72,7 +72,7 @@ char * GetAttributeString(sqInt id)
         if (-id  < getVMArgumentCount()){
         	return getVMArgument(-id);
         }
-        success(false);
+        success(false, 0);
         return "";
     }
 
@@ -117,7 +117,7 @@ char * GetAttributeString(sqInt id)
         if ((id - 2) < getImageArgumentCount())
             return getImageArgument(id - 2);
     }
-    success(false);
+    success(false, 0);
     return "";
 }
 
@@ -129,7 +129,7 @@ sqInt attributeSize(sqInt id, sqInt self)
 sqInt getAttributeIntoLength(sqInt id, sqInt byteArrayIndex, sqInt length, sqInt self)
 {
     if (length > 0)
-        strncpy(pointerForOop(byteArrayIndex, 0 /*self*/), GetAttributeString(id), length);
+        strncpy(pointerForOop(byteArrayIndex), GetAttributeString(id), length);
     return 0;
 }
 
@@ -185,7 +185,7 @@ sqInt vmPathSize(void){
 }
 
 sqInt vmPathGetLength(sqInt sqVMPathIndex, sqInt length, sqInt self){
-    char *stVMPath= pointerForOop(sqVMPathIndex, 0);
+    char *stVMPath= pointerForOop(sqVMPathIndex);
     int count;
 
     count = strlen(vmPath);
@@ -198,7 +198,7 @@ sqInt vmPathGetLength(sqInt sqVMPathIndex, sqInt length, sqInt self){
 }
 
 sqInt imageNameGetLength(sqInt sqImageNameIndex, sqInt length, sqInt self){
-    char *sqImageName = pointerForOop(sqImageNameIndex, 0);
+    char *sqImageName = pointerForOop(sqImageNameIndex);
     int count;
 
     count= strlen(imageName);
@@ -211,7 +211,7 @@ sqInt imageNameGetLength(sqInt sqImageNameIndex, sqInt length, sqInt self){
 }
 
 sqInt imageNamePutLength(sqInt sqImageNameIndex, sqInt length, sqInt self){
-    char *sqImageName= pointerForOop(sqImageNameIndex, 0);
+    char *sqImageName= pointerForOop(sqImageNameIndex);
     int count;
 
     count = (length >= sizeof(imageName)) ? sizeof(imageName) - 1 : length;

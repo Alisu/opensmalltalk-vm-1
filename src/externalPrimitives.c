@@ -112,7 +112,7 @@ ioFreeModule(void *moduleHandle, sqInt self)
 #if SPURVM
 void *
 ioFindExternalFunctionInAccessorDepthInto(char *lookupName, void *moduleHandle,
-											sqInt *accessorDepthPtr, sqInt self)
+											sqInt *accessorDepthPtr)
 #else
 void *
 ioFindExternalFunctionIn(char *lookupName, void *moduleHandle)

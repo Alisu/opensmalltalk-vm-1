@@ -404,7 +404,7 @@ Convert(ux,sq, XWin, uxXWinEncoding, sqTextEncoding, 0, 1);
 
 
 
-void sqFilenameFromString(char *uxName, sqInt sqNameIndex, int sqNameLength)
+void sqFilenameFromString(char *uxName, sqInt sqNameIndex, int sqNameLength, sqInt self)
 {
   /*xxx BUG: lots of code generate from the image assumes 1000 chars max path len */
   sq2uxPath(pointerForOop(sqNameIndex), sqNameLength, uxName, 1000, 1);
@@ -444,7 +444,7 @@ int main()
     in= "tésté";	// UTF-8 decomposed Unicode (libiconv fails on this one, MacOSX passes)
     n= convertChars(in, strlen(in), uxPathEncoding, out, sizeof(out), uxTextEncoding, 0, 1);
     printf("%d: %s -> %s\n", n, in, out);
-    in= "t�st�";		// ISO-8859-15
+    in= "t�st�";		// ISO-8859-15
     n= convertChars(in, strlen(in), uxTextEncoding, out, sizeof(out), uxPathEncoding, 0, 1);
     printf("%d: %s -> %s\n", n, in, out); // default composition -- should yield "tésté"
     n= convertChars(in, strlen(in), uxTextEncoding, out, sizeof(out), uxPathEncoding, 1, 1);

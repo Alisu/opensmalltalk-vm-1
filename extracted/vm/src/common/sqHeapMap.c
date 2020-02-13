@@ -133,7 +133,7 @@ static uchar **mapPages[NUMROOTPAGES] = { 0, };
  * Answer non-zero if the heapMap is set at wordPointer, 0 otherwise
  */
 int
-heapMapAtWord(void *wordPointer)
+heapMapAtWord(void *wordPointer, sqInt self)
 {
 	ulong address = (ulong)wordPointer;
 	uchar **directory, *page;
@@ -151,7 +151,7 @@ heapMapAtWord(void *wordPointer)
  * Set the value in the map at wordPointer to bit.
  */
 void
-heapMapAtWordPut(void *wordPointer, int bit)
+heapMapAtWordPut(void *wordPointer, int bit, sqInt self)
 {
 	ulong address = (ulong)wordPointer;
 	uchar **directory, *page;
@@ -183,7 +183,7 @@ heapMapAtWordPut(void *wordPointer, int bit)
  * Clear the heap map to zero.
  */
 void
-clearHeapMap(void)
+clearHeapMap(sqInt self)
 {
 	long i, j;
 	uchar **directory, *page;

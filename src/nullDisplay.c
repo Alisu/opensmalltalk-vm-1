@@ -251,7 +251,7 @@ ioClearProfile(sqInt self){
 }
 
 long
-ioControlNewProfile(int on, unsigned long buffer_size, sqInt self){
+ioControlNewProfile(int on, unsigned long buffer_size){
 	UNIMPLEMENTED
 	return 0;
 }
