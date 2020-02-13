@@ -4,6 +4,45 @@ Class {
 	#category : #VMMakerTheo
 }
 
+{ #category : #'as yet unclassified' }
+CCodeGeneratorTheoGlobalStructure >> CFunctionAsSelector [
+
+ ^  #(#memcpy:_:_: 
+		#sizeof:
+		#getenv:
+		#free:
+		#strlen:
+		#log
+		#mod:f:
+		#sin
+		#atan
+		#ld:exp:
+		#sqrt
+		#exp
+		#me:ms:et:
+		#f:open:
+		#putchar:
+		#fflush
+		#strncmp:_:_: 
+		#printf:
+		#malloc:
+		#strcpy:_:
+		#strcat:_:
+		#strncpy:_:_:
+		#memmove:_:_:
+		#c:alloc:
+		#re:alloc:
+		#strcmp:
+		#long:jmp:
+		#getchar
+		#setjmp:
+		#alloca:
+		#f:printf:
+		#fr:exp:
+		#time:
+		)
+]
+
 { #category : #'C code generator' }
 CCodeGeneratorTheoGlobalStructure >> emitCCodeAsFunctionCallOn: aStream level: level method: aMethod [
 	"Translate this message send into a C function call"
@@ -11,7 +50,7 @@ CCodeGeneratorTheoGlobalStructure >> emitCCodeAsFunctionCallOn: aStream level: l
 	aMethod selector == #break
 		ifTrue: [ aStream nextPutAll: '/* send of break elided */'.
 			^ aMethod ].
-	"self haltIf: [ aMethod selector = #strcpy: ]."
+	"self haltIf: [ (self cFunctionNameFor: aMethod selector) includesSubstring:  'intAtput' ]."
 	"Special case for pluggable modules. Replace messages to interpreterProxy
 	 by interpreterProxy->message(..) if the message is not builtin"
 	(self shouldGenerateAsInterpreterProxySend: aMethod)
@@ -31,8 +70,8 @@ CCodeGeneratorTheoGlobalStructure >> emitCCodeAsFunctionCallOn: aStream level: l
 		ifFalse: [ (aMethod receiver structTargetKindIn: self) == #struct
 				ifTrue: [ aStream nextPut: $& ].
 			aMethod receiver emitCCodeOn: aStream level: level generator: self.
-			aMethod args isEmpty
-				ifFalse: [ aStream nextPutAll: ', ' ] ].
+			(aMethod args isNotEmpty or: [self nonUnarySelector includes: aMethod selector])
+				ifTrue: [ aStream nextPutAll: ', ' ]  ].
 	aMethod args
 		do:
 			[ :arg | arg emitCCodeAsArgumentOn: aStream level: level generator: self ]
@@ -49,7 +88,7 @@ CCodeGeneratorTheoGlobalStructure >> emitCCodeAsFunctionCallOn: aStream level: l
 				level: level
 				generator: self ].
 	aStream nextPut: $).
-	"self haltIf: [ aStream contents includesSubstring: 'assert(fmt == (ephemeronFormat(self)), self)']."
+	"self haltIf: [ aStream contents includesSubstring: 'fetchFloatAtinto']."
 ]
 
 { #category : #'C code generator' }
@@ -82,6 +121,8 @@ CCodeGeneratorTheoGlobalStructure >> emitCMacros: methodList on: aStream [
 						s << ', self'.
 						s << (macroDefinition last: (macroDefinition size - (macroDefinition indexOf: $)) + 1)).
 						]].
+			(macroDefinition includesSubstring: 'enterSmalltalkExecutiveImplementation')	
+				ifTrue:[macroDefinition := (macroDefinition allButLast: 1), 'self)'].
 			aStream
 				nextPutAll: '#define ';
 				nextPutAll:(self cFunctionNameFor: m selector);
@@ -146,7 +187,7 @@ CCodeGeneratorTheoGlobalStructure >> emitCVariablesOn: aStream [
 		nextPutAll: 'int numberOfImage;'; cr;
 		nextPutAll: 'struct foo * all_threads_global;'; cr;
 		nextPutAll: 'pthread_t * thread_id;'; cr;
-		nextPutAll: '# define GIV(interpreterInstVar) (returnGlobalStructForCurrentThread(0)->interpreterInstVar)'; cr;
+		nextPutAll: '# define GIV(interpreterInstVar)  foo->interpreterInstVar'; cr;
 		nextPutAll: '#else'; cr;
 		nextPutAll: '# define DECL_MAYBE_SQ_GLOBAL_STRUCT /* oh, no mr bill! */'; cr;
 		nextPutAll: '# define DECL_MAYBE_VOLATILE_SQ_GLOBAL_STRUCT /* oh no, mr bill! */'; cr;
@@ -171,48 +212,52 @@ CCodeGeneratorTheoGlobalStructure >> emitCVariablesOn: aStream [
 		cr
 ]
 
-{ #category : #'C translation' }
-CCodeGeneratorTheoGlobalStructure >> generateDeny: denyMsgNode on: aStream indent: level [
-	"Generate the C code for a deny: expr onto the given stream."
+{ #category : #'as yet unclassified' }
+CCodeGeneratorTheoGlobalStructure >> nonUnarySelector [
 
-	aStream nextPutAll: 'assert(!('.
-	self emitCExpression: denyMsgNode args first on: aStream.
-	aStream nextPutAll: '), self)'
+ ^  #(#highBit
+		#isFree
+		)
+]
+
+{ #category : #'as yet unclassified' }
+CCodeGeneratorTheoGlobalStructure >> selectorExcludedForCommodities [
+
+ ^  #(
+		#error: 
+		#warning: 
+		#show:Sur:fa:ce:Fn: "special case function pointer"
+		#odd 
+		#assert:
+		#asserta:
+		#assert:l:
+		#assert:al:
+		#assert:fl:
+		#eassert:
+		#pointerForOop:
+		#oopForPointer:
+		#longAtPointer:put:
+		#byteAtPointer:
+		#longAt:
+		#byteAt:
+		#longAt:put:
+		#longAtPointer:
+		#fetchFloatAt:into:
+		#long64At:
+		#shortAt:
+		#shortAt:put:
+		#long64At:put:
+		#byteAt:put:
+		#intAt:
+		#intAt:put:
+		#long32At:
+		#long32At:put:
+		#storeFloatAt:from:
+		)
 ]
 
 { #category : #'as yet unclassified' }
 CCodeGeneratorTheoGlobalStructure >> selectorToExclude [
 
- ^  #(#memcpy:_:_: 
-		#sizeof:
-		#getenv:
-		#free:
-		#strlen:
-		#log
-		#mod:f:
-		#sin
-		#atan
-		#ld:exp:
-		#sqrt
-		#exp
-		#me:ms:et:
-		#f:open:
-		#putchar:
-		#fflush
-		#error: "for commodities"
-		#strncmp:_:_: 
-		#printf:
-		#malloc:
-		#strcpy:_:
-		#strcat:_:
-		#strncpy:_:_:
-		#memmove:_:_:
-		#c:alloc:
-		#re:alloc:
-		#strcmp:
-		#long:jmp:
-		#getchar
-		#setjmp:
-		#alloca:
-		)
+ ^ self CFunctionAsSelector, self selectorExcludedForCommodities 
 ]

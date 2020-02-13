@@ -1482,7 +1482,7 @@ StackInterpreter class >> initializePrimitiveTable [
 		(120 primitiveCalloutToFFI)
 		(121 primitiveImageName)
 		(122 primitiveNoop)					"Blue Book: primitiveImageVolume"
-		(123 primitiveOpenNewImage)					"was primitiveValueUninterruptably"
+		(123 primitiveOpenNewImage)		"was primitiveValueUninterruptably"
 		(124 primitiveLowSpaceSemaphore)
 		(125 primitiveSignalAtBytesLeft)
 
@@ -2046,7 +2046,10 @@ StackInterpreter class >> requiredMethodNames: options [
 		readableFormat: readImageFromFile:HeapSize:StartingAt:
 		setFullScreenFlag: setInterruptKeycode: setInterruptPending: setInterruptCheckChain:
 			setSavedWindowSize: success:
-		returnGlobalStructForCurrentThread
+		
+		validInstructionPointer:inMethod:framePointer:) asSet.
+		
+		"returnGlobalStructForCurrentThread
 		returnGlobalStructFor:
 		setMyCurrentThread:_:
 		setNumberOfImage:
@@ -2056,15 +2059,12 @@ StackInterpreter class >> requiredMethodNames: options [
 		growAllGlobalsStruct:
 		loadAndExecute:
 		initMutexForFetchNextBytecode:andCond:
-		mutexLock:andCond:
+			mutexLock:andCond:
 		mutexUnlock:andCond:
 		returnGIVNumberForCurrentThread
 		forceInterruptCheckFromHeartbeatV2:
 		forceInterruptCheckV2:
-		readImageFromFile:HeapSize:StartingAtV2:
-		
-		validInstructionPointer:inMethod:framePointer:) asSet.
-
+		readImageFromFile:HeapSize:StartingAtV2:"
 
 	"Nice to actually have all the primitives available"
 	requiredList addAll: (self primitiveTable select: [:each| each isSymbol]).
@@ -6820,14 +6820,14 @@ StackInterpreter >> fetchNextBytecode [
 	"This method fetches the next instruction (bytecode). Each bytecode method is responsible for fetching the next bytecode, preferably as early as possible to allow the memory system time to process the request before the next dispatch."
 
 	isStepable
-		ifTrue: [	self
+		ifTrue: ["	self
 				printLocalSP: localSP
 				LocalFP: localSP
 				LocalIP: localIP
 				CurrentBytecode: currentBytecode.
 			self externalizeIPandSP.
 			self printCallStack.
-			self lockFetchNextBytecode.
+			self lockFetchNextBytecode."
  ].
 	MULTIPLEBYTECODESETS
 		ifTrue: [ currentBytecode := self fetchByte + bytecodeSetSelector ]
@@ -8677,7 +8677,7 @@ StackInterpreter >> initStackPagesAndInterpret [
 	"Once the stack pages are initialized we can continue to bootstrap the system."
 	self loadInitialContext.
 	"We're ready for the heartbeat (poll interrupt)"
-	self cCode: 'setIOHeartbeatGIVToUse(returnGIVNumberForCurrentThread());'.
+	"self cCode: 'setIOHeartbeatGIVToUse(returnGIVNumberForCurrentThread());'."
 	self ioInitHeartbeat.
 	self initialEnterSmalltalkExecutive.
 	^nil
@@ -17255,56 +17255,6 @@ StackInterpreter >> newImage: imagePath WithArguments: imageArgs [
 	'
 ]
 
-{ #category : #thInter }
-StackInterpreter >> newImageWithArguments [
-<returnTypeC: #int>
-
-	self cCode: '
-	pthread_attr_t tattr;
-
-	pthread_attr_init(&tattr);
-
-	size_t size;
-	pthread_attr_getstacksize(&tattr, &size);
-
-   if(pthread_attr_setstacksize(&tattr, size*4)){
-		perror("Thread attr");
-   }
-	
-	//Pointers to the old struc will be lost
-	
-	if(pthread_create(&thread_id[numberOfImage], &tattr, printPouet, NULL)){
-			perror("Thread creation");
-		}
-		return 12;
-	'
-]
-
-{ #category : #thInter }
-StackInterpreter >> newImageWithArguments: anArrayOfArgs [
-	<var: #anArrayOfArgs type: 'sqInt'>
-
-	self cCode: '
-	pthread_attr_t tattr;
-
-	pthread_attr_init(&tattr);
-
-	size_t size;
-	pthread_attr_getstacksize(&tattr, &size);
-
-   if(pthread_attr_setstacksize(&tattr, size*4)){
-		perror("Thread attr");
-   }
-	
-	//Pointers to the old struc will be lost
-	
-	if(pthread_create(&thread_id[numberOfImage], &tattr, printPouet, NULL)){
-			perror("Thread creation");
-		}
-		return 12;
-	'
-]
-
 { #category : #thInterCom }
 StackInterpreter >> nextInInterpreter: anInt [
 	<var: #anInt type: 'int'>
@@ -21356,15 +21306,15 @@ StackInterpreter >> shortPrintOop: oop [
 	(objectMemory isImmediate: oop) ifTrue:
 		[(objectMemory isIntegerObject: oop) ifTrue:
 			[self
-				cCode: 'printf("=%ld\n", (long)integerValueOf(oop))'
+				cCode: 'printf("=%ld\n", (long)integerValueOf(oop, self))'
 				inSmalltalk: [self print: (self shortPrint: oop); cr]].
 		 (objectMemory isImmediateCharacter: oop) ifTrue:
 			[self
-				cCode: 'printf("=$%ld ($%lc)\n", (long)characterValueOf(oop), (wint_t)characterValueOf(oop))'
+				cCode: 'printf("=$%ld ($%lc)\n", (long)characterValueOf(oop, self), (wint_t)characterValueOf(oop, self))'
 				inSmalltalk: [self print: (self shortPrint: oop); cr]].
 		 (objectMemory isImmediateFloat: oop) ifTrue:
 			[self
-				cCode: 'printf("=%g\n", floatValueOf(oop))'
+				cCode: 'printf("=%g\n", floatValueOf(oop, self))'
 				inSmalltalk: [self print: '='; printFloat: (objectMemory floatValueOf: oop); cr]].
 		 ^self].
 	(objectMemory addressCouldBeObj: oop) ifFalse:
