@@ -296,8 +296,8 @@ heartbeat(sqInt self)
 	else
 		heartbeats += 1;
 	//checkHighPriorityTickees(utcMicrosecondClock);
-	int GIVToUse = returnGIVNumberForHearbeat(self);
-	forceInterruptCheckFromHeartbeat(GIVToUse);
+	//int GIVToUse = returnGIVNumberForHearbeat(self);
+	forceInterruptCheckFromHeartbeat(self);
 
 	errno = saved_errno;
 }
