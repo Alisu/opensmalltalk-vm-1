@@ -380,7 +380,7 @@ warningat(char *s, int l) { /* ditto with line number. */
 #pragma auto_inline(on)
 
 void
-invalidCompactClassError(char *s, sqInt self) { /* Print a (compact) class index error message and exit. */
+invalidCompactClassError(char *s, struct foo * self) { /* Print a (compact) class index error message and exit. */
 #if SPURVM
 	printf("\nClass %s does not have the required class index\n", s);
 #else
@@ -405,7 +405,7 @@ invalidCompactClassError(char *s, sqInt self) { /* Print a (compact) class index
 # define sigsetjmp(jb,ssmf) setjmp(jb)
 # define siglongjmp(jb,v) longjmp(jb,v)
 #else
-# define sigsetjmp(jb,ssmf,self) _setjmp(jb)
+# define sigsetjmp(jb,ssmf) _setjmp(jb)
 # define siglongjmp(jb,v) _longjmp(jb,v)
 #endif
 

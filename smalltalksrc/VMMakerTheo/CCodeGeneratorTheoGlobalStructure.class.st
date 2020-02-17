@@ -50,7 +50,7 @@ CCodeGeneratorTheoGlobalStructure >> emitCCodeAsFunctionCallOn: aStream level: l
 	aMethod selector == #break
 		ifTrue: [ aStream nextPutAll: '/* send of break elided */'.
 			^ aMethod ].
-	"self haltIf: [ (self cFunctionNameFor: aMethod selector) includesSubstring:  'intAtput' ]."
+	"self haltIf: [ (self cFunctionNameFor: aMethod selector) includesSubstring:  'ioSetMax' ]."
 	"Special case for pluggable modules. Replace messages to interpreterProxy
 	 by interpreterProxy->message(..) if the message is not builtin"
 	(self shouldGenerateAsInterpreterProxySend: aMethod)
@@ -93,13 +93,48 @@ CCodeGeneratorTheoGlobalStructure >> emitCCodeAsFunctionCallOn: aStream level: l
 
 { #category : #'C code generator' }
 CCodeGeneratorTheoGlobalStructure >> emitCFunctionPrototypeForMethod: aMethod isPrototype: isPrototype onStream: aStream [
-	| args |
+	| args declarations |
 	args := aMethod args copy.
-	args add: #self.
+	declarations := aMethod declarations copy.
+	(self selectorExcludedForFunctionPrototype includes: aMethod selector)
+		ifFalse: [ args add: #self.
+			declarations at: #self put: 'struct foo * self' ].
 	args
-		do: [ :arg | aStream nextPutAll: (aMethod declarationAt: arg) ]
+		do: [ :arg | 
+			aStream
+				nextPutAll: (declarations at: arg ifAbsent: [ #sqInt , ' ' , arg ]) ]
 		separatedBy: [ aStream nextPutAll: ', ' ].
 	aStream nextPut: $)
+]
+
+{ #category : #'C code generator' }
+CCodeGeneratorTheoGlobalStructure >> emitCFunctionPrototypes: methodList on: aStream [ 
+	"Store prototype declarations for all non-inlined methods on the given stream.
+	 Add a define for a NoDbgRegParms attribute for static functions used for debugging.
+	 gcc and other compilers will use non-standard calling conventions for static functions
+	 when optimizing.  The optimization can render the functions unusable in gdb.  The sqConfig.h
+	 file for the platform should define PlatformNoDbgRegParms suitably for the platform's
+	 compiler, if the compiler can be persuaded not to generate such functions.
+	 Add a define for a NeverInline attribute that tells the compiler never to inline functions
+	 with the attribute.  We mark functions we want to observe in a profiler as NeverInline.
+	 The sqConfig.h file for the platform should define NeverInline suitably for the platform's
+	 compiler, if the compiler can be persuaded not to inline certain functions."
+	aStream cr; nextPutAll: '/*** Function Prototypes ***/'; cr.
+	vmClass ifNotNil:
+		[NoRegParmsInAssertVMs ifTrue:
+			[aStream nextPutAll: '\\#if !PRODUCTION && defined(PlatformNoDbgRegParms)\# define NoDbgRegParms PlatformNoDbgRegParms\#endif' withCRs.
+			 aStream nextPutAll: '\\#if !defined(NoDbgRegParms)\# define NoDbgRegParms /*empty*/\#endif\\' withCRs].
+		 aStream nextPutAll: '\\#if !defined(NeverInline)\# define NeverInline /*empty*/\#endif\\' withCRs.
+		aStream nextPutAll: 'struct foo;';cr;cr.].
+	(methodList select: [:m| m isRealMethod and: [self shouldGenerateMethod: m]]) do:
+		[:m |
+		vmClass ifNotNil:
+			[(NoRegParmsInAssertVMs and: [m export not and: [m isStatic and: [m args notEmpty]]]) ifTrue:
+				[m addFunctionAttribute: 'NoDbgRegParms'].
+			 m inline == #never ifTrue:
+				[m addFunctionAttribute: 'NeverInline']].
+		m emitCFunctionPrototype: aStream generator: self].
+	aStream cr
 ]
 
 { #category : #'C code generator' }
@@ -234,7 +269,7 @@ CCodeGeneratorTheoGlobalStructure >> selectorExcludedForCommodities [
 		#assert:al:
 		#assert:fl:
 		#eassert:
-		#pointerForOop:
+		#pointerForOop: "sqMemoryAccess"
 		#oopForPointer:
 		#longAtPointer:put:
 		#byteAtPointer:
@@ -253,7 +288,64 @@ CCodeGeneratorTheoGlobalStructure >> selectorExcludedForCommodities [
 		#long32At:
 		#long32At:put:
 		#storeFloatAt:from:
-		)
+		#ioExitWithErrorCode: "utils.c"
+		#imageName:PutLength:
+		#imageName:GetLength:
+		#vmPath:GetLength:
+		#imageNamePut:Length:
+		#imageNameGet:Length:
+		#vmPathGet:Length:
+		#clipboardRead:Into:At: "nullDisplay.c"
+		#clipboardWrite:From:At:
+		#ioDisablePowerManager:
+		#crashInThisOrAnotherThread:
+		#ioBeDisplay:width:height:depth:
+		#ioNoteDisplayChanged:width:height:depth:
+		#ioGetNextEvent:
+		#ioSetInputSemaphore: 
+		#ioSetFullScreen:
+		#ioSetWindowWidth:Height:
+		#ioSetWindowLabel:OfSize:
+		#ioHasDisplayDepth:
+		#ioSetLogDirectory:OfSize:
+		#ioShow:D:i:s:p:l:a:y:
+		#ioNewProfileSamplesInto:
+		#ioNewProfile:Status:
+		#doSignalExternalSemaphores: "sqExternalSemaphore"
+		#signalSemaphoreWithIndex:
+		#ioSetMaxExtSemTableSize:
+		#ioHeartbeatFrequency: "***heartbeat.c"
+		#ioSetHeartbeatMilliseconds:
+		#ioHeartbeatFrequency:
+		#ioRelinquishProcessorForMicroseconds:
+		#ioGetClockLogSize:Usecs:Idx:Msecs:Idx:
+		#sqAllocateMemorySegmentOfSize:Above:AllocatedSizeInto: "memoryUnix.c"
+		#sqDeallocateMemorySegmentAt:OfSize:
+		#allocateMemory:Minimum:ImageFile:HeaderSize:
+		#unableToReadImageError
+		#insufficientMemoryAvailableError
+		#browserPluginReturnIfNeeded
+		) , self selectorExcludedForFunctionPrototype 
+]
+
+{ #category : #'as yet unclassified' }
+CCodeGeneratorTheoGlobalStructure >> selectorExcludedForFunctionPrototype [
+
+ ^ 		#( "sqVirtualMachine.c"
+		#fetchInteger:ofObject:
+		#floatValueOf:
+		#storeInteger:ofObject:withValue:
+		#addIdleUsecs:
+		#checkedIntegerValueOf:
+		#sigset:jmp:
+		#fetchFloat:ofObject:
+		#pop:
+		#pushInteger:
+		
+		#readableFormat:
+		#forceInterruptCheckFromHeartbeat
+		#ioUTCMicroseconds
+		#forceInterruptCheck)
 ]
 
 { #category : #'as yet unclassified' }
