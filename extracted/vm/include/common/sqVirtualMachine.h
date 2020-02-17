@@ -52,7 +52,7 @@ typedef struct _VMCallbackContext *vmccp;
 
 typedef sqInt (*CompilerHook)();
 
-struct VirtualMachine* sqGetInterpreterProxy(sqInt self);
+struct VirtualMachine* sqGetInterpreterProxy();
 
 typedef struct VirtualMachine {
 	sqInt (*minorVersion)(void);

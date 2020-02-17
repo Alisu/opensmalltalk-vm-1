@@ -65,14 +65,14 @@ EXPORT(char*) getVMVersion(){
 	return VM_BUILD_STRING;
 }
 
-char * GetAttributeString(sqInt id)
+char * GetAttributeString(sqInt id, struct foo * self)
 {
     if (id < 0)	/* VM argument */
     {
         if (-id  < getVMArgumentCount()){
         	return getVMArgument(-id);
         }
-        success(false, 0);
+        success(false, self);
         return "";
     }
 
@@ -117,19 +117,19 @@ char * GetAttributeString(sqInt id)
         if ((id - 2) < getImageArgumentCount())
             return getImageArgument(id - 2);
     }
-    success(false, 0);
+    success(false, self);
     return "";
 }
 
-sqInt attributeSize(sqInt id, sqInt self)
+sqInt attributeSize(sqInt id, struct foo * self)
 {
-    return strlen(GetAttributeString(id));
+    return strlen(GetAttributeString(id, self));
 }
 
-sqInt getAttributeIntoLength(sqInt id, sqInt byteArrayIndex, sqInt length, sqInt self)
+sqInt getAttributeIntoLength(sqInt id, sqInt byteArrayIndex, sqInt length, struct foo * self)
 {
     if (length > 0)
-        strncpy(pointerForOop(byteArrayIndex), GetAttributeString(id), length);
+        strncpy(pointerForOop(byteArrayIndex), GetAttributeString(id, self), length);
     return 0;
 }
 
@@ -184,7 +184,7 @@ sqInt vmPathSize(void){
     return strlen(vmPath);
 }
 
-sqInt vmPathGetLength(sqInt sqVMPathIndex, sqInt length, sqInt self){
+sqInt vmPathGetLength(sqInt sqVMPathIndex, sqInt length){
     char *stVMPath= pointerForOop(sqVMPathIndex);
     int count;
 
@@ -197,7 +197,7 @@ sqInt vmPathGetLength(sqInt sqVMPathIndex, sqInt length, sqInt self){
     return count;
 }
 
-sqInt imageNameGetLength(sqInt sqImageNameIndex, sqInt length, sqInt self){
+sqInt imageNameGetLength(sqInt sqImageNameIndex, sqInt length){
     char *sqImageName = pointerForOop(sqImageNameIndex);
     int count;
 
@@ -210,7 +210,7 @@ sqInt imageNameGetLength(sqInt sqImageNameIndex, sqInt length, sqInt self){
     return count;
 }
 
-sqInt imageNamePutLength(sqInt sqImageNameIndex, sqInt length, sqInt self){
+sqInt imageNamePutLength(sqInt sqImageNameIndex, sqInt length){
     char *sqImageName= pointerForOop(sqImageNameIndex);
     int count;
 
@@ -337,7 +337,7 @@ char** getPluginPaths(){
 }
 
 sqInt
-ioExitWithErrorCode(int errorCode, sqInt self)
+ioExitWithErrorCode(int errorCode)
 {
 	int* returnValue = malloc(sizeof(int));
 	*returnValue = errorCode;

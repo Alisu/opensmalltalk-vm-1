@@ -75,7 +75,7 @@ void * tryToLoadModuleInPath(char *path, const char *moduleName)
 }
 
 void *
-ioLoadModule(char *pluginName, sqInt self)
+ioLoadModule(char *pluginName)
 {
     void *moduleHandle;
     char** paths = getPluginPaths();
@@ -104,7 +104,7 @@ ioLoadModule(char *pluginName, sqInt self)
 }
 
 sqInt
-ioFreeModule(void *moduleHandle, sqInt self)
+ioFreeModule(void *moduleHandle)
 {
     return freeModuleHandle(moduleHandle);
 }

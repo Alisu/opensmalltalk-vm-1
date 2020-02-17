@@ -17,7 +17,7 @@ sqInt ioSetCursorARGB(sqInt cursorBitsIndex, sqInt extentX, sqInt extentY, sqInt
 }
 
 sqInt
-ioForceDisplayUpdate(sqInt self)
+ioForceDisplayUpdate()
 {
 	UNIMPLEMENTED
 	return 0;
@@ -32,13 +32,13 @@ ioFormPrint(sqInt bitsAddr, sqInt width, sqInt height, sqInt depth,
 }
 
 void
-ioNoteDisplayChangedwidthheightdepth(void *b, int w, int h, int d, sqInt self)
+ioNoteDisplayChangedwidthheightdepth(void *b, int w, int h, int d)
 {
 	UNIMPLEMENTED
 }
 
 sqInt
-ioSetFullScreen(sqInt fullScreen, sqInt self)
+ioSetFullScreen(sqInt fullScreen)
 {
 	UNIMPLEMENTED
 	return 0;
@@ -60,14 +60,14 @@ ioSetCursorWithMask(sqInt cursorBitsIndex, sqInt cursorMaskIndex, sqInt offsetX,
 
 sqInt
 ioShowDisplay(sqInt dispBitsIndex, sqInt width, sqInt height, sqInt depth,
-		    sqInt affectedL, sqInt affectedR, sqInt affectedT, sqInt affectedB, sqInt self)
+		    sqInt affectedL, sqInt affectedR, sqInt affectedT, sqInt affectedB)
 {
 	UNIMPLEMENTED
 	return 0;
 }
 
 sqInt
-ioHasDisplayDepth(sqInt depth, sqInt self)
+ioHasDisplayDepth(sqInt depth)
 {
 	return true;
 }
@@ -80,139 +80,139 @@ ioSetDisplayMode(sqInt width, sqInt height, sqInt depth, sqInt fullscreenFlag)
 }
 
 char*
-ioGetWindowLabel(sqInt self)
+ioGetWindowLabel()
 {
 	UNIMPLEMENTED
 	return 0;
 }
 
 sqInt
-ioSetWindowLabelOfSize(void *lblIndex, sqInt sz, sqInt self)
+ioSetWindowLabelOfSize(void *lblIndex, sqInt sz)
 {
 	UNIMPLEMENTED
 	return 0;
 }
 
 sqInt
-ioGetWindowWidth(sqInt self)
+ioGetWindowWidth()
 {
 	UNIMPLEMENTED
 	return 0;
 }
 
 sqInt
-ioGetWindowHeight(sqInt self)
+ioGetWindowHeight()
 {
 	UNIMPLEMENTED
 	return 0;
 }
 
 sqInt
-ioSetWindowWidthHeight(sqInt w, sqInt h, sqInt self)
+ioSetWindowWidthHeight(sqInt w, sqInt h)
 {
 	UNIMPLEMENTED
 	return 0;
 }
 
 sqInt
-ioIsWindowObscured(sqInt self)
+ioIsWindowObscured()
 {
 	UNIMPLEMENTED
 	return 0;
 }
 
 sqInt
-ioGetNextEvent(sqInputEvent *evt, sqInt self)
+ioGetNextEvent(sqInputEvent *evt)
 {
 	UNIMPLEMENTED
 	return 0;
 }
 
 sqInt
-ioGetButtonState(sqInt self)
+ioGetButtonState()
 {
 	UNIMPLEMENTED
 	return 0;
 }
 
 sqInt
-ioGetKeystroke(sqInt self)
+ioGetKeystroke()
 {
 	UNIMPLEMENTED
 	return 0;
 }
 
 sqInt
-ioMousePoint(sqInt self)
+ioMousePoint()
 {
 	UNIMPLEMENTED
 	return 0;
 }
 
 sqInt
-ioPeekKeystroke(sqInt self)
+ioPeekKeystroke()
 {
 	UNIMPLEMENTED
 	return 0;
 }
 
 sqInt
-ioProcessEvents(sqInt self)
+ioProcessEvents()
 {
     aioPoll(0);
     return 0;
 }
 
 double
-ioScreenScaleFactor(sqInt self)
+ioScreenScaleFactor()
 {
 	UNIMPLEMENTED
 	return 0;
 }
 
 sqInt
-ioScreenSize(sqInt self)
+ioScreenSize()
 {
 	UNIMPLEMENTED
 	return 0;
 }
 
 sqInt
-ioScreenDepth(sqInt self)
+ioScreenDepth()
 {
 	UNIMPLEMENTED
 	return 0;
 }
 
-sqInt clipboardSize(sqInt self)
+sqInt clipboardSize()
 {
 	UNIMPLEMENTED
     return 0;
 }
 
 sqInt
-clipboardReadIntoAt(sqInt count, sqInt byteArrayIndex, sqInt startIndex, sqInt self)
+clipboardReadIntoAt(sqInt count, sqInt byteArrayIndex, sqInt startIndex)
 {
 	UNIMPLEMENTED
     return 0;
 }
 
 sqInt
-clipboardWriteFromAt(sqInt count, sqInt byteArrayIndex, sqInt startIndex, sqInt self)
+clipboardWriteFromAt(sqInt count, sqInt byteArrayIndex, sqInt startIndex)
 {
 	UNIMPLEMENTED
     return 0;
 }
 
 static sqInt
-dropInit (sqInt self)
+dropInit ()
 {
 	UNIMPLEMENTED
     return 0;
 }
 
 static sqInt
-dropShutdown (sqInt self)
+dropShutdown ()
 {
 	UNIMPLEMENTED
     return 0;
@@ -233,20 +233,20 @@ dropRequestFileHandle(sqInt dropIndex)
 }
 
 sqInt
-ioBeep(sqInt self)
+ioBeep()
 {
 	UNIMPLEMENTED
     return 0;
 }
 
 sqInt
-ioDisablePowerManager(sqInt disableIfNonZero, sqInt self){
+ioDisablePowerManager(sqInt disableIfNonZero){
 	UNIMPLEMENTED
     return true;
 }
 
 void
-ioClearProfile(sqInt self){
+ioClearProfile(){
 	UNIMPLEMENTED
 }
 
@@ -267,38 +267,38 @@ int plugInTimeToReturn() {
 }
 
 void
-ioNewProfileStatus(sqInt *running, long *buffersize, sqInt self)
+ioNewProfileStatus(sqInt *running, long *buffersize)
 {
 	UNIMPLEMENTED
 }
 
 long
-ioNewProfileSamplesInto(void *sampleBuffer, sqInt self)
+ioNewProfileSamplesInto(void *sampleBuffer)
 {
 	UNIMPLEMENTED
     return 0;
 }
 
 
-sqInt crashInThisOrAnotherThread(sqInt flags, sqInt self)
+sqInt crashInThisOrAnotherThread(sqInt flags)
 {
 	UNIMPLEMENTED
 	return 0;
 }
 
-sqInt ioSetInputSemaphore(sqInt semaIndex, sqInt self){
+sqInt ioSetInputSemaphore(sqInt semaIndex){
 	UNIMPLEMENTED;
 	return 1;
 }
 
-void ioSignalInputEvent(sqInt self){
+void ioSignalInputEvent(){
 	UNIMPLEMENTED;
 }
 
-char* ioGetLogDirectory(sqInt self){
+char* ioGetLogDirectory(){
     return "";
 }
 
-sqInt ioSetLogDirectoryOfSize(void* lblIndex, sqInt sz, sqInt self){
+sqInt ioSetLogDirectoryOfSize(void* lblIndex, sqInt sz){
     return 1;
 }

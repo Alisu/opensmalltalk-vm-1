@@ -40,7 +40,7 @@ typedef struct ModuleEntry {
 
 static ModuleEntry *squeakModule = NULL;
 static ModuleEntry *firstModule = NULL;
-struct VirtualMachine *sqGetInterpreterProxy(sqInt self);
+struct VirtualMachine *sqGetInterpreterProxy();
 
 static void *
 findLoadedModule(char *pluginName)
@@ -206,7 +206,7 @@ findFunctionIn(char *functionName, ModuleEntry *module)
 	as well.
 */
 static sqInt
-callInitializersIn(ModuleEntry *module, sqInt self)
+callInitializersIn(ModuleEntry *module, struct foo * self)
 {
 	void *init0;
 	void *init1;
@@ -238,7 +238,7 @@ callInitializersIn(ModuleEntry *module, sqInt self)
 		return 0;
 	}
 	/* call setInterpreter */
-	okay = ((sqInt (*) (struct VirtualMachine*))init1)(sqGetInterpreterProxy(self));
+	okay = ((sqInt (*) (struct VirtualMachine*))init1)(sqGetInterpreterProxy());
 	if(!okay) {
 		DPRINTF(("ERROR: setInterpreter() returned false\n"));
 		return 0;
@@ -275,7 +275,7 @@ void ioDisableModuleLoading() {
 #endif
 
 static ModuleEntry *
-findAndLoadModule(char *pluginName, sqInt ffiLoad, sqInt self)
+findAndLoadModule(char *pluginName, sqInt ffiLoad, struct foo * self)
 {
 	void *handle;
 	ModuleEntry *module;
@@ -286,7 +286,7 @@ findAndLoadModule(char *pluginName, sqInt ffiLoad, sqInt self)
 #endif
 	DPRINTF(("Looking for plugin %s\n", (pluginName ? pluginName : "<intrinsic>")));
 	/* Try to load the module externally */
-	handle = ioLoadModule(pluginName, self);
+	handle = ioLoadModule(pluginName);
 	if(ffiLoad) {
 		/* When dealing with the FFI, don't attempt to mess around internally */
 		if(!handle) return NULL;
@@ -305,7 +305,7 @@ findAndLoadModule(char *pluginName, sqInt ffiLoad, sqInt self)
 		/* Initializers failed */
 		if(handle != squeakModule->handle) {
 			/* physically unload module */
-			ioFreeModule(handle, self);
+			ioFreeModule(handle);
 		}
 		removeFromList(module); /* remove list entry */
 		free(module); /* give back space */
@@ -319,7 +319,7 @@ findAndLoadModule(char *pluginName, sqInt ffiLoad, sqInt self)
 	If so, return it's handle, otherwise try to load it.
 */
 static ModuleEntry *
-findOrLoadModule(char *pluginName, sqInt ffiLoad, sqInt self)
+findOrLoadModule(char *pluginName, sqInt ffiLoad, struct foo * self)
 {
 	ModuleEntry *module;
 
@@ -344,7 +344,7 @@ findOrLoadModule(char *pluginName, sqInt ffiLoad, sqInt self)
 	This entry point is called from the interpreter proxy.
 */
 void *
-ioLoadFunctionFrom(char *functionName, char *pluginName, sqInt self)
+ioLoadFunctionFrom(char *functionName, char *pluginName, struct foo * self)
 {
 	ModuleEntry *module;
 
@@ -368,7 +368,7 @@ ioLoadFunctionFrom(char *functionName, char *pluginName, sqInt self)
 void *
 ioLoadExternalFunctionOfLengthFromModuleOfLength
 	(sqInt functionNameIndex, sqInt functionNameLength,
-	 sqInt moduleNameIndex, sqInt moduleNameLength, sqInt self)
+	 sqInt moduleNameIndex, sqInt moduleNameLength, struct foo * self)
 {
 	char *functionNamePointer= pointerForOop((usqInt)functionNameIndex);
 	char *moduleNamePointer= pointerForOop((usqInt)moduleNameIndex);
@@ -393,7 +393,7 @@ ioLoadExternalFunctionOfLengthFromModuleOfLength
 */
 static void *
 ioLoadFunctionFromAccessorDepthInto(char *functionName, char *pluginName,
-									sqInt fnameLength, sqInt *accessorDepthPtr, sqInt self)
+									sqInt fnameLength, sqInt *accessorDepthPtr, struct foo * self)
 {
 	ModuleEntry *module;
 	void *function;
@@ -419,7 +419,7 @@ ioLoadFunctionFromAccessorDepthInto(char *functionName, char *pluginName,
 void *
 ioLoadExternalFunctionOfLengthFromModuleOfLengthAccessorDepthInto
 	(sqInt functionNameIndex, sqInt functionNameLength,
-	 sqInt moduleNameIndex,   sqInt moduleNameLength, sqInt *accessorDepthPtr, sqInt self)
+	 sqInt moduleNameIndex,   sqInt moduleNameLength, sqInt *accessorDepthPtr, struct foo * self)
 {
 	char *functionNamePointer= pointerForOop((usqInt)functionNameIndex);
 	char *moduleNamePointer= pointerForOop((usqInt)moduleNameIndex);
@@ -446,7 +446,7 @@ ioLoadExternalFunctionOfLengthFromModuleOfLengthAccessorDepthInto
 #  define IO_LOAD_GLOBAL(fn) 0 
 #endif
 void *
-ioLoadSymbolOfLengthFromModule(sqInt functionNameIndex, sqInt functionNameLength, void *moduleHandle, sqInt self)
+ioLoadSymbolOfLengthFromModule(sqInt functionNameIndex, sqInt functionNameLength, void *moduleHandle, struct foo * self)
 {
 	char *functionNamePointer = pointerForOop((usqInt)functionNameIndex);
 	char functionName[256];
@@ -466,7 +466,7 @@ ioLoadSymbolOfLengthFromModule(sqInt functionNameIndex, sqInt functionNameLength
 	does it attempt to lookup stuff internally.
 */
 void *
-ioLoadModuleOfLength(sqInt moduleNameIndex, sqInt moduleNameLength, sqInt self)
+ioLoadModuleOfLength(sqInt moduleNameIndex, sqInt moduleNameLength, struct foo * self)
 {
 	ModuleEntry *module;
 	char *moduleNamePointer= pointerForOop((usqInt)moduleNameIndex);
@@ -504,7 +504,7 @@ shutdownModule(ModuleEntry *module)
 	Call the shutdown mechanism for all loaded modules.
 */
 sqInt
-ioShutdownAllModules(sqInt self)
+ioShutdownAllModules(struct foo * self)
 {
 	ModuleEntry *entry;
 	entry = firstModule;
@@ -519,7 +519,7 @@ ioShutdownAllModules(sqInt self)
 	Unload the module with the given name.
 */
 sqInt
-ioUnloadModule(char *moduleName, sqInt self)
+ioUnloadModule(char *moduleName)
 {
 	ModuleEntry *entry, *temp;
 
@@ -549,7 +549,7 @@ ioUnloadModule(char *moduleName, sqInt self)
 	}
 	/* And actually unload it if it isn't just the VM... */
 	if(entry->handle != squeakModule->handle)
-		ioFreeModule(entry->handle, self);
+		ioFreeModule(entry->handle);
 	removeFromList(entry);
 	free(entry); /* give back space */
 	return 1;
@@ -559,7 +559,7 @@ ioUnloadModule(char *moduleName, sqInt self)
 	Entry point for the interpreter.
 */
 sqInt
-ioUnloadModuleOfLength(sqInt moduleNameIndex, sqInt moduleNameLength, sqInt self)
+ioUnloadModuleOfLength(sqInt moduleNameIndex, sqInt moduleNameLength, struct foo * self)
 {
 	char *moduleNamePointer= pointerForOop((usqInt) moduleNameIndex);
 	char moduleName[256];
@@ -569,7 +569,7 @@ ioUnloadModuleOfLength(sqInt moduleNameIndex, sqInt moduleNameLength, sqInt self
 	for(i=0; i< moduleNameLength; i++)
 		moduleName[i] = moduleNamePointer[i];
 	moduleName[moduleNameLength] = 0;
-	return ioUnloadModule(moduleName, self);
+	return ioUnloadModule(moduleName);
 }
 
 /* ioListBuiltinModule:
@@ -577,7 +577,7 @@ ioUnloadModuleOfLength(sqInt moduleNameIndex, sqInt moduleNameLength, sqInt self
 */
 
 char *
-ioListBuiltinModule(sqInt moduleIndex, sqInt self)
+ioListBuiltinModule(sqInt moduleIndex, struct foo * self)
 {
   sqInt index, listIndex;
   char *function;
@@ -611,7 +611,7 @@ ioListBuiltinModule(sqInt moduleIndex, sqInt self)
 }
 
 char *
-ioListLoadedModule(sqInt moduleIndex, sqInt self)
+ioListLoadedModule(sqInt moduleIndex, struct foo * self)
 {
 	sqInt index = 1;
 

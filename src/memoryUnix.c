@@ -7,8 +7,8 @@
 #define roundDownToPage(v) ((v)&pageMask)
 #define roundUpToPage(v) (((v)+pageSize-1)&pageMask)
 
-char *uxGrowMemoryBy(char *oldLimit, sqInt delta, sqInt self);
-char *uxShrinkMemoryBy(char *oldLimit, sqInt delta, sqInt self);
+char *uxGrowMemoryBy(char *oldLimit, sqInt delta);
+char *uxShrinkMemoryBy(char *oldLimit, sqInt delta);
 sqInt uxMemoryExtraBytesLeft(sqInt includingSwap);
 
 #if !defined(MAP_ANON)
@@ -87,7 +87,7 @@ sqMakeMemoryNotExecutableFromTo(unsigned long startAddr, unsigned long endAddr)
 /* answer the address of (minHeapSize <= N <= desiredHeapSize) bytes of memory. */
 
 usqInt
-sqAllocateMemory(usqInt minHeapSize, usqInt desiredHeapSize, sqInt self)
+sqAllocateMemory(usqInt minHeapSize, usqInt desiredHeapSize)
 {
 	if (heap) {
 		heap = 0;
@@ -116,14 +116,14 @@ sqAllocateMemory(usqInt minHeapSize, usqInt desiredHeapSize, sqInt self)
   heapSize= heapLimit;
 
   if (overallocateMemory)
-    uxShrinkMemoryBy(heap + heapLimit, heapLimit - desiredHeapSize, self);
+    uxShrinkMemoryBy(heap + heapLimit, heapLimit - desiredHeapSize);
 
 	offsetWeWant = (void *) (heap + heapSize);
 
   return (usqInt)heap;
 }
 
-char *uxGrowMemoryBy(char *oldLimit, sqInt delta, sqInt self) {
+char *uxGrowMemoryBy(char *oldLimit, sqInt delta) {
 	int newSize = min(valign(oldLimit - heap + delta), heapLimit);
 	int newDelta = newSize - heapSize;
 	assert(0 == (newDelta & ~pageMask));
@@ -148,7 +148,7 @@ char *uxGrowMemoryBy(char *oldLimit, sqInt delta, sqInt self) {
 
 /* shrink the heap by delta bytes.  answer the new end of memory. */
 
-char *uxShrinkMemoryBy(char *oldLimit, sqInt delta, sqInt self) {
+char *uxShrinkMemoryBy(char *oldLimit, sqInt delta) {
 	int newSize = max(0, valign((char * )oldLimit - heap - delta));
 	int newDelta = heapSize - newSize;
 
@@ -178,8 +178,8 @@ sqInt uxMemoryExtraBytesLeft(sqInt includingSwap)
 }
 
 
-sqInt sqGrowMemoryBy(sqInt oldLimit, sqInt delta, sqInt self)			{ return (sqInt)(long)uxGrowMemoryBy((char *)(long)oldLimit, delta, self); }
-sqInt sqShrinkMemoryBy(sqInt oldLimit, sqInt delta, sqInt self)			{ return (sqInt)(long)uxShrinkMemoryBy((char *)(long)oldLimit, delta, self); }
+sqInt sqGrowMemoryBy(sqInt oldLimit, sqInt delta)			{ return (sqInt)(long)uxGrowMemoryBy((char *)(long)oldLimit, delta); }
+sqInt sqShrinkMemoryBy(sqInt oldLimit, sqInt delta)			{ return (sqInt)(long)uxShrinkMemoryBy((char *)(long)oldLimit, delta); }
 sqInt sqMemoryExtraBytesLeft(sqInt includingSwap)			{ return uxMemoryExtraBytesLeft(includingSwap); }
 
 
@@ -187,14 +187,14 @@ sqInt sqMemoryExtraBytesLeft(sqInt includingSwap)			{ return uxMemoryExtraBytesL
  * sqAllocateMemorySegmentOfSizeAboveAllocatedSizeInto.  Cannot fail.
  */
 void
-sqDeallocateMemorySegmentAtOfSize(void *addr, sqInt sz, sqInt self)
+sqDeallocateMemorySegmentAtOfSize(void *addr, sqInt sz)
 {
 	if (munmap(addr, sz) != 0)
 		perror("sqDeallocateMemorySegment... munmap");
 }
 
 void *
-sqAllocateMemorySegmentOfSizeAboveAllocatedSizeInto(sqInt size, void *minAddress, sqInt *allocatedSizePointer, sqInt self)
+sqAllocateMemorySegmentOfSizeAboveAllocatedSizeInto(sqInt size, void *minAddress, sqInt *allocatedSizePointer)
 {
 	void *alloc;
 	long bytes = roundUpToPage(size);

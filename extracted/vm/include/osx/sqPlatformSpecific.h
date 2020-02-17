@@ -80,9 +80,9 @@ void		sqFilenameFromString(char *buffer,sqInt fileIndex, long fileLength);
 #undef allocateMemoryMinimumImageFileHeaderSize
 #undef sqImageFileReadEntireImage
 #if SPURVM
-extern usqInt sqAllocateMemory(usqInt minHeapSize, usqInt desiredHeapSize, sqInt self);
-# define allocateMemoryMinimumImageFileHeaderSize(heapSize, minimumMemory, fileStream, headerSize, self) \
-sqAllocateMemory(minimumMemory, heapSize, self)
+extern usqInt sqAllocateMemory(usqInt minHeapSize, usqInt desiredHeapSize);
+# define allocateMemoryMinimumImageFileHeaderSize(heapSize, minimumMemory, fileStream, headerSize) \
+sqAllocateMemory(minimumMemory, heapSize)
 # define sqMacMemoryFree() 
 #else
 usqInt sqAllocateMemoryMac(usqInt desiredHeapSize,sqInt minHeapSize, FILE * f,usqInt headersize);
@@ -110,8 +110,8 @@ sqImageFileReadEntireImage(memoryAddress, elementSize, length, fileStream)
 #undef sqShrinkMemoryBy
 #undef sqMemoryExtraBytesLeft
 
-sqInt sqGrowMemoryBy(sqInt memoryLimit, sqInt delta, sqInt self);
-sqInt sqShrinkMemoryBy(sqInt memoryLimit, sqInt delta, sqInt self);
+sqInt sqGrowMemoryBy(sqInt memoryLimit, sqInt delta);
+sqInt sqShrinkMemoryBy(sqInt memoryLimit, sqInt delta);
 sqInt sqMemoryExtraBytesLeft(sqInt includingSwap);
 
     #undef insufficientMemorySpecifiedError
@@ -119,11 +119,11 @@ sqInt sqMemoryExtraBytesLeft(sqInt includingSwap);
     #undef unableToReadImageError
 int plugInNotifyUser(char *msg);
     #define insufficientMemorySpecifiedError() plugInNotifyUser("The amount of memory specified by the Setting Slider is not enough for the installed Squeak image file.")
-    #define insufficientMemoryAvailableError(self) plugInNotifyUser("There is not enough memory to give Squeak the amount specified by the Setting Slider")
-    #define unableToReadImageError(self) plugInNotifyUser("Read failed or premature end of image file")
+    #define insufficientMemoryAvailableError() plugInNotifyUser("There is not enough memory to give Squeak the amount specified by the Setting Slider")
+    #define unableToReadImageError() plugInNotifyUser("Read failed or premature end of image file")
 	#undef browserPluginReturnIfNeeded
 	int plugInTimeToReturn(void);
-	#define browserPluginReturnIfNeeded(self) if (plugInTimeToReturn()) {ReturnFromInterpret();}
+	#define browserPluginReturnIfNeeded() if (plugInTimeToReturn()) {ReturnFromInterpret();}
 
 sqInt ioSetCursorARGB(sqInt cursorBitsIndex, sqInt extentX, sqInt extentY, sqInt offsetX, sqInt offsetY);
 
