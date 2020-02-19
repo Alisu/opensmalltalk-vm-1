@@ -10,12 +10,12 @@
 /*** Function prototypes ***/
 
 /* InterpreterProxy methodsFor: 'stack access' */
-sqInt  pop(sqInt nItems);
+sqInt  pop(sqInt nItems, struct foo * self);
 sqInt  popthenPush(sqInt nItems, sqInt oop);
 sqInt  push(sqInt object);
 sqInt  pushBool(sqInt trueOrFalse);
 sqInt  pushFloat(double f);
-sqInt  pushInteger(sqInt integerValue);
+sqInt  pushInteger(sqInt integerValue, struct foo * self);
 double stackFloatValue(sqInt offset);
 sqInt  stackIntegerValue(sqInt offset);
 sqInt  stackObjectValue(sqInt offset);
@@ -25,12 +25,12 @@ sqInt  stackValue(sqInt offset);
 
 /* InterpreterProxy methodsFor: 'object access' */
 sqInt  argumentCountOf(sqInt methodPointer);
-void  *arrayValueOf(sqInt oop, struct foo * self);
+void  *arrayValueOf(sqInt oop, register struct foo * self);
 sqInt  byteSizeOf(sqInt oop);
-void  *fetchArrayofObject(sqInt fieldIndex, sqInt objectPointer, struct foo * self);
+void  *fetchArrayofObject(sqInt fieldIndex, sqInt objectPointer, register struct foo * self);
 sqInt  fetchClassOf(sqInt oop);
-double fetchFloatofObject(sqInt fieldIndex, sqInt objectPointer);
-sqInt  fetchIntegerofObject(sqInt fieldIndex, sqInt objectPointer);
+double fetchFloatofObject(sqInt fieldIndex, sqInt objectPointer, struct foo * self);
+sqInt  fetchIntegerofObject(sqInt fieldIndex, sqInt objectPointer, struct foo * self);
 sqInt  fetchPointerofObject(sqInt index, sqInt oop);
 /* sqInt  fetchWordofObject(sqInt fieldIndex, sqInt oop);     *
  * has been rescinded as of VMMaker 3.8 and the 64bitclean VM *
@@ -54,7 +54,7 @@ sqInt  slotSizeOf(sqInt oop);
 sqInt  stObjectat(sqInt array, sqInt index);
 sqInt  stObjectatput(sqInt array, sqInt index, sqInt value);
 sqInt  stSizeOf(sqInt oop);
-sqInt  storeIntegerofObjectwithValue(sqInt index, sqInt oop, sqInt integer);
+sqInt  storeIntegerofObjectwithValue(sqInt index, sqInt oop, sqInt integer, struct foo * self);
 sqInt  storePointerofObjectwithValue(sqInt index, sqInt oop, sqInt valuePointer);
 
 
@@ -84,9 +84,9 @@ sqInt isOopImmutable(sqInt oop);
 
 /* InterpreterProxy methodsFor: 'converting' */
 sqInt  booleanValueOf(sqInt obj);
-sqInt  checkedIntegerValueOf(sqInt intOop);
+sqInt  checkedIntegerValueOf(sqInt intOop, struct foo * self);
 sqInt  floatObjectOf(double aFloat);
-double floatValueOf(sqInt oop);
+double floatValueOf(sqInt oop, struct foo * self);
 sqInt  integerObjectOf(sqInt value);
 sqInt  integerValueOf(sqInt oop);
 sqInt  positive32BitIntegerFor(unsigned int integerValue);
@@ -143,7 +143,7 @@ sqInt primitiveFail(void);
 sqInt primitiveFailFor(sqInt reasonCode);
 sqInt showDisplayBitsLeftTopRightBottom(sqInt aForm, sqInt l, sqInt t, sqInt r, sqInt b);
 sqInt signalSemaphoreWithIndex(sqInt semaIndex);
-sqInt success(sqInt aBoolean, struct foo * self);
+sqInt success(sqInt aBoolean, register struct foo * self);
 sqInt superclassOf(sqInt classPointer);
 sqInt ioMicroMSecs(void);
 unsigned volatile long long  ioUTCMicroseconds(void);
@@ -165,8 +165,8 @@ sqInt classExternalData(void);
 sqInt classExternalFunction(void);
 sqInt classExternalLibrary(void);
 sqInt classExternalStructure(void);
-void *ioLoadModuleOfLength(sqInt moduleNameIndex, sqInt moduleNameLength, struct foo * self);
-void *ioLoadSymbolOfLengthFromModule(sqInt functionNameIndex, sqInt functionNameLength, void* moduleHandle, struct foo * self);
+void *ioLoadModuleOfLength(sqInt moduleNameIndex, sqInt moduleNameLength, register struct foo * self);
+void *ioLoadSymbolOfLengthFromModule(sqInt functionNameIndex, sqInt functionNameLength, void* moduleHandle, register struct foo * self);
 sqInt isInMemory(sqInt address);
 sqInt classAlien(void); /* Alien FFI */
 sqInt classUnsafeAlien(void); /* Alien FFI */
@@ -203,7 +203,7 @@ sqInt isBooleanObject(sqInt oop);
 sqInt isPositiveMachineIntegerObject(sqInt oop);
 #endif
 
-void *ioLoadFunctionFrom(char *fnName, char *modName, struct foo * self);
+void *ioLoadFunctionFrom(char *fnName, char *modName, register struct foo * self);
 
 
 /* Proxy declarations for v1.8 */
@@ -280,17 +280,17 @@ void addSynchronousTickee(void (*ticker)(void), unsigned periodms, unsigned roun
 
 #if SPURVM /* For now these are here; perhaps they're better in the VM. */
 static sqInt
-interceptFetchIntegerofObject(sqInt fieldIndex, sqInt objectPointer)
+interceptFetchIntegerofObject(sqInt fieldIndex, sqInt objectPointer, struct foo * self)
 {
 	if (fieldIndex == 0
 	 && isCharacterObject(objectPointer))
 		return characterValueOf(objectPointer);
 
-	return fetchIntegerofObject(fieldIndex, objectPointer);
+	return fetchIntegerofObject(fieldIndex, objectPointer, self);
 }
 #endif
 
-sqInt  fetchIntegerofObject(sqInt fieldIndex, sqInt objectPointer);
+sqInt  fetchIntegerofObject(sqInt fieldIndex, sqInt objectPointer, struct foo * self);
 struct VirtualMachine* sqGetInterpreterProxy()
 {
 	if(VM) return VM;

@@ -65,7 +65,7 @@ EXPORT(char*) getVMVersion(){
 	return VM_BUILD_STRING;
 }
 
-char * GetAttributeString(sqInt id, struct foo * self)
+char * GetAttributeString(sqInt id, register struct foo * self)
 {
     if (id < 0)	/* VM argument */
     {
@@ -121,12 +121,12 @@ char * GetAttributeString(sqInt id, struct foo * self)
     return "";
 }
 
-sqInt attributeSize(sqInt id, struct foo * self)
+sqInt attributeSize(sqInt id, register struct foo * self)
 {
     return strlen(GetAttributeString(id, self));
 }
 
-sqInt getAttributeIntoLength(sqInt id, sqInt byteArrayIndex, sqInt length, struct foo * self)
+sqInt getAttributeIntoLength(sqInt id, sqInt byteArrayIndex, sqInt length, register struct foo * self)
 {
     if (length > 0)
         strncpy(pointerForOop(byteArrayIndex), GetAttributeString(id, self), length);

@@ -178,7 +178,7 @@ void	checkHighPriorityTickees(usqLong);
 extern int numAsyncTickees; /* prodHighPriorityThread unless necessary */
 # endif						/* see platforms/unix/vm/sqUnixHeartbeat.c */
 void	ioGetClockLogSizeUsecsIdxMsecsIdx(sqInt*,void**,sqInt*,void**,sqInt*);
-void	addIdleUsecs(sqInt);
+void	addIdleUsecs(sqInt, struct foo * self);
 #endif
 
 /* this function should return the value of the high performance
@@ -588,15 +588,15 @@ sqInt clipboardWriteFromAt(sqInt count, sqInt byteArrayIndex, sqInt startIndex);
 
 /* Interpreter entry points needed by compiled primitives. */
 void *arrayValueOf(sqInt arrayOop, struct foo * self);
-sqInt checkedIntegerValueOf(sqInt intOop);
+sqInt checkedIntegerValueOf(sqInt intOop, struct foo * self);
 void *fetchArrayofObject(sqInt fieldIndex, sqInt objectPointer, struct foo * self);
-double fetchFloatofObject(sqInt fieldIndex, sqInt objectPointer);
-sqInt fetchIntegerofObject(sqInt fieldIndex, sqInt objectPointer);
-double floatValueOf(sqInt floatOop);
-sqInt pop(sqInt nItems);
-sqInt pushInteger(sqInt integerValue);
+double fetchFloatofObject(sqInt fieldIndex, sqInt objectPointer, struct foo * self);
+sqInt fetchIntegerofObject(sqInt fieldIndex, sqInt objectPointer, struct foo * self);
+double floatValueOf(sqInt floatOop, struct foo * self);
+sqInt pop(sqInt nItems, struct foo * self);
+sqInt pushInteger(sqInt integerValue, struct foo * self);
 sqInt sizeOfSTArrayFromCPrimitive(void *cPtr, struct foo * self);
-sqInt storeIntegerofObjectwithValue(sqInt fieldIndex, sqInt objectPointer, sqInt integerValue);
+sqInt storeIntegerofObjectwithValue(sqInt fieldIndex, sqInt objectPointer, sqInt integerValue, struct foo * self);
 
 /* System attributes. */
 sqInt attributeSize(sqInt indexNumber, struct foo * self);
