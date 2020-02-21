@@ -21314,7 +21314,7 @@ StackInterpreter >> shortPrintOop: oop [
 				inSmalltalk: [self print: (self shortPrint: oop); cr]].
 		 (objectMemory isImmediateFloat: oop) ifTrue:
 			[self
-				cCode: 'printf("=%g\n", floatValueOf(oop))'
+				cCode: 'printf("=%g\n", floatValueOf(oop, self))'
 				inSmalltalk: [self print: '='; printFloat: (objectMemory floatValueOf: oop); cr]].
 		 ^self].
 	(objectMemory addressCouldBeObj: oop) ifFalse:

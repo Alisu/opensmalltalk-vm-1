@@ -50,7 +50,7 @@ CCodeGeneratorTheoGlobalStructure >> emitCCodeAsFunctionCallOn: aStream level: l
 	aMethod selector == #break
 		ifTrue: [ aStream nextPutAll: '/* send of break elided */'.
 			^ aMethod ].
-	"self haltIf: [ (self cFunctionNameFor: aMethod selector) includesSubstring:  'ioSetMax' ]."
+	self haltIf: [ (self cFunctionNameFor: aMethod selector) includesSubstring:  'ioSetMax' ].
 	"Special case for pluggable modules. Replace messages to interpreterProxy
 	 by interpreterProxy->message(..) if the message is not builtin"
 	(self shouldGenerateAsInterpreterProxySend: aMethod)
@@ -94,17 +94,15 @@ CCodeGeneratorTheoGlobalStructure >> emitCCodeAsFunctionCallOn: aStream level: l
 { #category : #'C code generator' }
 CCodeGeneratorTheoGlobalStructure >> emitCFunctionPrototypeForMethod: aMethod isPrototype: isPrototype onStream: aStream [
 	| args declarations |
-	args := aMethod args copy.
+	(self selectorUsedInsqVirtualMachine includes: aMethod selector)ifFalse:
+	[args := aMethod args copy.
+	args add: #self.
 	declarations := aMethod declarations copy.
-	(self selectorExcludedForFunctionPrototype includes: aMethod selector)
-		ifFalse: [ args add: #self.
-			declarations at: #self put: 'struct foo * self' ].
+	declarations at: #self put: 'struct foo * self'.
 	args
-		do: [ :arg | 
-			aStream
-				nextPutAll: (declarations at: arg ifAbsent: [ #sqInt , ' ' , arg ]) ]
+		do: [ :arg | aStream nextPutAll: (declarations at: arg ifAbsent: [#sqInt, ' ', arg]) ]
 		separatedBy: [ aStream nextPutAll: ', ' ].
-	aStream nextPut: $)
+	aStream nextPut: $)]
 ]
 
 { #category : #'C code generator' }
@@ -222,7 +220,7 @@ CCodeGeneratorTheoGlobalStructure >> emitCVariablesOn: aStream [
 		nextPutAll: 'int numberOfImage;'; cr;
 		nextPutAll: 'struct foo * all_threads_global;'; cr;
 		nextPutAll: 'pthread_t * thread_id;'; cr;
-		nextPutAll: '# define GIV(interpreterInstVar)  foo->interpreterInstVar'; cr;
+		nextPutAll: '# define GIV(interpreterInstVar)  self->interpreterInstVar'; cr;
 		nextPutAll: '#else'; cr;
 		nextPutAll: '# define DECL_MAYBE_SQ_GLOBAL_STRUCT /* oh, no mr bill! */'; cr;
 		nextPutAll: '# define DECL_MAYBE_VOLATILE_SQ_GLOBAL_STRUCT /* oh no, mr bill! */'; cr;
@@ -245,6 +243,22 @@ CCodeGeneratorTheoGlobalStructure >> emitCVariablesOn: aStream [
 		nextPutAll: structure contents;
 		nextPutAll: nonstruct contents;
 		cr
+]
+
+{ #category : #'C code generator' }
+CCodeGeneratorTheoGlobalStructure >> generatePerform: msgNode on: aStream indent: level [
+	"Generate the C code for this message onto the given stream."
+
+	self emitCExpression: msgNode args first on: aStream.
+	aStream nextPut: $(.
+	(msgNode args copyFrom: 2 to: msgNode args size)
+		do: [ :arg | self emitCExpression: arg on: aStream ]
+		separatedBy: [ aStream nextPutAll: ', ' ].
+	msgNode args first value = #isScavengeSurvivor:
+		ifTrue: [ msgNode args size > 1
+				ifTrue: [ aStream nextPutAll: ', ' ].
+			aStream nextPutAll: 'self' ].
+	aStream nextPut: $)
 ]
 
 { #category : #'as yet unclassified' }
@@ -331,7 +345,9 @@ CCodeGeneratorTheoGlobalStructure >> selectorExcludedForCommodities [
 { #category : #'as yet unclassified' }
 CCodeGeneratorTheoGlobalStructure >> selectorExcludedForFunctionPrototype [
 
- ^ 		#( "sqVirtualMachine.c"
+ ^ 	#(#readableFormat:
+	 #sigset:jmp:
+	)	"#( sqVirtualMachine.c
 		#fetchInteger:ofObject:
 		#floatValueOf:
 		#storeInteger:ofObject:withValue:
@@ -345,7 +361,7 @@ CCodeGeneratorTheoGlobalStructure >> selectorExcludedForFunctionPrototype [
 		#readableFormat:
 		#forceInterruptCheckFromHeartbeat
 		#ioUTCMicroseconds
-		#forceInterruptCheck)
+		#forceInterruptCheck)"
 ]
 
 { #category : #'as yet unclassified' }
