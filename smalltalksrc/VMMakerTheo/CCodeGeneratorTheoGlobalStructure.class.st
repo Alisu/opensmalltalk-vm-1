@@ -50,7 +50,7 @@ CCodeGeneratorTheoGlobalStructure >> emitCCodeAsFunctionCallOn: aStream level: l
 	aMethod selector == #break
 		ifTrue: [ aStream nextPutAll: '/* send of break elided */'.
 			^ aMethod ].
-	self haltIf: [ (self cFunctionNameFor: aMethod selector) includesSubstring:  'ioSetMax' ].
+	"self haltIf: [ (self cFunctionNameFor: aMethod selector) includesSubstring:  'ioSetMax' ]."
 	"Special case for pluggable modules. Replace messages to interpreterProxy
 	 by interpreterProxy->message(..) if the message is not builtin"
 	(self shouldGenerateAsInterpreterProxySend: aMethod)
@@ -94,15 +94,17 @@ CCodeGeneratorTheoGlobalStructure >> emitCCodeAsFunctionCallOn: aStream level: l
 { #category : #'C code generator' }
 CCodeGeneratorTheoGlobalStructure >> emitCFunctionPrototypeForMethod: aMethod isPrototype: isPrototype onStream: aStream [
 	| args declarations |
-	(self selectorUsedInsqVirtualMachine includes: aMethod selector)ifFalse:
-	[args := aMethod args copy.
-	args add: #self.
+	args := aMethod args copy.
 	declarations := aMethod declarations copy.
-	declarations at: #self put: 'struct foo * self'.
+	(self selectorExcludedForFunctionPrototype includes: aMethod selector)
+		ifFalse: [ args add: #self.
+			declarations at: #self put: 'struct foo * self' ].
 	args
-		do: [ :arg | aStream nextPutAll: (declarations at: arg ifAbsent: [#sqInt, ' ', arg]) ]
+		do: [ :arg | 
+			aStream
+				nextPutAll: (declarations at: arg ifAbsent: [ #sqInt , ' ' , arg ]) ]
 		separatedBy: [ aStream nextPutAll: ', ' ].
-	aStream nextPut: $)]
+	aStream nextPut: $)
 ]
 
 { #category : #'C code generator' }
