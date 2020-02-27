@@ -5647,7 +5647,7 @@ StackInterpreter >> destructeurThreadLocal: aBuffer [
 	<api>
 	<var: #aBuffer type: 'void *'>
 	"Libère le tampon spécifique au thread"
-	self cCode: 'free(buf);' inSmalltalk: [ self destructeurThreadLocal: aBuffer ]
+	self cCode: 'free(aBuffer);' inSmalltalk: [ self destructeurThreadLocal: aBuffer ]
 ]
 
 { #category : #'debug support' }
@@ -10371,6 +10371,7 @@ StackInterpreter >> loadAndExecute: imageParameters [
 	 
 	self cCode: '
 	//Preinit
+	initLocalThreadAndGIV();
 	ioInitTime();
 
    ioVMThread = ioCurrentOSThread();
