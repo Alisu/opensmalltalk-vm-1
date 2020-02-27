@@ -127,7 +127,12 @@ CCodeGeneratorGlobalStructure >> emitCVariablesOn: aStream [
 		nextPutAll: 'int numberOfImage;'; cr;
 		nextPutAll: 'struct foo * all_threads_global;'; cr;
 		nextPutAll: 'pthread_t * thread_id;'; cr;
-		nextPutAll: '# define GIV(interpreterInstVar) (returnGlobalStructForCurrentThread()->interpreterInstVar)'; cr;
+		nextPutAll: '/* Clé pour le tampon spécifique au thread */
+		static pthread_key_t buffer_key;';cr;
+		nextPutAll: '/* Initialisation unique de la clé */
+static pthread_once_t buffer_key_once = PTHREAD_ONCE_INIT;';cr;
+		nextPutAll:'# define GETLOCALGIV() ((struct foo * )pthread_getspecific(buffer_key))';cr;
+		nextPutAll: '# define GIV(interpreterInstVar) (GETLOCALGIV()->interpreterInstVar)'; cr;
 		nextPutAll: '#else'; cr;
 		nextPutAll: '# define DECL_MAYBE_SQ_GLOBAL_STRUCT /* oh, no mr bill! */'; cr;
 		nextPutAll: '# define DECL_MAYBE_VOLATILE_SQ_GLOBAL_STRUCT /* oh no, mr bill! */'; cr;

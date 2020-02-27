@@ -2553,6 +2553,13 @@ StackInterpreter >> allOnesAsCharStar [
 		to: #'char *')
 ]
 
+{ #category : #thInter }
+StackInterpreter >> allocThreadLocal [ 
+	<api>
+	"/* Alloue la clée */"
+	self cCode: 'pthread_key_create(&buffer_key, destructeurThreadLocal);' inSmalltalk: [ self allocThreadLocal ]
+]
+
 { #category : #'inline primitive ffi abi' }
 StackInterpreter >> allocateLowcodeCalloutState [
 	<option: #LowcodeVM>
@@ -5635,6 +5642,14 @@ StackInterpreter >> defaultNumStackPages [
 		ifFalse: [160]
 ]
 
+{ #category : #thInter }
+StackInterpreter >> destructeurThreadLocal: aBuffer [
+	<api>
+	<var: #aBuffer type: 'void *'>
+	"/* Libère le tampon spécifique au thread */"
+	self cCode: 'free(buf);' inSmalltalk: [ self destructeurThreadLocal: aBuffer ]
+]
+
 { #category : #'debug support' }
 StackInterpreter >> detailedSymbolicMethod: aMethod [
 	<doNotGenerate>
@@ -7655,37 +7670,37 @@ StackInterpreter >> forceInterruptCheckFromHeartbeat [
 ]
 
 { #category : #thInter }
-StackInterpreter >> forceInterruptCheckFromHeartbeatV2: GIVNumber [
-	<var: #GIVNumber type: 'int'>
+StackInterpreter >> forceInterruptCheckFromHeartbeatV2: aGIV [
+	<var: #aGIV type: 'struct foo *'>
 	self
 		cCode:
 			'	
 		if (!suppressHeartbeatFlag) {
 			/* begin checkForLongRunningPrimitive */
-			if (returnGlobalStructFor(GIVNumber)->longRunningPrimitiveCheckSemaphore == null) {
+			if (aGIV->longRunningPrimitiveCheckSemaphore == null) {
 				goto l1;
 			}
-			if ((returnGlobalStructFor(GIVNumber)->longRunningPrimitiveStartUsecs > 0)
-			 && (returnGlobalStructFor(GIVNumber)->longRunningPrimitiveCheckMethod == returnGlobalStructFor(GIVNumber)->newMethod)
-		 	&& (returnGlobalStructFor(GIVNumber)->longRunningPrimitiveCheckSequenceNumber == returnGlobalStructFor(GIVNumber)->statCheckForEvents)) {
-				returnGlobalStructFor(GIVNumber)->longRunningPrimitiveStopUsecs = ioUTCMicroseconds();
-				assert(returnGlobalStructFor(GIVNumber)->longRunningPrimitiveStopUsecs > returnGlobalStructFor(GIVNumber)->longRunningPrimitiveStartUsecs);
+			if ((aGIV->longRunningPrimitiveStartUsecs > 0)
+			 && (aGIV->longRunningPrimitiveCheckMethod == aGIV->newMethod)
+		 	&& (aGIV->longRunningPrimitiveCheckSequenceNumber == aGIV->statCheckForEvents)) {
+				aGIV->longRunningPrimitiveStopUsecs = ioUTCMicroseconds();
+				assert(aGIV->longRunningPrimitiveStopUsecs > aGIV->longRunningPrimitiveStartUsecs);
 				goto l1;
 			}
-			if (returnGlobalStructFor(GIVNumber)->longRunningPrimitiveStopUsecs == 0) {
-				returnGlobalStructFor(GIVNumber)->longRunningPrimitiveCheckSequenceNumber = returnGlobalStructFor(GIVNumber)->statCheckForEvents;
-				returnGlobalStructFor(GIVNumber)->longRunningPrimitiveCheckMethod = returnGlobalStructFor(GIVNumber)->newMethod;
-				returnGlobalStructFor(GIVNumber)->longRunningPrimitiveStartUsecs = ioUTCMicroseconds();
+			if (aGIV->longRunningPrimitiveStopUsecs == 0) {
+				aGIV->longRunningPrimitiveCheckSequenceNumber = aGIV->statCheckForEvents;
+				aGIV->longRunningPrimitiveCheckMethod = aGIV->newMethod;
+				aGIV->longRunningPrimitiveStartUsecs = ioUTCMicroseconds();
 				sqLowLevelMFence();
 			}
 			l1:	/* end checkForLongRunningPrimitive */;
-			forceInterruptCheckV2(GIVNumber);
+			forceInterruptCheckV2(aGIV);
 	}'
 ]
 
 { #category : #thInter }
-StackInterpreter >> forceInterruptCheckV2: GIVNumber [
-	<var: #GIVNumber type: 'int'>
+StackInterpreter >> forceInterruptCheckV2: aGIV [
+	<var: #aGIV type: 'struct foo *'>
 	<returnTypeC: #int>
 	| thePage iccFunc |
 	<inline: false>
@@ -7695,22 +7710,21 @@ StackInterpreter >> forceInterruptCheckV2: GIVNumber [
 	self
 		cCode:
 			'	
-	if (returnGlobalStructFor(GIVNumber)->stackLimit == 0) {
+	if (aGIV->stackLimit == 0) {
 		return null;
 	}
-	thePage = returnGlobalStructFor(GIVNumber)->stackPage;
+	thePage = aGIV->stackPage;
 	if ((thePage != null)
 	 && (thePage != 0)) {
 		(thePage->stackLimit = ((char *) (((usqInt) -1))));
 	}
 	/* begin allOnesAsCharStar */
-	returnGlobalStructFor(GIVNumber)->stackLimit = ((char *) (((usqInt) -1)));
+	aGIV->stackLimit = ((char *) (((usqInt) -1)));
 	sqLowLevelMFence();
 	if (((iccFunc = interruptCheckChain)) != null) {
 		iccFunc();
 	}
-	returnGlobalStructFor(GIVNumber)->statForceInterruptCheck += 1;
-	return 0;'
+	aGIV->statForceInterruptCheck += 1;'
 ]
 
 { #category : #'frame access' }
@@ -8559,6 +8573,14 @@ StackInterpreter >> initExtensions [
 	BytecodeSetHasExtensions ifTrue: [extA := numExtB := extB := 0]
 ]
 
+{ #category : #thInter }
+StackInterpreter >> initLocalThreadAndGIV [ 
+	<api>
+	"/* Alloue le tampon spécifique au thread */"
+	self cCode: '  pthread_once(&buffer_key_once, allocThreadLocal);
+  pthread_setspecific(buffer_key, returnGlobalStructForCurrentThread());' inSmalltalk: [ self initLocalThreadAndGIV ]
+]
+
 { #category : #thInterCom }
 StackInterpreter >> initMutexForFetchNextBytecode: aMutex [
 	<var: #aMutex type: 'pthread_mutex_t'>
@@ -8678,7 +8700,7 @@ StackInterpreter >> initStackPagesAndInterpret [
 	self loadInitialContext.
 	"We're ready for the heartbeat (poll interrupt)"
 	self cCode: 'setIOHeartbeatGIVToUse(returnGIVNumberForCurrentThread());'.
-	self ioInitHeartbeat.
+	self cCode: 'ioInitHeartbeat(returnGlobalStructForCurrentThread());'.
 	self initialEnterSmalltalkExecutive.
 	^nil
 ]
@@ -19036,12 +19058,6 @@ StackInterpreter >> printOopShortInner: oop [
 StackInterpreter >> printPageHeadFrame [
 	<inline: false>
 	self printFrame: stackPage headFP WithSP: stackPage headSP
-]
-
-{ #category : #thInter }
-StackInterpreter >> printPouet [
-
-	self cCode:'printf("Pouet \n");'
 ]
 
 { #category : #'debug printing' }
