@@ -2556,7 +2556,7 @@ StackInterpreter >> allOnesAsCharStar [
 { #category : #thInter }
 StackInterpreter >> allocThreadLocal [ 
 	<api>
-	"/* Alloue la clée */"
+	"Alloue la clée"
 	self cCode: 'pthread_key_create(&buffer_key, destructeurThreadLocal);' inSmalltalk: [ self allocThreadLocal ]
 ]
 
@@ -5646,7 +5646,7 @@ StackInterpreter >> defaultNumStackPages [
 StackInterpreter >> destructeurThreadLocal: aBuffer [
 	<api>
 	<var: #aBuffer type: 'void *'>
-	"/* Libère le tampon spécifique au thread */"
+	"Libère le tampon spécifique au thread"
 	self cCode: 'free(buf);' inSmalltalk: [ self destructeurThreadLocal: aBuffer ]
 ]
 
@@ -8576,7 +8576,7 @@ StackInterpreter >> initExtensions [
 { #category : #thInter }
 StackInterpreter >> initLocalThreadAndGIV [ 
 	<api>
-	"/* Alloue le tampon spécifique au thread */"
+	"Alloue le tampon spécifique au thread"
 	self cCode: '  pthread_once(&buffer_key_once, allocThreadLocal);
   pthread_setspecific(buffer_key, returnGlobalStructForCurrentThread());' inSmalltalk: [ self initLocalThreadAndGIV ]
 ]
