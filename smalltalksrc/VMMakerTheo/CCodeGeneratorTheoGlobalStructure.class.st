@@ -156,7 +156,7 @@ CCodeGeneratorTheoGlobalStructure >> emitCMacros: methodList on: aStream [
 						s << ', self'.
 						s << (macroDefinition last: (macroDefinition size - (macroDefinition indexOf: $)) + 1)).
 						]].
-			(macroDefinition includesSubstring: 'enterSmalltalkExecutiveImplementation')	
+			(macroDefinition endsWith: '()')	
 				ifTrue:[macroDefinition := (macroDefinition allButLast: 1), 'self)'].
 			aStream
 				nextPutAll: '#define ';
@@ -348,7 +348,11 @@ CCodeGeneratorTheoGlobalStructure >> selectorExcludedForCommodities [
 CCodeGeneratorTheoGlobalStructure >> selectorExcludedForFunctionPrototype [
 
  ^ 	#(#readableFormat:
-	 #sigset:jmp:
+	#sigset:jmp:
+	#newGIV
+	#setNumberOfImage:
+	#getNumberOfImage
+	#initAllGlobalsStruct
 	)	"#( sqVirtualMachine.c
 		#fetchInteger:ofObject:
 		#floatValueOf:

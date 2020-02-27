@@ -8553,6 +8553,15 @@ StackInterpreter >> includesBehavior: aClass ThatOf: aSuperclass [
 	^false
 ]
 
+{ #category : #thInter }
+StackInterpreter >> initAllGlobalsStruct [
+
+	self
+		cCode: 'all_threads_global = calloc(sizeof(struct foo), 1);
+		thread_id = malloc(sizeof(pthread_t));'
+	inSmalltalk: [ self initAllGlobalsStruct ]
+]
+
 { #category : #'simulation support' }
 StackInterpreter >> initExtensions [
 	<inline: true>
@@ -17218,6 +17227,18 @@ StackInterpreter >> nativeStackSize [
 ]
 
 { #category : #thInter }
+StackInterpreter >> newGIV [
+	<returnTypeC: #'struct foo *'>
+	<api>
+	
+	self setNumberOfImage: self getNumberOfImage + 1.
+	self initAllGlobalsStruct.
+	self cCode: 'return &all_threads_global[0]'
+	
+	
+]
+
+{ #category : #thInter }
 StackInterpreter >> newImage: imagePath WithArguments: imageArgs [
 	<var: #imageArgs type: 'char *'>
 	<var: #imagePath type: 'char *'>
@@ -20996,12 +21017,12 @@ StackInterpreter >> setNextWakeupUsecs: value [
 	nextWakeupUsecs := value
 ]
 
-{ #category : #simulation }
+{ #category : #thInter }
 StackInterpreter >> setNumberOfImage: numberImages [
 	<var: #numberImages type: 'int'>
 
 	self
-		cCode: 'numberOfImage = numberImages;'
+		cCode: 'numberOfImage = numberImages;' inSmalltalk: [ self setNumberOfImage: numberImages ]
 ]
 
 { #category : #'plugin primitive support' }
