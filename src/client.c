@@ -25,9 +25,9 @@ void mtfsfi(unsigned long long fpscr)
 #endif
 
 
-int loadPharoImage(char* fileName);
+int loadPharoImage(char* fileName, struct foo * self);
 
-EXPORT(int) initPharoVM(char* image, char** vmParams, int vmParamCount, char** imageParams, int imageParamCount){
+EXPORT(int) initPharoVM(char* image, char** vmParams, int vmParamCount, char** imageParams, int imageParamCount, struct foo * self){
 	initGlobalStructure();
 
 	//Unix Initialization specific
@@ -55,18 +55,18 @@ EXPORT(int) initPharoVM(char* image, char** vmParams, int vmParamCount, char** i
          * or with image with not the rights vm params**/
 	    setPharoCommandLineParameters(vmParams, vmParamCount, imageParams, imageParamCount);
         /**loading the image and allocating ressource for it done in a the mutex to not call mmap in the same time and have the same memory allocated**/
-	    r = loadPharoImage(image);
+	    r = loadPharoImage(image, self);
     }
     pthread_mutex_unlock(&mutex);
 
     return r;
 }
 
-EXPORT(void) runInterpreter(){
-	interpret();
+EXPORT(void) runInterpreter(struct foo * self){
+	interpret(self);
 }
 
-int loadPharoImage(char* fileName){
+int loadPharoImage(char* fileName, struct foo * self){
     size_t imageSize = 0;
     FILE* imageFile = NULL;
 
@@ -82,7 +82,7 @@ int loadPharoImage(char* fileName){
     imageSize = ftell(imageFile);
     fseek(imageFile, 0, SEEK_SET);
 
-    readImageFromFileHeapSizeStartingAt(imageFile, 0, 0, 0 /*self?*/);
+    readImageFromFileHeapSizeStartingAt(imageFile, 0, 0, self);
     fclose(imageFile);
 
     setImageName(fileName);

@@ -5,17 +5,20 @@
 #include <pharo.h>
 #include <sys/queue.h>
 
-int loadAndExecuteVM(VM_PARAMETERS* parameters){
+extern struct foo * newGIV();
 
-	if(!initPharoVM(parameters->imageFile, parameters->vmParams, parameters->vmParamsCount, parameters->imageParams, parameters->imageParamsCount)){
+int loadAndExecuteVM(VM_PARAMETERS* parameters, struct foo * self){
+
+	if(!initPharoVM(parameters->imageFile, parameters->vmParams, parameters->vmParamsCount, parameters->imageParams, parameters->imageParamsCount, self)){
 		logError("Error opening image file: %s\n", parameters->imageFile);
 		exit(-1);
 	}
-	runInterpreter();
+	runInterpreter(self);
 }
 
 int runThread(void* parameters){
-	loadAndExecuteVM((VM_PARAMETERS*) parameters);
+	struct foo * giv = newGIV();
+	loadAndExecuteVM((VM_PARAMETERS*) parameters, giv);
 }
 
 /*

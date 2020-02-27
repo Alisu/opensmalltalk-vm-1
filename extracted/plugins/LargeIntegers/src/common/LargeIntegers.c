@@ -86,7 +86,7 @@ EXPORT(sqInt) primDigitBitShiftMagnitude(void);
 EXPORT(sqInt) primDigitBitXor(void);
 EXPORT(sqInt) primDigitCompare(void);
 EXPORT(sqInt) primDigitDivNegative(void);
-EXPORT(sqInt) primDigitMultiplyNegative(void);
+EXPORT(sqInt) primDigitMultiplyNegative(void * self);
 EXPORT(sqInt) primDigitSubtract(void);
 EXPORT(sqInt) primGetModuleName(void);
 EXPORT(sqInt) primMontgomeryDigitLength(void);
@@ -153,6 +153,7 @@ static sqInt (*slotSizeOf)(sqInt oop);
 static sqInt (*stObjectatput)(sqInt array, sqInt index, sqInt value);
 static sqInt (*stackIntegerValue)(sqInt offset);
 static sqInt (*stackValue)(sqInt offset);
+static sqInt (*stackValue2)(sqInt offset, struct foo * self);
 static sqInt (*success)(sqInt aBoolean);
 static sqInt (*trueObject)(void);
 #else /* !defined(SQUEAK_BUILTIN_PLUGIN) */
@@ -186,6 +187,7 @@ extern sqInt slotSizeOf(sqInt oop);
 extern sqInt stObjectatput(sqInt array, sqInt index, sqInt value);
 extern sqInt stackIntegerValue(sqInt offset);
 extern sqInt stackValue(sqInt offset);
+extern sqInt stackValue2(sqInt offset, struct foo * self);
 extern sqInt success(sqInt aBoolean);
 extern sqInt trueObject(void);
 extern
@@ -3158,7 +3160,7 @@ primDigitDivNegative(void)
 
 	/* LargeIntegersPlugin>>#primDigitMultiply:negative: */
 EXPORT(sqInt)
-primDigitMultiplyNegative(void)
+primDigitMultiplyNegative(void * self)
 {
 	unsigned long long ab;
 	unsigned int carry;
@@ -3185,8 +3187,8 @@ primDigitMultiplyNegative(void)
 	sqInt shortLen;
 	sqInt _return_value;
 
-	if (!((isKindOfInteger(stackValue(1)))
-		 && (isBooleanObject(stackValue(0))))) {
+	if (!((isKindOfInteger(stackValue2(1, self)))
+		 && (isBooleanObject(stackValue2(0, self))))) {
 		primitiveFailFor(PrimErrBadArgument);
 		return null;
 	}
