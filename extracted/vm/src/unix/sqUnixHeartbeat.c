@@ -284,7 +284,7 @@ ioInitTime(void)
 }
 
 static void
-heartbeat()
+heartbeat(struct foo * giv)
 {
 	int saved_errno = errno;
 
@@ -296,8 +296,8 @@ heartbeat()
 	else
 		heartbeats += 1;
 	//checkHighPriorityTickees(utcMicrosecondClock);
-	int GIVToUse = returnGIVNumberForHearbeat();
-	forceInterruptCheckFromHeartbeatV2(GIVToUse);
+	//int GIVToUse = returnGIVNumberForHearbeat();
+	forceInterruptCheckFromHeartbeatV2(giv);
 
 	errno = saved_errno;
 }
@@ -318,7 +318,7 @@ static int beatMilliseconds = DEFAULT_BEAT_MS;
 static struct timespec beatperiod = { 0, DEFAULT_BEAT_MS * 1000 * 1000 };
 
 static void *
-beatStateMachine(void *careLess)
+beatStateMachine(struct foo * giv)
 {
     int er;
 	if ((er = pthread_setschedparam(pthread_self(),
@@ -372,7 +372,7 @@ beatStateMachine(void *careLess)
 				perror("nanosleep");
 				exit(1);
 			}
-		heartbeat();
+		heartbeat(giv);
 	}
 	beatState = dead;
 	return 0;
@@ -416,7 +416,7 @@ void setIOHeartbeatGIVToUse(anInteger){
 }
 
 void
-ioInitHeartbeat()
+ioInitHeartbeat(struct foo * giv)
 {
 	int er;
 	struct timespec halfAMo;
@@ -451,7 +451,7 @@ ioInitHeartbeat()
 	if ((er= pthread_create(&careLess,
 							(const pthread_attr_t *)0,
 							beatStateMachine,
-							0))) {
+							giv))) {
 		errno = er;
 		perror("beat thread creation failed");
 		exit(errno);

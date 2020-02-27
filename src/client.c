@@ -29,7 +29,7 @@ int loadPharoImage(char* fileName);
 
 EXPORT(int) initPharoVM(char* image, char** vmParams, int vmParamCount, char** imageParams, int imageParamCount){
 	initGlobalStructure();
-
+    initLocalThreadAndGIV();
 	//Unix Initialization specific
 	fldcw(0x12bf);	/* signed infinity, round to nearest, REAL8, disable intrs, disable signals */
     mtfsfi(0);		/* disable signals, IEEE mode, round to nearest */

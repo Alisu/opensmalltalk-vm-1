@@ -45,6 +45,8 @@
 # endif
 #endif
 
+struct foo;
+
 /* Pluggable primitives macros. */
 
 /* Note: All pluggable primitives are defined as
@@ -296,7 +298,7 @@ extern sqOSThread ioVMThread;
 /* Event polling via periodic heartbeat thread. */
 int returnGIVNumberForHearbeat();
 void setIOHeartbeatGIVToUse(int);
-void  ioInitHeartbeat(void);
+void  ioInitHeartbeat(struct foo *);
 int   ioHeartbeatMilliseconds(void);
 void  ioSetHeartbeatMilliseconds(int);
 unsigned long ioHeartbeatFrequency(int);
