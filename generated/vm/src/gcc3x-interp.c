@@ -1264,7 +1264,6 @@ extern sqInt literalofMethod(sqInt offset, sqInt methodPointer);
 extern void loadAndExecute(char **imageParameters);
 extern sqInt loadBitBltFrom(sqInt bb);
 extern void loadInitialContext(void);
-static void lockFetchNextBytecode(void);
 extern void longPrintOop(sqInt oop);
 extern sqInt longStoreBytecodeForHeader(sqInt methodHeader);
 static sqInt NoDbgRegParms lookupInMethodCacheSelclassTag(sqInt selector, sqInt classTag);
@@ -1345,7 +1344,6 @@ extern sqInt printFrameWithSP(char *theFP, char *theSP);
 extern sqInt printHexnp(usqInt n);
 extern void printHex(usqInt n);
 extern void printLikelyImplementorsOfSelector(sqInt selector);
-static void NoDbgRegParms printLocalSPLocalFPLocalIPCurrentBytecode(char *anSP, char *anFP, char *anIP, sqInt byteCode);
 extern void printMethodCache(void);
 extern void printMethodCacheFor(sqInt thing);
 extern void printMethodDictionaryOf(sqInt behavior);
@@ -1523,21 +1521,20 @@ static struct foo {
 #endif
 _iss char * stackPointer;
 _iss sqInt primFailCode;
-_iss char * framePointer;
 _iss usqInt method;
-_iss usqInt instructionPointer;
 _iss sqInt nilObj;
 _iss StackPage * stackPage;
 _iss sqInt argumentCount;
 _iss sqInt bytecodeSetSelector;
 _iss usqInt freeStart;
+_iss char * framePointer;
 _iss sqInt specialObjectsOop;
-_iss int isStepable;
 _iss usqInt endOfMemory;
 _iss usqInt newMethod;
 _iss sqInt messageSelector;
 _iss usqInt newSpaceLimit;
 _iss usqInt oldSpaceStart;
+_iss usqInt instructionPointer;
 _iss SpurSegmentInfo * segments;
 _iss usqInt totalFreeOldSpace;
 _iss sqInt trueObj;
@@ -1698,6 +1695,7 @@ _iss sqInt tenuringClassIndex;
 _iss sqInt checkAllocFiller;
 _iss pthread_t myCurrentThread;
 _iss sqInt statIncrGCs;
+_iss int isStepable;
 _iss pthread_mutex_t mutexForFetchBytecode;
 _iss pthread_cond_t * step;
 _iss sqIntptr_t methodCache[MethodCacheSize + 1 /* 4097 */];
@@ -2508,7 +2506,6 @@ interpret(void)
 		error("bytecode jumpTable too small");
 #endif
 
-	currentBytecode = 0;
 	if (GIV(stackLimit) == 0) {
 		return initStackPagesAndInterpret();
 	}
@@ -2521,15 +2518,6 @@ interpret(void)
 	extA = (numExtB = (extB = 0));
 	initMutexForFetchNextBytecodeandCond(&GIV(mutexForFetchBytecode), &GIV(step));
 	/* begin fetchNextBytecode */
-	if (GIV(isStepable)) {
-		printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-		/* begin externalizeIPandSP */
-		GIV(instructionPointer) = oopForPointer(localIP);
-		GIV(stackPointer) = localSP;
-		GIV(framePointer) = localFP;
-		printCallStack();
-		lockFetchNextBytecode();
-	}
 	currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 	while (1) {
 		bytecodeDispatchDebugHook();
@@ -2537,21 +2525,13 @@ interpret(void)
 		VM_LABEL(bytecodeDispatch);
 		switch (currentBytecode) {
 		CASE(0)
+		CASE(256) /*0*/
 			/* pushReceiverVariableBytecode */
 			{
 				sqInt object;
 
 				VM_LABEL(pushReceiverVariableBytecode);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 0);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushReceiverVariable: */
 				object = longAt(((longAt(localFP + FoxReceiver)) + BaseHeaderSize));
@@ -2559,21 +2539,13 @@ interpret(void)
 			}
 			BREAK;
 		CASE(1)
+		CASE(257) /*1*/
 			/* pushReceiverVariableBytecode */
 			{
 				sqInt object;
 
 				VM_LABEL(pushReceiverVariableBytecode1);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 1);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushReceiverVariable: */
 				object = longAt(((longAt(localFP + FoxReceiver)) + BaseHeaderSize) + 8 /* (currentBytecode bitAnd: 15) << self shiftForWord */);
@@ -2581,21 +2553,13 @@ interpret(void)
 			}
 			BREAK;
 		CASE(2)
+		CASE(258) /*2*/
 			/* pushReceiverVariableBytecode */
 			{
 				sqInt object;
 
 				VM_LABEL(pushReceiverVariableBytecode2);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 2);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushReceiverVariable: */
 				object = longAt(((longAt(localFP + FoxReceiver)) + BaseHeaderSize) + 16 /* (currentBytecode bitAnd: 15) << self shiftForWord */);
@@ -2603,21 +2567,13 @@ interpret(void)
 			}
 			BREAK;
 		CASE(3)
+		CASE(259) /*3*/
 			/* pushReceiverVariableBytecode */
 			{
 				sqInt object;
 
 				VM_LABEL(pushReceiverVariableBytecode3);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 3);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushReceiverVariable: */
 				object = longAt(((longAt(localFP + FoxReceiver)) + BaseHeaderSize) + 24 /* (currentBytecode bitAnd: 15) << self shiftForWord */);
@@ -2625,21 +2581,13 @@ interpret(void)
 			}
 			BREAK;
 		CASE(4)
+		CASE(260) /*4*/
 			/* pushReceiverVariableBytecode */
 			{
 				sqInt object;
 
 				VM_LABEL(pushReceiverVariableBytecode4);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 4);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushReceiverVariable: */
 				object = longAt(((longAt(localFP + FoxReceiver)) + BaseHeaderSize) + 32 /* (currentBytecode bitAnd: 15) << self shiftForWord */);
@@ -2647,21 +2595,13 @@ interpret(void)
 			}
 			BREAK;
 		CASE(5)
+		CASE(261) /*5*/
 			/* pushReceiverVariableBytecode */
 			{
 				sqInt object;
 
 				VM_LABEL(pushReceiverVariableBytecode5);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 5);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushReceiverVariable: */
 				object = longAt(((longAt(localFP + FoxReceiver)) + BaseHeaderSize) + 40 /* (currentBytecode bitAnd: 15) << self shiftForWord */);
@@ -2669,21 +2609,13 @@ interpret(void)
 			}
 			BREAK;
 		CASE(6)
+		CASE(262) /*6*/
 			/* pushReceiverVariableBytecode */
 			{
 				sqInt object;
 
 				VM_LABEL(pushReceiverVariableBytecode6);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 6);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushReceiverVariable: */
 				object = longAt(((longAt(localFP + FoxReceiver)) + BaseHeaderSize) + 48 /* (currentBytecode bitAnd: 15) << self shiftForWord */);
@@ -2691,21 +2623,13 @@ interpret(void)
 			}
 			BREAK;
 		CASE(7)
+		CASE(263) /*7*/
 			/* pushReceiverVariableBytecode */
 			{
 				sqInt object;
 
 				VM_LABEL(pushReceiverVariableBytecode7);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 7);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushReceiverVariable: */
 				object = longAt(((longAt(localFP + FoxReceiver)) + BaseHeaderSize) + 56 /* (currentBytecode bitAnd: 15) << self shiftForWord */);
@@ -2713,21 +2637,13 @@ interpret(void)
 			}
 			BREAK;
 		CASE(8)
+		CASE(264) /*8*/
 			/* pushReceiverVariableBytecode */
 			{
 				sqInt object;
 
 				VM_LABEL(pushReceiverVariableBytecode8);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 8);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushReceiverVariable: */
 				object = longAt(((longAt(localFP + FoxReceiver)) + BaseHeaderSize) + 64 /* (currentBytecode bitAnd: 15) << self shiftForWord */);
@@ -2735,21 +2651,13 @@ interpret(void)
 			}
 			BREAK;
 		CASE(9)
+		CASE(265) /*9*/
 			/* pushReceiverVariableBytecode */
 			{
 				sqInt object;
 
 				VM_LABEL(pushReceiverVariableBytecode9);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 9);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushReceiverVariable: */
 				object = longAt(((longAt(localFP + FoxReceiver)) + BaseHeaderSize) + 72 /* (currentBytecode bitAnd: 15) << self shiftForWord */);
@@ -2757,21 +2665,13 @@ interpret(void)
 			}
 			BREAK;
 		CASE(10)
+		CASE(266) /*10*/
 			/* pushReceiverVariableBytecode */
 			{
 				sqInt object;
 
 				VM_LABEL(pushReceiverVariableBytecode10);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 10);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushReceiverVariable: */
 				object = longAt(((longAt(localFP + FoxReceiver)) + BaseHeaderSize) + 80 /* (currentBytecode bitAnd: 15) << self shiftForWord */);
@@ -2779,21 +2679,13 @@ interpret(void)
 			}
 			BREAK;
 		CASE(11)
+		CASE(267) /*11*/
 			/* pushReceiverVariableBytecode */
 			{
 				sqInt object;
 
 				VM_LABEL(pushReceiverVariableBytecode11);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 11);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushReceiverVariable: */
 				object = longAt(((longAt(localFP + FoxReceiver)) + BaseHeaderSize) + 88 /* (currentBytecode bitAnd: 15) << self shiftForWord */);
@@ -2801,21 +2693,13 @@ interpret(void)
 			}
 			BREAK;
 		CASE(12)
+		CASE(268) /*12*/
 			/* pushReceiverVariableBytecode */
 			{
 				sqInt object;
 
 				VM_LABEL(pushReceiverVariableBytecode12);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 12);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushReceiverVariable: */
 				object = longAt(((longAt(localFP + FoxReceiver)) + BaseHeaderSize) + 96 /* (currentBytecode bitAnd: 15) << self shiftForWord */);
@@ -2823,21 +2707,13 @@ interpret(void)
 			}
 			BREAK;
 		CASE(13)
+		CASE(269) /*13*/
 			/* pushReceiverVariableBytecode */
 			{
 				sqInt object;
 
 				VM_LABEL(pushReceiverVariableBytecode13);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 13);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushReceiverVariable: */
 				object = longAt(((longAt(localFP + FoxReceiver)) + BaseHeaderSize) + 104 /* (currentBytecode bitAnd: 15) << self shiftForWord */);
@@ -2845,21 +2721,13 @@ interpret(void)
 			}
 			BREAK;
 		CASE(14)
+		CASE(270) /*14*/
 			/* pushReceiverVariableBytecode */
 			{
 				sqInt object;
 
 				VM_LABEL(pushReceiverVariableBytecode14);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 14);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushReceiverVariable: */
 				object = longAt(((longAt(localFP + FoxReceiver)) + BaseHeaderSize) + 112 /* (currentBytecode bitAnd: 15) << self shiftForWord */);
@@ -2867,21 +2735,13 @@ interpret(void)
 			}
 			BREAK;
 		CASE(15)
+		CASE(271) /*15*/
 			/* pushReceiverVariableBytecode */
 			{
 				sqInt object;
 
 				VM_LABEL(pushReceiverVariableBytecode15);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 15);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushReceiverVariable: */
 				object = longAt(((longAt(localFP + FoxReceiver)) + BaseHeaderSize) + 120 /* (currentBytecode bitAnd: 15) << self shiftForWord */);
@@ -2889,6 +2749,7 @@ interpret(void)
 			}
 			BREAK;
 		CASE(16)
+		CASE(320) /*64*/
 			/* pushTemporaryVariableBytecode */
 			{
 				sqInt frameNumArgs;
@@ -2896,15 +2757,6 @@ interpret(void)
 
 				VM_LABEL(pushTemporaryVariableBytecode);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 16);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushTemporaryVariable: */
 				object = (0 /* currentBytecode bitAnd: 15 */ < ((frameNumArgs = byteAt((localFP + FoxFrameFlags) + 1)))
@@ -2914,6 +2766,7 @@ interpret(void)
 			}
 			BREAK;
 		CASE(17)
+		CASE(321) /*65*/
 			/* pushTemporaryVariableBytecode */
 			{
 				sqInt frameNumArgs;
@@ -2921,15 +2774,6 @@ interpret(void)
 
 				VM_LABEL(pushTemporaryVariableBytecode1);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 17);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushTemporaryVariable: */
 				object = (1 /* currentBytecode bitAnd: 15 */ < ((frameNumArgs = byteAt((localFP + FoxFrameFlags) + 1)))
@@ -2939,6 +2783,7 @@ interpret(void)
 			}
 			BREAK;
 		CASE(18)
+		CASE(322) /*66*/
 			/* pushTemporaryVariableBytecode */
 			{
 				sqInt frameNumArgs;
@@ -2946,15 +2791,6 @@ interpret(void)
 
 				VM_LABEL(pushTemporaryVariableBytecode2);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 18);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushTemporaryVariable: */
 				object = (2 /* currentBytecode bitAnd: 15 */ < ((frameNumArgs = byteAt((localFP + FoxFrameFlags) + 1)))
@@ -2964,6 +2800,7 @@ interpret(void)
 			}
 			BREAK;
 		CASE(19)
+		CASE(323) /*67*/
 			/* pushTemporaryVariableBytecode */
 			{
 				sqInt frameNumArgs;
@@ -2971,15 +2808,6 @@ interpret(void)
 
 				VM_LABEL(pushTemporaryVariableBytecode3);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 19);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushTemporaryVariable: */
 				object = (3 /* currentBytecode bitAnd: 15 */ < ((frameNumArgs = byteAt((localFP + FoxFrameFlags) + 1)))
@@ -2989,6 +2817,7 @@ interpret(void)
 			}
 			BREAK;
 		CASE(20)
+		CASE(324) /*68*/
 			/* pushTemporaryVariableBytecode */
 			{
 				sqInt frameNumArgs;
@@ -2996,15 +2825,6 @@ interpret(void)
 
 				VM_LABEL(pushTemporaryVariableBytecode4);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 20);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushTemporaryVariable: */
 				object = (4 /* currentBytecode bitAnd: 15 */ < ((frameNumArgs = byteAt((localFP + FoxFrameFlags) + 1)))
@@ -3014,6 +2834,7 @@ interpret(void)
 			}
 			BREAK;
 		CASE(21)
+		CASE(325) /*69*/
 			/* pushTemporaryVariableBytecode */
 			{
 				sqInt frameNumArgs;
@@ -3021,15 +2842,6 @@ interpret(void)
 
 				VM_LABEL(pushTemporaryVariableBytecode5);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 21);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushTemporaryVariable: */
 				object = (5 /* currentBytecode bitAnd: 15 */ < ((frameNumArgs = byteAt((localFP + FoxFrameFlags) + 1)))
@@ -3039,6 +2851,7 @@ interpret(void)
 			}
 			BREAK;
 		CASE(22)
+		CASE(326) /*70*/
 			/* pushTemporaryVariableBytecode */
 			{
 				sqInt frameNumArgs;
@@ -3046,15 +2859,6 @@ interpret(void)
 
 				VM_LABEL(pushTemporaryVariableBytecode6);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 22);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushTemporaryVariable: */
 				object = (6 /* currentBytecode bitAnd: 15 */ < ((frameNumArgs = byteAt((localFP + FoxFrameFlags) + 1)))
@@ -3064,6 +2868,7 @@ interpret(void)
 			}
 			BREAK;
 		CASE(23)
+		CASE(327) /*71*/
 			/* pushTemporaryVariableBytecode */
 			{
 				sqInt frameNumArgs;
@@ -3071,15 +2876,6 @@ interpret(void)
 
 				VM_LABEL(pushTemporaryVariableBytecode7);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 23);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushTemporaryVariable: */
 				object = (7 /* currentBytecode bitAnd: 15 */ < ((frameNumArgs = byteAt((localFP + FoxFrameFlags) + 1)))
@@ -3089,6 +2885,7 @@ interpret(void)
 			}
 			BREAK;
 		CASE(24)
+		CASE(328) /*72*/
 			/* pushTemporaryVariableBytecode */
 			{
 				sqInt frameNumArgs;
@@ -3096,15 +2893,6 @@ interpret(void)
 
 				VM_LABEL(pushTemporaryVariableBytecode8);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 24);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushTemporaryVariable: */
 				object = (8 /* currentBytecode bitAnd: 15 */ < ((frameNumArgs = byteAt((localFP + FoxFrameFlags) + 1)))
@@ -3114,6 +2902,7 @@ interpret(void)
 			}
 			BREAK;
 		CASE(25)
+		CASE(329) /*73*/
 			/* pushTemporaryVariableBytecode */
 			{
 				sqInt frameNumArgs;
@@ -3121,15 +2910,6 @@ interpret(void)
 
 				VM_LABEL(pushTemporaryVariableBytecode9);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 25);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushTemporaryVariable: */
 				object = (9 /* currentBytecode bitAnd: 15 */ < ((frameNumArgs = byteAt((localFP + FoxFrameFlags) + 1)))
@@ -3139,6 +2919,7 @@ interpret(void)
 			}
 			BREAK;
 		CASE(26)
+		CASE(330) /*74*/
 			/* pushTemporaryVariableBytecode */
 			{
 				sqInt frameNumArgs;
@@ -3146,15 +2927,6 @@ interpret(void)
 
 				VM_LABEL(pushTemporaryVariableBytecode10);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 26);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushTemporaryVariable: */
 				object = (10 /* currentBytecode bitAnd: 15 */ < ((frameNumArgs = byteAt((localFP + FoxFrameFlags) + 1)))
@@ -3164,6 +2936,7 @@ interpret(void)
 			}
 			BREAK;
 		CASE(27)
+		CASE(331) /*75*/
 			/* pushTemporaryVariableBytecode */
 			{
 				sqInt frameNumArgs;
@@ -3171,15 +2944,6 @@ interpret(void)
 
 				VM_LABEL(pushTemporaryVariableBytecode11);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 27);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushTemporaryVariable: */
 				object = (11 /* currentBytecode bitAnd: 15 */ < ((frameNumArgs = byteAt((localFP + FoxFrameFlags) + 1)))
@@ -3196,15 +2960,6 @@ interpret(void)
 
 				VM_LABEL(pushTemporaryVariableBytecode12);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 28);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushTemporaryVariable: */
 				object = (12 /* currentBytecode bitAnd: 15 */ < ((frameNumArgs = byteAt((localFP + FoxFrameFlags) + 1)))
@@ -3221,15 +2976,6 @@ interpret(void)
 
 				VM_LABEL(pushTemporaryVariableBytecode13);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 29);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushTemporaryVariable: */
 				object = (13 /* currentBytecode bitAnd: 15 */ < ((frameNumArgs = byteAt((localFP + FoxFrameFlags) + 1)))
@@ -3246,15 +2992,6 @@ interpret(void)
 
 				VM_LABEL(pushTemporaryVariableBytecode14);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 30);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushTemporaryVariable: */
 				object = (14 /* currentBytecode bitAnd: 15 */ < ((frameNumArgs = byteAt((localFP + FoxFrameFlags) + 1)))
@@ -3271,15 +3008,6 @@ interpret(void)
 
 				VM_LABEL(pushTemporaryVariableBytecode15);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 0x1F);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushTemporaryVariable: */
 				object = (15 /* currentBytecode bitAnd: 15 */ < ((frameNumArgs = byteAt((localFP + FoxFrameFlags) + 1)))
@@ -3289,21 +3017,13 @@ interpret(void)
 			}
 			BREAK;
 		CASE(32)
+		CASE(288) /*32*/
 			/* pushLiteralConstantBytecode */
 			{
 				sqInt object;
 
 				VM_LABEL(pushLiteralConstantBytecode);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 32);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralConstant: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -3313,21 +3033,13 @@ interpret(void)
 			}
 			BREAK;
 		CASE(33)
+		CASE(289) /*33*/
 			/* pushLiteralConstantBytecode */
 			{
 				sqInt object;
 
 				VM_LABEL(pushLiteralConstantBytecode1);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 33);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralConstant: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -3337,21 +3049,13 @@ interpret(void)
 			}
 			BREAK;
 		CASE(34)
+		CASE(290) /*34*/
 			/* pushLiteralConstantBytecode */
 			{
 				sqInt object;
 
 				VM_LABEL(pushLiteralConstantBytecode2);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 34);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralConstant: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -3361,21 +3065,13 @@ interpret(void)
 			}
 			BREAK;
 		CASE(35)
+		CASE(291) /*35*/
 			/* pushLiteralConstantBytecode */
 			{
 				sqInt object;
 
 				VM_LABEL(pushLiteralConstantBytecode3);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 35);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralConstant: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -3385,21 +3081,13 @@ interpret(void)
 			}
 			BREAK;
 		CASE(36)
+		CASE(292) /*36*/
 			/* pushLiteralConstantBytecode */
 			{
 				sqInt object;
 
 				VM_LABEL(pushLiteralConstantBytecode4);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 36);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralConstant: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -3409,21 +3097,13 @@ interpret(void)
 			}
 			BREAK;
 		CASE(37)
+		CASE(293) /*37*/
 			/* pushLiteralConstantBytecode */
 			{
 				sqInt object;
 
 				VM_LABEL(pushLiteralConstantBytecode5);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 37);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralConstant: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -3433,21 +3113,13 @@ interpret(void)
 			}
 			BREAK;
 		CASE(38)
+		CASE(294) /*38*/
 			/* pushLiteralConstantBytecode */
 			{
 				sqInt object;
 
 				VM_LABEL(pushLiteralConstantBytecode6);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 38);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralConstant: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -3457,21 +3129,13 @@ interpret(void)
 			}
 			BREAK;
 		CASE(39)
+		CASE(295) /*39*/
 			/* pushLiteralConstantBytecode */
 			{
 				sqInt object;
 
 				VM_LABEL(pushLiteralConstantBytecode7);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 39);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralConstant: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -3481,21 +3145,13 @@ interpret(void)
 			}
 			BREAK;
 		CASE(40)
+		CASE(296) /*40*/
 			/* pushLiteralConstantBytecode */
 			{
 				sqInt object;
 
 				VM_LABEL(pushLiteralConstantBytecode8);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 40);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralConstant: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -3505,21 +3161,13 @@ interpret(void)
 			}
 			BREAK;
 		CASE(41)
+		CASE(297) /*41*/
 			/* pushLiteralConstantBytecode */
 			{
 				sqInt object;
 
 				VM_LABEL(pushLiteralConstantBytecode9);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 41);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralConstant: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -3529,21 +3177,13 @@ interpret(void)
 			}
 			BREAK;
 		CASE(42)
+		CASE(298) /*42*/
 			/* pushLiteralConstantBytecode */
 			{
 				sqInt object;
 
 				VM_LABEL(pushLiteralConstantBytecode10);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 42);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralConstant: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -3553,21 +3193,13 @@ interpret(void)
 			}
 			BREAK;
 		CASE(43)
+		CASE(299) /*43*/
 			/* pushLiteralConstantBytecode */
 			{
 				sqInt object;
 
 				VM_LABEL(pushLiteralConstantBytecode11);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 43);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralConstant: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -3577,21 +3209,13 @@ interpret(void)
 			}
 			BREAK;
 		CASE(44)
+		CASE(300) /*44*/
 			/* pushLiteralConstantBytecode */
 			{
 				sqInt object;
 
 				VM_LABEL(pushLiteralConstantBytecode12);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 44);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralConstant: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -3601,21 +3225,13 @@ interpret(void)
 			}
 			BREAK;
 		CASE(45)
+		CASE(301) /*45*/
 			/* pushLiteralConstantBytecode */
 			{
 				sqInt object;
 
 				VM_LABEL(pushLiteralConstantBytecode13);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 45);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralConstant: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -3625,21 +3241,13 @@ interpret(void)
 			}
 			BREAK;
 		CASE(46)
+		CASE(302) /*46*/
 			/* pushLiteralConstantBytecode */
 			{
 				sqInt object;
 
 				VM_LABEL(pushLiteralConstantBytecode14);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 46);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralConstant: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -3649,21 +3257,13 @@ interpret(void)
 			}
 			BREAK;
 		CASE(47)
+		CASE(303) /*47*/
 			/* pushLiteralConstantBytecode */
 			{
 				sqInt object;
 
 				VM_LABEL(pushLiteralConstantBytecode15);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 47);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralConstant: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -3673,21 +3273,13 @@ interpret(void)
 			}
 			BREAK;
 		CASE(48)
+		CASE(304) /*48*/
 			/* pushLiteralConstantBytecode */
 			{
 				sqInt object;
 
 				VM_LABEL(pushLiteralConstantBytecode16);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 48);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralConstant: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -3697,21 +3289,13 @@ interpret(void)
 			}
 			BREAK;
 		CASE(49)
+		CASE(305) /*49*/
 			/* pushLiteralConstantBytecode */
 			{
 				sqInt object;
 
 				VM_LABEL(pushLiteralConstantBytecode17);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 49);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralConstant: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -3721,21 +3305,13 @@ interpret(void)
 			}
 			BREAK;
 		CASE(50)
+		CASE(306) /*50*/
 			/* pushLiteralConstantBytecode */
 			{
 				sqInt object;
 
 				VM_LABEL(pushLiteralConstantBytecode18);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 50);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralConstant: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -3745,21 +3321,13 @@ interpret(void)
 			}
 			BREAK;
 		CASE(51)
+		CASE(307) /*51*/
 			/* pushLiteralConstantBytecode */
 			{
 				sqInt object;
 
 				VM_LABEL(pushLiteralConstantBytecode19);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 51);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralConstant: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -3769,21 +3337,13 @@ interpret(void)
 			}
 			BREAK;
 		CASE(52)
+		CASE(308) /*52*/
 			/* pushLiteralConstantBytecode */
 			{
 				sqInt object;
 
 				VM_LABEL(pushLiteralConstantBytecode20);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 52);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralConstant: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -3793,21 +3353,13 @@ interpret(void)
 			}
 			BREAK;
 		CASE(53)
+		CASE(309) /*53*/
 			/* pushLiteralConstantBytecode */
 			{
 				sqInt object;
 
 				VM_LABEL(pushLiteralConstantBytecode21);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 53);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralConstant: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -3817,21 +3369,13 @@ interpret(void)
 			}
 			BREAK;
 		CASE(54)
+		CASE(310) /*54*/
 			/* pushLiteralConstantBytecode */
 			{
 				sqInt object;
 
 				VM_LABEL(pushLiteralConstantBytecode22);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 54);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralConstant: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -3841,21 +3385,13 @@ interpret(void)
 			}
 			BREAK;
 		CASE(55)
+		CASE(311) /*55*/
 			/* pushLiteralConstantBytecode */
 			{
 				sqInt object;
 
 				VM_LABEL(pushLiteralConstantBytecode23);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 55);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralConstant: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -3865,21 +3401,13 @@ interpret(void)
 			}
 			BREAK;
 		CASE(56)
+		CASE(312) /*56*/
 			/* pushLiteralConstantBytecode */
 			{
 				sqInt object;
 
 				VM_LABEL(pushLiteralConstantBytecode24);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 56);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralConstant: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -3889,21 +3417,13 @@ interpret(void)
 			}
 			BREAK;
 		CASE(57)
+		CASE(313) /*57*/
 			/* pushLiteralConstantBytecode */
 			{
 				sqInt object;
 
 				VM_LABEL(pushLiteralConstantBytecode25);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 57);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralConstant: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -3913,21 +3433,13 @@ interpret(void)
 			}
 			BREAK;
 		CASE(58)
+		CASE(314) /*58*/
 			/* pushLiteralConstantBytecode */
 			{
 				sqInt object;
 
 				VM_LABEL(pushLiteralConstantBytecode26);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 58);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralConstant: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -3937,21 +3449,13 @@ interpret(void)
 			}
 			BREAK;
 		CASE(59)
+		CASE(315) /*59*/
 			/* pushLiteralConstantBytecode */
 			{
 				sqInt object;
 
 				VM_LABEL(pushLiteralConstantBytecode27);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 59);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralConstant: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -3961,21 +3465,13 @@ interpret(void)
 			}
 			BREAK;
 		CASE(60)
+		CASE(316) /*60*/
 			/* pushLiteralConstantBytecode */
 			{
 				sqInt object;
 
 				VM_LABEL(pushLiteralConstantBytecode28);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 60);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralConstant: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -3985,21 +3481,13 @@ interpret(void)
 			}
 			BREAK;
 		CASE(61)
+		CASE(317) /*61*/
 			/* pushLiteralConstantBytecode */
 			{
 				sqInt object;
 
 				VM_LABEL(pushLiteralConstantBytecode29);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 61);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralConstant: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -4009,21 +3497,13 @@ interpret(void)
 			}
 			BREAK;
 		CASE(62)
+		CASE(318) /*62*/
 			/* pushLiteralConstantBytecode */
 			{
 				sqInt object;
 
 				VM_LABEL(pushLiteralConstantBytecode30);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 0x3E);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralConstant: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -4033,21 +3513,13 @@ interpret(void)
 			}
 			BREAK;
 		CASE(63)
+		CASE(319) /*63*/
 			/* pushLiteralConstantBytecode */
 			{
 				sqInt object;
 
 				VM_LABEL(pushLiteralConstantBytecode31);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 0x3F);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralConstant: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -4057,6 +3529,7 @@ interpret(void)
 			}
 			BREAK;
 		CASE(64)
+		CASE(272) /*16*/
 			/* pushLiteralVariableBytecode */
 			{
 				sqInt litVar;
@@ -4064,15 +3537,6 @@ interpret(void)
 
 				VM_LABEL(pushLiteralVariableBytecode);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 64);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralVariable: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -4087,6 +3551,7 @@ interpret(void)
 			}
 			BREAK;
 		CASE(65)
+		CASE(273) /*17*/
 			/* pushLiteralVariableBytecode */
 			{
 				sqInt litVar;
@@ -4094,15 +3559,6 @@ interpret(void)
 
 				VM_LABEL(pushLiteralVariableBytecode1);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 65);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralVariable: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -4117,6 +3573,7 @@ interpret(void)
 			}
 			BREAK;
 		CASE(66)
+		CASE(274) /*18*/
 			/* pushLiteralVariableBytecode */
 			{
 				sqInt litVar;
@@ -4124,15 +3581,6 @@ interpret(void)
 
 				VM_LABEL(pushLiteralVariableBytecode2);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 66);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralVariable: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -4147,6 +3595,7 @@ interpret(void)
 			}
 			BREAK;
 		CASE(67)
+		CASE(275) /*19*/
 			/* pushLiteralVariableBytecode */
 			{
 				sqInt litVar;
@@ -4154,15 +3603,6 @@ interpret(void)
 
 				VM_LABEL(pushLiteralVariableBytecode3);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 67);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralVariable: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -4177,6 +3617,7 @@ interpret(void)
 			}
 			BREAK;
 		CASE(68)
+		CASE(276) /*20*/
 			/* pushLiteralVariableBytecode */
 			{
 				sqInt litVar;
@@ -4184,15 +3625,6 @@ interpret(void)
 
 				VM_LABEL(pushLiteralVariableBytecode4);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 68);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralVariable: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -4207,6 +3639,7 @@ interpret(void)
 			}
 			BREAK;
 		CASE(69)
+		CASE(277) /*21*/
 			/* pushLiteralVariableBytecode */
 			{
 				sqInt litVar;
@@ -4214,15 +3647,6 @@ interpret(void)
 
 				VM_LABEL(pushLiteralVariableBytecode5);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 69);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralVariable: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -4237,6 +3661,7 @@ interpret(void)
 			}
 			BREAK;
 		CASE(70)
+		CASE(278) /*22*/
 			/* pushLiteralVariableBytecode */
 			{
 				sqInt litVar;
@@ -4244,15 +3669,6 @@ interpret(void)
 
 				VM_LABEL(pushLiteralVariableBytecode6);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 70);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralVariable: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -4267,6 +3683,7 @@ interpret(void)
 			}
 			BREAK;
 		CASE(71)
+		CASE(279) /*23*/
 			/* pushLiteralVariableBytecode */
 			{
 				sqInt litVar;
@@ -4274,15 +3691,6 @@ interpret(void)
 
 				VM_LABEL(pushLiteralVariableBytecode7);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 71);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralVariable: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -4297,6 +3705,7 @@ interpret(void)
 			}
 			BREAK;
 		CASE(72)
+		CASE(280) /*24*/
 			/* pushLiteralVariableBytecode */
 			{
 				sqInt litVar;
@@ -4304,15 +3713,6 @@ interpret(void)
 
 				VM_LABEL(pushLiteralVariableBytecode8);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 72);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralVariable: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -4327,6 +3727,7 @@ interpret(void)
 			}
 			BREAK;
 		CASE(73)
+		CASE(281) /*25*/
 			/* pushLiteralVariableBytecode */
 			{
 				sqInt litVar;
@@ -4334,15 +3735,6 @@ interpret(void)
 
 				VM_LABEL(pushLiteralVariableBytecode9);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 73);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralVariable: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -4357,6 +3749,7 @@ interpret(void)
 			}
 			BREAK;
 		CASE(74)
+		CASE(282) /*26*/
 			/* pushLiteralVariableBytecode */
 			{
 				sqInt litVar;
@@ -4364,15 +3757,6 @@ interpret(void)
 
 				VM_LABEL(pushLiteralVariableBytecode10);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 74);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralVariable: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -4387,6 +3771,7 @@ interpret(void)
 			}
 			BREAK;
 		CASE(75)
+		CASE(283) /*27*/
 			/* pushLiteralVariableBytecode */
 			{
 				sqInt litVar;
@@ -4394,15 +3779,6 @@ interpret(void)
 
 				VM_LABEL(pushLiteralVariableBytecode11);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 75);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralVariable: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -4417,6 +3793,7 @@ interpret(void)
 			}
 			BREAK;
 		CASE(76)
+		CASE(284) /*28*/
 			/* pushLiteralVariableBytecode */
 			{
 				sqInt litVar;
@@ -4424,15 +3801,6 @@ interpret(void)
 
 				VM_LABEL(pushLiteralVariableBytecode12);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 76);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralVariable: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -4447,6 +3815,7 @@ interpret(void)
 			}
 			BREAK;
 		CASE(77)
+		CASE(285) /*29*/
 			/* pushLiteralVariableBytecode */
 			{
 				sqInt litVar;
@@ -4454,15 +3823,6 @@ interpret(void)
 
 				VM_LABEL(pushLiteralVariableBytecode13);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 77);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralVariable: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -4477,6 +3837,7 @@ interpret(void)
 			}
 			BREAK;
 		CASE(78)
+		CASE(286) /*30*/
 			/* pushLiteralVariableBytecode */
 			{
 				sqInt litVar;
@@ -4484,15 +3845,6 @@ interpret(void)
 
 				VM_LABEL(pushLiteralVariableBytecode14);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 78);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralVariable: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -4507,6 +3859,7 @@ interpret(void)
 			}
 			BREAK;
 		CASE(79)
+		CASE(287) /*31*/
 			/* pushLiteralVariableBytecode */
 			{
 				sqInt litVar;
@@ -4514,15 +3867,6 @@ interpret(void)
 
 				VM_LABEL(pushLiteralVariableBytecode15);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 79);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralVariable: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -4544,15 +3888,6 @@ interpret(void)
 
 				VM_LABEL(pushLiteralVariableBytecode16);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 80);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralVariable: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -4574,15 +3909,6 @@ interpret(void)
 
 				VM_LABEL(pushLiteralVariableBytecode17);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 81);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralVariable: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -4604,15 +3930,6 @@ interpret(void)
 
 				VM_LABEL(pushLiteralVariableBytecode18);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 82);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralVariable: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -4634,15 +3951,6 @@ interpret(void)
 
 				VM_LABEL(pushLiteralVariableBytecode19);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 83);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralVariable: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -4664,15 +3972,6 @@ interpret(void)
 
 				VM_LABEL(pushLiteralVariableBytecode20);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 84);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralVariable: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -4694,15 +3993,6 @@ interpret(void)
 
 				VM_LABEL(pushLiteralVariableBytecode21);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 85);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralVariable: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -4724,15 +4014,6 @@ interpret(void)
 
 				VM_LABEL(pushLiteralVariableBytecode22);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 86);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralVariable: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -4754,15 +4035,6 @@ interpret(void)
 
 				VM_LABEL(pushLiteralVariableBytecode23);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 87);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralVariable: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -4784,15 +4056,6 @@ interpret(void)
 
 				VM_LABEL(pushLiteralVariableBytecode24);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 88);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralVariable: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -4814,15 +4077,6 @@ interpret(void)
 
 				VM_LABEL(pushLiteralVariableBytecode25);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 89);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralVariable: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -4844,15 +4098,6 @@ interpret(void)
 
 				VM_LABEL(pushLiteralVariableBytecode26);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 90);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralVariable: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -4874,15 +4119,6 @@ interpret(void)
 
 				VM_LABEL(pushLiteralVariableBytecode27);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 91);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralVariable: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -4904,15 +4140,6 @@ interpret(void)
 
 				VM_LABEL(pushLiteralVariableBytecode28);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 92);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralVariable: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -4934,15 +4161,6 @@ interpret(void)
 
 				VM_LABEL(pushLiteralVariableBytecode29);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 93);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralVariable: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -4964,15 +4182,6 @@ interpret(void)
 
 				VM_LABEL(pushLiteralVariableBytecode30);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 94);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralVariable: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -4994,15 +4203,6 @@ interpret(void)
 
 				VM_LABEL(pushLiteralVariableBytecode31);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 95);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushLiteralVariable: */
 				assert(GIV(method) == (iframeMethod(localFP)));
@@ -5074,34 +4274,17 @@ interpret(void)
 				longAtput((rcvr + BaseHeaderSize) + (((sqInt)((usqInt)(instVarIndex) << (shiftForWord())))), top);
 	l13:	/* end storePointerImmutabilityCheck:ofObject:withValue: */;
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 			}
 			BREAK;
 		CASE(104)
+		CASE(464) /*208*/
 			/* storeAndPopTemporaryVariableBytecode */
 			{
 				sqInt frameNumArgs;
 
 				VM_LABEL(storeAndPopTemporaryVariableBytecode);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 104);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin temporary:in:put: */
 				if (0 /* currentBytecode bitAnd: 7 */ < ((frameNumArgs = byteAt((localFP + FoxFrameFlags) + 1)))) {
@@ -5115,21 +4298,13 @@ interpret(void)
 			}
 			BREAK;
 		CASE(105)
+		CASE(465) /*209*/
 			/* storeAndPopTemporaryVariableBytecode */
 			{
 				sqInt frameNumArgs;
 
 				VM_LABEL(storeAndPopTemporaryVariableBytecode1);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 105);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin temporary:in:put: */
 				if (1 /* currentBytecode bitAnd: 7 */ < ((frameNumArgs = byteAt((localFP + FoxFrameFlags) + 1)))) {
@@ -5143,21 +4318,13 @@ interpret(void)
 			}
 			BREAK;
 		CASE(106)
+		CASE(466) /*210*/
 			/* storeAndPopTemporaryVariableBytecode */
 			{
 				sqInt frameNumArgs;
 
 				VM_LABEL(storeAndPopTemporaryVariableBytecode2);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 106);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin temporary:in:put: */
 				if (2 /* currentBytecode bitAnd: 7 */ < ((frameNumArgs = byteAt((localFP + FoxFrameFlags) + 1)))) {
@@ -5171,21 +4338,13 @@ interpret(void)
 			}
 			BREAK;
 		CASE(107)
+		CASE(467) /*211*/
 			/* storeAndPopTemporaryVariableBytecode */
 			{
 				sqInt frameNumArgs;
 
 				VM_LABEL(storeAndPopTemporaryVariableBytecode3);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 107);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin temporary:in:put: */
 				if (3 /* currentBytecode bitAnd: 7 */ < ((frameNumArgs = byteAt((localFP + FoxFrameFlags) + 1)))) {
@@ -5199,21 +4358,13 @@ interpret(void)
 			}
 			BREAK;
 		CASE(108)
+		CASE(468) /*212*/
 			/* storeAndPopTemporaryVariableBytecode */
 			{
 				sqInt frameNumArgs;
 
 				VM_LABEL(storeAndPopTemporaryVariableBytecode4);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 108);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin temporary:in:put: */
 				if (4 /* currentBytecode bitAnd: 7 */ < ((frameNumArgs = byteAt((localFP + FoxFrameFlags) + 1)))) {
@@ -5227,21 +4378,13 @@ interpret(void)
 			}
 			BREAK;
 		CASE(109)
+		CASE(469) /*213*/
 			/* storeAndPopTemporaryVariableBytecode */
 			{
 				sqInt frameNumArgs;
 
 				VM_LABEL(storeAndPopTemporaryVariableBytecode5);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 109);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin temporary:in:put: */
 				if (5 /* currentBytecode bitAnd: 7 */ < ((frameNumArgs = byteAt((localFP + FoxFrameFlags) + 1)))) {
@@ -5255,21 +4398,13 @@ interpret(void)
 			}
 			BREAK;
 		CASE(110)
+		CASE(470) /*214*/
 			/* storeAndPopTemporaryVariableBytecode */
 			{
 				sqInt frameNumArgs;
 
 				VM_LABEL(storeAndPopTemporaryVariableBytecode6);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 110);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin temporary:in:put: */
 				if (6 /* currentBytecode bitAnd: 7 */ < ((frameNumArgs = byteAt((localFP + FoxFrameFlags) + 1)))) {
@@ -5283,21 +4418,13 @@ interpret(void)
 			}
 			BREAK;
 		CASE(111)
+		CASE(471) /*215*/
 			/* storeAndPopTemporaryVariableBytecode */
 			{
 				sqInt frameNumArgs;
 
 				VM_LABEL(storeAndPopTemporaryVariableBytecode7);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 111);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin temporary:in:put: */
 				if (7 /* currentBytecode bitAnd: 7 */ < ((frameNumArgs = byteAt((localFP + FoxFrameFlags) + 1)))) {
@@ -5318,15 +4445,6 @@ interpret(void)
 
 				VM_LABEL(pushReceiverBytecode);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin internalPush: */
 				object = longAt(localFP + FoxReceiver);
@@ -5341,15 +4459,6 @@ interpret(void)
 
 				VM_LABEL(pushConstantTrueBytecode);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin internalPush: */
 				object = GIV(trueObj);
@@ -5364,15 +4473,6 @@ interpret(void)
 
 				VM_LABEL(pushConstantFalseBytecode);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin internalPush: */
 				object = GIV(falseObj);
@@ -5387,15 +4487,6 @@ interpret(void)
 
 				VM_LABEL(pushConstantNilBytecode);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin internalPush: */
 				object = GIV(nilObj);
@@ -5407,15 +4498,6 @@ interpret(void)
 			{
 				VM_LABEL(pushConstantMinusOneBytecode);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin internalPush: */
 				longAtPointerput((localSP -= BytesPerOop), ConstMinusOne);
@@ -5427,15 +4509,6 @@ interpret(void)
 			{
 				VM_LABEL(pushConstantZeroBytecode);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin internalPush: */
 				longAtPointerput((localSP -= BytesPerOop), ConstZero);
@@ -5447,15 +4520,6 @@ interpret(void)
 			{
 				VM_LABEL(pushConstantOneBytecode);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin internalPush: */
 				longAtPointerput((localSP -= BytesPerOop), ConstOne);
@@ -5466,15 +4530,6 @@ interpret(void)
 			{
 				VM_LABEL(pushConstantTwoBytecode);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin internalPush: */
 				longAtPointerput((localSP -= BytesPerOop), ConstTwo);
@@ -5567,10 +4622,10 @@ interpret(void)
 						if ((byteAt((localFP + FoxFrameFlags) + 2)) != 0) {
 							assert(isContext(frameContext(localFP)));
 							ourContext = longAt(localFP + FoxThisContext);
-							goto l886;
+							goto l900;
 						}
 						ourContext = marryFrameSP(localFP, localSP);
-	l886:	/* end ensureFrameIsMarried:SP: */;
+	l900:	/* end ensureFrameIsMarried:SP: */;
 						/* begin internalPush: */
 						longAtPointerput((localSP -= BytesPerOop), ourContext);
 						/* begin internalPush: */
@@ -5665,10 +4720,10 @@ interpret(void)
 					if ((byteAt((localFP + FoxFrameFlags) + 2)) != 0) {
 						assert(isContext(frameContext(localFP)));
 						ourContext1 = longAt(localFP + FoxThisContext);
-						goto l894;
+						goto l883;
 					}
 					ourContext1 = marryFrameSP(localFP, localSP);
-	l894:	/* end ensureFrameIsMarried:SP: */;
+	l883:	/* end ensureFrameIsMarried:SP: */;
 					/* begin internalPush: */
 					longAtPointerput((localSP -= BytesPerOop), ourContext1);
 					/* begin internalPush: */
@@ -5685,10 +4740,10 @@ interpret(void)
 					if ((byteAt((localFP + FoxFrameFlags) + 2)) != 0) {
 						assert(isContext(frameContext(localFP)));
 						ourContext2 = longAt(localFP + FoxThisContext);
-						goto l877;
+						goto l890;
 					}
 					ourContext2 = marryFrameSP(localFP, localSP);
-	l877:	/* end ensureFrameIsMarried:SP: */;
+	l890:	/* end ensureFrameIsMarried:SP: */;
 					/* begin internalPush: */
 					longAtPointerput((localSP -= BytesPerOop), ourContext2);
 					/* begin internalPush: */
@@ -5765,10 +4820,10 @@ interpret(void)
 						if ((byteAt((localFP + FoxFrameFlags) + 2)) != 0) {
 							assert(isContext(frameContext(localFP)));
 							ourContext3 = longAt(localFP + FoxThisContext);
-							goto l887;
+							goto l869;
 						}
 						ourContext3 = marryFrameSP(localFP, localSP);
-	l887:	/* end ensureFrameIsMarried:SP: */;
+	l869:	/* end ensureFrameIsMarried:SP: */;
 						/* begin internalPush: */
 						longAtPointerput((localSP -= BytesPerOop), ourContext3);
 						/* begin internalPush: */
@@ -5854,15 +4909,6 @@ interpret(void)
 					: 0);
 #        endif /* MULTIPLEBYTECODESETS */
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				longAtPointerput(localSP, localReturnValue);
 			}
@@ -5989,10 +5035,10 @@ interpret(void)
 							if ((byteAt((localFP + FoxFrameFlags) + 2)) != 0) {
 								assert(isContext(frameContext(localFP)));
 								ourContext = longAt(localFP + FoxThisContext);
-								goto l908;
+								goto l905;
 							}
 							ourContext = marryFrameSP(localFP, localSP);
-	l908:	/* end ensureFrameIsMarried:SP: */;
+	l905:	/* end ensureFrameIsMarried:SP: */;
 							/* begin internalPush: */
 							longAtPointerput((localSP -= BytesPerOop), ourContext);
 							/* begin internalPush: */
@@ -6002,7 +5048,7 @@ interpret(void)
 							GIV(argumentCount) = 1;
 							goto normalSend;
 							/* return self */
-							goto l902;
+							goto l911;
 						}
 						thePage = makeBaseFrameFor(contextToReturnTo);
 						theFP = (thePage->headFP);
@@ -6032,18 +5078,9 @@ interpret(void)
 					longAtPointerput(localSP, localReturnValue);
 					assert(checkIsStillMarriedContextcurrentFP(contextToReturnTo, localFP));
 					/* begin fetchNextBytecode */
-					if (GIV(isStepable)) {
-						printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-						/* begin externalizeIPandSP */
-						GIV(instructionPointer) = oopForPointer(localIP);
-						GIV(stackPointer) = localSP;
-						GIV(framePointer) = localFP;
-						printCallStack();
-						lockFetchNextBytecode();
-					}
 					currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 					/* return self */
-	l902:	/* end baseFrameReturn */;
+	l911:	/* end baseFrameReturn */;
 					goto l901;
 				}
 				localIP = pointerForOop(longAt(localFP + FoxCallerSavedIP));
@@ -6059,15 +5096,6 @@ interpret(void)
 					: 0);
 #        endif /* MULTIPLEBYTECODESETS */
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				longAtPointerput(localSP, localReturnValue);
 			}
@@ -6126,15 +5154,6 @@ interpret(void)
 				VM_LABEL(extendedPushBytecode);
 				descriptor = byteAtPointer(++localIP);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				variableType = (((usqInt) descriptor) >> 6) & 3;
 				variableIndex = descriptor & 0x3F;
@@ -6211,7 +5230,7 @@ interpret(void)
 						GIV(argumentCount) = 2;
 						goto normalSend;
 						/* return self */
-						goto l50;
+						goto l49;
 					}
 #          endif /* IMMUTABILITY */
 					/* begin storePointer:ofObject:withValue: */
@@ -6229,31 +5248,13 @@ interpret(void)
 						}
 					}
 					longAtput((objOop + BaseHeaderSize) + (((sqInt)((usqInt)(variableIndex) << (shiftForWord())))), value);
-	l50:	/* end storePointerImmutabilityCheck:ofObject:withValue: */;
+	l49:	/* end storePointerImmutabilityCheck:ofObject:withValue: */;
 					/* begin fetchNextBytecode */
-					if (GIV(isStepable)) {
-						printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-						/* begin externalizeIPandSP */
-						GIV(instructionPointer) = oopForPointer(localIP);
-						GIV(stackPointer) = localSP;
-						GIV(framePointer) = localFP;
-						printCallStack();
-						lockFetchNextBytecode();
-					}
 					currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 					goto l44;
 				}
 				if (variableType == 1) {
 					/* begin fetchNextBytecode */
-					if (GIV(isStepable)) {
-						printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-						/* begin externalizeIPandSP */
-						GIV(instructionPointer) = oopForPointer(localIP);
-						GIV(stackPointer) = localSP;
-						GIV(framePointer) = localFP;
-						printCallStack();
-						lockFetchNextBytecode();
-					}
 					currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 					if (variableIndex < ((frameNumArgs = byteAt((localFP + FoxFrameFlags) + 1)))) {
 						longAtput((localFP + FoxCallerSavedIP) + ((frameNumArgs - variableIndex) * BytesPerWord), value);
@@ -6312,15 +5313,6 @@ interpret(void)
 					longAtput((litVar + BaseHeaderSize) + (((sqInt)((usqInt)(ValueIndex) << (shiftForWord())))), value);
 	l41:	/* end storePointerImmutabilityCheck:ofObject:withValue: */;
 					/* begin fetchNextBytecode */
-					if (GIV(isStepable)) {
-						printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-						/* begin externalizeIPandSP */
-						GIV(instructionPointer) = oopForPointer(localIP);
-						GIV(stackPointer) = localSP;
-						GIV(framePointer) = localFP;
-						printCallStack();
-						lockFetchNextBytecode();
-					}
 					currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 					goto l44;
 				}
@@ -6365,7 +5357,7 @@ interpret(void)
 						GIV(argumentCount) = 2;
 						goto normalSend;
 						/* return self */
-						goto l63;
+						goto l62;
 					}
 #          endif /* IMMUTABILITY */
 					/* begin storePointer:ofObject:withValue: */
@@ -6383,31 +5375,13 @@ interpret(void)
 						}
 					}
 					longAtput((objOop + BaseHeaderSize) + (((sqInt)((usqInt)(variableIndex) << (shiftForWord())))), value);
-	l63:	/* end storePointerImmutabilityCheck:ofObject:withValue: */;
+	l62:	/* end storePointerImmutabilityCheck:ofObject:withValue: */;
 					/* begin fetchNextBytecode */
-					if (GIV(isStepable)) {
-						printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-						/* begin externalizeIPandSP */
-						GIV(instructionPointer) = oopForPointer(localIP);
-						GIV(stackPointer) = localSP;
-						GIV(framePointer) = localFP;
-						printCallStack();
-						lockFetchNextBytecode();
-					}
 					currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 					goto l57;
 				}
 				if (variableType == 1) {
 					/* begin fetchNextBytecode */
-					if (GIV(isStepable)) {
-						printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-						/* begin externalizeIPandSP */
-						GIV(instructionPointer) = oopForPointer(localIP);
-						GIV(stackPointer) = localSP;
-						GIV(framePointer) = localFP;
-						printCallStack();
-						lockFetchNextBytecode();
-					}
 					currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 					if (variableIndex < ((frameNumArgs = byteAt((localFP + FoxFrameFlags) + 1)))) {
 						longAtput((localFP + FoxCallerSavedIP) + ((frameNumArgs - variableIndex) * BytesPerWord), value);
@@ -6466,15 +5440,6 @@ interpret(void)
 					longAtput((litVar + BaseHeaderSize) + (((sqInt)((usqInt)(ValueIndex) << (shiftForWord())))), value);
 	l54:	/* end storePointerImmutabilityCheck:ofObject:withValue: */;
 					/* begin fetchNextBytecode */
-					if (GIV(isStepable)) {
-						printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-						/* begin externalizeIPandSP */
-						GIV(instructionPointer) = oopForPointer(localIP);
-						GIV(stackPointer) = localSP;
-						GIV(framePointer) = localFP;
-						printCallStack();
-						lockFetchNextBytecode();
-					}
 					currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 					goto l57;
 				}
@@ -6579,7 +5544,7 @@ interpret(void)
 							lkupClassTag = handleForwardedSendFaultForTag(lkupClassTag);
 						}
 						if (lookupInMethodCacheSelclassTag(GIV(messageSelector), lkupClassTag)) {
-							goto l918;
+							goto l926;
 						}
 					}
 					/* begin classForClassTag: */
@@ -6605,7 +5570,7 @@ interpret(void)
 					localFP = pointerForOop(GIV(framePointer));
 					addNewMethodToCache(GIV(lkupClass));
 	l916:	;
-	l918:	/* end internalFindNewMethodOrdinary */;
+	l926:	/* end internalFindNewMethodOrdinary */;
 					/* begin internalExecuteNewMethod */
 					if (GIV(primitiveFunctionPointer) != 0) {
 						if ((((usqIntptr_t) GIV(primitiveFunctionPointer))) <= MaxQuickPrimitiveIndex) {
@@ -6760,15 +5725,6 @@ interpret(void)
 											}
 	l930:	/* end internalExecuteNewMethod */;
 					/* begin fetchNextBytecode */
-					if (GIV(isStepable)) {
-						printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-						/* begin externalizeIPandSP */
-						GIV(instructionPointer) = oopForPointer(localIP);
-						GIV(stackPointer) = localSP;
-						GIV(framePointer) = localFP;
-						printCallStack();
-						lockFetchNextBytecode();
-					}
 					currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				}
 			}
@@ -6819,15 +5775,6 @@ interpret(void)
 				}
 				if (opType == 2) {
 					/* begin fetchNextBytecode */
-					if (GIV(isStepable)) {
-						printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-						/* begin externalizeIPandSP */
-						GIV(instructionPointer) = oopForPointer(localIP);
-						GIV(stackPointer) = localSP;
-						GIV(framePointer) = localFP;
-						printCallStack();
-						lockFetchNextBytecode();
-					}
 					currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 					/* begin pushMaybeContextReceiverVariable: */
 					obj = longAt(localFP + FoxReceiver);
@@ -6903,15 +5850,6 @@ interpret(void)
 				}
 				if (opType == 3) {
 					/* begin fetchNextBytecode */
-					if (GIV(isStepable)) {
-						printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-						/* begin externalizeIPandSP */
-						GIV(instructionPointer) = oopForPointer(localIP);
-						GIV(stackPointer) = localSP;
-						GIV(framePointer) = localFP;
-						printCallStack();
-						lockFetchNextBytecode();
-					}
 					currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 					/* begin pushLiteralConstant: */
 					assert(GIV(method) == (iframeMethod(localFP)));
@@ -6922,15 +5860,6 @@ interpret(void)
 				}
 				if (opType == 4) {
 					/* begin fetchNextBytecode */
-					if (GIV(isStepable)) {
-						printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-						/* begin externalizeIPandSP */
-						GIV(instructionPointer) = oopForPointer(localIP);
-						GIV(stackPointer) = localSP;
-						GIV(framePointer) = localFP;
-						printCallStack();
-						lockFetchNextBytecode();
-					}
 					currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 					/* begin pushLiteralVariable: */
 					assert(GIV(method) == (iframeMethod(localFP)));
@@ -6994,15 +5923,6 @@ interpret(void)
 					longAtput((litVar1 + BaseHeaderSize) + (((sqInt)((usqInt)(ValueIndex) << (shiftForWord())))), top);
 	l80:	/* end storePointerImmutabilityCheck:ofObject:withValue: */;
 					/* begin fetchNextBytecode */
-					if (GIV(isStepable)) {
-						printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-						/* begin externalizeIPandSP */
-						GIV(instructionPointer) = oopForPointer(localIP);
-						GIV(stackPointer) = localSP;
-						GIV(framePointer) = localFP;
-						printCallStack();
-						lockFetchNextBytecode();
-					}
 					currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 					goto l69;
 				}
@@ -7139,15 +6059,6 @@ interpret(void)
 	l83:	/* end storePointerImmutabilityCheck:ofObject:withValue: */;
 				}
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 			}
 	l69:	/* end case */;
@@ -7276,15 +6187,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 			{
 				VM_LABEL(popStackBytecode);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin internalPop: */
 				localSP += 1 * BytesPerOop;
@@ -7298,15 +6200,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 
 				VM_LABEL(duplicateTopBytecode);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin internalPush: */
 				object = longAtPointer(localSP);
@@ -7328,15 +6221,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 				ourContext = marryFrameSP(localFP, localSP);
 	l106:	/* end ensureFrameIsMarried:SP: */;
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin internalPush: */
 				longAtPointerput((localSP -= BytesPerOop), ourContext);
@@ -7360,15 +6244,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 				popValues = size > 0x7F;
 				size = size & 0x7F;
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin externalizeIPandSP */
 				GIV(instructionPointer) = oopForPointer(localIP);
@@ -7395,13 +6270,13 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 					if ((GIV(freeStart) + numBytes) > (((eden()).limit))) {
 						error("no room in eden for allocateSmallNewSpaceSlots:format:classIndex:");
 						array = 0;
-						goto l107;
+						goto l109;
 					}
 				}
 				long64Atput(newObj, (((((usqLong) size)) << (numSlotsFullShift())) + (2U << (formatShift()))) + ClassArrayCompactIndex);
 				GIV(freeStart) += numBytes;
 				array = newObj;
-	l107:	/* end eeInstantiateSmallClassIndex:format:numSlots: */;
+	l109:	/* end eeInstantiateSmallClassIndex:format:numSlots: */;
 				if (popValues) {
 					for (i = 0; i < size; i += 1) {
 
@@ -7442,15 +6317,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 ((header >> 3)) & AlternateHeaderNumLiteralsMask))) * BytesPerOop)) + BaseHeaderSize))) {
 					localIP = (localIP + (3)) - 1;
 					/* begin fetchNextBytecode */
-					if (GIV(isStepable)) {
-						printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-						/* begin externalizeIPandSP */
-						GIV(instructionPointer) = oopForPointer(localIP);
-						GIV(stackPointer) = localSP;
-						GIV(framePointer) = localFP;
-						printCallStack();
-						lockFetchNextBytecode();
-					}
 					currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 					goto l113;
 				}
@@ -7477,15 +6343,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 				/* begin fetchByte */
 				tempVectorIndex = byteAtPointer(++localIP);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin pushRemoteTemp:inVectorAt: */
 				tempVector = (tempVectorIndex < ((frameNumArgs = byteAt((localFP + FoxFrameFlags) + 1)))
@@ -7511,15 +6368,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 				/* begin fetchByte */
 				tempVectorIndex = byteAtPointer(++localIP);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin storeRemoteTemp:inVectorAt: */
 				tempVector = (tempVectorIndex < ((frameNumArgs = byteAt((localFP + FoxFrameFlags) + 1)))
@@ -7557,15 +6405,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 				/* begin fetchByte */
 				tempVectorIndex = byteAtPointer(++localIP);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin storeRemoteTemp:inVectorAt: */
 				tempVector = (tempVectorIndex < ((frameNumArgs = byteAt((localFP + FoxFrameFlags) + 1)))
@@ -7684,15 +6523,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 				}
 				localIP += blockSize;
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin internalPush: */
 				longAtPointerput((localSP -= BytesPerOop), newClosure);
@@ -7879,15 +6709,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 						goto l147;
 					}
 					/* begin fetchNextBytecode */
-					if (GIV(isStepable)) {
-						printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-						/* begin externalizeIPandSP */
-						GIV(instructionPointer) = oopForPointer(localIP);
-						GIV(stackPointer) = localSP;
-						GIV(framePointer) = localFP;
-						printCallStack();
-						lockFetchNextBytecode();
-					}
 					currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				}
 				/* begin internalPop: */
@@ -7925,15 +6746,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 					localFP = pointerForOop(GIV(framePointer));
 									}
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 			}
 			BREAK;
@@ -7970,15 +6782,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 						goto l152;
 					}
 					/* begin fetchNextBytecode */
-					if (GIV(isStepable)) {
-						printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-						/* begin externalizeIPandSP */
-						GIV(instructionPointer) = oopForPointer(localIP);
-						GIV(stackPointer) = localSP;
-						GIV(framePointer) = localFP;
-						printCallStack();
-						lockFetchNextBytecode();
-					}
 					currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				}
 				/* begin internalPop: */
@@ -8019,15 +6822,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 						goto l156;
 					}
 					/* begin fetchNextBytecode */
-					if (GIV(isStepable)) {
-						printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-						/* begin externalizeIPandSP */
-						GIV(instructionPointer) = oopForPointer(localIP);
-						GIV(stackPointer) = localSP;
-						GIV(framePointer) = localFP;
-						printCallStack();
-						lockFetchNextBytecode();
-					}
 					currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				}
 				/* begin internalPop: */
@@ -8067,15 +6861,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 						/* begin internalPop:thenPush: */
 						longAtPointerput((localSP += (2 - 1) * BytesPerOop), (((usqInt)result << 3) | 1));
 						/* begin fetchNextBytecode */
-						if (GIV(isStepable)) {
-							printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-							/* begin externalizeIPandSP */
-							GIV(instructionPointer) = oopForPointer(localIP);
-							GIV(stackPointer) = localSP;
-							GIV(framePointer) = localFP;
-							printCallStack();
-							lockFetchNextBytecode();
-						}
 						currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 						goto l158;
 					}
@@ -8174,15 +6959,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 					localFP = pointerForOop(GIV(framePointer));
 					if (!GIV(primFailCode)) {
 						/* begin fetchNextBytecode */
-						if (GIV(isStepable)) {
-							printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-							/* begin externalizeIPandSP */
-							GIV(instructionPointer) = oopForPointer(localIP);
-							GIV(stackPointer) = localSP;
-							GIV(framePointer) = localFP;
-							printCallStack();
-							lockFetchNextBytecode();
-						}
 						currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 						goto l158;
 					}
@@ -8227,15 +7003,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 						/* begin internalPop:thenPush: */
 						longAtPointerput((localSP += (2 - 1) * BytesPerOop), (((usqInt)result << 3) | 1));
 						/* begin fetchNextBytecode */
-						if (GIV(isStepable)) {
-							printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-							/* begin externalizeIPandSP */
-							GIV(instructionPointer) = oopForPointer(localIP);
-							GIV(stackPointer) = localSP;
-							GIV(framePointer) = localFP;
-							printCallStack();
-							lockFetchNextBytecode();
-						}
 						currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 						goto l169;
 					}
@@ -8334,15 +7101,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 					localFP = pointerForOop(GIV(framePointer));
 					if (!GIV(primFailCode)) {
 						/* begin fetchNextBytecode */
-						if (GIV(isStepable)) {
-							printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-							/* begin externalizeIPandSP */
-							GIV(instructionPointer) = oopForPointer(localIP);
-							GIV(stackPointer) = localSP;
-							GIV(framePointer) = localFP;
-							printCallStack();
-							lockFetchNextBytecode();
-						}
 						currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 						goto l169;
 					}
@@ -8508,15 +7266,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 
 						/* short jumpIfFalse 152 - 159 */
 						/* begin fetchNextBytecode */
-						if (GIV(isStepable)) {
-							printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-							/* begin externalizeIPandSP */
-							GIV(instructionPointer) = oopForPointer(localIP);
-							GIV(stackPointer) = localSP;
-							GIV(framePointer) = localFP;
-							printCallStack();
-							lockFetchNextBytecode();
-						}
 						currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 						goto l944;
 					}
@@ -8525,15 +7274,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 						/* long jumpIfFalse */
 						byteAtPointer(++localIP);
 						/* begin fetchNextBytecode */
-						if (GIV(isStepable)) {
-							printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-							/* begin externalizeIPandSP */
-							GIV(instructionPointer) = oopForPointer(localIP);
-							GIV(stackPointer) = localSP;
-							GIV(framePointer) = localFP;
-							printCallStack();
-							lockFetchNextBytecode();
-						}
 						currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 						goto l944;
 					}
@@ -9328,15 +8068,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 						/* begin internalPop:thenPush: */
 						longAtPointerput((localSP += (2 - 1) * BytesPerOop), oop);
 						/* begin fetchNextBytecode */
-						if (GIV(isStepable)) {
-							printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-							/* begin externalizeIPandSP */
-							GIV(instructionPointer) = oopForPointer(localIP);
-							GIV(stackPointer) = localSP;
-							GIV(framePointer) = localFP;
-							printCallStack();
-							lockFetchNextBytecode();
-						}
 						currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 						goto l240;
 					}
@@ -9435,15 +8166,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 					localFP = pointerForOop(GIV(framePointer));
 					if (!GIV(primFailCode)) {
 						/* begin fetchNextBytecode */
-						if (GIV(isStepable)) {
-							printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-							/* begin externalizeIPandSP */
-							GIV(instructionPointer) = oopForPointer(localIP);
-							GIV(stackPointer) = localSP;
-							GIV(framePointer) = localFP;
-							printCallStack();
-							lockFetchNextBytecode();
-						}
 						currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 						goto l240;
 					}
@@ -9494,15 +8216,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 							/* begin internalPop:thenPush: */
 							longAtPointerput((localSP += (2 - 1) * BytesPerOop), (((usqInt)result << 3) | 1));
 							/* begin fetchNextBytecode */
-							if (GIV(isStepable)) {
-								printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-								/* begin externalizeIPandSP */
-								GIV(instructionPointer) = oopForPointer(localIP);
-								GIV(stackPointer) = localSP;
-								GIV(framePointer) = localFP;
-								printCallStack();
-								lockFetchNextBytecode();
-							}
 							currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 							goto l251;
 						}
@@ -9610,15 +8323,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 					localFP = pointerForOop(GIV(framePointer));
 					if (!GIV(primFailCode)) {
 						/* begin fetchNextBytecode */
-						if (GIV(isStepable)) {
-							printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-							/* begin externalizeIPandSP */
-							GIV(instructionPointer) = oopForPointer(localIP);
-							GIV(stackPointer) = localSP;
-							GIV(framePointer) = localFP;
-							printCallStack();
-							lockFetchNextBytecode();
-						}
 						currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 						goto l251;
 					}
@@ -9645,15 +8349,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 					/* begin internalPop:thenPush: */
 					longAtPointerput((localSP += (2 - 1) * BytesPerOop), (((usqInt)mod << 3) | 1));
 					/* begin fetchNextBytecode */
-					if (GIV(isStepable)) {
-						printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-						/* begin externalizeIPandSP */
-						GIV(instructionPointer) = oopForPointer(localIP);
-						GIV(stackPointer) = localSP;
-						GIV(framePointer) = localFP;
-						printCallStack();
-						lockFetchNextBytecode();
-					}
 					currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 					goto l262;
 				}
@@ -9735,15 +8430,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 					/* begin internalPop:thenPush: */
 					longAtPointerput((localSP += (2 - 1) * BytesPerOop), pt);
 					/* begin fetchNextBytecode */
-					if (GIV(isStepable)) {
-						printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-						/* begin externalizeIPandSP */
-						GIV(instructionPointer) = oopForPointer(localIP);
-						GIV(stackPointer) = localSP;
-						GIV(framePointer) = localFP;
-						printCallStack();
-						lockFetchNextBytecode();
-					}
 					currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 					goto l266;
 				}
@@ -9828,15 +8514,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 				localFP = pointerForOop(GIV(framePointer));
 				if (!GIV(primFailCode)) {
 					/* begin fetchNextBytecode */
-					if (GIV(isStepable)) {
-						printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-						/* begin externalizeIPandSP */
-						GIV(instructionPointer) = oopForPointer(localIP);
-						GIV(stackPointer) = localSP;
-						GIV(framePointer) = localFP;
-						printCallStack();
-						lockFetchNextBytecode();
-					}
 					currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 					goto l275;
 				}
@@ -9862,15 +8539,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 					/* begin internalPop:thenPush: */
 					longAtPointerput((localSP += (2 - 1) * BytesPerOop), (((usqInt)quotient << 3) | 1));
 					/* begin fetchNextBytecode */
-					if (GIV(isStepable)) {
-						printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-						/* begin externalizeIPandSP */
-						GIV(instructionPointer) = oopForPointer(localIP);
-						GIV(stackPointer) = localSP;
-						GIV(framePointer) = localFP;
-						printCallStack();
-						lockFetchNextBytecode();
-					}
 					currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 					goto l281;
 				}
@@ -9897,15 +8565,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 					/* begin internalPop:thenPush: */
 					longAtPointerput((localSP += (2 - 1) * BytesPerOop), arg & rcvr);
 					/* begin fetchNextBytecode */
-					if (GIV(isStepable)) {
-						printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-						/* begin externalizeIPandSP */
-						GIV(instructionPointer) = oopForPointer(localIP);
-						GIV(stackPointer) = localSP;
-						GIV(framePointer) = localFP;
-						printCallStack();
-						lockFetchNextBytecode();
-					}
 					currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 					goto l285;
 				}
@@ -9922,15 +8581,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 				localFP = pointerForOop(GIV(framePointer));
 				if (!GIV(primFailCode)) {
 					/* begin fetchNextBytecode */
-					if (GIV(isStepable)) {
-						printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-						/* begin externalizeIPandSP */
-						GIV(instructionPointer) = oopForPointer(localIP);
-						GIV(stackPointer) = localSP;
-						GIV(framePointer) = localFP;
-						printCallStack();
-						lockFetchNextBytecode();
-					}
 					currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 					goto l285;
 				}
@@ -9957,15 +8607,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 					/* begin internalPop:thenPush: */
 					longAtPointerput((localSP += (2 - 1) * BytesPerOop), arg | rcvr);
 					/* begin fetchNextBytecode */
-					if (GIV(isStepable)) {
-						printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-						/* begin externalizeIPandSP */
-						GIV(instructionPointer) = oopForPointer(localIP);
-						GIV(stackPointer) = localSP;
-						GIV(framePointer) = localFP;
-						printCallStack();
-						lockFetchNextBytecode();
-					}
 					currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 					goto l290;
 				}
@@ -9982,15 +8623,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 				localFP = pointerForOop(GIV(framePointer));
 				if (!GIV(primFailCode)) {
 					/* begin fetchNextBytecode */
-					if (GIV(isStepable)) {
-						printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-						/* begin externalizeIPandSP */
-						GIV(instructionPointer) = oopForPointer(localIP);
-						GIV(stackPointer) = localSP;
-						GIV(framePointer) = localFP;
-						printCallStack();
-						lockFetchNextBytecode();
-					}
 					currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 					goto l290;
 				}
@@ -10065,7 +8697,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 								if (!GIV(primFailCode)) {
 									GIV(primFailCode) = 1;
 								}
-								goto l298;
+								goto l310;
 							}
 							if ((fmt == (indexablePointersFormat()))
 							 && ((hdr & (classIndexMask())) == ClassMethodContextCompactIndex)) {
@@ -10073,7 +8705,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 								/* Contexts must not be put in the atCache, since their size is not constant */
 								/* begin primitiveFailFor: */
 								GIV(primFailCode) = PrimErrBadReceiver;
-								goto l298;
+								goto l310;
 							}
 							/* begin lengthOf:format: */
 							numSlots11 = byteAt(rcvr + 7);
@@ -10123,7 +8755,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 							GIV(atCache)[atIx + AtCacheFmt] = fmt;
 							GIV(atCache)[atIx + AtCacheFixedFields] = fixedFields;
 							GIV(atCache)[atIx + AtCacheSize] = (totalLength - fixedFields);
-	l298:	/* end install:inAtCache:at:string: */;
+	l310:	/* end install:inAtCache:at:string: */;
 						}
 						else {
 							if (GIV(primitiveFunctionPointer) == primitiveStringAt) {
@@ -10139,7 +8771,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 									if (!GIV(primFailCode)) {
 										GIV(primFailCode) = 1;
 									}
-									goto l318;
+									goto l308;
 								}
 								
 								/* special flag for strings */
@@ -10150,35 +8782,35 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 									: numSlots12);
 								if (fmt1 <= 5 /* ephemeronFormat */) {
 									totalLength1 = numSlots3;
-									goto l310;
+									goto l321;
 								}
 								if (fmt1 >= (firstByteFormat())) {
 
 									/* bytes, including CompiledMethod */
 									totalLength1 = (numSlots3 << (shiftForWord())) - (fmt1 & 7);
-									goto l310;
+									goto l321;
 								}
 								if (fmt1 >= (firstShortFormat())) {
 									totalLength1 = (numSlots3 << ((shiftForWord()) - 1)) - (fmt1 & 3);
-									goto l310;
+									goto l321;
 								}
 								if (fmt1 >= (firstLongFormat())) {
 									totalLength1 = (numSlots3 << ((shiftForWord()) - 2)) - (fmt1 & 1);
-									goto l310;
+									goto l321;
 								}
 								if (fmt1 == (sixtyFourBitIndexableFormat())) {
 									totalLength1 = numSlots3;
-									goto l310;
+									goto l321;
 								}
 								totalLength1 = 0;
-	l310:	/* end lengthOf:format: */;
+	l321:	/* end lengthOf:format: */;
 								fixedFields1 = 0;
 								fmt1 += 32 /* firstStringyFakeFormat */;
 								GIV(atCache)[atIx + AtCacheOop] = rcvr;
 								GIV(atCache)[atIx + AtCacheFmt] = fmt1;
 								GIV(atCache)[atIx + AtCacheFixedFields] = fixedFields1;
 								GIV(atCache)[atIx + AtCacheSize] = (totalLength1 - fixedFields1);
-	l318:	/* end install:inAtCache:at:string: */;
+	l308:	/* end install:inAtCache:at:string: */;
 							}
 							else {
 								GIV(argumentCount) = 1;
@@ -10257,15 +8889,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 					}
 					if (!GIV(primFailCode)) {
 						/* begin fetchNextBytecode */
-						if (GIV(isStepable)) {
-							printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-							/* begin externalizeIPandSP */
-							GIV(instructionPointer) = oopForPointer(localIP);
-							GIV(stackPointer) = localSP;
-							GIV(framePointer) = localFP;
-							printCallStack();
-							lockFetchNextBytecode();
-						}
 						currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 						/* begin internalPop:thenPush: */
 						longAtPointerput((localSP += (2 - 1) * BytesPerOop), result);
@@ -10357,7 +8980,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 								if (!GIV(primFailCode)) {
 									GIV(primFailCode) = 1;
 								}
-								goto l361;
+								goto l363;
 							}
 							if ((fmt == (indexablePointersFormat()))
 							 && ((hdr & (classIndexMask())) == ClassMethodContextCompactIndex)) {
@@ -10365,7 +8988,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 								/* Contexts must not be put in the atCache, since their size is not constant */
 								/* begin primitiveFailFor: */
 								GIV(primFailCode) = PrimErrBadReceiver;
-								goto l361;
+								goto l363;
 							}
 							/* begin lengthOf:format: */
 							numSlots11 = byteAt(rcvr + 7);
@@ -10374,28 +8997,28 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 								: numSlots11);
 							if (fmt <= 5 /* ephemeronFormat */) {
 								totalLength = numSlots2;
-								goto l333;
+								goto l361;
 							}
 							if (fmt >= (firstByteFormat())) {
 
 								/* bytes, including CompiledMethod */
 								totalLength = (numSlots2 << (shiftForWord())) - (fmt & 7);
-								goto l333;
+								goto l361;
 							}
 							if (fmt >= (firstShortFormat())) {
 								totalLength = (numSlots2 << ((shiftForWord()) - 1)) - (fmt & 3);
-								goto l333;
+								goto l361;
 							}
 							if (fmt >= (firstLongFormat())) {
 								totalLength = (numSlots2 << ((shiftForWord()) - 2)) - (fmt & 1);
-								goto l333;
+								goto l361;
 							}
 							if (fmt == (sixtyFourBitIndexableFormat())) {
 								totalLength = numSlots2;
-								goto l333;
+								goto l361;
 							}
 							totalLength = 0;
-	l333:	/* end lengthOf:format: */;
+	l361:	/* end lengthOf:format: */;
 							/* begin fixedFieldsOf:format:length: */
 							if ((fmt >= (sixtyFourBitIndexableFormat()))
 							 || (fmt == 2 /* arrayFormat */)) {
@@ -10415,7 +9038,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 							GIV(atCache)[atIx + AtCacheFmt] = fmt;
 							GIV(atCache)[atIx + AtCacheFixedFields] = fixedFields;
 							GIV(atCache)[atIx + AtCacheSize] = (totalLength - fixedFields);
-	l361:	/* end install:inAtCache:at:string: */;
+	l363:	/* end install:inAtCache:at:string: */;
 						}
 						else {
 							if (GIV(primitiveFunctionPointer) == primitiveStringAtPut) {
@@ -10431,7 +9054,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 									if (!GIV(primFailCode)) {
 										GIV(primFailCode) = 1;
 									}
-									goto l350;
+									goto l352;
 								}
 								
 								/* special flag for strings */
@@ -10442,35 +9065,35 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 									: numSlots12);
 								if (fmt1 <= 5 /* ephemeronFormat */) {
 									totalLength1 = numSlots3;
-									goto l363;
+									goto l329;
 								}
 								if (fmt1 >= (firstByteFormat())) {
 
 									/* bytes, including CompiledMethod */
 									totalLength1 = (numSlots3 << (shiftForWord())) - (fmt1 & 7);
-									goto l363;
+									goto l329;
 								}
 								if (fmt1 >= (firstShortFormat())) {
 									totalLength1 = (numSlots3 << ((shiftForWord()) - 1)) - (fmt1 & 3);
-									goto l363;
+									goto l329;
 								}
 								if (fmt1 >= (firstLongFormat())) {
 									totalLength1 = (numSlots3 << ((shiftForWord()) - 2)) - (fmt1 & 1);
-									goto l363;
+									goto l329;
 								}
 								if (fmt1 == (sixtyFourBitIndexableFormat())) {
 									totalLength1 = numSlots3;
-									goto l363;
+									goto l329;
 								}
 								totalLength1 = 0;
-	l363:	/* end lengthOf:format: */;
+	l329:	/* end lengthOf:format: */;
 								fixedFields1 = 0;
 								fmt1 += 32 /* firstStringyFakeFormat */;
 								GIV(atCache)[atIx + AtCacheOop] = rcvr;
 								GIV(atCache)[atIx + AtCacheFmt] = fmt1;
 								GIV(atCache)[atIx + AtCacheFixedFields] = fixedFields1;
 								GIV(atCache)[atIx + AtCacheSize] = (totalLength1 - fixedFields1);
-	l350:	/* end install:inAtCache:at:string: */;
+	l352:	/* end install:inAtCache:at:string: */;
 							}
 							else {
 								GIV(argumentCount) = 2;
@@ -10605,15 +9228,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 					}
 					if (!GIV(primFailCode)) {
 						/* begin fetchNextBytecode */
-						if (GIV(isStepable)) {
-							printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-							/* begin externalizeIPandSP */
-							GIV(instructionPointer) = oopForPointer(localIP);
-							GIV(stackPointer) = localSP;
-							GIV(framePointer) = localFP;
-							printCallStack();
-							lockFetchNextBytecode();
-						}
 						currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 						/* begin internalPop:thenPush: */
 						longAtPointerput((localSP += (3 - 1) * BytesPerOop), value);
@@ -10660,15 +9274,15 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 				classOop = longAt((GIV(specialObjectsOop) + BaseHeaderSize) + (((sqInt)((usqInt)(ClassByteString) << (shiftForWord())))));
 				if (rcvr & (tagMask())) {
 					isString = 0;
-					goto l370;
+					goto l371;
 				}
 				/* begin isClassOfNonImm:equalTo:compactClassIndex: */
 				assert(!(isImmediate(rcvr)));
 				/* begin classIndexOf: */
 				ccIndex = (longAt(rcvr)) & (classIndexMask());
 				isString = ClassByteStringCompactIndex == ccIndex;
-				goto l370;
-	l370:	/* end is:instanceOf:compactClassIndex: */;
+				goto l371;
+	l371:	/* end is:instanceOf:compactClassIndex: */;
 				if (isString) {
 					/* begin lengthOf:format: */
 					fmt = (((usqInt) (longAt(rcvr))) >> (formatShift())) & (formatMask());
@@ -10703,15 +9317,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 	l373:	/* end lengthOf:format: */;
 					longAtPointerput(localSP, (((usqInt)sz << 3) | 1));
 					/* begin fetchNextBytecode */
-					if (GIV(isStepable)) {
-						printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-						/* begin externalizeIPandSP */
-						GIV(instructionPointer) = oopForPointer(localIP);
-						GIV(stackPointer) = localSP;
-						GIV(framePointer) = localFP;
-						printCallStack();
-						lockFetchNextBytecode();
-					}
 					currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 					goto l367;
 				}
@@ -10719,15 +9324,15 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 				classOop1 = longAt((GIV(specialObjectsOop) + BaseHeaderSize) + (((sqInt)((usqInt)(ClassArray) << (shiftForWord())))));
 				if (rcvr & (tagMask())) {
 					isArray = 0;
-					goto l371;
+					goto l368;
 				}
 				/* begin isClassOfNonImm:equalTo:compactClassIndex: */
 				assert(!(isImmediate(rcvr)));
 				/* begin classIndexOf: */
 				ccIndex1 = (longAt(rcvr)) & (classIndexMask());
 				isArray = ClassArrayCompactIndex == ccIndex1;
-				goto l371;
-	l371:	/* end is:instanceOf:compactClassIndex: */;
+				goto l368;
+	l368:	/* end is:instanceOf:compactClassIndex: */;
 				if (isArray) {
 					/* begin lengthOf:format: */
 					fmt1 = (((usqInt) (longAt(rcvr))) >> (formatShift())) & (formatMask());
@@ -10738,39 +9343,30 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 						: numSlots11);
 					if (fmt1 <= 5 /* ephemeronFormat */) {
 						sz = numSlots2;
-						goto l376;
+						goto l372;
 					}
 					if (fmt1 >= (firstByteFormat())) {
 
 						/* bytes, including CompiledMethod */
 						sz = (numSlots2 << (shiftForWord())) - (fmt1 & 7);
-						goto l376;
+						goto l372;
 					}
 					if (fmt1 >= (firstShortFormat())) {
 						sz = (numSlots2 << ((shiftForWord()) - 1)) - (fmt1 & 3);
-						goto l376;
+						goto l372;
 					}
 					if (fmt1 >= (firstLongFormat())) {
 						sz = (numSlots2 << ((shiftForWord()) - 2)) - (fmt1 & 1);
-						goto l376;
+						goto l372;
 					}
 					if (fmt1 == (sixtyFourBitIndexableFormat())) {
 						sz = numSlots2;
-						goto l376;
+						goto l372;
 					}
 					sz = 0;
-	l376:	/* end lengthOf:format: */;
+	l372:	/* end lengthOf:format: */;
 					longAtPointerput(localSP, (((usqInt)sz << 3) | 1));
 					/* begin fetchNextBytecode */
-					if (GIV(isStepable)) {
-						printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-						/* begin externalizeIPandSP */
-						GIV(instructionPointer) = oopForPointer(localIP);
-						GIV(stackPointer) = localSP;
-						GIV(framePointer) = localFP;
-						printCallStack();
-						lockFetchNextBytecode();
-					}
 					currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 					goto l367;
 				}
@@ -10870,15 +9466,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 					: fetchClassOfNonImm(rcvr));
 				longAtPointerput(localSP, aValue);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 			}
 			BREAK;
@@ -10924,15 +9511,15 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 				classOop = longAt((GIV(specialObjectsOop) + BaseHeaderSize) + (((sqInt)((usqInt)(ClassBlockClosure) << (shiftForWord())))));
 				if (rcvr & (tagMask())) {
 					isBlock = 0;
-					goto l390;
+					goto l392;
 				}
 				/* begin isClassOfNonImm:equalTo:compactClassIndex: */
 				assert(!(isImmediate(rcvr)));
 				/* begin classIndexOf: */
 				ccIndex = (longAt(rcvr)) & (classIndexMask());
 				isBlock = ClassBlockClosureCompactIndex == ccIndex;
-				goto l390;
-	l390:	/* end is:instanceOf:compactClassIndex: */;
+				goto l392;
+	l392:	/* end is:instanceOf:compactClassIndex: */;
 				if (isBlock) {
 					/* begin externalizeIPandSP */
 					GIV(instructionPointer) = oopForPointer(localIP);
@@ -10947,15 +9534,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 					localFP = pointerForOop(GIV(framePointer));
 					if (!GIV(primFailCode)) {
 						/* begin fetchNextBytecode */
-						if (GIV(isStepable)) {
-							printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-							/* begin externalizeIPandSP */
-							GIV(instructionPointer) = oopForPointer(localIP);
-							GIV(stackPointer) = localSP;
-							GIV(framePointer) = localFP;
-							printCallStack();
-							lockFetchNextBytecode();
-						}
 						currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 						goto l388;
 					}
@@ -10984,15 +9562,15 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 				classOop = longAt((GIV(specialObjectsOop) + BaseHeaderSize) + (((sqInt)((usqInt)(ClassBlockClosure) << (shiftForWord())))));
 				if (rcvr & (tagMask())) {
 					isBlock = 0;
-					goto l396;
+					goto l398;
 				}
 				/* begin isClassOfNonImm:equalTo:compactClassIndex: */
 				assert(!(isImmediate(rcvr)));
 				/* begin classIndexOf: */
 				ccIndex = (longAt(rcvr)) & (classIndexMask());
 				isBlock = ClassBlockClosureCompactIndex == ccIndex;
-				goto l396;
-	l396:	/* end is:instanceOf:compactClassIndex: */;
+				goto l398;
+	l398:	/* end is:instanceOf:compactClassIndex: */;
 				if (isBlock) {
 					/* begin externalizeIPandSP */
 					GIV(instructionPointer) = oopForPointer(localIP);
@@ -11007,15 +9585,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 					localFP = pointerForOop(GIV(framePointer));
 					if (!GIV(primFailCode)) {
 						/* begin fetchNextBytecode */
-						if (GIV(isStepable)) {
-							printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-							/* begin externalizeIPandSP */
-							GIV(instructionPointer) = oopForPointer(localIP);
-							GIV(stackPointer) = localSP;
-							GIV(framePointer) = localFP;
-							printCallStack();
-							lockFetchNextBytecode();
-						}
 						currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 						goto l394;
 					}
@@ -11103,15 +9672,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 					/* begin internalStackTopPut: */
 					longAtPointerput(localSP, longAt((rcvr + BaseHeaderSize) + (((sqInt)((usqInt)(XIndex) << (shiftForWord()))))));
 					/* begin fetchNextBytecode */
-					if (GIV(isStepable)) {
-						printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-						/* begin externalizeIPandSP */
-						GIV(instructionPointer) = oopForPointer(localIP);
-						GIV(stackPointer) = localSP;
-						GIV(framePointer) = localFP;
-						printCallStack();
-						lockFetchNextBytecode();
-					}
 					currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 					goto l406;
 				}
@@ -11157,15 +9717,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 					/* begin internalStackTopPut: */
 					longAtPointerput(localSP, longAt((rcvr + BaseHeaderSize) + (((sqInt)((usqInt)(YIndex) << (shiftForWord()))))));
 					/* begin fetchNextBytecode */
-					if (GIV(isStepable)) {
-						printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-						/* begin externalizeIPandSP */
-						GIV(instructionPointer) = oopForPointer(localIP);
-						GIV(stackPointer) = localSP;
-						GIV(framePointer) = localFP;
-						printCallStack();
-						lockFetchNextBytecode();
-					}
 					currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 					goto l414;
 				}
@@ -11331,1906 +9882,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 				goto commonSendOrdinary;
 			}
 			BREAK;
-		CASE(256) /*0*/
-			/* pushReceiverVariableBytecode */
-			{
-				sqInt object;
-
-				VM_LABEL(pushReceiverVariableBytecode16);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 256);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushReceiverVariable: */
-				object = longAt(((longAt(localFP + FoxReceiver)) + BaseHeaderSize));
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(257) /*1*/
-			/* pushReceiverVariableBytecode */
-			{
-				sqInt object;
-
-				VM_LABEL(pushReceiverVariableBytecode17);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 257);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushReceiverVariable: */
-				object = longAt(((longAt(localFP + FoxReceiver)) + BaseHeaderSize) + 8 /* (currentBytecode bitAnd: 15) << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(258) /*2*/
-			/* pushReceiverVariableBytecode */
-			{
-				sqInt object;
-
-				VM_LABEL(pushReceiverVariableBytecode18);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 258);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushReceiverVariable: */
-				object = longAt(((longAt(localFP + FoxReceiver)) + BaseHeaderSize) + 16 /* (currentBytecode bitAnd: 15) << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(259) /*3*/
-			/* pushReceiverVariableBytecode */
-			{
-				sqInt object;
-
-				VM_LABEL(pushReceiverVariableBytecode19);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 259);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushReceiverVariable: */
-				object = longAt(((longAt(localFP + FoxReceiver)) + BaseHeaderSize) + 24 /* (currentBytecode bitAnd: 15) << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(260) /*4*/
-			/* pushReceiverVariableBytecode */
-			{
-				sqInt object;
-
-				VM_LABEL(pushReceiverVariableBytecode20);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 260);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushReceiverVariable: */
-				object = longAt(((longAt(localFP + FoxReceiver)) + BaseHeaderSize) + 32 /* (currentBytecode bitAnd: 15) << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(261) /*5*/
-			/* pushReceiverVariableBytecode */
-			{
-				sqInt object;
-
-				VM_LABEL(pushReceiverVariableBytecode21);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 261);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushReceiverVariable: */
-				object = longAt(((longAt(localFP + FoxReceiver)) + BaseHeaderSize) + 40 /* (currentBytecode bitAnd: 15) << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(262) /*6*/
-			/* pushReceiverVariableBytecode */
-			{
-				sqInt object;
-
-				VM_LABEL(pushReceiverVariableBytecode22);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 262);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushReceiverVariable: */
-				object = longAt(((longAt(localFP + FoxReceiver)) + BaseHeaderSize) + 48 /* (currentBytecode bitAnd: 15) << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(263) /*7*/
-			/* pushReceiverVariableBytecode */
-			{
-				sqInt object;
-
-				VM_LABEL(pushReceiverVariableBytecode23);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 263);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushReceiverVariable: */
-				object = longAt(((longAt(localFP + FoxReceiver)) + BaseHeaderSize) + 56 /* (currentBytecode bitAnd: 15) << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(264) /*8*/
-			/* pushReceiverVariableBytecode */
-			{
-				sqInt object;
-
-				VM_LABEL(pushReceiverVariableBytecode24);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 264);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushReceiverVariable: */
-				object = longAt(((longAt(localFP + FoxReceiver)) + BaseHeaderSize) + 64 /* (currentBytecode bitAnd: 15) << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(265) /*9*/
-			/* pushReceiverVariableBytecode */
-			{
-				sqInt object;
-
-				VM_LABEL(pushReceiverVariableBytecode25);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 265);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushReceiverVariable: */
-				object = longAt(((longAt(localFP + FoxReceiver)) + BaseHeaderSize) + 72 /* (currentBytecode bitAnd: 15) << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(266) /*10*/
-			/* pushReceiverVariableBytecode */
-			{
-				sqInt object;
-
-				VM_LABEL(pushReceiverVariableBytecode26);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 266);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushReceiverVariable: */
-				object = longAt(((longAt(localFP + FoxReceiver)) + BaseHeaderSize) + 80 /* (currentBytecode bitAnd: 15) << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(267) /*11*/
-			/* pushReceiverVariableBytecode */
-			{
-				sqInt object;
-
-				VM_LABEL(pushReceiverVariableBytecode27);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 267);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushReceiverVariable: */
-				object = longAt(((longAt(localFP + FoxReceiver)) + BaseHeaderSize) + 88 /* (currentBytecode bitAnd: 15) << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(268) /*12*/
-			/* pushReceiverVariableBytecode */
-			{
-				sqInt object;
-
-				VM_LABEL(pushReceiverVariableBytecode28);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 268);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushReceiverVariable: */
-				object = longAt(((longAt(localFP + FoxReceiver)) + BaseHeaderSize) + 96 /* (currentBytecode bitAnd: 15) << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(269) /*13*/
-			/* pushReceiverVariableBytecode */
-			{
-				sqInt object;
-
-				VM_LABEL(pushReceiverVariableBytecode29);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 269);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushReceiverVariable: */
-				object = longAt(((longAt(localFP + FoxReceiver)) + BaseHeaderSize) + 104 /* (currentBytecode bitAnd: 15) << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(270) /*14*/
-			/* pushReceiverVariableBytecode */
-			{
-				sqInt object;
-
-				VM_LABEL(pushReceiverVariableBytecode30);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 270);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushReceiverVariable: */
-				object = longAt(((longAt(localFP + FoxReceiver)) + BaseHeaderSize) + 112 /* (currentBytecode bitAnd: 15) << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(271) /*15*/
-			/* pushReceiverVariableBytecode */
-			{
-				sqInt object;
-
-				VM_LABEL(pushReceiverVariableBytecode31);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 271);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushReceiverVariable: */
-				object = longAt(((longAt(localFP + FoxReceiver)) + BaseHeaderSize) + 120 /* (currentBytecode bitAnd: 15) << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(272) /*16*/
-			/* pushLiteralVariable16CasesBytecode */
-			{
-				sqInt litVar;
-				sqInt object;
-
-				VM_LABEL(pushLiteralVariable16CasesBytecode);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 272);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushLiteralVariable: */
-				assert(GIV(method) == (iframeMethod(localFP)));
-				/* begin fetchPointer:ofObject: */
-				litVar = longAt((GIV(method) + BaseHeaderSize) + 8 /* ((currentBytecode bitAnd: 15) + LiteralStart) << self shiftForWord */);
-				if (((longAt(litVar)) & ((classIndexMask()) - (isForwardedObjectClassIndexPun()))) == 0) {
-					litVar = unfollowatIndex(litVar, 0 /* currentBytecode bitAnd: 15 */);
-				}
-				/* begin internalPush: */
-				object = longAt((litVar + BaseHeaderSize) + 8 /* ValueIndex << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(273) /*17*/
-			/* pushLiteralVariable16CasesBytecode */
-			{
-				sqInt litVar;
-				sqInt object;
-
-				VM_LABEL(pushLiteralVariable16CasesBytecode1);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 273);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushLiteralVariable: */
-				assert(GIV(method) == (iframeMethod(localFP)));
-				/* begin fetchPointer:ofObject: */
-				litVar = longAt((GIV(method) + BaseHeaderSize) + 16 /* ((currentBytecode bitAnd: 15) + LiteralStart) << self shiftForWord */);
-				if (((longAt(litVar)) & ((classIndexMask()) - (isForwardedObjectClassIndexPun()))) == 0) {
-					litVar = unfollowatIndex(litVar, 1 /* currentBytecode bitAnd: 15 */);
-				}
-				/* begin internalPush: */
-				object = longAt((litVar + BaseHeaderSize) + 8 /* ValueIndex << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(274) /*18*/
-			/* pushLiteralVariable16CasesBytecode */
-			{
-				sqInt litVar;
-				sqInt object;
-
-				VM_LABEL(pushLiteralVariable16CasesBytecode2);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 274);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushLiteralVariable: */
-				assert(GIV(method) == (iframeMethod(localFP)));
-				/* begin fetchPointer:ofObject: */
-				litVar = longAt((GIV(method) + BaseHeaderSize) + 24 /* ((currentBytecode bitAnd: 15) + LiteralStart) << self shiftForWord */);
-				if (((longAt(litVar)) & ((classIndexMask()) - (isForwardedObjectClassIndexPun()))) == 0) {
-					litVar = unfollowatIndex(litVar, 2 /* currentBytecode bitAnd: 15 */);
-				}
-				/* begin internalPush: */
-				object = longAt((litVar + BaseHeaderSize) + 8 /* ValueIndex << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(275) /*19*/
-			/* pushLiteralVariable16CasesBytecode */
-			{
-				sqInt litVar;
-				sqInt object;
-
-				VM_LABEL(pushLiteralVariable16CasesBytecode3);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 275);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushLiteralVariable: */
-				assert(GIV(method) == (iframeMethod(localFP)));
-				/* begin fetchPointer:ofObject: */
-				litVar = longAt((GIV(method) + BaseHeaderSize) + 32 /* ((currentBytecode bitAnd: 15) + LiteralStart) << self shiftForWord */);
-				if (((longAt(litVar)) & ((classIndexMask()) - (isForwardedObjectClassIndexPun()))) == 0) {
-					litVar = unfollowatIndex(litVar, 3 /* currentBytecode bitAnd: 15 */);
-				}
-				/* begin internalPush: */
-				object = longAt((litVar + BaseHeaderSize) + 8 /* ValueIndex << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(276) /*20*/
-			/* pushLiteralVariable16CasesBytecode */
-			{
-				sqInt litVar;
-				sqInt object;
-
-				VM_LABEL(pushLiteralVariable16CasesBytecode4);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 276);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushLiteralVariable: */
-				assert(GIV(method) == (iframeMethod(localFP)));
-				/* begin fetchPointer:ofObject: */
-				litVar = longAt((GIV(method) + BaseHeaderSize) + 40 /* ((currentBytecode bitAnd: 15) + LiteralStart) << self shiftForWord */);
-				if (((longAt(litVar)) & ((classIndexMask()) - (isForwardedObjectClassIndexPun()))) == 0) {
-					litVar = unfollowatIndex(litVar, 4 /* currentBytecode bitAnd: 15 */);
-				}
-				/* begin internalPush: */
-				object = longAt((litVar + BaseHeaderSize) + 8 /* ValueIndex << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(277) /*21*/
-			/* pushLiteralVariable16CasesBytecode */
-			{
-				sqInt litVar;
-				sqInt object;
-
-				VM_LABEL(pushLiteralVariable16CasesBytecode5);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 277);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushLiteralVariable: */
-				assert(GIV(method) == (iframeMethod(localFP)));
-				/* begin fetchPointer:ofObject: */
-				litVar = longAt((GIV(method) + BaseHeaderSize) + 48 /* ((currentBytecode bitAnd: 15) + LiteralStart) << self shiftForWord */);
-				if (((longAt(litVar)) & ((classIndexMask()) - (isForwardedObjectClassIndexPun()))) == 0) {
-					litVar = unfollowatIndex(litVar, 5 /* currentBytecode bitAnd: 15 */);
-				}
-				/* begin internalPush: */
-				object = longAt((litVar + BaseHeaderSize) + 8 /* ValueIndex << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(278) /*22*/
-			/* pushLiteralVariable16CasesBytecode */
-			{
-				sqInt litVar;
-				sqInt object;
-
-				VM_LABEL(pushLiteralVariable16CasesBytecode6);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 278);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushLiteralVariable: */
-				assert(GIV(method) == (iframeMethod(localFP)));
-				/* begin fetchPointer:ofObject: */
-				litVar = longAt((GIV(method) + BaseHeaderSize) + 56 /* ((currentBytecode bitAnd: 15) + LiteralStart) << self shiftForWord */);
-				if (((longAt(litVar)) & ((classIndexMask()) - (isForwardedObjectClassIndexPun()))) == 0) {
-					litVar = unfollowatIndex(litVar, 6 /* currentBytecode bitAnd: 15 */);
-				}
-				/* begin internalPush: */
-				object = longAt((litVar + BaseHeaderSize) + 8 /* ValueIndex << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(279) /*23*/
-			/* pushLiteralVariable16CasesBytecode */
-			{
-				sqInt litVar;
-				sqInt object;
-
-				VM_LABEL(pushLiteralVariable16CasesBytecode7);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 279);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushLiteralVariable: */
-				assert(GIV(method) == (iframeMethod(localFP)));
-				/* begin fetchPointer:ofObject: */
-				litVar = longAt((GIV(method) + BaseHeaderSize) + 64 /* ((currentBytecode bitAnd: 15) + LiteralStart) << self shiftForWord */);
-				if (((longAt(litVar)) & ((classIndexMask()) - (isForwardedObjectClassIndexPun()))) == 0) {
-					litVar = unfollowatIndex(litVar, 7 /* currentBytecode bitAnd: 15 */);
-				}
-				/* begin internalPush: */
-				object = longAt((litVar + BaseHeaderSize) + 8 /* ValueIndex << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(280) /*24*/
-			/* pushLiteralVariable16CasesBytecode */
-			{
-				sqInt litVar;
-				sqInt object;
-
-				VM_LABEL(pushLiteralVariable16CasesBytecode8);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 280);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushLiteralVariable: */
-				assert(GIV(method) == (iframeMethod(localFP)));
-				/* begin fetchPointer:ofObject: */
-				litVar = longAt((GIV(method) + BaseHeaderSize) + 72 /* ((currentBytecode bitAnd: 15) + LiteralStart) << self shiftForWord */);
-				if (((longAt(litVar)) & ((classIndexMask()) - (isForwardedObjectClassIndexPun()))) == 0) {
-					litVar = unfollowatIndex(litVar, 8 /* currentBytecode bitAnd: 15 */);
-				}
-				/* begin internalPush: */
-				object = longAt((litVar + BaseHeaderSize) + 8 /* ValueIndex << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(281) /*25*/
-			/* pushLiteralVariable16CasesBytecode */
-			{
-				sqInt litVar;
-				sqInt object;
-
-				VM_LABEL(pushLiteralVariable16CasesBytecode9);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 281);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushLiteralVariable: */
-				assert(GIV(method) == (iframeMethod(localFP)));
-				/* begin fetchPointer:ofObject: */
-				litVar = longAt((GIV(method) + BaseHeaderSize) + 80 /* ((currentBytecode bitAnd: 15) + LiteralStart) << self shiftForWord */);
-				if (((longAt(litVar)) & ((classIndexMask()) - (isForwardedObjectClassIndexPun()))) == 0) {
-					litVar = unfollowatIndex(litVar, 9 /* currentBytecode bitAnd: 15 */);
-				}
-				/* begin internalPush: */
-				object = longAt((litVar + BaseHeaderSize) + 8 /* ValueIndex << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(282) /*26*/
-			/* pushLiteralVariable16CasesBytecode */
-			{
-				sqInt litVar;
-				sqInt object;
-
-				VM_LABEL(pushLiteralVariable16CasesBytecode10);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 282);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushLiteralVariable: */
-				assert(GIV(method) == (iframeMethod(localFP)));
-				/* begin fetchPointer:ofObject: */
-				litVar = longAt((GIV(method) + BaseHeaderSize) + 88 /* ((currentBytecode bitAnd: 15) + LiteralStart) << self shiftForWord */);
-				if (((longAt(litVar)) & ((classIndexMask()) - (isForwardedObjectClassIndexPun()))) == 0) {
-					litVar = unfollowatIndex(litVar, 10 /* currentBytecode bitAnd: 15 */);
-				}
-				/* begin internalPush: */
-				object = longAt((litVar + BaseHeaderSize) + 8 /* ValueIndex << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(283) /*27*/
-			/* pushLiteralVariable16CasesBytecode */
-			{
-				sqInt litVar;
-				sqInt object;
-
-				VM_LABEL(pushLiteralVariable16CasesBytecode11);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 283);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushLiteralVariable: */
-				assert(GIV(method) == (iframeMethod(localFP)));
-				/* begin fetchPointer:ofObject: */
-				litVar = longAt((GIV(method) + BaseHeaderSize) + 96 /* ((currentBytecode bitAnd: 15) + LiteralStart) << self shiftForWord */);
-				if (((longAt(litVar)) & ((classIndexMask()) - (isForwardedObjectClassIndexPun()))) == 0) {
-					litVar = unfollowatIndex(litVar, 11 /* currentBytecode bitAnd: 15 */);
-				}
-				/* begin internalPush: */
-				object = longAt((litVar + BaseHeaderSize) + 8 /* ValueIndex << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(284) /*28*/
-			/* pushLiteralVariable16CasesBytecode */
-			{
-				sqInt litVar;
-				sqInt object;
-
-				VM_LABEL(pushLiteralVariable16CasesBytecode12);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 284);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushLiteralVariable: */
-				assert(GIV(method) == (iframeMethod(localFP)));
-				/* begin fetchPointer:ofObject: */
-				litVar = longAt((GIV(method) + BaseHeaderSize) + 104 /* ((currentBytecode bitAnd: 15) + LiteralStart) << self shiftForWord */);
-				if (((longAt(litVar)) & ((classIndexMask()) - (isForwardedObjectClassIndexPun()))) == 0) {
-					litVar = unfollowatIndex(litVar, 12 /* currentBytecode bitAnd: 15 */);
-				}
-				/* begin internalPush: */
-				object = longAt((litVar + BaseHeaderSize) + 8 /* ValueIndex << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(285) /*29*/
-			/* pushLiteralVariable16CasesBytecode */
-			{
-				sqInt litVar;
-				sqInt object;
-
-				VM_LABEL(pushLiteralVariable16CasesBytecode13);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 285);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushLiteralVariable: */
-				assert(GIV(method) == (iframeMethod(localFP)));
-				/* begin fetchPointer:ofObject: */
-				litVar = longAt((GIV(method) + BaseHeaderSize) + 112 /* ((currentBytecode bitAnd: 15) + LiteralStart) << self shiftForWord */);
-				if (((longAt(litVar)) & ((classIndexMask()) - (isForwardedObjectClassIndexPun()))) == 0) {
-					litVar = unfollowatIndex(litVar, 13 /* currentBytecode bitAnd: 15 */);
-				}
-				/* begin internalPush: */
-				object = longAt((litVar + BaseHeaderSize) + 8 /* ValueIndex << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(286) /*30*/
-			/* pushLiteralVariable16CasesBytecode */
-			{
-				sqInt litVar;
-				sqInt object;
-
-				VM_LABEL(pushLiteralVariable16CasesBytecode14);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 286);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushLiteralVariable: */
-				assert(GIV(method) == (iframeMethod(localFP)));
-				/* begin fetchPointer:ofObject: */
-				litVar = longAt((GIV(method) + BaseHeaderSize) + 120 /* ((currentBytecode bitAnd: 15) + LiteralStart) << self shiftForWord */);
-				if (((longAt(litVar)) & ((classIndexMask()) - (isForwardedObjectClassIndexPun()))) == 0) {
-					litVar = unfollowatIndex(litVar, 14 /* currentBytecode bitAnd: 15 */);
-				}
-				/* begin internalPush: */
-				object = longAt((litVar + BaseHeaderSize) + 8 /* ValueIndex << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(287) /*31*/
-			/* pushLiteralVariable16CasesBytecode */
-			{
-				sqInt litVar;
-				sqInt object;
-
-				VM_LABEL(pushLiteralVariable16CasesBytecode15);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 287);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushLiteralVariable: */
-				assert(GIV(method) == (iframeMethod(localFP)));
-				/* begin fetchPointer:ofObject: */
-				litVar = longAt((GIV(method) + BaseHeaderSize) + 128 /* ((currentBytecode bitAnd: 15) + LiteralStart) << self shiftForWord */);
-				if (((longAt(litVar)) & ((classIndexMask()) - (isForwardedObjectClassIndexPun()))) == 0) {
-					litVar = unfollowatIndex(litVar, 15 /* currentBytecode bitAnd: 15 */);
-				}
-				/* begin internalPush: */
-				object = longAt((litVar + BaseHeaderSize) + 8 /* ValueIndex << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(288) /*32*/
-			/* pushLiteralConstantBytecode */
-			{
-				sqInt object;
-
-				VM_LABEL(pushLiteralConstantBytecode32);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 288);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushLiteralConstant: */
-				assert(GIV(method) == (iframeMethod(localFP)));
-				/* begin fetchPointer:ofObject: */
-				object = longAt((GIV(method) + BaseHeaderSize) + 8 /* ((currentBytecode bitAnd: 31) + LiteralStart) << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(289) /*33*/
-			/* pushLiteralConstantBytecode */
-			{
-				sqInt object;
-
-				VM_LABEL(pushLiteralConstantBytecode33);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 289);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushLiteralConstant: */
-				assert(GIV(method) == (iframeMethod(localFP)));
-				/* begin fetchPointer:ofObject: */
-				object = longAt((GIV(method) + BaseHeaderSize) + 16 /* ((currentBytecode bitAnd: 31) + LiteralStart) << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(290) /*34*/
-			/* pushLiteralConstantBytecode */
-			{
-				sqInt object;
-
-				VM_LABEL(pushLiteralConstantBytecode34);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 290);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushLiteralConstant: */
-				assert(GIV(method) == (iframeMethod(localFP)));
-				/* begin fetchPointer:ofObject: */
-				object = longAt((GIV(method) + BaseHeaderSize) + 24 /* ((currentBytecode bitAnd: 31) + LiteralStart) << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(291) /*35*/
-			/* pushLiteralConstantBytecode */
-			{
-				sqInt object;
-
-				VM_LABEL(pushLiteralConstantBytecode35);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 291);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushLiteralConstant: */
-				assert(GIV(method) == (iframeMethod(localFP)));
-				/* begin fetchPointer:ofObject: */
-				object = longAt((GIV(method) + BaseHeaderSize) + 32 /* ((currentBytecode bitAnd: 31) + LiteralStart) << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(292) /*36*/
-			/* pushLiteralConstantBytecode */
-			{
-				sqInt object;
-
-				VM_LABEL(pushLiteralConstantBytecode36);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 292);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushLiteralConstant: */
-				assert(GIV(method) == (iframeMethod(localFP)));
-				/* begin fetchPointer:ofObject: */
-				object = longAt((GIV(method) + BaseHeaderSize) + 40 /* ((currentBytecode bitAnd: 31) + LiteralStart) << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(293) /*37*/
-			/* pushLiteralConstantBytecode */
-			{
-				sqInt object;
-
-				VM_LABEL(pushLiteralConstantBytecode37);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 293);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushLiteralConstant: */
-				assert(GIV(method) == (iframeMethod(localFP)));
-				/* begin fetchPointer:ofObject: */
-				object = longAt((GIV(method) + BaseHeaderSize) + 48 /* ((currentBytecode bitAnd: 31) + LiteralStart) << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(294) /*38*/
-			/* pushLiteralConstantBytecode */
-			{
-				sqInt object;
-
-				VM_LABEL(pushLiteralConstantBytecode38);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 294);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushLiteralConstant: */
-				assert(GIV(method) == (iframeMethod(localFP)));
-				/* begin fetchPointer:ofObject: */
-				object = longAt((GIV(method) + BaseHeaderSize) + 56 /* ((currentBytecode bitAnd: 31) + LiteralStart) << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(295) /*39*/
-			/* pushLiteralConstantBytecode */
-			{
-				sqInt object;
-
-				VM_LABEL(pushLiteralConstantBytecode39);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 295);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushLiteralConstant: */
-				assert(GIV(method) == (iframeMethod(localFP)));
-				/* begin fetchPointer:ofObject: */
-				object = longAt((GIV(method) + BaseHeaderSize) + 64 /* ((currentBytecode bitAnd: 31) + LiteralStart) << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(296) /*40*/
-			/* pushLiteralConstantBytecode */
-			{
-				sqInt object;
-
-				VM_LABEL(pushLiteralConstantBytecode40);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 296);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushLiteralConstant: */
-				assert(GIV(method) == (iframeMethod(localFP)));
-				/* begin fetchPointer:ofObject: */
-				object = longAt((GIV(method) + BaseHeaderSize) + 72 /* ((currentBytecode bitAnd: 31) + LiteralStart) << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(297) /*41*/
-			/* pushLiteralConstantBytecode */
-			{
-				sqInt object;
-
-				VM_LABEL(pushLiteralConstantBytecode41);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 297);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushLiteralConstant: */
-				assert(GIV(method) == (iframeMethod(localFP)));
-				/* begin fetchPointer:ofObject: */
-				object = longAt((GIV(method) + BaseHeaderSize) + 80 /* ((currentBytecode bitAnd: 31) + LiteralStart) << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(298) /*42*/
-			/* pushLiteralConstantBytecode */
-			{
-				sqInt object;
-
-				VM_LABEL(pushLiteralConstantBytecode42);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 298);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushLiteralConstant: */
-				assert(GIV(method) == (iframeMethod(localFP)));
-				/* begin fetchPointer:ofObject: */
-				object = longAt((GIV(method) + BaseHeaderSize) + 88 /* ((currentBytecode bitAnd: 31) + LiteralStart) << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(299) /*43*/
-			/* pushLiteralConstantBytecode */
-			{
-				sqInt object;
-
-				VM_LABEL(pushLiteralConstantBytecode43);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 299);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushLiteralConstant: */
-				assert(GIV(method) == (iframeMethod(localFP)));
-				/* begin fetchPointer:ofObject: */
-				object = longAt((GIV(method) + BaseHeaderSize) + 96 /* ((currentBytecode bitAnd: 31) + LiteralStart) << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(300) /*44*/
-			/* pushLiteralConstantBytecode */
-			{
-				sqInt object;
-
-				VM_LABEL(pushLiteralConstantBytecode44);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 300);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushLiteralConstant: */
-				assert(GIV(method) == (iframeMethod(localFP)));
-				/* begin fetchPointer:ofObject: */
-				object = longAt((GIV(method) + BaseHeaderSize) + 104 /* ((currentBytecode bitAnd: 31) + LiteralStart) << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(301) /*45*/
-			/* pushLiteralConstantBytecode */
-			{
-				sqInt object;
-
-				VM_LABEL(pushLiteralConstantBytecode45);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 301);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushLiteralConstant: */
-				assert(GIV(method) == (iframeMethod(localFP)));
-				/* begin fetchPointer:ofObject: */
-				object = longAt((GIV(method) + BaseHeaderSize) + 112 /* ((currentBytecode bitAnd: 31) + LiteralStart) << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(302) /*46*/
-			/* pushLiteralConstantBytecode */
-			{
-				sqInt object;
-
-				VM_LABEL(pushLiteralConstantBytecode46);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 302);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushLiteralConstant: */
-				assert(GIV(method) == (iframeMethod(localFP)));
-				/* begin fetchPointer:ofObject: */
-				object = longAt((GIV(method) + BaseHeaderSize) + 120 /* ((currentBytecode bitAnd: 31) + LiteralStart) << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(303) /*47*/
-			/* pushLiteralConstantBytecode */
-			{
-				sqInt object;
-
-				VM_LABEL(pushLiteralConstantBytecode47);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 303);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushLiteralConstant: */
-				assert(GIV(method) == (iframeMethod(localFP)));
-				/* begin fetchPointer:ofObject: */
-				object = longAt((GIV(method) + BaseHeaderSize) + 128 /* ((currentBytecode bitAnd: 31) + LiteralStart) << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(304) /*48*/
-			/* pushLiteralConstantBytecode */
-			{
-				sqInt object;
-
-				VM_LABEL(pushLiteralConstantBytecode48);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 304);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushLiteralConstant: */
-				assert(GIV(method) == (iframeMethod(localFP)));
-				/* begin fetchPointer:ofObject: */
-				object = longAt((GIV(method) + BaseHeaderSize) + 136 /* ((currentBytecode bitAnd: 31) + LiteralStart) << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(305) /*49*/
-			/* pushLiteralConstantBytecode */
-			{
-				sqInt object;
-
-				VM_LABEL(pushLiteralConstantBytecode49);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 305);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushLiteralConstant: */
-				assert(GIV(method) == (iframeMethod(localFP)));
-				/* begin fetchPointer:ofObject: */
-				object = longAt((GIV(method) + BaseHeaderSize) + 144 /* ((currentBytecode bitAnd: 31) + LiteralStart) << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(306) /*50*/
-			/* pushLiteralConstantBytecode */
-			{
-				sqInt object;
-
-				VM_LABEL(pushLiteralConstantBytecode50);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 306);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushLiteralConstant: */
-				assert(GIV(method) == (iframeMethod(localFP)));
-				/* begin fetchPointer:ofObject: */
-				object = longAt((GIV(method) + BaseHeaderSize) + 152 /* ((currentBytecode bitAnd: 31) + LiteralStart) << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(307) /*51*/
-			/* pushLiteralConstantBytecode */
-			{
-				sqInt object;
-
-				VM_LABEL(pushLiteralConstantBytecode51);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 307);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushLiteralConstant: */
-				assert(GIV(method) == (iframeMethod(localFP)));
-				/* begin fetchPointer:ofObject: */
-				object = longAt((GIV(method) + BaseHeaderSize) + 160 /* ((currentBytecode bitAnd: 31) + LiteralStart) << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(308) /*52*/
-			/* pushLiteralConstantBytecode */
-			{
-				sqInt object;
-
-				VM_LABEL(pushLiteralConstantBytecode52);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 308);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushLiteralConstant: */
-				assert(GIV(method) == (iframeMethod(localFP)));
-				/* begin fetchPointer:ofObject: */
-				object = longAt((GIV(method) + BaseHeaderSize) + 168 /* ((currentBytecode bitAnd: 31) + LiteralStart) << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(309) /*53*/
-			/* pushLiteralConstantBytecode */
-			{
-				sqInt object;
-
-				VM_LABEL(pushLiteralConstantBytecode53);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 309);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushLiteralConstant: */
-				assert(GIV(method) == (iframeMethod(localFP)));
-				/* begin fetchPointer:ofObject: */
-				object = longAt((GIV(method) + BaseHeaderSize) + 176 /* ((currentBytecode bitAnd: 31) + LiteralStart) << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(310) /*54*/
-			/* pushLiteralConstantBytecode */
-			{
-				sqInt object;
-
-				VM_LABEL(pushLiteralConstantBytecode54);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 310);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushLiteralConstant: */
-				assert(GIV(method) == (iframeMethod(localFP)));
-				/* begin fetchPointer:ofObject: */
-				object = longAt((GIV(method) + BaseHeaderSize) + 184 /* ((currentBytecode bitAnd: 31) + LiteralStart) << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(311) /*55*/
-			/* pushLiteralConstantBytecode */
-			{
-				sqInt object;
-
-				VM_LABEL(pushLiteralConstantBytecode55);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 311);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushLiteralConstant: */
-				assert(GIV(method) == (iframeMethod(localFP)));
-				/* begin fetchPointer:ofObject: */
-				object = longAt((GIV(method) + BaseHeaderSize) + 192 /* ((currentBytecode bitAnd: 31) + LiteralStart) << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(312) /*56*/
-			/* pushLiteralConstantBytecode */
-			{
-				sqInt object;
-
-				VM_LABEL(pushLiteralConstantBytecode56);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 312);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushLiteralConstant: */
-				assert(GIV(method) == (iframeMethod(localFP)));
-				/* begin fetchPointer:ofObject: */
-				object = longAt((GIV(method) + BaseHeaderSize) + 200 /* ((currentBytecode bitAnd: 31) + LiteralStart) << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(313) /*57*/
-			/* pushLiteralConstantBytecode */
-			{
-				sqInt object;
-
-				VM_LABEL(pushLiteralConstantBytecode57);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 313);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushLiteralConstant: */
-				assert(GIV(method) == (iframeMethod(localFP)));
-				/* begin fetchPointer:ofObject: */
-				object = longAt((GIV(method) + BaseHeaderSize) + 208 /* ((currentBytecode bitAnd: 31) + LiteralStart) << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(314) /*58*/
-			/* pushLiteralConstantBytecode */
-			{
-				sqInt object;
-
-				VM_LABEL(pushLiteralConstantBytecode58);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 314);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushLiteralConstant: */
-				assert(GIV(method) == (iframeMethod(localFP)));
-				/* begin fetchPointer:ofObject: */
-				object = longAt((GIV(method) + BaseHeaderSize) + 216 /* ((currentBytecode bitAnd: 31) + LiteralStart) << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(315) /*59*/
-			/* pushLiteralConstantBytecode */
-			{
-				sqInt object;
-
-				VM_LABEL(pushLiteralConstantBytecode59);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 315);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushLiteralConstant: */
-				assert(GIV(method) == (iframeMethod(localFP)));
-				/* begin fetchPointer:ofObject: */
-				object = longAt((GIV(method) + BaseHeaderSize) + 224 /* ((currentBytecode bitAnd: 31) + LiteralStart) << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(316) /*60*/
-			/* pushLiteralConstantBytecode */
-			{
-				sqInt object;
-
-				VM_LABEL(pushLiteralConstantBytecode60);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 316);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushLiteralConstant: */
-				assert(GIV(method) == (iframeMethod(localFP)));
-				/* begin fetchPointer:ofObject: */
-				object = longAt((GIV(method) + BaseHeaderSize) + 232 /* ((currentBytecode bitAnd: 31) + LiteralStart) << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(317) /*61*/
-			/* pushLiteralConstantBytecode */
-			{
-				sqInt object;
-
-				VM_LABEL(pushLiteralConstantBytecode61);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 317);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushLiteralConstant: */
-				assert(GIV(method) == (iframeMethod(localFP)));
-				/* begin fetchPointer:ofObject: */
-				object = longAt((GIV(method) + BaseHeaderSize) + 240 /* ((currentBytecode bitAnd: 31) + LiteralStart) << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(318) /*62*/
-			/* pushLiteralConstantBytecode */
-			{
-				sqInt object;
-
-				VM_LABEL(pushLiteralConstantBytecode62);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 318);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushLiteralConstant: */
-				assert(GIV(method) == (iframeMethod(localFP)));
-				/* begin fetchPointer:ofObject: */
-				object = longAt((GIV(method) + BaseHeaderSize) + 0xF8 /* ((currentBytecode bitAnd: 31) + LiteralStart) << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(319) /*63*/
-			/* pushLiteralConstantBytecode */
-			{
-				sqInt object;
-
-				VM_LABEL(pushLiteralConstantBytecode63);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 319);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushLiteralConstant: */
-				assert(GIV(method) == (iframeMethod(localFP)));
-				/* begin fetchPointer:ofObject: */
-				object = longAt((GIV(method) + BaseHeaderSize) + 256 /* ((currentBytecode bitAnd: 31) + LiteralStart) << self shiftForWord */);
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(320) /*64*/
-			/* pushTemporaryVariableBytecode */
-			{
-				sqInt frameNumArgs;
-				sqInt object;
-
-				VM_LABEL(pushTemporaryVariableBytecode16);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 320);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushTemporaryVariable: */
-				object = (0 /* currentBytecode bitAnd: 15 */ < ((frameNumArgs = byteAt((localFP + FoxFrameFlags) + 1)))
-					? longAt((localFP + FoxCallerSavedIP) + ((frameNumArgs) * BytesPerWord))
-					: longAt(((localFP + FoxReceiver) - BytesPerWord) + ((frameNumArgs) * BytesPerWord)));
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(321) /*65*/
-			/* pushTemporaryVariableBytecode */
-			{
-				sqInt frameNumArgs;
-				sqInt object;
-
-				VM_LABEL(pushTemporaryVariableBytecode17);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 321);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushTemporaryVariable: */
-				object = (1 /* currentBytecode bitAnd: 15 */ < ((frameNumArgs = byteAt((localFP + FoxFrameFlags) + 1)))
-					? longAt((localFP + FoxCallerSavedIP) + ((frameNumArgs - 1 /* currentBytecode bitAnd: 15 */) * BytesPerWord))
-					: longAt(((localFP + FoxReceiver) - BytesPerWord) + ((frameNumArgs - 1 /* currentBytecode bitAnd: 15 */) * BytesPerWord)));
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(322) /*66*/
-			/* pushTemporaryVariableBytecode */
-			{
-				sqInt frameNumArgs;
-				sqInt object;
-
-				VM_LABEL(pushTemporaryVariableBytecode18);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 322);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushTemporaryVariable: */
-				object = (2 /* currentBytecode bitAnd: 15 */ < ((frameNumArgs = byteAt((localFP + FoxFrameFlags) + 1)))
-					? longAt((localFP + FoxCallerSavedIP) + ((frameNumArgs - 2 /* currentBytecode bitAnd: 15 */) * BytesPerWord))
-					: longAt(((localFP + FoxReceiver) - BytesPerWord) + ((frameNumArgs - 2 /* currentBytecode bitAnd: 15 */) * BytesPerWord)));
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(323) /*67*/
-			/* pushTemporaryVariableBytecode */
-			{
-				sqInt frameNumArgs;
-				sqInt object;
-
-				VM_LABEL(pushTemporaryVariableBytecode19);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 323);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushTemporaryVariable: */
-				object = (3 /* currentBytecode bitAnd: 15 */ < ((frameNumArgs = byteAt((localFP + FoxFrameFlags) + 1)))
-					? longAt((localFP + FoxCallerSavedIP) + ((frameNumArgs - 3 /* currentBytecode bitAnd: 15 */) * BytesPerWord))
-					: longAt(((localFP + FoxReceiver) - BytesPerWord) + ((frameNumArgs - 3 /* currentBytecode bitAnd: 15 */) * BytesPerWord)));
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(324) /*68*/
-			/* pushTemporaryVariableBytecode */
-			{
-				sqInt frameNumArgs;
-				sqInt object;
-
-				VM_LABEL(pushTemporaryVariableBytecode20);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 324);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushTemporaryVariable: */
-				object = (4 /* currentBytecode bitAnd: 15 */ < ((frameNumArgs = byteAt((localFP + FoxFrameFlags) + 1)))
-					? longAt((localFP + FoxCallerSavedIP) + ((frameNumArgs - 4 /* currentBytecode bitAnd: 15 */) * BytesPerWord))
-					: longAt(((localFP + FoxReceiver) - BytesPerWord) + ((frameNumArgs - 4 /* currentBytecode bitAnd: 15 */) * BytesPerWord)));
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(325) /*69*/
-			/* pushTemporaryVariableBytecode */
-			{
-				sqInt frameNumArgs;
-				sqInt object;
-
-				VM_LABEL(pushTemporaryVariableBytecode21);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 325);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushTemporaryVariable: */
-				object = (5 /* currentBytecode bitAnd: 15 */ < ((frameNumArgs = byteAt((localFP + FoxFrameFlags) + 1)))
-					? longAt((localFP + FoxCallerSavedIP) + ((frameNumArgs - 5 /* currentBytecode bitAnd: 15 */) * BytesPerWord))
-					: longAt(((localFP + FoxReceiver) - BytesPerWord) + ((frameNumArgs - 5 /* currentBytecode bitAnd: 15 */) * BytesPerWord)));
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(326) /*70*/
-			/* pushTemporaryVariableBytecode */
-			{
-				sqInt frameNumArgs;
-				sqInt object;
-
-				VM_LABEL(pushTemporaryVariableBytecode22);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 326);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushTemporaryVariable: */
-				object = (6 /* currentBytecode bitAnd: 15 */ < ((frameNumArgs = byteAt((localFP + FoxFrameFlags) + 1)))
-					? longAt((localFP + FoxCallerSavedIP) + ((frameNumArgs - 6 /* currentBytecode bitAnd: 15 */) * BytesPerWord))
-					: longAt(((localFP + FoxReceiver) - BytesPerWord) + ((frameNumArgs - 6 /* currentBytecode bitAnd: 15 */) * BytesPerWord)));
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(327) /*71*/
-			/* pushTemporaryVariableBytecode */
-			{
-				sqInt frameNumArgs;
-				sqInt object;
-
-				VM_LABEL(pushTemporaryVariableBytecode23);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 327);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushTemporaryVariable: */
-				object = (7 /* currentBytecode bitAnd: 15 */ < ((frameNumArgs = byteAt((localFP + FoxFrameFlags) + 1)))
-					? longAt((localFP + FoxCallerSavedIP) + ((frameNumArgs - 7 /* currentBytecode bitAnd: 15 */) * BytesPerWord))
-					: longAt(((localFP + FoxReceiver) - BytesPerWord) + ((frameNumArgs - 7 /* currentBytecode bitAnd: 15 */) * BytesPerWord)));
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(328) /*72*/
-			/* pushTemporaryVariableBytecode */
-			{
-				sqInt frameNumArgs;
-				sqInt object;
-
-				VM_LABEL(pushTemporaryVariableBytecode24);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 328);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushTemporaryVariable: */
-				object = (8 /* currentBytecode bitAnd: 15 */ < ((frameNumArgs = byteAt((localFP + FoxFrameFlags) + 1)))
-					? longAt((localFP + FoxCallerSavedIP) + ((frameNumArgs - 8 /* currentBytecode bitAnd: 15 */) * BytesPerWord))
-					: longAt(((localFP + FoxReceiver) - BytesPerWord) + ((frameNumArgs - 8 /* currentBytecode bitAnd: 15 */) * BytesPerWord)));
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(329) /*73*/
-			/* pushTemporaryVariableBytecode */
-			{
-				sqInt frameNumArgs;
-				sqInt object;
-
-				VM_LABEL(pushTemporaryVariableBytecode25);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 329);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushTemporaryVariable: */
-				object = (9 /* currentBytecode bitAnd: 15 */ < ((frameNumArgs = byteAt((localFP + FoxFrameFlags) + 1)))
-					? longAt((localFP + FoxCallerSavedIP) + ((frameNumArgs - 9 /* currentBytecode bitAnd: 15 */) * BytesPerWord))
-					: longAt(((localFP + FoxReceiver) - BytesPerWord) + ((frameNumArgs - 9 /* currentBytecode bitAnd: 15 */) * BytesPerWord)));
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(330) /*74*/
-			/* pushTemporaryVariableBytecode */
-			{
-				sqInt frameNumArgs;
-				sqInt object;
-
-				VM_LABEL(pushTemporaryVariableBytecode26);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 330);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushTemporaryVariable: */
-				object = (10 /* currentBytecode bitAnd: 15 */ < ((frameNumArgs = byteAt((localFP + FoxFrameFlags) + 1)))
-					? longAt((localFP + FoxCallerSavedIP) + ((frameNumArgs - 10 /* currentBytecode bitAnd: 15 */) * BytesPerWord))
-					: longAt(((localFP + FoxReceiver) - BytesPerWord) + ((frameNumArgs - 10 /* currentBytecode bitAnd: 15 */) * BytesPerWord)));
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
-		CASE(331) /*75*/
-			/* pushTemporaryVariableBytecode */
-			{
-				sqInt frameNumArgs;
-				sqInt object;
-
-				VM_LABEL(pushTemporaryVariableBytecode27);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 331);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin pushTemporaryVariable: */
-				object = (11 /* currentBytecode bitAnd: 15 */ < ((frameNumArgs = byteAt((localFP + FoxFrameFlags) + 1)))
-					? longAt((localFP + FoxCallerSavedIP) + ((frameNumArgs - 11 /* currentBytecode bitAnd: 15 */) * BytesPerWord))
-					: longAt(((localFP + FoxReceiver) - BytesPerWord) + ((frameNumArgs - 11 /* currentBytecode bitAnd: 15 */) * BytesPerWord)));
-				longAtPointerput((localSP -= BytesPerOop), object);
-			}
-			BREAK;
 		CASE(338) /*82*/
 			/* extPushPseudoVariable */
 			{
@@ -13262,15 +9913,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 
 				}
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin internalPush: */
 				longAtPointerput((localSP -= BytesPerOop), theThingToPush);
@@ -13331,15 +9973,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 			{
 				VM_LABEL(extNopBytecode);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				numExtB = (extA = (extB = 0));
 			}
@@ -13376,15 +10009,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 						/* begin internalPop:thenPush: */
 						longAtPointerput((localSP += (2 - 1) * BytesPerOop), (((usqInt)result << 3) | 1));
 						/* begin fetchNextBytecode */
-						if (GIV(isStepable)) {
-							printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-							/* begin externalizeIPandSP */
-							GIV(instructionPointer) = oopForPointer(localIP);
-							GIV(stackPointer) = localSP;
-							GIV(framePointer) = localFP;
-							printCallStack();
-							lockFetchNextBytecode();
-						}
 						currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 						goto l457;
 					}
@@ -13483,15 +10107,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 					localFP = pointerForOop(GIV(framePointer));
 					if (!GIV(primFailCode)) {
 						/* begin fetchNextBytecode */
-						if (GIV(isStepable)) {
-							printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-							/* begin externalizeIPandSP */
-							GIV(instructionPointer) = oopForPointer(localIP);
-							GIV(stackPointer) = localSP;
-							GIV(framePointer) = localFP;
-							printCallStack();
-							lockFetchNextBytecode();
-						}
 						currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 						goto l457;
 					}
@@ -13536,15 +10151,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 						/* begin internalPop:thenPush: */
 						longAtPointerput((localSP += (2 - 1) * BytesPerOop), (((usqInt)result << 3) | 1));
 						/* begin fetchNextBytecode */
-						if (GIV(isStepable)) {
-							printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-							/* begin externalizeIPandSP */
-							GIV(instructionPointer) = oopForPointer(localIP);
-							GIV(stackPointer) = localSP;
-							GIV(framePointer) = localFP;
-							printCallStack();
-							lockFetchNextBytecode();
-						}
 						currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 						goto l468;
 					}
@@ -13643,15 +10249,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 					localFP = pointerForOop(GIV(framePointer));
 					if (!GIV(primFailCode)) {
 						/* begin fetchNextBytecode */
-						if (GIV(isStepable)) {
-							printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-							/* begin externalizeIPandSP */
-							GIV(instructionPointer) = oopForPointer(localIP);
-							GIV(stackPointer) = localSP;
-							GIV(framePointer) = localFP;
-							printCallStack();
-							lockFetchNextBytecode();
-						}
 						currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 						goto l468;
 					}
@@ -13816,15 +10413,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 
 						/* short jumpIfFalse 192 - 199 */
 						/* begin fetchNextBytecode */
-						if (GIV(isStepable)) {
-							printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-							/* begin externalizeIPandSP */
-							GIV(instructionPointer) = oopForPointer(localIP);
-							GIV(stackPointer) = localSP;
-							GIV(framePointer) = localFP;
-							printCallStack();
-							lockFetchNextBytecode();
-						}
 						currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 						goto l948;
 					}
@@ -13833,15 +10421,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 						/* long jumpIfFalse */
 						byteAtPointer(++localIP);
 						/* begin fetchNextBytecode */
-						if (GIV(isStepable)) {
-							printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-							/* begin externalizeIPandSP */
-							GIV(instructionPointer) = oopForPointer(localIP);
-							GIV(stackPointer) = localSP;
-							GIV(framePointer) = localFP;
-							printCallStack();
-							lockFetchNextBytecode();
-						}
 						currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 						goto l948;
 					}
@@ -14636,15 +11215,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 						/* begin internalPop:thenPush: */
 						longAtPointerput((localSP += (2 - 1) * BytesPerOop), oop);
 						/* begin fetchNextBytecode */
-						if (GIV(isStepable)) {
-							printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-							/* begin externalizeIPandSP */
-							GIV(instructionPointer) = oopForPointer(localIP);
-							GIV(stackPointer) = localSP;
-							GIV(framePointer) = localFP;
-							printCallStack();
-							lockFetchNextBytecode();
-						}
 						currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 						goto l539;
 					}
@@ -14743,15 +11313,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 					localFP = pointerForOop(GIV(framePointer));
 					if (!GIV(primFailCode)) {
 						/* begin fetchNextBytecode */
-						if (GIV(isStepable)) {
-							printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-							/* begin externalizeIPandSP */
-							GIV(instructionPointer) = oopForPointer(localIP);
-							GIV(stackPointer) = localSP;
-							GIV(framePointer) = localFP;
-							printCallStack();
-							lockFetchNextBytecode();
-						}
 						currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 						goto l539;
 					}
@@ -14802,15 +11363,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 							/* begin internalPop:thenPush: */
 							longAtPointerput((localSP += (2 - 1) * BytesPerOop), (((usqInt)result << 3) | 1));
 							/* begin fetchNextBytecode */
-							if (GIV(isStepable)) {
-								printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-								/* begin externalizeIPandSP */
-								GIV(instructionPointer) = oopForPointer(localIP);
-								GIV(stackPointer) = localSP;
-								GIV(framePointer) = localFP;
-								printCallStack();
-								lockFetchNextBytecode();
-							}
 							currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 							goto l550;
 						}
@@ -14918,15 +11470,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 					localFP = pointerForOop(GIV(framePointer));
 					if (!GIV(primFailCode)) {
 						/* begin fetchNextBytecode */
-						if (GIV(isStepable)) {
-							printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-							/* begin externalizeIPandSP */
-							GIV(instructionPointer) = oopForPointer(localIP);
-							GIV(stackPointer) = localSP;
-							GIV(framePointer) = localFP;
-							printCallStack();
-							lockFetchNextBytecode();
-						}
 						currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 						goto l550;
 					}
@@ -14953,15 +11496,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 					/* begin internalPop:thenPush: */
 					longAtPointerput((localSP += (2 - 1) * BytesPerOop), (((usqInt)mod << 3) | 1));
 					/* begin fetchNextBytecode */
-					if (GIV(isStepable)) {
-						printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-						/* begin externalizeIPandSP */
-						GIV(instructionPointer) = oopForPointer(localIP);
-						GIV(stackPointer) = localSP;
-						GIV(framePointer) = localFP;
-						printCallStack();
-						lockFetchNextBytecode();
-					}
 					currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 					goto l561;
 				}
@@ -15043,15 +11577,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 					/* begin internalPop:thenPush: */
 					longAtPointerput((localSP += (2 - 1) * BytesPerOop), pt);
 					/* begin fetchNextBytecode */
-					if (GIV(isStepable)) {
-						printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-						/* begin externalizeIPandSP */
-						GIV(instructionPointer) = oopForPointer(localIP);
-						GIV(stackPointer) = localSP;
-						GIV(framePointer) = localFP;
-						printCallStack();
-						lockFetchNextBytecode();
-					}
 					currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 					goto l565;
 				}
@@ -15136,15 +11661,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 				localFP = pointerForOop(GIV(framePointer));
 				if (!GIV(primFailCode)) {
 					/* begin fetchNextBytecode */
-					if (GIV(isStepable)) {
-						printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-						/* begin externalizeIPandSP */
-						GIV(instructionPointer) = oopForPointer(localIP);
-						GIV(stackPointer) = localSP;
-						GIV(framePointer) = localFP;
-						printCallStack();
-						lockFetchNextBytecode();
-					}
 					currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 					goto l574;
 				}
@@ -15170,15 +11686,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 					/* begin internalPop:thenPush: */
 					longAtPointerput((localSP += (2 - 1) * BytesPerOop), (((usqInt)quotient << 3) | 1));
 					/* begin fetchNextBytecode */
-					if (GIV(isStepable)) {
-						printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-						/* begin externalizeIPandSP */
-						GIV(instructionPointer) = oopForPointer(localIP);
-						GIV(stackPointer) = localSP;
-						GIV(framePointer) = localFP;
-						printCallStack();
-						lockFetchNextBytecode();
-					}
 					currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 					goto l580;
 				}
@@ -15205,15 +11712,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 					/* begin internalPop:thenPush: */
 					longAtPointerput((localSP += (2 - 1) * BytesPerOop), arg & rcvr);
 					/* begin fetchNextBytecode */
-					if (GIV(isStepable)) {
-						printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-						/* begin externalizeIPandSP */
-						GIV(instructionPointer) = oopForPointer(localIP);
-						GIV(stackPointer) = localSP;
-						GIV(framePointer) = localFP;
-						printCallStack();
-						lockFetchNextBytecode();
-					}
 					currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 					goto l584;
 				}
@@ -15230,15 +11728,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 				localFP = pointerForOop(GIV(framePointer));
 				if (!GIV(primFailCode)) {
 					/* begin fetchNextBytecode */
-					if (GIV(isStepable)) {
-						printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-						/* begin externalizeIPandSP */
-						GIV(instructionPointer) = oopForPointer(localIP);
-						GIV(stackPointer) = localSP;
-						GIV(framePointer) = localFP;
-						printCallStack();
-						lockFetchNextBytecode();
-					}
 					currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 					goto l584;
 				}
@@ -15265,15 +11754,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 					/* begin internalPop:thenPush: */
 					longAtPointerput((localSP += (2 - 1) * BytesPerOop), arg | rcvr);
 					/* begin fetchNextBytecode */
-					if (GIV(isStepable)) {
-						printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-						/* begin externalizeIPandSP */
-						GIV(instructionPointer) = oopForPointer(localIP);
-						GIV(stackPointer) = localSP;
-						GIV(framePointer) = localFP;
-						printCallStack();
-						lockFetchNextBytecode();
-					}
 					currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 					goto l589;
 				}
@@ -15290,15 +11770,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 				localFP = pointerForOop(GIV(framePointer));
 				if (!GIV(primFailCode)) {
 					/* begin fetchNextBytecode */
-					if (GIV(isStepable)) {
-						printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-						/* begin externalizeIPandSP */
-						GIV(instructionPointer) = oopForPointer(localIP);
-						GIV(stackPointer) = localSP;
-						GIV(framePointer) = localFP;
-						printCallStack();
-						lockFetchNextBytecode();
-					}
 					currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 					goto l589;
 				}
@@ -15373,7 +11844,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 								if (!GIV(primFailCode)) {
 									GIV(primFailCode) = 1;
 								}
-								goto l597;
+								goto l609;
 							}
 							if ((fmt == (indexablePointersFormat()))
 							 && ((hdr & (classIndexMask())) == ClassMethodContextCompactIndex)) {
@@ -15381,7 +11852,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 								/* Contexts must not be put in the atCache, since their size is not constant */
 								/* begin primitiveFailFor: */
 								GIV(primFailCode) = PrimErrBadReceiver;
-								goto l597;
+								goto l609;
 							}
 							/* begin lengthOf:format: */
 							numSlots11 = byteAt(rcvr + 7);
@@ -15431,7 +11902,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 							GIV(atCache)[atIx + AtCacheFmt] = fmt;
 							GIV(atCache)[atIx + AtCacheFixedFields] = fixedFields;
 							GIV(atCache)[atIx + AtCacheSize] = (totalLength - fixedFields);
-	l597:	/* end install:inAtCache:at:string: */;
+	l609:	/* end install:inAtCache:at:string: */;
 						}
 						else {
 							if (GIV(primitiveFunctionPointer) == primitiveStringAt) {
@@ -15447,7 +11918,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 									if (!GIV(primFailCode)) {
 										GIV(primFailCode) = 1;
 									}
-									goto l617;
+									goto l607;
 								}
 								
 								/* special flag for strings */
@@ -15458,35 +11929,35 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 									: numSlots12);
 								if (fmt1 <= 5 /* ephemeronFormat */) {
 									totalLength1 = numSlots3;
-									goto l609;
+									goto l620;
 								}
 								if (fmt1 >= (firstByteFormat())) {
 
 									/* bytes, including CompiledMethod */
 									totalLength1 = (numSlots3 << (shiftForWord())) - (fmt1 & 7);
-									goto l609;
+									goto l620;
 								}
 								if (fmt1 >= (firstShortFormat())) {
 									totalLength1 = (numSlots3 << ((shiftForWord()) - 1)) - (fmt1 & 3);
-									goto l609;
+									goto l620;
 								}
 								if (fmt1 >= (firstLongFormat())) {
 									totalLength1 = (numSlots3 << ((shiftForWord()) - 2)) - (fmt1 & 1);
-									goto l609;
+									goto l620;
 								}
 								if (fmt1 == (sixtyFourBitIndexableFormat())) {
 									totalLength1 = numSlots3;
-									goto l609;
+									goto l620;
 								}
 								totalLength1 = 0;
-	l609:	/* end lengthOf:format: */;
+	l620:	/* end lengthOf:format: */;
 								fixedFields1 = 0;
 								fmt1 += 32 /* firstStringyFakeFormat */;
 								GIV(atCache)[atIx + AtCacheOop] = rcvr;
 								GIV(atCache)[atIx + AtCacheFmt] = fmt1;
 								GIV(atCache)[atIx + AtCacheFixedFields] = fixedFields1;
 								GIV(atCache)[atIx + AtCacheSize] = (totalLength1 - fixedFields1);
-	l617:	/* end install:inAtCache:at:string: */;
+	l607:	/* end install:inAtCache:at:string: */;
 							}
 							else {
 								GIV(argumentCount) = 1;
@@ -15565,15 +12036,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 					}
 					if (!GIV(primFailCode)) {
 						/* begin fetchNextBytecode */
-						if (GIV(isStepable)) {
-							printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-							/* begin externalizeIPandSP */
-							GIV(instructionPointer) = oopForPointer(localIP);
-							GIV(stackPointer) = localSP;
-							GIV(framePointer) = localFP;
-							printCallStack();
-							lockFetchNextBytecode();
-						}
 						currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 						/* begin internalPop:thenPush: */
 						longAtPointerput((localSP += (2 - 1) * BytesPerOop), result);
@@ -15665,7 +12127,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 								if (!GIV(primFailCode)) {
 									GIV(primFailCode) = 1;
 								}
-								goto l660;
+								goto l662;
 							}
 							if ((fmt == (indexablePointersFormat()))
 							 && ((hdr & (classIndexMask())) == ClassMethodContextCompactIndex)) {
@@ -15673,7 +12135,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 								/* Contexts must not be put in the atCache, since their size is not constant */
 								/* begin primitiveFailFor: */
 								GIV(primFailCode) = PrimErrBadReceiver;
-								goto l660;
+								goto l662;
 							}
 							/* begin lengthOf:format: */
 							numSlots11 = byteAt(rcvr + 7);
@@ -15682,28 +12144,28 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 								: numSlots11);
 							if (fmt <= 5 /* ephemeronFormat */) {
 								totalLength = numSlots2;
-								goto l632;
+								goto l660;
 							}
 							if (fmt >= (firstByteFormat())) {
 
 								/* bytes, including CompiledMethod */
 								totalLength = (numSlots2 << (shiftForWord())) - (fmt & 7);
-								goto l632;
+								goto l660;
 							}
 							if (fmt >= (firstShortFormat())) {
 								totalLength = (numSlots2 << ((shiftForWord()) - 1)) - (fmt & 3);
-								goto l632;
+								goto l660;
 							}
 							if (fmt >= (firstLongFormat())) {
 								totalLength = (numSlots2 << ((shiftForWord()) - 2)) - (fmt & 1);
-								goto l632;
+								goto l660;
 							}
 							if (fmt == (sixtyFourBitIndexableFormat())) {
 								totalLength = numSlots2;
-								goto l632;
+								goto l660;
 							}
 							totalLength = 0;
-	l632:	/* end lengthOf:format: */;
+	l660:	/* end lengthOf:format: */;
 							/* begin fixedFieldsOf:format:length: */
 							if ((fmt >= (sixtyFourBitIndexableFormat()))
 							 || (fmt == 2 /* arrayFormat */)) {
@@ -15723,7 +12185,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 							GIV(atCache)[atIx + AtCacheFmt] = fmt;
 							GIV(atCache)[atIx + AtCacheFixedFields] = fixedFields;
 							GIV(atCache)[atIx + AtCacheSize] = (totalLength - fixedFields);
-	l660:	/* end install:inAtCache:at:string: */;
+	l662:	/* end install:inAtCache:at:string: */;
 						}
 						else {
 							if (GIV(primitiveFunctionPointer) == primitiveStringAtPut) {
@@ -15739,7 +12201,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 									if (!GIV(primFailCode)) {
 										GIV(primFailCode) = 1;
 									}
-									goto l649;
+									goto l651;
 								}
 								
 								/* special flag for strings */
@@ -15750,35 +12212,35 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 									: numSlots12);
 								if (fmt1 <= 5 /* ephemeronFormat */) {
 									totalLength1 = numSlots3;
-									goto l662;
+									goto l628;
 								}
 								if (fmt1 >= (firstByteFormat())) {
 
 									/* bytes, including CompiledMethod */
 									totalLength1 = (numSlots3 << (shiftForWord())) - (fmt1 & 7);
-									goto l662;
+									goto l628;
 								}
 								if (fmt1 >= (firstShortFormat())) {
 									totalLength1 = (numSlots3 << ((shiftForWord()) - 1)) - (fmt1 & 3);
-									goto l662;
+									goto l628;
 								}
 								if (fmt1 >= (firstLongFormat())) {
 									totalLength1 = (numSlots3 << ((shiftForWord()) - 2)) - (fmt1 & 1);
-									goto l662;
+									goto l628;
 								}
 								if (fmt1 == (sixtyFourBitIndexableFormat())) {
 									totalLength1 = numSlots3;
-									goto l662;
+									goto l628;
 								}
 								totalLength1 = 0;
-	l662:	/* end lengthOf:format: */;
+	l628:	/* end lengthOf:format: */;
 								fixedFields1 = 0;
 								fmt1 += 32 /* firstStringyFakeFormat */;
 								GIV(atCache)[atIx + AtCacheOop] = rcvr;
 								GIV(atCache)[atIx + AtCacheFmt] = fmt1;
 								GIV(atCache)[atIx + AtCacheFixedFields] = fixedFields1;
 								GIV(atCache)[atIx + AtCacheSize] = (totalLength1 - fixedFields1);
-	l649:	/* end install:inAtCache:at:string: */;
+	l651:	/* end install:inAtCache:at:string: */;
 							}
 							else {
 								GIV(argumentCount) = 2;
@@ -15913,15 +12375,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 					}
 					if (!GIV(primFailCode)) {
 						/* begin fetchNextBytecode */
-						if (GIV(isStepable)) {
-							printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-							/* begin externalizeIPandSP */
-							GIV(instructionPointer) = oopForPointer(localIP);
-							GIV(stackPointer) = localSP;
-							GIV(framePointer) = localFP;
-							printCallStack();
-							lockFetchNextBytecode();
-						}
 						currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 						/* begin internalPop:thenPush: */
 						longAtPointerput((localSP += (3 - 1) * BytesPerOop), value);
@@ -15968,15 +12421,15 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 				classOop = longAt((GIV(specialObjectsOop) + BaseHeaderSize) + (((sqInt)((usqInt)(ClassByteString) << (shiftForWord())))));
 				if (rcvr & (tagMask())) {
 					isString = 0;
-					goto l669;
+					goto l670;
 				}
 				/* begin isClassOfNonImm:equalTo:compactClassIndex: */
 				assert(!(isImmediate(rcvr)));
 				/* begin classIndexOf: */
 				ccIndex = (longAt(rcvr)) & (classIndexMask());
 				isString = ClassByteStringCompactIndex == ccIndex;
-				goto l669;
-	l669:	/* end is:instanceOf:compactClassIndex: */;
+				goto l670;
+	l670:	/* end is:instanceOf:compactClassIndex: */;
 				if (isString) {
 					/* begin lengthOf:format: */
 					fmt = (((usqInt) (longAt(rcvr))) >> (formatShift())) & (formatMask());
@@ -16011,15 +12464,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 	l672:	/* end lengthOf:format: */;
 					longAtPointerput(localSP, (((usqInt)sz << 3) | 1));
 					/* begin fetchNextBytecode */
-					if (GIV(isStepable)) {
-						printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-						/* begin externalizeIPandSP */
-						GIV(instructionPointer) = oopForPointer(localIP);
-						GIV(stackPointer) = localSP;
-						GIV(framePointer) = localFP;
-						printCallStack();
-						lockFetchNextBytecode();
-					}
 					currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 					goto l666;
 				}
@@ -16027,15 +12471,15 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 				classOop1 = longAt((GIV(specialObjectsOop) + BaseHeaderSize) + (((sqInt)((usqInt)(ClassArray) << (shiftForWord())))));
 				if (rcvr & (tagMask())) {
 					isArray = 0;
-					goto l670;
+					goto l667;
 				}
 				/* begin isClassOfNonImm:equalTo:compactClassIndex: */
 				assert(!(isImmediate(rcvr)));
 				/* begin classIndexOf: */
 				ccIndex1 = (longAt(rcvr)) & (classIndexMask());
 				isArray = ClassArrayCompactIndex == ccIndex1;
-				goto l670;
-	l670:	/* end is:instanceOf:compactClassIndex: */;
+				goto l667;
+	l667:	/* end is:instanceOf:compactClassIndex: */;
 				if (isArray) {
 					/* begin lengthOf:format: */
 					fmt1 = (((usqInt) (longAt(rcvr))) >> (formatShift())) & (formatMask());
@@ -16046,39 +12490,30 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 						: numSlots11);
 					if (fmt1 <= 5 /* ephemeronFormat */) {
 						sz = numSlots2;
-						goto l675;
+						goto l671;
 					}
 					if (fmt1 >= (firstByteFormat())) {
 
 						/* bytes, including CompiledMethod */
 						sz = (numSlots2 << (shiftForWord())) - (fmt1 & 7);
-						goto l675;
+						goto l671;
 					}
 					if (fmt1 >= (firstShortFormat())) {
 						sz = (numSlots2 << ((shiftForWord()) - 1)) - (fmt1 & 3);
-						goto l675;
+						goto l671;
 					}
 					if (fmt1 >= (firstLongFormat())) {
 						sz = (numSlots2 << ((shiftForWord()) - 2)) - (fmt1 & 1);
-						goto l675;
+						goto l671;
 					}
 					if (fmt1 == (sixtyFourBitIndexableFormat())) {
 						sz = numSlots2;
-						goto l675;
+						goto l671;
 					}
 					sz = 0;
-	l675:	/* end lengthOf:format: */;
+	l671:	/* end lengthOf:format: */;
 					longAtPointerput(localSP, (((usqInt)sz << 3) | 1));
 					/* begin fetchNextBytecode */
-					if (GIV(isStepable)) {
-						printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-						/* begin externalizeIPandSP */
-						GIV(instructionPointer) = oopForPointer(localIP);
-						GIV(stackPointer) = localSP;
-						GIV(framePointer) = localFP;
-						printCallStack();
-						lockFetchNextBytecode();
-					}
 					currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 					goto l666;
 				}
@@ -16158,15 +12593,15 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 				classOop = longAt((GIV(specialObjectsOop) + BaseHeaderSize) + (((sqInt)((usqInt)(ClassBlockClosure) << (shiftForWord())))));
 				if (rcvr & (tagMask())) {
 					isBlock = 0;
-					goto l689;
+					goto l691;
 				}
 				/* begin isClassOfNonImm:equalTo:compactClassIndex: */
 				assert(!(isImmediate(rcvr)));
 				/* begin classIndexOf: */
 				ccIndex = (longAt(rcvr)) & (classIndexMask());
 				isBlock = ClassBlockClosureCompactIndex == ccIndex;
-				goto l689;
-	l689:	/* end is:instanceOf:compactClassIndex: */;
+				goto l691;
+	l691:	/* end is:instanceOf:compactClassIndex: */;
 				if (isBlock) {
 					/* begin externalizeIPandSP */
 					GIV(instructionPointer) = oopForPointer(localIP);
@@ -16181,15 +12616,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 					localFP = pointerForOop(GIV(framePointer));
 					if (!GIV(primFailCode)) {
 						/* begin fetchNextBytecode */
-						if (GIV(isStepable)) {
-							printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-							/* begin externalizeIPandSP */
-							GIV(instructionPointer) = oopForPointer(localIP);
-							GIV(stackPointer) = localSP;
-							GIV(framePointer) = localFP;
-							printCallStack();
-							lockFetchNextBytecode();
-						}
 						currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 						goto l687;
 					}
@@ -16218,15 +12644,15 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 				classOop = longAt((GIV(specialObjectsOop) + BaseHeaderSize) + (((sqInt)((usqInt)(ClassBlockClosure) << (shiftForWord())))));
 				if (rcvr & (tagMask())) {
 					isBlock = 0;
-					goto l695;
+					goto l697;
 				}
 				/* begin isClassOfNonImm:equalTo:compactClassIndex: */
 				assert(!(isImmediate(rcvr)));
 				/* begin classIndexOf: */
 				ccIndex = (longAt(rcvr)) & (classIndexMask());
 				isBlock = ClassBlockClosureCompactIndex == ccIndex;
-				goto l695;
-	l695:	/* end is:instanceOf:compactClassIndex: */;
+				goto l697;
+	l697:	/* end is:instanceOf:compactClassIndex: */;
 				if (isBlock) {
 					/* begin externalizeIPandSP */
 					GIV(instructionPointer) = oopForPointer(localIP);
@@ -16241,15 +12667,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 					localFP = pointerForOop(GIV(framePointer));
 					if (!GIV(primFailCode)) {
 						/* begin fetchNextBytecode */
-						if (GIV(isStepable)) {
-							printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-							/* begin externalizeIPandSP */
-							GIV(instructionPointer) = oopForPointer(localIP);
-							GIV(stackPointer) = localSP;
-							GIV(framePointer) = localFP;
-							printCallStack();
-							lockFetchNextBytecode();
-						}
 						currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 						goto l693;
 					}
@@ -16295,15 +12712,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 					/* begin internalStackTopPut: */
 					longAtPointerput(localSP, longAt((rcvr + BaseHeaderSize) + (((sqInt)((usqInt)(XIndex) << (shiftForWord()))))));
 					/* begin fetchNextBytecode */
-					if (GIV(isStepable)) {
-						printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-						/* begin externalizeIPandSP */
-						GIV(instructionPointer) = oopForPointer(localIP);
-						GIV(stackPointer) = localSP;
-						GIV(framePointer) = localFP;
-						printCallStack();
-						lockFetchNextBytecode();
-					}
 					currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 					goto l705;
 				}
@@ -16349,15 +12757,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 					/* begin internalStackTopPut: */
 					longAtPointerput(localSP, longAt((rcvr + BaseHeaderSize) + (((sqInt)((usqInt)(YIndex) << (shiftForWord()))))));
 					/* begin fetchNextBytecode */
-					if (GIV(isStepable)) {
-						printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-						/* begin externalizeIPandSP */
-						GIV(instructionPointer) = oopForPointer(localIP);
-						GIV(stackPointer) = localSP;
-						GIV(framePointer) = localFP;
-						printCallStack();
-						lockFetchNextBytecode();
-					}
 					currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 					goto l713;
 				}
@@ -16407,15 +12806,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 						goto l729;
 					}
 					/* begin fetchNextBytecode */
-					if (GIV(isStepable)) {
-						printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-						/* begin externalizeIPandSP */
-						GIV(instructionPointer) = oopForPointer(localIP);
-						GIV(stackPointer) = localSP;
-						GIV(framePointer) = localFP;
-						printCallStack();
-						lockFetchNextBytecode();
-					}
 					currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				}
 				/* begin internalPop: */
@@ -16460,15 +12850,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 						goto l733;
 					}
 					/* begin fetchNextBytecode */
-					if (GIV(isStepable)) {
-						printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-						/* begin externalizeIPandSP */
-						GIV(instructionPointer) = oopForPointer(localIP);
-						GIV(stackPointer) = localSP;
-						GIV(framePointer) = localFP;
-						printCallStack();
-						lockFetchNextBytecode();
-					}
 					currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				}
 				/* begin internalPop: */
@@ -16534,240 +12915,7 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 				longAtput((rcvr + BaseHeaderSize) + (((sqInt)((usqInt)(instVarIndex) << (shiftForWord())))), top);
 	l737:	/* end storePointerImmutabilityCheck:ofObject:withValue: */;
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-			}
-			BREAK;
-		CASE(464) /*208*/
-			/* storeAndPopTemporaryVariableBytecode */
-			{
-				sqInt frameNumArgs;
-
-				VM_LABEL(storeAndPopTemporaryVariableBytecode8);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 464);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin temporary:in:put: */
-				if (0 /* currentBytecode bitAnd: 7 */ < ((frameNumArgs = byteAt((localFP + FoxFrameFlags) + 1)))) {
-					longAtput((localFP + FoxCallerSavedIP) + ((frameNumArgs) * BytesPerWord), longAtPointer(localSP));
-				}
-				else {
-					longAtput(((localFP + FoxReceiver) - BytesPerWord) + ((frameNumArgs) * BytesPerWord), longAtPointer(localSP));
-				}
-				/* begin internalPop: */
-				localSP += 1 * BytesPerOop;
-			}
-			BREAK;
-		CASE(465) /*209*/
-			/* storeAndPopTemporaryVariableBytecode */
-			{
-				sqInt frameNumArgs;
-
-				VM_LABEL(storeAndPopTemporaryVariableBytecode9);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 465);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin temporary:in:put: */
-				if (1 /* currentBytecode bitAnd: 7 */ < ((frameNumArgs = byteAt((localFP + FoxFrameFlags) + 1)))) {
-					longAtput((localFP + FoxCallerSavedIP) + ((frameNumArgs - 1 /* currentBytecode bitAnd: 7 */) * BytesPerWord), longAtPointer(localSP));
-				}
-				else {
-					longAtput(((localFP + FoxReceiver) - BytesPerWord) + ((frameNumArgs - 1 /* currentBytecode bitAnd: 7 */) * BytesPerWord), longAtPointer(localSP));
-				}
-				/* begin internalPop: */
-				localSP += 1 * BytesPerOop;
-			}
-			BREAK;
-		CASE(466) /*210*/
-			/* storeAndPopTemporaryVariableBytecode */
-			{
-				sqInt frameNumArgs;
-
-				VM_LABEL(storeAndPopTemporaryVariableBytecode10);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 466);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin temporary:in:put: */
-				if (2 /* currentBytecode bitAnd: 7 */ < ((frameNumArgs = byteAt((localFP + FoxFrameFlags) + 1)))) {
-					longAtput((localFP + FoxCallerSavedIP) + ((frameNumArgs - 2 /* currentBytecode bitAnd: 7 */) * BytesPerWord), longAtPointer(localSP));
-				}
-				else {
-					longAtput(((localFP + FoxReceiver) - BytesPerWord) + ((frameNumArgs - 2 /* currentBytecode bitAnd: 7 */) * BytesPerWord), longAtPointer(localSP));
-				}
-				/* begin internalPop: */
-				localSP += 1 * BytesPerOop;
-			}
-			BREAK;
-		CASE(467) /*211*/
-			/* storeAndPopTemporaryVariableBytecode */
-			{
-				sqInt frameNumArgs;
-
-				VM_LABEL(storeAndPopTemporaryVariableBytecode11);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 467);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin temporary:in:put: */
-				if (3 /* currentBytecode bitAnd: 7 */ < ((frameNumArgs = byteAt((localFP + FoxFrameFlags) + 1)))) {
-					longAtput((localFP + FoxCallerSavedIP) + ((frameNumArgs - 3 /* currentBytecode bitAnd: 7 */) * BytesPerWord), longAtPointer(localSP));
-				}
-				else {
-					longAtput(((localFP + FoxReceiver) - BytesPerWord) + ((frameNumArgs - 3 /* currentBytecode bitAnd: 7 */) * BytesPerWord), longAtPointer(localSP));
-				}
-				/* begin internalPop: */
-				localSP += 1 * BytesPerOop;
-			}
-			BREAK;
-		CASE(468) /*212*/
-			/* storeAndPopTemporaryVariableBytecode */
-			{
-				sqInt frameNumArgs;
-
-				VM_LABEL(storeAndPopTemporaryVariableBytecode12);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 468);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin temporary:in:put: */
-				if (4 /* currentBytecode bitAnd: 7 */ < ((frameNumArgs = byteAt((localFP + FoxFrameFlags) + 1)))) {
-					longAtput((localFP + FoxCallerSavedIP) + ((frameNumArgs - 4 /* currentBytecode bitAnd: 7 */) * BytesPerWord), longAtPointer(localSP));
-				}
-				else {
-					longAtput(((localFP + FoxReceiver) - BytesPerWord) + ((frameNumArgs - 4 /* currentBytecode bitAnd: 7 */) * BytesPerWord), longAtPointer(localSP));
-				}
-				/* begin internalPop: */
-				localSP += 1 * BytesPerOop;
-			}
-			BREAK;
-		CASE(469) /*213*/
-			/* storeAndPopTemporaryVariableBytecode */
-			{
-				sqInt frameNumArgs;
-
-				VM_LABEL(storeAndPopTemporaryVariableBytecode13);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 469);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin temporary:in:put: */
-				if (5 /* currentBytecode bitAnd: 7 */ < ((frameNumArgs = byteAt((localFP + FoxFrameFlags) + 1)))) {
-					longAtput((localFP + FoxCallerSavedIP) + ((frameNumArgs - 5 /* currentBytecode bitAnd: 7 */) * BytesPerWord), longAtPointer(localSP));
-				}
-				else {
-					longAtput(((localFP + FoxReceiver) - BytesPerWord) + ((frameNumArgs - 5 /* currentBytecode bitAnd: 7 */) * BytesPerWord), longAtPointer(localSP));
-				}
-				/* begin internalPop: */
-				localSP += 1 * BytesPerOop;
-			}
-			BREAK;
-		CASE(470) /*214*/
-			/* storeAndPopTemporaryVariableBytecode */
-			{
-				sqInt frameNumArgs;
-
-				VM_LABEL(storeAndPopTemporaryVariableBytecode14);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 470);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin temporary:in:put: */
-				if (6 /* currentBytecode bitAnd: 7 */ < ((frameNumArgs = byteAt((localFP + FoxFrameFlags) + 1)))) {
-					longAtput((localFP + FoxCallerSavedIP) + ((frameNumArgs - 6 /* currentBytecode bitAnd: 7 */) * BytesPerWord), longAtPointer(localSP));
-				}
-				else {
-					longAtput(((localFP + FoxReceiver) - BytesPerWord) + ((frameNumArgs - 6 /* currentBytecode bitAnd: 7 */) * BytesPerWord), longAtPointer(localSP));
-				}
-				/* begin internalPop: */
-				localSP += 1 * BytesPerOop;
-			}
-			BREAK;
-		CASE(471) /*215*/
-			/* storeAndPopTemporaryVariableBytecode */
-			{
-				sqInt frameNumArgs;
-
-				VM_LABEL(storeAndPopTemporaryVariableBytecode15);
-				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, 471);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
-				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
-				/* begin temporary:in:put: */
-				if (7 /* currentBytecode bitAnd: 7 */ < ((frameNumArgs = byteAt((localFP + FoxFrameFlags) + 1)))) {
-					longAtput((localFP + FoxCallerSavedIP) + ((frameNumArgs - 7 /* currentBytecode bitAnd: 7 */) * BytesPerWord), longAtPointer(localSP));
-				}
-				else {
-					longAtput(((localFP + FoxReceiver) - BytesPerWord) + ((frameNumArgs - 7 /* currentBytecode bitAnd: 7 */) * BytesPerWord), longAtPointer(localSP));
-				}
-				/* begin internalPop: */
-				localSP += 1 * BytesPerOop;
 			}
 			BREAK;
 		CASE(473) /*217*/
@@ -16785,15 +12933,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 				VM_LABEL(extABytecode);
 				extA = (((usqInt) extA << 8)) + (byteAtPointer(++localIP));
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 			}
 			BREAK;
@@ -16805,15 +12944,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 				VM_LABEL(extBBytecode);
 				byte = byteAtPointer(++localIP);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				extB = ((numExtB == 0)
 				 && (byte > 0x7F)
@@ -16836,15 +12966,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 				VM_LABEL(extPushReceiverVariableBytecode);
 				index = (byteAtPointer(++localIP)) + (((sqInt)((usqInt)(extA) << 8)));
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				extA = 0;
 				/* begin pushMaybeContextReceiverVariable: */
@@ -16929,15 +13050,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 				VM_LABEL(extPushLiteralVariableBytecode);
 				index = (byteAtPointer(++localIP)) + (((sqInt)((usqInt)(extA) << 8)));
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				extA = 0;
 				/* begin pushLiteralVariable: */
@@ -16961,15 +13073,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 				VM_LABEL(extPushLiteralBytecode);
 				index = (byteAtPointer(++localIP)) + (((sqInt)((usqInt)(extA) << 8)));
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				extA = 0;
 				/* begin pushLiteralConstant: */
@@ -16990,15 +13093,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 				/* begin fetchByte */
 				index = byteAtPointer(++localIP);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin internalPush: */
 				object = (index < ((frameNumArgs = byteAt((localFP + FoxFrameFlags) + 1)))
@@ -17025,15 +13119,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 				popValues = size > 0x7F;
 				size = size & 0x7F;
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin externalizeIPandSP */
 				GIV(instructionPointer) = oopForPointer(localIP);
@@ -17060,13 +13145,13 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 					if ((GIV(freeStart) + numBytes) > (((eden()).limit))) {
 						error("no room in eden for allocateSmallNewSpaceSlots:format:classIndex:");
 						array = 0;
-						goto l760;
+						goto l762;
 					}
 				}
 				long64Atput(newObj, (((((usqLong) size)) << (numSlotsFullShift())) + (2U << (formatShift()))) + ClassArrayCompactIndex);
 				GIV(freeStart) += numBytes;
 				array = newObj;
-	l760:	/* end eeInstantiateSmallClassIndex:format:numSlots: */;
+	l762:	/* end eeInstantiateSmallClassIndex:format:numSlots: */;
 				if (popValues) {
 					for (i = 0; i < size; i += 1) {
 
@@ -17099,15 +13184,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 				VM_LABEL(extPushIntegerBytecode);
 				value = (byteAtPointer(++localIP)) + (((sqInt)((usqInt)(extB) << 8)));
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				extB = 0;
 				numExtB = 0;
@@ -17124,15 +13200,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 				VM_LABEL(extPushCharacterBytecode);
 				value = (byteAtPointer(++localIP)) + (((sqInt)((usqInt)(extB) << 8)));
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin internalPush: */
 				object = (((sqInt)((usqInt)(value) << (numTagBits())))) + (characterTag());
@@ -17299,15 +13366,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 					localFP = pointerForOop(GIV(framePointer));
 									}
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 			}
 			BREAK;
@@ -17343,15 +13401,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 						goto l775;
 					}
 					/* begin fetchNextBytecode */
-					if (GIV(isStepable)) {
-						printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-						/* begin externalizeIPandSP */
-						GIV(instructionPointer) = oopForPointer(localIP);
-						GIV(stackPointer) = localSP;
-						GIV(framePointer) = localFP;
-						printCallStack();
-						lockFetchNextBytecode();
-					}
 					currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				}
 				/* begin internalPop: */
@@ -17391,15 +13440,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 						goto l779;
 					}
 					/* begin fetchNextBytecode */
-					if (GIV(isStepable)) {
-						printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-						/* begin externalizeIPandSP */
-						GIV(instructionPointer) = oopForPointer(localIP);
-						GIV(stackPointer) = localSP;
-						GIV(framePointer) = localFP;
-						printCallStack();
-						lockFetchNextBytecode();
-					}
 					currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				}
 				/* begin internalPop: */
@@ -17554,15 +13594,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 	l781:	/* end storePointerImmutabilityCheck:ofObject:withValue: */;
 				}
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 			}
 			BREAK;
@@ -17627,15 +13658,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 				longAtput((litVar + BaseHeaderSize) + (((sqInt)((usqInt)(ValueIndex) << (shiftForWord())))), value);
 	l794:	/* end storePointerImmutabilityCheck:ofObject:withValue: */;
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 			}
 			BREAK;
@@ -17649,15 +13671,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 				/* begin longStoreTemporaryVariableBytecode */
 				index = byteAtPointer(++localIP);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin temporary:in:put: */
 				if (index < ((frameNumArgs = byteAt((localFP + FoxFrameFlags) + 1)))) {
@@ -17816,15 +13829,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 	l801:	/* end storePointerImmutabilityCheck:ofObject:withValue: */;
 				}
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 			}
 			BREAK;
@@ -17887,15 +13891,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 				longAtput((litVar + BaseHeaderSize) + (((sqInt)((usqInt)(ValueIndex) << (shiftForWord())))), anObject);
 	l814:	/* end storePointerImmutabilityCheck:ofObject:withValue: */;
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 			}
 			BREAK;
@@ -17909,15 +13904,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 				/* begin fetchByte */
 				index = byteAtPointer(++localIP);
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin temporary:in:put: */
 				if (index < ((frameNumArgs = byteAt((localFP + FoxFrameFlags) + 1)))) {
@@ -17944,15 +13930,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 ((header >> 3)) & AlternateHeaderNumLiteralsMask))) * BytesPerOop)) + BaseHeaderSize))) {
 					localIP = (localIP + (3)) - 1;
 					/* begin fetchNextBytecode */
-					if (GIV(isStepable)) {
-						printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-						/* begin externalizeIPandSP */
-						GIV(instructionPointer) = oopForPointer(localIP);
-						GIV(stackPointer) = localSP;
-						GIV(framePointer) = localFP;
-						printCallStack();
-						lockFetchNextBytecode();
-					}
 					currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 					goto l821;
 				}
@@ -18087,15 +14064,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 					localSP += numCopied1 * BytesPerOop;
 				}
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin internalPush: */
 				longAtPointerput((localSP -= BytesPerOop), newClosure);
@@ -18193,15 +14161,6 @@ longAt((GIV(method) + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shif
 				}
 				localIP += blockSize;
 				/* begin fetchNextBytecode */
-				if (GIV(isStepable)) {
-					printLocalSPLocalFPLocalIPCurrentBytecode(localSP, localSP, localIP, currentBytecode);
-					/* begin externalizeIPandSP */
-					GIV(instructionPointer) = oopForPointer(localIP);
-					GIV(stackPointer) = localSP;
-					GIV(framePointer) = localFP;
-					printCallStack();
-					lockFetchNextBytecode();
-				}
 				currentBytecode = (byteAtPointer(++localIP)) + GIV(bytecodeSetSelector);
 				/* begin internalPush: */
 				longAtPointerput((localSP -= BytesPerOop), newClosure);
@@ -60722,18 +56681,6 @@ loadInitialContext(void)
 	marryContextInNewStackPageAndInitializeInterpreterRegisters(activeContext);
 }
 
-
-/*	localSP and localFP are in the scope of interpret not in GIV */
-
-	/* StackInterpreter>>#lockFetchNextBytecode */
-static void
-lockFetchNextBytecode(void)
-{   DECL_MAYBE_SQ_GLOBAL_STRUCT
-	
-	mutexLockandCond(&GIV(mutexForFetchBytecode), &GIV(step));
-	
-}
-
 	/* StackInterpreter>>#longPrintOop: */
 void
 longPrintOop(sqInt oop)
@@ -64921,22 +60868,6 @@ longAt((objOop11 + BaseHeaderSize) + (((sqInt)((usqInt)(HeaderIndex) << (shiftFo
 	l24:	/* end objectAfter:limit: */;
 	}
 	}
-
-	/* StackInterpreter>>#printLocalSP:LocalFP:LocalIP:CurrentBytecode: */
-static void NoDbgRegParms
-printLocalSPLocalFPLocalIPCurrentBytecode(char *anSP, char *anFP, char *anIP, sqInt byteCode)
-{   DECL_MAYBE_SQ_GLOBAL_STRUCT
-	printf("Step\n");
-	printf("SP: %p\n",(void *) anSP);
-	printf("FP: %p\n",(void *) anFP);
-	printf("IP: %p\n",(void *) anIP);
-	printf("Method: %d\n", GIV(method));
-	/* -baseHeader (8) + 1 0base adresse (overall - 7)*/
-	printf("IP-method: %p %d\n",(void *) GIV(instructionPointer) - GIV(method) - 7, (int) anIP - GIV(method) - 7);
-	printf("Bytecode: %x\n",(char) byteCode);
-	printf("PrimitiveFunctionPointer: %p\n",GIV(primitiveFunctionPointer));
-	
-}
 
 	/* StackInterpreter>>#printMethodCache */
 void
