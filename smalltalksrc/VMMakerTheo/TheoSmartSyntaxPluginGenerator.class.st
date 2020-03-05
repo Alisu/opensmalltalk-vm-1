@@ -1,11 +1,11 @@
 Class {
-	#name : #CCodeGeneratorTheoGlobalStructure,
-	#superclass : #CCodeGeneratorGlobalStructure,
+	#name : #TheoSmartSyntaxPluginGenerator,
+	#superclass : #SmartSyntaxPluginCodeGenerator,
 	#category : #VMMakerTheo
 }
 
 { #category : #'as yet unclassified' }
-CCodeGeneratorTheoGlobalStructure >> CFunctionAsSelector [
+TheoSmartSyntaxPluginGenerator >> CFunctionAsSelector [
 
  ^  #(#memcpy:_:_: 
 		#sizeof:
@@ -44,7 +44,7 @@ CCodeGeneratorTheoGlobalStructure >> CFunctionAsSelector [
 ]
 
 { #category : #'C code generator' }
-CCodeGeneratorTheoGlobalStructure >> emitCCodeAsFunctionCallOn: aStream level: level method: aMethod [
+TheoSmartSyntaxPluginGenerator >> emitCCodeAsFunctionCallOn: aStream level: level method: aMethod [
 	"Translate this message send into a C function call"
 
 	aMethod selector == #break
@@ -78,6 +78,7 @@ CCodeGeneratorTheoGlobalStructure >> emitCCodeAsFunctionCallOn: aStream level: l
 		separatedBy: [ aStream
 				nextPut: $,;
 				space ].
+	"self haltIf: [ aMethod selector includesSubstring: 'integerObjectOf' ]."
 	(self selectorsToExclude includes: aMethod selector)
 		ifFalse: [ aMethod args
 				ifNotEmpty: [ aStream
@@ -92,7 +93,7 @@ CCodeGeneratorTheoGlobalStructure >> emitCCodeAsFunctionCallOn: aStream level: l
 ]
 
 { #category : #'C code generator' }
-CCodeGeneratorTheoGlobalStructure >> emitCFunctionPrototypeForMethod: aMethod isPrototype: isPrototype onStream: aStream [
+TheoSmartSyntaxPluginGenerator >> emitCFunctionPrototypeForMethod: aMethod isPrototype: isPrototype onStream: aStream [
 	| args declarations |
 	args := aMethod args copy.
 	declarations := aMethod declarations copy.
@@ -108,7 +109,7 @@ CCodeGeneratorTheoGlobalStructure >> emitCFunctionPrototypeForMethod: aMethod is
 ]
 
 { #category : #'C code generator' }
-CCodeGeneratorTheoGlobalStructure >> emitCFunctionPrototypes: methodList on: aStream [ 
+TheoSmartSyntaxPluginGenerator >> emitCFunctionPrototypes: methodList on: aStream [ 
 	"Store prototype declarations for all non-inlined methods on the given stream.
 	 Add a define for a NoDbgRegParms attribute for static functions used for debugging.
 	 gcc and other compilers will use non-standard calling conventions for static functions
@@ -124,8 +125,8 @@ CCodeGeneratorTheoGlobalStructure >> emitCFunctionPrototypes: methodList on: aSt
 		[NoRegParmsInAssertVMs ifTrue:
 			[aStream nextPutAll: '\\#if !PRODUCTION && defined(PlatformNoDbgRegParms)\# define NoDbgRegParms PlatformNoDbgRegParms\#endif' withCRs.
 			 aStream nextPutAll: '\\#if !defined(NoDbgRegParms)\# define NoDbgRegParms /*empty*/\#endif\\' withCRs].
-		 aStream nextPutAll: '\\#if !defined(NeverInline)\# define NeverInline /*empty*/\#endif\\' withCRs.
-		aStream nextPutAll: 'struct foo;';cr;cr.].
+		 aStream nextPutAll: '\\#if !defined(NeverInline)\# define NeverInline /*empty*/\#endif\\' withCRs.].
+	aStream nextPutAll: 'struct foo;';cr;cr.
 	(methodList select: [:m| m isRealMethod and: [self shouldGenerateMethod: m]]) do:
 		[:m |
 		vmClass ifNotNil:
@@ -138,7 +139,7 @@ CCodeGeneratorTheoGlobalStructure >> emitCFunctionPrototypes: methodList on: aSt
 ]
 
 { #category : #'C code generator' }
-CCodeGeneratorTheoGlobalStructure >> emitCMacros: methodList on: aStream [ 
+TheoSmartSyntaxPluginGenerator >> emitCMacros: methodList on: aStream [ 
 	"Store the global variable declarations on the given stream.  Answer any constants used in the macros."
 	| usedConstants |
 	macros isEmpty ifTrue: [^#()].
@@ -171,108 +172,62 @@ CCodeGeneratorTheoGlobalStructure >> emitCMacros: methodList on: aStream [
 ]
 
 { #category : #'C code generator' }
-CCodeGeneratorTheoGlobalStructure >> emitCVariablesOn: aStream [
-	"Store the global variable declarations on the given stream.
-	 Break logic into vars for structure and vars for non-structure."
-	| structure nonstruct |
-
-	structure := WriteStream on: (String new: 32768).
-	nonstruct := WriteStream on: (String new: 32768).
-
-	aStream nextPutAll: '/*** Variables ***/'; cr.
-	structure
-		nextPutAll: '#if SQ_USE_GLOBAL_STRUCT'; cr;
-		nextPutAll: '# define _iss /* define in-struct static as void */'; cr;
-		nextPutAll: 'static struct foo {'; cr;
-		nextPutAll: '#else'; cr;
-		nextPutAll: '# define _iss static'; cr;
-		nextPutAll: '#endif'; cr.
-	self buildSortedVariablesCollection do:
-		[ :var | | decl varString inStruct target |
-		target := (inStruct := self placeInStructure: (varString := var asString)) 
-					ifTrue: [structure]
-					ifFalse: [nonstruct].
-		decl := variableDeclarations at: varString ifAbsent: ['sqInt ' , varString].
-		decl first == $# "support cgen var: #bytecodeSetSelector declareC: '#define bytecodeSetSelector 0' hack"
-			ifTrue:
-				[target nextPutAll: decl; cr]
-			ifFalse:
-				[self isGeneratingPluginCode
-					ifTrue:
-						[varString = 'interpreterProxy'
-							ifTrue: "quite special..."
-								[self preDeclareInterpreterProxyOn: target]
-							ifFalse: [target nextPutAll: 'static ']]
-					ifFalse:
-						[(vmClass mustBeGlobal: varString) ifFalse:
-							[target nextPutAll: (inStruct ifTrue: ['_iss '] ifFalse: ['static '])]].
-				target nextPutAll: decl; nextPut: $;; cr]].
-	structure
-		nextPutAll: '_iss void (*primitiveFunctionPointer)();';cr;
-		nextPutAll: '#undef _iss'; cr;
-		nextPutAll: '#if SQ_USE_GLOBAL_STRUCT'; cr;
-		nextPutAll: ' } fum;'; cr;
-		nextPutAll: ' #if SQ_USE_GLOBAL_STRUCT_REG';cr;
-		nextPutAll: '# define DECL_MAYBE_SQ_GLOBAL_STRUCT /* using a global reg pointer */'; cr;
-		nextPutAll: '# define DECL_MAYBE_VOLATILE_SQ_GLOBAL_STRUCT /* using a global reg pointer */'; cr;
-		nextPutAll:'#else';cr;
-		nextPutAll: '# define DECL_MAYBE_SQ_GLOBAL_STRUCT register struct foo * foo = &fum;'; cr;
-		nextPutAll: '# define DECL_MAYBE_VOLATILE_SQ_GLOBAL_STRUCT volatile register struct foo * foo = &fum;'; cr;
-		nextPutAll: '#endif';cr;
-		nextPutAll: 'int numberOfImage;'; cr;
-		nextPutAll: 'struct foo * all_threads_global;'; cr;
-		nextPutAll: 'pthread_t * thread_id;'; cr;
-		nextPutAll: '# define GIV(interpreterInstVar)  self->interpreterInstVar'; cr;
-		nextPutAll: '#else'; cr;
-		nextPutAll: '# define DECL_MAYBE_SQ_GLOBAL_STRUCT /* oh, no mr bill! */'; cr;
-		nextPutAll: '# define DECL_MAYBE_VOLATILE_SQ_GLOBAL_STRUCT /* oh no, mr bill! */'; cr;
-		nextPutAll: '# define GIV(interpreterInstVar) interpreterInstVar'; cr;
-		nextPutAll: '#endif'; cr.
-
-	"if the machine needs the fum structure defining locally, do it now; global register users don't need that, but DO need some batshit insane C macro fudging in order to convert the define of USE_GLOBAL_STRUCT_REG into a simple string to use in the asm clause below. Sigh."
-	structure
-		nextPutAll: '#if SQ_USE_GLOBAL_STRUCT'; cr;
-		nextPutAll: '#if SQ_USE_GLOBAL_STRUCT_REG';cr;
-		nextPutAll: '#define fooxstr(s) foostr(s)'; cr;
-		nextPutAll: '#define foostr(s)  #s'; cr;
-		nextPutAll: 'register struct foo * foo asm(fooxstr(USE_GLOBAL_STRUCT_REG));'; cr;
-		nextPutAll: '#else'; cr;
-		nextPutAll: 'static struct foo * foo = &fum;'; cr;
-		nextPutAll: '#endif'; cr;
-		nextPutAll: '#endif'; cr.
-
-	aStream
-		nextPutAll: structure contents;
-		nextPutAll: nonstruct contents;
-		cr
+TheoSmartSyntaxPluginGenerator >> genCallOf: aSelector withAll: nodes on: aStream [
+	
+	^ super
+		genCallOf: aSelector
+		withAll: nodes, {
+			(TVariableNode new setName: #self)
+				emitCCodeAsArgumentOn: aStream
+				level: 0
+				generator: self }
+		on: aStream
 ]
 
 { #category : #'C code generator' }
-CCodeGeneratorTheoGlobalStructure >> generatePerform: msgNode on: aStream indent: level [
-	"Generate the C code for this message onto the given stream."
+TheoSmartSyntaxPluginGenerator >> preDeclareMacrosForFastClassCheckingOn: aStream [
+	"These macros can be used to check for various cases of Integer types.
+	 Since they can be defined based on existing API, this is a good trade off:
+	 - avoid extending the interpreterProxy API unnecessarily
+	 - provide fast type checking"
+	
+	"Speed-up generated code for internal plugins by using macros and fixed class indices to define this well known functionality."
+	#(	'#if defined(SQUEAK_BUILTIN_PLUGIN)' cr
 
-	self emitCExpression: msgNode args first on: aStream.
-	aStream nextPut: $(.
-	(msgNode args copyFrom: 2 to: msgNode args size)
-		do: [ :arg | self emitCExpression: arg on: aStream ]
-		separatedBy: [ aStream nextPutAll: ', ' ].
-	msgNode args first value = #isScavengeSurvivor:
-		ifTrue: [ msgNode args size > 1
-				ifTrue: [ aStream nextPutAll: ', ' ].
-			aStream nextPutAll: 'self' ].
-	aStream nextPut: $)
+		'# define isIntegerObject(oop, self) ((oop) & 1)' cr
+
+		'# if SPURVM'
+		'extern sqInt classIndexOf(sqInt, struct foo *);'
+	"Compact class indices are hardcoded here because there is no guarantee that the pool values at generation time
+	 are that of SPUR.. Make sure they are in sync with SpurMemoryManager class>>initializeCompactClassIndices"
+		'#	define LargeNegativeIntegerClassIndex 32'
+		'#	define LargePositiveIntegerClassIndex 33'
+		'#	if BytesPerOop == 4'
+		'#	  define isImmediate(oop, self) ((oop) & 3)'
+		'#	else'
+		'#	  define isImmediate(oop, self) ((oop) & 7)'
+		'#	endif'
+		'#	define isKindOfInteger(oop, self) (isImmediate(oop, self) ? isIntegerObject(oop, self) : (unsigned)(classIndexOf(oop, self) - LargeNegativeIntegerClassIndex) <= 1)'
+		'#	define isLargeIntegerObject(oop, self) (!isImmediate(oop, self) && (unsigned)(classIndexOf(oop, self) - LargeNegativeIntegerClassIndex) <= 1)'
+		'#	define isLargeNegativeIntegerObject(oop, self) (!isImmediate(oop, self) && classIndexOf(oop, self) == LargeNegativeIntegerClassIndex)'
+		'#	define isLargePositiveIntegerObject(oop, self) (!isImmediate(oop, self) && classIndexOf(oop, self) == LargePositiveIntegerClassIndex)'
+		'# endif /* SPURVM */'
+		'#endif /* defined(SQUEAK_BUILTIN_PLUGIN) */' cr
+
+	"If the functionality has not been defined via macros, define default versions using existing plugin API"
+		'#if !defined(isKindOfInteger)'
+		'# define isLargeNegativeIntegerObject(oop, self) (fetchClassOf(oop, self) == classLargeNegativeInteger(self))'
+		'# define isLargePositiveIntegerObject(oop, self) (fetchClassOf(oop, self) == classLargePositiveInteger(self))'
+		'# define isLargeIntegerObject(oop, self) (isLargeNegativeIntegerObject(oop, self) || isLargePositiveIntegerObject(oop, self))'
+		'# define isKindOfInteger(oop , self) (isIntegerObject(oop, self) || isLargeNegativeIntegerObject(oop, self) || isLargePositiveIntegerObject(oop, self))'
+		'#endif' cr) do:
+		[:element|
+		aStream cr.
+		element ~~ #cr ifTrue: [aStream nextPutAll: element]]
 ]
 
 { #category : #'as yet unclassified' }
-CCodeGeneratorTheoGlobalStructure >> nonUnarySelector [
-
- ^  #(#highBit
-		#isFree
-		)
-]
-
-{ #category : #'as yet unclassified' }
-CCodeGeneratorTheoGlobalStructure >> selectorExcludedForCommodities [
+TheoSmartSyntaxPluginGenerator >> selectorExcludedForCommodities [
 
  ^  #(
 		#error: 
@@ -344,8 +299,8 @@ CCodeGeneratorTheoGlobalStructure >> selectorExcludedForCommodities [
 		) , self selectorExcludedForFunctionPrototype 
 ]
 
-{ #category : #'as yet unclassified' }
-CCodeGeneratorTheoGlobalStructure >> selectorExcludedForFunctionPrototype [
+{ #category : #'C code generator' }
+TheoSmartSyntaxPluginGenerator >> selectorExcludedForFunctionPrototype [
 
  ^ 	#(#readableFormat:
 	#sigset:jmp:
@@ -371,7 +326,7 @@ CCodeGeneratorTheoGlobalStructure >> selectorExcludedForFunctionPrototype [
 ]
 
 { #category : #'as yet unclassified' }
-CCodeGeneratorTheoGlobalStructure >> selectorsToExclude [
+TheoSmartSyntaxPluginGenerator >> selectorsToExclude [
 
- ^ self CFunctionAsSelector, self selectorExcludedForCommodities 
+	^ self CFunctionAsSelector, self selectorExcludedForCommodities 
 ]

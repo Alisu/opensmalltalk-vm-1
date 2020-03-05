@@ -14,7 +14,7 @@ Class {
 SmartSyntaxInterpreterPlugin class >> codeGeneratorClass [
 	"return the appropriate class of code generator for this kind ofplugin"
 
-	^SmartSyntaxPluginCodeGenerator
+	^ CurrentSmartSyntaxPluginCodeGenerator value
 ]
 
 { #category : #'instance creation' }

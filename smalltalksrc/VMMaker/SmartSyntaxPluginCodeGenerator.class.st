@@ -346,34 +346,39 @@ SmartSyntaxPluginCodeGenerator >> ccgValBlock: valString [
 
 { #category : #'translating builtins' }
 SmartSyntaxPluginCodeGenerator >> genCallOf: aSelector with: aNode on: aStream [
-	pluginFunctionsUsed add: aSelector.
-	aStream nextPutAll: (self cFunctionNameFor: aSelector).
-	aStream nextPut: $(.
-	self emitCExpression: aNode on: aStream.
-	aStream nextPut: $)
+	
+	self
+		genCallOf: aSelector
+		withAll: { aNode }
+		on: aStream
 ]
 
 { #category : #'translating builtins' }
 SmartSyntaxPluginCodeGenerator >> genCallOf: aSelector with: firstArgNode with: secondArgNode on: aStream [
-	pluginFunctionsUsed add: aSelector.
-	aStream nextPutAll: (self cFunctionNameFor: aSelector).
-	aStream nextPut: $(.
-	self emitCExpression: firstArgNode on: aStream.
-	aStream nextPut: $,.
-	self emitCExpression: secondArgNode on: aStream.
-	aStream nextPut: $)
+
+	self
+		genCallOf: aSelector
+		withAll: { firstArgNode . secondArgNode }
+		on: aStream
 ]
 
 { #category : #'translating builtins' }
 SmartSyntaxPluginCodeGenerator >> genCallOf: aSelector with: firstArgNode with: secondArgNode with: thirdArgNode on: aStream [
+	
+	self
+		genCallOf: aSelector
+		withAll: { firstArgNode . secondArgNode . thirdArgNode }
+		on: aStream
+]
+
+{ #category : #'translating builtins' }
+SmartSyntaxPluginCodeGenerator >> genCallOf: aSelector withAll: nodes on: aStream [
 	pluginFunctionsUsed add: aSelector.
 	aStream nextPutAll: (self cFunctionNameFor: aSelector).
 	aStream nextPut: $(.
-	self emitCExpression: firstArgNode on: aStream.
-	aStream nextPut: $,.
-	self emitCExpression: secondArgNode on: aStream.
-	aStream nextPut: $,.
-	self emitCExpression: thirdArgNode on: aStream.
+	nodes
+		do: [ :each | self emitCExpression: each on: aStream ]
+		separatedBy: [ aStream nextPut: $, ].
 	aStream nextPut: $)
 ]
 

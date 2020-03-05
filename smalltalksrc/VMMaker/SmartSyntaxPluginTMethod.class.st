@@ -184,7 +184,7 @@ SmartSyntaxPluginTMethod >> handlePrimitiveDirective: aStmt on: sStream [
 		 sStream nextPutAll: (self
 			statementsFor:
 				(rcvrSpec
-					ccg:	SmartSyntaxPluginCodeGenerator new
+					ccg:	CurrentSmartSyntaxPluginCodeGenerator value new
 					prolog:  [:expr | aStmt variable name, ' := ', expr]
 					expr: 	aStmt variable name
 					index: 	fullArgs size)
