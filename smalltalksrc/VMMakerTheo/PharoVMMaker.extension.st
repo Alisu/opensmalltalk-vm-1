@@ -26,7 +26,7 @@ PharoVMMaker >> generateTheoVM [
 				platformRootDirectoryName: (VMMaker fullNameForPath: (self outputDirectory / 'generated'));
 				options: optionsPairsArray;
 				interpreterClass: interpreterClass.
-			maker externalModules addAll: #( LargeIntegersPlugin ).
+			maker externalModules addAll: #( LargeIntegersPlugin LocalePlugin).
 			
 			[ maker
 				doCleanupOldFiles;

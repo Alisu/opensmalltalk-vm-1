@@ -50,7 +50,7 @@ TheoSmartSyntaxPluginGenerator >> emitCCodeAsFunctionCallOn: aStream level: leve
 	aMethod selector == #break
 		ifTrue: [ aStream nextPutAll: '/* send of break elided */'.
 			^ aMethod ].
-	"self haltIf: [ (self cFunctionNameFor: aMethod selector) includesSubstring:  'ioSetMax' ]."
+	"self haltIf: [ (self cFunctionNameFor: aMethod selector) includesSubstring:  'stObjectatput' ]."
 	"Special case for pluggable modules. Replace messages to interpreterProxy
 	 by interpreterProxy->message(..) if the message is not builtin"
 	(self shouldGenerateAsInterpreterProxySend: aMethod)
@@ -139,49 +139,24 @@ TheoSmartSyntaxPluginGenerator >> emitCFunctionPrototypes: methodList on: aStrea
 ]
 
 { #category : #'C code generator' }
-TheoSmartSyntaxPluginGenerator >> emitCMacros: methodList on: aStream [ 
-	"Store the global variable declarations on the given stream.  Answer any constants used in the macros."
-	| usedConstants |
-	macros isEmpty ifTrue: [^#()].
-	aStream cr; nextPutAll: '/*** Macros ***/'; cr.
-	usedConstants := Set new.
-	(methodList reject: [:m| m isRealMethod]) do:
-		[:m |
-		m definedAsMacro ifTrue:
-			[ | macroDefinition |
-			macroDefinition := (macros at: m selector) trimBoth.
-			(macroDefinition beginsWith: '()')
-				ifTrue: [ macroDefinition := '(self)', (macroDefinition allButFirst: 2) ]
-				ifFalse:[ macroDefinition := String streamContents: [:s| 
-						s << (macroDefinition first: (macroDefinition indexOf: $)) - 1).
-						s << ', self'.
-						s << (macroDefinition last: (macroDefinition size - (macroDefinition indexOf: $)) + 1)).
-						]].
-			(macroDefinition endsWith: '()')	
-				ifTrue:[macroDefinition := (macroDefinition allButLast: 1), 'self)'].
-			aStream
-				nextPutAll: '#define ';
-				nextPutAll:(self cFunctionNameFor: m selector);
-				nextPutAll: macroDefinition; cr.
-			 m compiledMethod literalsDo:
-				[:lit|
-				(lit isVariableBinding and: [(macros at: m selector) includesSubstring: lit key]) ifTrue:
-					[usedConstants add: lit key]]]].
-	aStream cr.
-	^usedConstants
-]
-
-{ #category : #'C code generator' }
 TheoSmartSyntaxPluginGenerator >> genCallOf: aSelector withAll: nodes on: aStream [
-	
+	"self haltIf: [ aSelector includesSubstring: 'integerObjectOf' ]."
 	^ super
 		genCallOf: aSelector
 		withAll: nodes, {
 			(TVariableNode new setName: #self)
-				emitCCodeAsArgumentOn: aStream
+				"emitCCodeAsArgumentOn: aStream
 				level: 0
-				generator: self }
+				generator: self" }
 		on: aStream
+]
+
+{ #category : #'asOop:/asValue:' }
+TheoSmartSyntaxPluginGenerator >> generateCoerceToBooleanObjectFrom: aNode on: aStream [
+	pluginFunctionsUsed add: #trueObject; add: #falseObject.
+	aStream nextPutAll: '(('.
+	self emitCExpression: aNode on: aStream.
+	aStream nextPutAll: ') ? trueObject(self) : falseObject(self))'
 ]
 
 { #category : #'C code generator' }
@@ -229,100 +204,16 @@ TheoSmartSyntaxPluginGenerator >> preDeclareMacrosForFastClassCheckingOn: aStrea
 { #category : #'as yet unclassified' }
 TheoSmartSyntaxPluginGenerator >> selectorExcludedForCommodities [
 
- ^  #(
-		#error: 
-		#warning: 
-		#show:Sur:fa:ce:Fn: "special case function pointer"
-		#odd 
-		#assert:
-		#asserta:
-		#assert:l:
-		#assert:al:
-		#assert:fl:
-		#eassert:
-		#pointerForOop: "sqMemoryAccess"
-		#oopForPointer:
-		#longAtPointer:put:
-		#byteAtPointer:
-		#longAt:
-		#byteAt:
-		#longAt:put:
-		#longAtPointer:
-		#fetchFloatAt:into:
-		#long64At:
-		#shortAt:
-		#shortAt:put:
-		#long64At:put:
-		#byteAt:put:
-		#intAt:
-		#intAt:put:
-		#long32At:
-		#long32At:put:
-		#storeFloatAt:from:
-		#ioExitWithErrorCode: "utils.c"
-		#imageName:PutLength:
-		#imageName:GetLength:
-		#vmPath:GetLength:
-		#imageNamePut:Length:
-		#imageNameGet:Length:
-		#vmPathGet:Length:
-		#clipboardRead:Into:At: "nullDisplay.c"
-		#clipboardWrite:From:At:
-		#ioDisablePowerManager:
-		#crashInThisOrAnotherThread:
-		#ioBeDisplay:width:height:depth:
-		#ioNoteDisplayChanged:width:height:depth:
-		#ioGetNextEvent:
-		#ioSetInputSemaphore: 
-		#ioSetFullScreen:
-		#ioSetWindowWidth:Height:
-		#ioSetWindowLabel:OfSize:
-		#ioHasDisplayDepth:
-		#ioSetLogDirectory:OfSize:
-		#ioShow:D:i:s:p:l:a:y:
-		#ioNewProfileSamplesInto:
-		#ioNewProfile:Status:
-		#doSignalExternalSemaphores: "sqExternalSemaphore"
-		#signalSemaphoreWithIndex:
-		#ioSetMaxExtSemTableSize:
-		#ioHeartbeatFrequency: "***heartbeat.c"
-		#ioSetHeartbeatMilliseconds:
-		#ioHeartbeatFrequency:
-		#ioRelinquishProcessorForMicroseconds:
-		#ioGetClockLogSize:Usecs:Idx:Msecs:Idx:
-		#sqAllocateMemorySegmentOfSize:Above:AllocatedSizeInto: "memoryUnix.c"
-		#sqDeallocateMemorySegmentAt:OfSize:
-		#allocateMemory:Minimum:ImageFile:HeaderSize:
-		#unableToReadImageError
-		#insufficientMemoryAvailableError
-		#browserPluginReturnIfNeeded
+ ^  #(#minorVersion
+#majorVersion
 		) , self selectorExcludedForFunctionPrototype 
 ]
 
 { #category : #'C code generator' }
 TheoSmartSyntaxPluginGenerator >> selectorExcludedForFunctionPrototype [
 
- ^ 	#(#readableFormat:
-	#sigset:jmp:
-	#newGIV
-	#setNumberOfImage:
-	#getNumberOfImage
-	#initAllGlobalsStruct
-	)	"#( sqVirtualMachine.c
-		#fetchInteger:ofObject:
-		#floatValueOf:
-		#storeInteger:ofObject:withValue:
-		#addIdleUsecs:
-		#checkedIntegerValueOf:
-		#sigset:jmp:
-		#fetchFloat:ofObject:
-		#pop:
-		#pushInteger:
-		
-		#readableFormat:
-		#forceInterruptCheckFromHeartbeat
-		#ioUTCMicroseconds
-		#forceInterruptCheck)"
+ ^ 	#(
+	)	
 ]
 
 { #category : #'as yet unclassified' }
