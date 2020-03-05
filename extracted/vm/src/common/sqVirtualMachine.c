@@ -11,15 +11,15 @@
 
 /* InterpreterProxy methodsFor: 'stack access' */
 sqInt  pop(sqInt nItems, struct foo * self);
-sqInt  popthenPush(sqInt nItems, sqInt oop);
-sqInt  push(sqInt object);
-sqInt  pushBool(sqInt trueOrFalse);
-sqInt  pushFloat(double f);
+sqInt  popthenPush(sqInt nItems, sqInt oop, struct foo * self);
+sqInt  push(sqInt object, struct foo * self);
+sqInt  pushBool(sqInt trueOrFalse, struct foo * self);
+sqInt  pushFloat(double f, struct foo * self);
 sqInt  pushInteger(sqInt integerValue, struct foo * self);
-double stackFloatValue(sqInt offset);
-sqInt  stackIntegerValue(sqInt offset);
-sqInt  stackObjectValue(sqInt offset);
-sqInt  stackValue(sqInt offset);
+double stackFloatValue(sqInt offset, struct foo * self);
+sqInt  stackIntegerValue(sqInt offset, struct foo * self);
+sqInt  stackObjectValue(sqInt offset, struct foo * self);
+sqInt  stackValue(sqInt offset, struct foo * self);
 
 /*** variables ***/
 
