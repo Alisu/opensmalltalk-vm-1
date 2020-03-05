@@ -1,10 +1,12 @@
 macro(add_vm_plugin NAME)
 
     set(${NAME}_SOURCES_EXTRA ${ARGN})
-
+    file(GLOB ${NAME}_GENERATED_SOURCES
+        ${CMAKE_CURRENT_SOURCE_DIR}/generated/plugins/src/${NAME}/*.c
+    )
     if(OSX)
         file(GLOB ${NAME}_SOURCES
-            ${${NAME}_SOURCES_EXTRA}
+            ${${NAME}_SOURCES_EXTRA} 
             ${CMAKE_CURRENT_SOURCE_DIR}/extracted/plugins/${NAME}/src/common/*.c   
             ${CMAKE_CURRENT_SOURCE_DIR}/extracted/plugins/${NAME}/src/osx/*.c   
             ${CMAKE_CURRENT_SOURCE_DIR}/extracted/plugins/${NAME}/src/unix/*.c 
@@ -38,6 +40,6 @@ macro(add_vm_plugin NAME)
 
     message(STATUS "Adding plugin: ${NAME}")    
 
-    addLibraryWithRPATH(${NAME} ${${NAME}_SOURCES})
+    addLibraryWithRPATH(${NAME} ${${NAME}_SOURCES} ${${NAME}_GENERATED_SOURCES})
     target_link_libraries(${NAME} ${VM_LIBRARY_NAME})   
 endmacro()
