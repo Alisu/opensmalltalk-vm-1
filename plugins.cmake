@@ -17,7 +17,8 @@ target_link_libraries(SecurityPlugin ${VM_LIBRARY_NAME})
 # FilePlugin
 #
 message(STATUS "Adding plugin: FilePlugin")
-
+file(GLOB FilePlugin_GENERATED_SOURCES
+    ${CMAKE_CURRENT_SOURCE_DIR}/generated/plugins/src/FilePlugin/FilePlugin.c)
 if(OSX)
     include_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}/extracted/plugins/FilePlugin/include/common
@@ -58,7 +59,7 @@ else()
     )    
 endif()
 
-addLibraryWithRPATH(FilePlugin ${FilePlugin_SOURCES})
+addLibraryWithRPATH(FilePlugin ${FilePlugin_SOURCES} ${FilePlugin_GENERATED_SOURCES})
 target_link_libraries(FilePlugin ${VM_LIBRARY_NAME})
 
 if(OSX)
