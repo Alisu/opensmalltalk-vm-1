@@ -97,6 +97,7 @@ TheoSmartSyntaxPluginGenerator >> emitCFunctionPrototypeForMethod: aMethod isPro
 	| args declarations |
 	args := aMethod args copy.
 	declarations := aMethod declarations copy.
+	"self haltIf: [ (self cFunctionNameFor: aMethod selector) includesSubstring:  'primitiveCompareString' ]."
 	(self selectorExcludedForFunctionPrototype includes: aMethod selector)
 		ifFalse: [ args add: #self.
 			declarations at: #self put: 'struct foo * self' ].

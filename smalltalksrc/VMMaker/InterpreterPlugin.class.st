@@ -82,8 +82,8 @@ InterpreterPlugin class >> buildCodeGeneratorUpTo: aPluginClass [
 { #category : #private }
 InterpreterPlugin class >> codeGeneratorClass [
 	"return the appropriate class of code generator for this kind ofplugin"
-
-	^VMPluginCodeGenerator
+"VMPluginCodeGenerator"
+	^CurrentSmartSyntaxPluginCodeGenerator value
 ]
 
 { #category : #translation }

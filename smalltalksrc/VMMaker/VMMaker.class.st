@@ -1526,7 +1526,7 @@ VMMaker >> generateExternalPlugin: pluginName [
 			^self].
 
 	VMClass initializeForPlugins: #().
-	[exports := plugin
+	[exports := plugin 
 					translateInDirectory: (self externalPluginsDirectoryFor: plugin)
 					doInlining: inline]
 		on:  ProvideAnswerNotification
