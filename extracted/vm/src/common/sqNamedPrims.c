@@ -105,6 +105,7 @@ findExternalFunctionIn(char *functionName, ModuleEntry *module
 #else
 # define NADA /* nada */
 #endif
+, struct foo * self
 )
 {
 	void *result;
@@ -134,6 +135,7 @@ findInternalFunctionIn(char *functionName, char *pluginName
 #if SPURVM
 					,  sqInt fnameLength, sqInt *accessorDepthPtr
 #endif
+, struct foo * self
 )
 {
   char *function, *plugin;
@@ -179,22 +181,22 @@ findInternalFunctionIn(char *functionName, char *pluginName
 #if SPURVM
 static void *
 findFunctionAndAccessorDepthIn(char *functionName, ModuleEntry *module,
-								sqInt fnameLength, sqInt *accessorDepthPtr)
+								sqInt fnameLength, sqInt *accessorDepthPtr, struct foo * self)
 {
 	return module->handle == squeakModule->handle
 		? findInternalFunctionIn(functionName, module->name,
-								fnameLength, accessorDepthPtr)
+								fnameLength, accessorDepthPtr, self)
 		: findExternalFunctionIn(functionName, module,
-								fnameLength, accessorDepthPtr);
+								fnameLength, accessorDepthPtr, self);
 }
 #endif /* SPURVM */
 
 static void *
-findFunctionIn(char *functionName, ModuleEntry *module)
+findFunctionIn(char *functionName, ModuleEntry *module, struct foo * self)
 {
 	return module->handle == squeakModule->handle
-		? findInternalFunctionIn(functionName, module->name NADA)
-		: findExternalFunctionIn(functionName, module NADA);
+		? findInternalFunctionIn(functionName, module->name NADA, self)
+		: findExternalFunctionIn(functionName, module NADA, self);
 }
 
 /*
@@ -214,9 +216,9 @@ callInitializersIn(ModuleEntry *module, struct foo * self)
 	char *moduleName;
 	sqInt okay;
 
-	init0 = findFunctionIn("getModuleName", module);
-	init1 = findFunctionIn("setInterpreter", module);
-	init2 = findFunctionIn("initialiseModule", module);
+	init0 = findFunctionIn("getModuleName", module, self);
+	init1 = findFunctionIn("setInterpreter", module, self);
+	init2 = findFunctionIn("initialiseModule", module, self);
 
 	if(init0) {
 		/* Check the compiled name of the module */
@@ -244,7 +246,7 @@ callInitializersIn(ModuleEntry *module, struct foo * self)
 		return 0;
 	}
 	if(init2) {
-		okay = ((sqInt (*) (void)) init2)();
+		okay = ((sqInt (*) (struct foo *)) init2)(self);
 		if(!okay) {
 			DPRINTF(("ERROR: initialiseModule() returned false\n"));
 			return 0;
@@ -295,7 +297,7 @@ findAndLoadModule(char *pluginName, sqInt ffiLoad, struct foo * self)
 	/* NOT ffiLoad */
 	if(!handle) {
 		/* might be internal, so go looking for setInterpreter() */
-		if(findInternalFunctionIn("setInterpreter", pluginName NADA))
+		if(findInternalFunctionIn("setInterpreter", pluginName NADA, self))
 			handle = squeakModule->handle;
 		else
 			return NULL; /* PluginName_setInterpreter() not found */
@@ -359,7 +361,7 @@ ioLoadFunctionFrom(char *functionName, char *pluginName, struct foo * self)
 	  return (void *)1;
 	}
 	/* and load the actual function */
-	return findFunctionIn(functionName, module);
+	return findFunctionIn(functionName, module, self);
 }
 
 /* ioLoadExternalFunctionOfLengthFromModuleOfLength
@@ -409,7 +411,7 @@ ioLoadFunctionFromAccessorDepthInto(char *functionName, char *pluginName,
 	  return (void *)1;
 	}
 	/* and load the actual function */
-	function = findFunctionAndAccessorDepthIn(functionName, module, fnameLength, accessorDepthPtr);
+	function = findFunctionAndAccessorDepthIn(functionName, module, fnameLength, accessorDepthPtr, self);
 	return function;
 }
 
@@ -488,14 +490,14 @@ ioLoadModuleOfLength(sqInt moduleNameIndex, sqInt moduleNameLength, struct foo *
 	Call the shutdown mechanism from the specified module.
 */
 static sqInt
-shutdownModule(ModuleEntry *module)
+shutdownModule(ModuleEntry *module, struct foo * self)
 {
 	void* fn;
 
 	if(module->ffiLoaded) return 1; /* don't even attempt for ffi loaded modules */
 
 	/* load the actual function */
-	fn = findFunctionIn("shutdownModule", module);
+	fn = findFunctionIn("shutdownModule", module, self);
 	if(fn) return ((sqInt (*) (void)) fn) ();
 	return 1;
 }
@@ -509,7 +511,7 @@ ioShutdownAllModules(struct foo * self)
 	ModuleEntry *entry;
 	entry = firstModule;
 	while(entry) {
-		shutdownModule(entry);
+		shutdownModule(entry, self);
 		entry = entry->next;
 	}
 	return 1;
@@ -519,7 +521,7 @@ ioShutdownAllModules(struct foo * self)
 	Unload the module with the given name.
 */
 sqInt
-ioUnloadModule(char *moduleName)
+ioUnloadModule(char *moduleName, struct foo * self)
 {
 	ModuleEntry *entry, *temp;
 
@@ -530,7 +532,7 @@ ioUnloadModule(char *moduleName)
 	if(!entry) return 1; /* module was never loaded */
 
 	/* Try to shutdown the module */
-	if(!shutdownModule(entry)) {
+	if(!shutdownModule(entry, self)) {
 		/* Could not shut down the module. Bail out. */
 		return 0;
 	}
@@ -539,7 +541,7 @@ ioUnloadModule(char *moduleName)
 	while(temp) {
 		if(temp != entry) {
 			/* Lookup moduleUnloaded: from the plugin */
-			void *fn = findFunctionIn("moduleUnloaded", temp);
+			void *fn = findFunctionIn("moduleUnloaded", temp, self);
 			if(fn) {
 				/* call it */
 				((sqInt (*) (char *))fn)(entry->name);
@@ -569,7 +571,7 @@ ioUnloadModuleOfLength(sqInt moduleNameIndex, sqInt moduleNameLength, struct foo
 	for(i=0; i< moduleNameLength; i++)
 		moduleName[i] = moduleNamePointer[i];
 	moduleName[moduleNameLength] = 0;
-	return ioUnloadModule(moduleName);
+	return ioUnloadModule(moduleName, self);
 }
 
 /* ioListBuiltinModule:
@@ -596,7 +598,7 @@ ioListBuiltinModule(sqInt moduleIndex, struct foo * self)
 	if(--moduleIndex == 0) {
 	  char *moduleName;
 	  void * init0;
-	  init0 = findInternalFunctionIn("getModuleName", plugin NADA);
+	  init0 = findInternalFunctionIn("getModuleName", plugin NADA, self);
 	  if(init0) {
 	    /* Check the compiled name of the module */
 	    moduleName = ((char* (*) (void))init0)();
@@ -627,7 +629,7 @@ ioListLoadedModule(sqInt moduleIndex, struct foo * self)
 		char *moduleName;
 		void * init0;
 
-		init0 = findFunctionIn("getModuleName", entry);
+		init0 = findFunctionIn("getModuleName", entry, self);
 		if(init0) {
 			/* Check the compiled name of the module */
 			moduleName = ((char* (*) (void))init0)();

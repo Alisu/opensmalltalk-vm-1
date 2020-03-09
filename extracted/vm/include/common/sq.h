@@ -150,10 +150,10 @@ extern void sqDeallocateMemorySegmentAtOfSize(void *addr, sqInt sz);
    required we provide ioUTCMicrosecondsNow & ioLocalMicrosecondsNow that update
    the clock to return the time right now, rather than of the last heartbeat.
 */
-
+struct foo;
 long ioMSecs(struct foo * self);
 sqInt ioMicroMSecs();
-struct foo;
+
 
 /* duplicate the generated definition in the interpreter.  If they differ the
  * compiler will complain and catch it for us.  We use 0x1FFFFFFF instead of
@@ -268,7 +268,7 @@ sqInt ioGetWindowHeight(struct foo * self);
 sqInt ioSetWindowWidthHeight(sqInt w, sqInt h);
 sqInt ioIsWindowObscured(struct foo * self);
 
-sqInt ioRelinquishProcessorForMicroseconds(sqInt microSeconds);
+sqInt ioRelinquishProcessorForMicroseconds(sqInt microSeconds, struct foo * self);
 #if STACKVM || NewspeakVM
 /* thread subsystem support for e.g. sqExternalSemaphores.c */
 void ioInitThreads(struct foo * self);
@@ -615,7 +615,7 @@ void *ioLoadExternalFunctionOfLengthFromModuleOfLengthAccessorDepthInto
 #endif
 void  *ioLoadFunctionFrom(char *functionName, char *pluginName, struct foo * self);
 sqInt  ioShutdownAllModules(struct foo * self);
-sqInt  ioUnloadModule(char *moduleName);
+sqInt  ioUnloadModule(char *moduleName, struct foo * self);
 sqInt  ioUnloadModuleOfLength(sqInt moduleNameIndex, sqInt moduleNameLength, struct foo * self);
 char  *ioListBuiltinModule(sqInt moduleIndex, struct foo * self);
 char  *ioListLoadedModule(sqInt moduleIndex, struct foo * self);

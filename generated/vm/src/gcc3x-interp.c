@@ -27327,7 +27327,7 @@ primitiveRelinquishProcessor(struct foo * self)
 		   Instead we go full speed, therefore measuring the precise time we spend in the
 		   inner idle loop as a busy loop. */
 		if (GIV(nextProfileTick) == 0) {
-			ioRelinquishProcessorForMicroseconds(microSecs);
+			ioRelinquishProcessorForMicroseconds(microSecs, self);
 		}
 		/* begin pop: */
 		GIV(stackPointer) += 1 * BytesPerWord;
