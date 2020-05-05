@@ -1686,6 +1686,7 @@ _iss usqLong statFGCDeltaUsecs;
 _iss usqLong statIncrGCUsecs;
 _iss pthread_cond_t * step;
 _iss void (*primitiveFunctionPointer)();
+struct VirtualMachine* interpreterProxy;
 #undef _iss
 #if SQ_USE_GLOBAL_STRUCT
  } fum;
@@ -1732,7 +1733,6 @@ sqInt breakSelectorLength = MinSmallInteger;
 sqInt inIOProcessEvents;
 int (*showSurfaceFn)(sqIntptr_t, int, int, int, int);
 sqInt deferDisplayUpdates;
-struct VirtualMachine* interpreterProxy;
 static void (*interruptCheckChain)(void) = 0;
 char * breakSelector;
 sqInt debugCallbackInvokes;
@@ -55761,7 +55761,7 @@ doSignalSemaphoreWithIndex(sqInt index, struct foo * self)
 static void
 dummyReferToProxy(struct foo * self)
 {
-	interpreterProxy = interpreterProxy;
+	GIV(interpreterProxy) = GIV(interpreterProxy);
 }
 
 
@@ -64440,7 +64440,7 @@ readImageFromFileHeapSizeStartingAt(sqImageFile f, usqInt desiredHeapSize, squea
 	ensureImageFormatIsUpToDate(swapBytes, self);
 	bytesToShift = GIV(oldSpaceStart) - oldBaseAddr;
 	/* begin initializeInterpreter: */
-	interpreterProxy = sqGetInterpreterProxy(self);
+	GIV(interpreterProxy) = sqGetInterpreterProxy(self);
 	dummyReferToProxy(self);
 	initializeObjectMemory(bytesToShift, self);
 	/* begin checkAssumedCompactClasses */
@@ -74355,4 +74355,8 @@ void initGlobalStructure(void) {
 #if SQ_USE_GLOBAL_STRUCT_REG
 foo = &fum;
 #endif
+}
+
+VirtualMachine * getInterpreterProxy(struct foo * self){
+	return GIV(interpreterProxy);
 }

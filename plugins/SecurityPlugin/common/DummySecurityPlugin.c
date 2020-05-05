@@ -70,7 +70,7 @@ extern sqInt primitiveFail(void);
 extern sqInt pushBool(sqInt trueOrFalse);
 extern
 #endif
-struct VirtualMachine* interpreterProxy;
+
 static const char *moduleName =
 #ifdef SQUEAK_BUILTIN_PLUGIN
 	"SecurityPlugin DUMMY (i)"
@@ -195,7 +195,7 @@ setInterpreter(struct VirtualMachine *anInterpreter)
 {
     sqInt ok;
 
-	interpreterProxy = anInterpreter;
+	VirtualMachine* interpreterProxy = anInterpreter;
 	ok = ((interpreterProxy->majorVersion()) == (VM_PROXY_MAJOR))
 	 && ((interpreterProxy->minorVersion()) >= (VM_PROXY_MINOR));
 	if (ok) {

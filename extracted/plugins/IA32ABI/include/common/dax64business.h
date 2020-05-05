@@ -161,7 +161,7 @@
 		}
 	}
 
-	funcAlien = interpreterProxy->stackValue(funcOffset);
+	funcAlien = interpreterProxy->stackValue(funcOffset, interpreterProxy->interpreterState);
 	f = *(void**)startOfParameterData(funcAlien);
 
 	/* Note that this call a) passes the integer reg args in regs in the core
@@ -181,7 +181,7 @@
 		  dregs[4], dregs[5], dregs[6], dregs[7]);
 
 	/* Post call need to refresh stack pointer in case of call-back and GC. */
-	resultMaybeAlien = interpreterProxy->stackValue(resultOffset);
+	resultMaybeAlien = interpreterProxy->stackValue(resultOffset, interpreterProxy->interpreterState);
 	if (objIsAlien(resultMaybeAlien)) {
 		size = sizeField(resultMaybeAlien);
 		if (size == 0) /* Pointer Alien. */

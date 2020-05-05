@@ -37,10 +37,11 @@ typedef struct ModuleEntry {
 	char name[1];
 } ModuleEntry;
 
-
+struct foo;
 static ModuleEntry *squeakModule = NULL;
 static ModuleEntry *firstModule = NULL;
-struct VirtualMachine *sqGetInterpreterProxy();
+extern VirtualMachine *sqGetInterpreterProxy(struct foo * self);
+extern VirtualMachine * getInterpreterProxy(struct foo * self);
 
 static void *
 findLoadedModule(char *pluginName)
@@ -240,7 +241,8 @@ callInitializersIn(ModuleEntry *module, struct foo * self)
 		return 0;
 	}
 	/* call setInterpreter */
-	okay = ((sqInt (*) (struct VirtualMachine*))init1)(sqGetInterpreterProxy());
+	VirtualMachine * arg = getInterpreterProxy(self);
+	okay = ((sqInt (*) (struct VirtualMachine*))init1)(arg);
 	if(!okay) {
 		DPRINTF(("ERROR: setInterpreter() returned false\n"));
 		return 0;

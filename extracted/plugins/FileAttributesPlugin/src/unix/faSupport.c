@@ -127,7 +127,7 @@ char	*bytePtr;
 sqInt	status;
 
 	len = interpreterProxy->stSizeOf(pathNameOop);
-	bytePtr = interpreterProxy->arrayValueOf(pathNameOop);
+	bytePtr = interpreterProxy->arrayValueOf(pathNameOop, interpreterProxy->interpreterState);
 	if (len >= FA_PATH_MAX)
 		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG);
 	memcpy(aFaPath->uxpath, bytePtr, len);

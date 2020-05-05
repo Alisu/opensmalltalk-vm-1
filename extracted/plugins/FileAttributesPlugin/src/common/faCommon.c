@@ -75,7 +75,7 @@ char	*pathName;
 
 
 	len = interpreterProxy->stSizeOf(pathNameOop);
-	pathName = interpreterProxy->arrayValueOf(pathNameOop);
+	pathName = interpreterProxy->arrayValueOf(pathNameOop, interpreterProxy->interpreterState);
 	return faSetStDir(aFaPath, pathName, len);
 }
 
@@ -88,7 +88,7 @@ char	*pathName;
 
 
 	len = interpreterProxy->stSizeOf(pathNameOop);
-	pathName = interpreterProxy->arrayValueOf(pathNameOop);
+	pathName = interpreterProxy->arrayValueOf(pathNameOop, interpreterProxy->interpreterState);
 	return faSetStPath(aFaPath, pathName, len);
 }
 
@@ -115,7 +115,7 @@ sqInt newByteArray;
 	if (!(newByteArray)) {
 		return interpreterProxy->primitiveFailFor(PrimErrNoMemory);
 	}
-	byteArrayPtr = interpreterProxy->arrayValueOf(newByteArray);
+	byteArrayPtr = interpreterProxy->arrayValueOf(newByteArray, interpreterProxy->interpreterState);
 	memcpy(byteArrayPtr, cBuf, len);
 	byteArrayOop[0] = newByteArray;
 	return 0;

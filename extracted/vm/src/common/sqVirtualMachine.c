@@ -245,8 +245,6 @@ sqInt ptDisableCogIt(void*);
 
 sqInt isNonImmediate(sqInt oop);
 
-struct VirtualMachine *VM = NULL;
-
 static sqInt majorVersion(void) {
 	return VM_PROXY_MAJOR;
 }
@@ -291,10 +289,13 @@ interceptFetchIntegerofObject(sqInt fieldIndex, sqInt objectPointer, struct foo 
 #endif
 
 sqInt  fetchIntegerofObject(sqInt fieldIndex, sqInt objectPointer, struct foo * self);
-struct VirtualMachine* sqGetInterpreterProxy()
+struct VirtualMachine* sqGetInterpreterProxy(struct foo * self)
 {
+	VirtualMachine * VM = getInterpreterProxy(self);
 	if(VM) return VM;
+	
 	VM = (struct VirtualMachine *)calloc(1, sizeof(VirtualMachine));
+	VM->interpreterState = self;
 	/* Initialize Function pointers */
 	VM->majorVersion = majorVersion;
 	VM->minorVersion = minorVersion;

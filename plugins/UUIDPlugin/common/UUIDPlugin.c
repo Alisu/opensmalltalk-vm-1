@@ -134,7 +134,7 @@ primitiveMakeUUID(void)
 	char *location;
 	sqInt oop;
 
-	oop = interpreterProxy->stackValue(0);
+	oop = interpreterProxy->stackValue(0, interpreterProxy->interpreterState);
 	if (!(((interpreterProxy->methodArgumentCount()) == 0)
 			&& ((interpreterProxy->isBytes(oop))
 					&& ((interpreterProxy->byteSizeOf(oop)) == 16)))) {
