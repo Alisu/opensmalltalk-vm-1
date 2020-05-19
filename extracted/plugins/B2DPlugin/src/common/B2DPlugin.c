@@ -740,10 +740,10 @@ static sqInt geProfileTime;
 static int* getBuffer;
 
 #if !defined(SQUEAK_BUILTIN_PLUGIN)
-static sqInt (*booleanValueOf)(sqInt obj);
-static sqInt (*byteSizeOf)(sqInt oop);
-static sqInt (*classBitmap)(void);
-static sqInt (*classPoint)(void);
+static sqInt (*booleanValueOf)(sqInt obj, struct foo * self);
+static sqInt (*byteSizeOf)(sqInt oop, struct foo * self);
+static sqInt (*classBitmap)(struct foo * self);
+static sqInt (*classPoint)(struct foo * self);
 static sqInt (*failed)(void);
 static sqInt (*fetchClassOf)(sqInt oop);
 static sqInt (*fetchIntegerofObject)(sqInt fieldIndex, sqInt objectPointer);
@@ -763,28 +763,28 @@ static sqInt (*isWords)(sqInt oop);
 static sqInt (*makePointwithxValueyValue)(sqInt xValue, sqInt yValue);
 static sqInt (*methodArgumentCount)(void);
 static sqInt (*nilObject)(void);
-static sqInt (*pop)(sqInt nItems);
-static sqInt (*popthenPush)(sqInt nItems, sqInt oop);
+static sqInt (*pop)(sqInt nItems, struct foo * self);
+static sqInt (*popthenPush)(sqInt nItems, sqInt oop, struct foo * self);
 static sqInt (*popRemappableOop)(void);
 static sqInt (*positive32BitIntegerFor)(unsigned int integerValue);
 static usqInt (*positive32BitValueOf)(sqInt oop);
 static sqInt (*primitiveFail)(void);
-static sqInt (*primitiveFailFor)(sqInt reasonCode);
+static sqInt (*primitiveFailFor)(sqInt reasonCode, struct foo * self);
 static sqInt (*pushBool)(sqInt trueOrFalse);
 static sqInt (*pushInteger)(sqInt integerValue);
 static sqInt (*pushRemappableOop)(sqInt oop);
 static sqInt (*slotSizeOf)(sqInt oop);
 static sqInt (*stackIntegerValue)(sqInt offset);
 static sqInt (*stackObjectValue)(sqInt offset);
-static sqInt (*stackValue)(sqInt offset);
+static sqInt (*stackValue)(sqInt offset, struct foo * self);
 static sqInt (*storeIntegerofObjectwithValue)(sqInt index, sqInt oop, sqInt integer);
 static sqInt (*storePointerofObjectwithValue)(sqInt index, sqInt oop, sqInt valuePointer);
 static sqInt (*topRemappableOop)(void);
 #else /* !defined(SQUEAK_BUILTIN_PLUGIN) */
-extern sqInt booleanValueOf(sqInt obj);
-extern sqInt byteSizeOf(sqInt oop);
-extern sqInt classBitmap(void);
-extern sqInt classPoint(void);
+extern sqInt booleanValueOf(sqInt obj, struct foo * self);
+extern sqInt byteSizeOf(sqInt oop, struct foo * self);
+extern sqInt classBitmap(struct foo * self);
+extern sqInt classPoint(struct foo * self);
 extern sqInt failed(void);
 extern sqInt fetchClassOf(sqInt oop);
 extern sqInt fetchIntegerofObject(sqInt fieldIndex, sqInt objectPointer);
@@ -812,20 +812,20 @@ extern sqInt isWords(sqInt oop);
 extern sqInt makePointwithxValueyValue(sqInt xValue, sqInt yValue);
 extern sqInt methodArgumentCount(void);
 extern sqInt nilObject(void);
-extern sqInt pop(sqInt nItems);
-extern sqInt popthenPush(sqInt nItems, sqInt oop);
+extern sqInt pop(sqInt nItems, struct foo * self);
+extern sqInt popthenPush(sqInt nItems, sqInt oop, struct foo * self);
 extern sqInt popRemappableOop(void);
 extern sqInt positive32BitIntegerFor(unsigned int integerValue);
 extern usqInt positive32BitValueOf(sqInt oop);
 extern sqInt primitiveFail(void);
-extern sqInt primitiveFailFor(sqInt reasonCode);
+extern sqInt primitiveFailFor(sqInt reasonCode, struct foo * self);
 extern sqInt pushBool(sqInt trueOrFalse);
 extern sqInt pushInteger(sqInt integerValue);
 extern sqInt pushRemappableOop(sqInt oop);
 extern sqInt slotSizeOf(sqInt oop);
 extern sqInt stackIntegerValue(sqInt offset);
 extern sqInt stackObjectValue(sqInt offset);
-extern sqInt stackValue(sqInt offset);
+extern sqInt stackValue(sqInt offset, struct foo * self);
 extern sqInt storeIntegerofObjectwithValue(sqInt index, sqInt oop, sqInt integer);
 extern sqInt storePointerofObjectwithValue(sqInt index, sqInt oop, sqInt valuePointer);
 extern sqInt topRemappableOop(void);
@@ -6710,7 +6710,7 @@ loadBitmapFillcolormaptilefromalongnormalxIndex(sqInt formOop, sqInt cmOop, sqIn
 		cmBits = null;
 	}
 	else {
-		if (!((fetchClassOf(cmOop)) == (classBitmap()))) {
+		if (!((fetchClassOf(cmOop)) == (classBitmap(interpreterProxy->interpreterState)))) {
 			return primitiveFail();
 		}
 		cmSize = slotSizeOf(cmOop);
@@ -6723,7 +6723,7 @@ loadBitmapFillcolormaptilefromalongnormalxIndex(sqInt formOop, sqInt cmOop, sqIn
 		return primitiveFail();
 	}
 	bmBits = fetchPointerofObject(0, formOop);
-	if (!((fetchClassOf(bmBits)) == (classBitmap()))) {
+	if (!((fetchClassOf(bmBits)) == (classBitmap(interpreterProxy->interpreterState)))) {
 		return primitiveFail();
 	}
 	bmBitsSize = slotSizeOf(bmBits);
@@ -7775,7 +7775,7 @@ loadFormsFrom(sqInt arrayOop)
 			return 0;
 		}
 		bmBits = fetchPointerofObject(0, formOop);
-		if (!((fetchClassOf(bmBits)) == (classBitmap()))) {
+		if (!((fetchClassOf(bmBits)) == (classBitmap(interpreterProxy->interpreterState)))) {
 			return 0;
 		}
 		bmBitsSize = slotSizeOf(bmBits);
@@ -7813,7 +7813,7 @@ loadGradientFillfromalongnormalisRadial(sqInt rampOop, int *point1, int *point2,
     int *rampPtr;
     sqInt rampWidth;
 
-	if (!((fetchClassOf(rampOop)) == (classBitmap()))) {
+	if (!((fetchClassOf(rampOop)) == (classBitmap(interpreterProxy->interpreterState)))) {
 		return primitiveFail();
 	}
 	rampWidth = slotSizeOf(rampOop);
@@ -8114,7 +8114,7 @@ loadPointfrom(int *pointArray, sqInt pointOop)
 {
     sqInt value;
 
-	if (!((fetchClassOf(pointOop)) == (classPoint()))) {
+	if (!((fetchClassOf(pointOop)) == (classPoint(interpreterProxy->interpreterState)))) {
 		return primitiveFail();
 	}
 	value = fetchPointerofObject(0, pointOop);
@@ -8338,7 +8338,7 @@ loadRenderingState(void)
 	if (!((methodArgumentCount()) == 2)) {
 		return PrimErrBadNumArgs;
 	}
-	if (((failCode = quickLoadEngineFrom(stackValue(2)))) != 0) {
+	if (((failCode = quickLoadEngineFrom(stackValue(2, interpreterProxy->interpreterState)))) != 0) {
 		return failCode;
 	}
 	fillOop = stackObjectValue(0);
@@ -8699,7 +8699,7 @@ loadSpanBufferFrom(sqInt spanOop)
 {
     sqInt value;
 
-	if (!((fetchClassOf(spanOop)) == (classBitmap()))) {
+	if (!((fetchClassOf(spanOop)) == (classBitmap(interpreterProxy->interpreterState)))) {
 		return GEFClassMismatch;
 	}
 
@@ -9242,10 +9242,10 @@ primitiveAbortProcessing(void)
     sqInt failureCode;
 
 	if (!((methodArgumentCount()) == 0)) {
-		return primitiveFailFor(PrimErrBadNumArgs);
+		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
 	}
-	if (!(((failureCode = quickLoadEngineFrom(stackValue(0)))) == 0)) {
-		return primitiveFailFor(failureCode);
+	if (!(((failureCode = quickLoadEngineFrom(stackValue(0, interpreterProxy->interpreterState)))) == 0)) {
+		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
 	}
 	workBuffer[GWState] = GEStateCompleted;
 	/* begin storeEngineStateInto: */
@@ -9269,32 +9269,32 @@ primitiveAddActiveEdgeEntry(void)
 		geProfileTime = ioMicroMSecs();
 	}
 	if (!((methodArgumentCount()) == 1)) {
-		return primitiveFailFor(PrimErrBadNumArgs);
+		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
 	}
-	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(1), GEStateWaitingForEdge))) == 0)) {
-		return primitiveFailFor(failureCode);
+	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(1, interpreterProxy->interpreterState), GEStateWaitingForEdge))) == 0)) {
+		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
 	}
 	edgeOop = stackObjectValue(0);
 	if (failed()) {
-		return primitiveFailFor(PrimErrBadArgument);
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	edge = loadEdgeStateFrom(edgeOop);
 	if (edge == null) {
-		return primitiveFailFor(GEFEdgeDataTooSmall);
+		return primitiveFailFor(GEFEdgeDataTooSmall, interpreterProxy->interpreterState);
 	}
 	if (!(needAvailableSpace(1))) {
-		return primitiveFailFor(GEFWorkTooBig);
+		return primitiveFailFor(GEFWorkTooBig, interpreterProxy->interpreterState);
 	}
 	if ((objBuffer[edge + GENumLines]) > 0) {
 		insertEdgeIntoAET(edge);
 	}
 	if (engineStopped) {
-		return primitiveFailFor(GEFEngineStopped);
+		return primitiveFailFor(GEFEngineStopped, interpreterProxy->interpreterState);
 	}
 	workBuffer[GWState] = GEStateAddingFromGET;
 	/* begin storeEngineStateInto: */
 	workBuffer[GWObjUsed] = objUsed;
-	pop(1);
+	pop(1, interpreterProxy->interpreterState);
 	if (doProfileStats) {
 		/* begin incrementStat:by: */
 		workBuffer[GWCountAddAETEntry] = ((workBuffer[GWCountAddAETEntry]) + 1);
@@ -9344,31 +9344,31 @@ primitiveAddBezier(void)
 
 	/* Fail if we have the wrong number of arguments */
 	if (!((methodArgumentCount()) == 5)) {
-		return primitiveFailFor(PrimErrBadNumArgs);
+		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
 	}
-	rightFill = positive32BitValueOf(stackValue(0));
-	leftFill = positive32BitValueOf(stackValue(1));
+	rightFill = positive32BitValueOf(stackValue(0, interpreterProxy->interpreterState));
+	leftFill = positive32BitValueOf(stackValue(1, interpreterProxy->interpreterState));
 	viaOop = stackObjectValue(2);
 	endOop = stackObjectValue(3);
 	startOop = stackObjectValue(4);
 	if (failed()) {
-		return primitiveFailFor(PrimErrBadArgument);
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
-	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(5), GEStateUnlocked))) == 0)) {
-		return primitiveFailFor(failureCode);
+	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(5, interpreterProxy->interpreterState), GEStateUnlocked))) == 0)) {
+		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
 	}
 	if (!((isFillOkay(leftFill))
 		 && (isFillOkay(rightFill)))) {
-		return primitiveFailFor(GEFWrongFill);
+		return primitiveFailFor(GEFWrongFill, interpreterProxy->interpreterState);
 	}
 	if ((leftFill == rightFill) && 0) {
-		return pop(6);
+		return pop(6, interpreterProxy->interpreterState);
 	}
 	loadPointfrom(((int *) (workBuffer + GWPoint1)), startOop);
 	loadPointfrom(((int *) (workBuffer + GWPoint2)), viaOop);
 	loadPointfrom(((int *) (workBuffer + GWPoint3)), endOop);
 	if (failed()) {
-		return primitiveFailFor(PrimErrBadArgument);
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	/* begin transformPoints: */
 	if (3 > 0) {
@@ -9484,14 +9484,14 @@ primitiveAddBezier(void)
 		/* Make sure the stack is okay */
 		/* begin wbStackClear */
 		workBuffer[GWBufferTop] = (workBuffer[GWSize]);
-		return primitiveFailFor(GEFEngineStopped);
+		return primitiveFailFor(GEFEngineStopped, interpreterProxy->interpreterState);
 	}
 	if (failed()) {
-		return primitiveFailFor(GEFEntityLoadFailed);
+		return primitiveFailFor(GEFEntityLoadFailed, interpreterProxy->interpreterState);
 	}
 	/* begin storeEngineStateInto: */
 	workBuffer[GWObjUsed] = objUsed;
-	pop(5);
+	pop(5, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -9512,18 +9512,18 @@ primitiveAddBezierShape(void)
 
 	/* Fail if we have the wrong number of arguments */
 	if (!((methodArgumentCount()) == 5)) {
-		return primitiveFailFor(PrimErrBadNumArgs);
+		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
 	}
-	lineFill = positive32BitValueOf(stackValue(0));
+	lineFill = positive32BitValueOf(stackValue(0, interpreterProxy->interpreterState));
 	lineWidth = stackIntegerValue(1);
-	fillIndex = positive32BitValueOf(stackValue(2));
+	fillIndex = positive32BitValueOf(stackValue(2, interpreterProxy->interpreterState));
 	nSegments = stackIntegerValue(3);
 	points = stackObjectValue(4);
 	if (failed()) {
-		return primitiveFailFor(PrimErrBadArgument);
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
-	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(5), GEStateUnlocked))) == 0)) {
-		return primitiveFailFor(failureCode);
+	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(5, interpreterProxy->interpreterState), GEStateUnlocked))) == 0)) {
+		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
 	}
 	length = slotSizeOf(points);
 	if (isWords(points)) {
@@ -9532,17 +9532,17 @@ primitiveAddBezierShape(void)
 		pointsIsArray = 0;
 		if (!((length == (nSegments * 3))
 			 || (length == (nSegments * 6)))) {
-			return primitiveFailFor(PrimErrBadArgument);
+			return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 		}
 	}
 	else {
 
 		/* Must be Array of points */
 		if (!(isArray(points))) {
-			return primitiveFailFor(PrimErrBadArgument);
+			return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 		}
 		if (!(length == (nSegments * 3))) {
-			return primitiveFailFor(PrimErrBadArgument);
+			return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 		}
 		pointsIsArray = 1;
 	}
@@ -9554,21 +9554,21 @@ primitiveAddBezierShape(void)
 		segSize = GLWideSize;
 	}
 	if (!(needAvailableSpace(segSize * nSegments))) {
-		return primitiveFailFor(GEFWorkTooBig);
+		return primitiveFailFor(GEFWorkTooBig, interpreterProxy->interpreterState);
 	}
 	if (!((isFillOkay(lineFill))
 		 && (isFillOkay(fillIndex)))) {
-		return primitiveFailFor(GEFWrongFill);
+		return primitiveFailFor(GEFWrongFill, interpreterProxy->interpreterState);
 	}
 	lineFill = transformColor(lineFill);
 	fillIndex = transformColor(fillIndex);
 	if (engineStopped) {
-		return primitiveFailFor(GEFEngineStopped);
+		return primitiveFailFor(GEFEngineStopped, interpreterProxy->interpreterState);
 	}
 	if (((lineFill == 0)
 	 || (lineWidth == 0))
 	 && (fillIndex == 0)) {
-		return pop(5);
+		return pop(5, interpreterProxy->interpreterState);
 	}
 	if (!(lineWidth == 0)) {
 		lineWidth = transformWidth(lineWidth);
@@ -9583,16 +9583,16 @@ primitiveAddBezierShape(void)
 		loadShapenSegmentsfilllineWidthlineFillpointsShort(firstIndexableField(points), nSegments, fillIndex, lineWidth, lineFill, (nSegments * 3) == length);
 	}
 	if (engineStopped) {
-		return primitiveFailFor(GEFEngineStopped);
+		return primitiveFailFor(GEFEngineStopped, interpreterProxy->interpreterState);
 	}
 	if (failed()) {
-		return primitiveFailFor(GEFEntityLoadFailed);
+		return primitiveFailFor(GEFEntityLoadFailed, interpreterProxy->interpreterState);
 	}
 	/* begin needsFlushPut: */
 	workBuffer[GWNeedsFlush] = 1;
 	/* begin storeEngineStateInto: */
 	workBuffer[GWObjUsed] = objUsed;
-	pop(5);
+	pop(5, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -9628,29 +9628,29 @@ primitiveAddBitmapFill(void)
 
 	/* Fail if we have the wrong number of arguments */
 	if (!((methodArgumentCount()) == 7)) {
-		return primitiveFailFor(PrimErrBadNumArgs);
+		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
 	}
 	xIndex = stackIntegerValue(0);
 	if (xIndex <= 0) {
-		return primitiveFailFor(PrimErrBadArgument);
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	nrmOop = stackObjectValue(1);
 	dirOop = stackObjectValue(2);
 	originOop = stackObjectValue(3);
-	tileFlag = booleanValueOf(stackValue(4));
+	tileFlag = booleanValueOf(stackValue(4, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 	cmOop = stackObjectValue(5);
 	formOop = stackObjectValue(6);
 	if (failed()) {
-		return primitiveFailFor(PrimErrBadArgument);
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
-	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(7), GEStateUnlocked))) == 0)) {
-		return primitiveFailFor(failureCode);
+	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(7, interpreterProxy->interpreterState), GEStateUnlocked))) == 0)) {
+		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
 	}
 	loadPointfrom(((int *) (workBuffer + GWPoint1)), originOop);
 	loadPointfrom(((int *) (workBuffer + GWPoint2)), dirOop);
 	loadPointfrom(((int *) (workBuffer + GWPoint3)), nrmOop);
 	if (failed()) {
-		return primitiveFailFor(GEFBadPoint);
+		return primitiveFailFor(GEFBadPoint, interpreterProxy->interpreterState);
 	}
 	/* begin loadBitmapFill:colormap:tile:from:along:normal:xIndex: */
 	tileFlag1 = (tileFlag
@@ -9661,7 +9661,7 @@ primitiveAddBitmapFill(void)
 		cmBits = null;
 	}
 	else {
-		if (!((fetchClassOf(cmOop)) == (classBitmap()))) {
+		if (!((fetchClassOf(cmOop)) == (classBitmap(interpreterProxy->interpreterState)))) {
 			fill = primitiveFail();
 			goto l14;
 		}
@@ -9677,7 +9677,7 @@ primitiveAddBitmapFill(void)
 		goto l14;
 	}
 	bmBits = fetchPointerofObject(0, formOop);
-	if (!((fetchClassOf(bmBits)) == (classBitmap()))) {
+	if (!((fetchClassOf(bmBits)) == (classBitmap(interpreterProxy->interpreterState)))) {
 		fill = primitiveFail();
 		goto l14;
 	}
@@ -9762,14 +9762,14 @@ primitiveAddBitmapFill(void)
 	if (engineStopped) {
 
 		/* Make sure the stack is okay */
-		return primitiveFailFor(GEFEngineStopped);
+		return primitiveFailFor(GEFEngineStopped, interpreterProxy->interpreterState);
 	}
 	if (failed()) {
-		return primitiveFailFor(GEFEntityLoadFailed);
+		return primitiveFailFor(GEFEntityLoadFailed, interpreterProxy->interpreterState);
 	}
 	/* begin storeEngineStateInto: */
 	workBuffer[GWObjUsed] = objUsed;
-	popthenPush(8, positive32BitIntegerFor(fill));
+	popthenPush(8, positive32BitIntegerFor(fill), interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -9790,7 +9790,7 @@ primitiveAddCompressedShape(void)
 
 	/* Fail if we have the wrong number of arguments */
 	if (!((methodArgumentCount()) == 7)) {
-		return primitiveFailFor(PrimErrBadNumArgs);
+		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
 	}
 	fillIndexList = stackObjectValue(0);
 	lineFills = stackObjectValue(1);
@@ -9800,32 +9800,32 @@ primitiveAddCompressedShape(void)
 	nSegments = stackIntegerValue(5);
 	points = stackObjectValue(6);
 	if (failed()) {
-		return primitiveFailFor(PrimErrBadArgument);
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
-	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(7), GEStateUnlocked))) == 0)) {
-		return primitiveFailFor(failureCode);
+	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(7, interpreterProxy->interpreterState), GEStateUnlocked))) == 0)) {
+		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
 	}
 	if (!(checkCompressedShapesegmentsleftFillsrightFillslineWidthslineFillsfillIndexList(points, nSegments, leftFills, rightFills, lineWidths, lineFills, fillIndexList))) {
-		return primitiveFailFor(GEFEntityCheckFailed);
+		return primitiveFailFor(GEFEntityCheckFailed, interpreterProxy->interpreterState);
 	}
 	if (!(needAvailableSpace((((GBBaseSize < GLBaseSize) ? GLBaseSize : GBBaseSize)) * nSegments))) {
-		return primitiveFailFor(GEFWorkTooBig);
+		return primitiveFailFor(GEFWorkTooBig, interpreterProxy->interpreterState);
 	}
 
 	/* Then actually load the compressed shape */
 	pointsShort = (slotSizeOf(points)) == (nSegments * 3);
 	loadCompressedShapesegmentsleftFillsrightFillslineWidthslineFillsfillIndexListpointShort(firstIndexableField(points), nSegments, firstIndexableField(leftFills), firstIndexableField(rightFills), firstIndexableField(lineWidths), firstIndexableField(lineFills), firstIndexableField(fillIndexList), pointsShort);
 	if (engineStopped) {
-		return primitiveFailFor(GEFEngineStopped);
+		return primitiveFailFor(GEFEngineStopped, interpreterProxy->interpreterState);
 	}
 	if (failed()) {
-		return primitiveFailFor(GEFEntityLoadFailed);
+		return primitiveFailFor(GEFEntityLoadFailed, interpreterProxy->interpreterState);
 	}
 	/* begin needsFlushPut: */
 	workBuffer[GWNeedsFlush] = 1;
 	/* begin storeEngineStateInto: */
 	workBuffer[GWObjUsed] = objUsed;
-	pop(7);
+	pop(7, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -9844,37 +9844,37 @@ primitiveAddGradientFill(void)
 
 	/* Fail if we have the wrong number of arguments */
 	if (!((methodArgumentCount()) == 5)) {
-		return primitiveFailFor(PrimErrBadNumArgs);
+		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
 	}
-	isRadial = booleanValueOf(stackValue(0));
-	nrmOop = stackValue(1);
-	dirOop = stackValue(2);
-	originOop = stackValue(3);
-	rampOop = stackValue(4);
+	isRadial = booleanValueOf(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	nrmOop = stackValue(1, interpreterProxy->interpreterState);
+	dirOop = stackValue(2, interpreterProxy->interpreterState);
+	originOop = stackValue(3, interpreterProxy->interpreterState);
+	rampOop = stackValue(4, interpreterProxy->interpreterState);
 	if (failed()) {
-		return primitiveFailFor(PrimErrBadArgument);
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
-	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(5), GEStateUnlocked))) == 0)) {
-		return primitiveFailFor(failureCode);
+	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(5, interpreterProxy->interpreterState), GEStateUnlocked))) == 0)) {
+		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
 	}
 	loadPointfrom(((int *) (workBuffer + GWPoint1)), originOop);
 	loadPointfrom(((int *) (workBuffer + GWPoint2)), dirOop);
 	loadPointfrom(((int *) (workBuffer + GWPoint3)), nrmOop);
 	if (failed()) {
-		return primitiveFailFor(GEFBadPoint);
+		return primitiveFailFor(GEFBadPoint, interpreterProxy->interpreterState);
 	}
 	fill = loadGradientFillfromalongnormalisRadial(rampOop, ((int *) (workBuffer + GWPoint1)), ((int *) (workBuffer + GWPoint2)), ((int *) (workBuffer + GWPoint3)), isRadial);
 	if (engineStopped) {
 
 		/* Make sure the stack is okay */
-		return primitiveFailFor(GEFEngineStopped);
+		return primitiveFailFor(GEFEngineStopped, interpreterProxy->interpreterState);
 	}
 	if (failed()) {
-		return primitiveFailFor(GEFEntityLoadFailed);
+		return primitiveFailFor(GEFEntityLoadFailed, interpreterProxy->interpreterState);
 	}
 	/* begin storeEngineStateInto: */
 	workBuffer[GWObjUsed] = objUsed;
-	popthenPush(6, positive32BitIntegerFor(fill));
+	popthenPush(6, positive32BitIntegerFor(fill), interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -9915,26 +9915,26 @@ primitiveAddLine(void)
 
 	/* Fail if we have the wrong number of arguments */
 	if (!((methodArgumentCount()) == 4)) {
-		return primitiveFailFor(PrimErrBadNumArgs);
+		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
 	}
-	rightFill = positive32BitValueOf(stackValue(0));
-	leftFill = positive32BitValueOf(stackValue(1));
+	rightFill = positive32BitValueOf(stackValue(0, interpreterProxy->interpreterState));
+	leftFill = positive32BitValueOf(stackValue(1, interpreterProxy->interpreterState));
 	endOop = stackObjectValue(2);
 	startOop = stackObjectValue(3);
 	if (failed()) {
-		return primitiveFailFor(PrimErrBadArgument);
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
-	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(4), GEStateUnlocked))) == 0)) {
-		return primitiveFailFor(failureCode);
+	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(4, interpreterProxy->interpreterState), GEStateUnlocked))) == 0)) {
+		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
 	}
 	if (!((isFillOkay(leftFill))
 		 && (isFillOkay(rightFill)))) {
-		return primitiveFailFor(GEFWrongFill);
+		return primitiveFailFor(GEFWrongFill, interpreterProxy->interpreterState);
 	}
 	loadPointfrom(((int *) (workBuffer + GWPoint1)), startOop);
 	loadPointfrom(((int *) (workBuffer + GWPoint2)), endOop);
 	if (failed()) {
-		return primitiveFailFor(GEFBadPoint);
+		return primitiveFailFor(GEFBadPoint, interpreterProxy->interpreterState);
 	}
 	/* begin transformPoints: */
 	if (2 > 0) {
@@ -10032,18 +10032,18 @@ primitiveAddLine(void)
 	leftFill = transformColor(leftFill);
 	rightFill = transformColor(rightFill);
 	if (engineStopped) {
-		return primitiveFailFor(GEFEngineStopped);
+		return primitiveFailFor(GEFEngineStopped, interpreterProxy->interpreterState);
 	}
 	loadWideLinefromtolineFillleftFillrightFill(0, ((int *) (workBuffer + GWPoint1)), ((int *) (workBuffer + GWPoint2)), 0, leftFill, rightFill);
 	if (engineStopped) {
-		return primitiveFailFor(GEFEngineStopped);
+		return primitiveFailFor(GEFEngineStopped, interpreterProxy->interpreterState);
 	}
 	if (failed()) {
-		return primitiveFailFor(GEFEntityLoadFailed);
+		return primitiveFailFor(GEFEntityLoadFailed, interpreterProxy->interpreterState);
 	}
 	/* begin storeEngineStateInto: */
 	workBuffer[GWObjUsed] = objUsed;
-	pop(4);
+	pop(4, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -10061,35 +10061,35 @@ primitiveAddOval(void)
 
 	/* Fail if we have the wrong number of arguments */
 	if (!((methodArgumentCount()) == 5)) {
-		return primitiveFailFor(PrimErrBadNumArgs);
+		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
 	}
-	borderIndex = positive32BitValueOf(stackValue(0));
+	borderIndex = positive32BitValueOf(stackValue(0, interpreterProxy->interpreterState));
 	borderWidth = stackIntegerValue(1);
-	fillIndex = positive32BitValueOf(stackValue(2));
+	fillIndex = positive32BitValueOf(stackValue(2, interpreterProxy->interpreterState));
 	endOop = stackObjectValue(3);
 	startOop = stackObjectValue(4);
 	if (failed()) {
-		return primitiveFailFor(PrimErrBadArgument);
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
-	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(5), GEStateUnlocked))) == 0)) {
-		return primitiveFailFor(failureCode);
+	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(5, interpreterProxy->interpreterState), GEStateUnlocked))) == 0)) {
+		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
 	}
 	if (!((isFillOkay(borderIndex))
 		 && (isFillOkay(fillIndex)))) {
-		return primitiveFailFor(GEFWrongFill);
+		return primitiveFailFor(GEFWrongFill, interpreterProxy->interpreterState);
 	}
 	fillIndex = transformColor(fillIndex);
 	borderIndex = transformColor(borderIndex);
 	if (engineStopped) {
-		return primitiveFailFor(GEFEngineStopped);
+		return primitiveFailFor(GEFEngineStopped, interpreterProxy->interpreterState);
 	}
 	if ((fillIndex == 0)
 	 && ((borderIndex == 0)
 	 || (borderWidth <= 0))) {
-		return pop(5);
+		return pop(5, interpreterProxy->interpreterState);
 	}
 	if (!(needAvailableSpace(16 * GBBaseSize))) {
-		return primitiveFailFor(GEFWorkTooBig);
+		return primitiveFailFor(GEFWorkTooBig, interpreterProxy->interpreterState);
 	}
 	if ((borderWidth > 0)
 	 && (borderIndex != 0)) {
@@ -10101,22 +10101,22 @@ primitiveAddOval(void)
 	loadPointfrom(((int *) (workBuffer + GWPoint1)), startOop);
 	loadPointfrom(((int *) (workBuffer + GWPoint2)), endOop);
 	if (failed()) {
-		return primitiveFailFor(GEFBadPoint);
+		return primitiveFailFor(GEFBadPoint, interpreterProxy->interpreterState);
 	}
 	loadOvallineFillleftFillrightFill(borderWidth, borderIndex, 0, fillIndex);
 	if (engineStopped) {
 		/* begin wbStackClear */
 		workBuffer[GWBufferTop] = (workBuffer[GWSize]);
-		return primitiveFailFor(GEFEngineStopped);
+		return primitiveFailFor(GEFEngineStopped, interpreterProxy->interpreterState);
 	}
 	if (failed()) {
-		return primitiveFailFor(GEFEntityLoadFailed);
+		return primitiveFailFor(GEFEntityLoadFailed, interpreterProxy->interpreterState);
 	}
 	/* begin needsFlushPut: */
 	workBuffer[GWNeedsFlush] = 1;
 	/* begin storeEngineStateInto: */
 	workBuffer[GWObjUsed] = objUsed;
-	pop(5);
+	pop(5, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -10196,18 +10196,18 @@ primitiveAddPolygon(void)
 
 	/* Fail if we have the wrong number of arguments */
 	if (!((methodArgumentCount()) == 5)) {
-		return primitiveFailFor(PrimErrBadNumArgs);
+		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
 	}
-	lineFill = positive32BitValueOf(stackValue(0));
+	lineFill = positive32BitValueOf(stackValue(0, interpreterProxy->interpreterState));
 	lineWidth = stackIntegerValue(1);
-	fillIndex = positive32BitValueOf(stackValue(2));
+	fillIndex = positive32BitValueOf(stackValue(2, interpreterProxy->interpreterState));
 	nPoints = stackIntegerValue(3);
 	points = stackObjectValue(4);
 	if (failed()) {
-		return primitiveFailFor(PrimErrBadArgument);
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
-	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(5), GEStateUnlocked))) == 0)) {
-		return primitiveFailFor(failureCode);
+	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(5, interpreterProxy->interpreterState), GEStateUnlocked))) == 0)) {
+		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
 	}
 	length = slotSizeOf(points);
 	if (isWords(points)) {
@@ -10216,17 +10216,17 @@ primitiveAddPolygon(void)
 		pointsIsArray = 0;
 		if (!((length == nPoints)
 			 || ((nPoints * 2) == length))) {
-			return primitiveFailFor(PrimErrBadArgument);
+			return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 		}
 	}
 	else {
 
 		/* Must be Array of points */
 		if (!(isArray(points))) {
-			return primitiveFailFor(PrimErrBadArgument);
+			return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 		}
 		if (!(length == nPoints)) {
-			return primitiveFailFor(PrimErrBadArgument);
+			return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 		}
 		pointsIsArray = 1;
 	}
@@ -10242,17 +10242,17 @@ primitiveAddPolygon(void)
 	}
 	if (!((isFillOkay(lineFill))
 		 && (isFillOkay(fillIndex)))) {
-		return primitiveFailFor(GEFWrongFill);
+		return primitiveFailFor(GEFWrongFill, interpreterProxy->interpreterState);
 	}
 	lineFill = transformColor(lineFill);
 	fillIndex = transformColor(fillIndex);
 	if (engineStopped) {
-		return primitiveFailFor(GEFEngineStopped);
+		return primitiveFailFor(GEFEngineStopped, interpreterProxy->interpreterState);
 	}
 	if (((lineFill == 0)
 	 || (lineWidth == 0))
 	 && (fillIndex == 0)) {
-		return pop(5);
+		return pop(5, interpreterProxy->interpreterState);
 	}
 	if (!(lineWidth == 0)) {
 		lineWidth = transformWidth(lineWidth);
@@ -10513,16 +10513,16 @@ primitiveAddPolygon(void)
 	l20:	/* end loadPolygon:nPoints:fill:lineWidth:lineFill:pointsShort: */;
 	}
 	if (engineStopped) {
-		return primitiveFailFor(GEFEngineStopped);
+		return primitiveFailFor(GEFEngineStopped, interpreterProxy->interpreterState);
 	}
 	if (failed()) {
-		return primitiveFailFor(GEFEntityLoadFailed);
+		return primitiveFailFor(GEFEntityLoadFailed, interpreterProxy->interpreterState);
 	}
 	/* begin needsFlushPut: */
 	workBuffer[GWNeedsFlush] = 1;
 	/* begin storeEngineStateInto: */
 	workBuffer[GWObjUsed] = objUsed;
-	pop(5);
+	pop(5, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -10564,35 +10564,35 @@ primitiveAddRect(void)
 
 	/* Fail if we have the wrong number of arguments */
 	if (!((methodArgumentCount()) == 5)) {
-		return primitiveFailFor(PrimErrBadNumArgs);
+		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
 	}
-	borderIndex = positive32BitValueOf(stackValue(0));
+	borderIndex = positive32BitValueOf(stackValue(0, interpreterProxy->interpreterState));
 	borderWidth = stackIntegerValue(1);
-	fillIndex = positive32BitValueOf(stackValue(2));
+	fillIndex = positive32BitValueOf(stackValue(2, interpreterProxy->interpreterState));
 	endOop = stackObjectValue(3);
 	startOop = stackObjectValue(4);
 	if (failed()) {
-		return primitiveFailFor(PrimErrBadArgument);
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
-	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(5), GEStateUnlocked))) == 0)) {
-		return primitiveFailFor(failureCode);
+	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(5, interpreterProxy->interpreterState), GEStateUnlocked))) == 0)) {
+		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
 	}
 	if (!((isFillOkay(borderIndex))
 		 && (isFillOkay(fillIndex)))) {
-		return primitiveFailFor(GEFWrongFill);
+		return primitiveFailFor(GEFWrongFill, interpreterProxy->interpreterState);
 	}
 	borderIndex = transformColor(borderIndex);
 	fillIndex = transformColor(fillIndex);
 	if (engineStopped) {
-		return primitiveFailFor(GEFEngineStopped);
+		return primitiveFailFor(GEFEngineStopped, interpreterProxy->interpreterState);
 	}
 	if ((fillIndex == 0)
 	 && ((borderIndex == 0)
 	 || (borderWidth == 0))) {
-		return pop(5);
+		return pop(5, interpreterProxy->interpreterState);
 	}
 	if (!(needAvailableSpace(4 * GLBaseSize))) {
-		return primitiveFailFor(GEFWorkTooBig);
+		return primitiveFailFor(GEFWorkTooBig, interpreterProxy->interpreterState);
 	}
 	if ((borderWidth > 0)
 	 && (borderIndex != 0)) {
@@ -10604,7 +10604,7 @@ primitiveAddRect(void)
 	loadPointfrom(((int *) (workBuffer + GWPoint1)), startOop);
 	loadPointfrom(((int *) (workBuffer + GWPoint3)), endOop);
 	if (failed()) {
-		return primitiveFailFor(GEFBadPoint);
+		return primitiveFailFor(GEFBadPoint, interpreterProxy->interpreterState);
 	}
 	(((int *) (workBuffer + GWPoint2)))[0] = ((((int *) (workBuffer + GWPoint3)))[0]);
 	(((int *) (workBuffer + GWPoint2)))[1] = ((((int *) (workBuffer + GWPoint1)))[1]);
@@ -10709,13 +10709,13 @@ primitiveAddRect(void)
 	loadWideLinefromtolineFillleftFillrightFill(borderWidth, ((int *) (workBuffer + GWPoint3)), ((int *) (workBuffer + GWPoint4)), borderIndex, 0, fillIndex);
 	loadWideLinefromtolineFillleftFillrightFill(borderWidth, ((int *) (workBuffer + GWPoint4)), ((int *) (workBuffer + GWPoint1)), borderIndex, 0, fillIndex);
 	if (failed()) {
-		return primitiveFailFor(GEFEntityLoadFailed);
+		return primitiveFailFor(GEFEntityLoadFailed, interpreterProxy->interpreterState);
 	}
 	/* begin needsFlushPut: */
 	workBuffer[GWNeedsFlush] = 1;
 	/* begin storeEngineStateInto: */
 	workBuffer[GWObjUsed] = objUsed;
-	pop(5);
+	pop(5, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -10736,18 +10736,18 @@ primitiveChangedActiveEdgeEntry(void)
 		geProfileTime = ioMicroMSecs();
 	}
 	if (!((methodArgumentCount()) == 1)) {
-		return primitiveFailFor(PrimErrBadNumArgs);
+		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
 	}
-	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(1), GEStateWaitingChange))) == 0)) {
-		return primitiveFailFor(failureCode);
+	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(1, interpreterProxy->interpreterState), GEStateWaitingChange))) == 0)) {
+		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
 	}
 	edgeOop = stackObjectValue(0);
 	if (failed()) {
-		return primitiveFailFor(PrimErrBadArgument);
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	edge = loadEdgeStateFrom(edgeOop);
 	if (edge == null) {
-		return primitiveFailFor(GEFEdgeDataTooSmall);
+		return primitiveFailFor(GEFEdgeDataTooSmall, interpreterProxy->interpreterState);
 	}
 	if ((objBuffer[edge + GENumLines]) == 0) {
 		removeFirstAETEntry();
@@ -10761,7 +10761,7 @@ primitiveChangedActiveEdgeEntry(void)
 	workBuffer[GWState] = GEStateUpdateEdges;
 	/* begin storeEngineStateInto: */
 	workBuffer[GWObjUsed] = objUsed;
-	pop(1);
+	pop(1, interpreterProxy->interpreterState);
 	if (doProfileStats) {
 		/* begin incrementStat:by: */
 		workBuffer[GWCountChangeAETEntry] = ((workBuffer[GWCountChangeAETEntry]) + 1);
@@ -10785,21 +10785,21 @@ primitiveCopyBuffer(void)
     int *src;
 
 	if (!((methodArgumentCount()) == 2)) {
-		return primitiveFailFor(PrimErrBadNumArgs);
+		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
 	}
-	buf2 = stackValue(0);
+	buf2 = stackValue(0, interpreterProxy->interpreterState);
 
 	/* Make sure the old buffer is properly initialized */
-	buf1 = stackValue(1);
+	buf1 = stackValue(1, interpreterProxy->interpreterState);
 	if (!(((failCode = loadWorkBufferFrom(buf1))) == 0)) {
-		return primitiveFailFor(failCode);
+		return primitiveFailFor(failCode, interpreterProxy->interpreterState);
 	}
 	if (!((fetchClassOf(buf1)) == (fetchClassOf(buf2)))) {
-		return primitiveFailFor(GEFClassMismatch);
+		return primitiveFailFor(GEFClassMismatch, interpreterProxy->interpreterState);
 	}
 	diff = (slotSizeOf(buf2)) - (slotSizeOf(buf1));
 	if (diff < 0) {
-		return primitiveFailFor(GEFSizeMismatch);
+		return primitiveFailFor(GEFSizeMismatch, interpreterProxy->interpreterState);
 	}
 	src = workBuffer;
 	dst = firstIndexableField(buf2);
@@ -10814,9 +10814,9 @@ primitiveCopyBuffer(void)
 		dst[i] = (src[i]);
 	}
 	if (!(((failCode = loadWorkBufferFrom(buf2))) == 0)) {
-		return primitiveFailFor(failCode);
+		return primitiveFailFor(failCode, interpreterProxy->interpreterState);
 	}
-	pop(2);
+	pop(2, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -10835,16 +10835,16 @@ primitiveDisplaySpanBuffer(void)
 		geProfileTime = ioMicroMSecs();
 	}
 	if (!((methodArgumentCount()) == 0)) {
-		return primitiveFailFor(PrimErrBadNumArgs);
+		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
 	}
-	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(0), GEStateBlitBuffer))) == 0)) {
-		return primitiveFailFor(failureCode);
+	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(0, interpreterProxy->interpreterState), GEStateBlitBuffer))) == 0)) {
+		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
 	}
 	if (!(((failureCode = loadSpanBufferFrom(fetchPointerofObject(BESpanIndex, engine)))) == 0)) {
-		return primitiveFailFor(failureCode);
+		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
 	}
 	if (!(loadBitBltFrom(fetchPointerofObject(BEBitBltIndex, engine)))) {
-		return primitiveFailFor(GEFBitBltLoadFailed);
+		return primitiveFailFor(GEFBitBltLoadFailed, interpreterProxy->interpreterState);
 	}
 	if (((workBuffer[GWCurrentY]) & (workBuffer[GWAAScanMask])) == (workBuffer[GWAAScanMask])) {
 		displaySpanBufferAt(workBuffer[GWCurrentY]);
@@ -10882,10 +10882,10 @@ primitiveDoProfileStats(void)
 
 	oldValue = doProfileStats;
 	newValue = stackObjectValue(0);
-	newValue = booleanValueOf(newValue);
+	newValue = booleanValueOf(newValue, interpreterProxy->interpreterState);
 	if (!(failed())) {
 		doProfileStats = newValue;
-		pop(2);
+		pop(2, interpreterProxy->interpreterState);
 		pushBool(oldValue);
 	}
 	return 0;
@@ -10903,16 +10903,16 @@ primitiveFinishedProcessing(void)
 		geProfileTime = ioMicroMSecs();
 	}
 	if (!((methodArgumentCount()) == 0)) {
-		return primitiveFailFor(PrimErrBadNumArgs);
+		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
 	}
-	if (!(((failureCode = quickLoadEngineFrom(stackValue(0)))) == 0)) {
-		return primitiveFailFor(failureCode);
+	if (!(((failureCode = quickLoadEngineFrom(stackValue(0, interpreterProxy->interpreterState)))) == 0)) {
+		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
 	}
 	/* begin finishedProcessing */
 	finished = (workBuffer[GWState]) == GEStateCompleted;
 	/* begin storeEngineStateInto: */
 	workBuffer[GWObjUsed] = objUsed;
-	pop(1);
+	pop(1, interpreterProxy->interpreterState);
 	pushBool(finished);
 	if (doProfileStats) {
 		/* begin incrementStat:by: */
@@ -10931,12 +10931,12 @@ primitiveGetAALevel(void)
     sqInt failureCode;
 
 	if (!((methodArgumentCount()) == 0)) {
-		return primitiveFailFor(PrimErrBadNumArgs);
+		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
 	}
-	if (!(((failureCode = quickLoadEngineFrom(stackValue(0)))) == 0)) {
-		return primitiveFailFor(failureCode);
+	if (!(((failureCode = quickLoadEngineFrom(stackValue(0, interpreterProxy->interpreterState)))) == 0)) {
+		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
 	}
-	pop(1);
+	pop(1, interpreterProxy->interpreterState);
 	pushInteger(workBuffer[GWAALevel]);
 	return 0;
 }
@@ -10950,23 +10950,23 @@ primitiveGetBezierStats(void)
     int *stats;
 
 	if (!((methodArgumentCount()) == 1)) {
-		return primitiveFailFor(PrimErrBadNumArgs);
+		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
 	}
-	if (!(((failureCode = quickLoadEngineFrom(stackValue(1)))) == 0)) {
-		return primitiveFailFor(failureCode);
+	if (!(((failureCode = quickLoadEngineFrom(stackValue(1, interpreterProxy->interpreterState)))) == 0)) {
+		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
 	}
 	statOop = stackObjectValue(0);
 	if (!((!(failed()))
 		 && ((isWords(statOop))
 		 && ((slotSizeOf(statOop)) >= 4)))) {
-		return primitiveFailFor(PrimErrBadArgument);
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	stats = firstIndexableField(statOop);
 	stats[0] = ((stats[0]) + (workBuffer[GWBezierMonotonSubdivisions]));
 	stats[1] = ((stats[1]) + (workBuffer[GWBezierHeightSubdivisions]));
 	stats[2] = ((stats[2]) + (workBuffer[GWBezierOverflowSubdivisions]));
 	stats[3] = ((stats[3]) + (workBuffer[GWBezierLineConversions]));
-	pop(1);
+	pop(1, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -10979,16 +10979,16 @@ primitiveGetClipRect(void)
     sqInt rectOop;
 
 	if (!((methodArgumentCount()) == 1)) {
-		return primitiveFailFor(PrimErrBadNumArgs);
+		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
 	}
-	if (!(((failureCode = quickLoadEngineFrom(stackValue(1)))) == 0)) {
-		return primitiveFailFor(failureCode);
+	if (!(((failureCode = quickLoadEngineFrom(stackValue(1, interpreterProxy->interpreterState)))) == 0)) {
+		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
 	}
 	rectOop = stackObjectValue(0);
 	if (!((!(failed()))
 		 && ((isPointers(rectOop))
 		 && ((slotSizeOf(rectOop)) >= 2)))) {
-		return primitiveFailFor(PrimErrBadArgument);
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	pushRemappableOop(rectOop);
 	pointOop = makePointwithxValueyValue(workBuffer[GWClipMinX], workBuffer[GWClipMinY]);
@@ -10996,7 +10996,7 @@ primitiveGetClipRect(void)
 	pointOop = makePointwithxValueyValue(workBuffer[GWClipMaxX], workBuffer[GWClipMaxY]);
 	rectOop = popRemappableOop();
 	storePointerofObjectwithValue(1, rectOop, pointOop);
-	popthenPush(2, rectOop);
+	popthenPush(2, rectOop, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -11009,16 +11009,16 @@ primitiveGetCounts(void)
     int *stats;
 
 	if (!((methodArgumentCount()) == 1)) {
-		return primitiveFailFor(PrimErrBadNumArgs);
+		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
 	}
-	if (!(((failureCode = quickLoadEngineFrom(stackValue(1)))) == 0)) {
-		return primitiveFailFor(failureCode);
+	if (!(((failureCode = quickLoadEngineFrom(stackValue(1, interpreterProxy->interpreterState)))) == 0)) {
+		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
 	}
 	statOop = stackObjectValue(0);
 	if (!((!(failed()))
 		 && ((isWords(statOop))
 		 && ((slotSizeOf(statOop)) >= 9)))) {
-		return primitiveFailFor(PrimErrBadArgument);
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	stats = firstIndexableField(statOop);
 	stats[0] = ((stats[0]) + (workBuffer[GWCountInitializing]));
@@ -11030,7 +11030,7 @@ primitiveGetCounts(void)
 	stats[6] = ((stats[6]) + (workBuffer[GWCountDisplaySpan]));
 	stats[7] = ((stats[7]) + (workBuffer[GWCountNextAETEntry]));
 	stats[8] = ((stats[8]) + (workBuffer[GWCountChangeAETEntry]));
-	pop(1);
+	pop(1, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -11041,12 +11041,12 @@ primitiveGetDepth(void)
     sqInt failureCode;
 
 	if (!((methodArgumentCount()) == 0)) {
-		return primitiveFailFor(PrimErrBadNumArgs);
+		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
 	}
-	if (!(((failureCode = quickLoadEngineFrom(stackValue(0)))) == 0)) {
-		return primitiveFailFor(failureCode);
+	if (!(((failureCode = quickLoadEngineFrom(stackValue(0, interpreterProxy->interpreterState)))) == 0)) {
+		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
 	}
-	pop(1);
+	pop(1, interpreterProxy->interpreterState);
 	pushInteger(workBuffer[GWCurrentZ]);
 	return 0;
 }
@@ -11061,24 +11061,24 @@ primitiveGetFailureReason(void)
     sqInt failCode;
 
 	if (!((methodArgumentCount()) == 0)) {
-		return primitiveFailFor(PrimErrBadNumArgs);
+		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
 	}
 
 	/* Note -- don't call loadEngineFrom here because this will override the stopReason with Zero */
-	engine = stackValue(0);
+	engine = stackValue(0, interpreterProxy->interpreterState);
 	if (isImmediate(engine)) {
-		return primitiveFailFor(GEFEngineIsInteger);
+		return primitiveFailFor(GEFEngineIsInteger, interpreterProxy->interpreterState);
 	}
 	if (!(isPointers(engine))) {
-		return primitiveFailFor(GEFEngineIsWords);
+		return primitiveFailFor(GEFEngineIsWords, interpreterProxy->interpreterState);
 	}
 	if ((slotSizeOf(engine)) < BEBalloonEngineSize) {
-		return primitiveFailFor(GEFEngineTooSmall);
+		return primitiveFailFor(GEFEngineTooSmall, interpreterProxy->interpreterState);
 	}
 	if (!(((failCode = loadWorkBufferFrom(fetchPointerofObject(BEWorkBufferIndex, engine)))) == 0)) {
-		return primitiveFailFor(failCode);
+		return primitiveFailFor(failCode, interpreterProxy->interpreterState);
 	}
-	pop(1);
+	pop(1, interpreterProxy->interpreterState);
 	pushInteger(workBuffer[GWStopReason]);
 	return 0;
 }
@@ -11091,13 +11091,13 @@ primitiveGetOffset(void)
     sqInt pointOop;
 
 	if (!((methodArgumentCount()) == 0)) {
-		return primitiveFailFor(PrimErrBadNumArgs);
+		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
 	}
-	if (!(((failureCode = quickLoadEngineFrom(stackValue(0)))) == 0)) {
-		return primitiveFailFor(failureCode);
+	if (!(((failureCode = quickLoadEngineFrom(stackValue(0, interpreterProxy->interpreterState)))) == 0)) {
+		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
 	}
 	pointOop = makePointwithxValueyValue(workBuffer[GWDestOffsetX], workBuffer[GWDestOffsetY]);
-	popthenPush(1, pointOop);
+	popthenPush(1, pointOop, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -11110,16 +11110,16 @@ primitiveGetTimes(void)
     int *stats;
 
 	if (!((methodArgumentCount()) == 1)) {
-		return primitiveFailFor(PrimErrBadNumArgs);
+		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
 	}
-	if (!(((failureCode = quickLoadEngineFrom(stackValue(1)))) == 0)) {
-		return primitiveFailFor(failureCode);
+	if (!(((failureCode = quickLoadEngineFrom(stackValue(1, interpreterProxy->interpreterState)))) == 0)) {
+		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
 	}
 	statOop = stackObjectValue(0);
 	if (!((!(failed()))
 		 && ((isWords(statOop))
 		 && ((slotSizeOf(statOop)) >= 9)))) {
-		return primitiveFailFor(PrimErrBadArgument);
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	stats = firstIndexableField(statOop);
 	stats[0] = ((stats[0]) + (workBuffer[GWTimeInitializing]));
@@ -11131,7 +11131,7 @@ primitiveGetTimes(void)
 	stats[6] = ((stats[6]) + (workBuffer[GWTimeDisplaySpan]));
 	stats[7] = ((stats[7]) + (workBuffer[GWTimeNextAETEntry]));
 	stats[8] = ((stats[8]) + (workBuffer[GWTimeChangeAETEntry]));
-	pop(1);
+	pop(1, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -11143,7 +11143,7 @@ primitiveInitializeBuffer(void)
     sqInt wbOop;
 
 	if (!(((methodArgumentCount()) == 1)
-		 && ((isWords((wbOop = stackValue(0))))
+		 && ((isWords((wbOop = stackValue(0, interpreterProxy->interpreterState))))
 		 && (((size = slotSizeOf(wbOop))) >= GWMinimalSize)))) {
 		return primitiveFail();
 	}
@@ -11189,7 +11189,7 @@ primitiveInitializeBuffer(void)
 	resetGraphicsEngineStats();
 	initEdgeTransform();
 	initColorTransform();
-	popthenPush(2, wbOop);
+	popthenPush(2, wbOop, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -11207,17 +11207,17 @@ primitiveInitializeProcessing(void)
 		geProfileTime = ioMicroMSecs();
 	}
 	if (!((methodArgumentCount()) == 0)) {
-		return primitiveFailFor(PrimErrBadNumArgs);
+		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
 	}
-	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(0), GEStateUnlocked))) == 0)) {
-		return primitiveFailFor(failureCode);
+	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(0, interpreterProxy->interpreterState), GEStateUnlocked))) == 0)) {
+		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
 	}
 	if (!(((failureCode = loadSpanBufferFrom(fetchPointerofObject(BESpanIndex, engine)))) == 0)) {
-		return primitiveFailFor(failureCode);
+		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
 	}
 	initializeGETProcessing();
 	if (engineStopped) {
-		return primitiveFailFor(GEFEngineStopped);
+		return primitiveFailFor(GEFEngineStopped, interpreterProxy->interpreterState);
 	}
 	workBuffer[GWState] = GEStateAddingFromGET;
 	if (!(failed())) {
@@ -11251,39 +11251,39 @@ primitiveMergeFillFrom(void)
 		geProfileTime = ioMicroMSecs();
 	}
 	if (!((methodArgumentCount()) == 2)) {
-		return primitiveFailFor(PrimErrBadNumArgs);
+		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
 	}
-	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(2), GEStateWaitingForFill))) == 0)) {
-		return primitiveFailFor(failureCode);
+	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(2, interpreterProxy->interpreterState), GEStateWaitingForFill))) == 0)) {
+		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
 	}
 	if (!(((failureCode = loadSpanBufferFrom(fetchPointerofObject(BESpanIndex, engine)))) == 0)) {
-		return primitiveFailFor(failureCode);
+		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
 	}
 	fillOop = stackObjectValue(0);
 
 	/* Check bitmap */
 	bitsOop = stackObjectValue(1);
 	if (!((!(failed()))
-		 && ((fetchClassOf(bitsOop)) == (classBitmap())))) {
-		return primitiveFailFor(PrimErrBadArgument);
+		 && ((fetchClassOf(bitsOop)) == (classBitmap(interpreterProxy->interpreterState))))) {
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	if ((slotSizeOf(fillOop)) < FTBalloonFillDataSize) {
-		return primitiveFailFor(GEFFillDataTooSmall);
+		return primitiveFailFor(GEFFillDataTooSmall, interpreterProxy->interpreterState);
 	}
 	value = fetchIntegerofObject(FTIndexIndex, fillOop);
 	if (!((objBuffer[(workBuffer[GWLastExportedFill]) + GEObjectIndex]) == value)) {
-		return primitiveFailFor(GEFWrongFill);
+		return primitiveFailFor(GEFWrongFill, interpreterProxy->interpreterState);
 	}
 	value = fetchIntegerofObject(FTMinXIndex, fillOop);
 	if (!((workBuffer[GWLastExportedLeftX]) == value)) {
-		return primitiveFailFor(GEFWrongFill);
+		return primitiveFailFor(GEFWrongFill, interpreterProxy->interpreterState);
 	}
 	value = fetchIntegerofObject(FTMaxXIndex, fillOop);
 	if (!((workBuffer[GWLastExportedRightX]) == value)) {
-		return primitiveFailFor(GEFWrongFill);
+		return primitiveFailFor(GEFWrongFill, interpreterProxy->interpreterState);
 	}
 	if ((slotSizeOf(bitsOop)) < ((workBuffer[GWLastExportedRightX]) - (workBuffer[GWLastExportedLeftX]))) {
-		return primitiveFailFor(PrimErrBadArgument);
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	if (failed()) {
 		return null;
@@ -11292,7 +11292,7 @@ primitiveMergeFillFrom(void)
 	workBuffer[GWState] = GEStateScanningAET;
 	/* begin storeEngineStateInto: */
 	workBuffer[GWObjUsed] = objUsed;
-	pop(2);
+	pop(2, interpreterProxy->interpreterState);
 	if (doProfileStats) {
 		/* begin incrementStat:by: */
 		workBuffer[GWCountMergeFill] = ((workBuffer[GWCountMergeFill]) + 1);
@@ -11311,16 +11311,16 @@ primitiveNeedsFlush(void)
     sqInt needFlush;
 
 	if (!((methodArgumentCount()) == 0)) {
-		return primitiveFailFor(PrimErrBadNumArgs);
+		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
 	}
-	if (!(((failureCode = quickLoadEngineFrom(stackValue(0)))) == 0)) {
-		return primitiveFailFor(failureCode);
+	if (!(((failureCode = quickLoadEngineFrom(stackValue(0, interpreterProxy->interpreterState)))) == 0)) {
+		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
 	}
 	/* begin needsFlush */
 	needFlush = (workBuffer[GWNeedsFlush]) != 0;
 	/* begin storeEngineStateInto: */
 	workBuffer[GWObjUsed] = objUsed;
-	pop(1);
+	pop(1, interpreterProxy->interpreterState);
 	pushBool(needFlush);
 	return 0;
 }
@@ -11333,14 +11333,14 @@ primitiveNeedsFlushPut(void)
     sqInt needFlush;
 
 	if (!((methodArgumentCount()) == 1)) {
-		return primitiveFailFor(PrimErrBadNumArgs);
+		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
 	}
-	if (!(((failureCode = quickLoadEngineFrom(stackValue(1)))) == 0)) {
-		return primitiveFailFor(failureCode);
+	if (!(((failureCode = quickLoadEngineFrom(stackValue(1, interpreterProxy->interpreterState)))) == 0)) {
+		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
 	}
-	needFlush = booleanValueOf(stackValue(0));
+	needFlush = booleanValueOf(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 	if (failed()) {
-		return primitiveFailFor(PrimErrBadArgument);
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	if (needFlush == 1) {
 		/* begin needsFlushPut: */
@@ -11352,7 +11352,7 @@ primitiveNeedsFlushPut(void)
 	}
 	/* begin storeEngineStateInto: */
 	workBuffer[GWObjUsed] = objUsed;
-	pop(1);
+	pop(1, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -11373,14 +11373,14 @@ primitiveNextActiveEdgeEntry(void)
 		geProfileTime = ioMicroMSecs();
 	}
 	if (!((methodArgumentCount()) == 1)) {
-		return primitiveFailFor(PrimErrBadNumArgs);
+		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
 	}
-	if (!(((failureCode = quickLoadEngineFromrequiredStateor(stackValue(1), GEStateUpdateEdges, GEStateCompleted))) == 0)) {
-		return primitiveFailFor(failureCode);
+	if (!(((failureCode = quickLoadEngineFromrequiredStateor(stackValue(1, interpreterProxy->interpreterState), GEStateUpdateEdges, GEStateCompleted))) == 0)) {
+		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
 	}
 	edgeOop = stackObjectValue(0);
 	if (failed()) {
-		return primitiveFailFor(PrimErrBadArgument);
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	hasEdge = 0;
 	if (!((workBuffer[GWState]) == GEStateCompleted)) {
@@ -11399,7 +11399,7 @@ primitiveNextActiveEdgeEntry(void)
 	}
 	/* begin storeEngineStateInto: */
 	workBuffer[GWObjUsed] = objUsed;
-	pop(2);
+	pop(2, interpreterProxy->interpreterState);
 	pushBool(!hasEdge);
 	if (doProfileStats) {
 		/* begin incrementStat:by: */
@@ -11427,16 +11427,16 @@ primitiveNextFillEntry(void)
 		geProfileTime = ioMicroMSecs();
 	}
 	if (!((methodArgumentCount()) == 1)) {
-		return primitiveFailFor(PrimErrBadNumArgs);
+		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
 	}
-	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(1), GEStateScanningAET))) == 0)) {
-		return primitiveFailFor(failureCode);
+	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(1, interpreterProxy->interpreterState), GEStateScanningAET))) == 0)) {
+		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
 	}
 	if (!(((failureCode = loadSpanBufferFrom(fetchPointerofObject(BESpanIndex, engine)))) == 0)) {
-		return primitiveFailFor(failureCode);
+		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
 	}
 	if (!(loadFormsFrom(fetchPointerofObject(BEFormsIndex, engine)))) {
-		return primitiveFailFor(GEFFormLoadFailed);
+		return primitiveFailFor(GEFFormLoadFailed, interpreterProxy->interpreterState);
 	}
 	if (!((workBuffer[GWClearSpanBuffer]) == 0)) {
 		if (((workBuffer[GWCurrentY]) & (workBuffer[GWAAScanMask])) == 0) {
@@ -11448,13 +11448,13 @@ primitiveNextFillEntry(void)
 	fillOop = stackObjectValue(0);
 	hasFill = findNextExternalFillFromAET();
 	if (engineStopped) {
-		return primitiveFailFor(GEFEngineStopped);
+		return primitiveFailFor(GEFEngineStopped, interpreterProxy->interpreterState);
 	}
 	if (hasFill) {
 		storeFillStateInto(fillOop);
 	}
 	if (failed()) {
-		return primitiveFailFor(GEFWrongFill);
+		return primitiveFailFor(GEFWrongFill, interpreterProxy->interpreterState);
 	}
 	if (hasFill) {
 		workBuffer[GWState] = GEStateWaitingForFill;
@@ -11467,7 +11467,7 @@ primitiveNextFillEntry(void)
 	}
 	/* begin storeEngineStateInto: */
 	workBuffer[GWObjUsed] = objUsed;
-	pop(2);
+	pop(2, interpreterProxy->interpreterState);
 	pushBool(!hasFill);
 	if (doProfileStats) {
 		/* begin incrementStat:by: */
@@ -11497,10 +11497,10 @@ primitiveNextGlobalEdgeEntry(void)
 		geProfileTime = ioMicroMSecs();
 	}
 	if (!((methodArgumentCount()) == 1)) {
-		return primitiveFailFor(PrimErrBadNumArgs);
+		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
 	}
-	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(1), GEStateAddingFromGET))) == 0)) {
-		return primitiveFailFor(failureCode);
+	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(1, interpreterProxy->interpreterState), GEStateAddingFromGET))) == 0)) {
+		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
 	}
 	edgeOop = stackObjectValue(0);
 	hasEdge = findNextExternalEntryFromGET();
@@ -11512,7 +11512,7 @@ primitiveNextGlobalEdgeEntry(void)
 		workBuffer[GWGETStart] = value;
 	}
 	if (failed()) {
-		return primitiveFailFor(GEFWrongEdge);
+		return primitiveFailFor(GEFWrongEdge, interpreterProxy->interpreterState);
 	}
 	if (hasEdge) {
 		workBuffer[GWState] = GEStateWaitingForEdge;
@@ -11530,7 +11530,7 @@ primitiveNextGlobalEdgeEntry(void)
 	}
 	/* begin storeEngineStateInto: */
 	workBuffer[GWObjUsed] = objUsed;
-	pop(2);
+	pop(2, interpreterProxy->interpreterState);
 	pushBool(!hasEdge);
 	if (doProfileStats) {
 		/* begin incrementStat:by: */
@@ -11558,26 +11558,26 @@ primitiveRegisterExternalEdge(void)
     sqInt value1;
 
 	if (!((methodArgumentCount()) == 6)) {
-		return primitiveFailFor(PrimErrBadNumArgs);
+		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
 	}
-	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(6), GEStateUnlocked))) == 0)) {
-		return primitiveFailFor(failureCode);
+	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(6, interpreterProxy->interpreterState), GEStateUnlocked))) == 0)) {
+		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
 	}
-	rightFillIndex = positive32BitValueOf(stackValue(0));
-	leftFillIndex = positive32BitValueOf(stackValue(1));
+	rightFillIndex = positive32BitValueOf(stackValue(0, interpreterProxy->interpreterState));
+	leftFillIndex = positive32BitValueOf(stackValue(1, interpreterProxy->interpreterState));
 	initialZ = stackIntegerValue(2);
 	initialY = stackIntegerValue(3);
 	initialX = stackIntegerValue(4);
 	index = stackIntegerValue(5);
 	if (failed()) {
-		return primitiveFailFor(PrimErrBadArgument);
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	if (!(allocateObjEntry(GEBaseEdgeSize))) {
-		return primitiveFailFor(GEFWorkTooBig);
+		return primitiveFailFor(GEFWorkTooBig, interpreterProxy->interpreterState);
 	}
 	if (!((isFillOkay(leftFillIndex))
 		 && (isFillOkay(rightFillIndex)))) {
-		return primitiveFailFor(GEFWrongFill);
+		return primitiveFailFor(GEFWrongFill, interpreterProxy->interpreterState);
 	}
 	edge = objUsed;
 
@@ -11602,12 +11602,12 @@ primitiveRegisterExternalEdge(void)
 	value1 = transformColor(rightFillIndex);
 	objBuffer[edge + GEFillIndexRight] = value1;
 	if (engineStopped) {
-		return primitiveFailFor(GEFEngineStopped);
+		return primitiveFailFor(GEFEngineStopped, interpreterProxy->interpreterState);
 	}
 	if (!(failed())) {
 		/* begin storeEngineStateInto: */
 		workBuffer[GWObjUsed] = objUsed;
-		pop(6);
+		pop(6, interpreterProxy->interpreterState);
 	}
 	return 0;
 }
@@ -11621,19 +11621,19 @@ primitiveRegisterExternalFill(void)
     sqInt index;
 
 	if (!((methodArgumentCount()) == 1)) {
-		return primitiveFailFor(PrimErrBadNumArgs);
+		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
 	}
-	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(1), GEStateUnlocked))) == 0)) {
-		return primitiveFailFor(failureCode);
+	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(1, interpreterProxy->interpreterState), GEStateUnlocked))) == 0)) {
+		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
 	}
 	index = stackIntegerValue(0);
 	if (failed()) {
-		return primitiveFailFor(PrimErrBadArgument);
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	fill = 0;
 	while (fill == 0) {
 		if (!(allocateObjEntry(GEBaseEdgeSize))) {
-			return primitiveFailFor(GEFWorkTooBig);
+			return primitiveFailFor(GEFWorkTooBig, interpreterProxy->interpreterState);
 		}
 		fill = objUsed;
 
@@ -11649,7 +11649,7 @@ primitiveRegisterExternalFill(void)
 	if (!(failed())) {
 		/* begin storeEngineStateInto: */
 		workBuffer[GWObjUsed] = objUsed;
-		pop(2);
+		pop(2, interpreterProxy->interpreterState);
 		pushInteger(fill);
 	}
 	return 0;
@@ -11665,7 +11665,7 @@ primitiveRenderImage(void)
     sqInt failCode;
 
 	if (!(((failCode = loadRenderingState())) == 0)) {
-		return primitiveFailFor(failCode);
+		return primitiveFailFor(failCode, interpreterProxy->interpreterState);
 	}
 	proceedRenderingScanline();
 	if (engineStopped) {
@@ -11686,7 +11686,7 @@ primitiveRenderScanline(void)
     sqInt failCode;
 
 	if (!(((failCode = loadRenderingState())) == 0)) {
-		return primitiveFailFor(failCode);
+		return primitiveFailFor(failCode, interpreterProxy->interpreterState);
 	}
 	proceedRenderingScanline();
 	storeRenderingState();
@@ -11701,19 +11701,19 @@ primitiveSetAALevel(void)
     sqInt level;
 
 	if (!((methodArgumentCount()) == 1)) {
-		return primitiveFailFor(PrimErrBadNumArgs);
+		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
 	}
-	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(1), GEStateUnlocked))) == 0)) {
-		return primitiveFailFor(failureCode);
+	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(1, interpreterProxy->interpreterState), GEStateUnlocked))) == 0)) {
+		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
 	}
 	level = stackIntegerValue(0);
 	if (failed()) {
-		return primitiveFailFor(PrimErrBadArgument);
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	setAALevel(level);
 	/* begin storeEngineStateInto: */
 	workBuffer[GWObjUsed] = objUsed;
-	pop(1);
+	pop(1, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -11732,11 +11732,11 @@ primitiveSetBitBltPlugin(void)
 
 
 	/* Must be string to work */
-	pluginName = stackValue(0);
+	pluginName = stackValue(0, interpreterProxy->interpreterState);
 	if (!(isBytes(pluginName))) {
 		return primitiveFail();
 	}
-	length = byteSizeOf(pluginName);
+	length = byteSizeOf(pluginName, interpreterProxy->interpreterState);
 	if (length >= 256) {
 		return primitiveFail();
 	}
@@ -11759,7 +11759,7 @@ primitiveSetBitBltPlugin(void)
 			return primitiveFail();
 		}
 	}
-	pop(1);
+	pop(1, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -11775,21 +11775,21 @@ primitiveSetClipRect(void)
     sqInt value3;
 
 	if (!((methodArgumentCount()) == 1)) {
-		return primitiveFailFor(PrimErrBadNumArgs);
+		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
 	}
-	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(1), GEStateUnlocked))) == 0)) {
-		return primitiveFailFor(failureCode);
+	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(1, interpreterProxy->interpreterState), GEStateUnlocked))) == 0)) {
+		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
 	}
 	rectOop = stackObjectValue(0);
 	if (!((!(failed()))
 		 && ((isPointers(rectOop))
 		 && ((slotSizeOf(rectOop)) >= 2)))) {
-		return primitiveFailFor(PrimErrBadArgument);
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	loadPointfrom(((int *) (workBuffer + GWPoint1)), fetchPointerofObject(0, rectOop));
 	loadPointfrom(((int *) (workBuffer + GWPoint2)), fetchPointerofObject(1, rectOop));
 	if (failed()) {
-		return primitiveFailFor(PrimErrBadArgument);
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	/* begin clipMinXPut: */
 	value = (((int *) (workBuffer + GWPoint1)))[0];
@@ -11805,7 +11805,7 @@ primitiveSetClipRect(void)
 	workBuffer[GWClipMaxY] = value3;
 	/* begin storeEngineStateInto: */
 	workBuffer[GWObjUsed] = objUsed;
-	pop(1);
+	pop(1, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -11819,14 +11819,14 @@ primitiveSetColorTransform(void)
     sqInt transformOop;
 
 	if (!((methodArgumentCount()) == 1)) {
-		return primitiveFailFor(PrimErrBadNumArgs);
+		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
 	}
-	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(1), GEStateUnlocked))) == 0)) {
-		return primitiveFailFor(failureCode);
+	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(1, interpreterProxy->interpreterState), GEStateUnlocked))) == 0)) {
+		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
 	}
 	transformOop = stackObjectValue(0);
 	if (failed()) {
-		return primitiveFailFor(PrimErrBadArgument);
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	/* begin loadColorTransformFrom: */
 	transform = ((float *) (workBuffer + GWColorTransform));
@@ -11844,11 +11844,11 @@ primitiveSetColorTransform(void)
 	transform[7] = ((transform[7]) * (256.0f));
 	l4:	/* end loadColorTransformFrom: */;
 	if (failed()) {
-		return primitiveFailFor(GEFEntityLoadFailed);
+		return primitiveFailFor(GEFEntityLoadFailed, interpreterProxy->interpreterState);
 	}
 	/* begin storeEngineStateInto: */
 	workBuffer[GWObjUsed] = objUsed;
-	pop(1);
+	pop(1, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -11860,20 +11860,20 @@ primitiveSetDepth(void)
     sqInt failureCode;
 
 	if (!((methodArgumentCount()) == 1)) {
-		return primitiveFailFor(PrimErrBadNumArgs);
+		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
 	}
-	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(1), GEStateUnlocked))) == 0)) {
-		return primitiveFailFor(failureCode);
+	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(1, interpreterProxy->interpreterState), GEStateUnlocked))) == 0)) {
+		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
 	}
 	depth = stackIntegerValue(0);
 	if (failed()) {
-		return primitiveFailFor(PrimErrBadArgument);
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	/* begin currentZPut: */
 	workBuffer[GWCurrentZ] = depth;
 	/* begin storeEngineStateInto: */
 	workBuffer[GWObjUsed] = objUsed;
-	pop(1);
+	pop(1, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -11885,22 +11885,22 @@ primitiveSetEdgeTransform(void)
     sqInt transformOop;
 
 	if (!((methodArgumentCount()) == 1)) {
-		return primitiveFailFor(PrimErrBadNumArgs);
+		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
 	}
-	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(1), GEStateUnlocked))) == 0)) {
-		return primitiveFailFor(failureCode);
+	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(1, interpreterProxy->interpreterState), GEStateUnlocked))) == 0)) {
+		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
 	}
 	transformOop = stackObjectValue(0);
 	if (failed()) {
-		return primitiveFailFor(PrimErrBadArgument);
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	loadEdgeTransformFrom(transformOop);
 	if (failed()) {
-		return primitiveFailFor(PrimErrBadArgument);
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	/* begin storeEngineStateInto: */
 	workBuffer[GWObjUsed] = objUsed;
-	pop(1);
+	pop(1, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -11914,18 +11914,18 @@ primitiveSetOffset(void)
     sqInt value1;
 
 	if (!((methodArgumentCount()) == 1)) {
-		return primitiveFailFor(PrimErrBadNumArgs);
+		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
 	}
-	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(1), GEStateUnlocked))) == 0)) {
-		return primitiveFailFor(failureCode);
+	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(1, interpreterProxy->interpreterState), GEStateUnlocked))) == 0)) {
+		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
 	}
-	pointOop = stackValue(0);
-	if (!((fetchClassOf(pointOop)) == (classPoint()))) {
-		return primitiveFailFor(PrimErrBadArgument);
+	pointOop = stackValue(0, interpreterProxy->interpreterState);
+	if (!((fetchClassOf(pointOop)) == (classPoint(interpreterProxy->interpreterState)))) {
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	loadPointfrom(((int *) (workBuffer + GWPoint1)), pointOop);
 	if (failed()) {
-		return primitiveFailFor(PrimErrBadArgument);
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	/* begin destOffsetXPut: */
 	value = (((int *) (workBuffer + GWPoint1)))[0];
@@ -11935,7 +11935,7 @@ primitiveSetOffset(void)
 	workBuffer[GWDestOffsetY] = value1;
 	/* begin storeEngineStateInto: */
 	workBuffer[GWObjUsed] = objUsed;
-	pop(1);
+	pop(1, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -13920,7 +13920,7 @@ storeRenderingState(void)
 	}
 	/* begin storeEngineStateInto: */
 	workBuffer[GWObjUsed] = objUsed;
-	pop(3);
+	pop(3, interpreterProxy->interpreterState);
 	pushInteger(workBuffer[GWStopReason]);
 	return 0;
 }

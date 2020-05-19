@@ -107,10 +107,10 @@
 			}
 			else {
 				long v = interpreterProxy->signed64BitValueOf(arg);
-				if (interpreterProxy->failed()) {
-					interpreterProxy->primitiveFailFor(0);
+				if (interpreterProxy->failed(interpreterProxy->interpreterState)) {
+					interpreterProxy->primitiveFailFor(0, interpreterProxy->interpreterState);
 					v = interpreterProxy->positive64BitValueOf(arg);
-					if (interpreterProxy->failed()) {
+					if (interpreterProxy->failed(interpreterProxy->interpreterState)) {
 						return PrimErrBadArgument;
 					}
 				}
@@ -149,10 +149,10 @@
 			}
 			else {
 				long v = interpreterProxy->signed64BitValueOf(arg);
-				if (interpreterProxy->failed()) {
-					interpreterProxy->primitiveFailFor(0);
+				if (interpreterProxy->failed(interpreterProxy->interpreterState)) {
+					interpreterProxy->primitiveFailFor(0, interpreterProxy->interpreterState);
 					v = interpreterProxy->positive64BitValueOf(arg);
-					if (interpreterProxy->failed()) {
+					if (interpreterProxy->failed(interpreterProxy->interpreterState)) {
 						return PrimErrBadArgument;
 					}
 				}

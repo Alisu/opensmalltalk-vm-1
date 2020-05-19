@@ -162,7 +162,7 @@ sqInt sqFileAtEnd(SQFile *f, struct foo * self) {
 	sqInt status; int   fd; FILE  *fp;
 
 	if (!sqFileValid(f))
-		return interpreterProxy->success(false);
+		return interpreterProxy->success(false, interpreterProxy->interpreterState);
 	pentry(sqFileAtEnd);
 	fp = getFile(f);
 	fd = fileno(fp);
@@ -194,7 +194,7 @@ sqFileClose(SQFile *f, struct foo * self) {
 	int result;
 
 	if (!sqFileValid(f))
-		return interpreterProxy->success(false);
+		return interpreterProxy->success(false, interpreterProxy->interpreterState);
 
 	result = fclose(getFile(f));
 	setFile(f, NULL);
@@ -207,7 +207,7 @@ sqFileClose(SQFile *f, struct foo * self) {
 	 * errors must be checked, but it must NEVER be retried
 	 */
 	if (result != 0)
-		return interpreterProxy->success(false);
+		return interpreterProxy->success(false, interpreterProxy->interpreterState);
 
 	return 1;
 }
@@ -218,14 +218,14 @@ sqFileDeleteNameSize(char *sqFileName, sqInt sqFileNameSize, struct foo * self) 
 	int err;
 
 	if (sqFileNameSize >= sizeof(cFileName))
-		return interpreterProxy->success(false);
+		return interpreterProxy->success(false, interpreterProxy->interpreterState);
 
 	/* copy the file name into a null-terminated C string */
 	interpreterProxy->ioFilenamefromStringofLengthresolveAliases(cFileName, sqFileName, sqFileNameSize, false);
 
 	err = remove(cFileName);
 	if (err)
-		return interpreterProxy->success(false);
+		return interpreterProxy->success(false, interpreterProxy->interpreterState);
 
 	return 1;
 }
@@ -237,14 +237,14 @@ sqFileGetPosition(SQFile *f, struct foo * self) {
 	squeakFileOffsetType position;
 
 	if (!sqFileValid(f))
-		return interpreterProxy->success(false);
+		return interpreterProxy->success(false, interpreterProxy->interpreterState);
 	pentry(sqFileGetPosition);
 	if (f->isStdioStream
 	 && !f->writable)
 		return pexit(f->lastChar == EOF ? 0 : 1);
 	position = ftell(getFile(f));
 	if (position == -1)
-		return interpreterProxy->success(false);
+		return interpreterProxy->success(false, interpreterProxy->interpreterState);
 	return position;
 }
 
@@ -328,14 +328,14 @@ sqFileOpen(SQFile *f, char *sqFileName, sqInt sqFileNameSize, sqInt writeFlag, s
 
 	/* don't open an already open file */
 	if (sqFileValid(f))
-		return interpreterProxy->success(false);
+		return interpreterProxy->success(false, interpreterProxy->interpreterState);
 
 	/* copy the file name into a null-terminated C string */
 	if (sqFileNameSize >= sizeof(cFileName))
-		return interpreterProxy->success(false);
+		return interpreterProxy->success(false, interpreterProxy->interpreterState);
 	/* can fail when alias resolution is enabled */
 	if (interpreterProxy->ioFilenamefromStringofLengthresolveAliases(cFileName, sqFileName, sqFileNameSize, true) != 0)
-		return interpreterProxy->success(false);
+		return interpreterProxy->success(false, interpreterProxy->interpreterState);
 
 	if (writeFlag) {
 		int retried = 0;
@@ -418,7 +418,7 @@ sqFileOpen(SQFile *f, char *sqFileName, sqInt sqFileNameSize, sqInt writeFlag, s
 
 	f->sessionID = 0;
 	f->writable = false;
-	return interpreterProxy->success(false);
+	return interpreterProxy->success(false, interpreterProxy->interpreterState);
 }
 
 sqInt
@@ -440,14 +440,14 @@ sqFileOpenNew(SQFile *f, char *sqFileName, sqInt sqFileNameSize, sqInt *exists, 
 	*exists = false;
 	/* don't open an already open file */
 	if (sqFileValid(f))
-		return interpreterProxy->success(false);
+		return interpreterProxy->success(false, interpreterProxy->interpreterState);
 
 	/* copy the file name into a null-terminated C string */
 	if (sqFileNameSize >= sizeof(cFileName))
-		return interpreterProxy->success(false);
+		return interpreterProxy->success(false, interpreterProxy->interpreterState);
 	/* can fail when alias resolution is enabled */
 	if (interpreterProxy->ioFilenamefromStringofLengthresolveAliases(cFileName, sqFileName, sqFileNameSize, true) != 0)
-		return interpreterProxy->success(false);
+		return interpreterProxy->success(false, interpreterProxy->interpreterState);
 
 	mode = "r+b";
 	fd = openFileWithFlagsInMode(
@@ -500,7 +500,7 @@ sqFileOpenNew(SQFile *f, char *sqFileName, sqInt sqFileNameSize, sqInt *exists, 
 
 	f->sessionID = 0;
 	f->writable = false;
-	return interpreterProxy->success(false);
+	return interpreterProxy->success(false, interpreterProxy->interpreterState);
 }
 
 sqInt
@@ -517,7 +517,7 @@ sqConnectToFileDescriptor(SQFile *sqFile, int fd, sqInt writeFlag, struct foo * 
 	 */
 	FILE *file = openFileDescriptor(fd, writeFlag ? "wb" : "rb");
 	if (!file)
-		return interpreterProxy->success(false);
+		return interpreterProxy->success(false, interpreterProxy->interpreterState);
 	return sqConnectToFile(sqFile, (void *)file, writeFlag);
 }
 
@@ -631,12 +631,12 @@ sqFileReadIntoAt(SQFile *f, size_t count, char *byteArrayIndex, size_t startInde
 #endif
 
 	if (!sqFileValid(f))
-		return interpreterProxy->success(false);
+		return interpreterProxy->success(false, interpreterProxy->interpreterState);
 	pentry(sqFileReadIntoAt);
 	file = getFile(f);
 	if (f->writable) {
 		if (f->isStdioStream)
-			return interpreterProxy->success(false);
+			return interpreterProxy->success(false, interpreterProxy->interpreterState);
 		if (f->lastOp == WRITE_OP)
 			fseek(file, 0, SEEK_CUR);  /* seek between writing and reading */
 	}
@@ -699,7 +699,7 @@ sqFileRenameOldSizeNewSize(char *sqOldName, sqInt sqOldNameSize, char *sqNewName
 	int err;
 
 	if ((sqOldNameSize >= sizeof(cOldName)) || (sqNewNameSize >= sizeof(cNewName)))
-		return interpreterProxy->success(false);
+		return interpreterProxy->success(false, interpreterProxy->interpreterState);
 
 	/* copy the file names into null-terminated C strings */
 	interpreterProxy->ioFilenamefromStringofLengthresolveAliases(cOldName, sqOldName, sqOldNameSize, false);
@@ -707,7 +707,7 @@ sqFileRenameOldSizeNewSize(char *sqOldName, sqInt sqOldNameSize, char *sqNewName
 
 	err = rename(cOldName, cNewName);
 	if (err)
-		return interpreterProxy->success(false);
+		return interpreterProxy->success(false, interpreterProxy->interpreterState);
 
 	return 1;
 }
@@ -717,7 +717,7 @@ sqFileSetPosition(SQFile *f, squeakFileOffsetType position, struct foo * self) {
 	/* Set the file's read/write head to the given position. */
 
 	if (!sqFileValid(f))
-		return interpreterProxy->success(false);
+		return interpreterProxy->success(false, interpreterProxy->interpreterState);
 	if (f->isStdioStream) {
 		pentry(sqFileSetPosition);
 		/* support one character of pushback for stdio streams. */
@@ -733,7 +733,7 @@ sqFileSetPosition(SQFile *f, squeakFileOffsetType position, struct foo * self) {
 			}
 		}
 		pfail();
-		return interpreterProxy->success(false);
+		return interpreterProxy->success(false, interpreterProxy->interpreterState);
 	}
 	fseek(getFile(f), position, SEEK_SET);
 	f->lastOp = UNCOMMITTED;
@@ -745,9 +745,9 @@ sqFileSize(SQFile *f, struct foo * self) {
 	/* Return the length of the given file. */
 
 	if (!sqFileValid(f))
-		return interpreterProxy->success(false);
+		return interpreterProxy->success(false, interpreterProxy->interpreterState);
 	if (f->isStdioStream)
-		return interpreterProxy->success(false);
+		return interpreterProxy->success(false, interpreterProxy->interpreterState);
 	return getSize(f);
 }
 
@@ -756,7 +756,7 @@ sqFileFlush(SQFile *f, struct foo * self) {
 	/* Flush stdio buffers of file */
 
 	if (!sqFileValid(f))
-		return interpreterProxy->success(false);
+		return interpreterProxy->success(false, interpreterProxy->interpreterState);
 	pentry(sqFileFlush);
 
 	/*
@@ -765,7 +765,7 @@ sqFileFlush(SQFile *f, struct foo * self) {
 	 * so EBADF is ignored
 	 */
 	if (fflush(getFile(f)) != 0 && errno != EBADF)
-		return interpreterProxy->success(false);
+		return interpreterProxy->success(false, interpreterProxy->interpreterState);
 
 	return 1;
 }
@@ -775,20 +775,20 @@ sqFileSync(SQFile *f, struct foo * self) {
 	/* Flush kernel-level buffers of any written/flushed data to disk */
 
 	if (!sqFileValid(f))
-		return interpreterProxy->success(false);
+		return interpreterProxy->success(false, interpreterProxy->interpreterState);
 	pentry(sqFileSync);
 	if (fsync(fileno(getFile(f))) != 0)
-		return interpreterProxy->success(false);
+		return interpreterProxy->success(false, interpreterProxy->interpreterState);
 	return 1;
 }
 
 sqInt
 sqFileTruncate(SQFile *f, squeakFileOffsetType offset, struct foo * self) {
 	if (!sqFileValid(f))
-		return interpreterProxy->success(false);
+		return interpreterProxy->success(false, interpreterProxy->interpreterState);
 	fflush(getFile(f));
  	if (sqFTruncate(getFile(f), offset))
-		return interpreterProxy->success(false);
+		return interpreterProxy->success(false, interpreterProxy->interpreterState);
 	return 1;
 }
 
@@ -812,7 +812,7 @@ sqFileWriteFromAt(SQFile *f, size_t count, char *byteArrayIndex, size_t startInd
 	FILE *file;
 
 	if (!(sqFileValid(f) && f->writable))
-		return interpreterProxy->success(false);
+		return interpreterProxy->success(false, interpreterProxy->interpreterState);
 	pentry(sqFileWriteFromAt);
 	file = getFile(f);
 	if (f->lastOp == READ_OP) fseek(file, 0, SEEK_CUR);  /* seek between reading and writing */
@@ -820,7 +820,7 @@ sqFileWriteFromAt(SQFile *f, size_t count, char *byteArrayIndex, size_t startInd
 	bytesWritten = fwrite(src, 1, count, file);
 
 	if (bytesWritten != count) {
-		interpreterProxy->success(false);
+		interpreterProxy->success(false, interpreterProxy->interpreterState);
 	}
 	f->lastOp = WRITE_OP;
 	return pexit(bytesWritten);

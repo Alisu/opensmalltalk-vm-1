@@ -32,9 +32,9 @@ static fn_ioUnregisterSurface unregisterSurface = NULL;
 static fn_ioFindSurface findSurface = NULL;
 void initSurfacePluginFunctionPointers()
 {
-	registerSurface = (fn_ioRegisterSurface) interpreterProxy->ioLoadFunctionFrom("ioRegisterSurface","SurfacePlugin");
-	unregisterSurface = (fn_ioUnregisterSurface) interpreterProxy->ioLoadFunctionFrom("ioUnregisterSurface","SurfacePlugin");
-	findSurface = (fn_ioFindSurface) interpreterProxy->ioLoadFunctionFrom("ioFindSurface","SurfacePlugin");
+	registerSurface = (fn_ioRegisterSurface) interpreterProxy->ioLoadFunctionFrom("ioRegisterSurface","SurfacePlugin", interpreterProxy->interpreterState);
+	unregisterSurface = (fn_ioUnregisterSurface) interpreterProxy->ioLoadFunctionFrom("ioUnregisterSurface","SurfacePlugin", interpreterProxy->interpreterState);
+	findSurface = (fn_ioFindSurface) interpreterProxy->ioLoadFunctionFrom("ioFindSurface","SurfacePlugin", interpreterProxy->interpreterState);
 }
 
 /* This is the structure that represents a "manual surface".  These are 

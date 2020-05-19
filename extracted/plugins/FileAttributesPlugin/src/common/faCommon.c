@@ -21,9 +21,9 @@ int	vmSessionId = 0;
 sqInt faInitialiseModule()
 {
 	if (vmSessionId == 0)
-		return interpreterProxy->falseObject();
+		return interpreterProxy->falseObject(interpreterProxy->interpreterState);
 	vmSessionId = interpreterProxy->getThisSessionID();
-	return interpreterProxy->trueObject();
+	return interpreterProxy->trueObject(interpreterProxy->interpreterState);
 }
 
 
@@ -113,7 +113,7 @@ sqInt newByteArray;
 	}
 	newByteArray = interpreterProxy->instantiateClassindexableSize(interpreterProxy->classByteArray(), len);
 	if (!(newByteArray)) {
-		return interpreterProxy->primitiveFailFor(PrimErrNoMemory);
+		return interpreterProxy->primitiveFailFor(PrimErrNoMemory, interpreterProxy->interpreterState);
 	}
 	byteArrayPtr = interpreterProxy->arrayValueOf(newByteArray, interpreterProxy->interpreterState);
 	memcpy(byteArrayPtr, cBuf, len);

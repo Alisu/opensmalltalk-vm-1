@@ -193,7 +193,7 @@ thunkEntry(long a0, long a1, long a2, long a3, long a4, long a5,
 	fpargs[7] = d7;
 
 
-	if ((flags = interpreterProxy->ownVM(0)) < 0) {
+	if ((flags = interpreterProxy->ownVM(0, interpreterProxy->interpreterState)) < 0) {
 		fprintf(stderr,"Warning; callback failed to own the VM\n");
 		return -1;
 	}
@@ -208,11 +208,11 @@ thunkEntry(long a0, long a1, long a2, long a3, long a4, long a5,
 		interpreterProxy->sendInvokeCallbackContext(&vmcc);
 		fprintf(stderr,"Warning; callback failed to invoke\n");
 		setMRCC(previousCallbackContext);
-		interpreterProxy->disownVM(flags);
+		interpreterProxy->disownVM(flags, interpreterProxy->interpreterState);
 		return -1;
 	}
 	setMRCC(previousCallbackContext);
-	interpreterProxy->disownVM(flags);
+	interpreterProxy->disownVM(flags, interpreterProxy->interpreterState);
 
 	switch (returnType) {
 

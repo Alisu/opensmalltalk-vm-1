@@ -232,7 +232,7 @@ typedef struct {
 /*** Function Prototypes ***/
 static sqInt atomicTypeOf(sqInt typeSpec);
 static void cleanupCalloutState(CalloutState *calloutState);
-static sqInt externalFunctionHasStackSizeSlot(void);
+static sqInt externalFunctionHasStackSizeSlot(struct foo * self);
 static void * ffiAddressOfstartingAtsize(sqInt rcvr, sqInt byteOffset, sqInt byteSize, struct foo * self);
 static sqInt ffiArgByValuein(sqInt oop, CalloutState *calloutState, struct foo * self);
 static sqInt ffiArgumentSpecClassin(sqInt oop, sqInt argSpec, sqInt argClass, CalloutState *calloutState, struct foo * self);
@@ -271,11 +271,11 @@ static sqInt ffiPushUnsignedShortin(sqInt value, CalloutState *calloutState);
 static sqInt ffiPushVoidin(sqInt ignored, CalloutState *calloutState);
 static sqInt ffiReturnCStringFrom(sqInt cPointer, struct foo * self);
 static sqInt ffiReturnPointerofTypein(usqLong retVal, sqInt retType, CalloutState *calloutState, struct foo * self);
-static sqInt ffiReturnStructofTypein(SixteenByteReturn sixteenByteRet, sqInt ffiRetType, CalloutState *calloutState);
+static sqInt ffiReturnStructofTypein(SixteenByteReturn sixteenByteRet, sqInt ffiRetType, CalloutState *calloutState, struct foo * self);
 static sqInt ffiReturnType(sqInt specOnStack, struct foo * self);
 static sqInt ffiSupportsCallingConvention(sqInt aCallingConvention);
 static sqInt ffiValidateExternalDataAtomicType(sqInt oop, sqInt atomicType);
-EXPORT(const char *) getModuleName(void);
+EXPORT(const char *) getModuleName();
 static sqInt incrementFloatRegisterIndex(CalloutState * self_in_incrementFloatRegisterIndex);
 static sqInt incrementIntegerRegisterIndex(CalloutState * self_in_incrementIntegerRegisterIndex);
 EXPORT(sqInt) initialiseModule(struct foo * self);
@@ -283,7 +283,7 @@ static sqInt isAlien(sqInt anOop, struct foo * self);
 static sqInt isAtomicType(sqInt typeSpec);
 static sqInt isDirectAlien(sqInt oop);
 static sqInt msg(char *s);
-static sqInt nonRegisterStructReturnIsViaImplicitFirstArgument(void);
+static sqInt nonRegisterStructReturnIsViaImplicitFirstArgument(struct foo * self);
 EXPORT(void) primitiveCallout(struct foo * self);
 EXPORT(void) primitiveCalloutWithArgs(struct foo * self);
 EXPORT(sqInt) primitiveCreateManualSurface(struct foo * self);
@@ -344,16 +344,16 @@ static sqInt (*booleanValueOf)(sqInt obj);
 static sqInt (*byteSizeOf)(sqInt oop);
 static sqInt (*characterObjectOf)(sqInt characterCode);
 static sqInt (*characterValueOf)(sqInt aCharacter);
-static sqInt (*classAlien)(void);
-static sqInt (*classByteArray)(void);
+static sqInt (*classAlien)(struct foo * self);
+static sqInt (*classByteArray)(struct foo * self);
 static sqInt (*classExternalAddress)(struct foo * self);
-static sqInt (*classExternalData)(void);
+static sqInt (*classExternalData)(struct foo *self);
 static sqInt (*classExternalFunction)(struct foo * self);
-static sqInt (*classExternalLibrary)(void);
+static sqInt (*classExternalLibrary)(struct foo * self);
 static sqInt (*classExternalStructure)(struct foo * self);
 static sqInt (*classLargePositiveInteger)(struct foo * self);
-static sqInt (*classString)(void);
-static sqInt (*disownVM)(sqInt flags);
+static sqInt (*classString)(struct foo * self);
+static sqInt (*disownVM)(sqInt flags, struct foo * self);
 static sqInt (*failed)(struct foo * self);
 static sqInt (*falseObject)(struct foo * self);
 static sqInt (*fetchClassOf)(sqInt oop, struct foo * self);
@@ -365,7 +365,7 @@ static sqInt (*floatObjectOf)(double aFloat);
 static double (*floatValueOf)(sqInt oop);
 static sqInt (*includesBehaviorThatOf)(sqInt aClass, sqInt aSuperclass, struct foo * self);
 static sqInt (*instanceSizeOf)(sqInt classObj, struct foo * self);
-static sqInt (*instantiateClassindexableSize)(sqInt classPointer, sqInt size);
+static sqInt (*instantiateClassindexableSize)(sqInt classPointer, sqInt size, struct foo * self);
 static sqInt (*integerObjectOf)(sqInt value);
 static sqInt (*integerValueOf)(sqInt oop);
 static void * (*ioLoadModuleOfLength)(sqInt moduleNameIndex, sqInt moduleLength);
@@ -376,30 +376,30 @@ static sqInt (*isBytes)(sqInt oop);
 static sqInt (*isCharacterObject)(sqInt oop);
 static sqInt (*isFloatObject)(sqInt oop);
 static sqInt (*isImmediate)(sqInt anObject);
-static sqInt (*isInMemory)(sqInt address);
+static sqInt (*isInMemory)(sqInt address, struct foo * self);
 static sqInt (*isIntegerObject)(sqInt objectPointer, struct foo * self);
 static sqInt (*isPointers)(sqInt oop);
 static sqInt (*isWords)(sqInt oop);
 static sqInt (*isYoung)(sqInt anOop);
 static sqInt (*literalofMethod)(sqInt offset, sqInt methodPointer);
 static sqInt (*literalCountOf)(sqInt methodPointer);
-static sqInt (*methodArgumentCount)(void);
+static sqInt (*methodArgumentCount)(struct foo * self);
 static sqInt (*methodReturnInteger)(sqInt integer, struct foo * self);
-static sqInt (*methodReturnValue)(sqInt oop);
+static sqInt (*methodReturnValue)(sqInt oop, struct foo * self);
 static sqInt (*nilObject)(struct foo * self);
-static sqInt (*ownVM)(sqInt flags);
-static sqInt (*pop)(sqInt nItems);
+static sqInt (*ownVM)(sqInt flags, struct foo * self);
+static sqInt (*pop)(sqInt nItems, struct foo * self);
 static sqInt (*popthenPush)(sqInt nItems, sqInt oop, struct foo * self);
-static sqInt (*popRemappableOop)(void);
+static sqInt (*popRemappableOop)(struct foo * self);
 static sqInt (*positive32BitIntegerFor)(unsigned int integerValue);
 static usqInt (*positive32BitValueOf)(sqInt oop);
-static sqInt (*positive64BitIntegerFor)(usqLong integerValue);
+static sqInt (*positive64BitIntegerFor)(usqLong integerValue, struct foo *self);
 static usqLong (*positive64BitValueOf)(sqInt oop);
 static usqIntptr_t (*positiveMachineIntegerValueOf)(sqInt oop);
 static sqInt (*primitiveErrorTable)(struct foo * self);
-static sqInt (*primitiveFail)(void);
+static sqInt (*primitiveFail)(struct foo * self);
 static sqInt (*primitiveFailFor)(sqInt reasonCode, struct foo * self);
-static sqInt (*primitiveMethod)(void);
+static sqInt (*primitiveMethod)(struct foo * self);
 static sqInt (*pushFloat)(double f);
 static sqInt (*pushRemappableOop)(sqInt oop);
 static sqInt (*signed32BitIntegerFor)(sqInt integerValue);
@@ -411,8 +411,8 @@ static sqInt (*stackIntegerValue)(sqInt offset, struct foo * self);
 static sqInt (*stackObjectValue)(sqInt offset, struct foo * self);
 static sqInt (*stackValue)(sqInt offset, struct foo * self);
 static sqInt (*storeIntegerofObjectwithValue)(sqInt index, sqInt oop, sqInt integer);
-static sqInt (*storePointerofObjectwithValue)(sqInt index, sqInt oop, sqInt valuePointer);
-static void (*tenuringIncrementalGC)(void);
+static sqInt (*storePointerofObjectwithValue)(sqInt index, sqInt oop, sqInt valuePointer, struct foo * self);
+static void (*tenuringIncrementalGC)(struct foo * self);
 static sqInt (*trueObject)(struct foo * self);
 #else /* !defined(SQUEAK_BUILTIN_PLUGIN) */
 extern sqInt booleanValueOf(sqInt obj);
@@ -427,16 +427,16 @@ extern sqInt characterValueOf(sqInt aCharacter);
 #else
 # define characterValueOf(aCharacter) 0
 #endif
-extern sqInt classAlien(void);
-extern sqInt classByteArray(void);
+extern sqInt classAlien(struct foo * self);
+extern sqInt classByteArray(struct foo * self);
 extern sqInt classExternalAddress(struct foo * self);
-extern sqInt classExternalData(void);
+extern sqInt classExternalData(struct foo * self);
 extern sqInt classExternalFunction(struct foo * self);
-extern sqInt classExternalLibrary(void);
+extern sqInt classExternalLibrary(struct foo * self);
 extern sqInt classExternalStructure(struct foo * self);
 extern sqInt classLargePositiveInteger(struct foo * self);
-extern sqInt classString(void);
-extern sqInt disownVM(sqInt flags);
+extern sqInt classString(struct foo * self);
+extern sqInt disownVM(sqInt flags, struct foo * self);
 extern sqInt failed(struct foo * self);
 extern sqInt falseObject(struct foo * self);
 extern sqInt fetchClassOf(sqInt oop, struct foo * self);
@@ -448,7 +448,7 @@ extern sqInt floatObjectOf(double aFloat);
 extern double floatValueOf(sqInt oop);
 extern sqInt includesBehaviorThatOf(sqInt aClass, sqInt aSuperclass), struct foo * self;
 extern sqInt instanceSizeOf(sqInt classObj, struct foo * self);
-extern sqInt instantiateClassindexableSize(sqInt classPointer, sqInt size);
+extern sqInt instantiateClassindexableSize(sqInt classPointer, sqInt size, struct foo * self);
 extern sqInt integerObjectOf(sqInt value);
 extern sqInt integerValueOf(sqInt oop);
 extern void * ioLoadModuleOfLength(sqInt moduleNameIndex, sqInt moduleLength);
@@ -469,7 +469,7 @@ extern sqInt isImmediate(sqInt anObject);
 # define isImmediate(anObject) 0
 #endif
 #endif /* !defined(isImmediate) */
-extern sqInt isInMemory(sqInt address);
+extern sqInt isInMemory(sqInt address, struct foo *self);
 #if !defined(isIntegerObject)
 extern sqInt isIntegerObject(sqInt objectPointer, struct foo * self);
 #endif
@@ -478,23 +478,23 @@ extern sqInt isWords(sqInt oop);
 extern sqInt isYoung(sqInt anOop);
 extern sqInt literalofMethod(sqInt offset, sqInt methodPointer);
 extern sqInt literalCountOf(sqInt methodPointer);
-extern sqInt methodArgumentCount(void);
+extern sqInt methodArgumentCount(struct foo * self);
 extern sqInt methodReturnInteger(sqInt integer, struct foo * self);
-extern sqInt methodReturnValue(sqInt oop);
+extern sqInt methodReturnValue(sqInt oop, struct foo * self);
 extern sqInt nilObject(struct foo * self);
-extern sqInt ownVM(sqInt flags);
-extern sqInt pop(sqInt nItems);
+extern sqInt ownVM(sqInt flags, struct foo * self);
+extern sqInt pop(sqInt nItems, struct foo * self);
 extern sqInt popthenPush(sqInt nItems, sqInt oop, struct foo * self);
-extern sqInt popRemappableOop(void);
+extern sqInt popRemappableOop(struct foo * self);
 extern sqInt positive32BitIntegerFor(unsigned int integerValue);
 extern usqInt positive32BitValueOf(sqInt oop);
-extern sqInt positive64BitIntegerFor(usqLong integerValue);
+extern sqInt positive64BitIntegerFor(usqLong integerValue, struct foo * self);
 extern usqLong positive64BitValueOf(sqInt oop);
 extern usqIntptr_t positiveMachineIntegerValueOf(sqInt oop);
 extern sqInt primitiveErrorTable(struct foo * self);
-extern sqInt primitiveFail(void);
+extern sqInt primitiveFail(struct foo * self);
 extern sqInt primitiveFailFor(sqInt reasonCode, struct foo * self);
-extern sqInt primitiveMethod(void);
+extern sqInt primitiveMethod(struct foo * self);
 extern sqInt pushFloat(double f);
 extern sqInt pushRemappableOop(sqInt oop);
 extern sqInt signed32BitIntegerFor(sqInt integerValue);
@@ -506,8 +506,8 @@ extern sqInt stackIntegerValue(sqInt offset, struct foo * self);
 extern sqInt stackObjectValue(sqInt offset, struct foo * self);
 extern sqInt stackValue(sqInt offset, struct foo * self);
 extern sqInt storeIntegerofObjectwithValue(sqInt index, sqInt oop, sqInt integer);
-extern sqInt storePointerofObjectwithValue(sqInt index, sqInt oop, sqInt valuePointer);
-extern void tenuringIncrementalGC(void);
+extern sqInt storePointerofObjectwithValue(sqInt index, sqInt oop, sqInt valuePointer, struct foo * self);
+extern void tenuringIncrementalGC(struct foo * self);
 extern sqInt trueObject(struct foo * self);
 extern
 #endif
@@ -554,7 +554,7 @@ cleanupCalloutState(CalloutState *calloutState)
 
 	/* ThreadedFFIPlugin>>#externalFunctionHasStackSizeSlot */
 static sqInt
-externalFunctionHasStackSizeSlot(void)
+externalFunctionHasStackSizeSlot(struct foo * self)
 {
 	return externalFunctionInstSize > ExternalFunctionStackSizeIndex;
 }
@@ -902,7 +902,7 @@ ffiArgumentSpecClassin(sqInt oop, sqInt argSpec, sqInt argClass, CalloutState *c
 			/* There is no way we can make sure the structure is valid.
 			   But we can at least check for attempts to pass pointers to ST memory. */
 			ptrAddress = ((void *)(fetchPointerofObject(0, valueOop)));
-			if (isInMemory(ptrAddress)) {
+			if (isInMemory(ptrAddress, self)) {
 				return FFIErrorInvalidPointer;
 			}
 			/* begin ffiPushStructure:ofSize:typeSpec:ofLength:in: */
@@ -1019,7 +1019,7 @@ ffiArgumentSpecClassin(sqInt oop, sqInt argSpec, sqInt argClass, CalloutState *c
 			(calloutState->currentArg = ((calloutState->currentArg)) + roundedSize);
 			return 0;
 		}
-		if (ptrClass == (classByteArray())) {
+		if (ptrClass == (classByteArray(self))) {
 
 			/* The following is a somewhat pessimistic test but I like being sure... */
 			if (!((byteSizeOf(valueOop)) == (((calloutState->ffiArgHeader)) & FFIStructSizeMask))) {
@@ -1155,7 +1155,7 @@ ffiArgumentSpecClassin(sqInt oop, sqInt argSpec, sqInt argClass, CalloutState *c
 				return FFIErrorStructSize;
 			}
 			ptrAddress = ((void *)(fetchPointerofObject(0, valueOop)));
-			if (isInMemory(ptrAddress)) {
+			if (isInMemory(ptrAddress, self)) {
 				return FFIErrorInvalidPointer;
 			}
 			/* begin ffiPushPointer:in: */
@@ -1200,7 +1200,7 @@ ffiArgumentSpecClassin(sqInt oop, sqInt argSpec, sqInt argClass, CalloutState *c
 			/* e.g., ExternalData */
 			if (isStruct) {
 				/* begin ffiAtomicStructByReference:Class:in: */
-				if (!(oopClass == (classExternalData()))) {
+				if (!(oopClass == (classExternalData(self)))) {
 					return FFIErrorCoercionFailed;
 				}
 				/* begin atomicTypeOf: */
@@ -1256,9 +1256,9 @@ ffiArgumentSpecClassin(sqInt oop, sqInt argSpec, sqInt argClass, CalloutState *c
 					/* No bools on input */
 					return FFIErrorCoercionFailed;
 				}
-				isAlien = ((isString = includesBehaviorThatOf(oopClass, classString(), self))
+				isAlien = ((isString = includesBehaviorThatOf(oopClass, classString(self), self))
 					? 0
-					: includesBehaviorThatOf(oopClass, classAlien(), self));
+					: includesBehaviorThatOf(oopClass, classAlien(self), self));
 				if ((((usqInt) atomicType1) >> 1) == (((usqInt) FFITypeSignedChar) >> 1)) {
 
 					/* string value (char*) */
@@ -1318,7 +1318,7 @@ ffiArgumentSpecClassin(sqInt oop, sqInt argSpec, sqInt argClass, CalloutState *c
 
 					/* byte* -- see comment on string above */
 					if (isString
-					 || (oopClass == (classByteArray()))) {
+					 || (oopClass == (classByteArray(self)))) {
 
 						/* String/Symbol/ByteArray */
 						/* begin ffiPushPointer:in: */
@@ -1371,12 +1371,12 @@ ffiArgumentSpecClassin(sqInt oop, sqInt argSpec, sqInt argClass, CalloutState *c
 						return 0;
 					}
 					if (!(atomicType1 == FFITypeVoid)) {
-						return FFIErrorCoercionFailed;
+						abort();
 					}
 				}
 				if (atomicType1 <= FFITypeDoubleFloat) {
 					if ((isWords(oop))
-					 || (oopClass == (classByteArray()))) {
+					 || (oopClass == (classByteArray(self)))) {
 						/* begin ffiPushPointer:in: */
 						pointer4 = ((void *) (firstIndexableField(oop)));
 						if (((calloutState->integerRegisterIndex)) < NumIntRegArgs) {
@@ -1635,9 +1635,9 @@ ffiAtomicArgByReferenceClassin(sqInt oop, sqInt oopClass, CalloutState *calloutS
 		/* No bools on input */
 		return FFIErrorCoercionFailed;
 	}
-	isAlien = ((isString = includesBehaviorThatOf(oopClass, classString(), self))
+	isAlien = ((isString = includesBehaviorThatOf(oopClass, classString(self), self))
 		? 0
-		: includesBehaviorThatOf(oopClass, classAlien(), self));
+		: includesBehaviorThatOf(oopClass, classAlien(self), self));
 	if ((((usqInt) atomicType) >> 1) == (((usqInt) FFITypeSignedChar) >> 1)) {
 
 		/* string value (char*) */
@@ -1697,7 +1697,7 @@ ffiAtomicArgByReferenceClassin(sqInt oop, sqInt oopClass, CalloutState *calloutS
 
 		/* byte* -- see comment on string above */
 		if (isString
-		 || (oopClass == (classByteArray()))) {
+		 || (oopClass == (classByteArray(self)))) {
 
 			/* String/Symbol/ByteArray */
 			/* begin ffiPushPointer:in: */
@@ -1755,7 +1755,7 @@ ffiAtomicArgByReferenceClassin(sqInt oop, sqInt oopClass, CalloutState *calloutS
 	}
 	if (atomicType <= FFITypeDoubleFloat) {
 		if ((isWords(oop))
-		 || (oopClass == (classByteArray()))) {
+		 || (oopClass == (classByteArray(self)))) {
 			/* begin ffiPushPointer:in: */
 			pointer4 = ((void *) (firstIndexableField(oop)));
 			if (((calloutState->integerRegisterIndex)) < NumIntRegArgs) {
@@ -1829,7 +1829,7 @@ ffiAtomicStructByReferenceClassin(sqInt oop, sqInt oopClass, CalloutState *callo
 
 
 	/* must be external data to pass pointers to atomic type */
-	if (!(oopClass == (classExternalData()))) {
+	if (!(oopClass == (classExternalData(self)))) {
 		return FFIErrorCoercionFailed;
 	}
 	/* begin atomicTypeOf: */
@@ -1931,7 +1931,7 @@ ffiCalloutToSpecOnStackin(void *procAddr, sqInt specOnStack, CalloutState *callo
 #  else /* COGMTVM */
 		DisownVMForFFICall
 #  endif /* COGMTVM */
-		);
+		, self);
 	if (((calloutState->floatRegisterIndex)) > 0) {
 		loadFloatRegs(((calloutState->floatRegisters))[0], ((calloutState->floatRegisters))[1], ((calloutState->floatRegisters))[2], ((calloutState->floatRegisters))[3], ((calloutState->floatRegisters))[4], ((calloutState->floatRegisters))[5], ((calloutState->floatRegisters))[6], ((calloutState->floatRegisters))[7]);
 	}
@@ -1951,11 +1951,11 @@ ffiCalloutToSpecOnStackin(void *procAddr, sqInt specOnStack, CalloutState *callo
 			/* atomicType = FFITypeDoubleFloat */
 			floatRet = dispatchFunctionPointerwithwithwithwithwithwith(((double (*)(sqIntptr_t, sqIntptr_t, sqIntptr_t, sqIntptr_t, sqIntptr_t, sqIntptr_t)) procAddr), ((calloutState->integerRegisters))[0], ((calloutState->integerRegisters))[1], ((calloutState->integerRegisters))[2], ((calloutState->integerRegisters))[3], ((calloutState->integerRegisters))[4], ((calloutState->integerRegisters))[5]);
 		}
-		ownVM(myThreadIndex);
+		ownVM(myThreadIndex, self);
 		return floatObjectOf(floatRet);
 	}
 	intRet = dispatchFunctionPointerwithwithwithwithwithwith(((SixteenByteReturn (*)(sqIntptr_t, sqIntptr_t, sqIntptr_t, sqIntptr_t, sqIntptr_t, sqIntptr_t)) procAddr), ((calloutState->integerRegisters))[0], ((calloutState->integerRegisters))[1], ((calloutState->integerRegisters))[2], ((calloutState->integerRegisters))[3], ((calloutState->integerRegisters))[4], ((calloutState->integerRegisters))[5]);
-	ownVM(myThreadIndex);
+	ownVM(myThreadIndex, self);
 	if (((calloutState->ffiRetHeader)) & (FFIFlagPointer + FFIFlagStructure)) {
 
 		/* Note: Order is important here since FFIFlagPointer + FFIFlagStructure is used to represent
@@ -1966,7 +1966,7 @@ ffiCalloutToSpecOnStackin(void *procAddr, sqInt specOnStack, CalloutState *callo
 			/* begin ffiReturnType: */
 			specLiteral = (specOnStack
 				? stackValue(1, self)
-				: literalofMethod(0, primitiveMethod()));
+				: literalofMethod(0, primitiveMethod(self)));
 			argTypes = fetchPointerofObject(ExternalFunctionArgTypesIndex, specLiteral);
 			retType = fetchPointerofObject(0, argTypes);
 			retClass = fetchPointerofObject(1, retType);
@@ -1990,7 +1990,7 @@ ffiCalloutToSpecOnStackin(void *procAddr, sqInt specOnStack, CalloutState *callo
 					while (!((cString[strLen]) == 0)) {
 						strLen += 1;
 					}
-					strOop = instantiateClassindexableSize(classString(), strLen);
+					strOop = instantiateClassindexableSize(classString(self), strLen, self);
 					strPtr = firstIndexableField(strOop);
 					for (i = 0; i < strLen; i += 1) {
 						strPtr[i] = (cString[i]);
@@ -2001,37 +2001,37 @@ ffiCalloutToSpecOnStackin(void *procAddr, sqInt specOnStack, CalloutState *callo
 				}
 				
 #if SPURVM
-				oop = instantiateClassindexableSize(classExternalAddress(self), BytesPerWord);
+				oop = instantiateClassindexableSize(classExternalAddress(self), BytesPerWord, self);
 				ptr = firstIndexableField(oop);
 				ptr[0] = (((sqInt) retVal));
-				retOop = instantiateClassindexableSize(classExternalData(), 0);
-				storePointerofObjectwithValue(0, retOop, oop);
+				retOop = instantiateClassindexableSize(classExternalData(self), 0, self);
+				storePointerofObjectwithValue(0, retOop, oop, self);
 
 #else /* SPURVM */
 				pushRemappableOop(retType);
-				oop = instantiateClassindexableSize(classExternalAddress(self), BytesPerWord);
+				oop = instantiateClassindexableSize(classExternalAddress(self), BytesPerWord, self);
 				ptr = firstIndexableField(oop);
 				ptr[0] = (((sqInt) retVal));
 								pushRemappableOop(oop);
-				retOop = instantiateClassindexableSize(classExternalData(), 0);
+				retOop = instantiateClassindexableSize(classExternalData(self), 0, self);
 				oop = popRemappableOop();
-				storePointerofObjectwithValue(0, retOop, oop);
+				storePointerofObjectwithValue(0, retOop, oop, self);
 				retType = popRemappableOop()
 #endif /* SPURVM */
 ;
-				storePointerofObjectwithValue(1, retOop, retType);
+				storePointerofObjectwithValue(1, retOop, retType, self);
 				return retOop;
 			}
 			classOop = (((calloutState->ffiRetHeader)) & FFIFlagStructure
-				? classByteArray()
+				? classByteArray(self)
 				: classExternalAddress(self));
 			
 #if SPURVM
-			oop = instantiateClassindexableSize(classOop, BytesPerWord);
+			oop = instantiateClassindexableSize(classOop, BytesPerWord, self);
 
 #else /* SPURVM */
 			pushRemappableOop(retClass);
-			oop = instantiateClassindexableSize(classOop, BytesPerWord);
+			oop = instantiateClassindexableSize(classOop, BytesPerWord, self);
 			retClass = popRemappableOop()
 #endif /* SPURVM */
 ;
@@ -2039,39 +2039,39 @@ ffiCalloutToSpecOnStackin(void *procAddr, sqInt specOnStack, CalloutState *callo
 			ptr[0] = (((sqInt) retVal));
 			
 #if SPURVM
-			retOop = instantiateClassindexableSize(retClass, 0);
+			retOop = instantiateClassindexableSize(retClass, 0, self);
 
 #else /* SPURVM */
 			pushRemappableOop(oop);
-			retOop = instantiateClassindexableSize(retClass, 0);
+			retOop = instantiateClassindexableSize(retClass, 0, self);
 			oop = popRemappableOop()
 #endif /* SPURVM */
 ;
-			storePointerofObjectwithValue(0, retOop, oop);
+			storePointerofObjectwithValue(0, retOop, oop, self);
 			return retOop;
 		}
 		/* begin ffiReturnStruct:ofType:in: */
 		specLiteral1 = (specOnStack
 			? stackValue(1, self)
-			: literalofMethod(0, primitiveMethod()));
+			: literalofMethod(0, primitiveMethod(self)));
 		argTypes1 = fetchPointerofObject(ExternalFunctionArgTypesIndex, specLiteral1);
 		ffiRetType = fetchPointerofObject(0, argTypes1);
 		retClass1 = fetchPointerofObject(1, ffiRetType);
-		retOop1 = instantiateClassindexableSize(retClass1, 0);
+		retOop1 = instantiateClassindexableSize(retClass1, 0, self);
 		
 #if SPURVM
-		oop1 = instantiateClassindexableSize(classByteArray(), (calloutState->structReturnSize));
+		oop1 = instantiateClassindexableSize(classByteArray(self), (calloutState->structReturnSize), self);
 
 #else /* SPURVM */
 		pushRemappableOop(retOop1);
-		oop1 = instantiateClassindexableSize(classByteArray(), (calloutState->structReturnSize));
+		oop1 = instantiateClassindexableSize(classByteArray(self), (calloutState->structReturnSize), self);
 		retOop1 = popRemappableOop()
 #endif /* SPURVM */
 ;
 		memcpy(firstIndexableField(oop1), (((calloutState->structReturnSize)) <= (WordSize * 2)
 			? ((void *)((&intRet)))
 			: (calloutState->limit)), (calloutState->structReturnSize));
-		storePointerofObjectwithValue(0, retOop1, oop1);
+		storePointerofObjectwithValue(0, retOop1, oop1, self);
 		return retOop1;
 	}
 	/* begin ffiCreateIntegralResultOop:ofAtomicType:in: */
@@ -2116,13 +2116,13 @@ ffiCalloutToSpecOnStackin(void *procAddr, sqInt specOnStack, CalloutState *callo
 					? signed64BitIntegerFor(retVal1)
 					: signed32BitIntegerFor(retVal1))
 			: (BytesPerWord == 8
-					? positive64BitIntegerFor(retVal1)
+					? positive64BitIntegerFor(retVal1, self)
 					: positive32BitIntegerFor(retVal1)));
 	}
 	return ((((usqInt) atomicType) >> 1) == (((usqInt) FFITypeSignedLongLong) >> 1)
 		? (atomicType & 1
 				? signed64BitIntegerFor(retVal1)
-				: positive64BitIntegerFor(retVal1))
+				: positive64BitIntegerFor(retVal1, self))
 		: characterObjectOf(retVal1 & 0xFF));
 }
 
@@ -2192,7 +2192,7 @@ ffiCallArgArrayOrNilNumArgs(sqInt externalFunction, sqInt argArrayOrNil, sqInt n
     sqInt typeSpec1;
     usqLong value;
 
-	primNumArgs = methodArgumentCount();
+	primNumArgs = methodArgumentCount(self);
 	if (!(isKindOfClass(externalFunction, classExternalFunction(self)))) {
 		return ffiFail(FFIErrorNotFunction, self);
 	}
@@ -2219,7 +2219,7 @@ ffiCallArgArrayOrNilNumArgs(sqInt externalFunction, sqInt argArrayOrNil, sqInt n
 
 		/* Go look it up in the module */
 		if (externalFunctionInstSize > ExternalFunctionStackSizeIndex) {
-			storePointerofObjectwithValue(ExternalFunctionStackSizeIndex, externalFunction, integerObjectOf(-1));
+			storePointerofObjectwithValue(ExternalFunctionStackSizeIndex, externalFunction, integerObjectOf(-1), self);
 		}
 		if ((slotSizeOf(externalFunction)) < 5) {
 			address = ffiFail(FFIErrorNoModule, self);
@@ -2365,7 +2365,7 @@ ffiCallArgArrayOrNilNumArgs(sqInt externalFunction, sqInt argArrayOrNil, sqInt n
 #  else /* COGMTVM */
 		DisownVMForFFICall
 #  endif /* COGMTVM */
-		);
+		, self);
 	if (((calloutState->floatRegisterIndex)) > 0) {
 		loadFloatRegs(((calloutState->floatRegisters))[0], ((calloutState->floatRegisters))[1], ((calloutState->floatRegisters))[2], ((calloutState->floatRegisters))[3], ((calloutState->floatRegisters))[4], ((calloutState->floatRegisters))[5], ((calloutState->floatRegisters))[6], ((calloutState->floatRegisters))[7]);
 	}
@@ -2385,12 +2385,12 @@ ffiCallArgArrayOrNilNumArgs(sqInt externalFunction, sqInt argArrayOrNil, sqInt n
 			/* atomicType = FFITypeDoubleFloat */
 			floatRet = dispatchFunctionPointerwithwithwithwithwithwith(((double (*)(sqIntptr_t, sqIntptr_t, sqIntptr_t, sqIntptr_t, sqIntptr_t, sqIntptr_t)) (((void *) address))), ((calloutState->integerRegisters))[0], ((calloutState->integerRegisters))[1], ((calloutState->integerRegisters))[2], ((calloutState->integerRegisters))[3], ((calloutState->integerRegisters))[4], ((calloutState->integerRegisters))[5]);
 		}
-		ownVM(myThreadIndex);
+		ownVM(myThreadIndex, self);
 		result = floatObjectOf(floatRet);
 		goto l9;
 	}
 	intRet = dispatchFunctionPointerwithwithwithwithwithwith(((SixteenByteReturn (*)(sqIntptr_t, sqIntptr_t, sqIntptr_t, sqIntptr_t, sqIntptr_t, sqIntptr_t)) (((void *) address))), ((calloutState->integerRegisters))[0], ((calloutState->integerRegisters))[1], ((calloutState->integerRegisters))[2], ((calloutState->integerRegisters))[3], ((calloutState->integerRegisters))[4], ((calloutState->integerRegisters))[5]);
-	ownVM(myThreadIndex);
+	ownVM(myThreadIndex, self);
 	if (((calloutState->ffiRetHeader)) & (FFIFlagPointer + FFIFlagStructure)) {
 
 		/* Note: Order is important here since FFIFlagPointer + FFIFlagStructure is used to represent
@@ -2401,7 +2401,7 @@ ffiCallArgArrayOrNilNumArgs(sqInt externalFunction, sqInt argArrayOrNil, sqInt n
 			/* begin ffiReturnType: */
 			specLiteral = (argArrayOrNil != null
 				? stackValue(1, self)
-				: literalofMethod(0, primitiveMethod()));
+				: literalofMethod(0, primitiveMethod(self)));
 			argTypes = fetchPointerofObject(ExternalFunctionArgTypesIndex, specLiteral);
 			retType = fetchPointerofObject(0, argTypes);
 			retClass = fetchPointerofObject(1, retType);
@@ -2425,7 +2425,7 @@ ffiCallArgArrayOrNilNumArgs(sqInt externalFunction, sqInt argArrayOrNil, sqInt n
 					while (!((cString[strLen]) == 0)) {
 						strLen += 1;
 					}
-					strOop = instantiateClassindexableSize(classString(), strLen);
+					strOop = instantiateClassindexableSize(classString(self), strLen, self);
 					strPtr = firstIndexableField(strOop);
 					for (i1 = 0; i1 < strLen; i1 += 1) {
 						strPtr[i1] = (cString[i1]);
@@ -2437,38 +2437,38 @@ ffiCallArgArrayOrNilNumArgs(sqInt externalFunction, sqInt argArrayOrNil, sqInt n
 				}
 				
 #if SPURVM
-				oop2 = instantiateClassindexableSize(classExternalAddress(self), BytesPerWord);
+				oop2 = instantiateClassindexableSize(classExternalAddress(self), BytesPerWord, self);
 				ptr1 = firstIndexableField(oop2);
 				ptr1[0] = (((sqInt) retVal));
-				retOop = instantiateClassindexableSize(classExternalData(), 0);
-				storePointerofObjectwithValue(0, retOop, oop2);
+				retOop = instantiateClassindexableSize(classExternalData(self), 0, self);
+				storePointerofObjectwithValue(0, retOop, oop2, self);
 
 #else /* SPURVM */
 				pushRemappableOop(retType);
-				oop2 = instantiateClassindexableSize(classExternalAddress(self), BytesPerWord);
+				oop2 = instantiateClassindexableSize(classExternalAddress(self), BytesPerWord, self);
 				ptr1 = firstIndexableField(oop2);
 				ptr1[0] = (((sqInt) retVal));
 								pushRemappableOop(oop2);
-				retOop = instantiateClassindexableSize(classExternalData(), 0);
+				retOop = instantiateClassindexableSize(classExternalData(self), 0, self);
 				oop2 = popRemappableOop();
-				storePointerofObjectwithValue(0, retOop, oop2);
+				storePointerofObjectwithValue(0, retOop, oop2, self);
 				retType = popRemappableOop()
 #endif /* SPURVM */
 ;
-				storePointerofObjectwithValue(1, retOop, retType);
+				storePointerofObjectwithValue(1, retOop, retType, self);
 				result = retOop;
 				goto l9;
 			}
 			classOop = (((calloutState->ffiRetHeader)) & FFIFlagStructure
-				? classByteArray()
+				? classByteArray(self)
 				: classExternalAddress(self));
 			
 #if SPURVM
-			oop2 = instantiateClassindexableSize(classOop, BytesPerWord);
+			oop2 = instantiateClassindexableSize(classOop, BytesPerWord, self);
 
 #else /* SPURVM */
 			pushRemappableOop(retClass);
-			oop2 = instantiateClassindexableSize(classOop, BytesPerWord);
+			oop2 = instantiateClassindexableSize(classOop, BytesPerWord, self);
 			retClass = popRemappableOop()
 #endif /* SPURVM */
 ;
@@ -2476,40 +2476,40 @@ ffiCallArgArrayOrNilNumArgs(sqInt externalFunction, sqInt argArrayOrNil, sqInt n
 			ptr1[0] = (((sqInt) retVal));
 			
 #if SPURVM
-			retOop = instantiateClassindexableSize(retClass, 0);
+			retOop = instantiateClassindexableSize(retClass, 0, self);
 
 #else /* SPURVM */
 			pushRemappableOop(oop2);
-			retOop = instantiateClassindexableSize(retClass, 0);
+			retOop = instantiateClassindexableSize(retClass, 0, self);
 			oop2 = popRemappableOop()
 #endif /* SPURVM */
 ;
-			storePointerofObjectwithValue(0, retOop, oop2);
+			storePointerofObjectwithValue(0, retOop, oop2, self);
 			result = retOop;
 			goto l9;
 		}
 		/* begin ffiReturnStruct:ofType:in: */
 		specLiteral1 = (argArrayOrNil != null
 			? stackValue(1, self)
-			: literalofMethod(0, primitiveMethod()));
+			: literalofMethod(0, primitiveMethod(self)));
 		argTypes1 = fetchPointerofObject(ExternalFunctionArgTypesIndex, specLiteral1);
 		ffiRetType = fetchPointerofObject(0, argTypes1);
 		retClass1 = fetchPointerofObject(1, ffiRetType);
-		retOop1 = instantiateClassindexableSize(retClass1, 0);
+		retOop1 = instantiateClassindexableSize(retClass1, 0, self);
 		
 #if SPURVM
-		oop1 = instantiateClassindexableSize(classByteArray(), (calloutState->structReturnSize));
+		oop1 = instantiateClassindexableSize(classByteArray(self), (calloutState->structReturnSize), self);
 
 #else /* SPURVM */
 		pushRemappableOop(retOop1);
-		oop1 = instantiateClassindexableSize(classByteArray(), (calloutState->structReturnSize));
+		oop1 = instantiateClassindexableSize(classByteArray(self), (calloutState->structReturnSize), self);
 		retOop1 = popRemappableOop()
 #endif /* SPURVM */
 ;
 		memcpy(firstIndexableField(oop1), (((calloutState->structReturnSize)) <= (WordSize * 2)
 			? ((void *)((&intRet)))
 			: (calloutState->limit)), (calloutState->structReturnSize));
-		storePointerofObjectwithValue(0, retOop1, oop1);
+		storePointerofObjectwithValue(0, retOop1, oop1, self);
 		result = retOop1;
 		goto l9;
 	}
@@ -2557,14 +2557,14 @@ ffiCallArgArrayOrNilNumArgs(sqInt externalFunction, sqInt argArrayOrNil, sqInt n
 					? signed64BitIntegerFor(retVal1)
 					: signed32BitIntegerFor(retVal1))
 			: (BytesPerWord == 8
-					? positive64BitIntegerFor(retVal1)
+					? positive64BitIntegerFor(retVal1, self)
 					: positive32BitIntegerFor(retVal1)));
 		goto l9;
 	}
 	result = ((((usqInt) atomicType) >> 1) == (((usqInt) FFITypeSignedLongLong) >> 1)
 		? (atomicType & 1
 				? signed64BitIntegerFor(retVal1)
-				: positive64BitIntegerFor(retVal1))
+				: positive64BitIntegerFor(retVal1, self))
 		: characterObjectOf(retVal1 & 0xFF));
 	l9:	/* end ffiCalloutTo:SpecOnStack:in: */;
 	/* begin cleanupCalloutState: */
@@ -2669,13 +2669,13 @@ ffiCreateIntegralResultOopofAtomicTypein(usqLong retVal, sqInt atomicType, Callo
 					? signed64BitIntegerFor(retVal)
 					: signed32BitIntegerFor(retVal))
 			: (BytesPerWord == 8
-					? positive64BitIntegerFor(retVal)
+					? positive64BitIntegerFor(retVal, self)
 					: positive32BitIntegerFor(retVal)));
 	}
 	return ((((usqInt) atomicType) >> 1) == (((usqInt) FFITypeSignedLongLong) >> 1)
 		? (atomicType & 1
 				? signed64BitIntegerFor(retVal)
-				: positive64BitIntegerFor(retVal))
+				: positive64BitIntegerFor(retVal, self))
 		: characterObjectOf(retVal & 0xFF));
 }
 
@@ -2843,7 +2843,7 @@ ffiLoadCalloutAddress(sqInt lit, struct foo * self)
 
 		/* Go look it up in the module */
 		if (externalFunctionInstSize > ExternalFunctionStackSizeIndex) {
-			storePointerofObjectwithValue(ExternalFunctionStackSizeIndex, lit, integerObjectOf(-1));
+			storePointerofObjectwithValue(ExternalFunctionStackSizeIndex, lit, integerObjectOf(-1), self);
 		}
 		if ((slotSizeOf(lit)) < 5) {
 			return ffiFail(FFIErrorNoModule, self);
@@ -2884,8 +2884,8 @@ ffiLoadCalloutModule(sqInt module, struct foo * self)
 		}
 		return moduleHandle;
 	}
-	rcvr = stackValue(methodArgumentCount(), self);
-	if (!(isKindOfClass(rcvr, classExternalLibrary()))) {
+	rcvr = stackValue(methodArgumentCount(self), self);
+	if (!(isKindOfClass(rcvr, classExternalLibrary(self)))) {
 		return ffiFail(FFIErrorNoModule, self);
 	}
 	moduleHandlePtr = fetchPointerofObject(0, rcvr);
@@ -2983,7 +2983,7 @@ ffiPushPointerContentsOfin(sqInt oop, CalloutState *calloutState, struct foo * s
 
 		/* Don't you dare to pass pointers into object memory */
 		ptrAddress = ((void *)(fetchPointerofObject(0, oop)));
-		if (isInMemory(ptrAddress)) {
+		if (isInMemory(ptrAddress, self)) {
 			return FFIErrorInvalidPointer;
 		}
 		/* begin ffiPushPointer:in: */
@@ -3000,7 +3000,7 @@ ffiPushPointerContentsOfin(sqInt oop, CalloutState *calloutState, struct foo * s
 		}
 		return 0;
 	}
-	if (ptrClass == (classByteArray())) {
+	if (ptrClass == (classByteArray(self))) {
 
 		/* Since this involves passing the address of the first indexable field we need to fail
 		   the call if it is threaded and the object is young, since it may move during the call. */
@@ -3026,7 +3026,7 @@ ffiPushPointerContentsOfin(sqInt oop, CalloutState *calloutState, struct foo * s
 		}
 		return 0;
 	}
-	if (includesBehaviorThatOf(ptrClass, classAlien(), self)) {
+	if (includesBehaviorThatOf(ptrClass, classAlien(self), self)) {
 		
 #    if COGMTVM
 		if ((((calloutState->callFlags)) & FFICallFlagThreaded)
@@ -3276,7 +3276,7 @@ ffiPushStructureContentsOfin(sqInt oop, CalloutState *calloutState, struct foo *
 		/* There is no way we can make sure the structure is valid.
 		   But we can at least check for attempts to pass pointers to ST memory. */
 		ptrAddress = ((void *)(fetchPointerofObject(0, oop)));
-		if (isInMemory(ptrAddress)) {
+		if (isInMemory(ptrAddress, self)) {
 			return FFIErrorInvalidPointer;
 		}
 		/* begin ffiPushStructure:ofSize:typeSpec:ofLength:in: */
@@ -3393,7 +3393,7 @@ ffiPushStructureContentsOfin(sqInt oop, CalloutState *calloutState, struct foo *
 		(calloutState->currentArg = ((calloutState->currentArg)) + roundedSize);
 		return 0;
 	}
-	if (ptrClass == (classByteArray())) {
+	if (ptrClass == (classByteArray(self))) {
 
 		/* The following is a somewhat pessimistic test but I like being sure... */
 		if (!((byteSizeOf(oop)) == (((calloutState->ffiArgHeader)) & FFIStructSizeMask))) {
@@ -3529,7 +3529,7 @@ ffiPushStructureContentsOfin(sqInt oop, CalloutState *calloutState, struct foo *
 			return FFIErrorStructSize;
 		}
 		ptrAddress = ((void *)(fetchPointerofObject(0, oop)));
-		if (isInMemory(ptrAddress)) {
+		if (isInMemory(ptrAddress, self)) {
 			return FFIErrorInvalidPointer;
 		}
 		/* begin ffiPushPointer:in: */
@@ -3836,7 +3836,7 @@ ffiReturnCStringFrom(sqInt cPointer, struct foo * self)
 	while (!((cString[strLen]) == 0)) {
 		strLen += 1;
 	}
-	strOop = instantiateClassindexableSize(classString(), strLen);
+	strOop = instantiateClassindexableSize(classString(self), strLen, self);
 	strPtr = firstIndexableField(strOop);
 	for (i = 0; i < strLen; i += 1) {
 		strPtr[i] = (cString[i]);
@@ -3888,7 +3888,7 @@ ffiReturnPointerofTypein(usqLong retVal, sqInt retType, CalloutState *calloutSta
 			while (!((cString[strLen]) == 0)) {
 				strLen += 1;
 			}
-			strOop = instantiateClassindexableSize(classString(), strLen);
+			strOop = instantiateClassindexableSize(classString(self), strLen, self);
 			strPtr = firstIndexableField(strOop);
 			for (i = 0; i < strLen; i += 1) {
 				strPtr[i] = (cString[i]);
@@ -3899,37 +3899,37 @@ ffiReturnPointerofTypein(usqLong retVal, sqInt retType, CalloutState *calloutSta
 		}
 		
 #if SPURVM
-		oop = instantiateClassindexableSize(classExternalAddress(self), BytesPerWord);
+		oop = instantiateClassindexableSize(classExternalAddress(self), BytesPerWord, self);
 		ptr = firstIndexableField(oop);
 		ptr[0] = (((sqInt) retVal));
-		retOop = instantiateClassindexableSize(classExternalData(), 0);
-		storePointerofObjectwithValue(0, retOop, oop);
+		retOop = instantiateClassindexableSize(classExternalData(self), 0, self);
+		storePointerofObjectwithValue(0, retOop, oop, self);
 
 #else /* SPURVM */
 		pushRemappableOop(retType);
-		oop = instantiateClassindexableSize(classExternalAddress(self), BytesPerWord);
+		oop = instantiateClassindexableSize(classExternalAddress(self), BytesPerWord, self);
 		ptr = firstIndexableField(oop);
 		ptr[0] = (((sqInt) retVal));
 				pushRemappableOop(oop);
-		retOop = instantiateClassindexableSize(classExternalData(), 0);
+		retOop = instantiateClassindexableSize(classExternalData(self), 0, self);
 		oop = popRemappableOop();
-		storePointerofObjectwithValue(0, retOop, oop);
+		storePointerofObjectwithValue(0, retOop, oop, self);
 		retType = popRemappableOop()
 #endif /* SPURVM */
 ;
-		storePointerofObjectwithValue(1, retOop, retType);
+		storePointerofObjectwithValue(1, retOop, retType, self);
 		return retOop;
 	}
 	classOop = (((calloutState->ffiRetHeader)) & FFIFlagStructure
-		? classByteArray()
+		? classByteArray(self)
 		: classExternalAddress(self));
 	
 #if SPURVM
-	oop = instantiateClassindexableSize(classOop, BytesPerWord);
+	oop = instantiateClassindexableSize(classOop, BytesPerWord, self);
 
 #else /* SPURVM */
 	pushRemappableOop(retClass);
-	oop = instantiateClassindexableSize(classOop, BytesPerWord);
+	oop = instantiateClassindexableSize(classOop, BytesPerWord, self);
 	retClass = popRemappableOop()
 #endif /* SPURVM */
 ;
@@ -3937,15 +3937,15 @@ ffiReturnPointerofTypein(usqLong retVal, sqInt retType, CalloutState *calloutSta
 	ptr[0] = (((sqInt) retVal));
 	
 #if SPURVM
-	retOop = instantiateClassindexableSize(retClass, 0);
+	retOop = instantiateClassindexableSize(retClass, 0, self);
 
 #else /* SPURVM */
 	pushRemappableOop(oop);
-	retOop = instantiateClassindexableSize(retClass, 0);
+	retOop = instantiateClassindexableSize(retClass, 0, self);
 	oop = popRemappableOop()
 #endif /* SPURVM */
 ;
-	storePointerofObjectwithValue(0, retOop, oop);
+	storePointerofObjectwithValue(0, retOop, oop, self);
 	return retOop;
 }
 
@@ -3956,28 +3956,28 @@ ffiReturnPointerofTypein(usqLong retVal, sqInt retType, CalloutState *calloutSta
 
 	/* ThreadedX64SysVFFIPlugin>>#ffiReturnStruct:ofType:in: */
 static sqInt
-ffiReturnStructofTypein(SixteenByteReturn sixteenByteRet, sqInt ffiRetType, CalloutState *calloutState)
+ffiReturnStructofTypein(SixteenByteReturn sixteenByteRet, sqInt ffiRetType, CalloutState *calloutState, struct foo * self)
 {
     sqInt oop;
     sqInt retClass;
     sqInt retOop;
 
 	retClass = fetchPointerofObject(1, ffiRetType);
-	retOop = instantiateClassindexableSize(retClass, 0);
+	retOop = instantiateClassindexableSize(retClass, 0, self);
 	
 #if SPURVM
-	oop = instantiateClassindexableSize(classByteArray(), (calloutState->structReturnSize));
+	oop = instantiateClassindexableSize(classByteArray(self), (calloutState->structReturnSize), self);
 
 #else /* SPURVM */
 	pushRemappableOop(retOop);
-	oop = instantiateClassindexableSize(classByteArray(), (calloutState->structReturnSize));
+	oop = instantiateClassindexableSize(classByteArray(self), (calloutState->structReturnSize), self);
 	retOop = popRemappableOop()
 #endif /* SPURVM */
 ;
 	memcpy(firstIndexableField(oop), (((calloutState->structReturnSize)) <= (WordSize * 2)
 		? ((void *)((&sixteenByteRet)))
 		: (calloutState->limit)), (calloutState->structReturnSize));
-	storePointerofObjectwithValue(0, retOop, oop);
+	storePointerofObjectwithValue(0, retOop, oop, self);
 	return retOop;
 }
 
@@ -3993,7 +3993,7 @@ ffiReturnType(sqInt specOnStack, struct foo * self)
 
 	specLiteral = (specOnStack
 		? stackValue(1, self)
-		: literalofMethod(0, primitiveMethod()));
+		: literalofMethod(0, primitiveMethod(self)));
 	argTypes = fetchPointerofObject(ExternalFunctionArgTypesIndex, specLiteral);
 	return fetchPointerofObject(0, argTypes);
 }
@@ -4061,7 +4061,7 @@ ffiValidateExternalDataAtomicType(sqInt oop, sqInt atomicType)
 
 	/* ThreadedFFIPlugin>>#getModuleName */
 EXPORT(const char *)
-getModuleName(void)
+getModuleName()
 {
 	return "SqueakFFIPrims";
 }
@@ -4100,7 +4100,7 @@ initialiseModule(struct foo * self)
 static sqInt
 isAlien(sqInt anOop, struct foo * self)
 {
-	return includesBehaviorThatOf(fetchClassOf(anOop, self), classAlien(), self);
+	return includesBehaviorThatOf(fetchClassOf(anOop, self), classAlien(self), self);
 }
 
 	/* ThreadedFFIPlugin>>#isAtomicType: */
@@ -4133,7 +4133,7 @@ msg(char *s)
 
 	/* ThreadedFFIPlugin>>#nonRegisterStructReturnIsViaImplicitFirstArgument */
 static sqInt
-nonRegisterStructReturnIsViaImplicitFirstArgument(void)
+nonRegisterStructReturnIsViaImplicitFirstArgument(struct foo * self)
 {
 	return 1;
 }
@@ -4265,7 +4265,7 @@ primitiveCallout(struct foo * self)
     usqLong value;
     usqLong value1;
 
-	meth = primitiveMethod();
+	meth = primitiveMethod(self);
 	if (!((literalCountOf(meth)) > 0)) {
 		primitiveFailFor(PrimErrBadMethod, self);
 		return;
@@ -4273,11 +4273,11 @@ primitiveCallout(struct foo * self)
 	externalFunction = literalofMethod(0, meth);
 	
 #  if COGMTVM
-	nArgs = methodArgumentCount();
+	nArgs = methodArgumentCount(self);
 	retryCount = 0;
 	while (1) {
 		/* begin ffiCall:ArgArrayOrNil:NumArgs: */
-		primNumArgs = methodArgumentCount();
+		primNumArgs = methodArgumentCount(self);
 		if (!(isKindOfClass(externalFunction, classExternalFunction(self)))) {
 			result = ffiFail(FFIErrorNotFunction, self);
 			goto l10;
@@ -4306,7 +4306,7 @@ primitiveCallout(struct foo * self)
 
 			/* Go look it up in the module */
 			if (externalFunctionInstSize > ExternalFunctionStackSizeIndex) {
-				storePointerofObjectwithValue(ExternalFunctionStackSizeIndex, externalFunction, integerObjectOf(-1));
+				storePointerofObjectwithValue(ExternalFunctionStackSizeIndex, externalFunction, integerObjectOf(-1), self);
 			}
 			if ((slotSizeOf(externalFunction)) < 5) {
 				address = ffiFail(FFIErrorNoModule, self);
@@ -4462,7 +4462,7 @@ primitiveCallout(struct foo * self)
 #    else /* COGMTVM */
 			DisownVMForFFICall
 #    endif /* COGMTVM */
-			);
+			, self);
 		if (((calloutState->floatRegisterIndex)) > 0) {
 			loadFloatRegs(((calloutState->floatRegisters))[0], ((calloutState->floatRegisters))[1], ((calloutState->floatRegisters))[2], ((calloutState->floatRegisters))[3], ((calloutState->floatRegisters))[4], ((calloutState->floatRegisters))[5], ((calloutState->floatRegisters))[6], ((calloutState->floatRegisters))[7]);
 		}
@@ -4482,12 +4482,12 @@ primitiveCallout(struct foo * self)
 				/* atomicType = FFITypeDoubleFloat */
 				floatRet = dispatchFunctionPointerwithwithwithwithwithwith(((double (*)(sqIntptr_t, sqIntptr_t, sqIntptr_t, sqIntptr_t, sqIntptr_t, sqIntptr_t)) (((void *) address))), ((calloutState->integerRegisters))[0], ((calloutState->integerRegisters))[1], ((calloutState->integerRegisters))[2], ((calloutState->integerRegisters))[3], ((calloutState->integerRegisters))[4], ((calloutState->integerRegisters))[5]);
 			}
-			ownVM(myThreadIndex);
+			ownVM(myThreadIndex, self);
 			result1 = floatObjectOf(floatRet);
 			goto l9;
 		}
 		intRet = dispatchFunctionPointerwithwithwithwithwithwith(((SixteenByteReturn (*)(sqIntptr_t, sqIntptr_t, sqIntptr_t, sqIntptr_t, sqIntptr_t, sqIntptr_t)) (((void *) address))), ((calloutState->integerRegisters))[0], ((calloutState->integerRegisters))[1], ((calloutState->integerRegisters))[2], ((calloutState->integerRegisters))[3], ((calloutState->integerRegisters))[4], ((calloutState->integerRegisters))[5]);
-		ownVM(myThreadIndex);
+		ownVM(myThreadIndex, self);
 		if (((calloutState->ffiRetHeader)) & (FFIFlagPointer + FFIFlagStructure)) {
 
 			/* Note: Order is important here since FFIFlagPointer + FFIFlagStructure is used to represent
@@ -4498,7 +4498,7 @@ primitiveCallout(struct foo * self)
 				/* begin ffiReturnType: */
 				specLiteral = (null != null
 					? stackValue(1, self)
-					: literalofMethod(0, primitiveMethod()));
+					: literalofMethod(0, primitiveMethod(self)));
 				argTypes = fetchPointerofObject(ExternalFunctionArgTypesIndex, specLiteral);
 				retType = fetchPointerofObject(0, argTypes);
 				retClass = fetchPointerofObject(1, retType);
@@ -4522,7 +4522,7 @@ primitiveCallout(struct foo * self)
 						while (!((cString[strLen]) == 0)) {
 							strLen += 1;
 						}
-						strOop = instantiateClassindexableSize(classString(), strLen);
+						strOop = instantiateClassindexableSize(classString(self), strLen, self);
 						strPtr = firstIndexableField(strOop);
 						for (i1 = 0; i1 < strLen; i1 += 1) {
 							strPtr[i1] = (cString[i1]);
@@ -4534,38 +4534,38 @@ primitiveCallout(struct foo * self)
 					}
 					
 #if SPURVM
-					oop2 = instantiateClassindexableSize(classExternalAddress(self), BytesPerWord);
+					oop2 = instantiateClassindexableSize(classExternalAddress(self), BytesPerWord, self);
 					ptr1 = firstIndexableField(oop2);
 					ptr1[0] = (((sqInt) retVal));
-					retOop = instantiateClassindexableSize(classExternalData(), 0);
-					storePointerofObjectwithValue(0, retOop, oop2);
+					retOop = instantiateClassindexableSize(classExternalData(self), 0, self);
+					storePointerofObjectwithValue(0, retOop, oop2, self);
 
 #else /* SPURVM */
 					pushRemappableOop(retType);
-					oop2 = instantiateClassindexableSize(classExternalAddress(self), BytesPerWord);
+					oop2 = instantiateClassindexableSize(classExternalAddress(self), BytesPerWord, self);
 					ptr1 = firstIndexableField(oop2);
 					ptr1[0] = (((sqInt) retVal));
 										pushRemappableOop(oop2);
-					retOop = instantiateClassindexableSize(classExternalData(), 0);
+					retOop = instantiateClassindexableSize(classExternalData(self), 0, self);
 					oop2 = popRemappableOop();
-					storePointerofObjectwithValue(0, retOop, oop2);
+					storePointerofObjectwithValue(0, retOop, oop2, self);
 					retType = popRemappableOop()
 #endif /* SPURVM */
 ;
-					storePointerofObjectwithValue(1, retOop, retType);
+					storePointerofObjectwithValue(1, retOop, retType, self);
 					result1 = retOop;
 					goto l9;
 				}
 				classOop = (((calloutState->ffiRetHeader)) & FFIFlagStructure
-					? classByteArray()
+					? classByteArray(self)
 					: classExternalAddress(self));
 				
 #if SPURVM
-				oop2 = instantiateClassindexableSize(classOop, BytesPerWord);
+				oop2 = instantiateClassindexableSize(classOop, BytesPerWord, self);
 
 #else /* SPURVM */
 				pushRemappableOop(retClass);
-				oop2 = instantiateClassindexableSize(classOop, BytesPerWord);
+				oop2 = instantiateClassindexableSize(classOop, BytesPerWord, self);
 				retClass = popRemappableOop()
 #endif /* SPURVM */
 ;
@@ -4573,40 +4573,40 @@ primitiveCallout(struct foo * self)
 				ptr1[0] = (((sqInt) retVal));
 				
 #if SPURVM
-				retOop = instantiateClassindexableSize(retClass, 0);
+				retOop = instantiateClassindexableSize(retClass, 0, self);
 
 #else /* SPURVM */
 				pushRemappableOop(oop2);
-				retOop = instantiateClassindexableSize(retClass, 0);
+				retOop = instantiateClassindexableSize(retClass, 0, self);
 				oop2 = popRemappableOop()
 #endif /* SPURVM */
 ;
-				storePointerofObjectwithValue(0, retOop, oop2);
+				storePointerofObjectwithValue(0, retOop, oop2, self);
 				result1 = retOop;
 				goto l9;
 			}
 			/* begin ffiReturnStruct:ofType:in: */
 			specLiteral2 = (null != null
 				? stackValue(1, self)
-				: literalofMethod(0, primitiveMethod()));
+				: literalofMethod(0, primitiveMethod(self)));
 			argTypes2 = fetchPointerofObject(ExternalFunctionArgTypesIndex, specLiteral2);
 			ffiRetType = fetchPointerofObject(0, argTypes2);
 			retClass1 = fetchPointerofObject(1, ffiRetType);
-			retOop1 = instantiateClassindexableSize(retClass1, 0);
+			retOop1 = instantiateClassindexableSize(retClass1, 0, self);
 			
 #if SPURVM
-			oop1 = instantiateClassindexableSize(classByteArray(), (calloutState->structReturnSize));
+			oop1 = instantiateClassindexableSize(classByteArray(self), (calloutState->structReturnSize), self);
 
 #else /* SPURVM */
 			pushRemappableOop(retOop1);
-			oop1 = instantiateClassindexableSize(classByteArray(), (calloutState->structReturnSize));
+			oop1 = instantiateClassindexableSize(classByteArray(self), (calloutState->structReturnSize), self);
 			retOop1 = popRemappableOop()
 #endif /* SPURVM */
 ;
 			memcpy(firstIndexableField(oop1), (((calloutState->structReturnSize)) <= (WordSize * 2)
 				? ((void *)((&intRet)))
 				: (calloutState->limit)), (calloutState->structReturnSize));
-			storePointerofObjectwithValue(0, retOop1, oop1);
+			storePointerofObjectwithValue(0, retOop1, oop1, self);
 			result1 = retOop1;
 			goto l9;
 		}
@@ -4654,14 +4654,14 @@ primitiveCallout(struct foo * self)
 						? signed64BitIntegerFor(retVal1)
 						: signed32BitIntegerFor(retVal1))
 				: (BytesPerWord == 8
-						? positive64BitIntegerFor(retVal1)
+						? positive64BitIntegerFor(retVal1, self)
 						: positive32BitIntegerFor(retVal1)));
 			goto l9;
 		}
 		result1 = ((((usqInt) atomicType) >> 1) == (((usqInt) FFITypeSignedLongLong) >> 1)
 			? (atomicType & 1
 					? signed64BitIntegerFor(retVal1)
-					: positive64BitIntegerFor(retVal1))
+					: positive64BitIntegerFor(retVal1, self))
 			: characterObjectOf(retVal1 & 0xFF));
 	l9:	/* end ffiCalloutTo:SpecOnStack:in: */;
 		/* begin cleanupCalloutState: */
@@ -4677,8 +4677,8 @@ primitiveCallout(struct foo * self)
 	}
 #  else /* COGMTVM */
 	/* begin ffiCall:ArgArrayOrNil:NumArgs: */
-	nArgs1 = methodArgumentCount();
-	primNumArgs1 = methodArgumentCount();
+	nArgs1 = methodArgumentCount(self);
+	primNumArgs1 = methodArgumentCount(self);
 	if (!(isKindOfClass(externalFunction, classExternalFunction(self)))) {
 		ffiFail(FFIErrorNotFunction, self);
 		goto l20;
@@ -4707,7 +4707,7 @@ primitiveCallout(struct foo * self)
 
 		/* Go look it up in the module */
 		if (externalFunctionInstSize > ExternalFunctionStackSizeIndex) {
-			storePointerofObjectwithValue(ExternalFunctionStackSizeIndex, externalFunction, integerObjectOf(-1));
+			storePointerofObjectwithValue(ExternalFunctionStackSizeIndex, externalFunction, integerObjectOf(-1), self);
 		}
 		if ((slotSizeOf(externalFunction)) < 5) {
 			address2 = ffiFail(FFIErrorNoModule, self);
@@ -4860,7 +4860,7 @@ primitiveCallout(struct foo * self)
 #  else /* COGMTVM */
 		DisownVMForFFICall
 #  endif /* COGMTVM */
-		);
+		, self);
 	if (((calloutState1->floatRegisterIndex)) > 0) {
 		loadFloatRegs(((calloutState1->floatRegisters))[0], ((calloutState1->floatRegisters))[1], ((calloutState1->floatRegisters))[2], ((calloutState1->floatRegisters))[3], ((calloutState1->floatRegisters))[4], ((calloutState1->floatRegisters))[5], ((calloutState1->floatRegisters))[6], ((calloutState1->floatRegisters))[7]);
 	}
@@ -4880,12 +4880,12 @@ primitiveCallout(struct foo * self)
 			/* atomicType = FFITypeDoubleFloat */
 			floatRet1 = dispatchFunctionPointerwithwithwithwithwithwith(((double (*)(sqIntptr_t, sqIntptr_t, sqIntptr_t, sqIntptr_t, sqIntptr_t, sqIntptr_t)) (((void *) address2))), ((calloutState1->integerRegisters))[0], ((calloutState1->integerRegisters))[1], ((calloutState1->integerRegisters))[2], ((calloutState1->integerRegisters))[3], ((calloutState1->integerRegisters))[4], ((calloutState1->integerRegisters))[5]);
 		}
-		ownVM(myThreadIndex1);
+		ownVM(myThreadIndex1, self);
 		result2 = floatObjectOf(floatRet1);
 		goto l14;
 	}
 	intRet1 = dispatchFunctionPointerwithwithwithwithwithwith(((SixteenByteReturn (*)(sqIntptr_t, sqIntptr_t, sqIntptr_t, sqIntptr_t, sqIntptr_t, sqIntptr_t)) (((void *) address2))), ((calloutState1->integerRegisters))[0], ((calloutState1->integerRegisters))[1], ((calloutState1->integerRegisters))[2], ((calloutState1->integerRegisters))[3], ((calloutState1->integerRegisters))[4], ((calloutState1->integerRegisters))[5]);
-	ownVM(myThreadIndex1);
+	ownVM(myThreadIndex1, self);
 	if (((calloutState1->ffiRetHeader)) & (FFIFlagPointer + FFIFlagStructure)) {
 
 		/* Note: Order is important here since FFIFlagPointer + FFIFlagStructure is used to represent
@@ -4896,7 +4896,7 @@ primitiveCallout(struct foo * self)
 			/* begin ffiReturnType: */
 			specLiteral1 = (null != null
 				? stackValue(1, self)
-				: literalofMethod(0, primitiveMethod()));
+				: literalofMethod(0, primitiveMethod(self)));
 			argTypes1 = fetchPointerofObject(ExternalFunctionArgTypesIndex, specLiteral1);
 			retType1 = fetchPointerofObject(0, argTypes1);
 			retClass2 = fetchPointerofObject(1, retType1);
@@ -4920,7 +4920,7 @@ primitiveCallout(struct foo * self)
 					while (!((cString1[strLen1]) == 0)) {
 						strLen1 += 1;
 					}
-					strOop1 = instantiateClassindexableSize(classString(), strLen1);
+					strOop1 = instantiateClassindexableSize(classString(self), strLen1, self);
 					strPtr1 = firstIndexableField(strOop1);
 					for (i11 = 0; i11 < strLen1; i11 += 1) {
 						strPtr1[i11] = (cString1[i11]);
@@ -4932,38 +4932,38 @@ primitiveCallout(struct foo * self)
 				}
 				
 #if SPURVM
-				oop21 = instantiateClassindexableSize(classExternalAddress(self), BytesPerWord);
+				oop21 = instantiateClassindexableSize(classExternalAddress(self), BytesPerWord, self);
 				ptr11 = firstIndexableField(oop21);
 				ptr11[0] = (((sqInt) retVal2));
-				retOop2 = instantiateClassindexableSize(classExternalData(), 0);
-				storePointerofObjectwithValue(0, retOop2, oop21);
+				retOop2 = instantiateClassindexableSize(classExternalData(self), 0, self);
+				storePointerofObjectwithValue(0, retOop2, oop21, self);
 
 #else /* SPURVM */
 				pushRemappableOop(retType1);
-				oop21 = instantiateClassindexableSize(classExternalAddress(self), BytesPerWord);
+				oop21 = instantiateClassindexableSize(classExternalAddress(self), BytesPerWord, self);
 				ptr11 = firstIndexableField(oop21);
 				ptr11[0] = (((sqInt) retVal2));
 								pushRemappableOop(oop21);
-				retOop2 = instantiateClassindexableSize(classExternalData(), 0);
+				retOop2 = instantiateClassindexableSize(classExternalData(self), 0, self);
 				oop21 = popRemappableOop();
-				storePointerofObjectwithValue(0, retOop2, oop21);
+				storePointerofObjectwithValue(0, retOop2, oop21, self);
 				retType1 = popRemappableOop()
 #endif /* SPURVM */
 ;
-				storePointerofObjectwithValue(1, retOop2, retType1);
+				storePointerofObjectwithValue(1, retOop2, retType1, self);
 				result2 = retOop2;
 				goto l14;
 			}
 			classOop1 = (((calloutState1->ffiRetHeader)) & FFIFlagStructure
-				? classByteArray()
+				? classByteArray(self)
 				: classExternalAddress(self));
 			
 #if SPURVM
-			oop21 = instantiateClassindexableSize(classOop1, BytesPerWord);
+			oop21 = instantiateClassindexableSize(classOop1, BytesPerWord, self);
 
 #else /* SPURVM */
 			pushRemappableOop(retClass2);
-			oop21 = instantiateClassindexableSize(classOop1, BytesPerWord);
+			oop21 = instantiateClassindexableSize(classOop1, BytesPerWord, self);
 			retClass2 = popRemappableOop()
 #endif /* SPURVM */
 ;
@@ -4971,40 +4971,40 @@ primitiveCallout(struct foo * self)
 			ptr11[0] = (((sqInt) retVal2));
 			
 #if SPURVM
-			retOop2 = instantiateClassindexableSize(retClass2, 0);
+			retOop2 = instantiateClassindexableSize(retClass2, 0, self);
 
 #else /* SPURVM */
 			pushRemappableOop(oop21);
-			retOop2 = instantiateClassindexableSize(retClass2, 0);
+			retOop2 = instantiateClassindexableSize(retClass2, 0, self);
 			oop21 = popRemappableOop()
 #endif /* SPURVM */
 ;
-			storePointerofObjectwithValue(0, retOop2, oop21);
+			storePointerofObjectwithValue(0, retOop2, oop21, self);
 			result2 = retOop2;
 			goto l14;
 		}
 		/* begin ffiReturnStruct:ofType:in: */
 		specLiteral3 = (null != null
 			? stackValue(1, self)
-			: literalofMethod(0, primitiveMethod()));
+			: literalofMethod(0, primitiveMethod(self)));
 		argTypes3 = fetchPointerofObject(ExternalFunctionArgTypesIndex, specLiteral3);
 		ffiRetType1 = fetchPointerofObject(0, argTypes3);
 		retClass11 = fetchPointerofObject(1, ffiRetType1);
-		retOop11 = instantiateClassindexableSize(retClass11, 0);
+		retOop11 = instantiateClassindexableSize(retClass11, 0, self);
 		
 #if SPURVM
-		oop11 = instantiateClassindexableSize(classByteArray(), (calloutState1->structReturnSize));
+		oop11 = instantiateClassindexableSize(classByteArray(self), (calloutState1->structReturnSize), self);
 
 #else /* SPURVM */
 		pushRemappableOop(retOop11);
-		oop11 = instantiateClassindexableSize(classByteArray(), (calloutState1->structReturnSize));
+		oop11 = instantiateClassindexableSize(classByteArray(self), (calloutState1->structReturnSize), self);
 		retOop11 = popRemappableOop()
 #endif /* SPURVM */
 ;
 		memcpy(firstIndexableField(oop11), (((calloutState1->structReturnSize)) <= (WordSize * 2)
 			? ((void *)((&intRet1)))
 			: (calloutState1->limit)), (calloutState1->structReturnSize));
-		storePointerofObjectwithValue(0, retOop11, oop11);
+		storePointerofObjectwithValue(0, retOop11, oop11, self);
 		result2 = retOop11;
 		goto l14;
 	}
@@ -5052,14 +5052,14 @@ primitiveCallout(struct foo * self)
 					? signed64BitIntegerFor(retVal11)
 					: signed32BitIntegerFor(retVal11))
 			: (BytesPerWord == 8
-					? positive64BitIntegerFor(retVal11)
+					? positive64BitIntegerFor(retVal11, self)
 					: positive32BitIntegerFor(retVal11)));
 		goto l14;
 	}
 	result2 = ((((usqInt) atomicType2) >> 1) == (((usqInt) FFITypeSignedLongLong) >> 1)
 		? (atomicType2 & 1
 				? signed64BitIntegerFor(retVal11)
-				: positive64BitIntegerFor(retVal11))
+				: positive64BitIntegerFor(retVal11, self))
 		: characterObjectOf(retVal11 & 0xFF));
 	l14:	/* end ffiCalloutTo:SpecOnStack:in: */;
 	/* begin cleanupCalloutState: */
@@ -5195,7 +5195,7 @@ primitiveCalloutWithArgs(struct foo * self)
     usqLong value;
     usqLong value1;
 
-	if (!((methodArgumentCount()) == 1)) {
+	if (!((methodArgumentCount(self)) == 1)) {
 		primitiveFailFor(PrimErrBadNumArgs, self);
 		return;
 	}
@@ -5211,7 +5211,7 @@ primitiveCalloutWithArgs(struct foo * self)
 		}
 		nArgs = slotSizeOf(argArray);
 		/* begin ffiCall:ArgArrayOrNil:NumArgs: */
-		primNumArgs = methodArgumentCount();
+		primNumArgs = methodArgumentCount(self);
 		if (!(isKindOfClass(externalFunction, classExternalFunction(self)))) {
 			result = ffiFail(FFIErrorNotFunction, self);
 			goto l10;
@@ -5240,7 +5240,7 @@ primitiveCalloutWithArgs(struct foo * self)
 
 			/* Go look it up in the module */
 			if (externalFunctionInstSize > ExternalFunctionStackSizeIndex) {
-				storePointerofObjectwithValue(ExternalFunctionStackSizeIndex, externalFunction, integerObjectOf(-1));
+				storePointerofObjectwithValue(ExternalFunctionStackSizeIndex, externalFunction, integerObjectOf(-1), self);
 			}
 			if ((slotSizeOf(externalFunction)) < 5) {
 				address = ffiFail(FFIErrorNoModule, self);
@@ -5396,7 +5396,7 @@ primitiveCalloutWithArgs(struct foo * self)
 #    else /* COGMTVM */
 			DisownVMForFFICall
 #    endif /* COGMTVM */
-			);
+			, self);
 		if (((calloutState->floatRegisterIndex)) > 0) {
 			loadFloatRegs(((calloutState->floatRegisters))[0], ((calloutState->floatRegisters))[1], ((calloutState->floatRegisters))[2], ((calloutState->floatRegisters))[3], ((calloutState->floatRegisters))[4], ((calloutState->floatRegisters))[5], ((calloutState->floatRegisters))[6], ((calloutState->floatRegisters))[7]);
 		}
@@ -5416,12 +5416,12 @@ primitiveCalloutWithArgs(struct foo * self)
 				/* atomicType = FFITypeDoubleFloat */
 				floatRet = dispatchFunctionPointerwithwithwithwithwithwith(((double (*)(sqIntptr_t, sqIntptr_t, sqIntptr_t, sqIntptr_t, sqIntptr_t, sqIntptr_t)) (((void *) address))), ((calloutState->integerRegisters))[0], ((calloutState->integerRegisters))[1], ((calloutState->integerRegisters))[2], ((calloutState->integerRegisters))[3], ((calloutState->integerRegisters))[4], ((calloutState->integerRegisters))[5]);
 			}
-			ownVM(myThreadIndex);
+			ownVM(myThreadIndex, self);
 			result1 = floatObjectOf(floatRet);
 			goto l9;
 		}
 		intRet = dispatchFunctionPointerwithwithwithwithwithwith(((SixteenByteReturn (*)(sqIntptr_t, sqIntptr_t, sqIntptr_t, sqIntptr_t, sqIntptr_t, sqIntptr_t)) (((void *) address))), ((calloutState->integerRegisters))[0], ((calloutState->integerRegisters))[1], ((calloutState->integerRegisters))[2], ((calloutState->integerRegisters))[3], ((calloutState->integerRegisters))[4], ((calloutState->integerRegisters))[5]);
-		ownVM(myThreadIndex);
+		ownVM(myThreadIndex, self);
 		if (((calloutState->ffiRetHeader)) & (FFIFlagPointer + FFIFlagStructure)) {
 
 			/* Note: Order is important here since FFIFlagPointer + FFIFlagStructure is used to represent
@@ -5432,7 +5432,7 @@ primitiveCalloutWithArgs(struct foo * self)
 				/* begin ffiReturnType: */
 				specLiteral = (argArray != null
 					? stackValue(1, self)
-					: literalofMethod(0, primitiveMethod()));
+					: literalofMethod(0, primitiveMethod(self)));
 				argTypes = fetchPointerofObject(ExternalFunctionArgTypesIndex, specLiteral);
 				retType = fetchPointerofObject(0, argTypes);
 				retClass = fetchPointerofObject(1, retType);
@@ -5456,7 +5456,7 @@ primitiveCalloutWithArgs(struct foo * self)
 						while (!((cString[strLen]) == 0)) {
 							strLen += 1;
 						}
-						strOop = instantiateClassindexableSize(classString(), strLen);
+						strOop = instantiateClassindexableSize(classString(self), strLen, self);
 						strPtr = firstIndexableField(strOop);
 						for (i1 = 0; i1 < strLen; i1 += 1) {
 							strPtr[i1] = (cString[i1]);
@@ -5468,38 +5468,38 @@ primitiveCalloutWithArgs(struct foo * self)
 					}
 					
 #if SPURVM
-					oop2 = instantiateClassindexableSize(classExternalAddress(self), BytesPerWord);
+					oop2 = instantiateClassindexableSize(classExternalAddress(self), BytesPerWord, self);
 					ptr1 = firstIndexableField(oop2);
 					ptr1[0] = (((sqInt) retVal));
-					retOop = instantiateClassindexableSize(classExternalData(), 0);
-					storePointerofObjectwithValue(0, retOop, oop2);
+					retOop = instantiateClassindexableSize(classExternalData(self), 0, self);
+					storePointerofObjectwithValue(0, retOop, oop2, self);
 
 #else /* SPURVM */
 					pushRemappableOop(retType);
-					oop2 = instantiateClassindexableSize(classExternalAddress(self), BytesPerWord);
+					oop2 = instantiateClassindexableSize(classExternalAddress(self), BytesPerWord, self);
 					ptr1 = firstIndexableField(oop2);
 					ptr1[0] = (((sqInt) retVal));
 										pushRemappableOop(oop2);
-					retOop = instantiateClassindexableSize(classExternalData(), 0);
+					retOop = instantiateClassindexableSize(classExternalData(self), 0, self);
 					oop2 = popRemappableOop();
-					storePointerofObjectwithValue(0, retOop, oop2);
+					storePointerofObjectwithValue(0, retOop, oop2, self);
 					retType = popRemappableOop()
 #endif /* SPURVM */
 ;
-					storePointerofObjectwithValue(1, retOop, retType);
+					storePointerofObjectwithValue(1, retOop, retType, self);
 					result1 = retOop;
 					goto l9;
 				}
 				classOop = (((calloutState->ffiRetHeader)) & FFIFlagStructure
-					? classByteArray()
+					? classByteArray(self)
 					: classExternalAddress(self));
 				
 #if SPURVM
-				oop2 = instantiateClassindexableSize(classOop, BytesPerWord);
+				oop2 = instantiateClassindexableSize(classOop, BytesPerWord, self);
 
 #else /* SPURVM */
 				pushRemappableOop(retClass);
-				oop2 = instantiateClassindexableSize(classOop, BytesPerWord);
+				oop2 = instantiateClassindexableSize(classOop, BytesPerWord, self);
 				retClass = popRemappableOop()
 #endif /* SPURVM */
 ;
@@ -5507,40 +5507,40 @@ primitiveCalloutWithArgs(struct foo * self)
 				ptr1[0] = (((sqInt) retVal));
 				
 #if SPURVM
-				retOop = instantiateClassindexableSize(retClass, 0);
+				retOop = instantiateClassindexableSize(retClass, 0, self);
 
 #else /* SPURVM */
 				pushRemappableOop(oop2);
-				retOop = instantiateClassindexableSize(retClass, 0);
+				retOop = instantiateClassindexableSize(retClass, 0, self);
 				oop2 = popRemappableOop()
 #endif /* SPURVM */
 ;
-				storePointerofObjectwithValue(0, retOop, oop2);
+				storePointerofObjectwithValue(0, retOop, oop2, self);
 				result1 = retOop;
 				goto l9;
 			}
 			/* begin ffiReturnStruct:ofType:in: */
 			specLiteral2 = (argArray != null
 				? stackValue(1, self)
-				: literalofMethod(0, primitiveMethod()));
+				: literalofMethod(0, primitiveMethod(self)));
 			argTypes2 = fetchPointerofObject(ExternalFunctionArgTypesIndex, specLiteral2);
 			ffiRetType = fetchPointerofObject(0, argTypes2);
 			retClass1 = fetchPointerofObject(1, ffiRetType);
-			retOop1 = instantiateClassindexableSize(retClass1, 0);
+			retOop1 = instantiateClassindexableSize(retClass1, 0, self);
 			
 #if SPURVM
-			oop1 = instantiateClassindexableSize(classByteArray(), (calloutState->structReturnSize));
+			oop1 = instantiateClassindexableSize(classByteArray(self), (calloutState->structReturnSize), self);
 
 #else /* SPURVM */
 			pushRemappableOop(retOop1);
-			oop1 = instantiateClassindexableSize(classByteArray(), (calloutState->structReturnSize));
+			oop1 = instantiateClassindexableSize(classByteArray(self), (calloutState->structReturnSize), self);
 			retOop1 = popRemappableOop()
 #endif /* SPURVM */
 ;
 			memcpy(firstIndexableField(oop1), (((calloutState->structReturnSize)) <= (WordSize * 2)
 				? ((void *)((&intRet)))
 				: (calloutState->limit)), (calloutState->structReturnSize));
-			storePointerofObjectwithValue(0, retOop1, oop1);
+			storePointerofObjectwithValue(0, retOop1, oop1, self);
 			result1 = retOop1;
 			goto l9;
 		}
@@ -5588,14 +5588,14 @@ primitiveCalloutWithArgs(struct foo * self)
 						? signed64BitIntegerFor(retVal1)
 						: signed32BitIntegerFor(retVal1))
 				: (BytesPerWord == 8
-						? positive64BitIntegerFor(retVal1)
+						? positive64BitIntegerFor(retVal1, self)
 						: positive32BitIntegerFor(retVal1)));
 			goto l9;
 		}
 		result1 = ((((usqInt) atomicType) >> 1) == (((usqInt) FFITypeSignedLongLong) >> 1)
 			? (atomicType & 1
 					? signed64BitIntegerFor(retVal1)
-					: positive64BitIntegerFor(retVal1))
+					: positive64BitIntegerFor(retVal1, self))
 			: characterObjectOf(retVal1 & 0xFF));
 	l9:	/* end ffiCalloutTo:SpecOnStack:in: */;
 		/* begin cleanupCalloutState: */
@@ -5618,7 +5618,7 @@ primitiveCalloutWithArgs(struct foo * self)
 	}
 	nArgs = slotSizeOf(argArray);
 	/* begin ffiCall:ArgArrayOrNil:NumArgs: */
-	primNumArgs1 = methodArgumentCount();
+	primNumArgs1 = methodArgumentCount(self);
 	if (!(isKindOfClass(externalFunction, classExternalFunction(self)))) {
 		ffiFail(FFIErrorNotFunction, self);
 		goto l20;
@@ -5647,7 +5647,7 @@ primitiveCalloutWithArgs(struct foo * self)
 
 		/* Go look it up in the module */
 		if (externalFunctionInstSize > ExternalFunctionStackSizeIndex) {
-			storePointerofObjectwithValue(ExternalFunctionStackSizeIndex, externalFunction, integerObjectOf(-1));
+			storePointerofObjectwithValue(ExternalFunctionStackSizeIndex, externalFunction, integerObjectOf(-1), self);
 		}
 		if ((slotSizeOf(externalFunction)) < 5) {
 			address2 = ffiFail(FFIErrorNoModule, self);
@@ -5800,7 +5800,7 @@ primitiveCalloutWithArgs(struct foo * self)
 #  else /* COGMTVM */
 		DisownVMForFFICall
 #  endif /* COGMTVM */
-		);
+		, self);
 	if (((calloutState1->floatRegisterIndex)) > 0) {
 		loadFloatRegs(((calloutState1->floatRegisters))[0], ((calloutState1->floatRegisters))[1], ((calloutState1->floatRegisters))[2], ((calloutState1->floatRegisters))[3], ((calloutState1->floatRegisters))[4], ((calloutState1->floatRegisters))[5], ((calloutState1->floatRegisters))[6], ((calloutState1->floatRegisters))[7]);
 	}
@@ -5820,12 +5820,12 @@ primitiveCalloutWithArgs(struct foo * self)
 			/* atomicType = FFITypeDoubleFloat */
 			floatRet1 = dispatchFunctionPointerwithwithwithwithwithwith(((double (*)(sqIntptr_t, sqIntptr_t, sqIntptr_t, sqIntptr_t, sqIntptr_t, sqIntptr_t)) (((void *) address2))), ((calloutState1->integerRegisters))[0], ((calloutState1->integerRegisters))[1], ((calloutState1->integerRegisters))[2], ((calloutState1->integerRegisters))[3], ((calloutState1->integerRegisters))[4], ((calloutState1->integerRegisters))[5]);
 		}
-		ownVM(myThreadIndex1);
+		ownVM(myThreadIndex1, self);
 		result2 = floatObjectOf(floatRet1);
 		goto l14;
 	}
 	intRet1 = dispatchFunctionPointerwithwithwithwithwithwith(((SixteenByteReturn (*)(sqIntptr_t, sqIntptr_t, sqIntptr_t, sqIntptr_t, sqIntptr_t, sqIntptr_t)) (((void *) address2))), ((calloutState1->integerRegisters))[0], ((calloutState1->integerRegisters))[1], ((calloutState1->integerRegisters))[2], ((calloutState1->integerRegisters))[3], ((calloutState1->integerRegisters))[4], ((calloutState1->integerRegisters))[5]);
-	ownVM(myThreadIndex1);
+	ownVM(myThreadIndex1, self);
 	if (((calloutState1->ffiRetHeader)) & (FFIFlagPointer + FFIFlagStructure)) {
 
 		/* Note: Order is important here since FFIFlagPointer + FFIFlagStructure is used to represent
@@ -5836,7 +5836,7 @@ primitiveCalloutWithArgs(struct foo * self)
 			/* begin ffiReturnType: */
 			specLiteral1 = (argArray != null
 				? stackValue(1, self)
-				: literalofMethod(0, primitiveMethod()));
+				: literalofMethod(0, primitiveMethod(self)));
 			argTypes1 = fetchPointerofObject(ExternalFunctionArgTypesIndex, specLiteral1);
 			retType1 = fetchPointerofObject(0, argTypes1);
 			retClass2 = fetchPointerofObject(1, retType1);
@@ -5860,7 +5860,7 @@ primitiveCalloutWithArgs(struct foo * self)
 					while (!((cString1[strLen1]) == 0)) {
 						strLen1 += 1;
 					}
-					strOop1 = instantiateClassindexableSize(classString(), strLen1);
+					strOop1 = instantiateClassindexableSize(classString(self), strLen1, self);
 					strPtr1 = firstIndexableField(strOop1);
 					for (i11 = 0; i11 < strLen1; i11 += 1) {
 						strPtr1[i11] = (cString1[i11]);
@@ -5872,38 +5872,38 @@ primitiveCalloutWithArgs(struct foo * self)
 				}
 				
 #if SPURVM
-				oop21 = instantiateClassindexableSize(classExternalAddress(self), BytesPerWord);
+				oop21 = instantiateClassindexableSize(classExternalAddress(self), BytesPerWord, self);
 				ptr11 = firstIndexableField(oop21);
 				ptr11[0] = (((sqInt) retVal2));
-				retOop2 = instantiateClassindexableSize(classExternalData(), 0);
-				storePointerofObjectwithValue(0, retOop2, oop21);
+				retOop2 = instantiateClassindexableSize(classExternalData(self), 0, self);
+				storePointerofObjectwithValue(0, retOop2, oop21, self);
 
 #else /* SPURVM */
 				pushRemappableOop(retType1);
-				oop21 = instantiateClassindexableSize(classExternalAddress(self), BytesPerWord);
+				oop21 = instantiateClassindexableSize(classExternalAddress(self), BytesPerWord, self);
 				ptr11 = firstIndexableField(oop21);
 				ptr11[0] = (((sqInt) retVal2));
 								pushRemappableOop(oop21);
-				retOop2 = instantiateClassindexableSize(classExternalData(), 0);
+				retOop2 = instantiateClassindexableSize(classExternalData(self), 0, self);
 				oop21 = popRemappableOop();
-				storePointerofObjectwithValue(0, retOop2, oop21);
+				storePointerofObjectwithValue(0, retOop2, oop21, self);
 				retType1 = popRemappableOop()
 #endif /* SPURVM */
 ;
-				storePointerofObjectwithValue(1, retOop2, retType1);
+				storePointerofObjectwithValue(1, retOop2, retType1, self);
 				result2 = retOop2;
 				goto l14;
 			}
 			classOop1 = (((calloutState1->ffiRetHeader)) & FFIFlagStructure
-				? classByteArray()
+				? classByteArray(self)
 				: classExternalAddress(self));
 			
 #if SPURVM
-			oop21 = instantiateClassindexableSize(classOop1, BytesPerWord);
+			oop21 = instantiateClassindexableSize(classOop1, BytesPerWord, self);
 
 #else /* SPURVM */
 			pushRemappableOop(retClass2);
-			oop21 = instantiateClassindexableSize(classOop1, BytesPerWord);
+			oop21 = instantiateClassindexableSize(classOop1, BytesPerWord, self);
 			retClass2 = popRemappableOop()
 #endif /* SPURVM */
 ;
@@ -5911,40 +5911,40 @@ primitiveCalloutWithArgs(struct foo * self)
 			ptr11[0] = (((sqInt) retVal2));
 			
 #if SPURVM
-			retOop2 = instantiateClassindexableSize(retClass2, 0);
+			retOop2 = instantiateClassindexableSize(retClass2, 0, self);
 
 #else /* SPURVM */
 			pushRemappableOop(oop21);
-			retOop2 = instantiateClassindexableSize(retClass2, 0);
+			retOop2 = instantiateClassindexableSize(retClass2, 0, self);
 			oop21 = popRemappableOop()
 #endif /* SPURVM */
 ;
-			storePointerofObjectwithValue(0, retOop2, oop21);
+			storePointerofObjectwithValue(0, retOop2, oop21, self);
 			result2 = retOop2;
 			goto l14;
 		}
 		/* begin ffiReturnStruct:ofType:in: */
 		specLiteral3 = (argArray != null
 			? stackValue(1, self)
-			: literalofMethod(0, primitiveMethod()));
+			: literalofMethod(0, primitiveMethod(self)));
 		argTypes3 = fetchPointerofObject(ExternalFunctionArgTypesIndex, specLiteral3);
 		ffiRetType1 = fetchPointerofObject(0, argTypes3);
 		retClass11 = fetchPointerofObject(1, ffiRetType1);
-		retOop11 = instantiateClassindexableSize(retClass11, 0);
+		retOop11 = instantiateClassindexableSize(retClass11, 0, self);
 		
 #if SPURVM
-		oop11 = instantiateClassindexableSize(classByteArray(), (calloutState1->structReturnSize));
+		oop11 = instantiateClassindexableSize(classByteArray(self), (calloutState1->structReturnSize), self);
 
 #else /* SPURVM */
 		pushRemappableOop(retOop11);
-		oop11 = instantiateClassindexableSize(classByteArray(), (calloutState1->structReturnSize));
+		oop11 = instantiateClassindexableSize(classByteArray(self), (calloutState1->structReturnSize), self);
 		retOop11 = popRemappableOop()
 #endif /* SPURVM */
 ;
 		memcpy(firstIndexableField(oop11), (((calloutState1->structReturnSize)) <= (WordSize * 2)
 			? ((void *)((&intRet1)))
 			: (calloutState1->limit)), (calloutState1->structReturnSize));
-		storePointerofObjectwithValue(0, retOop11, oop11);
+		storePointerofObjectwithValue(0, retOop11, oop11, self);
 		result2 = retOop11;
 		goto l14;
 	}
@@ -5992,14 +5992,14 @@ primitiveCalloutWithArgs(struct foo * self)
 					? signed64BitIntegerFor(retVal11)
 					: signed32BitIntegerFor(retVal11))
 			: (BytesPerWord == 8
-					? positive64BitIntegerFor(retVal11)
+					? positive64BitIntegerFor(retVal11, self)
 					: positive32BitIntegerFor(retVal11)));
 		goto l14;
 	}
 	result2 = ((((usqInt) atomicType2) >> 1) == (((usqInt) FFITypeSignedLongLong) >> 1)
 		? (atomicType2 & 1
 				? signed64BitIntegerFor(retVal11)
-				: positive64BitIntegerFor(retVal11))
+				: positive64BitIntegerFor(retVal11, self))
 		: characterObjectOf(retVal11 & 0xFF));
 	l14:	/* end ffiCalloutTo:SpecOnStack:in: */;
 	/* begin cleanupCalloutState: */
@@ -6031,7 +6031,7 @@ primitiveCreateManualSurface(struct foo * self)
     sqInt rowPitch;
     sqInt width;
 
-	if (!((methodArgumentCount()) == 5)) {
+	if (!((methodArgumentCount(self)) == 5)) {
 		return primitiveFailFor(PrimErrBadNumArgs, self);
 	}
 	width = stackIntegerValue(4, self);
@@ -6045,7 +6045,7 @@ primitiveCreateManualSurface(struct foo * self)
 	}
 	result = createManualSurface(width, height, rowPitch, depth, isMSB);
 	if (result < 0) {
-		return primitiveFail();
+		return primitiveFail(self);
 	}
 	result = signed32BitIntegerFor(result);
 	return popthenPush(6, result, self);
@@ -6057,16 +6057,16 @@ primitiveDestroyManualSurface(struct foo * self)
 {
     sqInt surfaceID;
 
-	if (!((methodArgumentCount()) == 1)) {
-		return primitiveFail();
+	if (!((methodArgumentCount(self)) == 1)) {
+		return primitiveFail(self);
 	}
 	surfaceID = stackIntegerValue(0, self);
 	if (!(failed(self))) {
 		if ((destroyManualSurface(surfaceID)) == 0) {
-			primitiveFail();
+			primitiveFail(self);
 		}
 		else {
-			pop(1);
+			pop(1, self);
 		}
 	}
 	return 0;
@@ -6090,9 +6090,9 @@ primitiveFFIAllocate(struct foo * self)
 	}
 	addr = ffiAlloc(byteSize);
 	if (addr == 0) {
-		return primitiveFail();
+		return primitiveFail(self);
 	}
-	oop = instantiateClassindexableSize(classExternalAddress(self), sizeof(sqIntptr_t));
+	oop = instantiateClassindexableSize(classExternalAddress(self), sizeof(sqIntptr_t), self);
 	ptr = firstIndexableField(oop);
 	ptr[0] = addr;
 	return popthenPush(2, oop, self);
@@ -6117,10 +6117,10 @@ primitiveFFIDoubleAt(struct foo * self)
 	}
 	addr = ffiAddressOfstartingAtsize(rcvr, byteOffset, 8, self);
 	if (addr == 0) {
-		return primitiveFail();
+		return primitiveFail(self);
 	}
 	memcpy((&floatValue), addr, sizeof(floatValue));
-	pop(2);
+	pop(2, self);
 	return pushFloat(floatValue);
 }
 
@@ -6151,7 +6151,7 @@ primitiveFFIDoubleAtPut(struct foo * self)
 	}
 	addr = ffiAddressOfstartingAtsize(rcvr, byteOffset, 8, self);
 	if (addr == 0) {
-		return primitiveFail();
+		return primitiveFail(self);
 	}
 	memcpy(addr, (&floatValue), sizeof(floatValue));
 	return popthenPush(3, floatOop, self);
@@ -6176,10 +6176,10 @@ primitiveFFIFloatAt(struct foo * self)
 	}
 	addr = ffiAddressOfstartingAtsize(rcvr, byteOffset, 4, self);
 	if (addr == 0) {
-		return primitiveFail();
+		return primitiveFail(self);
 	}
 	memcpy((&floatValue), addr, sizeof(floatValue));
-	pop(2);
+	pop(2, self);
 	return pushFloat(floatValue);
 }
 
@@ -6210,7 +6210,7 @@ primitiveFFIFloatAtPut(struct foo * self)
 	}
 	addr = ffiAddressOfstartingAtsize(rcvr, byteOffset, 4, self);
 	if (addr == 0) {
-		return primitiveFail();
+		return primitiveFail(self);
 	}
 	memcpy(addr, (&floatValue), sizeof(floatValue));
 	return popthenPush(3, floatOop, self);
@@ -6230,7 +6230,7 @@ primitiveFFIFree(struct foo * self)
 	oop = stackObjectValue(0, self);
 	if (!(((fetchClassOf(oop, self)) == (classExternalAddress(self)))
 		 && ((byteSizeOf(oop)) == (sizeof(sqIntptr_t))))) {
-		return primitiveFail();
+		return primitiveFail(self);
 	}
 	ptr = firstIndexableField(oop);
 
@@ -6238,8 +6238,8 @@ primitiveFFIFree(struct foo * self)
 	addr = ptr[0];
 	if ((addr == 0)
 	 || ((((((usqIntptr_t)addr)) & ((sizeof(sqIntptr_t)) - 1)) != 0)
-	 || (isInMemory(addr)))) {
-		return primitiveFail();
+	 || (isInMemory(addr, self)))) {
+		return primitiveFail(self);
 	}
 	ffiFree(addr);
 	return ptr[0] = 0;
@@ -6287,11 +6287,11 @@ primitiveFFIIntegerAt(struct foo * self)
 	if (!((byteOffset > 0)
 		 && ((((byteSize >= 1) && (byteSize <= 8)))
 		 && ((byteSize & (byteSize - 1)) == 0)))) {
-		return primitiveFail();
+		return primitiveFail(self);
 	}
 	addr = ffiAddressOfstartingAtsize(rcvr, byteOffset, byteSize, self);
 	if (addr == 0) {
-		return primitiveFail();
+		return primitiveFail(self);
 	}
 	if (byteSize <= 2) {
 		if (byteSize == 1) {
@@ -6331,7 +6331,7 @@ primitiveFFIIntegerAt(struct foo * self)
 			valueOop = signed64BitIntegerFor(value);
 		}
 		else {
-			valueOop = positive64BitIntegerFor(value);
+			valueOop = positive64BitIntegerFor(value, self);
 		}
 	}
 	return popthenPush(4, valueOop, self);
@@ -6365,11 +6365,11 @@ primitiveFFIIntegerAtPut(struct foo * self)
 	if (!((byteOffset > 0)
 		 && ((((byteSize >= 1) && (byteSize <= 8)))
 		 && ((byteSize & (byteSize - 1)) == 0)))) {
-		return primitiveFail();
+		return primitiveFail(self);
 	}
 	addr = ffiAddressOfstartingAtsize(rcvr, byteOffset, byteSize, self);
 	if (addr == 0) {
-		return primitiveFail();
+		return primitiveFail(self);
 	}
 	if (isSigned) {
 		value = signed64BitValueOf(valueOop);
@@ -6385,12 +6385,12 @@ primitiveFFIIntegerAtPut(struct foo * self)
 			max = (((unsigned long long)1)) << ((8 * byteSize) - 1);
 			if (!((value >= (0 - max))
 				 && (value < max))) {
-				return primitiveFail();
+				return primitiveFail(self);
 			}
 		}
 		else {
 			if (!((((unsigned long long)value)) < ((((unsigned long long)1)) << (8 * byteSize)))) {
-				return primitiveFail();
+				return primitiveFail(self);
 			}
 		}
 	}
@@ -6426,11 +6426,11 @@ primitiveForceLoad(struct foo * self)
     sqInt *ptr;
     sqInt rcvr;
 
-	if (!((methodArgumentCount()) == 0)) {
-		return primitiveFail();
+	if (!((methodArgumentCount(self)) == 0)) {
+		return primitiveFail(self);
 	}
 	rcvr = stackValue(0, self);
-	if (!(isKindOfClass(rcvr, classExternalLibrary()))) {
+	if (!(isKindOfClass(rcvr, classExternalLibrary(self)))) {
 		return ffiFail(FFIErrorBadExternalLibrary, self);
 	}
 	moduleHandlePtr = fetchPointerofObject(0, rcvr);
@@ -6475,7 +6475,7 @@ primitiveLoadSymbolFromModule(struct foo * self)
     void **ptr;
     sqInt symbol;
 
-	if (!((methodArgumentCount()) == 2)) {
+	if (!((methodArgumentCount(self)) == 2)) {
 		return primitiveFailFor(PrimErrBadNumArgs, self);
 	}
 	module = stackValue(0, self);
@@ -6491,10 +6491,10 @@ primitiveLoadSymbolFromModule(struct foo * self)
 	 || (address == 0)) {
 		return primitiveFailFor(PrimErrNotFound, self);
 	}
-	oop = instantiateClassindexableSize(classExternalAddress(self), sizeof(void *));
+	oop = instantiateClassindexableSize(classExternalAddress(self), sizeof(void *), self);
 	ptr = firstIndexableField(oop);
 	ptr[0] = address;
-	return methodReturnValue(oop);
+	return methodReturnValue(oop, self);
 }
 
 
@@ -6507,8 +6507,8 @@ primitiveLogCallsTo(struct foo * self)
     sqInt logFile;
     sqInt ok;
 
-	if (!((methodArgumentCount()) == 1)) {
-		return primitiveFail();
+	if (!((methodArgumentCount(self)) == 1)) {
+		return primitiveFail(self);
 	}
 	logFile = stackValue(0, self);
 	if (logFile == (nilObject(self))) {
@@ -6516,7 +6516,7 @@ primitiveLogCallsTo(struct foo * self)
 		/* disable logging */
 		ok = ffiLogFileNameOfLength(null, 0);
 		if (!ok) {
-			return primitiveFail();
+			return primitiveFail(self);
 		}
 		ffiLogEnabled = 0;
 	}
@@ -6524,15 +6524,15 @@ primitiveLogCallsTo(struct foo * self)
 
 		/* enable logging */
 		if (!(isBytes(logFile))) {
-			return primitiveFail();
+			return primitiveFail(self);
 		}
 		ok = ffiLogFileNameOfLength(firstIndexableField(logFile), byteSizeOf(logFile));
 		if (!ok) {
-			return primitiveFail();
+			return primitiveFail(self);
 		}
 		ffiLogEnabled = 1;
 	}
-	return pop(1);
+	return pop(1, self);
 }
 
 
@@ -6550,8 +6550,8 @@ primitiveSetManualSurfacePointer(struct foo * self)
     sqInt result;
     sqInt surfaceID;
 
-	if (!((methodArgumentCount()) == 2)) {
-		return primitiveFail();
+	if (!((methodArgumentCount(self)) == 2)) {
+		return primitiveFail(self);
 	}
 	surfaceID = stackIntegerValue(1, self);
 	ptr = positiveMachineIntegerValueOf(stackValue(0, self));
@@ -6560,9 +6560,9 @@ primitiveSetManualSurfacePointer(struct foo * self)
 	}
 	result = setManualSurfacePointer(surfaceID, ((void *)ptr));
 	if (result == 0) {
-		return primitiveFail();
+		return primitiveFail(self);
 	}
-	return pop(2);
+	return pop(2, self);
 }
 
 

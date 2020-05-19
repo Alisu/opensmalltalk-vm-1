@@ -266,7 +266,7 @@ static sqInt height;
 
 #if !defined(SQUEAK_BUILTIN_PLUGIN)
 static sqInt (*byteSizeOf)(sqInt oop);
-static sqInt (*failed)(void);
+static sqInt (*failed)(struct foo * self);
 static sqInt (*fetchIntegerofObject)(sqInt fieldIndex, sqInt objectPointer);
 static sqInt (*fetchLong32ofObject)(sqInt fieldIndex, sqInt oop);
 static sqInt (*fetchPointerofObject)(sqInt index, sqInt oop);
@@ -282,10 +282,10 @@ static sqInt (*isPointers)(sqInt oop);
 static sqInt (*isPositiveMachineIntegerObject)(sqInt oop);
 static sqInt (*isWords)(sqInt oop);
 static sqInt (*isWordsOrBytes)(sqInt oop);
-static sqInt (*methodArgumentCount)(void);
+static sqInt (*methodArgumentCount)(struct foo * self);
 static sqInt (*methodReturnInteger)(sqInt integer);
 static sqInt (*methodReturnReceiver)(void);
-static sqInt (*nilObject)(void);
+static sqInt (*nilObject)(struct foo * self);
 static sqInt (*pop)(sqInt nItems);
 static sqInt (*popthenPush)(sqInt nItems, sqInt oop);
 static sqInt (*positive32BitIntegerFor)(unsigned int integerValue);
@@ -293,16 +293,16 @@ static usqInt (*positive32BitValueOf)(sqInt oop);
 static usqLong (*positive64BitValueOf)(sqInt oop);
 static sqInt (*primitiveFail)(void);
 static sqInt (*primitiveFailFor)(sqInt reasonCode);
-static sqInt (*showDisplayBitsLeftTopRightBottom)(sqInt aForm, sqInt l, sqInt t, sqInt r, sqInt b);
+static sqInt (*showDisplayBitsLeftTopRightBottom)(sqInt aForm, sqInt l, sqInt t, sqInt r, sqInt b, struct foo * self);
 static sqInt (*slotSizeOf)(sqInt oop);
-static sqInt (*stackIntegerValue)(sqInt offset);
-static sqInt (*stackObjectValue)(sqInt offset);
-static sqInt (*stackValue)(sqInt offset);
-static sqInt (*statNumGCs)(void);
+static sqInt (*stackIntegerValue)(sqInt offset, struct foo * self);
+static sqInt (*stackObjectValue)(sqInt offset, struct foo * self);
+static sqInt (*stackValue)(sqInt offset, struct foo * self);
+static sqInt (*statNumGCs)(struct foo * self);
 static sqInt (*storeIntegerofObjectwithValue)(sqInt index, sqInt oop, sqInt integer);
 #else /* !defined(SQUEAK_BUILTIN_PLUGIN) */
 extern sqInt byteSizeOf(sqInt oop);
-extern sqInt failed(void);
+extern sqInt failed(struct foo * self);
 extern sqInt fetchIntegerofObject(sqInt fieldIndex, sqInt objectPointer);
 extern sqInt fetchLong32ofObject(sqInt fieldIndex, sqInt oop);
 extern sqInt fetchPointerofObject(sqInt index, sqInt oop);
@@ -324,10 +324,10 @@ extern sqInt isPositiveMachineIntegerObject(sqInt oop);
 #endif
 extern sqInt isWords(sqInt oop);
 extern sqInt isWordsOrBytes(sqInt oop);
-extern sqInt methodArgumentCount(void);
+extern sqInt methodArgumentCount(struct foo * self);
 extern sqInt methodReturnInteger(sqInt integer);
 extern sqInt methodReturnReceiver(void);
-extern sqInt nilObject(void);
+extern sqInt nilObject(struct foo * self);
 extern sqInt pop(sqInt nItems);
 extern sqInt popthenPush(sqInt nItems, sqInt oop);
 extern sqInt positive32BitIntegerFor(unsigned int integerValue);
@@ -335,15 +335,15 @@ extern usqInt positive32BitValueOf(sqInt oop);
 extern usqLong positive64BitValueOf(sqInt oop);
 extern sqInt primitiveFail(void);
 extern sqInt primitiveFailFor(sqInt reasonCode);
-extern sqInt showDisplayBitsLeftTopRightBottom(sqInt aForm, sqInt l, sqInt t, sqInt r, sqInt b);
+extern sqInt showDisplayBitsLeftTopRightBottom(sqInt aForm, sqInt l, sqInt t, sqInt r, sqInt b, struct foo * self);
 extern sqInt slotSizeOf(sqInt oop);
-extern sqInt stackIntegerValue(sqInt offset);
-extern sqInt stackObjectValue(sqInt offset);
-extern sqInt stackValue(sqInt offset);
+extern sqInt stackIntegerValue(sqInt offset, struct foo * self);
+extern sqInt stackObjectValue(sqInt offset, struct foo * self);
+extern sqInt stackValue(sqInt offset, struct foo * self);
 #if VM_PROXY_MAJOR > 1 || (VM_PROXY_MAJOR == 1 && VM_PROXY_MINOR >= 14)
-extern sqInt statNumGCs(void);
+extern sqInt statNumGCs(struct foo * self);
 #else
-# define statNumGCs() 0
+# define statNumGCs(self) 0
 #endif
 extern sqInt storeIntegerofObjectwithValue(sqInt index, sqInt oop, sqInt integer);
 extern
@@ -1276,15 +1276,15 @@ copyBitsFastPathSpecialised(void)
 	/* set the affected area to 0 first */
 	affectedL = (affectedR = (affectedT = (affectedB = 0)));
 	copyBitsRule41Test();
-	if (failed()) {
+	if (failed(interpreterProxy->interpreterState)) {
 		return primitiveFail();
 	}
 	if ((combinationRule == 30) || (combinationRule == 0x1F)) {
 
 		/* Check and fetch source alpha parameter for alpha blend */
-		if ((methodArgumentCount()) == 1) {
-			sourceAlpha = stackIntegerValue(0);
-			if (!((!(failed()))
+		if ((methodArgumentCount(interpreterProxy->interpreterState)) == 1) {
+			sourceAlpha = stackIntegerValue(0, interpreterProxy->interpreterState);
+			if (!((!(failed(interpreterProxy->interpreterState)))
 				 && ((sourceAlpha >= 0) && (sourceAlpha <= 0xFF)))) {
 				return primitiveFail();
 			}
@@ -1356,10 +1356,10 @@ copyBitsFromtoat(sqInt startX, sqInt stopX, sqInt yValue)
 	width = stopX - startX;
 	copyBits();
 	/* begin showDisplayBits */
-	if (numGCsOnInvocation != (statNumGCs())) {
+	if (numGCsOnInvocation != (statNumGCs(interpreterProxy->interpreterState))) {
 		reloadDestAndSourceForms();
 	}
-	showDisplayBitsLeftTopRightBottom(destForm, affectedL, affectedT, affectedR, affectedB);
+	showDisplayBitsLeftTopRightBottom(destForm, affectedL, affectedT, affectedR, affectedB, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -1382,7 +1382,7 @@ copyBitsLockedAndClipped(void)
 	sqInt t;
 
 	copyBitsRule41Test();
-	if (failed()) {
+	if (failed(interpreterProxy->interpreterState)) {
 		return primitiveFail();
 	}
 	
@@ -1452,11 +1452,11 @@ copyBitsLockedAndClipped(void)
 	if (((combinationRule >= 30) && (combinationRule <= 0x1F))) {
 
 		/* Check and fetch source alpha parameter for alpha blend */
-		if (!((methodArgumentCount()) == 1)) {
+		if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 1)) {
 			return primitiveFail();
 		}
-		sourceAlpha = stackIntegerValue(0);
-		if ((failed())
+		sourceAlpha = stackIntegerValue(0, interpreterProxy->interpreterState);
+		if ((failed(interpreterProxy->interpreterState))
 		 || ((sourceAlpha < 0)
 		 || (sourceAlpha > 0xFF))) {
 			return primitiveFail();
@@ -1640,30 +1640,30 @@ copyBitsRule41Test(void)
 		componentAlphaModeColor = 0xFFFFFF;
 		gammaLookupTable = null;
 		ungammaLookupTable = null;
-		if ((methodArgumentCount()) >= 2) {
-			componentAlphaModeAlpha = stackIntegerValue((methodArgumentCount()) - 2);
-			if (failed()) {
+		if ((methodArgumentCount(interpreterProxy->interpreterState)) >= 2) {
+			componentAlphaModeAlpha = stackIntegerValue((methodArgumentCount(interpreterProxy->interpreterState)) - 2, interpreterProxy->interpreterState);
+			if (failed(interpreterProxy->interpreterState)) {
 				return primitiveFail();
 			}
-			componentAlphaModeColor = stackIntegerValue((methodArgumentCount()) - 1);
-			if (failed()) {
+			componentAlphaModeColor = stackIntegerValue((methodArgumentCount(interpreterProxy->interpreterState)) - 1, interpreterProxy->interpreterState);
+			if (failed(interpreterProxy->interpreterState)) {
 				return primitiveFail();
 			}
-			if ((methodArgumentCount()) == 4) {
-				gammaLookupTableOop = stackObjectValue(1);
+			if ((methodArgumentCount(interpreterProxy->interpreterState)) == 4) {
+				gammaLookupTableOop = stackObjectValue(1, interpreterProxy->interpreterState);
 				if (isBytes(gammaLookupTableOop)) {
 					gammaLookupTable = firstIndexableField(gammaLookupTableOop);
 				}
-				ungammaLookupTableOop = stackObjectValue(0);
+				ungammaLookupTableOop = stackObjectValue(0, interpreterProxy->interpreterState);
 				if (isBytes(ungammaLookupTableOop)) {
 					ungammaLookupTable = firstIndexableField(ungammaLookupTableOop);
 				}
 			}
 		}
 		else {
-			if ((methodArgumentCount()) == 1) {
-				componentAlphaModeColor = stackIntegerValue(0);
-				if (failed()) {
+			if ((methodArgumentCount(interpreterProxy->interpreterState)) == 1) {
+				componentAlphaModeColor = stackIntegerValue(0, interpreterProxy->interpreterState);
+				if (failed(interpreterProxy->interpreterState)) {
 					return primitiveFail();
 				}
 			}
@@ -2676,7 +2676,7 @@ drawLoopXY(sqInt xDelta, sqInt yDelta)
 			}
 			if (i < py) {
 				copyBits();
-				if (failed()) {
+				if (failed(interpreterProxy->interpreterState)) {
 					return null;
 				}
 				if ((affectedL < affectedR)
@@ -2695,10 +2695,10 @@ drawLoopXY(sqInt xDelta, sqInt yDelta)
 						affectedT = affT;
 						affectedB = affB;
 						/* begin showDisplayBits */
-						if (numGCsOnInvocation != (statNumGCs())) {
+						if (numGCsOnInvocation != (statNumGCs(interpreterProxy->interpreterState))) {
 							reloadDestAndSourceForms();
 						}
-						showDisplayBitsLeftTopRightBottom(destForm, affectedL, affectedT, affectedR, affectedB);
+						showDisplayBitsLeftTopRightBottom(destForm, affectedL, affectedT, affectedR, affectedB, interpreterProxy->interpreterState);
 
 						/* init null rectangle */
 						affL = (affT = 9999);
@@ -2720,7 +2720,7 @@ drawLoopXY(sqInt xDelta, sqInt yDelta)
 			}
 			if (i < px) {
 				copyBits();
-				if (failed()) {
+				if (failed(interpreterProxy->interpreterState)) {
 					return null;
 				}
 				if ((affectedL < affectedR)
@@ -2739,10 +2739,10 @@ drawLoopXY(sqInt xDelta, sqInt yDelta)
 						affectedT = affT;
 						affectedB = affB;
 						/* begin showDisplayBits */
-						if (numGCsOnInvocation != (statNumGCs())) {
+						if (numGCsOnInvocation != (statNumGCs(interpreterProxy->interpreterState))) {
 							reloadDestAndSourceForms();
 						}
-						showDisplayBitsLeftTopRightBottom(destForm, affectedL, affectedT, affectedR, affectedB);
+						showDisplayBitsLeftTopRightBottom(destForm, affectedL, affectedT, affectedR, affectedB, interpreterProxy->interpreterState);
 
 						/* init null rectangle */
 						affL = (affT = 9999);
@@ -2852,7 +2852,7 @@ fetchIntOrFloatofObjectifNil(sqInt fieldIndex, sqInt objectPointer, sqInt defaul
 	if (isIntegerObject(fieldOop)) {
 		return integerValueOf(fieldOop);
 	}
-	if (fieldOop == (nilObject())) {
+	if (fieldOop == (nilObject(interpreterProxy->interpreterState))) {
 		return defaultValue;
 	}
 	floatValue = floatValueOf(fieldOop);
@@ -2903,7 +2903,7 @@ getModuleName(void)
 static sqInt
 ignoreSourceOrHalftone(sqInt formPointer)
 {
-	if (formPointer == (nilObject())) {
+	if (formPointer == (nilObject(interpreterProxy->interpreterState))) {
 		return 1;
 	}
 	if (combinationRule == 0) {
@@ -3155,10 +3155,10 @@ loadBitBltFromwarping(sqInt bbObj, sqInt aBool)
 	v1 = 0;
 	bitBltOop = bbObj;
 	isWarping = aBool;
-	bitBltIsReceiver = bbObj == (stackValue(methodArgumentCount()));
-	numGCsOnInvocation = statNumGCs();
+	bitBltIsReceiver = bbObj == (stackValue(methodArgumentCount(interpreterProxy->interpreterState), interpreterProxy->interpreterState));
+	numGCsOnInvocation = statNumGCs(interpreterProxy->interpreterState);
 	combinationRule = fetchIntegerofObject(BBRuleIndex, bitBltOop);
-	if ((failed())
+	if ((failed(interpreterProxy->interpreterState))
 	 || ((combinationRule < 0)
 	 || (combinationRule > (OpTableSize - 2)))) {
 		return 0;
@@ -3169,7 +3169,7 @@ loadBitBltFromwarping(sqInt bbObj, sqInt aBool)
 	}
 	sourceForm = fetchPointerofObject(BBSourceFormIndex, bitBltOop);
 	/* begin ignoreSourceOrHalftone: */
-	if (sourceForm == (nilObject())) {
+	if (sourceForm == (nilObject(interpreterProxy->interpreterState))) {
 		noSource = 1;
 		goto l1;
 	}
@@ -3193,7 +3193,7 @@ loadBitBltFromwarping(sqInt bbObj, sqInt aBool)
 	l1:	/* end ignoreSourceOrHalftone: */;
 	halftoneForm = fetchPointerofObject(BBHalftoneFormIndex, bitBltOop);
 	/* begin ignoreSourceOrHalftone: */
-	if (halftoneForm == (nilObject())) {
+	if (halftoneForm == (nilObject(interpreterProxy->interpreterState))) {
 		noHalftone = 1;
 		goto l2;
 	}
@@ -3274,7 +3274,7 @@ loadBitBltFromwarping(sqInt bbObj, sqInt aBool)
 	destY = fetchIntOrFloatofObjectifNil(BBDestYIndex, bitBltOop, 0);
 	width = fetchIntOrFloatofObjectifNil(BBWidthIndex, bitBltOop, destWidth);
 	height = fetchIntOrFloatofObjectifNil(BBHeightIndex, bitBltOop, destHeight);
-	if (failed()) {
+	if (failed(interpreterProxy->interpreterState)) {
 		return 0;
 	}
 	if (noSource) {
@@ -3369,7 +3369,7 @@ loadBitBltFromwarping(sqInt bbObj, sqInt aBool)
 		cmMaskTable = null;
 		cmLookupTable = null;
 		cmOop = fetchPointerofObject(BBColorMapIndex, bitBltOop);
-		if (cmOop == (nilObject())) {
+		if (cmOop == (nilObject(interpreterProxy->interpreterState))) {
 			ok = 1;
 			goto l10;
 		}
@@ -3394,7 +3394,7 @@ loadBitBltFromwarping(sqInt bbObj, sqInt aBool)
 			}
 			/* begin loadColorMapShiftOrMaskFrom: */
 			mapOop = fetchPointerofObject(0, cmOop);
-			if (mapOop == (nilObject())) {
+			if (mapOop == (nilObject(interpreterProxy->interpreterState))) {
 				cmShiftTable = ((void *) null);
 				goto l8;
 			}
@@ -3408,7 +3408,7 @@ loadBitBltFromwarping(sqInt bbObj, sqInt aBool)
 	l8:	/* end loadColorMapShiftOrMaskFrom: */;
 			/* begin loadColorMapShiftOrMaskFrom: */
 			mapOop1 = fetchPointerofObject(1, cmOop);
-			if (mapOop1 == (nilObject())) {
+			if (mapOop1 == (nilObject(interpreterProxy->interpreterState))) {
 				cmMaskTable = ((void *) null);
 				goto l9;
 			}
@@ -3421,7 +3421,7 @@ loadBitBltFromwarping(sqInt bbObj, sqInt aBool)
 			cmMaskTable = ((void *) (firstIndexableField(mapOop1)));
 	l9:	/* end loadColorMapShiftOrMaskFrom: */;
 			oop = fetchPointerofObject(2, cmOop);
-			if (oop == (nilObject())) {
+			if (oop == (nilObject(interpreterProxy->interpreterState))) {
 				cmSize = 0;
 			}
 			else {
@@ -3515,7 +3515,7 @@ loadBitBltFromwarping(sqInt bbObj, sqInt aBool)
 	clipY = fetchIntOrFloatofObjectifNil(BBClipYIndex, bitBltOop, 0);
 	clipWidth = fetchIntOrFloatofObjectifNil(BBClipWidthIndex, bitBltOop, destWidth);
 	clipHeight = fetchIntOrFloatofObjectifNil(BBClipHeightIndex, bitBltOop, destHeight);
-	if (failed()) {
+	if (failed(interpreterProxy->interpreterState)) {
 		return 0;
 	}
 	if (clipX < 0) {
@@ -3532,7 +3532,7 @@ loadBitBltFromwarping(sqInt bbObj, sqInt aBool)
 	if ((clipY + clipHeight) > destHeight) {
 		clipHeight = destHeight - clipY;
 	}
-	if (numGCsOnInvocation != (statNumGCs())) {
+	if (numGCsOnInvocation != (statNumGCs(interpreterProxy->interpreterState))) {
 
 		/* querySurface could be a callback in loadSourceFor: and loadDestForm: */
 		primitiveFailFor(PrimErrObjectMoved);
@@ -3652,7 +3652,7 @@ loadColorMap(void)
 	cmMaskTable = null;
 	cmLookupTable = null;
 	cmOop = fetchPointerofObject(BBColorMapIndex, bitBltOop);
-	if (cmOop == (nilObject())) {
+	if (cmOop == (nilObject(interpreterProxy->interpreterState))) {
 		return 1;
 	}
 
@@ -3675,7 +3675,7 @@ loadColorMap(void)
 		}
 		/* begin loadColorMapShiftOrMaskFrom: */
 		mapOop = fetchPointerofObject(0, cmOop);
-		if (mapOop == (nilObject())) {
+		if (mapOop == (nilObject(interpreterProxy->interpreterState))) {
 			cmShiftTable = ((void *) null);
 			goto l1;
 		}
@@ -3689,7 +3689,7 @@ loadColorMap(void)
 	l1:	/* end loadColorMapShiftOrMaskFrom: */;
 		/* begin loadColorMapShiftOrMaskFrom: */
 		mapOop1 = fetchPointerofObject(1, cmOop);
-		if (mapOop1 == (nilObject())) {
+		if (mapOop1 == (nilObject(interpreterProxy->interpreterState))) {
 			cmMaskTable = ((void *) null);
 			goto l2;
 		}
@@ -3702,7 +3702,7 @@ loadColorMap(void)
 		cmMaskTable = ((void *) (firstIndexableField(mapOop1)));
 	l2:	/* end loadColorMapShiftOrMaskFrom: */;
 		oop = fetchPointerofObject(2, cmOop);
-		if (oop == (nilObject())) {
+		if (oop == (nilObject(interpreterProxy->interpreterState))) {
 			cmSize = 0;
 		}
 		else {
@@ -3754,7 +3754,7 @@ loadColorMap(void)
 static void *
 loadColorMapShiftOrMaskFrom(sqInt mapOop)
 {
-	if (mapOop == (nilObject())) {
+	if (mapOop == (nilObject(interpreterProxy->interpreterState))) {
 		return null;
 	}
 	if (!((isWords(mapOop))
@@ -3877,7 +3877,7 @@ lockSurfaces(void)
 	sqInt v;
 
 	v = 0;
-	assert(numGCsOnInvocation == (statNumGCs()));
+	assert(numGCsOnInvocation == (statNumGCs(interpreterProxy->interpreterState)));
 	hasSurfaceLock = 0;
 	if (destBits == 0) {
 
@@ -3914,7 +3914,7 @@ lockSurfaces(void)
 				destBits = sourceBits;
 				destPitch = sourcePitch;
 				hasSurfaceLock = 1;
-				if (numGCsOnInvocation != (statNumGCs())) {
+				if (numGCsOnInvocation != (statNumGCs(interpreterProxy->interpreterState))) {
 					unlockSurfaces();
 					primitiveFailFor(PrimErrObjectMoved);
 					return 0;
@@ -3930,7 +3930,7 @@ lockSurfaces(void)
 		}
 		destBits = lockSurfaceFn(destHandle, (&destPitch), dx, dy, bbW, bbH);
 		hasSurfaceLock = 1;
-		if (numGCsOnInvocation != (statNumGCs())) {
+		if (numGCsOnInvocation != (statNumGCs(interpreterProxy->interpreterState))) {
 			unlockSurfaces();
 			primitiveFailFor(PrimErrObjectMoved);
 			return 0;
@@ -3944,7 +3944,7 @@ lockSurfaces(void)
 
 		/* Blitting *from* OS surface */
 		sourceHandle = fetchIntegerofObject(FormBitsIndex, sourceForm);
-		if (failed()) {
+		if (failed(interpreterProxy->interpreterState)) {
 			return 0;
 		}
 		if (lockSurfaceFn == 0) {
@@ -3959,7 +3959,7 @@ lockSurfaces(void)
 			sourceBits = lockSurfaceFn(sourceHandle, (&sourcePitch), sx, sy, bbW, bbH);
 		}
 		hasSurfaceLock = 1;
-		if (numGCsOnInvocation != (statNumGCs())) {
+		if (numGCsOnInvocation != (statNumGCs(interpreterProxy->interpreterState))) {
 			unlockSurfaces();
 			primitiveFailFor(PrimErrObjectMoved);
 			return 0;
@@ -5028,21 +5028,21 @@ primitiveCompareColors(void)
 	sqInt _return_value;
 
 	val = 0;
-	if (!((isPositiveMachineIntegerObject(stackValue(2)))
-		 && ((isPositiveMachineIntegerObject(stackValue(1)))
-		 && (isIntegerObject(stackValue(0)))))) {
+	if (!((isPositiveMachineIntegerObject(stackValue(2, interpreterProxy->interpreterState)))
+		 && ((isPositiveMachineIntegerObject(stackValue(1, interpreterProxy->interpreterState)))
+		 && (isIntegerObject(stackValue(0, interpreterProxy->interpreterState)))))) {
 		primitiveFailFor(PrimErrBadArgument);
 		return null;
 	}
 	colorA = (BytesPerOop == 4
-		? positive32BitValueOf(stackValue(2))
-		: positive64BitValueOf(stackValue(2)));
+		? positive32BitValueOf(stackValue(2, interpreterProxy->interpreterState))
+		: positive64BitValueOf(stackValue(2, interpreterProxy->interpreterState)));
 	colorB = (BytesPerOop == 4
-		? positive32BitValueOf(stackValue(1))
-		: positive64BitValueOf(stackValue(1)));
-	testID = stackIntegerValue(0);
-	rcvr = stackValue(3);
-	if (failed()) {
+		? positive32BitValueOf(stackValue(1, interpreterProxy->interpreterState))
+		: positive64BitValueOf(stackValue(1, interpreterProxy->interpreterState)));
+	testID = stackIntegerValue(0, interpreterProxy->interpreterState);
+	rcvr = stackValue(3, interpreterProxy->interpreterState);
+	if (failed(interpreterProxy->interpreterState)) {
 		return null;
 	}
 	
@@ -5081,9 +5081,9 @@ primitiveCompareColors(void)
 	op.colorB = colorB;
 
 	val = compareColorsDispatch(&op);
-	if (!(failed())) {
+	if (!(failed(interpreterProxy->interpreterState))) {
 		_return_value = positive32BitIntegerFor(val);
-		if (!(failed())) {
+		if (!(failed(interpreterProxy->interpreterState))) {
 			popthenPush(4, _return_value);
 		}
 	}
@@ -5091,7 +5091,7 @@ primitiveCompareColors(void)
 #  else /* ENABLE_FAST_BLT */
 	primitiveFail();
 #  endif /* ENABLE_FAST_BLT */
-	if (!(failed())) {
+	if (!(failed(interpreterProxy->interpreterState))) {
 		pop(3);
 	}
 	return null;
@@ -5108,20 +5108,20 @@ primitiveCopyBits(void)
 {
 	sqInt rcvr;
 
-	rcvr = stackValue(methodArgumentCount());
+	rcvr = stackValue(methodArgumentCount(interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 	if (!(loadBitBltFromwarping(rcvr, 0))) {
 		return primitiveFail();
 	}
 	copyBits();
-	if (failed()) {
+	if (failed(interpreterProxy->interpreterState)) {
 		return null;
 	}
 	/* begin showDisplayBits */
-	if (numGCsOnInvocation != (statNumGCs())) {
+	if (numGCsOnInvocation != (statNumGCs(interpreterProxy->interpreterState))) {
 		reloadDestAndSourceForms();
 	}
-	showDisplayBitsLeftTopRightBottom(destForm, affectedL, affectedT, affectedR, affectedB);
-	if (failed()) {
+	showDisplayBitsLeftTopRightBottom(destForm, affectedL, affectedT, affectedR, affectedB, interpreterProxy->interpreterState);
+	if (failed(interpreterProxy->interpreterState)) {
 		return null;
 	}
 	if ((combinationRule == 22)
@@ -5156,17 +5156,17 @@ primitiveDisplayString(void)
 	sqInt stopIndex;
 	sqInt xTable;
 
-	if (!((methodArgumentCount()) == 6)) {
+	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 6)) {
 		return primitiveFail();
 	}
-	kernDelta = stackIntegerValue(0);
-	xTable = stackValue(1);
-	glyphMap = stackValue(2);
-	stopIndex = stackIntegerValue(3);
-	startIndex = stackIntegerValue(4);
-	sourceString = stackValue(5);
-	bbObj = stackObjectValue(6);
-	if (failed()) {
+	kernDelta = stackIntegerValue(0, interpreterProxy->interpreterState);
+	xTable = stackValue(1, interpreterProxy->interpreterState);
+	glyphMap = stackValue(2, interpreterProxy->interpreterState);
+	stopIndex = stackIntegerValue(3, interpreterProxy->interpreterState);
+	startIndex = stackIntegerValue(4, interpreterProxy->interpreterState);
+	sourceString = stackValue(5, interpreterProxy->interpreterState);
+	bbObj = stackObjectValue(6, interpreterProxy->interpreterState);
+	if (failed(interpreterProxy->interpreterState)) {
 		return null;
 	}
 	if (!((isArray(xTable))
@@ -5216,7 +5216,7 @@ primitiveDisplayString(void)
 		}
 		sourceX = fetchIntegerofObject(glyphIndex, xTable);
 		width = (fetchIntegerofObject(glyphIndex + 1, xTable)) - sourceX;
-		if (failed()) {
+		if (failed(interpreterProxy->interpreterState)) {
 			return null;
 		}
 		clipRange();
@@ -5267,7 +5267,7 @@ primitiveDisplayString(void)
 				copyBitsLockedAndClipped();
 			}
 		}
-		if (failed()) {
+		if (failed(interpreterProxy->interpreterState)) {
 			return null;
 		}
 		destX = (destX + width) + kernDelta;
@@ -5277,10 +5277,10 @@ primitiveDisplayString(void)
 		unlockSurfaces();
 	}
 	/* begin showDisplayBits */
-	if (numGCsOnInvocation != (statNumGCs())) {
+	if (numGCsOnInvocation != (statNumGCs(interpreterProxy->interpreterState))) {
 		reloadDestAndSourceForms();
 	}
-	showDisplayBitsLeftTopRightBottom(destForm, affectedL, affectedT, affectedR, affectedB);
+	showDisplayBitsLeftTopRightBottom(destForm, affectedL, affectedT, affectedR, affectedB, interpreterProxy->interpreterState);
 	storeIntegerofObjectwithValue(BBDestXIndex, bbObj, destX);
 	pop(6);
 	return 0;
@@ -5307,13 +5307,13 @@ primitiveDrawLoop(void)
 	sqInt xDelta;
 	sqInt yDelta;
 
-	rcvr = stackValue(2);
-	xDelta = stackIntegerValue(1);
-	yDelta = stackIntegerValue(0);
+	rcvr = stackValue(2, interpreterProxy->interpreterState);
+	xDelta = stackIntegerValue(1, interpreterProxy->interpreterState);
+	yDelta = stackIntegerValue(0, interpreterProxy->interpreterState);
 	if (!(loadBitBltFromwarping(rcvr, 0))) {
 		return primitiveFail();
 	}
-	if (!(failed())) {
+	if (!(failed(interpreterProxy->interpreterState))) {
 		/* begin drawLoopX:Y: */
 		if (xDelta > 0) {
 			dx1 = 1;
@@ -5355,7 +5355,7 @@ primitiveDrawLoop(void)
 				}
 				if (i < py) {
 					copyBits();
-					if (failed()) {
+					if (failed(interpreterProxy->interpreterState)) {
 						goto l1;
 					}
 					if ((affectedL < affectedR)
@@ -5374,10 +5374,10 @@ primitiveDrawLoop(void)
 							affectedT = affT;
 							affectedB = affB;
 							/* begin showDisplayBits */
-							if (numGCsOnInvocation != (statNumGCs())) {
+							if (numGCsOnInvocation != (statNumGCs(interpreterProxy->interpreterState))) {
 								reloadDestAndSourceForms();
 							}
-							showDisplayBitsLeftTopRightBottom(destForm, affectedL, affectedT, affectedR, affectedB);
+							showDisplayBitsLeftTopRightBottom(destForm, affectedL, affectedT, affectedR, affectedB, interpreterProxy->interpreterState);
 
 							/* init null rectangle */
 							affL = (affT = 9999);
@@ -5399,7 +5399,7 @@ primitiveDrawLoop(void)
 				}
 				if (i < px) {
 					copyBits();
-					if (failed()) {
+					if (failed(interpreterProxy->interpreterState)) {
 						goto l1;
 					}
 					if ((affectedL < affectedR)
@@ -5418,10 +5418,10 @@ primitiveDrawLoop(void)
 							affectedT = affT;
 							affectedB = affB;
 							/* begin showDisplayBits */
-							if (numGCsOnInvocation != (statNumGCs())) {
+							if (numGCsOnInvocation != (statNumGCs(interpreterProxy->interpreterState))) {
 								reloadDestAndSourceForms();
 							}
-							showDisplayBitsLeftTopRightBottom(destForm, affectedL, affectedT, affectedR, affectedB);
+							showDisplayBitsLeftTopRightBottom(destForm, affectedL, affectedT, affectedR, affectedB, interpreterProxy->interpreterState);
 
 							/* init null rectangle */
 							affL = (affT = 9999);
@@ -5441,12 +5441,12 @@ primitiveDrawLoop(void)
 		storeIntegerofObjectwithValue(BBDestYIndex, bitBltOop, destY);
 	l1:	/* end drawLoopX:Y: */;
 		/* begin showDisplayBits */
-		if (numGCsOnInvocation != (statNumGCs())) {
+		if (numGCsOnInvocation != (statNumGCs(interpreterProxy->interpreterState))) {
 			reloadDestAndSourceForms();
 		}
-		showDisplayBitsLeftTopRightBottom(destForm, affectedL, affectedT, affectedR, affectedB);
+		showDisplayBitsLeftTopRightBottom(destForm, affectedL, affectedT, affectedR, affectedB, interpreterProxy->interpreterState);
 	}
-	if (!(failed())) {
+	if (!(failed(interpreterProxy->interpreterState))) {
 		pop(2);
 	}
 	return 0;
@@ -5479,26 +5479,26 @@ primitivePixelValueAt(void)
 	sqInt yVal;
 	sqInt _return_value;
 
-	if (!((isIntegerObject(stackValue(1)))
-		 && (isIntegerObject(stackValue(0))))) {
+	if (!((isIntegerObject(stackValue(1, interpreterProxy->interpreterState)))
+		 && (isIntegerObject(stackValue(0, interpreterProxy->interpreterState))))) {
 		primitiveFailFor(PrimErrBadArgument);
 		return null;
 	}
-	xVal = stackIntegerValue(1);
-	yVal = stackIntegerValue(0);
-	rcvr = stackValue(2);
-	if (failed()) {
+	xVal = stackIntegerValue(1, interpreterProxy->interpreterState);
+	yVal = stackIntegerValue(0, interpreterProxy->interpreterState);
+	rcvr = stackValue(2, interpreterProxy->interpreterState);
+	if (failed(interpreterProxy->interpreterState)) {
 		return null;
 	}
 	if ((xVal < 0)
 	 || (yVal < 0)) {
 		_return_value = integerObjectOf(0);
-		if (!(failed())) {
+		if (!(failed(interpreterProxy->interpreterState))) {
 			popthenPush(3, _return_value);
 		}
 		return null;
 	}
-	rcvr = stackValue(methodArgumentCount());
+	rcvr = stackValue(methodArgumentCount(interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 	if (!((isPointers(rcvr))
 		 && ((slotSizeOf(rcvr)) >= 4))) {
 		primitiveFail();
@@ -5514,13 +5514,13 @@ primitivePixelValueAt(void)
 
 	/* if width/height/depth are not integer, fail */
 	depth = fetchIntegerofObject(FormDepthIndex, rcvr);
-	if (failed()) {
+	if (failed(interpreterProxy->interpreterState)) {
 		return null;
 	}
 	if ((xVal >= width)
 	 || (yVal >= height)) {
 		_return_value = integerObjectOf(0);
-		if (!(failed())) {
+		if (!(failed(interpreterProxy->interpreterState))) {
 			popthenPush(3, _return_value);
 		}
 		return null;
@@ -5554,9 +5554,9 @@ primitivePixelValueAt(void)
 
 	/* shift, mask and dim the lights */
 	pixel = (((usqInt) word) >> shift) & mask;
-	if (!(failed())) {
+	if (!(failed(interpreterProxy->interpreterState))) {
 		_return_value = positive32BitIntegerFor(pixel);
-		if (!(failed())) {
+		if (!(failed(interpreterProxy->interpreterState))) {
 			popthenPush(3, _return_value);
 		}
 	}
@@ -5578,7 +5578,7 @@ primitiveWarpBits(void)
 	sqInt rcvr;
 	sqInt startBits;
 
-	rcvr = stackValue(methodArgumentCount());
+	rcvr = stackValue(methodArgumentCount(interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 	if (!(loadBitBltFromwarping(rcvr, 1))) {
 		return primitiveFail();
 	}
@@ -5652,15 +5652,15 @@ primitiveWarpBits(void)
 	}
 	unlockSurfaces();
 	l1:	/* end warpBits */;
-	if (failed()) {
+	if (failed(interpreterProxy->interpreterState)) {
 		return null;
 	}
 	/* begin showDisplayBits */
-	if (numGCsOnInvocation != (statNumGCs())) {
+	if (numGCsOnInvocation != (statNumGCs(interpreterProxy->interpreterState))) {
 		reloadDestAndSourceForms();
 	}
-	showDisplayBitsLeftTopRightBottom(destForm, affectedL, affectedT, affectedR, affectedB);
-	if (failed()) {
+	showDisplayBitsLeftTopRightBottom(destForm, affectedL, affectedT, affectedR, affectedB, interpreterProxy->interpreterState);
+	if (failed(interpreterProxy->interpreterState)) {
 		return null;
 	}
 	methodReturnReceiver();
@@ -5680,7 +5680,7 @@ reloadDestAndSourceForms(void)
 {
 	sqInt receiver;
 
-	receiver = stackValue(methodArgumentCount());
+	receiver = stackValue(methodArgumentCount(interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 	if (!bitBltIsReceiver) {
 		receiver = fetchPointerofObject(BEBitBltIndex, receiver);
 	}
@@ -6764,10 +6764,10 @@ static sqInt
 showDisplayBits(void)
 {
 	/* begin ensureDestAndSourceFormsAreValid */
-	if (numGCsOnInvocation != (statNumGCs())) {
+	if (numGCsOnInvocation != (statNumGCs(interpreterProxy->interpreterState))) {
 		reloadDestAndSourceForms();
 	}
-	showDisplayBitsLeftTopRightBottom(destForm, affectedL, affectedT, affectedR, affectedB);
+	showDisplayBitsLeftTopRightBottom(destForm, affectedL, affectedT, affectedR, affectedB, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -7123,7 +7123,7 @@ unlockSurfaces(void)
 		}
 	}
 	/* begin ensureDestAndSourceFormsAreValid */
-	if (numGCsOnInvocation != (statNumGCs())) {
+	if (numGCsOnInvocation != (statNumGCs(interpreterProxy->interpreterState))) {
 		reloadDestAndSourceForms();
 	}
 	destLocked = 0;
@@ -7137,7 +7137,7 @@ unlockSurfaces(void)
 	}
 	if (!noSource) {
 		/* begin ensureDestAndSourceFormsAreValid */
-		if (numGCsOnInvocation != (statNumGCs())) {
+		if (numGCsOnInvocation != (statNumGCs(interpreterProxy->interpreterState))) {
 			reloadDestAndSourceForms();
 		}
 		sourceHandle = fetchPointerofObject(FormBitsIndex, sourceForm);
@@ -7501,13 +7501,13 @@ warpLoop(void)
 	if (deltaP43y < 0) {
 		pBy = words - (nSteps * deltaP43y);
 	}
-	if (failed()) {
+	if (failed(interpreterProxy->interpreterState)) {
 		return 0;
 	}
-	if ((methodArgumentCount()) == 2) {
-		smoothingCount = stackIntegerValue(1);
-		sourceMapOop = stackValue(0);
-		if (sourceMapOop == (nilObject())) {
+	if ((methodArgumentCount(interpreterProxy->interpreterState)) == 2) {
+		smoothingCount = stackIntegerValue(1, interpreterProxy->interpreterState);
+		sourceMapOop = stackValue(0, interpreterProxy->interpreterState);
+		if (sourceMapOop == (nilObject(interpreterProxy->interpreterState))) {
 			if (sourceDepth < 16) {
 
 				/* color map is required to smooth non-RGB dest */
@@ -7525,7 +7525,7 @@ warpLoop(void)
 	}
 	else {
 		smoothingCount = 1;
-		sourceMapOop = nilObject();
+		sourceMapOop = nilObject(interpreterProxy->interpreterState);
 	}
 	nSteps = width - 1;
 	if (nSteps <= 0) {

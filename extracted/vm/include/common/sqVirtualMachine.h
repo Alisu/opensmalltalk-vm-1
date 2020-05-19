@@ -77,7 +77,7 @@ typedef struct VirtualMachine {
 
 	sqInt  (*argumentCountOf)(sqInt methodPointer);
 	void  *(*arrayValueOf)(sqInt oop, struct foo * self);
-	sqInt  (*byteSizeOf)(sqInt oop);
+	sqInt  (*byteSizeOf)(sqInt oop, struct foo * self);
 	void  *(*fetchArrayofObject)(sqInt fieldIndex, sqInt objectPointer);
 	sqInt  (*fetchClassOf)(sqInt oop);
 	double (*fetchFloatofObject)(sqInt fieldIndex, sqInt objectPointer, struct foo * self);
@@ -95,7 +95,7 @@ typedef struct VirtualMachine {
 	void  *(*firstIndexableField)(sqInt oop);
 	sqInt  (*literalofMethod)(sqInt offset, sqInt methodPointer);
 	sqInt  (*literalCountOf)(sqInt methodPointer);
-	sqInt  (*methodArgumentCount)(void);
+	sqInt  (*methodArgumentCount)(struct foo * self);
 	sqInt  (*methodPrimitiveIndex)(void);
 	sqInt  (*primitiveIndexOf)(sqInt methodPointer);
 	sqInt  (*sizeOfSTArrayFromCPrimitive)(void *cPtr);
@@ -104,13 +104,13 @@ typedef struct VirtualMachine {
 	sqInt  (*stObjectatput)(sqInt array, sqInt fieldIndex, sqInt value);
 	sqInt  (*stSizeOf)(sqInt oop);
 	sqInt  (*storeIntegerofObjectwithValue)(sqInt fieldIndex, sqInt oop, sqInt integer);
-	sqInt  (*storePointerofObjectwithValue)(sqInt fieldIndex, sqInt oop, sqInt valuePointer);
+	sqInt  (*storePointerofObjectwithValue)(sqInt fieldIndex, sqInt oop, sqInt valuePointer, struct foo * self);
 
 	/* InterpreterProxy methodsFor: 'testing' */
 
 	sqInt (*isKindOf)(sqInt oop, char *aString);
 	sqInt (*isMemberOf)(sqInt oop, char *aString);
-	sqInt (*isBytes)(sqInt oop);
+	sqInt (*isBytes)(sqInt oop, struct foo * self);
 	sqInt (*isFloatObject)(sqInt oop);
 	sqInt (*isIndexable)(sqInt oop);
 	sqInt (*isIntegerObject)(sqInt oop);
@@ -122,7 +122,7 @@ typedef struct VirtualMachine {
 
 	/* InterpreterProxy methodsFor: 'converting' */
 
-	sqInt  (*booleanValueOf)(sqInt obj);
+	sqInt  (*booleanValueOf)(sqInt obj, struct foo * self);
 	sqInt  (*checkedIntegerValueOf)(sqInt intOop);
 	sqInt  (*floatObjectOf)(double aFloat);
 	double (*floatValueOf)(sqInt oop);
@@ -135,19 +135,19 @@ typedef struct VirtualMachine {
 
 	sqInt (*characterTable)(void);
 	sqInt (*displayObject)(void);
-	sqInt (*falseObject)(void);
-	sqInt (*nilObject)(void);
-	sqInt (*trueObject)(void);
+	sqInt (*falseObject)(struct foo * self);
+	sqInt (*nilObject)(struct foo * self);
+	sqInt (*trueObject)(struct foo * self);
 
 	/* InterpreterProxy methodsFor: 'special classes' */
 
 	sqInt (*classArray)(void);
-	sqInt (*classBitmap)(void);
+	sqInt (*classBitmap)(struct foo * self);
 	sqInt (*classByteArray)(void);
 	sqInt (*classCharacter)(void);
 	sqInt (*classFloat)(void);
 	sqInt (*classLargePositiveInteger)(void);
-	sqInt (*classPoint)(void);
+	sqInt (*classPoint)(struct foo * self);
 	sqInt (*classSemaphore)(void);
 	sqInt (*classSmallInteger)(void);
 	sqInt (*classString)(void);
@@ -164,19 +164,19 @@ typedef struct VirtualMachine {
 
 	sqInt (*becomewith)(sqInt array1, sqInt array2);
 	sqInt (*byteSwapped)(sqInt w);
-	sqInt (*failed)(void);
+	sqInt (*failed)(struct foo * self);
 	sqInt (*fullDisplayUpdate)(void);
 	void (*fullGC)(void);
 	void (*incrementalGC)(void);
 	sqInt (*primitiveFail)(void);
-	sqInt (*showDisplayBitsLeftTopRightBottom)(sqInt aForm, sqInt l, sqInt t, sqInt r, sqInt b);
+	sqInt (*showDisplayBitsLeftTopRightBottom)(sqInt aForm, sqInt l, sqInt t, sqInt r, sqInt b, struct foo * self);
 	sqInt (*signalSemaphoreWithIndex)(sqInt semaIndex);
-	sqInt (*success)(sqInt aBoolean);
+	sqInt (*success)(sqInt aBoolean, struct foo * self);
 	sqInt (*superclassOf)(sqInt classPointer);
 
 # if VM_PROXY_MINOR > 13
 	/* Reuse these now that Cog provides a production JIT. */
-	sqInt (*statNumGCs)(void);
+	sqInt (*statNumGCs)(struct foo * self);
 	sqInt (*stringForCString)(char *nullTerminatedCString);
 # else
 	/* InterpreterProxy methodsFor: 'compiler' */
@@ -201,24 +201,24 @@ typedef struct VirtualMachine {
 	sqInt (*signed32BitIntegerFor)(sqInt integerValue);
 	int   (*signed32BitValueOf)(sqInt oop);
 	sqInt (*includesBehaviorThatOf)(sqInt aClass, sqInt aSuperClass);
-	sqInt (*primitiveMethod)(void);
+	sqInt (*primitiveMethod)(struct foo * self);
 
 	/* InterpreterProxy methodsFor: 'FFI support' */
 
-	sqInt (*classExternalAddress)(void);
-	sqInt (*classExternalData)(void);
-	sqInt (*classExternalFunction)(void);
-	sqInt (*classExternalLibrary)(void);
-	sqInt (*classExternalStructure)(void);
+	sqInt (*classExternalAddress)(struct foo * self);
+	sqInt (*classExternalData)(struct foo * self);
+	sqInt (*classExternalFunction)(struct foo * self);
+	sqInt (*classExternalLibrary)(struct foo * self);
+	sqInt (*classExternalStructure)(struct foo * self);
 	void *(*ioLoadModuleOfLength)(sqInt modIndex, sqInt modLength);
 	void *(*ioLoadSymbolOfLengthFromModule)(sqInt fnIndex, sqInt fnLength, sqInt handle);
-	sqInt (*isInMemory)(sqInt address);
+	sqInt (*isInMemory)(sqInt address, struct foo * self);
 
 #endif
 
 #if VM_PROXY_MINOR > 3
 
-	void *(*ioLoadFunctionFrom)(char *fnName, char *modName);
+	void *(*ioLoadFunctionFrom)(char *fnName, char *modName, struct foo * self);
 	sqInt (*ioMicroMSecs)(void);
 
 #endif
@@ -235,7 +235,7 @@ typedef struct VirtualMachine {
 #   endif
 #  endif
 
-	sqInt  (*positive64BitIntegerFor)(usqLong integerValue);
+	sqInt  (*positive64BitIntegerFor)(usqLong integerValue, struct foo * self);
 	usqLong(*positive64BitValueOf)(sqInt oop);
 	sqInt  (*signed64BitIntegerFor)(sqLong integerValue);
 	sqLong (*signed64BitValueOf)(sqInt oop);
@@ -287,7 +287,7 @@ typedef struct VirtualMachine {
 
 #if VM_PROXY_MINOR > 8
 	/* See interp.h and above for standard error codes. */
-	sqInt  (*primitiveFailFor)(sqInt code);
+	sqInt  (*primitiveFailFor)(sqInt code, struct foo * self);
 	void (*(*setInterruptCheckChain)(void (*aFunction)(void)))();
 	sqInt  (*classAlien)(void);
 	sqInt  (*classUnsafeAlien)(void);
@@ -304,14 +304,14 @@ typedef struct VirtualMachine {
   sqInt  (*methodReturnFloat)(double);
   sqInt  (*methodReturnInteger)(sqInt);
   sqInt  (*methodReturnString)(char *);
-#	define returnSelf() methodReturnValue(0)
+#	define returnSelf() methodReturnValue(0, self)
 # else
   sqInt  (*methodArg)  (sqInt index); /* These ended up never being used. */
   sqInt  (*objectArg)  (sqInt index);
   sqInt  (*integerArg) (sqInt index);
   double (*floatArg)   (sqInt index);
 # endif
-  sqInt  (*methodReturnValue) (sqInt oop);
+  sqInt  (*methodReturnValue) (sqInt oop, struct foo * self);
   sqInt  (*topRemappableOop)  (void);
 #endif
 
@@ -319,8 +319,8 @@ typedef struct VirtualMachine {
 # if !SPURVM
 #	define DisownVMLockOutFullGC 1
 # endif
-  sqInt	(*disownVM)(sqInt flags);
-  sqInt	(*ownVM)   (sqInt threadIdAndFlags);
+  sqInt	(*disownVM)(sqInt flags, struct foo * self);
+  sqInt	(*ownVM)   (sqInt threadIdAndFlags, struct foo * self);
   void  (*addHighPriorityTickee)(void (*ticker)(void), unsigned periodms);
   void  (*addSynchronousTickee)(void (*ticker)(void), unsigned periodms, unsigned roundms);
   volatile usqLong (*utcMicroseconds)(void);
