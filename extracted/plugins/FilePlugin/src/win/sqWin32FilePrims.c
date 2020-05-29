@@ -159,7 +159,7 @@ sqInt sqFileInit(void) {
   */
 
 #if VM_PROXY_MINOR > 6
-  thisSession = interpreterProxy->getThisSessionID();
+  thisSession = interpreterProxy->getThisSessionID(interpreterProxy->interpreterState);
 #else
   thisSession = GetTickCount();
   if (thisSession == 0) thisSession = 1;	/* don't use 0 */
@@ -264,7 +264,7 @@ sqConnectToFileDescriptor(SQFile *sqFile, int fd, sqInt writeFlag)
 	 */
 	HANDLE file = _fdopen(fd, writeFlag ? "wb" : "rb");
 	if (!file)
-		return interpreterProxy->success(false);
+		return interpreterProxy->success(false, interpreterProxy->interpreterState);
 	return sqConnectToFile(sqFile, file, writeFlag);
 }
 
@@ -300,7 +300,7 @@ sqFileStdioHandlesIntoFile_WithHandle_IsWritable(SQFile * file, HANDLE handle, i
  * Fill-in files with handles for stdin, stdout and seterr as available and
  * answer a bit-mask of the availability:
  *
- * <0 - Error.  The value will be returned to the image using primitiveFailForOSError().
+ * <0 - Error.  The value will be returned to the image using primitiveFailForOSError(interpreterProxy->interpreterState).
  * 0  - no stdio available
  * 1  - stdin available
  * 2  - stdout available

@@ -55,7 +55,7 @@ static const char *moduleName = "SurfacePlugin "__DATE__" (e)";
 #endif
 
 static VirtualMachine *interpreterProxy;
-#define FAIL { interpreterProxy->primitiveFail(); return 0; }
+#define FAIL { interpreterProxy->primitiveFail(interpreterProxy->interpreterState); return 0; }
 
 #pragma export on
 /* module initialization/shutdown */

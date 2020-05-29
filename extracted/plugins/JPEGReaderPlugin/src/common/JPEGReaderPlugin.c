@@ -117,37 +117,37 @@ static sqInt dcTableSize;
 static sqInt ditherMask;
 
 #if !defined(SQUEAK_BUILTIN_PLUGIN)
-static sqInt (*byteSizeOf)(sqInt oop);
-static sqInt (*failed)(void);
-static sqInt (*fetchIntegerofObject)(sqInt fieldIndex, sqInt objectPointer);
-static sqInt (*fetchPointerofObject)(sqInt index, sqInt oop);
-static void * (*firstIndexableField)(sqInt oop);
-static sqInt (*isBytes)(sqInt oop);
-static sqInt (*isPointers)(sqInt oop);
-static sqInt (*isWords)(sqInt oop);
-static sqInt (*methodArgumentCount)(void);
-static sqInt (*pop)(sqInt nItems);
-static sqInt (*primitiveFail)(void);
-static sqInt (*slotSizeOf)(sqInt oop);
-static sqInt (*stackIntegerValue)(sqInt offset);
-static sqInt (*stackValue)(sqInt offset);
-static sqInt (*storeIntegerofObjectwithValue)(sqInt index, sqInt oop, sqInt integer);
+static sqInt (*byteSizeOf)(sqInt oop, struct foo * self);
+static sqInt (*failed)(struct foo * self);
+static sqInt (*fetchIntegerofObject)(sqInt fieldIndex, sqInt objectPointer, struct foo * self);
+static sqInt (*fetchPointerofObject)(sqInt index, sqInt oop, struct foo * self);
+static void * (*firstIndexableField)(sqInt oop, struct foo * self);
+static sqInt (*isBytes)(sqInt oop, struct foo * self);
+static sqInt (*isPointers)(sqInt oop, struct foo * self);
+static sqInt (*isWords)(sqInt oop, struct foo * self);
+static sqInt (*methodArgumentCount)(struct foo * self);
+static sqInt (*pop)(sqInt nItems, struct foo * self);
+static sqInt (*primitiveFail)(struct foo * self);
+static sqInt (*slotSizeOf)(sqInt oop, struct foo * self);
+static sqInt (*stackIntegerValue)(sqInt offset, struct foo * self);
+static sqInt (*stackValue)(sqInt offset, struct foo * self);
+static sqInt (*storeIntegerofObjectwithValue)(sqInt index, sqInt oop, sqInt integer, struct foo * self);
 #else /* !defined(SQUEAK_BUILTIN_PLUGIN) */
-extern sqInt byteSizeOf(sqInt oop);
-extern sqInt failed(void);
-extern sqInt fetchIntegerofObject(sqInt fieldIndex, sqInt objectPointer);
-extern sqInt fetchPointerofObject(sqInt index, sqInt oop);
-extern void * firstIndexableField(sqInt oop);
-extern sqInt isBytes(sqInt oop);
-extern sqInt isPointers(sqInt oop);
-extern sqInt isWords(sqInt oop);
-extern sqInt methodArgumentCount(void);
-extern sqInt pop(sqInt nItems);
-extern sqInt primitiveFail(void);
-extern sqInt slotSizeOf(sqInt oop);
-extern sqInt stackIntegerValue(sqInt offset);
-extern sqInt stackValue(sqInt offset);
-extern sqInt storeIntegerofObjectwithValue(sqInt index, sqInt oop, sqInt integer);
+extern sqInt byteSizeOf(sqInt oop, struct foo * self);
+extern sqInt failed(struct foo * self);
+extern sqInt fetchIntegerofObject(sqInt fieldIndex, sqInt objectPointer, struct foo * self);
+extern sqInt fetchPointerofObject(sqInt index, sqInt oop, struct foo * self);
+extern void * firstIndexableField(sqInt oop, struct foo * self);
+extern sqInt isBytes(sqInt oop, struct foo * self);
+extern sqInt isPointers(sqInt oop, struct foo * self);
+extern sqInt isWords(sqInt oop, struct foo * self);
+extern sqInt methodArgumentCount(struct foo * self);
+extern sqInt pop(sqInt nItems, struct foo * self);
+extern sqInt primitiveFail(struct foo * self);
+extern sqInt slotSizeOf(sqInt oop, struct foo * self);
+extern sqInt stackIntegerValue(sqInt offset, struct foo * self);
+extern sqInt stackValue(sqInt offset, struct foo * self);
+extern sqInt storeIntegerofObjectwithValue(sqInt index, sqInt oop, sqInt integer, struct foo * self);
 extern
 #endif
 struct VirtualMachine* interpreterProxy;
@@ -198,51 +198,51 @@ colorComponentBlocksfrom(int **blocks, sqInt oop)
     sqInt i;
     sqInt max;
 
-	if (!(isPointers(oop))) {
+	if (!(isPointers(oop, interpreterProxy->interpreterState))) {
 		return 0;
 	}
-	if ((slotSizeOf(oop)) < MinComponentSize) {
+	if ((slotSizeOf(oop, interpreterProxy->interpreterState)) < MinComponentSize) {
 		return 0;
 	}
-	arrayOop = fetchPointerofObject(MCUBlockIndex, oop);
-	if (!(isPointers(arrayOop))) {
+	arrayOop = fetchPointerofObject(MCUBlockIndex, oop, interpreterProxy->interpreterState);
+	if (!(isPointers(arrayOop, interpreterProxy->interpreterState))) {
 		return 0;
 	}
-	max = slotSizeOf(arrayOop);
+	max = slotSizeOf(arrayOop, interpreterProxy->interpreterState);
 	if (max > MaxMCUBlocks) {
 		return 0;
 	}
 	for (i = 0; i < max; i += 1) {
-		blockOop = fetchPointerofObject(i, arrayOop);
-		if (!(isWords(blockOop))) {
+		blockOop = fetchPointerofObject(i, arrayOop, interpreterProxy->interpreterState);
+		if (!(isWords(blockOop, interpreterProxy->interpreterState))) {
 			return 0;
 		}
-		if (!((slotSizeOf(blockOop)) == DCTSize2)) {
+		if (!((slotSizeOf(blockOop, interpreterProxy->interpreterState)) == DCTSize2)) {
 			return 0;
 		}
-		blocks[i] = (firstIndexableField(blockOop));
+		blocks[i] = (firstIndexableField(blockOop, interpreterProxy->interpreterState));
 	}
-	return !(failed());
+	return !(failed(interpreterProxy->interpreterState));
 }
 
 	/* JPEGReaderPlugin>>#colorComponent:from: */
 static sqInt
 colorComponentfrom(int *aColorComponent, sqInt oop)
 {
-	if (!(isPointers(oop))) {
+	if (!(isPointers(oop, interpreterProxy->interpreterState))) {
 		return 0;
 	}
-	if ((slotSizeOf(oop)) < MinComponentSize) {
+	if ((slotSizeOf(oop, interpreterProxy->interpreterState)) < MinComponentSize) {
 		return 0;
 	}
-	aColorComponent[CurrentXIndex] = (fetchIntegerofObject(CurrentXIndex, oop));
-	aColorComponent[CurrentYIndex] = (fetchIntegerofObject(CurrentYIndex, oop));
-	aColorComponent[HScaleIndex] = (fetchIntegerofObject(HScaleIndex, oop));
-	aColorComponent[VScaleIndex] = (fetchIntegerofObject(VScaleIndex, oop));
-	aColorComponent[BlockWidthIndex] = (fetchIntegerofObject(BlockWidthIndex, oop));
-	aColorComponent[MCUWidthIndex] = (fetchIntegerofObject(MCUWidthIndex, oop));
-	aColorComponent[PriorDCValueIndex] = (fetchIntegerofObject(PriorDCValueIndex, oop));
-	return !(failed());
+	aColorComponent[CurrentXIndex] = (fetchIntegerofObject(CurrentXIndex, oop, interpreterProxy->interpreterState));
+	aColorComponent[CurrentYIndex] = (fetchIntegerofObject(CurrentYIndex, oop, interpreterProxy->interpreterState));
+	aColorComponent[HScaleIndex] = (fetchIntegerofObject(HScaleIndex, oop, interpreterProxy->interpreterState));
+	aColorComponent[VScaleIndex] = (fetchIntegerofObject(VScaleIndex, oop, interpreterProxy->interpreterState));
+	aColorComponent[BlockWidthIndex] = (fetchIntegerofObject(BlockWidthIndex, oop, interpreterProxy->interpreterState));
+	aColorComponent[MCUWidthIndex] = (fetchIntegerofObject(MCUWidthIndex, oop, interpreterProxy->interpreterState));
+	aColorComponent[PriorDCValueIndex] = (fetchIntegerofObject(PriorDCValueIndex, oop, interpreterProxy->interpreterState));
+	return !(failed(interpreterProxy->interpreterState));
 }
 
 	/* JPEGReaderPlugin>>#colorConvertGrayscaleMCU */
@@ -453,7 +453,7 @@ decodeBlockIntocomponent(int *anArray, int *aColorComponent)
 
 	byte = jpegDecodeValueFromsize(dcTable, dcTableSize);
 	if (byte < 0) {
-		return primitiveFail();
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
 	if (byte != 0) {
 		/* begin getBits: */
@@ -509,7 +509,7 @@ decodeBlockIntocomponent(int *anArray, int *aColorComponent)
 	while (index < DCTSize2) {
 		byte = jpegDecodeValueFromsize(acTable, acTableSize);
 		if (byte < 0) {
-			return primitiveFail();
+			return primitiveFail(interpreterProxy->interpreterState);
 		}
 		zeroCount = ((usqInt) byte) >> 4;
 		byte = byte & 15;
@@ -560,7 +560,7 @@ decodeBlockIntocomponent(int *anArray, int *aColorComponent)
 	l6:	/* end scaleAndSignExtend:inFieldWidth: */;
 			if ((index < 0)
 			 || (index >= DCTSize2)) {
-				return primitiveFail();
+				return primitiveFail(interpreterProxy->interpreterState);
 			}
 			anArray[jpegNaturalOrder[index]] = byte;
 		}
@@ -906,23 +906,23 @@ loadJPEGStreamFrom(sqInt streamOop)
     sqInt oop;
     sqInt sz;
 
-	if (!(isPointers(streamOop))) {
+	if (!(isPointers(streamOop, interpreterProxy->interpreterState))) {
 		return 0;
 	}
-	if ((slotSizeOf(streamOop)) < 5) {
+	if ((slotSizeOf(streamOop, interpreterProxy->interpreterState)) < 5) {
 		return 0;
 	}
-	oop = fetchPointerofObject(0, streamOop);
-	if (!(isBytes(oop))) {
+	oop = fetchPointerofObject(0, streamOop, interpreterProxy->interpreterState);
+	if (!(isBytes(oop, interpreterProxy->interpreterState))) {
 		return 0;
 	}
-	jsCollection = firstIndexableField(oop);
-	sz = byteSizeOf(oop);
-	jsPosition = fetchIntegerofObject(1, streamOop);
-	jsReadLimit = fetchIntegerofObject(2, streamOop);
-	jsBitBuffer = fetchIntegerofObject(3, streamOop);
-	jsBitCount = fetchIntegerofObject(4, streamOop);
-	if (failed()) {
+	jsCollection = firstIndexableField(oop, interpreterProxy->interpreterState);
+	sz = byteSizeOf(oop, interpreterProxy->interpreterState);
+	jsPosition = fetchIntegerofObject(1, streamOop, interpreterProxy->interpreterState);
+	jsReadLimit = fetchIntegerofObject(2, streamOop, interpreterProxy->interpreterState);
+	jsBitBuffer = fetchIntegerofObject(3, streamOop, interpreterProxy->interpreterState);
+	jsBitCount = fetchIntegerofObject(4, streamOop, interpreterProxy->interpreterState);
+	if (failed(interpreterProxy->interpreterState)) {
 		return 0;
 	}
 	if (sz < jsReadLimit) {
@@ -1104,29 +1104,29 @@ primitiveColorConvertGrayscaleMCU(void)
     sqInt y;
 
 	/* begin stInit */
-	if (!((methodArgumentCount()) == 4)) {
-		return primitiveFail();
+	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 4)) {
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
-	ditherMask = stackIntegerValue(0);
-	if (failed()) {
+	ditherMask = stackIntegerValue(0, interpreterProxy->interpreterState);
+	if (failed(interpreterProxy->interpreterState)) {
 		return null;
 	}
-	arrayOop = stackValue(1);
-	if (!((isWords(arrayOop))
-		 && ((slotSizeOf(arrayOop)) == 3))) {
-		return primitiveFail();
+	arrayOop = stackValue(1, interpreterProxy->interpreterState);
+	if (!((isWords(arrayOop, interpreterProxy->interpreterState))
+		 && ((slotSizeOf(arrayOop, interpreterProxy->interpreterState)) == 3))) {
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
-	residuals = firstIndexableField(arrayOop);
-	arrayOop = stackValue(2);
-	if (!(isWords(arrayOop))) {
-		return primitiveFail();
+	residuals = firstIndexableField(arrayOop, interpreterProxy->interpreterState);
+	arrayOop = stackValue(2, interpreterProxy->interpreterState);
+	if (!(isWords(arrayOop, interpreterProxy->interpreterState))) {
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
-	jpegBitsSize = slotSizeOf(arrayOop);
-	jpegBits = firstIndexableField(arrayOop);
-	arrayOop = stackValue(3);
+	jpegBitsSize = slotSizeOf(arrayOop, interpreterProxy->interpreterState);
+	jpegBits = firstIndexableField(arrayOop, interpreterProxy->interpreterState);
+	arrayOop = stackValue(3, interpreterProxy->interpreterState);
 	if (!((colorComponentfrom(yComponent, arrayOop))
 		 && (colorComponentBlocksfrom(yBlocks, arrayOop)))) {
-		return primitiveFail();
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
 	/* begin colorConvertGrayscaleMCU */
 	yComponent[CurrentXIndex] = 0;
@@ -1161,7 +1161,7 @@ primitiveColorConvertGrayscaleMCU(void)
 		y = ((y < 1) ? 1 : y);
 		jpegBits[i] = (((0xFF000000U + (((sqInt)((usqInt)(y) << 16)))) + (((sqInt)((usqInt)(y) << 8)))) + y);
 	}
-	pop(4);
+	pop(4, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -1211,38 +1211,38 @@ primitiveColorConvertMCU(void)
     sqInt y;
 
 	/* begin stInit */
-	if (!((methodArgumentCount()) == 4)) {
-		return primitiveFail();
+	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 4)) {
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
-	ditherMask = stackIntegerValue(0);
-	if (failed()) {
+	ditherMask = stackIntegerValue(0, interpreterProxy->interpreterState);
+	if (failed(interpreterProxy->interpreterState)) {
 		return null;
 	}
-	arrayOop = stackValue(1);
-	if (!((isWords(arrayOop))
-		 && ((slotSizeOf(arrayOop)) == 3))) {
-		return primitiveFail();
+	arrayOop = stackValue(1, interpreterProxy->interpreterState);
+	if (!((isWords(arrayOop, interpreterProxy->interpreterState))
+		 && ((slotSizeOf(arrayOop, interpreterProxy->interpreterState)) == 3))) {
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
-	residuals = firstIndexableField(arrayOop);
-	arrayOop = stackValue(2);
-	if (!(isWords(arrayOop))) {
-		return primitiveFail();
+	residuals = firstIndexableField(arrayOop, interpreterProxy->interpreterState);
+	arrayOop = stackValue(2, interpreterProxy->interpreterState);
+	if (!(isWords(arrayOop, interpreterProxy->interpreterState))) {
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
-	jpegBitsSize = slotSizeOf(arrayOop);
-	jpegBits = firstIndexableField(arrayOop);
-	arrayOop = stackValue(3);
-	if (!((isPointers(arrayOop))
-		 && ((slotSizeOf(arrayOop)) == 3))) {
-		return primitiveFail();
+	jpegBitsSize = slotSizeOf(arrayOop, interpreterProxy->interpreterState);
+	jpegBits = firstIndexableField(arrayOop, interpreterProxy->interpreterState);
+	arrayOop = stackValue(3, interpreterProxy->interpreterState);
+	if (!((isPointers(arrayOop, interpreterProxy->interpreterState))
+		 && ((slotSizeOf(arrayOop, interpreterProxy->interpreterState)) == 3))) {
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
-	if (!(yColorComponentFrom(fetchPointerofObject(0, arrayOop)))) {
-		return primitiveFail();
+	if (!(yColorComponentFrom(fetchPointerofObject(0, arrayOop, interpreterProxy->interpreterState)))) {
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
-	if (!(cbColorComponentFrom(fetchPointerofObject(1, arrayOop)))) {
-		return primitiveFail();
+	if (!(cbColorComponentFrom(fetchPointerofObject(1, arrayOop, interpreterProxy->interpreterState)))) {
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
-	if (!(crColorComponentFrom(fetchPointerofObject(2, arrayOop)))) {
-		return primitiveFail();
+	if (!(crColorComponentFrom(fetchPointerofObject(2, arrayOop, interpreterProxy->interpreterState)))) {
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
 	/* begin colorConvertMCU */
 	yComponent[CurrentXIndex] = 0;
@@ -1340,7 +1340,7 @@ primitiveColorConvertMCU(void)
 		blue = ((blue < 1) ? 1 : blue);
 		jpegBits[i] = (((0xFF000000U + (((usqInt) red << 16))) + (((usqInt) green << 8))) + blue);
 	}
-	pop(4);
+	pop(4, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -1371,42 +1371,42 @@ primitiveDecodeMCU(void)
     sqInt value1;
     sqInt zeroCount;
 
-	if (!((methodArgumentCount()) == 5)) {
-		return primitiveFail();
+	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 5)) {
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
-	oop = stackValue(0);
+	oop = stackValue(0, interpreterProxy->interpreterState);
 	if (!(loadJPEGStreamFrom(oop))) {
-		return primitiveFail();
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
-	arrayOop = stackValue(1);
-	if (!(isWords(arrayOop))) {
-		return primitiveFail();
+	arrayOop = stackValue(1, interpreterProxy->interpreterState);
+	if (!(isWords(arrayOop, interpreterProxy->interpreterState))) {
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
-	acTableSize = slotSizeOf(arrayOop);
-	acTable = firstIndexableField(arrayOop);
-	arrayOop = stackValue(2);
-	if (!(isWords(arrayOop))) {
-		return primitiveFail();
+	acTableSize = slotSizeOf(arrayOop, interpreterProxy->interpreterState);
+	acTable = firstIndexableField(arrayOop, interpreterProxy->interpreterState);
+	arrayOop = stackValue(2, interpreterProxy->interpreterState);
+	if (!(isWords(arrayOop, interpreterProxy->interpreterState))) {
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
-	dcTableSize = slotSizeOf(arrayOop);
-	dcTable = firstIndexableField(arrayOop);
-	oop = stackValue(3);
+	dcTableSize = slotSizeOf(arrayOop, interpreterProxy->interpreterState);
+	dcTable = firstIndexableField(arrayOop, interpreterProxy->interpreterState);
+	oop = stackValue(3, interpreterProxy->interpreterState);
 	if (!(colorComponentfrom(yComponent, oop))) {
-		return primitiveFail();
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
-	arrayOop = stackValue(4);
-	if (!((isWords(arrayOop))
-		 && ((slotSizeOf(arrayOop)) == DCTSize2))) {
-		return primitiveFail();
+	arrayOop = stackValue(4, interpreterProxy->interpreterState);
+	if (!((isWords(arrayOop, interpreterProxy->interpreterState))
+		 && ((slotSizeOf(arrayOop, interpreterProxy->interpreterState)) == DCTSize2))) {
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
-	anArray = firstIndexableField(arrayOop);
-	if (failed()) {
+	anArray = firstIndexableField(arrayOop, interpreterProxy->interpreterState);
+	if (failed(interpreterProxy->interpreterState)) {
 		return null;
 	}
 	/* begin decodeBlockInto:component: */
 	byte = jpegDecodeValueFromsize(dcTable, dcTableSize);
 	if (byte < 0) {
-		primitiveFail();
+		primitiveFail(interpreterProxy->interpreterState);
 		goto l7;
 	}
 	if (byte != 0) {
@@ -1463,7 +1463,7 @@ primitiveDecodeMCU(void)
 	while (index < DCTSize2) {
 		byte = jpegDecodeValueFromsize(acTable, acTableSize);
 		if (byte < 0) {
-			primitiveFail();
+			primitiveFail(interpreterProxy->interpreterState);
 			goto l7;
 		}
 		zeroCount = ((usqInt) byte) >> 4;
@@ -1515,7 +1515,7 @@ primitiveDecodeMCU(void)
 	l6:	/* end scaleAndSignExtend:inFieldWidth: */;
 			if ((index < 0)
 			 || (index >= DCTSize2)) {
-				primitiveFail();
+				primitiveFail(interpreterProxy->interpreterState);
 				goto l7;
 			}
 			anArray[jpegNaturalOrder[index]] = byte;
@@ -1531,16 +1531,16 @@ primitiveDecodeMCU(void)
 		index += 1;
 	}
 	l7:	/* end decodeBlockInto:component: */;
-	if (failed()) {
+	if (failed(interpreterProxy->interpreterState)) {
 		return null;
 	}
 	/* begin storeJPEGStreamOn: */
-	streamOop = stackValue(0);
-	storeIntegerofObjectwithValue(1, streamOop, jsPosition);
-	storeIntegerofObjectwithValue(3, streamOop, jsBitBuffer);
-	storeIntegerofObjectwithValue(4, streamOop, jsBitCount);
-	storeIntegerofObjectwithValue(PriorDCValueIndex, stackValue(3), yComponent[PriorDCValueIndex]);
-	pop(5);
+	streamOop = stackValue(0, interpreterProxy->interpreterState);
+	storeIntegerofObjectwithValue(1, streamOop, jsPosition, interpreterProxy->interpreterState);
+	storeIntegerofObjectwithValue(3, streamOop, jsBitBuffer, interpreterProxy->interpreterState);
+	storeIntegerofObjectwithValue(4, streamOop, jsBitCount, interpreterProxy->interpreterState);
+	storeIntegerofObjectwithValue(PriorDCValueIndex, stackValue(3, interpreterProxy->interpreterState), yComponent[PriorDCValueIndex], interpreterProxy->interpreterState);
+	pop(5, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -1578,21 +1578,21 @@ primitiveIdctInt(void)
     sqInt z4;
     sqInt z5;
 
-	if (!((methodArgumentCount()) == 2)) {
-		return primitiveFail();
+	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 2)) {
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
-	arrayOop = stackValue(0);
-	if (!((isWords(arrayOop))
-		 && ((slotSizeOf(arrayOop)) == DCTSize2))) {
-		return primitiveFail();
+	arrayOop = stackValue(0, interpreterProxy->interpreterState);
+	if (!((isWords(arrayOop, interpreterProxy->interpreterState))
+		 && ((slotSizeOf(arrayOop, interpreterProxy->interpreterState)) == DCTSize2))) {
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
-	qt = firstIndexableField(arrayOop);
-	arrayOop = stackValue(1);
-	if (!((isWords(arrayOop))
-		 && ((slotSizeOf(arrayOop)) == DCTSize2))) {
-		return primitiveFail();
+	qt = firstIndexableField(arrayOop, interpreterProxy->interpreterState);
+	arrayOop = stackValue(1, interpreterProxy->interpreterState);
+	if (!((isWords(arrayOop, interpreterProxy->interpreterState))
+		 && ((slotSizeOf(arrayOop, interpreterProxy->interpreterState)) == DCTSize2))) {
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
-	anArray = firstIndexableField(arrayOop);
+	anArray = firstIndexableField(arrayOop, interpreterProxy->interpreterState);
 	/* begin idctBlockInt:qt: */
 	for (i = 0; i < DCTSize; i += 1) {
 		anACTerm = -1;
@@ -1724,7 +1724,7 @@ primitiveIdctInt(void)
 		v = ((v < 0) ? 0 : v);
 		anArray[i + 4] = v;
 	}
-	pop(2);
+	pop(2, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -1786,9 +1786,9 @@ stInit(void)
 static sqInt
 storeJPEGStreamOn(sqInt streamOop)
 {
-	storeIntegerofObjectwithValue(1, streamOop, jsPosition);
-	storeIntegerofObjectwithValue(3, streamOop, jsBitBuffer);
-	storeIntegerofObjectwithValue(4, streamOop, jsBitCount);
+	storeIntegerofObjectwithValue(1, streamOop, jsPosition, interpreterProxy->interpreterState);
+	storeIntegerofObjectwithValue(3, streamOop, jsBitBuffer, interpreterProxy->interpreterState);
+	storeIntegerofObjectwithValue(4, streamOop, jsBitCount, interpreterProxy->interpreterState);
 	return 0;
 }
 

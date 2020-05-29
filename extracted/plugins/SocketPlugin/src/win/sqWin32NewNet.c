@@ -1302,7 +1302,7 @@ void sqSocketSetReusable (SocketPtr s)
   *(int *)buf = 1;
   bufSize = 4;
   err = setsockopt(SOCKET(s), SOL_SOCKET, SO_REUSEADDR, buf, bufSize);
-  if(err < 0) interpreterProxy->success(false);
+  if(err < 0) interpreterProxy->success(false, interpreterProxy->interpreterState);
 }
 
 /*****************************************************************************
@@ -1570,10 +1570,10 @@ sqInt sqSocketReceiveUDPDataBufCountaddressportmoreFlag(SocketPtr s, char *buf, 
 {
   int nRead;
   if(TCPSocketType == s->socketType)
-    return interpreterProxy->primitiveFail();
+    return interpreterProxy->primitiveFail(interpreterProxy->interpreterState);
   /* bind UDP/RAW socket*/
   sqSocketConnectToPort(s, *address, *port);
-  if(interpreterProxy->failed()) return 0;
+  if(interpreterProxy->failed(interpreterProxy->interpreterState)) return 0;
   /* receive data */
   nRead = sqSocketReceiveDataBufCount(s, buf, bufSize);
   if(nRead >= 0) {
@@ -1586,10 +1586,10 @@ sqInt sqSocketReceiveUDPDataBufCountaddressportmoreFlag(SocketPtr s, char *buf, 
 sqInt	sqSockettoHostportSendDataBufCount(SocketPtr s, sqInt address, sqInt port, char *buf, sqInt bufSize)
 {
   if(TCPSocketType == s->socketType)
-    return interpreterProxy->primitiveFail();
+    return interpreterProxy->primitiveFail(interpreterProxy->interpreterState);
   /* bind UDP/RAW socket */
   sqSocketConnectToPort(s, address, port);
-  if(interpreterProxy->failed()) return 0;
+  if(interpreterProxy->failed(interpreterProxy->interpreterState)) return 0;
   /* send data */
   return sqSocketSendDataBufCount(s, buf, bufSize);
 }
@@ -1740,7 +1740,7 @@ sqInt sqSocketSetOptionsoptionNameStartoptionNameSizeoptionValueStartoptionValue
     return 0;
   }
  barf:
-  interpreterProxy->success(false);
+  interpreterProxy->success(false, interpreterProxy->interpreterState);
   return false;
 }
 
@@ -1801,7 +1801,7 @@ sqInt sqSocketGetOptionsoptionNameStartoptionNameSizereturnedValue
 #endif
 
  barf:
-  interpreterProxy->success(false);
+  interpreterProxy->success(false, interpreterProxy->interpreterState);
   return errno;
 }
 
@@ -2188,7 +2188,7 @@ void sqResolverGetAddressInfoHostSizeServiceSizeFlagsFamilyTypeProtocol(char *ho
   return;
 
  fail:
-  interpreterProxy->success(false);
+  interpreterProxy->success(false, interpreterProxy->interpreterState);
   return;
 }
 
@@ -2220,7 +2220,7 @@ void sqResolverGetAddressInfoResultSize(char *addr, sqInt addrSize)
 {
   if ((!addrInfo) || (addrSize < AddressHeaderSize + addrInfo->ai_addrlen))
     {
-      interpreterProxy->success(false);
+      interpreterProxy->success(false, interpreterProxy->interpreterState);
       return;
     }
 
@@ -2234,7 +2234,7 @@ sqInt sqResolverGetAddressInfoFamily(void)
 {
   if (!addrInfo)
     {
-      interpreterProxy->success(false);
+      interpreterProxy->success(false, interpreterProxy->interpreterState);
       return 0;
     }
 
@@ -2267,7 +2267,7 @@ sqInt sqResolverGetAddressInfoProtocol(void)
 {
   if (!addrInfo)
     {
-      interpreterProxy->success(false);
+      interpreterProxy->success(false, interpreterProxy->interpreterState);
       return 0;
     }
 
@@ -2299,7 +2299,7 @@ sqInt sqSocketAddressSizeGetPort(char *addr, sqInt addrSize)
       case AF_INET6:	return ntohs(((struct sockaddr_in6 *)socketAddress(addr))->sin6_port);
       }
 
-  interpreterProxy->success(false);
+  interpreterProxy->success(false, interpreterProxy->interpreterState);
   return 0;
 }
 
@@ -2313,7 +2313,7 @@ void sqSocketAddressSizeSetPort(char *addr, sqInt addrSize, sqInt port)
       case AF_INET6:	((struct sockaddr_in6 *)socketAddress(addr))->sin6_port= htons(port);	return;
       }
 
-  interpreterProxy->success(false);
+  interpreterProxy->success(false, interpreterProxy->interpreterState);
 }
 
 
@@ -2359,7 +2359,7 @@ void sqResolverGetNameInfoSizeFlags(char *addr, sqInt addrSize, sqInt flags)
   return;
 
  fail:
-  interpreterProxy->success(false);
+  interpreterProxy->success(false, interpreterProxy->interpreterState);
 }
 
 
@@ -2367,7 +2367,7 @@ sqInt sqResolverGetNameInfoHostSize(void)
 {
   if (!nameInfoValid)
     {
-      interpreterProxy->success(false);
+      interpreterProxy->success(false, interpreterProxy->interpreterState);
       return 0;
     }
   return strlen(hostNameInfo);
@@ -2389,7 +2389,7 @@ void sqResolverGetNameInfoHostResultSize(char *name, sqInt nameSize)
   return;
 
  fail:
-  interpreterProxy->success(false);
+  interpreterProxy->success(false, interpreterProxy->interpreterState);
 }
 
 
@@ -2397,7 +2397,7 @@ sqInt sqResolverGetNameInfoServiceSize(void)
 {
   if (!nameInfoValid)
     {
-      interpreterProxy->success(false);
+      interpreterProxy->success(false, interpreterProxy->interpreterState);
       return 0;
     }
   return strlen(servNameInfo);
@@ -2419,7 +2419,7 @@ void sqResolverGetNameInfoServiceResultSize(char *name, sqInt nameSize)
   return;
 
  fail:
-  interpreterProxy->success(false);
+  interpreterProxy->success(false, interpreterProxy->interpreterState);
 }
 
 
@@ -2428,7 +2428,7 @@ sqInt sqResolverHostNameSize(void)
   char buf[MAXHOSTNAMELEN+1];
   if (gethostname(buf, sizeof(buf)))
     {
-      interpreterProxy->success(false);
+      interpreterProxy->success(false, interpreterProxy->interpreterState);
       return 0;
     }
   return strlen(buf);
@@ -2441,7 +2441,7 @@ void sqResolverHostNameResultSize(char *name, sqInt nameSize)
   int len;
   if (gethostname(buf, sizeof(buf)) || (nameSize < (len= strlen(buf))))
     {
-      interpreterProxy->success(false);
+      interpreterProxy->success(false, interpreterProxy->interpreterState);
       return;
     }
   memcpy(name, buf, len);
@@ -2464,7 +2464,7 @@ void sqSocketBindToAddressSize(SocketPtr s, char *addr, sqInt addrSize)
   pss->sockError= errno;
 
  fail:
-  interpreterProxy->success(false);
+  interpreterProxy->success(false, interpreterProxy->interpreterState);
 }
 
 
@@ -2642,7 +2642,7 @@ void sqSocketRemoteAddressResultSize(SocketPtr s, char *addr, int addrSize)
 sqInt sqSocketSendUDPToSizeDataBufCount(SocketPtr s, char *addr, sqInt addrSize, char *buf, sqInt bufSize)
 {
   if(UDPSocketType != s->socketType)
-    return interpreterProxy->primitiveFail();
+    return interpreterProxy->primitiveFail(interpreterProxy->interpreterState);
 
   /* send data */
   return sqSocketSendDataBufCount(s, buf, bufSize);

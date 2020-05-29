@@ -80,7 +80,7 @@
 #endif
 
 #if defined(FFI_TEST)
-  static int primitiveFail(void) { puts("primitive fail"); exit(1); return 0; }
+  static int primitiveFail(void, interpreterProxy->interpreterState) { puts("primitive fail"); exit(1); return 0; }
 #else
   extern struct VirtualMachine *interpreterProxy;
 # define primitiveFail() interpreterProxy->primitiveFail()
@@ -144,11 +144,11 @@ int ffiFree(sqIntptr_t ptr)
 
 #define checkStack()				\
   if (stackIndex >= ARG_MAX)		\
-    return primitiveFail()
+    return primitiveFail(interpreterProxy->interpreterState)
 
 #define checkGPR()						\
   if ((gprCount >= GPR_MAX) && (stackIndex >= ARG_MAX))	\
-    return primitiveFail()
+    return primitiveFail(interpreterProxy->interpreterState)
 
 #define qalignStack()	stackIndex += (stackIndex & 1)
 
@@ -258,7 +258,7 @@ int ffiPushPointer(int pointer)
 
 #define checkFPR()					\
   if ((fprCount >= FPR_MAX) && (stackIndex >= ARG_MAX))	\
-    return primitiveFail()
+    return primitiveFail(interpreterProxy->interpreterState)
 
 #define dalignStack()	stackIndex += (stackIndex & 1)
 
@@ -302,7 +302,7 @@ int ffiPushStringOfLength(int srcIndex, int length)
   checkGPR();
   ptr= (char *)malloc(length + 1);
   if (!ptr)
-    return primitiveFail();
+    return primitiveFail(interpreterProxy->interpreterState);
   memcpy(ptr, (void *)srcIndex, length);
   ptr[length]= '\0';
   strings[stringCount++]= ptr;
@@ -318,7 +318,7 @@ int ffiPushStringOfLength(int srcIndex, int length)
 {							\
   DPRINTF(("  ++ "#type"\n"));				\
   if ((structCount + sizeof(type)) > sizeof(structs))	\
-    return primitiveFail();				\
+    return primitiveFail(interpreterProxy->interpreterState);				\
   *(type *)(structs + structCount)= value;		\
   structCount += sizeof(type);				\
 }
@@ -330,7 +330,7 @@ int ffiPushStructureOfLength(int pointer, int *structSpec, int specSize)
   DPRINTF(("ffiPushStructureOfLength %d (%db)\n", specSize, size));
   salign(16);
   if (structCount + size > sizeof(structs))
-    return primitiveFail();
+    return primitiveFail(interpreterProxy->interpreterState);
   ffiPushPointer((int)(structs + structCount));
   memcpy((void *)(structs + structCount), (void *)pointer, size);
   structCount += size;

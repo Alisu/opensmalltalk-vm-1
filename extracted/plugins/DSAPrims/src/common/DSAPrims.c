@@ -59,29 +59,29 @@ static unsigned char* dsaQuotient;
 static unsigned char* dsaRemainder;
 
 #if !defined(SQUEAK_BUILTIN_PLUGIN)
-static sqInt (*classLargePositiveInteger)(void);
-static sqInt (*fetchClassOf)(sqInt oop);
-static void * (*firstIndexableField)(sqInt oop);
-static sqInt (*isBytes)(sqInt oop);
-static sqInt (*isWords)(sqInt oop);
-static sqInt (*pop)(sqInt nItems);
-static sqInt (*primitiveFailFor)(sqInt reasonCode);
-static sqInt (*pushBool)(sqInt trueOrFalse);
-static sqInt (*pushInteger)(sqInt integerValue);
-static sqInt (*stSizeOf)(sqInt oop);
-static sqInt (*stackValue)(sqInt offset);
+static sqInt (*classLargePositiveInteger)(struct foo * self);
+static sqInt (*fetchClassOf)(sqInt oop, struct foo * self);
+static void * (*firstIndexableField)(sqInt oop, struct foo * self);
+static sqInt (*isBytes)(sqInt oop, struct foo * self);
+static sqInt (*isWords)(sqInt oop, struct foo * self);
+static sqInt (*pop)(sqInt nItems, struct foo * self);
+static sqInt (*primitiveFailFor)(sqInt reasonCode, struct foo * self);
+static sqInt (*pushBool)(sqInt trueOrFalse, struct foo * self);
+static sqInt (*pushInteger)(sqInt integerValue, struct foo * self);
+static sqInt (*stSizeOf)(sqInt oop, struct foo * self);
+static sqInt (*stackValue)(sqInt offset, struct foo * self);
 #else /* !defined(SQUEAK_BUILTIN_PLUGIN) */
-extern sqInt classLargePositiveInteger(void);
-extern sqInt fetchClassOf(sqInt oop);
-extern void * firstIndexableField(sqInt oop);
-extern sqInt isBytes(sqInt oop);
-extern sqInt isWords(sqInt oop);
-extern sqInt pop(sqInt nItems);
-extern sqInt primitiveFailFor(sqInt reasonCode);
-extern sqInt pushBool(sqInt trueOrFalse);
-extern sqInt pushInteger(sqInt integerValue);
-extern sqInt stSizeOf(sqInt oop);
-extern sqInt stackValue(sqInt offset);
+extern sqInt classLargePositiveInteger(struct foo * self);
+extern sqInt fetchClassOf(sqInt oop, struct foo * self);
+extern void * firstIndexableField(sqInt oop, struct foo * self);
+extern sqInt isBytes(sqInt oop, struct foo * self);
+extern sqInt isWords(sqInt oop, struct foo * self);
+extern sqInt pop(sqInt nItems, struct foo * self);
+extern sqInt primitiveFailFor(sqInt reasonCode, struct foo * self);
+extern sqInt pushBool(sqInt trueOrFalse, struct foo * self);
+extern sqInt pushInteger(sqInt integerValue, struct foo * self);
+extern sqInt stSizeOf(sqInt oop, struct foo * self);
+extern sqInt stackValue(sqInt offset, struct foo * self);
 extern
 #endif
 struct VirtualMachine* interpreterProxy;
@@ -301,22 +301,22 @@ primitiveBigDivide(void)
     sqInt sum;
     unsigned char thirdDigit;
 
-	quo = stackValue(0);
-	div = stackValue(1);
-	rem = stackValue(2);
-	clpi = classLargePositiveInteger();
-	if (!(((fetchClassOf(rem)) == clpi)
-		 && (((fetchClassOf(div)) == clpi)
-		 && ((fetchClassOf(quo)) == clpi)))) {
-		primitiveFailFor(PrimErrBadArgument);
+	quo = stackValue(0, interpreterProxy->interpreterState);
+	div = stackValue(1, interpreterProxy->interpreterState);
+	rem = stackValue(2, interpreterProxy->interpreterState);
+	clpi = classLargePositiveInteger(interpreterProxy->interpreterState);
+	if (!(((fetchClassOf(rem, interpreterProxy->interpreterState)) == clpi)
+		 && (((fetchClassOf(div, interpreterProxy->interpreterState)) == clpi)
+		 && ((fetchClassOf(quo, interpreterProxy->interpreterState)) == clpi)))) {
+		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
-	dsaRemainder = firstIndexableField(rem);
-	dsaDivisor = firstIndexableField(div);
-	dsaQuotient = firstIndexableField(quo);
-	divisorDigitCount = stSizeOf(div);
+	dsaRemainder = firstIndexableField(rem, interpreterProxy->interpreterState);
+	dsaDivisor = firstIndexableField(div, interpreterProxy->interpreterState);
+	dsaQuotient = firstIndexableField(quo, interpreterProxy->interpreterState);
+	divisorDigitCount = stSizeOf(div, interpreterProxy->interpreterState);
 
 	/* adjust pointers for base-1 indexing */
-	remainderDigitCount = stSizeOf(rem);
+	remainderDigitCount = stSizeOf(rem, interpreterProxy->interpreterState);
 	dsaRemainder -= 1;
 	dsaDivisor -= 1;
 	dsaQuotient -= 1;
@@ -398,7 +398,7 @@ primitiveBigDivide(void)
 		}
 		dsaQuotient[digitShift + 1] = q;
 	}
-	pop(3);
+	pop(3, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -430,24 +430,24 @@ primitiveBigMultiply(void)
     unsigned char *prodPtr;
     sqInt sum;
 
-	prod = stackValue(0);
-	f2 = stackValue(1);
-	f1 = stackValue(2);
-	clpi = classLargePositiveInteger();
-	if (!(((fetchClassOf(prod)) == clpi)
-		 && (((fetchClassOf(f2)) == clpi)
-		 && ((fetchClassOf(f1)) == clpi)))) {
-		primitiveFailFor(PrimErrBadArgument);
+	prod = stackValue(0, interpreterProxy->interpreterState);
+	f2 = stackValue(1, interpreterProxy->interpreterState);
+	f1 = stackValue(2, interpreterProxy->interpreterState);
+	clpi = classLargePositiveInteger(interpreterProxy->interpreterState);
+	if (!(((fetchClassOf(prod, interpreterProxy->interpreterState)) == clpi)
+		 && (((fetchClassOf(f2, interpreterProxy->interpreterState)) == clpi)
+		 && ((fetchClassOf(f1, interpreterProxy->interpreterState)) == clpi)))) {
+		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
-	prodLen = stSizeOf(prod);
-	f1Len = stSizeOf(f1);
-	f2Len = stSizeOf(f2);
+	prodLen = stSizeOf(prod, interpreterProxy->interpreterState);
+	f1Len = stSizeOf(f1, interpreterProxy->interpreterState);
+	f2Len = stSizeOf(f2, interpreterProxy->interpreterState);
 	if (!(prodLen == (f1Len + f2Len))) {
-		primitiveFailFor(PrimErrBadArgument);
+		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
-	prodPtr = firstIndexableField(prod);
-	f2Ptr = firstIndexableField(f2);
-	f1Ptr = firstIndexableField(f1);
+	prodPtr = firstIndexableField(prod, interpreterProxy->interpreterState);
+	f2Ptr = firstIndexableField(f2, interpreterProxy->interpreterState);
+	f1Ptr = firstIndexableField(f1, interpreterProxy->interpreterState);
 	for (i = 0; i < f1Len; i += 1) {
 		if (((digit = f1Ptr[i])) != 0) {
 			carry = 0;
@@ -463,7 +463,7 @@ primitiveBigMultiply(void)
 			prodPtr[k] = carry;
 		}
 	}
-	pop(3);
+	pop(3, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -486,16 +486,16 @@ primitiveExpandBlock(void)
     unsigned int v;
     unsigned int *wordPtr;
 
-	expanded = stackValue(0);
-	buf = stackValue(1);
-	if (!((isWords(expanded))
-		 && ((isBytes(buf))
-		 && (((stSizeOf(expanded)) == 80)
-		 && ((stSizeOf(buf)) == 64))))) {
-		primitiveFailFor(PrimErrBadArgument);
+	expanded = stackValue(0, interpreterProxy->interpreterState);
+	buf = stackValue(1, interpreterProxy->interpreterState);
+	if (!((isWords(expanded, interpreterProxy->interpreterState))
+		 && ((isBytes(buf, interpreterProxy->interpreterState))
+		 && (((stSizeOf(expanded, interpreterProxy->interpreterState)) == 80)
+		 && ((stSizeOf(buf, interpreterProxy->interpreterState)) == 64))))) {
+		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
-	wordPtr = firstIndexableField(expanded);
-	bytePtr = firstIndexableField(buf);
+	wordPtr = firstIndexableField(expanded, interpreterProxy->interpreterState);
+	bytePtr = firstIndexableField(buf, interpreterProxy->interpreterState);
 	src = 0;
 	for (i = 0; i <= 15; i += 1) {
 		v = (((((usqInt)((bytePtr[src])) << 24)) + (((usqInt)((bytePtr[src + 1])) << 16))) + (((usqInt)((bytePtr[src + 2])) << 8))) + (bytePtr[src + 3]);
@@ -508,7 +508,7 @@ primitiveExpandBlock(void)
 		v = (((usqInt)(v) << 1)) | (((usqInt) v) >> (32 - 1));
 		wordPtr[i] = v;
 	}
-	pop(2);
+	pop(2, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -533,16 +533,16 @@ primitiveHashBlock(void)
     unsigned int *statePtr;
     unsigned int tmp;
 
-	state = stackValue(0);
-	buf = stackValue(1);
-	if (!((isWords(state))
-		 && ((isWords(buf))
-		 && (((stSizeOf(state)) == 5)
-		 && ((stSizeOf(buf)) == 80))))) {
-		primitiveFailFor(PrimErrBadArgument);
+	state = stackValue(0, interpreterProxy->interpreterState);
+	buf = stackValue(1, interpreterProxy->interpreterState);
+	if (!((isWords(state, interpreterProxy->interpreterState))
+		 && ((isWords(buf, interpreterProxy->interpreterState))
+		 && (((stSizeOf(state, interpreterProxy->interpreterState)) == 5)
+		 && ((stSizeOf(buf, interpreterProxy->interpreterState)) == 80))))) {
+		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
-	statePtr = firstIndexableField(state);
-	bufPtr = firstIndexableField(buf);
+	statePtr = firstIndexableField(state, interpreterProxy->interpreterState);
+	bufPtr = firstIndexableField(buf, interpreterProxy->interpreterState);
 	a = statePtr[0];
 	b = statePtr[1];
 	c = statePtr[2];
@@ -589,7 +589,7 @@ primitiveHashBlock(void)
 	statePtr[2] = ((statePtr[2]) + c);
 	statePtr[3] = ((statePtr[3]) + d);
 	statePtr[4] = ((statePtr[4]) + e);
-	pop(2);
+	pop(2, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -600,8 +600,8 @@ primitiveHashBlock(void)
 EXPORT(sqInt)
 primitiveHasSecureHashPrimitive(void)
 {
-	pop(1);
-	pushBool(1);
+	pop(1, interpreterProxy->interpreterState);
+	pushBool(1, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -618,17 +618,17 @@ primitiveHighestNonZeroDigitIndex(void)
     unsigned char *bigIntPtr;
     sqInt i;
 
-	arg = stackValue(0);
-	if (!((fetchClassOf(arg)) == (classLargePositiveInteger()))) {
-		primitiveFailFor(PrimErrBadArgument);
+	arg = stackValue(0, interpreterProxy->interpreterState);
+	if (!((fetchClassOf(arg, interpreterProxy->interpreterState)) == (classLargePositiveInteger(interpreterProxy->interpreterState)))) {
+		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
-	bigIntPtr = firstIndexableField(arg);
-	i = stSizeOf(arg);
+	bigIntPtr = firstIndexableField(arg, interpreterProxy->interpreterState);
+	i = stSizeOf(arg, interpreterProxy->interpreterState);
 	while ((i > 0)
 	 && ((bigIntPtr[(i -= 1)]) == 0)) {
 	}
-	pop(1);
-	pushInteger(i + 1);
+	pop(1, interpreterProxy->interpreterState);
+	pushInteger(i + 1, interpreterProxy->interpreterState);
 	return 0;
 }
 

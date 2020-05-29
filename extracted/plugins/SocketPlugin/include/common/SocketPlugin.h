@@ -11,8 +11,6 @@ typedef struct
   void	*privateSocketPtr;
 }  SQSocket, *SocketPtr;
 
-struct foo;
-
 /* networking primitives */
 sqInt sqNetworkInit(sqInt resolverSemaIndex);
 void  sqNetworkShutdown(void);
@@ -43,7 +41,7 @@ sqInt sqSocketRemoteAddress(SocketPtr s);
 sqInt sqSocketRemotePort(SocketPtr s);
 sqInt sqSocketSendDataBufCount(SocketPtr s, char *buf, sqInt bufSize);
 sqInt sqSocketSendDone(SocketPtr s);
-/* ar 7/16/1999: New primitives for accept(struct foo * self).  Note: If accept(struct foo * self) calls are not supported simply make the calls fail and the old connection style will be used. */
+/* ar 7/16/1999: New primitives for accept().  Note: If accept() calls are not supported simply make the calls fail and the old connection style will be used. */
 void  sqSocketListenOnPortBacklogSize(SocketPtr s, sqInt port, sqInt backlogSize);
 void  sqSocketListenOnPortBacklogSizeInterface(SocketPtr s, sqInt port, sqInt backlogSize, sqInt addr);
 void  sqSocketAcceptFromRecvBytesSendBytesSemaID(SocketPtr s, SocketPtr serverSocket, sqInt recvBufSize, sqInt sendBufSize, sqInt semaIndex);

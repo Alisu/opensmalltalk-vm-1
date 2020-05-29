@@ -22,7 +22,7 @@ sqInt faInitialiseModule()
 {
 	if (vmSessionId == 0)
 		return interpreterProxy->falseObject(interpreterProxy->interpreterState);
-	vmSessionId = interpreterProxy->getThisSessionID();
+	vmSessionId = interpreterProxy->getThisSessionID(interpreterProxy->interpreterState);
 	return interpreterProxy->trueObject(interpreterProxy->interpreterState);
 }
 
@@ -74,7 +74,7 @@ int	len;
 char	*pathName;
 
 
-	len = interpreterProxy->stSizeOf(pathNameOop);
+	len = interpreterProxy->stSizeOf(pathNameOop, interpreterProxy->interpreterState);
 	pathName = interpreterProxy->arrayValueOf(pathNameOop, interpreterProxy->interpreterState);
 	return faSetStDir(aFaPath, pathName, len);
 }
@@ -87,7 +87,7 @@ int		len;
 char	*pathName;
 
 
-	len = interpreterProxy->stSizeOf(pathNameOop);
+	len = interpreterProxy->stSizeOf(pathNameOop, interpreterProxy->interpreterState);
 	pathName = interpreterProxy->arrayValueOf(pathNameOop, interpreterProxy->interpreterState);
 	return faSetStPath(aFaPath, pathName, len);
 }
@@ -111,7 +111,7 @@ sqInt newByteArray;
 	if (len >= FA_PATH_MAX) {
 		return -1 /* stringTooLong */;
 	}
-	newByteArray = interpreterProxy->instantiateClassindexableSize(interpreterProxy->classByteArray(), len);
+	newByteArray = interpreterProxy->instantiateClassindexableSize(interpreterProxy->classByteArray(interpreterProxy->interpreterState), len, interpreterProxy->interpreterState);
 	if (!(newByteArray)) {
 		return interpreterProxy->primitiveFailFor(PrimErrNoMemory, interpreterProxy->interpreterState);
 	}

@@ -58,57 +58,57 @@ static sqInt sqAssert(sqInt aBool);
 /*** Variables ***/
 
 #if !defined(SQUEAK_BUILTIN_PLUGIN)
-static sqInt (*booleanValueOf)(sqInt obj);
-static sqInt (*byteSizeOf)(sqInt oop);
-static sqInt (*failed)(void);
-static sqInt (*falseObject)(void);
-static sqInt (*fetchIntegerofObject)(sqInt fieldIndex, sqInt objectPointer);
-static sqInt (*fetchPointerofObject)(sqInt index, sqInt oop);
-static void * (*firstIndexableField)(sqInt oop);
-static sqInt (*integerObjectOf)(sqInt value);
-static sqInt (*isKindOf)(sqInt oop, char *aString);
-static sqInt (*isBooleanObject)(sqInt oop);
-static sqInt (*isBytes)(sqInt oop);
-static sqInt (*isIntegerObject)(sqInt objectPointer);
-static sqInt (*isWordsOrBytes)(sqInt oop);
-static sqInt (*pop)(sqInt nItems);
-static sqInt (*popthenPush)(sqInt nItems, sqInt oop);
-static sqInt (*primitiveFail)(void);
-static sqInt (*primitiveFailFor)(sqInt reasonCode);
-static sqInt (*stSizeOf)(sqInt oop);
-static sqInt (*stackIntegerValue)(sqInt offset);
-static sqInt (*stackValue)(sqInt offset);
-static sqInt (*success)(sqInt aBoolean);
-static sqInt (*trueObject)(void);
+static sqInt (*booleanValueOf)(sqInt obj, struct foo * self);
+static sqInt (*byteSizeOf)(sqInt oop, struct foo * self);
+static sqInt (*failed)(struct foo * self);
+static sqInt (*falseObject)(struct foo * self);
+static sqInt (*fetchIntegerofObject)(sqInt fieldIndex, sqInt objectPointer, struct foo * self);
+static sqInt (*fetchPointerofObject)(sqInt index, sqInt oop, struct foo * self);
+static void * (*firstIndexableField)(sqInt oop, struct foo * self);
+static sqInt (*integerObjectOf)(sqInt value, struct foo * self);
+static sqInt (*isKindOf)(sqInt oop, char *aString, struct foo * self);
+static sqInt (*isBooleanObject)(sqInt oop, struct foo * self);
+static sqInt (*isBytes)(sqInt oop, struct foo * self);
+static sqInt (*isIntegerObject)(sqInt objectPointer, struct foo * self);
+static sqInt (*isWordsOrBytes)(sqInt oop, struct foo * self);
+static sqInt (*pop)(sqInt nItems, struct foo * self);
+static sqInt (*popthenPush)(sqInt nItems, sqInt oop, struct foo * self);
+static sqInt (*primitiveFail)(struct foo * self);
+static sqInt (*primitiveFailFor)(sqInt reasonCode, struct foo * self);
+static sqInt (*stSizeOf)(sqInt oop, struct foo * self);
+static sqInt (*stackIntegerValue)(sqInt offset, struct foo * self);
+static sqInt (*stackValue)(sqInt offset, struct foo * self);
+static sqInt (*success)(sqInt aBoolean, struct foo * self);
+static sqInt (*trueObject)(struct foo * self);
 #else /* !defined(SQUEAK_BUILTIN_PLUGIN) */
-extern sqInt booleanValueOf(sqInt obj);
-extern sqInt byteSizeOf(sqInt oop);
-extern sqInt failed(void);
-extern sqInt falseObject(void);
-extern sqInt fetchIntegerofObject(sqInt fieldIndex, sqInt objectPointer);
-extern sqInt fetchPointerofObject(sqInt index, sqInt oop);
-extern void * firstIndexableField(sqInt oop);
-extern sqInt integerObjectOf(sqInt value);
-extern sqInt isKindOf(sqInt oop, char *aString);
+extern sqInt booleanValueOf(sqInt obj, struct foo * self);
+extern sqInt byteSizeOf(sqInt oop, struct foo * self);
+extern sqInt failed(struct foo * self);
+extern sqInt falseObject(struct foo * self);
+extern sqInt fetchIntegerofObject(sqInt fieldIndex, sqInt objectPointer, struct foo * self);
+extern sqInt fetchPointerofObject(sqInt index, sqInt oop, struct foo * self);
+extern void * firstIndexableField(sqInt oop, struct foo * self);
+extern sqInt integerObjectOf(sqInt value, struct foo * self);
+extern sqInt isKindOf(sqInt oop, char *aString, struct foo * self);
 #if VM_PROXY_MAJOR > 1 || (VM_PROXY_MAJOR == 1 && VM_PROXY_MINOR >= 15)
-extern sqInt isBooleanObject(sqInt oop);
+extern sqInt isBooleanObject(sqInt oop, struct foo * self);
 #else
 # define isBooleanObject(oop) 0
 #endif
-extern sqInt isBytes(sqInt oop);
+extern sqInt isBytes(sqInt oop, struct foo * self);
 #if !defined(isIntegerObject)
-extern sqInt isIntegerObject(sqInt objectPointer);
+extern sqInt isIntegerObject(sqInt objectPointer, struct foo * self);
 #endif
-extern sqInt isWordsOrBytes(sqInt oop);
-extern sqInt pop(sqInt nItems);
-extern sqInt popthenPush(sqInt nItems, sqInt oop);
-extern sqInt primitiveFail(void);
-extern sqInt primitiveFailFor(sqInt reasonCode);
-extern sqInt stSizeOf(sqInt oop);
-extern sqInt stackIntegerValue(sqInt offset);
-extern sqInt stackValue(sqInt offset);
-extern sqInt success(sqInt aBoolean);
-extern sqInt trueObject(void);
+extern sqInt isWordsOrBytes(sqInt oop, struct foo * self);
+extern sqInt pop(sqInt nItems, struct foo * self);
+extern sqInt popthenPush(sqInt nItems, sqInt oop, struct foo * self);
+extern sqInt primitiveFail(struct foo * self);
+extern sqInt primitiveFailFor(sqInt reasonCode, struct foo * self);
+extern sqInt stSizeOf(sqInt oop, struct foo * self);
+extern sqInt stackIntegerValue(sqInt offset, struct foo * self);
+extern sqInt stackValue(sqInt offset, struct foo * self);
+extern sqInt success(sqInt aBoolean, struct foo * self);
+extern sqInt trueObject(struct foo * self);
 extern
 #endif
 struct VirtualMachine* interpreterProxy;
@@ -141,22 +141,22 @@ primImageHeight(void)
 	char *aJPEGDecompressStruct;
 	sqInt _return_value;
 
-	if (!(isBytes(stackValue(0)))) {
-		primitiveFailFor(PrimErrBadArgument);
+	if (!(isBytes(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState))) {
+		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 		return null;
 	}
-	aJPEGDecompressStruct = ((char *) (firstIndexableField(stackValue(0))));
-	if (failed()) {
+	aJPEGDecompressStruct = ((char *) (firstIndexableField(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState)));
+	if (failed(interpreterProxy->interpreterState)) {
 		return null;
 	}
-	if (!((byteSizeOf(((sqInt)(sqIntptr_t)(aJPEGDecompressStruct) - BaseHeaderSize))) >= (sizeof(struct jpeg_decompress_struct)))) {
-		primitiveFail();
+	if (!((byteSizeOf(((sqInt)(sqIntptr_t)(aJPEGDecompressStruct) - BaseHeaderSize), interpreterProxy->interpreterState)) >= (sizeof(struct jpeg_decompress_struct)))) {
+		primitiveFail(interpreterProxy->interpreterState);
 		return null;
 	}
-	if (!(failed())) {
-		_return_value = integerObjectOf((((j_decompress_ptr)aJPEGDecompressStruct)->image_height));
-		if (!(failed())) {
-			popthenPush(2, _return_value);
+	if (!(failed(interpreterProxy->interpreterState))) {
+		_return_value = integerObjectOf((((j_decompress_ptr)aJPEGDecompressStruct)->image_height), interpreterProxy->interpreterState);
+		if (!(failed(interpreterProxy->interpreterState))) {
+			popthenPush(2, _return_value, interpreterProxy->interpreterState);
 		}
 	}
 	return null;
@@ -169,22 +169,22 @@ primImageNumComponents(void)
 	char *aJPEGDecompressStruct;
 	sqInt _return_value;
 
-	if (!(isBytes(stackValue(0)))) {
-		primitiveFailFor(PrimErrBadArgument);
+	if (!(isBytes(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState))) {
+		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 		return null;
 	}
-	aJPEGDecompressStruct = ((char *) (firstIndexableField(stackValue(0))));
-	if (failed()) {
+	aJPEGDecompressStruct = ((char *) (firstIndexableField(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState)));
+	if (failed(interpreterProxy->interpreterState)) {
 		return null;
 	}
-	if (!((byteSizeOf(((sqInt)(sqIntptr_t)(aJPEGDecompressStruct) - BaseHeaderSize))) >= (sizeof(struct jpeg_decompress_struct)))) {
-		primitiveFail();
+	if (!((byteSizeOf(((sqInt)(sqIntptr_t)(aJPEGDecompressStruct) - BaseHeaderSize), interpreterProxy->interpreterState)) >= (sizeof(struct jpeg_decompress_struct)))) {
+		primitiveFail(interpreterProxy->interpreterState);
 		return null;
 	}
-	if (!(failed())) {
-		_return_value = integerObjectOf((((j_decompress_ptr)aJPEGDecompressStruct)->num_components));
-		if (!(failed())) {
-			popthenPush(2, _return_value);
+	if (!(failed(interpreterProxy->interpreterState))) {
+		_return_value = integerObjectOf((((j_decompress_ptr)aJPEGDecompressStruct)->num_components), interpreterProxy->interpreterState);
+		if (!(failed(interpreterProxy->interpreterState))) {
+			popthenPush(2, _return_value, interpreterProxy->interpreterState);
 		}
 	}
 	return null;
@@ -197,22 +197,22 @@ primImageWidth(void)
 	char *aJPEGDecompressStruct;
 	sqInt _return_value;
 
-	if (!(isBytes(stackValue(0)))) {
-		primitiveFailFor(PrimErrBadArgument);
+	if (!(isBytes(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState))) {
+		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 		return null;
 	}
-	aJPEGDecompressStruct = ((char *) (firstIndexableField(stackValue(0))));
-	if (failed()) {
+	aJPEGDecompressStruct = ((char *) (firstIndexableField(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState)));
+	if (failed(interpreterProxy->interpreterState)) {
 		return null;
 	}
-	if (!((byteSizeOf(((sqInt)(sqIntptr_t)(aJPEGDecompressStruct) - BaseHeaderSize))) >= (sizeof(struct jpeg_decompress_struct)))) {
-		primitiveFail();
+	if (!((byteSizeOf(((sqInt)(sqIntptr_t)(aJPEGDecompressStruct) - BaseHeaderSize), interpreterProxy->interpreterState)) >= (sizeof(struct jpeg_decompress_struct)))) {
+		primitiveFail(interpreterProxy->interpreterState);
 		return null;
 	}
-	if (!(failed())) {
-		_return_value = integerObjectOf((((j_decompress_ptr)aJPEGDecompressStruct)->image_width));
-		if (!(failed())) {
-			popthenPush(2, _return_value);
+	if (!(failed(interpreterProxy->interpreterState))) {
+		_return_value = integerObjectOf((((j_decompress_ptr)aJPEGDecompressStruct)->image_width), interpreterProxy->interpreterState);
+		if (!(failed(interpreterProxy->interpreterState))) {
+			popthenPush(2, _return_value, interpreterProxy->interpreterState);
 		}
 	}
 	return null;
@@ -224,9 +224,9 @@ primJPEGCompressStructSize(void)
 {
 	sqInt _return_value;
 
-	_return_value = integerObjectOf((sizeof(struct jpeg_compress_struct)));
-	if (!(failed())) {
-		popthenPush(1, _return_value);
+	_return_value = integerObjectOf((sizeof(struct jpeg_compress_struct)), interpreterProxy->interpreterState);
+	if (!(failed(interpreterProxy->interpreterState))) {
+		popthenPush(1, _return_value, interpreterProxy->interpreterState);
 	}
 	return null;
 }
@@ -237,9 +237,9 @@ primJPEGDecompressStructSize(void)
 {
 	sqInt _return_value;
 
-	_return_value = integerObjectOf((sizeof(struct jpeg_decompress_struct)));
-	if (!(failed())) {
-		popthenPush(1, _return_value);
+	_return_value = integerObjectOf((sizeof(struct jpeg_decompress_struct)), interpreterProxy->interpreterState);
+	if (!(failed(interpreterProxy->interpreterState))) {
+		popthenPush(1, _return_value, interpreterProxy->interpreterState);
 	}
 	return null;
 }
@@ -250,9 +250,9 @@ primJPEGErrorMgr2StructSize(void)
 {
 	sqInt _return_value;
 
-	_return_value = integerObjectOf((sizeof(struct error_mgr2)));
-	if (!(failed())) {
-		popthenPush(1, _return_value);
+	_return_value = integerObjectOf((sizeof(struct error_mgr2)), interpreterProxy->interpreterState);
+	if (!(failed(interpreterProxy->interpreterState))) {
+		popthenPush(1, _return_value, interpreterProxy->interpreterState);
 	}
 	return null;
 }
@@ -263,9 +263,9 @@ primJPEGPluginIsPresent(void)
 {
 	sqInt _return_value;
 
-	_return_value = ((1) ? trueObject() : falseObject());
-	if (!(failed())) {
-		popthenPush(1, _return_value);
+	_return_value = ((1) ? trueObject(interpreterProxy->interpreterState) : falseObject(interpreterProxy->interpreterState));
+	if (!(failed(interpreterProxy->interpreterState))) {
+		popthenPush(1, _return_value, interpreterProxy->interpreterState);
 	}
 	return null;
 }
@@ -279,29 +279,29 @@ primJPEGReadHeaderfromByteArrayerrorMgr(void)
 	char *source;
 	sqInt sourceSize;
 
-	if (!((isBytes(stackValue(2)))
-		 && ((isBytes(stackValue(1)))
-		 && (isBytes(stackValue(0)))))) {
-		primitiveFailFor(PrimErrBadArgument);
+	if (!((isBytes(stackValue(2, interpreterProxy->interpreterState), interpreterProxy->interpreterState))
+		 && ((isBytes(stackValue(1, interpreterProxy->interpreterState), interpreterProxy->interpreterState))
+		 && (isBytes(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState))))) {
+		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 		return null;
 	}
-	aJPEGDecompressStruct = ((char *) (firstIndexableField(stackValue(2))));
-	source = ((char *) (firstIndexableField(stackValue(1))));
-	aJPEGErrorMgr2Struct = ((char *) (firstIndexableField(stackValue(0))));
-	if (failed()) {
+	aJPEGDecompressStruct = ((char *) (firstIndexableField(stackValue(2, interpreterProxy->interpreterState), interpreterProxy->interpreterState)));
+	source = ((char *) (firstIndexableField(stackValue(1, interpreterProxy->interpreterState), interpreterProxy->interpreterState)));
+	aJPEGErrorMgr2Struct = ((char *) (firstIndexableField(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState)));
+	if (failed(interpreterProxy->interpreterState)) {
 		return null;
 	}
-	if (!(((byteSizeOf(((sqInt)(sqIntptr_t)(aJPEGDecompressStruct) - BaseHeaderSize))) >= (sizeof(struct jpeg_decompress_struct)))
-		 && ((byteSizeOf(((sqInt)(sqIntptr_t)(aJPEGErrorMgr2Struct) - BaseHeaderSize))) >= (sizeof(struct error_mgr2))))) {
-		primitiveFail();
+	if (!(((byteSizeOf(((sqInt)(sqIntptr_t)(aJPEGDecompressStruct) - BaseHeaderSize), interpreterProxy->interpreterState)) >= (sizeof(struct jpeg_decompress_struct)))
+		 && ((byteSizeOf(((sqInt)(sqIntptr_t)(aJPEGErrorMgr2Struct) - BaseHeaderSize), interpreterProxy->interpreterState)) >= (sizeof(struct error_mgr2))))) {
+		primitiveFail(interpreterProxy->interpreterState);
 		return null;
 	}
-	sourceSize = byteSizeOf(((sqInt)(sqIntptr_t)(source) - BaseHeaderSize));
+	sourceSize = byteSizeOf(((sqInt)(sqIntptr_t)(source) - BaseHeaderSize), interpreterProxy->interpreterState);
 	if (sourceSize > 0) {
 		primJPEGReadHeaderfromByteArraysizeerrorMgrReadHeader(aJPEGDecompressStruct, source, sourceSize, aJPEGErrorMgr2Struct);
 	}
-	if (!(failed())) {
-		pop(3);
+	if (!(failed(interpreterProxy->interpreterState))) {
+		pop(3, interpreterProxy->interpreterState);
 	}
 	return null;
 }
@@ -329,32 +329,32 @@ primJPEGReadImagefromByteArrayonFormdoDitheringerrorMgr(void)
 	sqInt sourceSize;
 	sqInt wordsPerRow;
 
-	if (!((isBytes(stackValue(4)))
-		 && ((isBytes(stackValue(3)))
-		 && ((isKindOf(stackValue(2), "Form"))
-		 && ((isBooleanObject(stackValue(1)))
-		 && (isBytes(stackValue(0)))))))) {
-		primitiveFailFor(PrimErrBadArgument);
+	if (!((isBytes(stackValue(4, interpreterProxy->interpreterState), interpreterProxy->interpreterState))
+		 && ((isBytes(stackValue(3, interpreterProxy->interpreterState), interpreterProxy->interpreterState))
+		 && ((isKindOf(stackValue(2, interpreterProxy->interpreterState), "Form", interpreterProxy->interpreterState))
+		 && ((isBooleanObject(stackValue(1, interpreterProxy->interpreterState), interpreterProxy->interpreterState))
+		 && (isBytes(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState))))))) {
+		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 		return null;
 	}
-	aJPEGDecompressStruct = ((char *) (firstIndexableField(stackValue(4))));
-	source = ((char *) (firstIndexableField(stackValue(3))));
-	form = stackValue(2);
-	ditherFlag = booleanValueOf(stackValue(1));
-	aJPEGErrorMgr2Struct = ((char *) (firstIndexableField(stackValue(0))));
-	if (failed()) {
+	aJPEGDecompressStruct = ((char *) (firstIndexableField(stackValue(4, interpreterProxy->interpreterState), interpreterProxy->interpreterState)));
+	source = ((char *) (firstIndexableField(stackValue(3, interpreterProxy->interpreterState), interpreterProxy->interpreterState)));
+	form = stackValue(2, interpreterProxy->interpreterState);
+	ditherFlag = booleanValueOf(stackValue(1, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	aJPEGErrorMgr2Struct = ((char *) (firstIndexableField(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState)));
+	if (failed(interpreterProxy->interpreterState)) {
 		return null;
 	}
-	formBitmapOOP = fetchPointerofObject(0, form);
-	formNativeDepth = fetchIntegerofObject(3, form);
-	formWidth = fetchIntegerofObject(1, form);
-	formHeight = fetchIntegerofObject(2, form);
+	formBitmapOOP = fetchPointerofObject(0, form, interpreterProxy->interpreterState);
+	formNativeDepth = fetchIntegerofObject(3, form, interpreterProxy->interpreterState);
+	formWidth = fetchIntegerofObject(1, form, interpreterProxy->interpreterState);
+	formHeight = fetchIntegerofObject(2, form, interpreterProxy->interpreterState);
 
 	/* Various parameter checks */
 	formDepth = SQABS(formNativeDepth);
-	if (!(((byteSizeOf(((sqInt)(sqIntptr_t)(aJPEGDecompressStruct) - BaseHeaderSize))) >= (sizeof(struct jpeg_decompress_struct)))
-		 && ((byteSizeOf(((sqInt)(sqIntptr_t)(aJPEGErrorMgr2Struct) - BaseHeaderSize))) >= (sizeof(struct error_mgr2))))) {
-		primitiveFail();
+	if (!(((byteSizeOf(((sqInt)(sqIntptr_t)(aJPEGDecompressStruct) - BaseHeaderSize), interpreterProxy->interpreterState)) >= (sizeof(struct jpeg_decompress_struct)))
+		 && ((byteSizeOf(((sqInt)(sqIntptr_t)(aJPEGErrorMgr2Struct) - BaseHeaderSize), interpreterProxy->interpreterState)) >= (sizeof(struct error_mgr2))))) {
+		primitiveFail(interpreterProxy->interpreterState);
 		return null;
 	}
 	formComponents = (formDepth != 8
@@ -366,21 +366,21 @@ primJPEGReadImagefromByteArrayonFormdoDitheringerrorMgr(void)
 	pixelsPerWord = 32 / (formComponents * formComponentBitSize);
 	wordsPerRow = ((formWidth + pixelsPerWord) - 1) / pixelsPerWord;
 	formPitch = ((formWidth + (pixelsPerWord - 1)) / pixelsPerWord) * 4;
-	formBitmapSizeInBytes = byteSizeOf(formBitmapOOP);
-	success((isWordsOrBytes(formBitmapOOP))
-	 && (formBitmapSizeInBytes >= (formPitch * formHeight)));
-	if (failed()) {
+	formBitmapSizeInBytes = byteSizeOf(formBitmapOOP, interpreterProxy->interpreterState);
+	success((isWordsOrBytes(formBitmapOOP, interpreterProxy->interpreterState))
+	 && (formBitmapSizeInBytes >= (formPitch * formHeight)), interpreterProxy->interpreterState);
+	if (failed(interpreterProxy->interpreterState)) {
 		return null;
 	}
-	sourceSize = stSizeOf(stackValue(3));
-	success(sourceSize != 0);
-	if (failed()) {
+	sourceSize = stSizeOf(stackValue(3, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	success(sourceSize != 0, interpreterProxy->interpreterState);
+	if (failed(interpreterProxy->interpreterState)) {
 		return null;
 	}
-	formBitmap = firstIndexableField(formBitmapOOP);
+	formBitmap = firstIndexableField(formBitmapOOP, interpreterProxy->interpreterState);
 	primJPEGReadImagefromByteArrayonFormdoDitheringerrorMgrReadScanlines(aJPEGDecompressStruct, aJPEGErrorMgr2Struct, source, sourceSize, ditherFlag, formBitmap, pixelsPerWord, wordsPerRow, formNativeDepth);
-	if (!(failed())) {
-		pop(5);
+	if (!(failed(interpreterProxy->interpreterState))) {
+		pop(5, interpreterProxy->interpreterState);
 	}
 	return null;
 }
@@ -412,34 +412,34 @@ primJPEGWriteImageonByteArrayformqualityprogressiveJPEGerrorMgr(void)
 	sqInt _return_value;
 
 	v = 0;
-	if (!((isBytes(stackValue(5)))
-		 && ((isBytes(stackValue(4)))
-		 && ((isKindOf(stackValue(3), "Form"))
-		 && ((isIntegerObject(stackValue(2)))
-		 && ((isBooleanObject(stackValue(1)))
-		 && (isBytes(stackValue(0))))))))) {
-		primitiveFailFor(PrimErrBadArgument);
+	if (!((isBytes(stackValue(5, interpreterProxy->interpreterState), interpreterProxy->interpreterState))
+		 && ((isBytes(stackValue(4, interpreterProxy->interpreterState), interpreterProxy->interpreterState))
+		 && ((isKindOf(stackValue(3, interpreterProxy->interpreterState), "Form", interpreterProxy->interpreterState))
+		 && ((isIntegerObject(stackValue(2, interpreterProxy->interpreterState), interpreterProxy->interpreterState))
+		 && ((isBooleanObject(stackValue(1, interpreterProxy->interpreterState), interpreterProxy->interpreterState))
+		 && (isBytes(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState)))))))) {
+		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 		return null;
 	}
-	aJPEGCompressStruct = ((char *) (firstIndexableField(stackValue(5))));
-	destination = ((char *) (firstIndexableField(stackValue(4))));
-	form = stackValue(3);
-	quality = stackIntegerValue(2);
-	progressiveFlag = booleanValueOf(stackValue(1));
-	aJPEGErrorMgr2Struct = ((char *) (firstIndexableField(stackValue(0))));
-	if (failed()) {
+	aJPEGCompressStruct = ((char *) (firstIndexableField(stackValue(5, interpreterProxy->interpreterState), interpreterProxy->interpreterState)));
+	destination = ((char *) (firstIndexableField(stackValue(4, interpreterProxy->interpreterState), interpreterProxy->interpreterState)));
+	form = stackValue(3, interpreterProxy->interpreterState);
+	quality = stackIntegerValue(2, interpreterProxy->interpreterState);
+	progressiveFlag = booleanValueOf(stackValue(1, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	aJPEGErrorMgr2Struct = ((char *) (firstIndexableField(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState)));
+	if (failed(interpreterProxy->interpreterState)) {
 		return null;
 	}
-	formBitmapOOP = fetchPointerofObject(0, form);
-	formWidth = fetchIntegerofObject(1, form);
-	formHeight = fetchIntegerofObject(2, form);
-	formNativeDepth = fetchIntegerofObject(3, form);
+	formBitmapOOP = fetchPointerofObject(0, form, interpreterProxy->interpreterState);
+	formWidth = fetchIntegerofObject(1, form, interpreterProxy->interpreterState);
+	formHeight = fetchIntegerofObject(2, form, interpreterProxy->interpreterState);
+	formNativeDepth = fetchIntegerofObject(3, form, interpreterProxy->interpreterState);
 
 	/* Various parameter checks */
 	formDepth = SQABS(formNativeDepth);
-	if (!(((byteSizeOf(((sqInt)(sqIntptr_t)(aJPEGCompressStruct) - BaseHeaderSize))) >= (sizeof(struct jpeg_compress_struct)))
-		 && ((byteSizeOf(((sqInt)(sqIntptr_t)(aJPEGErrorMgr2Struct) - BaseHeaderSize))) >= (sizeof(struct error_mgr2))))) {
-		primitiveFail();
+	if (!(((byteSizeOf(((sqInt)(sqIntptr_t)(aJPEGCompressStruct) - BaseHeaderSize), interpreterProxy->interpreterState)) >= (sizeof(struct jpeg_compress_struct)))
+		 && ((byteSizeOf(((sqInt)(sqIntptr_t)(aJPEGErrorMgr2Struct) - BaseHeaderSize), interpreterProxy->interpreterState)) >= (sizeof(struct error_mgr2))))) {
+		primitiveFail(interpreterProxy->interpreterState);
 		return null;
 	}
 	formComponents = (formDepth != 8
@@ -451,21 +451,21 @@ primJPEGWriteImageonByteArrayformqualityprogressiveJPEGerrorMgr(void)
 	pixelsPerWord = 32 / (formComponents * formComponentBitSize);
 	wordsPerRow = ((formWidth + pixelsPerWord) - 1) / pixelsPerWord;
 	formPitch = wordsPerRow * 4;
-	formBitmapSizeInBytes = byteSizeOf(formBitmapOOP);
-	success((isWordsOrBytes(formBitmapOOP))
-	 && (formBitmapSizeInBytes >= (formPitch * formHeight)));
-	if (failed()) {
+	formBitmapSizeInBytes = byteSizeOf(formBitmapOOP, interpreterProxy->interpreterState);
+	success((isWordsOrBytes(formBitmapOOP, interpreterProxy->interpreterState))
+	 && (formBitmapSizeInBytes >= (formPitch * formHeight)), interpreterProxy->interpreterState);
+	if (failed(interpreterProxy->interpreterState)) {
 		return null;
 	}
-	formBitmap = firstIndexableField(formBitmapOOP);
-	destinationSize = stSizeOf(stackValue(4));
+	formBitmap = firstIndexableField(formBitmapOOP, interpreterProxy->interpreterState);
+	destinationSize = stSizeOf(stackValue(4, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 	if (destinationSize > 0) {
 		primJPEGWriteImageonByteArrayformqualityprogressiveJPEGerrorMgrWriteScanlines(formWidth, formHeight, formNativeDepth, formBitmap, aJPEGCompressStruct, aJPEGErrorMgr2Struct, quality, progressiveFlag, pixelsPerWord, wordsPerRow, destination, (&destinationSize));
 	}
-	if (!(failed())) {
-		_return_value = integerObjectOf(destinationSize);
-		if (!(failed())) {
-			popthenPush(7, _return_value);
+	if (!(failed(interpreterProxy->interpreterState))) {
+		_return_value = integerObjectOf(destinationSize, interpreterProxy->interpreterState);
+		if (!(failed(interpreterProxy->interpreterState))) {
+			popthenPush(7, _return_value, interpreterProxy->interpreterState);
 		}
 	}
 	return null;
@@ -477,9 +477,9 @@ primSupports8BitGrayscaleJPEGs(void)
 {
 	sqInt _return_value;
 
-	_return_value = ((1) ? trueObject() : falseObject());
-	if (!(failed())) {
-		popthenPush(1, _return_value);
+	_return_value = ((1) ? trueObject(interpreterProxy->interpreterState) : falseObject(interpreterProxy->interpreterState));
+	if (!(failed(interpreterProxy->interpreterState))) {
+		popthenPush(1, _return_value, interpreterProxy->interpreterState);
 	}
 	return null;
 }

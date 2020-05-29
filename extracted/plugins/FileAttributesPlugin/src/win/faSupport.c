@@ -20,7 +20,7 @@ sqInt	status;
 
 	/* Set the St encoded path and ensure trailing delimiter */
 	if (len+1 >= FA_PATH_MAX)
-		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG);
+		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG, interpreterProxy->interpreterState);
 	memcpy(aFaPath->path, pathName, len);
 	if (aFaPath->path[len-1] != PATH_SEPARATOR)
 		aFaPath->path[len++] = PATH_SEPARATOR;
@@ -40,7 +40,7 @@ sqInt	status;
 				aFaPath->path, -1, 
 				aFaPath->winpath, FA_PATH_MAX);
 	if (!status)
-		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG);
+		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG, interpreterProxy->interpreterState);
 	/* Set aFaPath->uxpath_file and max_file_len to the buffer after the directory */
 	aFaPath->winpathLPP_len = wcslen(aFaPath->winpathLPP);
 	aFaPath->winpath_len = aFaPath->winpathLPP_len - 4;
@@ -58,7 +58,7 @@ sqInt	status;
 
 	/* Set the St encoded path */
 	if (len >= FA_PATH_MAX)
-		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG);
+		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG, interpreterProxy->interpreterState);
 	memcpy(aFaPath->path, pathName, len);
 	aFaPath->path[len] = 0;
 	aFaPath->path_len = len;
@@ -76,7 +76,7 @@ sqInt	status;
 				aFaPath->path, -1, 
 				aFaPath->winpath, FA_PATH_MAX);
 	if (!status)
-		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG);
+		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG, interpreterProxy->interpreterState);
 	/* Set aFaPath->uxpath_file and max_file_len to the buffer after the directory */
 	aFaPath->winpathLPP_len = wcslen(aFaPath->winpathLPP);
 	aFaPath->winpath_len = aFaPath->winpathLPP_len - 4;
@@ -97,7 +97,7 @@ sqInt	status;
 	/* Set the St encoded path */
 	len = strlen(pathName);
 	if (len >= aFaPath->max_file_len)
-		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG);
+		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG, interpreterProxy->interpreterState);
 	strcpy(aFaPath->path_file, pathName);
 
 	/* Convert to platform specific form */
@@ -105,7 +105,7 @@ sqInt	status;
 				aFaPath->path_file, -1, 
 				aFaPath->winpath_file, aFaPath->winmax_file_len);
 	if (!status)
-		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG);
+		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG, interpreterProxy->interpreterState);
 
 	return 0;
 }
@@ -123,7 +123,7 @@ int		len;
 
 	len = wcslen(pathName);
 	if (len >= FA_PATH_MAX)
-		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG);
+		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG, interpreterProxy->interpreterState);
 	/* Set the platform encoded path */
 	aFaPath->winpathLPP[0] = L'\\';
 	aFaPath->winpathLPP[1] = L'\\';
@@ -147,7 +147,7 @@ int		len;
 		NULL, 
 		NULL);
 	if (!len)
-		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG);
+		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG, interpreterProxy->interpreterState);
 	/* Set aFaPath->uxpath_file and max_file_len to the buffer after the directory */
 	aFaPath->path_len = strlen(aFaPath->path);
 	aFaPath->path_file = 0;
@@ -164,11 +164,11 @@ int	byteCount;
 char	*bytePtr;
 int	len;
 
-	byteCount = interpreterProxy->stSizeOf(pathNameOop);
-	bytePtr = interpreterProxy->arrayValueOf(pathNameOop);
+	byteCount = interpreterProxy->stSizeOf(pathNameOop, interpreterProxy->interpreterState);
+	bytePtr = interpreterProxy->arrayValueOf(pathNameOop, interpreterProxy->interpreterState);
 	len = byteCount / sizeof(WCHAR);
 	if (len >= FA_PATH_MAX)
-		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG);
+		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG, interpreterProxy->interpreterState);
 
 	aFaPath->winpathLPP[0] = L'\\';
 	aFaPath->winpathLPP[1] = L'\\';
@@ -192,7 +192,7 @@ int	len;
 		NULL, 
 		NULL);
 	if (!len)
-		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG);
+		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG, interpreterProxy->interpreterState);
 	/* Set aFaPath->uxpath_file and max_file_len to the buffer after the directory */
 	aFaPath->path_len = strlen(aFaPath->path);
 	aFaPath->path_file = 0;
@@ -211,7 +211,7 @@ int		len;
 	/* Set the platform encoded file name */
 	len = wcslen(pathName);
 	if (len >= aFaPath->winmax_file_len)
-		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG);
+		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG, interpreterProxy->interpreterState);
 	wcscpy(aFaPath->winpath_file, pathName);
 
 	/* Convert to St specific form */
@@ -224,7 +224,7 @@ int		len;
 		NULL, 
 		NULL);
 	if (!len)
-		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG);
+		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG, interpreterProxy->interpreterState);
 
 	return 0;
 }
@@ -376,11 +376,11 @@ char	stName[FA_PATH_MAX];
 		NULL, 
 		NULL);
 	if (!len)
-		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG);
+		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG, interpreterProxy->interpreterState);
 
 	status = faCharToByteArray(stName, &pathOop);
 	if (status)
-		return interpreterProxy->primitiveFailForOSError(status);
+		return interpreterProxy->primitiveFailForOSError(status, interpreterProxy->interpreterState);
 	return pathOop;
 }
 
@@ -576,107 +576,107 @@ sqLong		fileSize;
 	status = GetFileAttributesExW(faGetPlatPathCPP(aFaPath), 
 			GetFileExInfoStandard, &winAttrs);
 	if (!status) {
-		interpreterProxy->primitiveFailForOSError(FA_CANT_STAT_PATH);
+		interpreterProxy->primitiveFailForOSError(FA_CANT_STAT_PATH, interpreterProxy->interpreterState);
 		return 0; }
 	faSetStMode(aFaPath, &st_mode, winAttrs.dwFileAttributes);
 
 	switch (attributeNumber) {
 
 		case 1: /* fileName, not supported for a single attribute */
-			resultOop = interpreterProxy->nilObject();
+			resultOop = interpreterProxy->nilObject(interpreterProxy->interpreterState);
 			break;
 
 		case 2: /* Mode */
-			resultOop = interpreterProxy->positive32BitIntegerFor(st_mode);
+			resultOop = interpreterProxy->positive32BitIntegerFor(st_mode, interpreterProxy->interpreterState);
 			break;
 
 		case 3: /* inode */
-			resultOop = interpreterProxy->positive32BitIntegerFor(0);
+			resultOop = interpreterProxy->positive32BitIntegerFor(0, interpreterProxy->interpreterState);
 			break;
 
 		case 4: /* device id */
-			resultOop = interpreterProxy->positive32BitIntegerFor(faWinDevId(aFaPath));
+			resultOop = interpreterProxy->positive32BitIntegerFor(faWinDevId(aFaPath, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 			break;
 
 		case 5: /* nlink - not yet supported */
-			interpreterProxy->primitiveFailForOSError(FA_UNSUPPORTED_OPERATION);
+			interpreterProxy->primitiveFailForOSError(FA_UNSUPPORTED_OPERATION, interpreterProxy->interpreterState);
 			resultOop = 0;
 			break;
 
 		case 6: /* uid - not supported on Windows */
-			resultOop = interpreterProxy->positive32BitIntegerFor(0);
+			resultOop = interpreterProxy->positive32BitIntegerFor(0, interpreterProxy->interpreterState);
 			break;
 
 		case 7: /* gid - not supported on windows */
-			resultOop = interpreterProxy->positive32BitIntegerFor(0);
+			resultOop = interpreterProxy->positive32BitIntegerFor(0, interpreterProxy->interpreterState);
 			break;
 
 		case 8: /* size (if file) */
 			fileSize = winAttrs.nFileSizeHigh;
 			fileSize = (fileSize << 32) + winAttrs.nFileSizeLow;
 			if (S_ISDIR(st_mode) == 0)
-				resultOop = interpreterProxy->positive64BitIntegerFor(fileSize);
+				resultOop = interpreterProxy->positive64BitIntegerFor(fileSize, interpreterProxy->interpreterState);
 			else
-				resultOop = interpreterProxy->positive32BitIntegerFor(0);
+				resultOop = interpreterProxy->positive32BitIntegerFor(0, interpreterProxy->interpreterState);
 			break;
 
 		case 9: /* access time */
 			if (!FileTimeToLocalFileTime(&winAttrs.ftLastAccessTime, &fileTime))
- 				return interpreterProxy->primitiveFailForOSError(FA_TIME_CONVERSION_FAILED);
+ 				return interpreterProxy->primitiveFailForOSError(FA_TIME_CONVERSION_FAILED, interpreterProxy->interpreterState);
 			if (!FileTimeToSystemTime(&fileTime, &sysTime))
- 				return interpreterProxy->primitiveFailForOSError(FA_TIME_CONVERSION_FAILED);
+ 				return interpreterProxy->primitiveFailForOSError(FA_TIME_CONVERSION_FAILED, interpreterProxy->interpreterState);
 			attributeDate = faConvertWinToLongSqueakTime(sysTime);
-			resultOop = interpreterProxy->signed64BitIntegerFor(attributeDate);
+			resultOop = interpreterProxy->signed64BitIntegerFor(attributeDate, interpreterProxy->interpreterState);
 			break;
 
 		case 10: /* modified time */
 			if (!FileTimeToLocalFileTime(&winAttrs.ftLastWriteTime, &fileTime))
- 				return interpreterProxy->primitiveFailForOSError(FA_TIME_CONVERSION_FAILED);
+ 				return interpreterProxy->primitiveFailForOSError(FA_TIME_CONVERSION_FAILED, interpreterProxy->interpreterState);
 			if (!FileTimeToSystemTime(&fileTime, &sysTime))
- 				return interpreterProxy->primitiveFailForOSError(FA_TIME_CONVERSION_FAILED);
+ 				return interpreterProxy->primitiveFailForOSError(FA_TIME_CONVERSION_FAILED, interpreterProxy->interpreterState);
 			attributeDate = faConvertWinToLongSqueakTime(sysTime);
-			resultOop = interpreterProxy->signed64BitIntegerFor(attributeDate);
+			resultOop = interpreterProxy->signed64BitIntegerFor(attributeDate, interpreterProxy->interpreterState);
 			break;
 
 		case 11: /* change time */
-			resultOop = interpreterProxy->nilObject();
+			resultOop = interpreterProxy->nilObject(interpreterProxy->interpreterState);
 			break;
 
 		case 12: /* creation time */
 			if (!FileTimeToLocalFileTime(&winAttrs.ftCreationTime, &fileTime))
- 				return interpreterProxy->primitiveFailForOSError(FA_TIME_CONVERSION_FAILED);
+ 				return interpreterProxy->primitiveFailForOSError(FA_TIME_CONVERSION_FAILED, interpreterProxy->interpreterState);
 			if (!FileTimeToSystemTime(&fileTime, &sysTime))
- 				return interpreterProxy->primitiveFailForOSError(FA_TIME_CONVERSION_FAILED);
+ 				return interpreterProxy->primitiveFailForOSError(FA_TIME_CONVERSION_FAILED, interpreterProxy->interpreterState);
 			attributeDate = faConvertWinToLongSqueakTime(sysTime);
-			resultOop = interpreterProxy->signed64BitIntegerFor(attributeDate);
+			resultOop = interpreterProxy->signed64BitIntegerFor(attributeDate, interpreterProxy->interpreterState);
 			break;
 
 		case 13:
 			if (st_mode & S_IRUSR)
-				resultOop = interpreterProxy->trueObject();
+				resultOop = interpreterProxy->trueObject(interpreterProxy->interpreterState);
 			else
-				resultOop = interpreterProxy->falseObject();
+				resultOop = interpreterProxy->falseObject(interpreterProxy->interpreterState);
 			break;
 
 		case 14:
 			if (st_mode & S_IWUSR)
-				resultOop = interpreterProxy->trueObject();
+				resultOop = interpreterProxy->trueObject(interpreterProxy->interpreterState);
 			else
-				resultOop = interpreterProxy->falseObject();
+				resultOop = interpreterProxy->falseObject(interpreterProxy->interpreterState);
 			break;
 
 		case 15:
 			if (st_mode & S_IXUSR)
-				resultOop = interpreterProxy->trueObject();
+				resultOop = interpreterProxy->trueObject(interpreterProxy->interpreterState);
 			else
-				resultOop = interpreterProxy->falseObject();
+				resultOop = interpreterProxy->falseObject(interpreterProxy->interpreterState);
 			break;
 
 		case 16:
 			if ((st_mode & S_IFLNK) == S_IFLNK)
-				resultOop = interpreterProxy->trueObject();
+				resultOop = interpreterProxy->trueObject(interpreterProxy->interpreterState);
 			else
-				resultOop = interpreterProxy->falseObject();
+				resultOop = interpreterProxy->falseObject(interpreterProxy->interpreterState);
 			break;
 	}
 
@@ -715,84 +715,84 @@ sqLong		fileSize;
 
 	interpreterProxy->storePointerofObjectwithValue(
 		0, attributeArray,
-		interpreterProxy->nilObject());
+		interpreterProxy->nilObject(interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 
 	interpreterProxy->storePointerofObjectwithValue(
 		1, attributeArray,
-		interpreterProxy->positive32BitIntegerFor(st_mode));
+		interpreterProxy->positive32BitIntegerFor(st_mode, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 
 	interpreterProxy->storePointerofObjectwithValue(
 		2, attributeArray,
-		interpreterProxy->positive32BitIntegerFor(0));
+		interpreterProxy->positive32BitIntegerFor(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 
 	/* device id */
 	interpreterProxy->storePointerofObjectwithValue(
 		3, attributeArray,
-		interpreterProxy->positive32BitIntegerFor(faWinDevId(aFaPath)));
+		interpreterProxy->positive32BitIntegerFor(faWinDevId(aFaPath, interpreterProxy->interpreterState), interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 
 	/* nlinks - Not Yet Supported */
 	interpreterProxy->storePointerofObjectwithValue(
 		4, attributeArray,
-		interpreterProxy->nilObject());
+		interpreterProxy->nilObject(interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 
 	/* uid */
 	interpreterProxy->storePointerofObjectwithValue(
 		5, attributeArray,
-		interpreterProxy->positive32BitIntegerFor(0));
+		interpreterProxy->positive32BitIntegerFor(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 
 	/* gid */
 	interpreterProxy->storePointerofObjectwithValue(
 		6, attributeArray,
-		interpreterProxy->positive32BitIntegerFor(0));
+		interpreterProxy->positive32BitIntegerFor(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 
 	fileSize = winAttrs.nFileSizeHigh;
 	fileSize = (fileSize << 32) + winAttrs.nFileSizeLow;
 	interpreterProxy->storePointerofObjectwithValue(
 		7, attributeArray,
-		(S_ISDIR(st_mode) == 0) ?
-			interpreterProxy->positive64BitIntegerFor(fileSize) :
-			interpreterProxy->positive32BitIntegerFor(0));
+		(S_ISDIR(st_mode, interpreterProxy->interpreterState) == 0) ?
+			interpreterProxy->positive64BitIntegerFor(fileSize, interpreterProxy->interpreterState) :
+			interpreterProxy->positive32BitIntegerFor(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 
 	if (!FileTimeToLocalFileTime(&winAttrs.ftLastAccessTime, &fileTime)) {
- 		interpreterProxy->primitiveFailForOSError(FA_TIME_CONVERSION_FAILED);
+ 		interpreterProxy->primitiveFailForOSError(FA_TIME_CONVERSION_FAILED, interpreterProxy->interpreterState);
 		return FA_TIME_CONVERSION_FAILED; }
 	if (!FileTimeToSystemTime(&fileTime, &sysTime)) {
- 		interpreterProxy->primitiveFailForOSError(FA_TIME_CONVERSION_FAILED);
+ 		interpreterProxy->primitiveFailForOSError(FA_TIME_CONVERSION_FAILED, interpreterProxy->interpreterState);
 		return FA_TIME_CONVERSION_FAILED; }
 	attributeDate = faConvertWinToLongSqueakTime(sysTime);
 	interpreterProxy->storePointerofObjectwithValue(
 		8, attributeArray,
-		interpreterProxy->signed64BitIntegerFor(attributeDate));
+		interpreterProxy->signed64BitIntegerFor(attributeDate, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 
 	if (!FileTimeToLocalFileTime(&winAttrs.ftLastWriteTime, &fileTime)) {
- 		interpreterProxy->primitiveFailForOSError(FA_TIME_CONVERSION_FAILED);
+ 		interpreterProxy->primitiveFailForOSError(FA_TIME_CONVERSION_FAILED, interpreterProxy->interpreterState);
 		return FA_TIME_CONVERSION_FAILED; }
 	if (!FileTimeToSystemTime(&fileTime, &sysTime)) {
- 		interpreterProxy->primitiveFailForOSError(FA_TIME_CONVERSION_FAILED);
+ 		interpreterProxy->primitiveFailForOSError(FA_TIME_CONVERSION_FAILED, interpreterProxy->interpreterState);
 		return FA_TIME_CONVERSION_FAILED; }
 	attributeDate = faConvertWinToLongSqueakTime(sysTime);
 	interpreterProxy->storePointerofObjectwithValue(
 		9, attributeArray,
-		interpreterProxy->signed64BitIntegerFor(attributeDate));
+		interpreterProxy->signed64BitIntegerFor(attributeDate, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 
 	interpreterProxy->storePointerofObjectwithValue(
 		10, attributeArray,
-		interpreterProxy->nilObject());
+		interpreterProxy->nilObject(interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 
 	if (!FileTimeToLocalFileTime(&winAttrs.ftCreationTime, &fileTime)) {
-		interpreterProxy->primitiveFailForOSError(FA_TIME_CONVERSION_FAILED);
+		interpreterProxy->primitiveFailForOSError(FA_TIME_CONVERSION_FAILED, interpreterProxy->interpreterState);
 		return FA_TIME_CONVERSION_FAILED; }
 	if (!FileTimeToSystemTime(&fileTime, &sysTime)) {
- 		interpreterProxy->primitiveFailForOSError(FA_TIME_CONVERSION_FAILED);
+ 		interpreterProxy->primitiveFailForOSError(FA_TIME_CONVERSION_FAILED, interpreterProxy->interpreterState);
 		return FA_TIME_CONVERSION_FAILED; }
 	attributeDate = faConvertWinToLongSqueakTime(sysTime);
 	interpreterProxy->storePointerofObjectwithValue(
 		11, attributeArray,
-		interpreterProxy->signed64BitIntegerFor(attributeDate));
+		interpreterProxy->signed64BitIntegerFor(attributeDate, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 
 	interpreterProxy->storePointerofObjectwithValue(
 		12, attributeArray,
-		interpreterProxy->positive32BitIntegerFor(winAttrs.dwFileAttributes));
+		interpreterProxy->positive32BitIntegerFor(winAttrs.dwFileAttributes, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 
 	return FA_SUCCESS;
 }
@@ -813,9 +813,9 @@ WIN32_FILE_ATTRIBUTE_DATA winAttrs;
 	status = GetFileAttributesExW(faGetPlatPathCPP(aFaPath), 
 			GetFileExInfoStandard, &winAttrs);
 	if (status != 0)
-		return interpreterProxy->trueObject();
+		return interpreterProxy->trueObject(interpreterProxy->interpreterState);
 	else
-		return interpreterProxy->falseObject();
+		return interpreterProxy->falseObject(interpreterProxy->interpreterState);
 }
 
 
@@ -842,22 +842,22 @@ WIN32_FILE_ATTRIBUTE_DATA winAttrs;
 	status = GetFileAttributesExW(faGetPlatPathCPP(aFaPath), 
 			GetFileExInfoStandard, &winAttrs);
 	if (!status) {
-		interpreterProxy->primitiveFailForOSError(FA_CANT_STAT_PATH);
+		interpreterProxy->primitiveFailForOSError(FA_CANT_STAT_PATH, interpreterProxy->interpreterState);
 		return FA_CANT_STAT_PATH; }
 	faSetStMode(aFaPath, &st_mode, winAttrs.dwFileAttributes);
 
 	index = offset;
-	trueOop = interpreterProxy->trueObject();
-	falseOop = interpreterProxy->falseObject();
+	trueOop = interpreterProxy->trueObject(interpreterProxy->interpreterState);
+	falseOop = interpreterProxy->falseObject(interpreterProxy->interpreterState);
 
 	accessOop = (st_mode & S_IRUSR) ? trueOop : falseOop;
-	interpreterProxy->storePointerofObjectwithValue(index++, attributeArray, accessOop);
+	interpreterProxy->storePointerofObjectwithValue(index++, attributeArray, accessOop, interpreterProxy->interpreterState);
 
 	accessOop = (st_mode & S_IWUSR) ? trueOop : falseOop;
-	interpreterProxy->storePointerofObjectwithValue(index++, attributeArray, accessOop);
+	interpreterProxy->storePointerofObjectwithValue(index++, attributeArray, accessOop, interpreterProxy->interpreterState);
 
 	accessOop = (st_mode & S_IXUSR) ? trueOop : falseOop;
-	interpreterProxy->storePointerofObjectwithValue(index++, attributeArray, accessOop);
+	interpreterProxy->storePointerofObjectwithValue(index++, attributeArray, accessOop, interpreterProxy->interpreterState);
 
 	return 0;
 }

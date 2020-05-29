@@ -214,7 +214,7 @@ thunkEntry(long long rcx, long long rdx,
 extern void saveFloatRegsWin64(long long xmm0,long long xmm1,long long xmm2, long long xmm3,double *fpargs); /* fake passing long long args */
     saveFloatRegsWin64(rcx,rdx,r8,r9,fpargs); /* the callee expects double parameters that it will retrieve thru registers */
 
-	if ((flags = interpreterProxy->ownVM(0)) < 0) {
+	if ((flags = interpreterProxy->ownVM(0, interpreterProxy->interpreterState)) < 0) {
 		fprintf(stderr,"Warning; callback failed to own the VM\n");
 		return -1;
 	}
@@ -226,14 +226,14 @@ extern void saveFloatRegsWin64(long long xmm0,long long xmm1,long long xmm2, lon
 		vmcc.stackp = stackp + 2; /* skip address of retpc & retpc (thunk) */
 		vmcc.intregargsp = intargs;
 		vmcc.floatregargsp = fpargs;
-		interpreterProxy->sendInvokeCallbackContext(&vmcc);
+		interpreterProxy->sendInvokeCallbackContext(&vmcc, interpreterProxy->interpreterState);
 		fprintf(stderr,"Warning; callback failed to invoke\n");
 		setMRCC(previousCallbackContext);
-		interpreterProxy->disownVM(flags);
+		interpreterProxy->disownVM(flags, interpreterProxy->interpreterState);
 		return -1;
 	}
 	setMRCC(previousCallbackContext);
-	interpreterProxy->disownVM(flags);
+	interpreterProxy->disownVM(flags, interpreterProxy->interpreterState);
 
 	switch (returnType) {
 

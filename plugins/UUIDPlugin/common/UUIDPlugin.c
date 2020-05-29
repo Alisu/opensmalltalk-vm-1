@@ -138,9 +138,9 @@ primitiveMakeUUID(void)
 	if (!(((interpreterProxy->methodArgumentCount(interpreterProxy->interpreterState)) == 0)
 			&& ((interpreterProxy->isBytes(oop,interpreterProxy->interpreterState ))
 					&& ((interpreterProxy->byteSizeOf(oop,interpreterProxy->interpreterState)) == 16)))) {
-		return interpreterProxy->primitiveFail();
+		return interpreterProxy->primitiveFail(interpreterProxy->interpreterState);
 	}
-	location = interpreterProxy->firstIndexableField(oop);
+	location = interpreterProxy->firstIndexableField(oop,interpreterProxy->interpreterState);
 	MakeUUID(location);
 	return oop;
 }

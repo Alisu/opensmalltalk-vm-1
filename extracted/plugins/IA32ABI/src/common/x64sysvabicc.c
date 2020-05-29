@@ -75,8 +75,8 @@ struct VirtualMachine* interpreterProxy;
 #define IsAlignedPowerOfTwo(value, modulus)                                    \
   (((value) & ((modulus) - 1)) == 0)
 
-#define objIsAlien(anOop) (interpreterProxy->includesBehaviorThatOf(interpreterProxy->fetchClassOf(anOop), interpreterProxy->classAlien()))
-#define objIsUnsafeAlien(anOop) (interpreterProxy->includesBehaviorThatOf(interpreterProxy->fetchClassOf(anOop), interpreterProxy->classUnsafeAlien()))
+#define objIsAlien(anOop, self) (interpreterProxy->includesBehaviorThatOf(interpreterProxy->fetchClassOf(anOop, self), interpreterProxy->classAlien(self), self))
+#define objIsUnsafeAlien(anOop, self) (interpreterProxy->includesBehaviorThatOf(interpreterProxy->fetchClassOf(anOop, self), interpreterProxy->classUnsafeAlien(self), self))
 
 #define sizeField(alien) (*(long *)pointerForOop((sqInt)(alien) + BaseHeaderSize))
 #define dataPtr(alien) pointerForOop((sqInt)(alien) + BaseHeaderSize + BytesPerOop)
@@ -205,7 +205,7 @@ thunkEntry(long a0, long a1, long a2, long a3, long a4, long a5,
 		vmcc.stackp = stackp + 2; /* skip address of retpc & retpc (thunk) */
 		vmcc.intregargsp = intargs;
 		vmcc.floatregargsp = fpargs;
-		interpreterProxy->sendInvokeCallbackContext(&vmcc);
+		interpreterProxy->sendInvokeCallbackContext(&vmcc, interpreterProxy->interpreterState);
 		fprintf(stderr,"Warning; callback failed to invoke\n");
 		setMRCC(previousCallbackContext);
 		interpreterProxy->disownVM(flags, interpreterProxy->interpreterState);

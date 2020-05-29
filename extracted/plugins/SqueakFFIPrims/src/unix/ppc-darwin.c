@@ -64,7 +64,7 @@
 extern struct VirtualMachine *interpreterProxy;
 
 #if defined(FFI_TEST)
-  static int primitiveFail(void) { puts("primitive fail"); exit(1); return 0; }
+  static int primitiveFail(void, interpreterProxy->interpreterState) { puts("primitive fail"); exit(1); return 0; }
 #else
 # define primitiveFail() interpreterProxy->primitiveFail();
 #endif
@@ -147,11 +147,11 @@ int ffiFree(sqIntptr_t ptr)
 
 #define checkStack()				\
   if (stackIndex >= ARG_MAX)			\
-    return primitiveFail()
+    return primitiveFail(interpreterProxy->interpreterState)
 
 #define checkGPR()					\
   if ((gprCount >= GPR_MAX) && (stackIndex >= ARG_MAX))	\
-    return primitiveFail()
+    return primitiveFail(interpreterProxy->interpreterState)
 
 #define qalignStack()	stackIndex += (stackIndex & 1)
 
@@ -289,7 +289,7 @@ int ffiPushStringOfLength(int srcIndex, int length)
   checkGPR();
   ptr= (char *)malloc(length + 1);
   if (!ptr)
-    return primitiveFail();
+    return primitiveFail(interpreterProxy->interpreterState);
   memcpy(ptr, (void *)srcIndex, length);
   ptr[length]= '\0';
   strings[stringCount++]= ptr;
@@ -317,7 +317,7 @@ int ffiPushStructureOfLength(int pointer, int *structSpec, int specSize)
   if (gprSize < 4) gprp += (4 - gprSize);
   if (argSize < 4) argp += (4 - gprSize);
   if (argp + argSize > argl)
-    return primitiveFail();
+    return primitiveFail(interpreterProxy->interpreterState);
 
   memcpy((void *)gprp, (void *)data, gprSize);
   memcpy((void *)argp, (void *)data, argSize);

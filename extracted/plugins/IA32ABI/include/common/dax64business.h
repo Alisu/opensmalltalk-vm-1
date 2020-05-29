@@ -26,10 +26,10 @@
 		/* Stack or Cog VM. Need to access args downwards from first arg. */
 		for (i = size = 0; --i >= numArgs;) {
 			sqInt arg = argVector[i + 1];
-			if (objIsAlien(arg) && (sizeField(arg) != 0))
+			if (objIsAlien(arg, interpreterProxy->interpreterState) && (sizeField(arg) != 0))
 				/* Direct or indirect Alien. */
                         	size += RoundUpPowerOfTwo(SQABS(sizeField(arg)), 8);
-			else if (interpreterProxy->isFloatObject(arg))
+			else if (interpreterProxy->isFloatObject(arg, interpreterProxy->interpreterState))
 				size += sizeof(double);
 			else 
 				/* Assume an integer or pointer Alien. Check below. */
@@ -40,10 +40,10 @@
 		/* Context Interpreter or array version of callout primitive. */
 		for (i = numArgs, size = 0; --i >= 0;) {
 			sqInt arg = argVector[i];
-			if (objIsAlien(arg) && (sizeField(arg) != 0))
+			if (objIsAlien(arg, interpreterProxy->interpreterState) && (sizeField(arg) != 0))
 				/* Direct or indirect Alien. */
                           size += RoundUpPowerOfTwo(SQABS(sizeField(arg)), 8);
-			else if (interpreterProxy->isFloatObject(arg))
+			else if (interpreterProxy->isFloatObject(arg, interpreterProxy->interpreterState))
 				size += sizeof(double);
 			else
 				/* Assume an integer or pointer Alien. Check below. */
@@ -82,7 +82,7 @@
 			if (isSmallInt(arg)) {
 				MaybePassAsRegArg(intVal(arg))
 			}
-			else if (objIsAlien(arg)) {
+			else if (objIsAlien(arg, interpreterProxy->interpreterState)) {
 				long argByteSize;
 				if ((size = sizeField(arg)) == 0) /* Pointer Alien. */
 					size = argByteSize = sizeof(void *);
@@ -96,20 +96,20 @@
 					argvec += RoundUpPowerOfTwo(argByteSize, 8);
 				}
 			}
-			else if (objIsUnsafeAlien(arg)) {
-				sqInt bitsObj = interpreterProxy->fetchPointerofObject(0,arg);
-				long v = (long)interpreterProxy->firstIndexableField(bitsObj);
+			else if (objIsUnsafeAlien(arg, interpreterProxy->interpreterState)) {
+				sqInt bitsObj = interpreterProxy->fetchPointerofObject(0, arg , interpreterProxy->interpreterState);
+				long v = (long)interpreterProxy->firstIndexableField(bitsObj, interpreterProxy->interpreterState);
 				MaybePassAsRegArg(v)
 			}
-			else if (interpreterProxy->isFloatObject(arg)) {
-				double d = interpreterProxy->floatValueOf(arg);
+			else if (interpreterProxy->isFloatObject(arg, interpreterProxy->interpreterState)) {
+				double d = interpreterProxy->floatValueOf(arg, interpreterProxy->interpreterState);
 				MaybePassAsDRegArg(d)
 			}
 			else {
-				long v = interpreterProxy->signed64BitValueOf(arg);
+				long v = interpreterProxy->signed64BitValueOf(arg, interpreterProxy->interpreterState);
 				if (interpreterProxy->failed(interpreterProxy->interpreterState)) {
 					interpreterProxy->primitiveFailFor(0, interpreterProxy->interpreterState);
-					v = interpreterProxy->positive64BitValueOf(arg);
+					v = interpreterProxy->positive64BitValueOf(arg, interpreterProxy->interpreterState);
 					if (interpreterProxy->failed(interpreterProxy->interpreterState)) {
 						return PrimErrBadArgument;
 					}
@@ -124,7 +124,7 @@
 			sqInt arg = argVector[i];
 			if (isSmallInt(arg))
 				MaybePassAsDRegArg(intVal(arg))
-			else if (objIsAlien(arg)) {
+			else if (objIsAlien(arg, interpreterProxy->interpreterState)) {
 				long argByteSize;
 				if ((size = sizeField(arg)) == 0) /* Pointer Alien. */
 					size = argByteSize = sizeof(void *);
@@ -138,20 +138,20 @@
 					argvec += RoundUpPowerOfTwo(argByteSize, 8);
 				}
 			}
-			else if (objIsUnsafeAlien(arg)) {
-				sqInt bitsObj = interpreterProxy->fetchPointerofObject(0,arg);
-				long v = (long)interpreterProxy->firstIndexableField(bitsObj);
+			else if (objIsUnsafeAlien(arg, interpreterProxy->interpreterState)) {
+				sqInt bitsObj = interpreterProxy->fetchPointerofObject(0, arg , interpreterProxy->interpreterState);
+				long v = (long)interpreterProxy->firstIndexableField(bitsObj, interpreterProxy->interpreterState);
 				MaybePassAsRegArg(v)
 			}
-			else if (interpreterProxy->isFloatObject(arg)) {
-				double d = interpreterProxy->floatValueOf(arg);
+			else if (interpreterProxy->isFloatObject(arg, interpreterProxy->interpreterState)) {
+				double d = interpreterProxy->floatValueOf(arg, interpreterProxy->interpreterState);
 				MaybePassAsDRegArg(d)
 			}
 			else {
-				long v = interpreterProxy->signed64BitValueOf(arg);
+				long v = interpreterProxy->signed64BitValueOf(arg, interpreterProxy->interpreterState);
 				if (interpreterProxy->failed(interpreterProxy->interpreterState)) {
 					interpreterProxy->primitiveFailFor(0, interpreterProxy->interpreterState);
-					v = interpreterProxy->positive64BitValueOf(arg);
+					v = interpreterProxy->positive64BitValueOf(arg, interpreterProxy->interpreterState);
 					if (interpreterProxy->failed(interpreterProxy->interpreterState)) {
 						return PrimErrBadArgument;
 					}
@@ -182,7 +182,7 @@
 
 	/* Post call need to refresh stack pointer in case of call-back and GC. */
 	resultMaybeAlien = interpreterProxy->stackValue(resultOffset, interpreterProxy->interpreterState);
-	if (objIsAlien(resultMaybeAlien)) {
+	if (objIsAlien(resultMaybeAlien, interpreterProxy->interpreterState)) {
 		size = sizeField(resultMaybeAlien);
 		if (size == 0) /* Pointer Alien. */
 			size = sizeof(long);

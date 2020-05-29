@@ -48,13 +48,13 @@ struct VirtualMachine* interpreterProxy;
 
 #define objIsAlien(anOop)                                                      \
     (interpreterProxy->includesBehaviorThatOf(                                 \
-      interpreterProxy->fetchClassOf(anOop),                                   \
-      interpreterProxy->classAlien()))
+      interpreterProxy->fetchClassOf(anOop, interpreterProxy->interpreterState),                                   \
+      interpreterProxy->classAlien(interpreterProxy->interpreterState), interpreterProxy->interpreterState))
 
 #define objIsUnsafeAlien(anOop)                                                \
     (interpreterProxy->includesBehaviorThatOf(                                 \
-      interpreterProxy->fetchClassOf(anOop),                                   \
-      interpreterProxy->classUnsafeAlien()))
+      interpreterProxy->fetchClassOf(anOop, interpreterProxy->interpreterState),                                   \
+      interpreterProxy->classUnsafeAlien(interpreterProxy->interpreterState), interpreterProxy->interpreterState))
 
 #define sizeField(alien)                                                       \
     (*(long*)pointerForOop((sqInt)(alien) + BaseHeaderSize))
@@ -174,7 +174,7 @@ thunkEntry(long r0, long r1, long r2, long r3,
   dregArgs[6] = d6;
   dregArgs[7] = d7;
 
-  flags = interpreterProxy->ownVM(0);
+  flags = interpreterProxy->ownVM(0, interpreterProxy->interpreterState);
   if (flags < 0) {
     fprintf(stderr,"Warning; callback failed to own the VM\n");
     return -1;
@@ -187,15 +187,15 @@ thunkEntry(long r0, long r1, long r2, long r3,
     vmcc.stackp = stackp;
     vmcc.intregargsp = regArgs;
     vmcc.floatregargsp = dregArgs;
-    interpreterProxy->sendInvokeCallbackContext(&vmcc);
+    interpreterProxy->sendInvokeCallbackContext(&vmcc, interpreterProxy->interpreterState);
     fprintf(stderr,"Warning; callback failed to invoke\n");
     setMRCC(previousCallbackContext);
-    interpreterProxy->disownVM(flags);
+    interpreterProxy->disownVM(flags, interpreterProxy->interpreterState);
     return -1;
   }
 
   setMRCC(previousCallbackContext);
-  interpreterProxy->disownVM(flags);
+  interpreterProxy->disownVM(flags, interpreterProxy->interpreterState);
 
   switch (returnType) {
   case retword:

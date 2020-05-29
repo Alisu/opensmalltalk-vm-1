@@ -52,7 +52,7 @@
 #endif
 
 #if defined(FFI_TEST)
-  static int primitiveFail(void) { puts("primitive fail"); exit(1); return 0; }
+  static int primitiveFail(void, interpreterProxy->interpreterState) { puts("primitive fail"); exit(1); return 0; }
 #else
   extern struct VirtualMachine *interpreterProxy;
 # define primitiveFail() interpreterProxy->primitiveFail()
@@ -138,7 +138,7 @@ int ffiFree(sqIntptr_t ptr)
 
 #define checkStack()				\
   if (ffiStackIndex >= FFI_MAX_STACK)		\
-     return primitiveFail();
+     return primitiveFail(interpreterProxy->interpreterState);
 
 #define pushInt(value)				\
   checkStack();					\
@@ -265,7 +265,7 @@ int ffiPushStringOfLength(int srcIndex, int length)
   checkStack();
   ptr= (char *)malloc(length + 1);
   if (!ptr)
-    return primitiveFail();
+    return primitiveFail(interpreterProxy->interpreterState);
   DPRINTF(("  ++ alloc string\n"));
   memcpy(ptr, (void *)srcIndex, length);
   ptr[length]= '\0';
@@ -280,7 +280,7 @@ int ffiPushStructureOfLength(int pointer, int *structSpec, int specSize)
   int size= (lbs + sizeof(int) - 1) / sizeof(int);
   DPRINTF(("ffiPushStructureOfLength %d (%db %dw)\n", specSize, lbs, size));
   if (ffiStackIndex + size > FFI_MAX_STACK)
-    return primitiveFail();
+    return primitiveFail(interpreterProxy->interpreterState);
   memcpy((void *)(ffiStack + ffiStackIndex), (void *)pointer, lbs);
   ffiStackIndex += size;
   return 1;

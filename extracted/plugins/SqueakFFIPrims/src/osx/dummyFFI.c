@@ -78,12 +78,12 @@ return 1;
 
 int ffiPushSignedLongLong(int low, int high)
 {
-return primitiveFail();
+return primitiveFail(interpreterProxy->interpreterState);
 }
 
 int ffiPushUnsignedLongLong(int low, int high)
 {
-return primitiveFail();
+return primitiveFail(interpreterProxy->interpreterState);
 }
 
 int ffiPushSignedChar(int value)

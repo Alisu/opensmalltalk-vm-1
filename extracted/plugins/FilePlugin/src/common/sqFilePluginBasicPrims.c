@@ -94,7 +94,6 @@
 /*** Variables ***/
 int thisSession = 0;
 extern struct VirtualMachine * interpreterProxy;
-struct foo;
 
 /* Since SQFile instances are held on the heap in 32-bit-aligned byte arrays we
  * may need to use memcpy to avoid alignment faults.
@@ -139,7 +138,7 @@ static squeakFileOffsetType getSize(SQFile *f)
 # define pfail() 0
 #endif
 
-sqInt sqFileAtEnd(SQFile *f, struct foo * self) {
+sqInt sqFileAtEnd(SQFile *f) {
 	/* Return true if the file's read/write head is at the end of the file.
 	 *
 	 * libc's end of file function, feof(), returns a flag that is set by
@@ -179,7 +178,7 @@ sqInt sqFileAtEnd(SQFile *f, struct foo * self) {
 		 * causing hard-to-trace failures here.
 		 * Revert to previous behaviour of ignoring errors.
 		if (ferror(fp))
-			interpreterProxy->primitiveFail();
+			interpreterProxy->primitiveFail(interpreterProxy->interpreterState);
 		 */
 		}
 	else
@@ -188,7 +187,7 @@ sqInt sqFileAtEnd(SQFile *f, struct foo * self) {
 }
 
 sqInt
-sqFileClose(SQFile *f, struct foo * self) {
+sqFileClose(SQFile *f) {
 	/* Close the given file. */
 
 	int result;
@@ -213,7 +212,7 @@ sqFileClose(SQFile *f, struct foo * self) {
 }
 
 sqInt
-sqFileDeleteNameSize(char *sqFileName, sqInt sqFileNameSize, struct foo * self) {
+sqFileDeleteNameSize(char *sqFileName, sqInt sqFileNameSize) {
 	char cFileName[PATH_MAX];
 	int err;
 
@@ -221,7 +220,7 @@ sqFileDeleteNameSize(char *sqFileName, sqInt sqFileNameSize, struct foo * self) 
 		return interpreterProxy->success(false, interpreterProxy->interpreterState);
 
 	/* copy the file name into a null-terminated C string */
-	interpreterProxy->ioFilenamefromStringofLengthresolveAliases(cFileName, sqFileName, sqFileNameSize, false);
+	interpreterProxy->ioFilenamefromStringofLengthresolveAliases(cFileName, sqFileName, sqFileNameSize, false, interpreterProxy->interpreterState);
 
 	err = remove(cFileName);
 	if (err)
@@ -231,7 +230,7 @@ sqFileDeleteNameSize(char *sqFileName, sqInt sqFileNameSize, struct foo * self) 
 }
 
 squeakFileOffsetType
-sqFileGetPosition(SQFile *f, struct foo * self) {
+sqFileGetPosition(SQFile *f) {
 	/* Return the current position of the file's read/write head. */
 
 	squeakFileOffsetType position;
@@ -249,12 +248,12 @@ sqFileGetPosition(SQFile *f, struct foo * self) {
 }
 
 sqInt
-sqFileInit(struct foo * self) {
+sqFileInit(void) {
 	/* Create a session ID that is unlikely to be repeated.
 	   Zero is never used for a valid session number.
 	   Should be called once at startup time.
 	*/
-	thisSession = interpreterProxy->getThisSessionID();
+	thisSession = interpreterProxy->getThisSessionID(interpreterProxy->interpreterState);
 	return 1;
 }
 
@@ -315,7 +314,7 @@ static void setNewFileMacTypeAndCreator(char *sqFileName, sqInt sqFileNameSize)
 }
 
 sqInt
-sqFileOpen(SQFile *f, char *sqFileName, sqInt sqFileNameSize, sqInt writeFlag, struct foo * self) {
+sqFileOpen(SQFile *f, char *sqFileName, sqInt sqFileNameSize, sqInt writeFlag) {
 	/* Opens the given file using the supplied sqFile structure
 	   to record its state. Fails with no side effects if f is
 	   already open. Files are always opened in binary mode;
@@ -334,7 +333,7 @@ sqFileOpen(SQFile *f, char *sqFileName, sqInt sqFileNameSize, sqInt writeFlag, s
 	if (sqFileNameSize >= sizeof(cFileName))
 		return interpreterProxy->success(false, interpreterProxy->interpreterState);
 	/* can fail when alias resolution is enabled */
-	if (interpreterProxy->ioFilenamefromStringofLengthresolveAliases(cFileName, sqFileName, sqFileNameSize, true) != 0)
+	if (interpreterProxy->ioFilenamefromStringofLengthresolveAliases(cFileName, sqFileName, sqFileNameSize, true, interpreterProxy->interpreterState) != 0)
 		return interpreterProxy->success(false, interpreterProxy->interpreterState);
 
 	if (writeFlag) {
@@ -422,7 +421,7 @@ sqFileOpen(SQFile *f, char *sqFileName, sqInt sqFileNameSize, sqInt writeFlag, s
 }
 
 sqInt
-sqFileOpenNew(SQFile *f, char *sqFileName, sqInt sqFileNameSize, sqInt *exists, struct foo * self) {
+sqFileOpenNew(SQFile *f, char *sqFileName, sqInt sqFileNameSize, sqInt *exists) {
 	/* Opens the given file for writing and if possible reading
 	   if it does not already exist using the supplied sqFile
 	   structure to record its state.
@@ -446,7 +445,7 @@ sqFileOpenNew(SQFile *f, char *sqFileName, sqInt sqFileNameSize, sqInt *exists, 
 	if (sqFileNameSize >= sizeof(cFileName))
 		return interpreterProxy->success(false, interpreterProxy->interpreterState);
 	/* can fail when alias resolution is enabled */
-	if (interpreterProxy->ioFilenamefromStringofLengthresolveAliases(cFileName, sqFileName, sqFileNameSize, true) != 0)
+	if (interpreterProxy->ioFilenamefromStringofLengthresolveAliases(cFileName, sqFileName, sqFileNameSize, true, interpreterProxy->interpreterState) != 0)
 		return interpreterProxy->success(false, interpreterProxy->interpreterState);
 
 	mode = "r+b";
@@ -504,7 +503,7 @@ sqFileOpenNew(SQFile *f, char *sqFileName, sqInt sqFileNameSize, sqInt *exists, 
 }
 
 sqInt
-sqConnectToFileDescriptor(SQFile *sqFile, int fd, sqInt writeFlag, struct foo * self)
+sqConnectToFileDescriptor(SQFile *sqFile, int fd, sqInt writeFlag)
 {
 	/*
 	 * Open the file with the supplied file descriptor in binary mode.
@@ -541,7 +540,7 @@ sqConnectToFile(SQFile *sqFile, void *file, sqInt writeFlag)
  * Fill-in files with handles for stdin, stdout and seterr as available and
  * answer a bit-mask of the availability:
  *
- * <0 - Error.  The value will be returned to the image using primitiveFailForOSError().
+ * <0 - Error.  The value will be returned to the image using primitiveFailForOSError(interpreterProxy->interpreterState).
  * 0  - no stdio available
  * 1  - stdin available
  * 2  - stdout available
@@ -611,7 +610,7 @@ sqInt sqFileDescriptorType(int fdNum) {
 
 
 size_t
-sqFileReadIntoAt(SQFile *f, size_t count, char *byteArrayIndex, size_t startIndex, struct foo * self) {
+sqFileReadIntoAt(SQFile *f, size_t count, char *byteArrayIndex, size_t startIndex) {
 	/* Read count bytes from the given file into byteArray starting at
 	   startIndex. byteArray is the address of the first byte of a
 	   Squeak bytes object (e.g. String or ByteArray). startIndex
@@ -644,21 +643,21 @@ sqFileReadIntoAt(SQFile *f, size_t count, char *byteArrayIndex, size_t startInde
 	if (f->isStdioStream) {
 #if COGMTVM
 # if SPURVM
-		if (!(wasPinned = interpreterProxy->isPinned(bufferOop))) {
-			if (!(bufferOop = interpreterProxy->pinObject(bufferOop)))
+		if (!(wasPinned = interpreterProxy->isPinned(bufferOop, interpreterProxy->interpreterState))) {
+			if (!(bufferOop = interpreterProxy->pinObject(bufferOop, interpreterProxy->interpreterState)))
 				return 0;
 			dst = bufferOop + BaseHeaderSize + startIndex;
 		}
-		myThreadIndex = interpreterProxy->disownVM(0);
+		myThreadIndex = interpreterProxy->disownVM(0, interpreterProxy->interpreterState);
 # else
-		if (interpreterProxy->isInMemory((sqInt)f)
-		 && interpreterProxy->isYoung((sqInt)f)
-		 || interpreterProxy->isInMemory((sqInt)dst)
-		 && interpreterProxy->isYoung((sqInt)dst)) {
-			interpreterProxy->primitiveFailFor(PrimErrObjectMayMove);
+		if (interpreterProxy->isInMemory((sqInt)f, interpreterProxy->interpreterState)
+		 && interpreterProxy->isYoung((sqInt)f, interpreterProxy->interpreterState)
+		 || interpreterProxy->isInMemory((sqInt)dst, interpreterProxy->interpreterState)
+		 && interpreterProxy->isYoung((sqInt)dst, interpreterProxy->interpreterState)) {
+			interpreterProxy->primitiveFailFor(PrimErrObjectMayMove, interpreterProxy->interpreterState);
 			return 0;
 		}
-		myThreadIndex = interpreterProxy->disownVM(DisownVMLockOutFullGC);
+		myThreadIndex = interpreterProxy->disownVM(DisownVMLockOutFullGC, interpreterProxy->interpreterState);
 # endif
 #endif /* COGMTVM */
 		/* Line buffering in fread can't be relied upon, at least on Mac OS X
@@ -672,10 +671,10 @@ sqFileReadIntoAt(SQFile *f, size_t count, char *byteArrayIndex, size_t startInde
 		}
 		while (bytesRead <= 0 && ferror(file) && errno == EINTR);
 #if COGMTVM
-		interpreterProxy->ownVM(myThreadIndex);
+		interpreterProxy->ownVM(myThreadIndex, interpreterProxy->interpreterState);
 # if SPURVM
 		if (!wasPinned)
-			interpreterProxy->unpinObject(bufferOop);
+			interpreterProxy->unpinObject(bufferOop, interpreterProxy->interpreterState);
 # endif
 #endif /* COGMTVM */
 	}
@@ -694,7 +693,7 @@ sqFileReadIntoAt(SQFile *f, size_t count, char *byteArrayIndex, size_t startInde
 }
 
 sqInt
-sqFileRenameOldSizeNewSize(char *sqOldName, sqInt sqOldNameSize, char *sqNewName, sqInt sqNewNameSize, struct foo * self) {
+sqFileRenameOldSizeNewSize(char *sqOldName, sqInt sqOldNameSize, char *sqNewName, sqInt sqNewNameSize) {
 	char cOldName[PATH_MAX], cNewName[PATH_MAX];
 	int err;
 
@@ -702,8 +701,8 @@ sqFileRenameOldSizeNewSize(char *sqOldName, sqInt sqOldNameSize, char *sqNewName
 		return interpreterProxy->success(false, interpreterProxy->interpreterState);
 
 	/* copy the file names into null-terminated C strings */
-	interpreterProxy->ioFilenamefromStringofLengthresolveAliases(cOldName, sqOldName, sqOldNameSize, false);
-	interpreterProxy->ioFilenamefromStringofLengthresolveAliases(cNewName, sqNewName, sqNewNameSize, false);
+	interpreterProxy->ioFilenamefromStringofLengthresolveAliases(cOldName, sqOldName, sqOldNameSize, false, interpreterProxy->interpreterState);
+	interpreterProxy->ioFilenamefromStringofLengthresolveAliases(cNewName, sqNewName, sqNewNameSize, false, interpreterProxy->interpreterState);
 
 	err = rename(cOldName, cNewName);
 	if (err)
@@ -713,7 +712,7 @@ sqFileRenameOldSizeNewSize(char *sqOldName, sqInt sqOldNameSize, char *sqNewName
 }
 
 sqInt
-sqFileSetPosition(SQFile *f, squeakFileOffsetType position, struct foo * self) {
+sqFileSetPosition(SQFile *f, squeakFileOffsetType position) {
 	/* Set the file's read/write head to the given position. */
 
 	if (!sqFileValid(f))
@@ -741,7 +740,7 @@ sqFileSetPosition(SQFile *f, squeakFileOffsetType position, struct foo * self) {
 }
 
 squeakFileOffsetType
-sqFileSize(SQFile *f, struct foo * self) {
+sqFileSize(SQFile *f) {
 	/* Return the length of the given file. */
 
 	if (!sqFileValid(f))
@@ -752,7 +751,7 @@ sqFileSize(SQFile *f, struct foo * self) {
 }
 
 sqInt
-sqFileFlush(SQFile *f, struct foo * self) {
+sqFileFlush(SQFile *f) {
 	/* Flush stdio buffers of file */
 
 	if (!sqFileValid(f))
@@ -771,7 +770,7 @@ sqFileFlush(SQFile *f, struct foo * self) {
 }
 
 sqInt
-sqFileSync(SQFile *f, struct foo * self) {
+sqFileSync(SQFile *f) {
 	/* Flush kernel-level buffers of any written/flushed data to disk */
 
 	if (!sqFileValid(f))
@@ -783,7 +782,7 @@ sqFileSync(SQFile *f, struct foo * self) {
 }
 
 sqInt
-sqFileTruncate(SQFile *f, squeakFileOffsetType offset, struct foo * self) {
+sqFileTruncate(SQFile *f, squeakFileOffsetType offset) {
 	if (!sqFileValid(f))
 		return interpreterProxy->success(false, interpreterProxy->interpreterState);
 	fflush(getFile(f));
@@ -801,7 +800,7 @@ sqFileValid(SQFile *f) {
 }
 
 size_t
-sqFileWriteFromAt(SQFile *f, size_t count, char *byteArrayIndex, size_t startIndex, struct foo * self) {
+sqFileWriteFromAt(SQFile *f, size_t count, char *byteArrayIndex, size_t startIndex) {
 	/* Write count bytes to the given writable file starting at startIndex
 	   in the given byteArray. (See comment in sqFileReadIntoAt for interpretation
 	   of byteArray and startIndex).

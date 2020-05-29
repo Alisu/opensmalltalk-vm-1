@@ -24,7 +24,7 @@
 #endif
 
 #if defined(FFI_TEST)
-  static int primitiveFail(void) { puts("primitive fail"); exit(1); return 0; }
+  static int primitiveFail(void, interpreterProxy->interpreterState) { puts("primitive fail"); exit(1); return 0; }
 #else
   extern struct VirtualMachine *interpreterProxy;
 # define primitiveFail() interpreterProxy->primitiveFail();
@@ -178,7 +178,7 @@ int ffiPushSignedLongLong(int low, int high)
   LARG_PUSH(value, ffi_type_sint64);
   return 1;
 #else
-  return primitiveFail();
+  return primitiveFail(interpreterProxy->interpreterState);
 #endif
 }
 
@@ -189,7 +189,7 @@ int ffiPushUnsignedLongLong(int low, int high)
   LARG_PUSH(value, ffi_type_uint64);
   return 1;
 #else
-  return primitiveFail();
+  return primitiveFail(interpreterProxy->interpreterState);
 #endif
 }
 
@@ -303,10 +303,10 @@ int ffiPushStructureOfLength(int pointer, int* structSpec, int structSize)
 {
   ffi_type *structType;
 
-  if(pointer == 0) return primitiveFail();
+  if(pointer == 0) return primitiveFail(interpreterProxy->interpreterState);
   CHECK_ARGS(); /* fail early on */
   structType = ffiCreateType(structSpec, structSize);
-  if(structType == NULL) return primitiveFail();
+  if(structType == NULL) return primitiveFail(interpreterProxy->interpreterState);
   ffiStructTypes[ffiStructIndex++] = structType;
   ffiTypes[ffiArgIndex] = structType;
   ffiArgs[ffiArgIndex] = (void*) pointer;
@@ -324,7 +324,7 @@ int ffiPushStringOfLength(int srcIndex, int length)
 {
   char *ptr;
   ptr = (char*) malloc(length+1);
-  if(!ptr) return primitiveFail();
+  if(!ptr) return primitiveFail(interpreterProxy->interpreterState);
   memcpy(ptr, (void*)srcIndex, length);
   ptr[length] = 0;
   ffiTempStrings[ffiTempStringCount++] = ptr;
@@ -433,7 +433,7 @@ int ffiCallAddress(int fn, ffi_type *returnType, int atomicArgType)
 
   result = ffi_prep_cif(&cif, FFI_DEFAULT_ABI, ffiArgIndex, 
 			returnType, ffiTypes);
-  if(result != FFI_OK) return primitiveFail();
+  if(result != FFI_OK) return primitiveFail(interpreterProxy->interpreterState);
   if(structReturnValue) {
     ffi_call(&cif, (void *)fn, (void *)structReturnValue, (void **)ffiArgs);
     return (int) structReturnValue;
@@ -466,7 +466,7 @@ int ffiCallAddressOfWithPointerReturn(int fn, int callType)
 int ffiCallAddressOfWithStructReturn(int fn, int callType, 
 				     int *structSpec, int specSize)
 {
-  if(!structReturnType) return primitiveFail();
+  if(!structReturnType) return primitiveFail(interpreterProxy->interpreterState);
   return ffiCallAddress(fn, structReturnType,-1);
 }
 
@@ -491,7 +491,7 @@ int ffiCallAddressOfWithReturnType(int fn, int callType, int typeSpec)
   case FFITypeSingleFloat:	returnType = &ffi_type_float; break;
   case FFITypeDoubleFloat:	returnType = &ffi_type_double; break;
   default:
-    return primitiveFail();
+    return primitiveFail(interpreterProxy->interpreterState);
   }
   return ffiCallAddress(fn, returnType, atomicType);
 }

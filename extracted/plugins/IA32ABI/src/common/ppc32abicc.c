@@ -142,11 +142,11 @@ volatile double *floatReturnValueLocation = &floatReturnValue;
 int figureOutFloatSize(int typeSignatureArray,int index) {
 	int floatSize,objectSize;
 	char *floatSizePointer;
-	sqInt oops = interpreterProxy->stackValue(typeSignatureArray);
-	objectSize = interpreterProxy->stSizeOf(oops);
+	sqInt oops = interpreterProxy->stackValue(typeSignatureArray, interpreterProxy->interpreterState);
+	objectSize = interpreterProxy->stSizeOf(oops, interpreterProxy->interpreterState);
 	if (index >= objectSize) 
 		return sizeof(double);
-	floatSizePointer = interpreterProxy->firstIndexableField(oops);
+	floatSizePointer = interpreterProxy->firstIndexableField(oops, interpreterProxy->interpreterState);
 	floatSize = floatSizePointer[index];
 	return floatSize;
 }
@@ -229,7 +229,7 @@ thunkEntry(void *thunkp, sqIntptr_t *stackp)
 			sendInvokeCallbackStackRegistersJmpbuf(	(sqInt)thunkp,
 													(sqInt)(stackp + 2),
 													0,
-													(sqInt)&trampoline);
+													(sqInt)&trampoline, interpreterProxy->interpreterState);
 		perror("Warning; callback failed to invoke\n");
 		return 0;
 	}

@@ -52,39 +52,39 @@ EXPORT(sqInt) setInterpreter(struct VirtualMachine *anInterpreter);
 /*** Variables ***/
 
 #if !defined(SQUEAK_BUILTIN_PLUGIN)
-static sqInt (*byteSizeOf)(sqInt oop);
-static sqInt (*classString)(void);
-static sqInt (*failed)(void);
-static void * (*firstIndexableField)(sqInt oop);
-static sqInt (*instantiateClassindexableSize)(sqInt classPointer, sqInt size);
-static sqInt (*isBytes)(sqInt oop);
-static sqInt (*methodArgumentCount)(void);
-static sqInt (*nilObject)(void);
-static sqInt (*pop)(sqInt nItems);
-static sqInt (*popthenPush)(sqInt nItems, sqInt oop);
-static sqInt (*primitiveFail)(void);
-static sqInt (*pushInteger)(sqInt integerValue);
-static sqInt (*signed32BitIntegerFor)(sqInt integerValue);
-static int (*signed32BitValueOf)(sqInt oop);
-static sqInt (*stackIntegerValue)(sqInt offset);
-static sqInt (*stackValue)(sqInt offset);
+static sqInt (*byteSizeOf)(sqInt oop, struct foo * self);
+static sqInt (*classString)(struct foo * self);
+static sqInt (*failed)(struct foo * self);
+static void * (*firstIndexableField)(sqInt oop, struct foo * self);
+static sqInt (*instantiateClassindexableSize)(sqInt classPointer, sqInt size, struct foo * self);
+static sqInt (*isBytes)(sqInt oop, struct foo * self);
+static sqInt (*methodArgumentCount)(struct foo * self);
+static sqInt (*nilObject)(struct foo * self);
+static sqInt (*pop)(sqInt nItems, struct foo * self);
+static sqInt (*popthenPush)(sqInt nItems, sqInt oop, struct foo * self);
+static sqInt (*primitiveFail)(struct foo * self);
+static sqInt (*pushInteger)(sqInt integerValue, struct foo * self);
+static sqInt (*signed32BitIntegerFor)(sqInt integerValue, struct foo * self);
+static int (*signed32BitValueOf)(sqInt oop, struct foo * self);
+static sqInt (*stackIntegerValue)(sqInt offset, struct foo * self);
+static sqInt (*stackValue)(sqInt offset, struct foo * self);
 #else /* !defined(SQUEAK_BUILTIN_PLUGIN) */
-extern sqInt byteSizeOf(sqInt oop);
-extern sqInt classString(void);
-extern sqInt failed(void);
-extern void * firstIndexableField(sqInt oop);
-extern sqInt instantiateClassindexableSize(sqInt classPointer, sqInt size);
-extern sqInt isBytes(sqInt oop);
-extern sqInt methodArgumentCount(void);
-extern sqInt nilObject(void);
-extern sqInt pop(sqInt nItems);
-extern sqInt popthenPush(sqInt nItems, sqInt oop);
-extern sqInt primitiveFail(void);
-extern sqInt pushInteger(sqInt integerValue);
-extern sqInt signed32BitIntegerFor(sqInt integerValue);
-extern int signed32BitValueOf(sqInt oop);
-extern sqInt stackIntegerValue(sqInt offset);
-extern sqInt stackValue(sqInt offset);
+extern sqInt byteSizeOf(sqInt oop, struct foo * self);
+extern sqInt classString(struct foo * self);
+extern sqInt failed(struct foo * self);
+extern void * firstIndexableField(sqInt oop, struct foo * self);
+extern sqInt instantiateClassindexableSize(sqInt classPointer, sqInt size, struct foo * self);
+extern sqInt isBytes(sqInt oop, struct foo * self);
+extern sqInt methodArgumentCount(struct foo * self);
+extern sqInt nilObject(struct foo * self);
+extern sqInt pop(sqInt nItems, struct foo * self);
+extern sqInt popthenPush(sqInt nItems, sqInt oop, struct foo * self);
+extern sqInt primitiveFail(struct foo * self);
+extern sqInt pushInteger(sqInt integerValue, struct foo * self);
+extern sqInt signed32BitIntegerFor(sqInt integerValue, struct foo * self);
+extern int signed32BitValueOf(sqInt oop, struct foo * self);
+extern sqInt stackIntegerValue(sqInt offset, struct foo * self);
+extern sqInt stackValue(sqInt offset, struct foo * self);
 extern
 #endif
 struct VirtualMachine* interpreterProxy;
@@ -136,34 +136,34 @@ primitiveAccept(void)
     char *srcPtr;
     sqInt start;
 
-	if (!((methodArgumentCount()) == 5)) {
-		return primitiveFail();
+	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 5)) {
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
-	dstOop = stackValue(0);
-	srcLen = stackIntegerValue(1);
-	start = stackIntegerValue(2);
-	srcOop = stackValue(3);
-	handle = stackIntegerValue(4);
-	if (failed()) {
+	dstOop = stackValue(0, interpreterProxy->interpreterState);
+	srcLen = stackIntegerValue(1, interpreterProxy->interpreterState);
+	start = stackIntegerValue(2, interpreterProxy->interpreterState);
+	srcOop = stackValue(3, interpreterProxy->interpreterState);
+	handle = stackIntegerValue(4, interpreterProxy->interpreterState);
+	if (failed(interpreterProxy->interpreterState)) {
 		return null;
 	}
 	if (!(((start > 0)
 		 && (srcLen >= 0))
-		 && ((isBytes(srcOop))
-		 && ((isBytes(dstOop))
-		 && ((byteSizeOf(srcOop)) >= ((start + srcLen) - 1)))))) {
-		return primitiveFail();
+		 && ((isBytes(srcOop, interpreterProxy->interpreterState))
+		 && ((isBytes(dstOop, interpreterProxy->interpreterState))
+		 && ((byteSizeOf(srcOop, interpreterProxy->interpreterState)) >= ((start + srcLen) - 1)))))) {
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
-	srcPtr = firstIndexableField(srcOop);
-	dstPtr = firstIndexableField(dstOop);
+	srcPtr = firstIndexableField(srcOop, interpreterProxy->interpreterState);
+	dstPtr = firstIndexableField(dstOop, interpreterProxy->interpreterState);
 	srcPtr = (srcPtr + start) - 1;
-	dstLen = byteSizeOf(dstOop);
+	dstLen = byteSizeOf(dstOop, interpreterProxy->interpreterState);
 	result = sqAcceptSSL(handle, srcPtr, srcLen, dstPtr, dstLen);
-	if (failed()) {
+	if (failed(interpreterProxy->interpreterState)) {
 		return null;
 	}
-	pop((methodArgumentCount()) + 1);
-	pushInteger(result);
+	pop((methodArgumentCount(interpreterProxy->interpreterState)) + 1, interpreterProxy->interpreterState);
+	pushInteger(result, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -192,34 +192,34 @@ primitiveConnect(void)
     char *srcPtr;
     sqInt start;
 
-	if (!((methodArgumentCount()) == 5)) {
-		return primitiveFail();
+	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 5)) {
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
-	dstOop = stackValue(0);
-	srcLen = stackIntegerValue(1);
-	start = stackIntegerValue(2);
-	srcOop = stackValue(3);
-	handle = stackIntegerValue(4);
-	if (failed()) {
+	dstOop = stackValue(0, interpreterProxy->interpreterState);
+	srcLen = stackIntegerValue(1, interpreterProxy->interpreterState);
+	start = stackIntegerValue(2, interpreterProxy->interpreterState);
+	srcOop = stackValue(3, interpreterProxy->interpreterState);
+	handle = stackIntegerValue(4, interpreterProxy->interpreterState);
+	if (failed(interpreterProxy->interpreterState)) {
 		return null;
 	}
 	if (!(((start > 0)
 		 && (srcLen >= 0))
-		 && ((isBytes(srcOop))
-		 && ((isBytes(dstOop))
-		 && ((byteSizeOf(srcOop)) >= ((start + srcLen) - 1)))))) {
-		return primitiveFail();
+		 && ((isBytes(srcOop, interpreterProxy->interpreterState))
+		 && ((isBytes(dstOop, interpreterProxy->interpreterState))
+		 && ((byteSizeOf(srcOop, interpreterProxy->interpreterState)) >= ((start + srcLen) - 1)))))) {
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
-	srcPtr = firstIndexableField(srcOop);
-	dstPtr = firstIndexableField(dstOop);
+	srcPtr = firstIndexableField(srcOop, interpreterProxy->interpreterState);
+	dstPtr = firstIndexableField(dstOop, interpreterProxy->interpreterState);
 	srcPtr = (srcPtr + start) - 1;
-	dstLen = byteSizeOf(dstOop);
+	dstLen = byteSizeOf(dstOop, interpreterProxy->interpreterState);
 	result = sqConnectSSL(handle, srcPtr, srcLen, dstPtr, dstLen);
-	if (failed()) {
+	if (failed(interpreterProxy->interpreterState)) {
 		return null;
 	}
-	pop((methodArgumentCount()) + 1);
-	pushInteger(result);
+	pop((methodArgumentCount(interpreterProxy->interpreterState)) + 1, interpreterProxy->interpreterState);
+	pushInteger(result, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -232,15 +232,15 @@ primitiveCreate(void)
 {
     sqInt handle;
 
-	if (!((methodArgumentCount()) == 0)) {
-		return primitiveFail();
+	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 0)) {
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
 	handle = sqCreateSSL();
 	if (handle == 0) {
-		return primitiveFail();
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
-	pop((methodArgumentCount()) + 1);
-	pushInteger(handle);
+	pop((methodArgumentCount(interpreterProxy->interpreterState)) + 1, interpreterProxy->interpreterState);
+	pushInteger(handle, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -266,34 +266,34 @@ primitiveDecrypt(void)
     char *srcPtr;
     sqInt start;
 
-	if (!((methodArgumentCount()) == 5)) {
-		return primitiveFail();
+	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 5)) {
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
-	dstOop = stackValue(0);
-	srcLen = stackIntegerValue(1);
-	start = stackIntegerValue(2);
-	srcOop = stackValue(3);
-	handle = stackIntegerValue(4);
-	if (failed()) {
+	dstOop = stackValue(0, interpreterProxy->interpreterState);
+	srcLen = stackIntegerValue(1, interpreterProxy->interpreterState);
+	start = stackIntegerValue(2, interpreterProxy->interpreterState);
+	srcOop = stackValue(3, interpreterProxy->interpreterState);
+	handle = stackIntegerValue(4, interpreterProxy->interpreterState);
+	if (failed(interpreterProxy->interpreterState)) {
 		return null;
 	}
 	if (!(((start > 0)
 		 && (srcLen >= 0))
-		 && ((isBytes(srcOop))
-		 && ((isBytes(dstOop))
-		 && ((byteSizeOf(srcOop)) >= ((start + srcLen) - 1)))))) {
-		return primitiveFail();
+		 && ((isBytes(srcOop, interpreterProxy->interpreterState))
+		 && ((isBytes(dstOop, interpreterProxy->interpreterState))
+		 && ((byteSizeOf(srcOop, interpreterProxy->interpreterState)) >= ((start + srcLen) - 1)))))) {
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
-	srcPtr = firstIndexableField(srcOop);
-	dstPtr = firstIndexableField(dstOop);
+	srcPtr = firstIndexableField(srcOop, interpreterProxy->interpreterState);
+	dstPtr = firstIndexableField(dstOop, interpreterProxy->interpreterState);
 	srcPtr = (srcPtr + start) - 1;
-	dstLen = byteSizeOf(dstOop);
+	dstLen = byteSizeOf(dstOop, interpreterProxy->interpreterState);
 	result = sqDecryptSSL(handle, srcPtr, srcLen, dstPtr, dstLen);
-	if (failed()) {
+	if (failed(interpreterProxy->interpreterState)) {
 		return null;
 	}
-	pop((methodArgumentCount()) + 1);
-	pushInteger(result);
+	pop((methodArgumentCount(interpreterProxy->interpreterState)) + 1, interpreterProxy->interpreterState);
+	pushInteger(result, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -307,18 +307,18 @@ primitiveDestroy(void)
     sqInt handle;
     sqInt result;
 
-	if (!((methodArgumentCount()) == 1)) {
-		return primitiveFail();
+	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 1)) {
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
-	handle = stackIntegerValue(0);
-	if (failed()) {
+	handle = stackIntegerValue(0, interpreterProxy->interpreterState);
+	if (failed(interpreterProxy->interpreterState)) {
 		return null;
 	}
 	result = sqDestroySSL(handle);
 	if (result == 0) {
-		return primitiveFail();
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
-	pop(methodArgumentCount());
+	pop(methodArgumentCount(interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -344,34 +344,34 @@ primitiveEncrypt(void)
     char *srcPtr;
     sqInt start;
 
-	if (!((methodArgumentCount()) == 5)) {
-		return primitiveFail();
+	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 5)) {
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
-	dstOop = stackValue(0);
-	srcLen = stackIntegerValue(1);
-	start = stackIntegerValue(2);
-	srcOop = stackValue(3);
-	handle = stackIntegerValue(4);
-	if (failed()) {
+	dstOop = stackValue(0, interpreterProxy->interpreterState);
+	srcLen = stackIntegerValue(1, interpreterProxy->interpreterState);
+	start = stackIntegerValue(2, interpreterProxy->interpreterState);
+	srcOop = stackValue(3, interpreterProxy->interpreterState);
+	handle = stackIntegerValue(4, interpreterProxy->interpreterState);
+	if (failed(interpreterProxy->interpreterState)) {
 		return null;
 	}
 	if (!(((start > 0)
 		 && (srcLen >= 0))
-		 && ((isBytes(srcOop))
-		 && ((isBytes(dstOop))
-		 && ((byteSizeOf(srcOop)) >= ((start + srcLen) - 1)))))) {
-		return primitiveFail();
+		 && ((isBytes(srcOop, interpreterProxy->interpreterState))
+		 && ((isBytes(dstOop, interpreterProxy->interpreterState))
+		 && ((byteSizeOf(srcOop, interpreterProxy->interpreterState)) >= ((start + srcLen) - 1)))))) {
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
-	srcPtr = firstIndexableField(srcOop);
-	dstPtr = firstIndexableField(dstOop);
+	srcPtr = firstIndexableField(srcOop, interpreterProxy->interpreterState);
+	dstPtr = firstIndexableField(dstOop, interpreterProxy->interpreterState);
 	srcPtr = (srcPtr + start) - 1;
-	dstLen = byteSizeOf(dstOop);
+	dstLen = byteSizeOf(dstOop, interpreterProxy->interpreterState);
 	result = sqEncryptSSL(handle, srcPtr, srcLen, dstPtr, dstLen);
-	if (failed()) {
+	if (failed(interpreterProxy->interpreterState)) {
 		return null;
 	}
-	pop((methodArgumentCount()) + 1);
-	pushInteger(result);
+	pop((methodArgumentCount(interpreterProxy->interpreterState)) + 1, interpreterProxy->interpreterState);
+	pushInteger(result, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -386,19 +386,19 @@ primitiveGetIntProperty(void)
     sqInt propID;
     sqInt value;
 
-	if (!((methodArgumentCount()) == 2)) {
-		return primitiveFail();
+	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 2)) {
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
-	propID = stackIntegerValue(0);
-	handle = stackIntegerValue(1);
-	if (failed()) {
+	propID = stackIntegerValue(0, interpreterProxy->interpreterState);
+	handle = stackIntegerValue(1, interpreterProxy->interpreterState);
+	if (failed(interpreterProxy->interpreterState)) {
 		return null;
 	}
 	value = sqGetIntPropertySSL(handle, propID);
-	if (failed()) {
+	if (failed(interpreterProxy->interpreterState)) {
 		return null;
 	}
-	popthenPush((methodArgumentCount()) + 1, signed32BitIntegerFor(value));
+	popthenPush((methodArgumentCount(interpreterProxy->interpreterState)) + 1, signed32BitIntegerFor(value, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -417,30 +417,30 @@ primitiveGetStringProperty(void)
     sqInt stringOop;
     char *stringPtr;
 
-	if (!((methodArgumentCount()) == 2)) {
-		return primitiveFail();
+	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 2)) {
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
-	propID = stackIntegerValue(0);
-	handle = stackIntegerValue(1);
-	if (failed()) {
+	propID = stackIntegerValue(0, interpreterProxy->interpreterState);
+	handle = stackIntegerValue(1, interpreterProxy->interpreterState);
+	if (failed(interpreterProxy->interpreterState)) {
 		return null;
 	}
 	stringPtr = sqGetStringPropertySSL(handle, propID);
-	if (failed()) {
+	if (failed(interpreterProxy->interpreterState)) {
 		return null;
 	}
 	if (stringPtr == null) {
-		stringOop = nilObject();
+		stringOop = nilObject(interpreterProxy->interpreterState);
 	}
 	else {
 		stringLen = strlen(stringPtr);
-		stringOop = instantiateClassindexableSize(classString(), stringLen);
-		oopPtr = firstIndexableField(stringOop);
+		stringOop = instantiateClassindexableSize(classString(interpreterProxy->interpreterState), stringLen, interpreterProxy->interpreterState);
+		oopPtr = firstIndexableField(stringOop, interpreterProxy->interpreterState);
 		for (i = 0; i < stringLen; i += 1) {
 			oopPtr[i] = (stringPtr[i]);
 		}
 	}
-	popthenPush((methodArgumentCount()) + 1, stringOop);
+	popthenPush((methodArgumentCount(interpreterProxy->interpreterState)) + 1, stringOop, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -456,23 +456,23 @@ primitiveSetIntProperty(void)
     sqInt result;
     sqInt value;
 
-	if (!((methodArgumentCount()) == 3)) {
-		return primitiveFail();
+	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 3)) {
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
-	value = signed32BitValueOf(stackValue(0));
-	propID = stackIntegerValue(1);
-	handle = stackIntegerValue(2);
-	if (failed()) {
+	value = signed32BitValueOf(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	propID = stackIntegerValue(1, interpreterProxy->interpreterState);
+	handle = stackIntegerValue(2, interpreterProxy->interpreterState);
+	if (failed(interpreterProxy->interpreterState)) {
 		return null;
 	}
 	result = sqSetIntPropertySSL(handle, propID, value);
 	if (!result) {
-		return primitiveFail();
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
-	if (failed()) {
+	if (failed(interpreterProxy->interpreterState)) {
 		return null;
 	}
-	pop(methodArgumentCount());
+	pop(methodArgumentCount(interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -490,28 +490,28 @@ primitiveSetStringProperty(void)
     sqInt srcOop;
     char *srcPtr;
 
-	if (!((methodArgumentCount()) == 3)) {
-		return primitiveFail();
+	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 3)) {
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
-	srcOop = stackValue(0);
-	propID = stackIntegerValue(1);
-	handle = stackIntegerValue(2);
-	if (failed()) {
+	srcOop = stackValue(0, interpreterProxy->interpreterState);
+	propID = stackIntegerValue(1, interpreterProxy->interpreterState);
+	handle = stackIntegerValue(2, interpreterProxy->interpreterState);
+	if (failed(interpreterProxy->interpreterState)) {
 		return null;
 	}
-	if (!(isBytes(srcOop))) {
-		return primitiveFail();
+	if (!(isBytes(srcOop, interpreterProxy->interpreterState))) {
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
-	srcPtr = firstIndexableField(srcOop);
-	srcLen = byteSizeOf(srcOop);
+	srcPtr = firstIndexableField(srcOop, interpreterProxy->interpreterState);
+	srcLen = byteSizeOf(srcOop, interpreterProxy->interpreterState);
 	result = sqSetStringPropertySSL(handle, propID, srcPtr, srcLen);
 	if (!result) {
-		return primitiveFail();
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
-	if (failed()) {
+	if (failed(interpreterProxy->interpreterState)) {
 		return null;
 	}
-	pop(methodArgumentCount());
+	pop(methodArgumentCount(interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 	return 0;
 }
 

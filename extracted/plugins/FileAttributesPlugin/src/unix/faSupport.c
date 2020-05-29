@@ -19,7 +19,7 @@ sqInt	status;
 
 	/* Set the St encoded path and ensure trailing delimiter */
 	if (len+1 >= FA_PATH_MAX)
-		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG);
+		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG, interpreterProxy->interpreterState);
 	memcpy(aFaPath->path, pathName, len);
 	if (aFaPath->path[len-1] != PATH_SEPARATOR)
 		aFaPath->path[len++] = PATH_SEPARATOR;
@@ -31,7 +31,7 @@ sqInt	status;
 	/* Convert to platform specific form */
 	status = sq2uxPath(aFaPath->path, len, aFaPath->uxpath, FA_PATH_MAX, 1);
 	if (!status)
-		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG);
+		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG, interpreterProxy->interpreterState);
 	/* Set aFaPath->uxpath_file and max_file_len to the buffer after the directory */
 	aFaPath->uxpath_len = strlen(aFaPath->uxpath);
 	aFaPath->uxpath_file = aFaPath->uxpath + aFaPath->uxpath_len;
@@ -48,7 +48,7 @@ sqInt	status;
 
 	/* Set the St encoded path */
 	if (len >= FA_PATH_MAX)
-		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG);
+		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG, interpreterProxy->interpreterState);
 	memcpy(aFaPath->path, pathName, len);
 	aFaPath->path[len] = 0;
 	aFaPath->path_len = len;
@@ -58,7 +58,7 @@ sqInt	status;
 	/* Convert to platform specific form */
 	status = sq2uxPath(aFaPath->path, len, aFaPath->uxpath, FA_PATH_MAX, 1);
 	if (!status)
-		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG);
+		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG, interpreterProxy->interpreterState);
 	/* Set aFaPath->uxpath_file and max_file_len to the buffer after the directory */
 	aFaPath->uxpath_len = strlen(aFaPath->uxpath);
 	aFaPath->uxpath_file = 0;
@@ -78,13 +78,13 @@ sqInt	status;
 	/* Set the St encoded path */
 	len = strlen(pathName);
 	if (len >= aFaPath->max_file_len)
-		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG);
+		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG, interpreterProxy->interpreterState);
 	strcpy(aFaPath->path_file, pathName);
 
 	/* Convert to platform specific form */
 	status = sq2uxPath(aFaPath->path_file, len, aFaPath->uxpath_file, aFaPath->uxmax_file_len, 1);
 	if (!status)
-		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG);
+		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG, interpreterProxy->interpreterState);
 
 	return 0;
 }
@@ -99,7 +99,7 @@ sqInt	status;
 	/* Set the platform encoded path */
 	len = strlen(pathName);
 	if (len >= FA_PATH_MAX)
-		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG);
+		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG, interpreterProxy->interpreterState);
 	strcpy(aFaPath->uxpath, pathName);
 	aFaPath->uxpath[len] = 0;
 	aFaPath->uxpath_len = len;
@@ -109,7 +109,7 @@ sqInt	status;
 	/* Convert to St specific form */
 	status = ux2sqPath(aFaPath->uxpath, len, aFaPath->path, FA_PATH_MAX, 1);
 	if (!status)
-		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG);
+		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG, interpreterProxy->interpreterState);
 	/* Set aFaPath->uxpath_file and max_file_len to the buffer after the directory */
 	aFaPath->path_len = strlen(aFaPath->path);
 	aFaPath->path_file = 0;
@@ -126,10 +126,10 @@ int	len;
 char	*bytePtr;
 sqInt	status;
 
-	len = interpreterProxy->stSizeOf(pathNameOop);
+	len = interpreterProxy->stSizeOf(pathNameOop, interpreterProxy->interpreterState);
 	bytePtr = interpreterProxy->arrayValueOf(pathNameOop, interpreterProxy->interpreterState);
 	if (len >= FA_PATH_MAX)
-		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG);
+		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG, interpreterProxy->interpreterState);
 	memcpy(aFaPath->uxpath, bytePtr, len);
 	aFaPath->uxpath[len] = 0;
 	aFaPath->uxpath_len = len;
@@ -139,7 +139,7 @@ sqInt	status;
 	/* Convert to St specific form */
 	status = ux2sqPath(aFaPath->uxpath, len, aFaPath->path, FA_PATH_MAX, 1);
 	if (!status)
-		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG);
+		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG, interpreterProxy->interpreterState);
 	/* Set aFaPath->uxpath_file and max_file_len to the buffer after the directory */
 	aFaPath->path_len = strlen(aFaPath->path);
 	aFaPath->path_file = 0;
@@ -159,13 +159,13 @@ sqInt	status;
 	/* Set the platform encoded file name */
 	len = strlen(pathName);
 	if (len >= aFaPath->uxmax_file_len)
-		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG);
+		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG, interpreterProxy->interpreterState);
 	strcpy(aFaPath->uxpath_file, pathName);
 
 	/* Convert to St specific form */
 	status = ux2sqPath(aFaPath->uxpath_file, len, aFaPath->path_file, aFaPath->max_file_len, 1);
 	if (!status)
-		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG);
+		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG, interpreterProxy->interpreterState);
 
 	return 0;
 }
@@ -216,13 +216,13 @@ char	uxName[FA_PATH_MAX];
 
 	len = strlen(pathName);
 	if (len >= FA_PATH_MAX)
-   		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG);
+   		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG, interpreterProxy->interpreterState);
 	status = ux2sqPath(pathName, len, uxName, FA_PATH_MAX, 1);
 	if (!status)
-		return interpreterProxy->primitiveFailForOSError(FA_INVALID_ARGUMENTS);
+		return interpreterProxy->primitiveFailForOSError(FA_INVALID_ARGUMENTS, interpreterProxy->interpreterState);
 	status = faCharToByteArray(uxName, &pathOop);
 	if (status)
-		return interpreterProxy->primitiveFailForOSError(status);
+		return interpreterProxy->primitiveFailForOSError(status, interpreterProxy->interpreterState);
 	return pathOop;
 }
 
@@ -359,7 +359,7 @@ int		mode;
 		/* Requested attribute comes from stat() entry */
 		status = stat(faGetPlatPath(aFaPath), &statBuf);
 		if (status) {
-			interpreterProxy->primitiveFailForOSError(FA_CANT_STAT_PATH);
+			interpreterProxy->primitiveFailForOSError(FA_CANT_STAT_PATH, interpreterProxy->interpreterState);
 			return 0; }
 
 		switch (attributeNumber) {
@@ -369,7 +369,7 @@ int		mode;
 				break;
 
 			case 2: /* Mode */
-				resultOop = interpreterProxy->positive32BitIntegerFor(statBuf.st_mode);
+				resultOop = interpreterProxy->positive32BitIntegerFor(statBuf.st_mode, interpreterProxy->interpreterState);
 				break;
 
 			case 3: /* inode */
@@ -385,33 +385,33 @@ int		mode;
 				break;
 
 			case 6: /* uid */
-				resultOop = interpreterProxy->positive32BitIntegerFor(statBuf.st_uid);
+				resultOop = interpreterProxy->positive32BitIntegerFor(statBuf.st_uid, interpreterProxy->interpreterState);
 				break;
 
 			case 7: /* gid */
-				resultOop = interpreterProxy->positive32BitIntegerFor(statBuf.st_gid);
+				resultOop = interpreterProxy->positive32BitIntegerFor(statBuf.st_gid, interpreterProxy->interpreterState);
 				break;
 
 			case 8: /* size (if file) */
 				if (S_ISDIR(statBuf.st_mode) == 0)
 					resultOop = interpreterProxy->positive64BitIntegerFor(statBuf.st_size, interpreterProxy->interpreterState);
 				else
-					resultOop = interpreterProxy->positive32BitIntegerFor(0);
+					resultOop = interpreterProxy->positive32BitIntegerFor(0, interpreterProxy->interpreterState);
 				break;
 
 			case 9: /* access time */
 				resultOop = interpreterProxy->signed64BitIntegerFor(
-					faConvertUnixToLongSqueakTime(statBuf.st_atime));
+					faConvertUnixToLongSqueakTime(statBuf.st_atime), interpreterProxy->interpreterState);
 				break;
 
 			case 10: /* modified time */
 				resultOop = interpreterProxy->signed64BitIntegerFor(
-					faConvertUnixToLongSqueakTime(statBuf.st_mtime));
+					faConvertUnixToLongSqueakTime(statBuf.st_mtime), interpreterProxy->interpreterState);
 				break;
 
 			case 11: /* change time */
 				resultOop = interpreterProxy->signed64BitIntegerFor(
-					faConvertUnixToLongSqueakTime(statBuf.st_ctime));
+					faConvertUnixToLongSqueakTime(statBuf.st_ctime), interpreterProxy->interpreterState);
 				break;
 
 			case 12: /* creation time */
@@ -440,7 +440,7 @@ int		mode;
 		/* isSymlink */
 		status = lstat(faGetPlatPath(aFaPath), &statBuf);
 		if (status) {
-			interpreterProxy->primitiveFailForOSError(FA_CANT_STAT_PATH);
+			interpreterProxy->primitiveFailForOSError(FA_CANT_STAT_PATH, interpreterProxy->interpreterState);
 			 return 0; }
 		if (S_ISLNK(statBuf.st_mode))
 			resultOop = interpreterProxy->trueObject(interpreterProxy->interpreterState);
@@ -487,63 +487,52 @@ char		targetFile[FA_PATH_MAX];
 
 	interpreterProxy->storePointerofObjectwithValue(
 		0, attributeArray,
-		targetOop
-		, interpreterProxy->interpreterState);
+		targetOop, interpreterProxy->interpreterState);
 
 	interpreterProxy->storePointerofObjectwithValue(
 		1, attributeArray,
-		interpreterProxy->positive32BitIntegerFor(statBuf.st_mode)
-		, interpreterProxy->interpreterState);
+		interpreterProxy->positive32BitIntegerFor(statBuf.st_mode, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 
 	interpreterProxy->storePointerofObjectwithValue(
 		2, attributeArray,
-		interpreterProxy->positive64BitIntegerFor(statBuf.st_ino, interpreterProxy->interpreterState)
-		, interpreterProxy->interpreterState);
+		interpreterProxy->positive64BitIntegerFor(statBuf.st_ino, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 
 	interpreterProxy->storePointerofObjectwithValue(
 		3, attributeArray,
-		interpreterProxy->positive64BitIntegerFor(statBuf.st_dev, interpreterProxy->interpreterState)
-		, interpreterProxy->interpreterState);
+		interpreterProxy->positive64BitIntegerFor(statBuf.st_dev, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 
 	interpreterProxy->storePointerofObjectwithValue(
 		4, attributeArray,
-		interpreterProxy->positive32BitIntegerFor(statBuf.st_nlink)
-		, interpreterProxy->interpreterState);
+		interpreterProxy->positive32BitIntegerFor(statBuf.st_nlink, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 
 	interpreterProxy->storePointerofObjectwithValue(
 		5, attributeArray,
-		interpreterProxy->positive32BitIntegerFor(statBuf.st_uid)
-		, interpreterProxy->interpreterState);
+		interpreterProxy->positive32BitIntegerFor(statBuf.st_uid, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 
 	interpreterProxy->storePointerofObjectwithValue(
 		6, attributeArray,
-		interpreterProxy->positive32BitIntegerFor(statBuf.st_gid)
-		, interpreterProxy->interpreterState);
+		interpreterProxy->positive32BitIntegerFor(statBuf.st_gid, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 
 	interpreterProxy->storePointerofObjectwithValue(
 		7, attributeArray,
 		(S_ISDIR(statBuf.st_mode) == 0) ?
 			interpreterProxy->positive64BitIntegerFor(statBuf.st_size, interpreterProxy->interpreterState) :
-			interpreterProxy->positive32BitIntegerFor(0)
-			, interpreterProxy->interpreterState);
+			interpreterProxy->positive32BitIntegerFor(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 
 	interpreterProxy->storePointerofObjectwithValue(
 		8, attributeArray,
 		interpreterProxy->signed64BitIntegerFor(
-			faConvertUnixToLongSqueakTime(statBuf.st_atime))
-			, interpreterProxy->interpreterState);
+			faConvertUnixToLongSqueakTime(statBuf.st_atime), interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 
 	interpreterProxy->storePointerofObjectwithValue(
 		9, attributeArray,
 		interpreterProxy->signed64BitIntegerFor(
-			faConvertUnixToLongSqueakTime(statBuf.st_mtime))
-			, interpreterProxy->interpreterState);
+			faConvertUnixToLongSqueakTime(statBuf.st_mtime), interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 
 	interpreterProxy->storePointerofObjectwithValue(
 		10, attributeArray,
 		interpreterProxy->signed64BitIntegerFor(
-			faConvertUnixToLongSqueakTime(statBuf.st_ctime))
-			, interpreterProxy->interpreterState);
+			faConvertUnixToLongSqueakTime(statBuf.st_ctime), interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 
 	interpreterProxy->storePointerofObjectwithValue(
 		11, attributeArray,

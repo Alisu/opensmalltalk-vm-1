@@ -128,139 +128,139 @@ static sqInt startOfDatawithSize(sqInt rcvr, sqInt sizeField);
 
 #if defined(SQUEAK_BUILTIN_PLUGIN)
 
-# define isIntegerObject(oop) ((oop) & 1)
+# define isIntegerObject(oop, self) ((oop) & 1)
 
 # if SPURVM
-extern sqInt classIndexOf(sqInt);
+extern sqInt classIndexOf(sqInt, struct foo *);
 #	define LargeNegativeIntegerClassIndex 32
 #	define LargePositiveIntegerClassIndex 33
 #	if BytesPerOop == 4
-#	  define isImmediate(oop) ((oop) & 3)
+#	  define isImmediate(oop, self) ((oop) & 3)
 #	else
-#	  define isImmediate(oop) ((oop) & 7)
+#	  define isImmediate(oop, self) ((oop) & 7)
 #	endif
-#	define isKindOfInteger(oop) (isImmediate(oop) ? isIntegerObject(oop) : (unsigned)(classIndexOf(oop) - LargeNegativeIntegerClassIndex) <= 1)
-#	define isLargeIntegerObject(oop) (!isImmediate(oop) && (unsigned)(classIndexOf(oop) - LargeNegativeIntegerClassIndex) <= 1)
-#	define isLargeNegativeIntegerObject(oop) (!isImmediate(oop) && classIndexOf(oop) == LargeNegativeIntegerClassIndex)
-#	define isLargePositiveIntegerObject(oop) (!isImmediate(oop) && classIndexOf(oop) == LargePositiveIntegerClassIndex)
+#	define isKindOfInteger(oop, self) (isImmediate(oop, self) ? isIntegerObject(oop, self) : (unsigned)(classIndexOf(oop, self) - LargeNegativeIntegerClassIndex) <= 1)
+#	define isLargeIntegerObject(oop, self) (!isImmediate(oop, self) && (unsigned)(classIndexOf(oop, self) - LargeNegativeIntegerClassIndex) <= 1)
+#	define isLargeNegativeIntegerObject(oop, self) (!isImmediate(oop, self) && classIndexOf(oop, self) == LargeNegativeIntegerClassIndex)
+#	define isLargePositiveIntegerObject(oop, self) (!isImmediate(oop, self) && classIndexOf(oop, self) == LargePositiveIntegerClassIndex)
 # endif /* SPURVM */
 #endif /* defined(SQUEAK_BUILTIN_PLUGIN) */
 
 #if !defined(isKindOfInteger)
-# define isLargeNegativeIntegerObject(oop) (fetchClassOf(oop) == classLargeNegativeInteger())
-# define isLargePositiveIntegerObject(oop) (fetchClassOf(oop) == classLargePositiveInteger())
-# define isLargeIntegerObject(oop) (isLargeNegativeIntegerObject(oop) || isLargePositiveIntegerObject(oop))
-# define isKindOfInteger(oop) (isIntegerObject(oop) || isLargeNegativeIntegerObject(oop) || isLargePositiveIntegerObject(oop))
+# define isLargeNegativeIntegerObject(oop, self) (fetchClassOf(oop, self) == classLargeNegativeInteger(self))
+# define isLargePositiveIntegerObject(oop, self) (fetchClassOf(oop, self) == classLargePositiveInteger(self))
+# define isLargeIntegerObject(oop, self) (isLargeNegativeIntegerObject(oop, self) || isLargePositiveIntegerObject(oop, self))
+# define isKindOfInteger(oop , self) (isIntegerObject(oop, self) || isLargeNegativeIntegerObject(oop, self) || isLargePositiveIntegerObject(oop, self))
 #endif
 
 #if !defined(SQUEAK_BUILTIN_PLUGIN)
-static sqInt (*byteSizeOf)(sqInt oop);
-static sqInt (*classAlien)(void);
-static sqInt (*classLargeNegativeInteger)(void);
-static sqInt (*classLargePositiveInteger)(void);
-static sqInt (*classSemaphore)(void);
-static sqInt (*failed)(void);
-static sqInt (*falseObject)(void);
-static sqInt (*fetchClassOf)(sqInt oop);
-static void * (*firstIndexableField)(sqInt oop);
-static double (*floatValueOf)(sqInt oop);
-static sqInt * (*getStackPointer)(void);
-static sqInt (*includesBehaviorThatOf)(sqInt aClass, sqInt aSuperclass);
-static sqInt (*instantiateClassindexableSize)(sqInt classPointer, sqInt size);
-static sqInt (*integerObjectOf)(sqInt value);
-static sqInt (*integerValueOf)(sqInt oop);
+static sqInt (*byteSizeOf)(sqInt oop, struct foo * self);
+static sqInt (*classAlien)(struct foo * self);
+static sqInt (*classLargeNegativeInteger)(struct foo * self);
+static sqInt (*classLargePositiveInteger)(struct foo * self);
+static sqInt (*classSemaphore)(struct foo * self);
+static sqInt (*failed)(struct foo * self);
+static sqInt (*falseObject)(struct foo * self);
+static sqInt (*fetchClassOf)(sqInt oop, struct foo * self);
+static void * (*firstIndexableField)(sqInt oop, struct foo * self);
+static double (*floatValueOf)(sqInt oop, struct foo * self);
+static sqInt * (*getStackPointer)(struct foo * self);
+static sqInt (*includesBehaviorThatOf)(sqInt aClass, sqInt aSuperclass, struct foo * self);
+static sqInt (*instantiateClassindexableSize)(sqInt classPointer, sqInt size, struct foo * self);
+static sqInt (*integerObjectOf)(sqInt value, struct foo * self);
+static sqInt (*integerValueOf)(sqInt oop, struct foo * self);
 static void * (*ioLoadModuleOfLength)(sqInt moduleNameIndex, sqInt moduleLength);
 static void * (*ioLoadSymbolOfLengthFromModule)(sqInt functionNameIndex, sqInt functionLength, sqInt moduleHandle);
-static sqInt (*isArray)(sqInt oop);
-static sqInt (*isBytes)(sqInt oop);
-static sqInt (*isInMemory)(sqInt address);
-static sqInt (*isIntegerObject)(sqInt objectPointer);
-static sqInt (*isNonImmediate)(sqInt anObject);
+static sqInt (*isArray)(sqInt oop, struct foo * self);
+static sqInt (*isBytes)(sqInt oop, struct foo * self);
+static sqInt (*isInMemory)(sqInt address, struct foo * self);
+static sqInt (*isIntegerObject)(sqInt objectPointer, struct foo * self);
+static sqInt (*isNonImmediate)(sqInt anObject, struct foo * self);
 #if IMMUTABILITY
-static sqInt (*isOopImmutable)(sqInt oop);
+static sqInt (*isOopImmutable)(sqInt oop, struct foo * self);
 #endif /* IMMUTABILITY */
-static sqInt (*isWordsOrBytes)(sqInt oop);
-static sqInt (*methodArgumentCount)(void);
-static sqInt (*methodReturnValue)(sqInt oop);
-static sqInt (*pop)(sqInt nItems);
-static sqInt (*popthenPush)(sqInt nItems, sqInt oop);
-static sqInt (*positive32BitIntegerFor)(unsigned int integerValue);
-static usqInt (*positive32BitValueOf)(sqInt oop);
-static sqInt (*positive64BitIntegerFor)(usqLong integerValue);
-static usqLong (*positive64BitValueOf)(sqInt oop);
-static usqIntptr_t (*positiveMachineIntegerValueOf)(sqInt oop);
-static sqInt (*primitiveFailFor)(sqInt reasonCode);
-static sqInt (*pushFloat)(double f);
-static sqInt (*returnAsThroughCallbackContext)(sqInt returnTypeOop, VMCallbackContext *vmCallbackContext, sqInt callbackMethodContext);
-static sqInt (*signalNoResume)(sqInt aSemaphore);
-static sqInt (*signed32BitIntegerFor)(sqInt integerValue);
-static int (*signed32BitValueOf)(sqInt oop);
-static sqInt (*signed64BitIntegerFor)(sqLong integerValue);
-static sqLong (*signed64BitValueOf)(sqInt oop);
-static sqIntptr_t (*signedMachineIntegerValueOf)(sqInt oop);
-static sqInt (*stSizeOf)(sqInt oop);
-static sqInt (*stackIntegerValue)(sqInt offset);
-static sqInt (*stackObjectValue)(sqInt offset);
-static usqIntptr_t (*stackPositiveMachineIntegerValue)(sqInt offset);
-static sqInt (*stackValue)(sqInt offset);
-static sqInt (*trueObject)(void);
+static sqInt (*isWordsOrBytes)(sqInt oop, struct foo * self);
+static sqInt (*methodArgumentCount)(struct foo * self);
+static sqInt (*methodReturnValue)(sqInt oop, struct foo * self);
+static sqInt (*pop)(sqInt nItems, struct foo * self);
+static sqInt (*popthenPush)(sqInt nItems, sqInt oop, struct foo * self);
+static sqInt (*positive32BitIntegerFor)(unsigned int integerValue, struct foo * self);
+static usqInt (*positive32BitValueOf)(sqInt oop, struct foo * self);
+static sqInt (*positive64BitIntegerFor)(usqLong integerValue, struct foo * self);
+static usqLong (*positive64BitValueOf)(sqInt oop, struct foo * self);
+static usqIntptr_t (*positiveMachineIntegerValueOf)(sqInt oop, struct foo * self);
+static sqInt (*primitiveFailFor)(sqInt reasonCode, struct foo * self);
+static sqInt (*pushFloat)(double f, struct foo * self);
+static sqInt (*returnAsThroughCallbackContext)(sqInt returnTypeOop, VMCallbackContext *vmCallbackContext, sqInt callbackMethodContext, struct foo * self);
+static sqInt (*signalNoResume)(sqInt aSemaphore, struct foo * self);
+static sqInt (*signed32BitIntegerFor)(sqInt integerValue, struct foo * self);
+static int (*signed32BitValueOf)(sqInt oop, struct foo * self);
+static sqInt (*signed64BitIntegerFor)(sqLong integerValue, struct foo * self);
+static sqLong (*signed64BitValueOf)(sqInt oop, struct foo * self);
+static sqIntptr_t (*signedMachineIntegerValueOf)(sqInt oop, struct foo * self);
+static sqInt (*stSizeOf)(sqInt oop, struct foo * self);
+static sqInt (*stackIntegerValue)(sqInt offset, struct foo * self);
+static sqInt (*stackObjectValue)(sqInt offset, struct foo * self);
+static usqIntptr_t (*stackPositiveMachineIntegerValue)(sqInt offset, struct foo * self);
+static sqInt (*stackValue)(sqInt offset, struct foo * self);
+static sqInt (*trueObject)(struct foo * self);
 #else /* !defined(SQUEAK_BUILTIN_PLUGIN) */
-extern sqInt byteSizeOf(sqInt oop);
-extern sqInt classAlien(void);
-extern sqInt classLargeNegativeInteger(void);
-extern sqInt classLargePositiveInteger(void);
-extern sqInt classSemaphore(void);
-extern sqInt failed(void);
-extern sqInt falseObject(void);
-extern sqInt fetchClassOf(sqInt oop);
-extern void * firstIndexableField(sqInt oop);
-extern double floatValueOf(sqInt oop);
-extern sqInt * getStackPointer(void);
-extern sqInt includesBehaviorThatOf(sqInt aClass, sqInt aSuperclass);
-extern sqInt instantiateClassindexableSize(sqInt classPointer, sqInt size);
-extern sqInt integerObjectOf(sqInt value);
-extern sqInt integerValueOf(sqInt oop);
+extern sqInt byteSizeOf(sqInt oop, struct foo * self);
+extern sqInt classAlien(struct foo * self);
+extern sqInt classLargeNegativeInteger(struct foo * self);
+extern sqInt classLargePositiveInteger(struct foo * self);
+extern sqInt classSemaphore(struct foo * self);
+extern sqInt failed(struct foo * self);
+extern sqInt falseObject(struct foo * self);
+extern sqInt fetchClassOf(sqInt oop, struct foo * self);
+extern void * firstIndexableField(sqInt oop, struct foo * self);
+extern double floatValueOf(sqInt oop, struct foo * self);
+extern sqInt * getStackPointer(struct foo * self);
+extern sqInt includesBehaviorThatOf(sqInt aClass, sqInt aSuperclass, struct foo * self);
+extern sqInt instantiateClassindexableSize(sqInt classPointer, sqInt size, struct foo * self);
+extern sqInt integerObjectOf(sqInt value, struct foo * self);
+extern sqInt integerValueOf(sqInt oop, struct foo * self);
 extern void * ioLoadModuleOfLength(sqInt moduleNameIndex, sqInt moduleLength);
 extern void * ioLoadSymbolOfLengthFromModule(sqInt functionNameIndex, sqInt functionLength, sqInt moduleHandle);
-extern sqInt isArray(sqInt oop);
-extern sqInt isBytes(sqInt oop);
-extern sqInt isInMemory(sqInt address);
+extern sqInt isArray(sqInt oop, struct foo * self);
+extern sqInt isBytes(sqInt oop, struct foo * self);
+extern sqInt isInMemory(sqInt address, struct foo * self);
 #if !defined(isIntegerObject)
-extern sqInt isIntegerObject(sqInt objectPointer);
+extern sqInt isIntegerObject(sqInt objectPointer, struct foo * self);
 #endif
-extern sqInt isNonImmediate(sqInt anObject);
+extern sqInt isNonImmediate(sqInt anObject, struct foo * self);
 #if IMMUTABILITY
 #if IMMUTABILITY
-extern sqInt isOopImmutable(sqInt oop);
+extern sqInt isOopImmutable(sqInt oop, struct foo * self);
 #endif /* IMMUTABILITY */
 #else
 # define isOopImmutable(oop) 0
 #endif
-extern sqInt isWordsOrBytes(sqInt oop);
-extern sqInt methodArgumentCount(void);
-extern sqInt methodReturnValue(sqInt oop);
-extern sqInt pop(sqInt nItems);
-extern sqInt popthenPush(sqInt nItems, sqInt oop);
-extern sqInt positive32BitIntegerFor(unsigned int integerValue);
-extern usqInt positive32BitValueOf(sqInt oop);
-extern sqInt positive64BitIntegerFor(usqLong integerValue);
-extern usqLong positive64BitValueOf(sqInt oop);
-extern usqIntptr_t positiveMachineIntegerValueOf(sqInt oop);
-extern sqInt primitiveFailFor(sqInt reasonCode);
-extern sqInt pushFloat(double f);
-extern sqInt returnAsThroughCallbackContext(sqInt returnTypeOop, VMCallbackContext *vmCallbackContext, sqInt callbackMethodContext);
-extern sqInt signalNoResume(sqInt aSemaphore);
-extern sqInt signed32BitIntegerFor(sqInt integerValue);
-extern int signed32BitValueOf(sqInt oop);
-extern sqInt signed64BitIntegerFor(sqLong integerValue);
-extern sqLong signed64BitValueOf(sqInt oop);
-extern sqIntptr_t signedMachineIntegerValueOf(sqInt oop);
-extern sqInt stSizeOf(sqInt oop);
-extern sqInt stackIntegerValue(sqInt offset);
-extern sqInt stackObjectValue(sqInt offset);
-extern usqIntptr_t stackPositiveMachineIntegerValue(sqInt offset);
-extern sqInt stackValue(sqInt offset);
-extern sqInt trueObject(void);
+extern sqInt isWordsOrBytes(sqInt oop, struct foo * self);
+extern sqInt methodArgumentCount(struct foo * self);
+extern sqInt methodReturnValue(sqInt oop, struct foo * self);
+extern sqInt pop(sqInt nItems, struct foo * self);
+extern sqInt popthenPush(sqInt nItems, sqInt oop, struct foo * self);
+extern sqInt positive32BitIntegerFor(unsigned int integerValue, struct foo * self);
+extern usqInt positive32BitValueOf(sqInt oop, struct foo * self);
+extern sqInt positive64BitIntegerFor(usqLong integerValue, struct foo * self);
+extern usqLong positive64BitValueOf(sqInt oop, struct foo * self);
+extern usqIntptr_t positiveMachineIntegerValueOf(sqInt oop, struct foo * self);
+extern sqInt primitiveFailFor(sqInt reasonCode, struct foo * self);
+extern sqInt pushFloat(double f, struct foo * self);
+extern sqInt returnAsThroughCallbackContext(sqInt returnTypeOop, VMCallbackContext *vmCallbackContext, sqInt callbackMethodContext, struct foo * self);
+extern sqInt signalNoResume(sqInt aSemaphore, struct foo * self);
+extern sqInt signed32BitIntegerFor(sqInt integerValue, struct foo * self);
+extern int signed32BitValueOf(sqInt oop, struct foo * self);
+extern sqInt signed64BitIntegerFor(sqLong integerValue, struct foo * self);
+extern sqLong signed64BitValueOf(sqInt oop, struct foo * self);
+extern sqIntptr_t signedMachineIntegerValueOf(sqInt oop, struct foo * self);
+extern sqInt stSizeOf(sqInt oop, struct foo * self);
+extern sqInt stackIntegerValue(sqInt offset, struct foo * self);
+extern sqInt stackObjectValue(sqInt offset, struct foo * self);
+extern usqIntptr_t stackPositiveMachineIntegerValue(sqInt offset, struct foo * self);
+extern sqInt stackValue(sqInt offset, struct foo * self);
+extern sqInt trueObject(struct foo * self);
 extern
 #endif
 struct VirtualMachine* interpreterProxy;
@@ -317,7 +317,7 @@ indexlengthinRange(sqInt byteIndex, sqInt length, sqInt rcvr)
 EXPORT(sqInt)
 isAlien(sqInt anOop)
 {
-	return includesBehaviorThatOf(fetchClassOf(anOop), classAlien());
+	return includesBehaviorThatOf(fetchClassOf(anOop, interpreterProxy->interpreterState), classAlien(interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 }
 
 
@@ -335,13 +335,13 @@ primAddressField(void)
     sqInt value;
     sqInt valueOop;
 
-	rcvr = stackValue(0);
+	rcvr = stackValue(0, interpreterProxy->interpreterState);
 	value = longAt((rcvr + BaseHeaderSize) + BytesPerOop);
 	/* begin positiveMachineIntegerFor: */
 	valueOop = (BytesPerWord == 8
-		? positive64BitIntegerFor(value)
-		: positive32BitIntegerFor(value));
-	return methodReturnValue(valueOop);
+		? positive64BitIntegerFor(value, interpreterProxy->interpreterState)
+		: positive32BitIntegerFor(value, interpreterProxy->interpreterState));
+	return methodReturnValue(valueOop, interpreterProxy->interpreterState);
 }
 
 
@@ -359,17 +359,17 @@ primAddressFieldPut(void)
     sqInt value;
     sqInt valueOop;
 
-	valueOop = stackValue(0);
-	rcvr = stackValue(1);
-	value = positiveMachineIntegerValueOf(valueOop);
-	if (failed()) {
-		return primitiveFailFor(PrimErrBadArgument);
+	valueOop = stackValue(0, interpreterProxy->interpreterState);
+	rcvr = stackValue(1, interpreterProxy->interpreterState);
+	value = positiveMachineIntegerValueOf(valueOop, interpreterProxy->interpreterState);
+	if (failed(interpreterProxy->interpreterState)) {
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
-	if (isOopImmutable(rcvr)) {
-		return primitiveFailFor(PrimErrNoModification);
+	if (isOopImmutable(rcvr, interpreterProxy->interpreterState)) {
+		return primitiveFailFor(PrimErrNoModification, interpreterProxy->interpreterState);
 	}
 	longAtput((rcvr + BaseHeaderSize) + BytesPerOop, value);
-	return methodReturnValue(valueOop);
+	return methodReturnValue(valueOop, interpreterProxy->interpreterState);
 }
 
 
@@ -407,16 +407,16 @@ primAlienReplace(void)
     sqInt stop;
     sqInt totalLength;
 
-	array = stackValue(4);
-	start = stackIntegerValue(3);
-	stop = stackIntegerValue(2);
-	repl = stackValue(1);
-	replStart = stackIntegerValue(0);
-	if ((failed())
-	 || (!(isWordsOrBytes(array)))) {
-		return primitiveFailFor(PrimErrBadArgument);
+	array = stackValue(4, interpreterProxy->interpreterState);
+	start = stackIntegerValue(3, interpreterProxy->interpreterState);
+	stop = stackIntegerValue(2, interpreterProxy->interpreterState);
+	repl = stackValue(1, interpreterProxy->interpreterState);
+	replStart = stackIntegerValue(0, interpreterProxy->interpreterState);
+	if ((failed(interpreterProxy->interpreterState))
+	 || (!(isWordsOrBytes(array, interpreterProxy->interpreterState)))) {
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
-	if (includesBehaviorThatOf(fetchClassOf(array), classAlien())) {
+	if (includesBehaviorThatOf(fetchClassOf(array, interpreterProxy->interpreterState), classAlien(interpreterProxy->interpreterState), interpreterProxy->interpreterState)) {
 		totalLength = longAt(array + BaseHeaderSize);
 		dest = (((totalLength > 0
 	? (array + BaseHeaderSize) + BytesPerOop
@@ -431,22 +431,22 @@ primAlienReplace(void)
 		}
 	}
 	else {
-		totalLength = byteSizeOf(array);
+		totalLength = byteSizeOf(array, interpreterProxy->interpreterState);
 		dest = ((array + BaseHeaderSize) + start) - 1;
 	}
 	if (!((start >= 1)
 		 && (((start - 1) <= stop)
 		 && (stop <= totalLength)))) {
-		return primitiveFailFor(PrimErrBadIndex);
+		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
 	}
-	if (isKindOfInteger(repl)) {
-		src = ((positiveMachineIntegerValueOf(repl)) + replStart) - 1;
-		if (failed()) {
-			return primitiveFailFor(PrimErrBadArgument);
+	if (isKindOfInteger(repl, interpreterProxy->interpreterState)) {
+		src = ((positiveMachineIntegerValueOf(repl, interpreterProxy->interpreterState)) + replStart) - 1;
+		if (failed(interpreterProxy->interpreterState)) {
+			return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 		}
 	}
 	else {
-		if (includesBehaviorThatOf(fetchClassOf(repl), classAlien())) {
+		if (includesBehaviorThatOf(fetchClassOf(repl, interpreterProxy->interpreterState), classAlien(interpreterProxy->interpreterState), interpreterProxy->interpreterState)) {
 			totalLength = longAt(repl + BaseHeaderSize);
 			src = (((totalLength > 0
 	? (repl + BaseHeaderSize) + BytesPerOop
@@ -461,23 +461,23 @@ primAlienReplace(void)
 			}
 		}
 		else {
-			if (!(isWordsOrBytes(repl))) {
-				return primitiveFailFor(PrimErrBadArgument);
+			if (!(isWordsOrBytes(repl, interpreterProxy->interpreterState))) {
+				return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 			}
-			totalLength = byteSizeOf(repl);
+			totalLength = byteSizeOf(repl, interpreterProxy->interpreterState);
 			src = ((repl + BaseHeaderSize) + replStart) - 1;
 		}
 		if (!((replStart >= 1)
 			 && (((stop - start) + replStart) <= totalLength))) {
-			return primitiveFailFor(PrimErrBadIndex);
+			return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
 		}
 	}
-	if (isOopImmutable(array)) {
-		return primitiveFailFor(PrimErrNoModification);
+	if (isOopImmutable(array, interpreterProxy->interpreterState)) {
+		return primitiveFailFor(PrimErrNoModification, interpreterProxy->interpreterState);
 	}
 	count = (stop - start) + 1;
 	memmove(((void *)dest), ((void *)src), count);
-	pop(methodArgumentCount());
+	pop(methodArgumentCount(interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -499,16 +499,16 @@ primAllocateExecutablePage(void)
 
 	mem = allocateExecutablePage(&byteSize);
 	if (mem == 0) {
-		return primitiveFailFor(PrimErrNoCMemory);
+		return primitiveFailFor(PrimErrNoCMemory, interpreterProxy->interpreterState);
 	}
-	alien = instantiateClassindexableSize(classAlien(), 2 * BytesPerOop);
-	if (failed()) {
-		return primitiveFailFor(PrimErrNoMemory);
+	alien = instantiateClassindexableSize(classAlien(interpreterProxy->interpreterState), 2 * BytesPerOop, interpreterProxy->interpreterState);
+	if (failed(interpreterProxy->interpreterState)) {
+		return primitiveFailFor(PrimErrNoMemory, interpreterProxy->interpreterState);
 	}
-	ptr = firstIndexableField(alien);
+	ptr = firstIndexableField(alien, interpreterProxy->interpreterState);
 	ptr[0] = (0 - byteSize);
 	ptr[1] = (((sqIntptr_t) mem));
-	methodReturnValue(alien);
+	methodReturnValue(alien, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -526,19 +526,19 @@ primBoxedFree(void)
     sqInt rcvr;
     sqIntptr_t sizeField;
 
-	rcvr = stackValue(0);
-	if (!((byteSizeOf(rcvr)) >= (2 * BytesPerOop))) {
-		return primitiveFailFor(PrimErrBadReceiver);
+	rcvr = stackValue(0, interpreterProxy->interpreterState);
+	if (!((byteSizeOf(rcvr, interpreterProxy->interpreterState)) >= (2 * BytesPerOop))) {
+		return primitiveFailFor(PrimErrBadReceiver, interpreterProxy->interpreterState);
 	}
-	ptr = firstIndexableField(rcvr);
+	ptr = firstIndexableField(rcvr, interpreterProxy->interpreterState);
 	sizeField = ptr[0];
 
 	/* Don't you dare to free Squeak's memory! */
 	addr = ptr[1];
 	if ((sizeField >= 0)
 	 || ((addr == 0)
-	 || (isInMemory(addr)))) {
-		return primitiveFailFor(PrimErrInappropriate);
+	 || (isInMemory(addr, interpreterProxy->interpreterState)))) {
+		return primitiveFailFor(PrimErrInappropriate, interpreterProxy->interpreterState);
 	}
 	free((void *)addr);
 	ptr[0] = 0;
@@ -566,7 +566,7 @@ primCallOutDoubleReturn(void)
     sqInt mac;
     sqInt result;
 
-	mac = methodArgumentCount();
+	mac = methodArgumentCount(interpreterProxy->interpreterState);
 	
 #  if STACKVM
 
@@ -576,20 +576,20 @@ primCallOutDoubleReturn(void)
 	/* nargs negated to imply stack direction */
 	/* funcOffset */
 	/* resultOffset */
-	errCode = callIA32DoubleReturn(((getStackPointer()) + mac) - 2, 1 - mac, mac, mac - 1);
+	errCode = callIA32DoubleReturn(((getStackPointer(interpreterProxy->interpreterState)) + mac) - 2, 1 - mac, mac, mac - 1);
 #  else /* STACKVM */
 
 	/* ptr to 0th arg */
 	/* nargs */
 	/* funcOffset */
 	/* resultOffset */
-	errCode = callIA32DoubleReturn(((getStackPointer()) - mac) + 2, mac - 1, mac, mac - 1);
+	errCode = callIA32DoubleReturn(((getStackPointer(interpreterProxy->interpreterState)) - mac) + 2, mac - 1, mac, mac - 1);
 #  endif /* STACKVM */
 	if (errCode != 0) {
-		return primitiveFailFor(errCode);
+		return primitiveFailFor(errCode, interpreterProxy->interpreterState);
 	}
-	result = stackValue(mac - 1);
-	popthenPush(mac + 1, result);
+	result = stackValue(mac - 1, interpreterProxy->interpreterState);
+	popthenPush(mac + 1, result, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -613,7 +613,7 @@ primCallOutFloatReturn(void)
     sqInt mac;
     sqInt result;
 
-	mac = methodArgumentCount();
+	mac = methodArgumentCount(interpreterProxy->interpreterState);
 	
 #  if STACKVM
 
@@ -623,20 +623,20 @@ primCallOutFloatReturn(void)
 	/* nargs negated to imply stack direction */
 	/* funcOffset */
 	/* resultOffset */
-	errCode = callIA32FloatReturn(((getStackPointer()) + mac) - 2, 1 - mac, mac, mac - 1);
+	errCode = callIA32FloatReturn(((getStackPointer(interpreterProxy->interpreterState)) + mac) - 2, 1 - mac, mac, mac - 1);
 #  else /* STACKVM */
 
 	/* ptr to 0th arg */
 	/* nargs */
 	/* funcOffset */
 	/* resultOffset */
-	errCode = callIA32FloatReturn(((getStackPointer()) - mac) + 2, mac - 1, mac, mac - 1);
+	errCode = callIA32FloatReturn(((getStackPointer(interpreterProxy->interpreterState)) - mac) + 2, mac - 1, mac, mac - 1);
 #  endif /* STACKVM */
 	if (errCode != 0) {
-		return primitiveFailFor(errCode);
+		return primitiveFailFor(errCode, interpreterProxy->interpreterState);
 	}
-	result = stackValue(mac - 1);
-	popthenPush(mac + 1, result);
+	result = stackValue(mac - 1, interpreterProxy->interpreterState);
+	popthenPush(mac + 1, result, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -660,7 +660,7 @@ primCallOutIntegralReturn(void)
     sqInt mac;
     sqInt result;
 
-	mac = methodArgumentCount();
+	mac = methodArgumentCount(interpreterProxy->interpreterState);
 	
 #  if STACKVM
 
@@ -670,20 +670,20 @@ primCallOutIntegralReturn(void)
 	/* nargs negated to imply stack direction */
 	/* funcOffset */
 	/* resultOffset */
-	errCode = callIA32IntegralReturn(((getStackPointer()) + mac) - 2, 1 - mac, mac, mac - 1);
+	errCode = callIA32IntegralReturn(((getStackPointer(interpreterProxy->interpreterState)) + mac) - 2, 1 - mac, mac, mac - 1);
 #  else /* STACKVM */
 
 	/* ptr to 0th arg */
 	/* nargs */
 	/* funcOffset */
 	/* resultOffset */
-	errCode = callIA32IntegralReturn(((getStackPointer()) - mac) + 2, mac - 1, mac, mac - 1);
+	errCode = callIA32IntegralReturn(((getStackPointer(interpreterProxy->interpreterState)) - mac) + 2, mac - 1, mac, mac - 1);
 #  endif /* STACKVM */
 	if (errCode != 0) {
-		return primitiveFailFor(errCode);
+		return primitiveFailFor(errCode, interpreterProxy->interpreterState);
 	}
-	result = stackValue(mac - 1);
-	popthenPush(mac + 1, result);
+	result = stackValue(mac - 1, interpreterProxy->interpreterState);
+	popthenPush(mac + 1, result, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -699,18 +699,18 @@ primCalloc(void)
     usqInt addr;
     sqInt byteSize;
 
-	byteSize = stackIntegerValue(0);
-	if ((failed())
+	byteSize = stackIntegerValue(0, interpreterProxy->interpreterState);
+	if ((failed(interpreterProxy->interpreterState))
 	 || (byteSize <= 0)) {
-		return primitiveFailFor(PrimErrBadArgument);
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	addr = ((usqInt)(calloc(1, byteSize)));
 	if (addr == 0) {
-		return primitiveFailFor(PrimErrNoCMemory);
+		return primitiveFailFor(PrimErrNoCMemory, interpreterProxy->interpreterState);
 	}
 	methodReturnValue((BytesPerWord == 8
-		? positive64BitIntegerFor(addr)
-		: positive32BitIntegerFor(addr)));
+		? positive64BitIntegerFor(addr, interpreterProxy->interpreterState)
+		: positive32BitIntegerFor(addr, interpreterProxy->interpreterState)), interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -731,23 +731,23 @@ primDoubleAt(void)
     sqInt rcvr;
     sqInt startAddr;
 
-	byteOffset = (stackPositiveMachineIntegerValue(0)) - 1;
-	rcvr = stackObjectValue(1);
-	if (failed()) {
-		return primitiveFailFor(PrimErrBadArgument);
+	byteOffset = (stackPositiveMachineIntegerValue(0, interpreterProxy->interpreterState)) - 1;
+	rcvr = stackObjectValue(1, interpreterProxy->interpreterState);
+	if (failed(interpreterProxy->interpreterState)) {
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	if (!(indexlengthinRange(byteOffset, 8, rcvr))) {
-		return primitiveFailFor(PrimErrBadIndex);
+		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
 	}
 	if (((startAddr = ((longAt(rcvr + BaseHeaderSize)) > 0
 		? (rcvr + BaseHeaderSize) + BytesPerOop
 		: longAt((rcvr + BaseHeaderSize) + BytesPerOop)))) == 0) {
-		return primitiveFailFor(PrimErrBadReceiver);
+		return primitiveFailFor(PrimErrBadReceiver, interpreterProxy->interpreterState);
 	}
 	addr = startAddr + byteOffset;
 	memcpy((&floatValue), addr, sizeof(floatValue));
-	pop(2);
-	return pushFloat(floatValue);
+	pop(2, interpreterProxy->interpreterState);
+	return pushFloat(floatValue, interpreterProxy->interpreterState);
 }
 
 
@@ -768,32 +768,32 @@ primDoubleAtPut(void)
     sqInt startAddr;
     sqInt valueOop;
 
-	valueOop = stackValue(0);
-	if (isIntegerObject(valueOop)) {
-		floatValue = ((double) (integerValueOf(valueOop)));
+	valueOop = stackValue(0, interpreterProxy->interpreterState);
+	if (isIntegerObject(valueOop, interpreterProxy->interpreterState)) {
+		floatValue = ((double) (integerValueOf(valueOop, interpreterProxy->interpreterState)));
 	}
 	else {
-		floatValue = ((double) (floatValueOf(valueOop)));
+		floatValue = ((double) (floatValueOf(valueOop, interpreterProxy->interpreterState)));
 	}
-	byteOffset = (stackPositiveMachineIntegerValue(1)) - 1;
-	rcvr = stackObjectValue(2);
-	if (failed()) {
-		return primitiveFailFor(PrimErrBadArgument);
+	byteOffset = (stackPositiveMachineIntegerValue(1, interpreterProxy->interpreterState)) - 1;
+	rcvr = stackObjectValue(2, interpreterProxy->interpreterState);
+	if (failed(interpreterProxy->interpreterState)) {
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	if (!(indexlengthinRange(byteOffset, 8, rcvr))) {
-		return primitiveFailFor(PrimErrBadIndex);
+		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
 	}
-	if (isOopImmutable(rcvr)) {
-		return primitiveFailFor(PrimErrNoModification);
+	if (isOopImmutable(rcvr, interpreterProxy->interpreterState)) {
+		return primitiveFailFor(PrimErrNoModification, interpreterProxy->interpreterState);
 	}
 	if (((startAddr = ((longAt(rcvr + BaseHeaderSize)) > 0
 		? (rcvr + BaseHeaderSize) + BytesPerOop
 		: longAt((rcvr + BaseHeaderSize) + BytesPerOop)))) == 0) {
-		return primitiveFailFor(PrimErrBadReceiver);
+		return primitiveFailFor(PrimErrBadReceiver, interpreterProxy->interpreterState);
 	}
 	addr = startAddr + byteOffset;
 	memcpy(addr, (&floatValue), sizeof(floatValue));
-	methodReturnValue(valueOop);
+	methodReturnValue(valueOop, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -823,23 +823,23 @@ primFloatAt(void)
     sqInt rcvr;
     sqInt startAddr;
 
-	byteOffset = (stackPositiveMachineIntegerValue(0)) - 1;
-	rcvr = stackObjectValue(1);
-	if (failed()) {
-		return primitiveFailFor(PrimErrBadArgument);
+	byteOffset = (stackPositiveMachineIntegerValue(0, interpreterProxy->interpreterState)) - 1;
+	rcvr = stackObjectValue(1, interpreterProxy->interpreterState);
+	if (failed(interpreterProxy->interpreterState)) {
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	if (!(indexlengthinRange(byteOffset, 4, rcvr))) {
-		return primitiveFailFor(PrimErrBadIndex);
+		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
 	}
 	if (((startAddr = ((longAt(rcvr + BaseHeaderSize)) > 0
 		? (rcvr + BaseHeaderSize) + BytesPerOop
 		: longAt((rcvr + BaseHeaderSize) + BytesPerOop)))) == 0) {
-		return primitiveFailFor(PrimErrBadReceiver);
+		return primitiveFailFor(PrimErrBadReceiver, interpreterProxy->interpreterState);
 	}
 	addr = startAddr + byteOffset;
 	memcpy((&floatValue), addr, sizeof(floatValue));
-	pop(2);
-	return pushFloat(floatValue);
+	pop(2, interpreterProxy->interpreterState);
+	return pushFloat(floatValue, interpreterProxy->interpreterState);
 }
 
 
@@ -860,32 +860,32 @@ primFloatAtPut(void)
     sqInt startAddr;
     sqInt valueOop;
 
-	valueOop = stackValue(0);
-	if (isIntegerObject(valueOop)) {
-		floatValue = ((double) (integerValueOf(valueOop)));
+	valueOop = stackValue(0, interpreterProxy->interpreterState);
+	if (isIntegerObject(valueOop, interpreterProxy->interpreterState)) {
+		floatValue = ((double) (integerValueOf(valueOop, interpreterProxy->interpreterState)));
 	}
 	else {
-		floatValue = ((double) (floatValueOf(valueOop)));
+		floatValue = ((double) (floatValueOf(valueOop, interpreterProxy->interpreterState)));
 	}
-	byteOffset = (stackPositiveMachineIntegerValue(1)) - 1;
-	rcvr = stackObjectValue(2);
-	if (failed()) {
-		return primitiveFailFor(PrimErrBadArgument);
+	byteOffset = (stackPositiveMachineIntegerValue(1, interpreterProxy->interpreterState)) - 1;
+	rcvr = stackObjectValue(2, interpreterProxy->interpreterState);
+	if (failed(interpreterProxy->interpreterState)) {
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	if (!(indexlengthinRange(byteOffset, 4, rcvr))) {
-		return primitiveFailFor(PrimErrBadIndex);
+		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
 	}
-	if (isOopImmutable(rcvr)) {
-		return primitiveFailFor(PrimErrNoModification);
+	if (isOopImmutable(rcvr, interpreterProxy->interpreterState)) {
+		return primitiveFailFor(PrimErrNoModification, interpreterProxy->interpreterState);
 	}
 	if (((startAddr = ((longAt(rcvr + BaseHeaderSize)) > 0
 		? (rcvr + BaseHeaderSize) + BytesPerOop
 		: longAt((rcvr + BaseHeaderSize) + BytesPerOop)))) == 0) {
-		return primitiveFailFor(PrimErrBadReceiver);
+		return primitiveFailFor(PrimErrBadReceiver, interpreterProxy->interpreterState);
 	}
 	addr = startAddr + byteOffset;
 	memcpy(addr, (&floatValue), sizeof(floatValue));
-	methodReturnValue(valueOop);
+	methodReturnValue(valueOop, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -900,16 +900,16 @@ primFree(void)
 {
     sqInt addr;
 
-	addr = stackPositiveMachineIntegerValue(0);
-	if (failed()) {
-		return primitiveFailFor(PrimErrBadArgument);
+	addr = stackPositiveMachineIntegerValue(0, interpreterProxy->interpreterState);
+	if (failed(interpreterProxy->interpreterState)) {
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	if ((addr == 0)
-	 || (isInMemory(addr))) {
-		return primitiveFailFor(PrimErrInappropriate);
+	 || (isInMemory(addr, interpreterProxy->interpreterState))) {
+		return primitiveFailFor(PrimErrInappropriate, interpreterProxy->interpreterState);
 	}
 	free((void *)addr);
-	pop(1);
+	pop(1, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -925,8 +925,8 @@ primInIOProcessEventsFlagAddress(void)
     extern int inIOProcessEvents;
 
 	methodReturnValue((BytesPerWord == 8
-		? positive64BitIntegerFor(((usqInt)((&inIOProcessEvents))))
-		: positive32BitIntegerFor(((usqInt)((&inIOProcessEvents))))));
+		? positive64BitIntegerFor(((usqInt)((&inIOProcessEvents))), interpreterProxy->interpreterState)
+		: positive32BitIntegerFor(((usqInt)((&inIOProcessEvents))), interpreterProxy->interpreterState)), interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -948,21 +948,21 @@ primInLibraryFindSymbol(void)
     sqInt functionName;
     sqInt libraryProxy;
 
-	functionName = stackValue(0);
-	libraryProxy = stackValue(1);
-	if (!((includesBehaviorThatOf(fetchClassOf(libraryProxy), classAlien()))
-		 && (((byteSizeOf(libraryProxy)) >= (2 * BytesPerOop))
-		 && (isBytes(functionName))))) {
-		return primitiveFailFor(PrimErrBadArgument);
+	functionName = stackValue(0, interpreterProxy->interpreterState);
+	libraryProxy = stackValue(1, interpreterProxy->interpreterState);
+	if (!((includesBehaviorThatOf(fetchClassOf(libraryProxy, interpreterProxy->interpreterState), classAlien(interpreterProxy->interpreterState), interpreterProxy->interpreterState))
+		 && (((byteSizeOf(libraryProxy, interpreterProxy->interpreterState)) >= (2 * BytesPerOop))
+		 && (isBytes(functionName, interpreterProxy->interpreterState))))) {
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
-	address = ioLoadSymbolOfLengthFromModule(((sqInt) (firstIndexableField(functionName))), byteSizeOf(functionName), longAt((libraryProxy + BaseHeaderSize) + BytesPerOop));
-	if ((failed())
+	address = ioLoadSymbolOfLengthFromModule(((sqInt) (firstIndexableField(functionName, interpreterProxy->interpreterState))), byteSizeOf(functionName, interpreterProxy->interpreterState), longAt((libraryProxy + BaseHeaderSize) + BytesPerOop));
+	if ((failed(interpreterProxy->interpreterState))
 	 || (address == 0)) {
-		return primitiveFailFor(PrimErrNotFound);
+		return primitiveFailFor(PrimErrNotFound, interpreterProxy->interpreterState);
 	}
 	methodReturnValue((BytesPerWord == 8
-		? positive64BitIntegerFor(((usqInt)address))
-		: positive32BitIntegerFor(((usqInt)address))));
+		? positive64BitIntegerFor(((usqInt)address), interpreterProxy->interpreterState)
+		: positive32BitIntegerFor(((usqInt)address), interpreterProxy->interpreterState)), interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -979,17 +979,17 @@ primLoadLibrary(void)
     void *libraryHandle;
     sqInt libraryName;
 
-	libraryName = stackValue(0);
-	if (!(isBytes(libraryName))) {
-		return primitiveFailFor(PrimErrBadArgument);
+	libraryName = stackValue(0, interpreterProxy->interpreterState);
+	if (!(isBytes(libraryName, interpreterProxy->interpreterState))) {
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
-	libraryHandle = ioLoadModuleOfLength(((sqInt) (firstIndexableField(libraryName))), byteSizeOf(libraryName));
+	libraryHandle = ioLoadModuleOfLength(((sqInt) (firstIndexableField(libraryName, interpreterProxy->interpreterState))), byteSizeOf(libraryName, interpreterProxy->interpreterState));
 	if (libraryHandle == 0) {
-		return primitiveFailFor(PrimErrNotFound);
+		return primitiveFailFor(PrimErrNotFound, interpreterProxy->interpreterState);
 	}
 	methodReturnValue((BytesPerWord == 8
-		? positive64BitIntegerFor(((usqInt)libraryHandle))
-		: positive32BitIntegerFor(((usqInt)libraryHandle))));
+		? positive64BitIntegerFor(((usqInt)libraryHandle), interpreterProxy->interpreterState)
+		: positive32BitIntegerFor(((usqInt)libraryHandle), interpreterProxy->interpreterState)), interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -1005,18 +1005,18 @@ primMalloc(void)
     usqInt addr;
     sqInt byteSize;
 
-	byteSize = stackIntegerValue(0);
-	if ((failed())
+	byteSize = stackIntegerValue(0, interpreterProxy->interpreterState);
+	if ((failed(interpreterProxy->interpreterState))
 	 || (byteSize <= 0)) {
-		return primitiveFailFor(PrimErrBadArgument);
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	addr = ((usqInt)(malloc(byteSize)));
 	if (addr == 0) {
-		return primitiveFailFor(PrimErrNoCMemory);
+		return primitiveFailFor(PrimErrNoCMemory, interpreterProxy->interpreterState);
 	}
 	methodReturnValue((BytesPerWord == 8
-		? positive64BitIntegerFor(addr)
-		: positive32BitIntegerFor(addr)));
+		? positive64BitIntegerFor(addr, interpreterProxy->interpreterState)
+		: positive32BitIntegerFor(addr, interpreterProxy->interpreterState)), interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -1042,31 +1042,31 @@ primReturnAsFromContextThrough(void)
     int isMostRecent;
     VMCallbackContext *vmCallbackContext;
 
-	if ((methodArgumentCount()) == 3) {
-		assert(isNonImmediate(stackValue(3)));
-		assert((fetchClassOf(stackValue(2))) == (classSemaphore()));
-		assert(isIntegerObject(stackValue(1)));
-		assert(isNonImmediate(stackValue(0)));
-		vmCallbackContext = ((VMCallbackContext *) (startOfData(stackValue(3))));
+	if ((methodArgumentCount(interpreterProxy->interpreterState)) == 3) {
+		assert(isNonImmediate(stackValue(3, interpreterProxy->interpreterState), interpreterProxy->interpreterState));
+		assert((fetchClassOf(stackValue(2, interpreterProxy->interpreterState), interpreterProxy->interpreterState)) == (classSemaphore(interpreterProxy->interpreterState)));
+		assert(isIntegerObject(stackValue(1, interpreterProxy->interpreterState), interpreterProxy->interpreterState));
+		assert(isNonImmediate(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState));
+		vmCallbackContext = ((VMCallbackContext *) (startOfData(stackValue(3, interpreterProxy->interpreterState))));
 		isMostRecent = vmCallbackContext == (getMostRecentCallbackContext());
 		if (!isMostRecent) {
-			return methodReturnValue(falseObject());
+			return methodReturnValue(falseObject(interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 		}
-		if (!((fetchClassOf(stackValue(2))) == (classSemaphore()))) {
-			return primitiveFailFor(PrimErrBadArgument);
+		if (!((fetchClassOf(stackValue(2, interpreterProxy->interpreterState), interpreterProxy->interpreterState)) == (classSemaphore(interpreterProxy->interpreterState)))) {
+			return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 		}
-		while (!(signalNoResume(stackValue(2)))) {
+		while (!(signalNoResume(stackValue(2, interpreterProxy->interpreterState), interpreterProxy->interpreterState))) {
 		}
 	}
 	else {
-		assert((methodArgumentCount()) == 2);
-		assert(isNonImmediate(stackValue(2)));
-		assert(isIntegerObject(stackValue(1)));
-		assert(isNonImmediate(stackValue(0)));
-		vmCallbackContext = ((VMCallbackContext *) (startOfData(stackValue(2))));
+		assert((methodArgumentCount(interpreterProxy->interpreterState)) == 2);
+		assert(isNonImmediate(stackValue(2, interpreterProxy->interpreterState), interpreterProxy->interpreterState));
+		assert(isIntegerObject(stackValue(1, interpreterProxy->interpreterState), interpreterProxy->interpreterState));
+		assert(isNonImmediate(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState));
+		vmCallbackContext = ((VMCallbackContext *) (startOfData(stackValue(2, interpreterProxy->interpreterState))));
 	}
-	if (!(returnAsThroughCallbackContext(stackValue(1), vmCallbackContext, stackValue(0)))) {
-		return primitiveFailFor(PrimErrBadArgument);
+	if (!(returnAsThroughCallbackContext(stackValue(1, interpreterProxy->interpreterState), vmCallbackContext, stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState))) {
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	return 0;
 }
@@ -1093,27 +1093,27 @@ primReturnFromContextThrough(void)
     VMCallbackContext *vmCallbackContext;
     VMCallbackReturnValue *vmCallbackReturnValue;
 
-	vmCallbackContext = ((VMCallbackContext *) (positiveMachineIntegerValueOf(stackValue(0))));
-	if ((failed())
+	vmCallbackContext = ((VMCallbackContext *) (positiveMachineIntegerValueOf(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState)));
+	if ((failed(interpreterProxy->interpreterState))
 	 || (vmCallbackContext == 0)) {
-		return primitiveFailFor(PrimErrBadArgument);
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
-	if (((mac = methodArgumentCount())) == 3) {
+	if (((mac = methodArgumentCount(interpreterProxy->interpreterState))) == 3) {
 		isMostRecent = vmCallbackContext == (getMostRecentCallbackContext());
 		if (!isMostRecent) {
-			methodReturnValue(trueObject());
+			methodReturnValue(trueObject(interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 			return null;
 		}
-		if (!((fetchClassOf(stackValue(2))) == (classSemaphore()))) {
-			return primitiveFailFor(PrimErrBadArgument);
+		if (!((fetchClassOf(stackValue(2, interpreterProxy->interpreterState), interpreterProxy->interpreterState)) == (classSemaphore(interpreterProxy->interpreterState)))) {
+			return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 		}
-		while (!(signalNoResume(stackValue(2)))) {
+		while (!(signalNoResume(stackValue(2, interpreterProxy->interpreterState), interpreterProxy->interpreterState))) {
 		}
 	}
-	vmCallbackReturnValue = ((VMCallbackReturnValue *) (startOfData(stackValue(mac))));
+	vmCallbackReturnValue = ((VMCallbackReturnValue *) (startOfData(stackValue(mac, interpreterProxy->interpreterState))));
 	memcpy((&((vmCallbackContext->rvs))), (&((vmCallbackReturnValue->crvrvs))), sizeof((vmCallbackContext->rvs)));
-	if (!(returnAsThroughCallbackContext(integerObjectOf(((vmCallbackReturnValue->type)) + 1), vmCallbackContext, stackValue(1)))) {
-		return primitiveFailFor(PrimErrBadArgument);
+	if (!(returnAsThroughCallbackContext(integerObjectOf(((vmCallbackReturnValue->type)) + 1, interpreterProxy->interpreterState), vmCallbackContext, stackValue(1, interpreterProxy->interpreterState), interpreterProxy->interpreterState))) {
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	return 0;
 }
@@ -1136,23 +1136,23 @@ primSignedByteAt(void)
     signed char value;
     sqInt valueOop;
 
-	byteOffset = (stackPositiveMachineIntegerValue(0)) - 1;
-	rcvr = stackObjectValue(1);
-	if (failed()) {
-		return primitiveFailFor(PrimErrBadArgument);
+	byteOffset = (stackPositiveMachineIntegerValue(0, interpreterProxy->interpreterState)) - 1;
+	rcvr = stackObjectValue(1, interpreterProxy->interpreterState);
+	if (failed(interpreterProxy->interpreterState)) {
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	if (!(indexlengthinRange(byteOffset, 1, rcvr))) {
-		return primitiveFailFor(PrimErrBadIndex);
+		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
 	}
 	if (((startAddr = ((longAt(rcvr + BaseHeaderSize)) > 0
 		? (rcvr + BaseHeaderSize) + BytesPerOop
 		: longAt((rcvr + BaseHeaderSize) + BytesPerOop)))) == 0) {
-		return primitiveFailFor(PrimErrBadReceiver);
+		return primitiveFailFor(PrimErrBadReceiver, interpreterProxy->interpreterState);
 	}
 	addr = startAddr + byteOffset;
 	value = byteAt(addr);
-	valueOop = signed32BitIntegerFor(value);
-	return methodReturnValue(valueOop);
+	valueOop = signed32BitIntegerFor(value, interpreterProxy->interpreterState);
+	return methodReturnValue(valueOop, interpreterProxy->interpreterState);
 }
 
 
@@ -1173,29 +1173,29 @@ primSignedByteAtPut(void)
     sqInt value;
     sqInt valueOop;
 
-	valueOop = stackValue(0);
-	byteOffset = (stackPositiveMachineIntegerValue(1)) - 1;
-	rcvr = stackObjectValue(2);
-	value = signed32BitValueOf(valueOop);
-	if ((failed())
+	valueOop = stackValue(0, interpreterProxy->interpreterState);
+	byteOffset = (stackPositiveMachineIntegerValue(1, interpreterProxy->interpreterState)) - 1;
+	rcvr = stackObjectValue(2, interpreterProxy->interpreterState);
+	value = signed32BitValueOf(valueOop, interpreterProxy->interpreterState);
+	if ((failed(interpreterProxy->interpreterState))
 	 || ((value < -128)
 	 || (value > 0x7F))) {
-		return primitiveFailFor(PrimErrBadArgument);
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	if (!(indexlengthinRange(byteOffset, 1, rcvr))) {
-		return primitiveFailFor(PrimErrBadIndex);
+		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
 	}
-	if (isOopImmutable(rcvr)) {
-		return primitiveFailFor(PrimErrNoModification);
+	if (isOopImmutable(rcvr, interpreterProxy->interpreterState)) {
+		return primitiveFailFor(PrimErrNoModification, interpreterProxy->interpreterState);
 	}
 	if (((startAddr = ((longAt(rcvr + BaseHeaderSize)) > 0
 		? (rcvr + BaseHeaderSize) + BytesPerOop
 		: longAt((rcvr + BaseHeaderSize) + BytesPerOop)))) == 0) {
-		return primitiveFailFor(PrimErrBadReceiver);
+		return primitiveFailFor(PrimErrBadReceiver, interpreterProxy->interpreterState);
 	}
 	addr = startAddr + byteOffset;
 	byteAtput(addr, value);
-	return methodReturnValue(valueOop);
+	return methodReturnValue(valueOop, interpreterProxy->interpreterState);
 }
 
 
@@ -1216,23 +1216,23 @@ primSignedLongAt(void)
     int value;
     sqInt valueOop;
 
-	byteOffset = (stackPositiveMachineIntegerValue(0)) - 1;
-	rcvr = stackObjectValue(1);
-	if (failed()) {
-		return primitiveFailFor(PrimErrBadArgument);
+	byteOffset = (stackPositiveMachineIntegerValue(0, interpreterProxy->interpreterState)) - 1;
+	rcvr = stackObjectValue(1, interpreterProxy->interpreterState);
+	if (failed(interpreterProxy->interpreterState)) {
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	if (!(indexlengthinRange(byteOffset, 4, rcvr))) {
-		return primitiveFailFor(PrimErrBadIndex);
+		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
 	}
 	if (((startAddr = ((longAt(rcvr + BaseHeaderSize)) > 0
 		? (rcvr + BaseHeaderSize) + BytesPerOop
 		: longAt((rcvr + BaseHeaderSize) + BytesPerOop)))) == 0) {
-		return primitiveFailFor(PrimErrBadReceiver);
+		return primitiveFailFor(PrimErrBadReceiver, interpreterProxy->interpreterState);
 	}
 	addr = startAddr + byteOffset;
 	value = long32At(addr);
-	valueOop = signed32BitIntegerFor(value);
-	return methodReturnValue(valueOop);
+	valueOop = signed32BitIntegerFor(value, interpreterProxy->interpreterState);
+	return methodReturnValue(valueOop, interpreterProxy->interpreterState);
 }
 
 
@@ -1253,27 +1253,27 @@ primSignedLongAtPut(void)
     sqInt value;
     sqInt valueOop;
 
-	valueOop = stackValue(0);
-	byteOffset = (stackPositiveMachineIntegerValue(1)) - 1;
-	rcvr = stackObjectValue(2);
-	value = signed32BitValueOf(valueOop);
-	if (failed()) {
-		return primitiveFailFor(PrimErrBadArgument);
+	valueOop = stackValue(0, interpreterProxy->interpreterState);
+	byteOffset = (stackPositiveMachineIntegerValue(1, interpreterProxy->interpreterState)) - 1;
+	rcvr = stackObjectValue(2, interpreterProxy->interpreterState);
+	value = signed32BitValueOf(valueOop, interpreterProxy->interpreterState);
+	if (failed(interpreterProxy->interpreterState)) {
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	if (!(indexlengthinRange(byteOffset, 4, rcvr))) {
-		return primitiveFailFor(PrimErrBadIndex);
+		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
 	}
-	if (isOopImmutable(rcvr)) {
-		return primitiveFailFor(PrimErrNoModification);
+	if (isOopImmutable(rcvr, interpreterProxy->interpreterState)) {
+		return primitiveFailFor(PrimErrNoModification, interpreterProxy->interpreterState);
 	}
 	if (((startAddr = ((longAt(rcvr + BaseHeaderSize)) > 0
 		? (rcvr + BaseHeaderSize) + BytesPerOop
 		: longAt((rcvr + BaseHeaderSize) + BytesPerOop)))) == 0) {
-		return primitiveFailFor(PrimErrBadReceiver);
+		return primitiveFailFor(PrimErrBadReceiver, interpreterProxy->interpreterState);
 	}
 	addr = startAddr + byteOffset;
 	long32Atput(addr, value);
-	return methodReturnValue(valueOop);
+	return methodReturnValue(valueOop, interpreterProxy->interpreterState);
 }
 
 
@@ -1296,24 +1296,24 @@ primSignedLongLongAt(void)
     sqInt valueOop;
 
 	signedlonglongvaluePtr = 0;
-	byteOffset = (stackPositiveMachineIntegerValue(0)) - 1;
-	rcvr = stackObjectValue(1);
-	if (failed()) {
-		return primitiveFailFor(PrimErrBadArgument);
+	byteOffset = (stackPositiveMachineIntegerValue(0, interpreterProxy->interpreterState)) - 1;
+	rcvr = stackObjectValue(1, interpreterProxy->interpreterState);
+	if (failed(interpreterProxy->interpreterState)) {
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	if (!(indexlengthinRange(byteOffset, 8, rcvr))) {
-		return primitiveFailFor(PrimErrBadIndex);
+		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
 	}
 	if (((startAddr = ((longAt(rcvr + BaseHeaderSize)) > 0
 		? (rcvr + BaseHeaderSize) + BytesPerOop
 		: longAt((rcvr + BaseHeaderSize) + BytesPerOop)))) == 0) {
-		return primitiveFailFor(PrimErrBadReceiver);
+		return primitiveFailFor(PrimErrBadReceiver, interpreterProxy->interpreterState);
 	}
 	addr = startAddr + byteOffset;
 	signedlonglongvaluePtr = ((long long*) addr);
 	signedlonglongvalue = *signedlonglongvaluePtr;
-	valueOop = signed64BitIntegerFor(signedlonglongvalue);
-	return methodReturnValue(valueOop);
+	valueOop = signed64BitIntegerFor(signedlonglongvalue, interpreterProxy->interpreterState);
+	return methodReturnValue(valueOop, interpreterProxy->interpreterState);
 }
 
 
@@ -1336,28 +1336,28 @@ primSignedLongLongAtPut(void)
     sqInt valueOop;
 
 	signedlonglongvaluePtr = 0;
-	valueOop = stackValue(0);
-	byteOffset = (stackPositiveMachineIntegerValue(1)) - 1;
-	rcvr = stackObjectValue(2);
-	signedlonglongvalue = signed64BitValueOf(valueOop);
-	if (failed()) {
-		return primitiveFailFor(PrimErrBadArgument);
+	valueOop = stackValue(0, interpreterProxy->interpreterState);
+	byteOffset = (stackPositiveMachineIntegerValue(1, interpreterProxy->interpreterState)) - 1;
+	rcvr = stackObjectValue(2, interpreterProxy->interpreterState);
+	signedlonglongvalue = signed64BitValueOf(valueOop, interpreterProxy->interpreterState);
+	if (failed(interpreterProxy->interpreterState)) {
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	if (!(indexlengthinRange(byteOffset, 8, rcvr))) {
-		return primitiveFailFor(PrimErrBadIndex);
+		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
 	}
-	if (isOopImmutable(rcvr)) {
-		return primitiveFailFor(PrimErrNoModification);
+	if (isOopImmutable(rcvr, interpreterProxy->interpreterState)) {
+		return primitiveFailFor(PrimErrNoModification, interpreterProxy->interpreterState);
 	}
 	if (((startAddr = ((longAt(rcvr + BaseHeaderSize)) > 0
 		? (rcvr + BaseHeaderSize) + BytesPerOop
 		: longAt((rcvr + BaseHeaderSize) + BytesPerOop)))) == 0) {
-		return primitiveFailFor(PrimErrBadReceiver);
+		return primitiveFailFor(PrimErrBadReceiver, interpreterProxy->interpreterState);
 	}
 	addr = startAddr + byteOffset;
 	signedlonglongvaluePtr = ((long long*) addr);
 	*signedlonglongvaluePtr = signedlonglongvalue;
-	return methodReturnValue(valueOop);
+	return methodReturnValue(valueOop, interpreterProxy->interpreterState);
 }
 
 
@@ -1378,23 +1378,23 @@ primSignedShortAt(void)
     short value;
     sqInt valueOop;
 
-	byteOffset = (stackPositiveMachineIntegerValue(0)) - 1;
-	rcvr = stackObjectValue(1);
-	if (failed()) {
-		return primitiveFailFor(PrimErrBadArgument);
+	byteOffset = (stackPositiveMachineIntegerValue(0, interpreterProxy->interpreterState)) - 1;
+	rcvr = stackObjectValue(1, interpreterProxy->interpreterState);
+	if (failed(interpreterProxy->interpreterState)) {
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	if (!(indexlengthinRange(byteOffset, 2, rcvr))) {
-		return primitiveFailFor(PrimErrBadIndex);
+		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
 	}
 	if (((startAddr = ((longAt(rcvr + BaseHeaderSize)) > 0
 		? (rcvr + BaseHeaderSize) + BytesPerOop
 		: longAt((rcvr + BaseHeaderSize) + BytesPerOop)))) == 0) {
-		return primitiveFailFor(PrimErrBadReceiver);
+		return primitiveFailFor(PrimErrBadReceiver, interpreterProxy->interpreterState);
 	}
 	addr = startAddr + byteOffset;
 	value = shortAt(addr);
-	valueOop = signed32BitIntegerFor(value);
-	return methodReturnValue(valueOop);
+	valueOop = signed32BitIntegerFor(value, interpreterProxy->interpreterState);
+	return methodReturnValue(valueOop, interpreterProxy->interpreterState);
 }
 
 
@@ -1415,29 +1415,29 @@ primSignedShortAtPut(void)
     sqInt value;
     sqInt valueOop;
 
-	valueOop = stackValue(0);
-	byteOffset = (stackPositiveMachineIntegerValue(1)) - 1;
-	rcvr = stackObjectValue(2);
-	value = signed32BitValueOf(valueOop);
-	if ((failed())
+	valueOop = stackValue(0, interpreterProxy->interpreterState);
+	byteOffset = (stackPositiveMachineIntegerValue(1, interpreterProxy->interpreterState)) - 1;
+	rcvr = stackObjectValue(2, interpreterProxy->interpreterState);
+	value = signed32BitValueOf(valueOop, interpreterProxy->interpreterState);
+	if ((failed(interpreterProxy->interpreterState))
 	 || ((value < -32768)
 	 || (value > 0x7FFF))) {
-		return primitiveFailFor(PrimErrBadArgument);
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	if (!(indexlengthinRange(byteOffset, 2, rcvr))) {
-		return primitiveFailFor(PrimErrBadIndex);
+		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
 	}
-	if (isOopImmutable(rcvr)) {
-		return primitiveFailFor(PrimErrNoModification);
+	if (isOopImmutable(rcvr, interpreterProxy->interpreterState)) {
+		return primitiveFailFor(PrimErrNoModification, interpreterProxy->interpreterState);
 	}
 	if (((startAddr = ((longAt(rcvr + BaseHeaderSize)) > 0
 		? (rcvr + BaseHeaderSize) + BytesPerOop
 		: longAt((rcvr + BaseHeaderSize) + BytesPerOop)))) == 0) {
-		return primitiveFailFor(PrimErrBadReceiver);
+		return primitiveFailFor(PrimErrBadReceiver, interpreterProxy->interpreterState);
 	}
 	addr = startAddr + byteOffset;
 	shortAtput(addr, value);
-	return methodReturnValue(valueOop);
+	return methodReturnValue(valueOop, interpreterProxy->interpreterState);
 }
 
 
@@ -1456,23 +1456,23 @@ primSignedWordAt(void)
     sqInt value;
     sqInt valueOop;
 
-	byteOffset = (stackPositiveMachineIntegerValue(0)) - 1;
-	rcvr = stackObjectValue(1);
-	if (failed()) {
-		return primitiveFailFor(PrimErrBadArgument);
+	byteOffset = (stackPositiveMachineIntegerValue(0, interpreterProxy->interpreterState)) - 1;
+	rcvr = stackObjectValue(1, interpreterProxy->interpreterState);
+	if (failed(interpreterProxy->interpreterState)) {
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	if (!(indexlengthinRange(byteOffset, BytesPerOop, rcvr))) {
-		return primitiveFailFor(PrimErrBadIndex);
+		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
 	}
 	if (((startAddr = ((longAt(rcvr + BaseHeaderSize)) > 0
 		? (rcvr + BaseHeaderSize) + BytesPerOop
 		: longAt((rcvr + BaseHeaderSize) + BytesPerOop)))) == 0) {
-		return primitiveFailFor(PrimErrBadReceiver);
+		return primitiveFailFor(PrimErrBadReceiver, interpreterProxy->interpreterState);
 	}
 	addr = startAddr + byteOffset;
 	value = longAt(addr);
-	valueOop = signedMachineIntegerValueOf(value);
-	return methodReturnValue(valueOop);
+	valueOop = signedMachineIntegerValueOf(value, interpreterProxy->interpreterState);
+	return methodReturnValue(valueOop, interpreterProxy->interpreterState);
 }
 
 
@@ -1493,27 +1493,27 @@ primSignedWordAtPut(void)
     sqInt value;
     sqInt valueOop;
 
-	valueOop = stackValue(0);
-	byteOffset = (stackPositiveMachineIntegerValue(1)) - 1;
-	rcvr = stackObjectValue(2);
-	value = signedMachineIntegerValueOf(valueOop);
-	if (failed()) {
-		return primitiveFailFor(PrimErrBadArgument);
+	valueOop = stackValue(0, interpreterProxy->interpreterState);
+	byteOffset = (stackPositiveMachineIntegerValue(1, interpreterProxy->interpreterState)) - 1;
+	rcvr = stackObjectValue(2, interpreterProxy->interpreterState);
+	value = signedMachineIntegerValueOf(valueOop, interpreterProxy->interpreterState);
+	if (failed(interpreterProxy->interpreterState)) {
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	if (!(indexlengthinRange(byteOffset, BytesPerOop, rcvr))) {
-		return primitiveFailFor(PrimErrBadIndex);
+		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
 	}
-	if (isOopImmutable(rcvr)) {
-		return primitiveFailFor(PrimErrNoModification);
+	if (isOopImmutable(rcvr, interpreterProxy->interpreterState)) {
+		return primitiveFailFor(PrimErrNoModification, interpreterProxy->interpreterState);
 	}
 	if (((startAddr = ((longAt(rcvr + BaseHeaderSize)) > 0
 		? (rcvr + BaseHeaderSize) + BytesPerOop
 		: longAt((rcvr + BaseHeaderSize) + BytesPerOop)))) == 0) {
-		return primitiveFailFor(PrimErrBadReceiver);
+		return primitiveFailFor(PrimErrBadReceiver, interpreterProxy->interpreterState);
 	}
 	addr = startAddr + byteOffset;
 	longAtput(addr, value);
-	return methodReturnValue(valueOop);
+	return methodReturnValue(valueOop, interpreterProxy->interpreterState);
 }
 
 
@@ -1531,7 +1531,7 @@ primSizeField(void)
     sqInt value;
     sqInt valueOop;
 
-	rcvr = stackValue(0);
+	rcvr = stackValue(0, interpreterProxy->interpreterState);
 	value = 
 #  if BytesPerOop == 8
 		((sqLong) (longAt(rcvr + BaseHeaderSize)))
@@ -1540,9 +1540,9 @@ primSizeField(void)
 #  endif /* BytesPerOop == 8 */
 		;
 	valueOop = (BytesPerWord == 8
-		? signed64BitIntegerFor(value)
-		: signed32BitIntegerFor(value));
-	return methodReturnValue(valueOop);
+		? signed64BitIntegerFor(value, interpreterProxy->interpreterState)
+		: signed32BitIntegerFor(value, interpreterProxy->interpreterState));
+	return methodReturnValue(valueOop, interpreterProxy->interpreterState);
 }
 
 
@@ -1560,11 +1560,11 @@ primSizeFieldPut(void)
     sqInt value;
     sqInt valueOop;
 
-	valueOop = stackValue(0);
-	rcvr = stackValue(1);
-	value = signedMachineIntegerValueOf(valueOop);
-	if (failed()) {
-		return primitiveFailFor(PrimErrBadArgument);
+	valueOop = stackValue(0, interpreterProxy->interpreterState);
+	rcvr = stackValue(1, interpreterProxy->interpreterState);
+	value = signedMachineIntegerValueOf(valueOop, interpreterProxy->interpreterState);
+	if (failed(interpreterProxy->interpreterState)) {
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	
 #  if BytesPerOop == 8
@@ -1572,7 +1572,7 @@ primSizeFieldPut(void)
 #  else /* BytesPerOop == 8 */
 	longAtput(rcvr + BaseHeaderSize, ((usqInt) value));
 #  endif /* BytesPerOop == 8 */
-	return methodReturnValue(valueOop);
+	return methodReturnValue(valueOop, interpreterProxy->interpreterState);
 }
 
 
@@ -1593,13 +1593,13 @@ primStrlenFromStartIndex(void)
     char *ptr;
     sqInt rcvr;
 
-	byteOffset = (stackPositiveMachineIntegerValue(0)) - 1;
-	rcvr = stackObjectValue(1);
-	if (failed()) {
-		return primitiveFailFor(PrimErrBadArgument);
+	byteOffset = (stackPositiveMachineIntegerValue(0, interpreterProxy->interpreterState)) - 1;
+	rcvr = stackObjectValue(1, interpreterProxy->interpreterState);
+	if (failed(interpreterProxy->interpreterState)) {
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	if (!(indexlengthinRange(byteOffset, 1, rcvr))) {
-		return primitiveFailFor(PrimErrBadIndex);
+		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
 	}
 	limit = longAt(rcvr + BaseHeaderSize);
 	ptr = ((char *) (((limit > 0
@@ -1616,7 +1616,7 @@ primStrlenFromStartIndex(void)
 			index += 1;
 		}
 	}
-	return methodReturnValue(positive32BitIntegerFor(index));
+	return methodReturnValue(positive32BitIntegerFor(index, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 }
 
 
@@ -1636,19 +1636,19 @@ primStrlenThroughPointerAtIndex(void)
     char *ptr;
     sqInt rcvr;
 
-	byteOffset = (stackPositiveMachineIntegerValue(0)) - 1;
-	rcvr = stackObjectValue(1);
-	if (failed()) {
-		return primitiveFailFor(PrimErrBadArgument);
+	byteOffset = (stackPositiveMachineIntegerValue(0, interpreterProxy->interpreterState)) - 1;
+	rcvr = stackObjectValue(1, interpreterProxy->interpreterState);
+	if (failed(interpreterProxy->interpreterState)) {
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	if (!(indexlengthinRange(byteOffset, BytesPerOop, rcvr))) {
-		return primitiveFailFor(PrimErrBadIndex);
+		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
 	}
 	addr = (((longAt(rcvr + BaseHeaderSize)) > 0
 	? (rcvr + BaseHeaderSize) + BytesPerOop
 	: longAt((rcvr + BaseHeaderSize) + BytesPerOop))) + byteOffset;
 	ptr = ((char *) (longAt(addr)));
-	return methodReturnValue(positive32BitIntegerFor(strlen(ptr)));
+	return methodReturnValue(positive32BitIntegerFor(strlen(ptr), interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 }
 
 
@@ -1665,8 +1665,8 @@ primThunkEntryAddress(void)
 
 	address = ((sqIntptr_t)thunkEntry);
 	methodReturnValue((BytesPerWord == 8
-		? positive64BitIntegerFor(address)
-		: positive32BitIntegerFor(address)));
+		? positive64BitIntegerFor(address, interpreterProxy->interpreterState)
+		: positive32BitIntegerFor(address, interpreterProxy->interpreterState)), interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -1688,23 +1688,23 @@ primUnsignedByteAt(void)
     unsigned char value;
     sqInt valueOop;
 
-	byteOffset = (stackPositiveMachineIntegerValue(0)) - 1;
-	rcvr = stackObjectValue(1);
-	if (failed()) {
-		return primitiveFailFor(PrimErrBadArgument);
+	byteOffset = (stackPositiveMachineIntegerValue(0, interpreterProxy->interpreterState)) - 1;
+	rcvr = stackObjectValue(1, interpreterProxy->interpreterState);
+	if (failed(interpreterProxy->interpreterState)) {
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	if (!(indexlengthinRange(byteOffset, 1, rcvr))) {
-		return primitiveFailFor(PrimErrBadIndex);
+		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
 	}
 	if (((startAddr = ((longAt(rcvr + BaseHeaderSize)) > 0
 		? (rcvr + BaseHeaderSize) + BytesPerOop
 		: longAt((rcvr + BaseHeaderSize) + BytesPerOop)))) == 0) {
-		return primitiveFailFor(PrimErrBadReceiver);
+		return primitiveFailFor(PrimErrBadReceiver, interpreterProxy->interpreterState);
 	}
 	addr = startAddr + byteOffset;
 	value = byteAt(addr);
-	valueOop = positive32BitIntegerFor(value);
-	return methodReturnValue(valueOop);
+	valueOop = positive32BitIntegerFor(value, interpreterProxy->interpreterState);
+	return methodReturnValue(valueOop, interpreterProxy->interpreterState);
 }
 
 
@@ -1725,28 +1725,28 @@ primUnsignedByteAtPut(void)
     sqInt value;
     sqInt valueOop;
 
-	valueOop = stackValue(0);
-	byteOffset = (stackPositiveMachineIntegerValue(1)) - 1;
-	rcvr = stackObjectValue(2);
-	value = positive32BitValueOf(valueOop);
-	if ((failed())
+	valueOop = stackValue(0, interpreterProxy->interpreterState);
+	byteOffset = (stackPositiveMachineIntegerValue(1, interpreterProxy->interpreterState)) - 1;
+	rcvr = stackObjectValue(2, interpreterProxy->interpreterState);
+	value = positive32BitValueOf(valueOop, interpreterProxy->interpreterState);
+	if ((failed(interpreterProxy->interpreterState))
 	 || (value > 0xFF)) {
-		return primitiveFailFor(PrimErrBadArgument);
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	if (!(indexlengthinRange(byteOffset, 1, rcvr))) {
-		return primitiveFailFor(PrimErrBadIndex);
+		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
 	}
-	if (isOopImmutable(rcvr)) {
-		return primitiveFailFor(PrimErrNoModification);
+	if (isOopImmutable(rcvr, interpreterProxy->interpreterState)) {
+		return primitiveFailFor(PrimErrNoModification, interpreterProxy->interpreterState);
 	}
 	if (((startAddr = ((longAt(rcvr + BaseHeaderSize)) > 0
 		? (rcvr + BaseHeaderSize) + BytesPerOop
 		: longAt((rcvr + BaseHeaderSize) + BytesPerOop)))) == 0) {
-		return primitiveFailFor(PrimErrBadReceiver);
+		return primitiveFailFor(PrimErrBadReceiver, interpreterProxy->interpreterState);
 	}
 	addr = startAddr + byteOffset;
 	byteAtput(addr, value);
-	return methodReturnValue(valueOop);
+	return methodReturnValue(valueOop, interpreterProxy->interpreterState);
 }
 
 
@@ -1767,23 +1767,23 @@ primUnsignedLongAt(void)
     int value;
     sqInt valueOop;
 
-	byteOffset = (stackPositiveMachineIntegerValue(0)) - 1;
-	rcvr = stackObjectValue(1);
-	if (failed()) {
-		return primitiveFailFor(PrimErrBadArgument);
+	byteOffset = (stackPositiveMachineIntegerValue(0, interpreterProxy->interpreterState)) - 1;
+	rcvr = stackObjectValue(1, interpreterProxy->interpreterState);
+	if (failed(interpreterProxy->interpreterState)) {
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	if (!(indexlengthinRange(byteOffset, 4, rcvr))) {
-		return primitiveFailFor(PrimErrBadIndex);
+		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
 	}
 	if (((startAddr = ((longAt(rcvr + BaseHeaderSize)) > 0
 		? (rcvr + BaseHeaderSize) + BytesPerOop
 		: longAt((rcvr + BaseHeaderSize) + BytesPerOop)))) == 0) {
-		return primitiveFailFor(PrimErrBadReceiver);
+		return primitiveFailFor(PrimErrBadReceiver, interpreterProxy->interpreterState);
 	}
 	addr = startAddr + byteOffset;
 	value = long32At(addr);
-	valueOop = positive32BitIntegerFor(value);
-	return methodReturnValue(valueOop);
+	valueOop = positive32BitIntegerFor(value, interpreterProxy->interpreterState);
+	return methodReturnValue(valueOop, interpreterProxy->interpreterState);
 }
 
 
@@ -1804,27 +1804,27 @@ primUnsignedLongAtPut(void)
     sqInt value;
     sqInt valueOop;
 
-	valueOop = stackValue(0);
-	byteOffset = (stackPositiveMachineIntegerValue(1)) - 1;
-	rcvr = stackObjectValue(2);
-	value = positive32BitValueOf(valueOop);
-	if (failed()) {
-		return primitiveFailFor(PrimErrBadArgument);
+	valueOop = stackValue(0, interpreterProxy->interpreterState);
+	byteOffset = (stackPositiveMachineIntegerValue(1, interpreterProxy->interpreterState)) - 1;
+	rcvr = stackObjectValue(2, interpreterProxy->interpreterState);
+	value = positive32BitValueOf(valueOop, interpreterProxy->interpreterState);
+	if (failed(interpreterProxy->interpreterState)) {
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	if (!(indexlengthinRange(byteOffset, 4, rcvr))) {
-		return primitiveFailFor(PrimErrBadIndex);
+		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
 	}
-	if (isOopImmutable(rcvr)) {
-		return primitiveFailFor(PrimErrNoModification);
+	if (isOopImmutable(rcvr, interpreterProxy->interpreterState)) {
+		return primitiveFailFor(PrimErrNoModification, interpreterProxy->interpreterState);
 	}
 	if (((startAddr = ((longAt(rcvr + BaseHeaderSize)) > 0
 		? (rcvr + BaseHeaderSize) + BytesPerOop
 		: longAt((rcvr + BaseHeaderSize) + BytesPerOop)))) == 0) {
-		return primitiveFailFor(PrimErrBadReceiver);
+		return primitiveFailFor(PrimErrBadReceiver, interpreterProxy->interpreterState);
 	}
 	addr = startAddr + byteOffset;
 	long32Atput(addr, value);
-	return methodReturnValue(valueOop);
+	return methodReturnValue(valueOop, interpreterProxy->interpreterState);
 }
 
 
@@ -1847,24 +1847,24 @@ primUnsignedLongLongAt(void)
     sqInt valueOop;
 
 	unsignedlonglongvaluePtr = 0;
-	byteOffset = (stackPositiveMachineIntegerValue(0)) - 1;
-	rcvr = stackObjectValue(1);
-	if (failed()) {
-		return primitiveFailFor(PrimErrBadArgument);
+	byteOffset = (stackPositiveMachineIntegerValue(0, interpreterProxy->interpreterState)) - 1;
+	rcvr = stackObjectValue(1, interpreterProxy->interpreterState);
+	if (failed(interpreterProxy->interpreterState)) {
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	if (!(indexlengthinRange(byteOffset, 8, rcvr))) {
-		return primitiveFailFor(PrimErrBadIndex);
+		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
 	}
 	if (((startAddr = ((longAt(rcvr + BaseHeaderSize)) > 0
 		? (rcvr + BaseHeaderSize) + BytesPerOop
 		: longAt((rcvr + BaseHeaderSize) + BytesPerOop)))) == 0) {
-		return primitiveFailFor(PrimErrBadReceiver);
+		return primitiveFailFor(PrimErrBadReceiver, interpreterProxy->interpreterState);
 	}
 	addr = startAddr + byteOffset;
 	unsignedlonglongvaluePtr = ((unsigned long long*) addr);
 	unsignedlonglongvalue = *unsignedlonglongvaluePtr;
-	valueOop = positive64BitIntegerFor(unsignedlonglongvalue);
-	return methodReturnValue(valueOop);
+	valueOop = positive64BitIntegerFor(unsignedlonglongvalue, interpreterProxy->interpreterState);
+	return methodReturnValue(valueOop, interpreterProxy->interpreterState);
 }
 
 
@@ -1888,28 +1888,28 @@ primUnsignedLongLongAtPut(void)
     sqInt valueOop;
 
 	unsignedlonglongvaluePtr = 0;
-	valueOop = stackValue(0);
-	byteOffset = (stackPositiveMachineIntegerValue(1)) - 1;
-	rcvr = stackObjectValue(2);
-	unsignedlonglongvalue = positive64BitValueOf(valueOop);
-	if (failed()) {
-		return primitiveFailFor(PrimErrBadArgument);
+	valueOop = stackValue(0, interpreterProxy->interpreterState);
+	byteOffset = (stackPositiveMachineIntegerValue(1, interpreterProxy->interpreterState)) - 1;
+	rcvr = stackObjectValue(2, interpreterProxy->interpreterState);
+	unsignedlonglongvalue = positive64BitValueOf(valueOop, interpreterProxy->interpreterState);
+	if (failed(interpreterProxy->interpreterState)) {
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	if (!(indexlengthinRange(byteOffset, 8, rcvr))) {
-		return primitiveFailFor(PrimErrBadIndex);
+		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
 	}
-	if (isOopImmutable(rcvr)) {
-		return primitiveFailFor(PrimErrNoModification);
+	if (isOopImmutable(rcvr, interpreterProxy->interpreterState)) {
+		return primitiveFailFor(PrimErrNoModification, interpreterProxy->interpreterState);
 	}
 	if (((startAddr = ((longAt(rcvr + BaseHeaderSize)) > 0
 		? (rcvr + BaseHeaderSize) + BytesPerOop
 		: longAt((rcvr + BaseHeaderSize) + BytesPerOop)))) == 0) {
-		return primitiveFailFor(PrimErrBadReceiver);
+		return primitiveFailFor(PrimErrBadReceiver, interpreterProxy->interpreterState);
 	}
 	addr = startAddr + byteOffset;
 	unsignedlonglongvaluePtr = ((unsigned long long*) addr);
 	*unsignedlonglongvaluePtr = unsignedlonglongvalue;
-	return methodReturnValue(valueOop);
+	return methodReturnValue(valueOop, interpreterProxy->interpreterState);
 }
 
 
@@ -1930,23 +1930,23 @@ primUnsignedShortAt(void)
     unsigned short value;
     sqInt valueOop;
 
-	byteOffset = (stackPositiveMachineIntegerValue(0)) - 1;
-	rcvr = stackObjectValue(1);
-	if (failed()) {
-		return primitiveFailFor(PrimErrBadArgument);
+	byteOffset = (stackPositiveMachineIntegerValue(0, interpreterProxy->interpreterState)) - 1;
+	rcvr = stackObjectValue(1, interpreterProxy->interpreterState);
+	if (failed(interpreterProxy->interpreterState)) {
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	if (!(indexlengthinRange(byteOffset, 2, rcvr))) {
-		return primitiveFailFor(PrimErrBadIndex);
+		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
 	}
 	if (((startAddr = ((longAt(rcvr + BaseHeaderSize)) > 0
 		? (rcvr + BaseHeaderSize) + BytesPerOop
 		: longAt((rcvr + BaseHeaderSize) + BytesPerOop)))) == 0) {
-		return primitiveFailFor(PrimErrBadReceiver);
+		return primitiveFailFor(PrimErrBadReceiver, interpreterProxy->interpreterState);
 	}
 	addr = startAddr + byteOffset;
 	value = shortAt(addr);
-	valueOop = positive32BitIntegerFor(value);
-	return methodReturnValue(valueOop);
+	valueOop = positive32BitIntegerFor(value, interpreterProxy->interpreterState);
+	return methodReturnValue(valueOop, interpreterProxy->interpreterState);
 }
 
 
@@ -1967,28 +1967,28 @@ primUnsignedShortAtPut(void)
     sqInt value;
     sqInt valueOop;
 
-	valueOop = stackValue(0);
-	byteOffset = (stackPositiveMachineIntegerValue(1)) - 1;
-	rcvr = stackObjectValue(2);
-	value = positive32BitValueOf(valueOop);
-	if ((failed())
+	valueOop = stackValue(0, interpreterProxy->interpreterState);
+	byteOffset = (stackPositiveMachineIntegerValue(1, interpreterProxy->interpreterState)) - 1;
+	rcvr = stackObjectValue(2, interpreterProxy->interpreterState);
+	value = positive32BitValueOf(valueOop, interpreterProxy->interpreterState);
+	if ((failed(interpreterProxy->interpreterState))
 	 || (value > 0xFFFF)) {
-		return primitiveFailFor(PrimErrBadArgument);
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	if (!(indexlengthinRange(byteOffset, 2, rcvr))) {
-		return primitiveFailFor(PrimErrBadIndex);
+		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
 	}
-	if (isOopImmutable(rcvr)) {
-		return primitiveFailFor(PrimErrNoModification);
+	if (isOopImmutable(rcvr, interpreterProxy->interpreterState)) {
+		return primitiveFailFor(PrimErrNoModification, interpreterProxy->interpreterState);
 	}
 	if (((startAddr = ((longAt(rcvr + BaseHeaderSize)) > 0
 		? (rcvr + BaseHeaderSize) + BytesPerOop
 		: longAt((rcvr + BaseHeaderSize) + BytesPerOop)))) == 0) {
-		return primitiveFailFor(PrimErrBadReceiver);
+		return primitiveFailFor(PrimErrBadReceiver, interpreterProxy->interpreterState);
 	}
 	addr = startAddr + byteOffset;
 	shortAtput(addr, value);
-	return methodReturnValue(valueOop);
+	return methodReturnValue(valueOop, interpreterProxy->interpreterState);
 }
 
 
@@ -2009,26 +2009,26 @@ primUnsignedWordAt(void)
     sqInt value;
     sqInt valueOop;
 
-	byteOffset = (stackPositiveMachineIntegerValue(0)) - 1;
-	rcvr = stackObjectValue(1);
-	if (failed()) {
-		return primitiveFailFor(PrimErrBadArgument);
+	byteOffset = (stackPositiveMachineIntegerValue(0, interpreterProxy->interpreterState)) - 1;
+	rcvr = stackObjectValue(1, interpreterProxy->interpreterState);
+	if (failed(interpreterProxy->interpreterState)) {
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	if (!(indexlengthinRange(byteOffset, BytesPerOop, rcvr))) {
-		return primitiveFailFor(PrimErrBadIndex);
+		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
 	}
 	if (((startAddr = ((longAt(rcvr + BaseHeaderSize)) > 0
 		? (rcvr + BaseHeaderSize) + BytesPerOop
 		: longAt((rcvr + BaseHeaderSize) + BytesPerOop)))) == 0) {
-		return primitiveFailFor(PrimErrBadReceiver);
+		return primitiveFailFor(PrimErrBadReceiver, interpreterProxy->interpreterState);
 	}
 	addr = startAddr + byteOffset;
 	value = longAt(addr);
 	/* begin positiveMachineIntegerFor: */
 	valueOop = (BytesPerWord == 8
-		? positive64BitIntegerFor(value)
-		: positive32BitIntegerFor(value));
-	return methodReturnValue(valueOop);
+		? positive64BitIntegerFor(value, interpreterProxy->interpreterState)
+		: positive32BitIntegerFor(value, interpreterProxy->interpreterState));
+	return methodReturnValue(valueOop, interpreterProxy->interpreterState);
 }
 
 
@@ -2049,27 +2049,27 @@ primUnsignedWordAtPut(void)
     sqInt value;
     sqInt valueOop;
 
-	valueOop = stackValue(0);
-	byteOffset = (stackPositiveMachineIntegerValue(1)) - 1;
-	rcvr = stackObjectValue(2);
-	value = positiveMachineIntegerValueOf(valueOop);
-	if (failed()) {
-		return primitiveFailFor(PrimErrBadArgument);
+	valueOop = stackValue(0, interpreterProxy->interpreterState);
+	byteOffset = (stackPositiveMachineIntegerValue(1, interpreterProxy->interpreterState)) - 1;
+	rcvr = stackObjectValue(2, interpreterProxy->interpreterState);
+	value = positiveMachineIntegerValueOf(valueOop, interpreterProxy->interpreterState);
+	if (failed(interpreterProxy->interpreterState)) {
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	if (!(indexlengthinRange(byteOffset, BytesPerOop, rcvr))) {
-		return primitiveFailFor(PrimErrBadIndex);
+		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
 	}
-	if (isOopImmutable(rcvr)) {
-		return primitiveFailFor(PrimErrNoModification);
+	if (isOopImmutable(rcvr, interpreterProxy->interpreterState)) {
+		return primitiveFailFor(PrimErrNoModification, interpreterProxy->interpreterState);
 	}
 	if (((startAddr = ((longAt(rcvr + BaseHeaderSize)) > 0
 		? (rcvr + BaseHeaderSize) + BytesPerOop
 		: longAt((rcvr + BaseHeaderSize) + BytesPerOop)))) == 0) {
-		return primitiveFailFor(PrimErrBadReceiver);
+		return primitiveFailFor(PrimErrBadReceiver, interpreterProxy->interpreterState);
 	}
 	addr = startAddr + byteOffset;
 	longAtput(addr, value);
-	return methodReturnValue(valueOop);
+	return methodReturnValue(valueOop, interpreterProxy->interpreterState);
 }
 
 
@@ -2093,22 +2093,22 @@ primVarArgsCallOutDoubleReturn(void)
     sqInt mac;
     sqInt result;
 
-	array = stackValue(0);
-	if (!(isArray(array))) {
-		return primitiveFailFor(PrimErrBadArgument);
+	array = stackValue(0, interpreterProxy->interpreterState);
+	if (!(isArray(array, interpreterProxy->interpreterState))) {
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
-	mac = methodArgumentCount();
+	mac = methodArgumentCount(interpreterProxy->interpreterState);
 
 	/* ptr to 0th arg */
 	/* nargs */
 	/* func stackValue */
 	/* result stackValue */
-	errCode = callIA32DoubleReturn(firstIndexableField(array), stSizeOf(array), 2, 1);
+	errCode = callIA32DoubleReturn(firstIndexableField(array, interpreterProxy->interpreterState), stSizeOf(array, interpreterProxy->interpreterState), 2, 1);
 	if (errCode != 0) {
-		return primitiveFailFor(errCode);
+		return primitiveFailFor(errCode, interpreterProxy->interpreterState);
 	}
-	result = stackValue(1);
-	popthenPush(mac + 1, result);
+	result = stackValue(1, interpreterProxy->interpreterState);
+	popthenPush(mac + 1, result, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -2133,22 +2133,22 @@ primVarArgsCallOutFloatReturn(void)
     sqInt mac;
     sqInt result;
 
-	array = stackValue(0);
-	if (!(isArray(array))) {
-		return primitiveFailFor(PrimErrBadArgument);
+	array = stackValue(0, interpreterProxy->interpreterState);
+	if (!(isArray(array, interpreterProxy->interpreterState))) {
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
-	mac = methodArgumentCount();
+	mac = methodArgumentCount(interpreterProxy->interpreterState);
 
 	/* ptr to 0th arg */
 	/* nargs */
 	/* func stackValue */
 	/* result stackValue */
-	errCode = callIA32FloatReturn(firstIndexableField(array), stSizeOf(array), 2, 1);
+	errCode = callIA32FloatReturn(firstIndexableField(array, interpreterProxy->interpreterState), stSizeOf(array, interpreterProxy->interpreterState), 2, 1);
 	if (errCode != 0) {
-		return primitiveFailFor(errCode);
+		return primitiveFailFor(errCode, interpreterProxy->interpreterState);
 	}
-	result = stackValue(1);
-	popthenPush(mac + 1, result);
+	result = stackValue(1, interpreterProxy->interpreterState);
+	popthenPush(mac + 1, result, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -2173,22 +2173,22 @@ primVarArgsCallOutIntegralReturn(void)
     sqInt mac;
     sqInt result;
 
-	array = stackValue(0);
-	if (!(isArray(array))) {
-		return primitiveFailFor(PrimErrBadArgument);
+	array = stackValue(0, interpreterProxy->interpreterState);
+	if (!(isArray(array, interpreterProxy->interpreterState))) {
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
-	mac = methodArgumentCount();
+	mac = methodArgumentCount(interpreterProxy->interpreterState);
 
 	/* ptr to 0th arg */
 	/* nargs */
 	/* func stackValue */
 	/* result stackValue */
-	errCode = callIA32IntegralReturn(firstIndexableField(array), stSizeOf(array), 2, 1);
+	errCode = callIA32IntegralReturn(firstIndexableField(array, interpreterProxy->interpreterState), stSizeOf(array, interpreterProxy->interpreterState), 2, 1);
 	if (errCode != 0) {
-		return primitiveFailFor(errCode);
+		return primitiveFailFor(errCode, interpreterProxy->interpreterState);
 	}
-	result = stackValue(1);
-	popthenPush(mac + 1, result);
+	result = stackValue(1, interpreterProxy->interpreterState);
+	popthenPush(mac + 1, result, interpreterProxy->interpreterState);
 	return 0;
 }
 

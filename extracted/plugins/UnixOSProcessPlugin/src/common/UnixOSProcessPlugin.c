@@ -104,7 +104,7 @@ static sqInt isVmThread(void);
 static sqInt makePipeForReaderwriter(FILEHANDLETYPE *readerIOStreamPtr, FILEHANDLETYPE *writerIOStreamPtr);
 static sqInt maskForThisThreadAndResend(int sigNum);
 static sqInt maskSignalForThisThread(int sigNum);
-EXPORT(sqInt) moduleUnloaded(char *aModuleName);
+EXPORT(sqInt) moduleUnloaded(char *aModuleName, struct foo * self);
 static sqInt msg(char *s);
 static sqInt needSigaltstack(void);
 static sqInt newPthreadTypeByteArray(pthread_t aPthreadType);
@@ -257,79 +257,79 @@ static char * versionString(void);
 /*** Variables ***/
 
 #if !defined(SQUEAK_BUILTIN_PLUGIN)
-static void * (*arrayValueOf)(sqInt oop);
-static sqInt (*byteSizeOf)(sqInt oop);
-static sqInt (*checkedIntegerValueOf)(sqInt intOop);
-static sqInt (*classArray)(void);
-static sqInt (*classByteArray)(void);
-static sqInt (*classString)(void);
-static sqInt (*failed)(void);
-static sqInt (*falseObject)(void);
-static void * (*firstIndexableField)(sqInt oop);
-static sqInt (*getThisSessionID)(void);
-static sqInt (*instantiateClassindexableSize)(sqInt classPointer, sqInt size);
-static sqInt (*integerObjectOf)(sqInt value);
-static sqInt (*integerValueOf)(sqInt oop);
+static void * (*arrayValueOf)(sqInt oop, struct foo * self);
+static sqInt (*byteSizeOf)(sqInt oop, struct foo * self);
+static sqInt (*checkedIntegerValueOf)(sqInt intOop, struct foo * self);
+static sqInt (*classArray)(struct foo * self);
+static sqInt (*classByteArray)(struct foo * self);
+static sqInt (*classString)(struct foo * self);
+static sqInt (*failed)(struct foo * self);
+static sqInt (*falseObject)(struct foo * self);
+static void * (*firstIndexableField)(sqInt oop, struct foo * self);
+static sqInt (*getThisSessionID)(struct foo * self);
+static sqInt (*instantiateClassindexableSize)(sqInt classPointer, sqInt size, struct foo * self);
+static sqInt (*integerObjectOf)(sqInt value, struct foo * self);
+static sqInt (*integerValueOf)(sqInt oop, struct foo * self);
 static void * (*ioLoadFunctionFrom)(char *functionName, char *moduleName);
-static sqInt (*isBytes)(sqInt oop);
-static sqInt (*isIntegerObject)(sqInt objectPointer);
-static sqInt (*methodArgumentCount)(void);
-static sqInt (*methodReturnValue)(sqInt oop);
-static sqInt (*nilObject)(void);
-static sqInt (*pop)(sqInt nItems);
-static sqInt (*popthenPush)(sqInt nItems, sqInt oop);
-static sqInt (*popRemappableOop)(void);
-static sqInt (*primitiveFail)(void);
-static sqInt (*primitiveFailFor)(sqInt reasonCode);
-static sqInt (*push)(sqInt object);
-static sqInt (*pushInteger)(sqInt integerValue);
-static sqInt (*pushRemappableOop)(sqInt oop);
+static sqInt (*isBytes)(sqInt oop, struct foo * self);
+static sqInt (*isIntegerObject)(sqInt objectPointer, struct foo * self);
+static sqInt (*methodArgumentCount)(struct foo * self);
+static sqInt (*methodReturnValue)(sqInt oop, struct foo * self);
+static sqInt (*nilObject)(struct foo * self);
+static sqInt (*pop)(sqInt nItems, struct foo * self);
+static sqInt (*popthenPush)(sqInt nItems, sqInt oop, struct foo * self);
+static sqInt (*popRemappableOop)(struct foo * self);
+static sqInt (*primitiveFail)(struct foo * self);
+static sqInt (*primitiveFailFor)(sqInt reasonCode, struct foo * self);
+static sqInt (*push)(sqInt object, struct foo * self);
+static sqInt (*pushInteger)(sqInt integerValue, struct foo * self);
+static sqInt (*pushRemappableOop)(sqInt oop, struct foo * self);
 static sqInt (*signalSemaphoreWithIndex)(sqInt semaIndex);
-static sqInt (*sizeOfSTArrayFromCPrimitive)(void *cPtr);
-static sqInt (*stObjectatput)(sqInt array, sqInt index, sqInt value);
-static sqInt (*stSizeOf)(sqInt oop);
-static sqInt (*stackIntegerValue)(sqInt offset);
-static sqInt (*stackObjectValue)(sqInt offset);
-static sqInt (*stackValue)(sqInt offset);
-static sqInt (*trueObject)(void);
+static sqInt (*sizeOfSTArrayFromCPrimitive)(void *cPtr, struct foo * self);
+static sqInt (*stObjectatput)(sqInt array, sqInt index, sqInt value, struct foo * self);
+static sqInt (*stSizeOf)(sqInt oop, struct foo * self);
+static sqInt (*stackIntegerValue)(sqInt offset, struct foo * self);
+static sqInt (*stackObjectValue)(sqInt offset, struct foo * self);
+static sqInt (*stackValue)(sqInt offset, struct foo * self);
+static sqInt (*trueObject)(struct foo * self);
 #else /* !defined(SQUEAK_BUILTIN_PLUGIN) */
-extern void * arrayValueOf(sqInt oop);
-extern sqInt byteSizeOf(sqInt oop);
-extern sqInt checkedIntegerValueOf(sqInt intOop);
-extern sqInt classArray(void);
-extern sqInt classByteArray(void);
-extern sqInt classString(void);
-extern sqInt failed(void);
-extern sqInt falseObject(void);
-extern void * firstIndexableField(sqInt oop);
-extern sqInt getThisSessionID(void);
-extern sqInt instantiateClassindexableSize(sqInt classPointer, sqInt size);
-extern sqInt integerObjectOf(sqInt value);
-extern sqInt integerValueOf(sqInt oop);
+extern void * arrayValueOf(sqInt oop, struct foo * self);
+extern sqInt byteSizeOf(sqInt oop, struct foo * self);
+extern sqInt checkedIntegerValueOf(sqInt intOop, struct foo * self);
+extern sqInt classArray(struct foo * self);
+extern sqInt classByteArray(struct foo * self);
+extern sqInt classString(struct foo * self);
+extern sqInt failed(struct foo * self);
+extern sqInt falseObject(struct foo * self);
+extern void * firstIndexableField(sqInt oop, struct foo * self);
+extern sqInt getThisSessionID(struct foo * self);
+extern sqInt instantiateClassindexableSize(sqInt classPointer, sqInt size, struct foo * self);
+extern sqInt integerObjectOf(sqInt value, struct foo * self);
+extern sqInt integerValueOf(sqInt oop, struct foo * self);
 extern void * ioLoadFunctionFrom(char *functionName, char *moduleName);
-extern sqInt isBytes(sqInt oop);
+extern sqInt isBytes(sqInt oop, struct foo * self);
 #if !defined(isIntegerObject)
-extern sqInt isIntegerObject(sqInt objectPointer);
+extern sqInt isIntegerObject(sqInt objectPointer, struct foo * self);
 #endif
-extern sqInt methodArgumentCount(void);
-extern sqInt methodReturnValue(sqInt oop);
-extern sqInt nilObject(void);
-extern sqInt pop(sqInt nItems);
-extern sqInt popthenPush(sqInt nItems, sqInt oop);
-extern sqInt popRemappableOop(void);
-extern sqInt primitiveFail(void);
-extern sqInt primitiveFailFor(sqInt reasonCode);
-extern sqInt push(sqInt object);
-extern sqInt pushInteger(sqInt integerValue);
-extern sqInt pushRemappableOop(sqInt oop);
+extern sqInt methodArgumentCount(struct foo * self);
+extern sqInt methodReturnValue(sqInt oop, struct foo * self);
+extern sqInt nilObject(struct foo * self);
+extern sqInt pop(sqInt nItems, struct foo * self);
+extern sqInt popthenPush(sqInt nItems, sqInt oop, struct foo * self);
+extern sqInt popRemappableOop(struct foo * self);
+extern sqInt primitiveFail(struct foo * self);
+extern sqInt primitiveFailFor(sqInt reasonCode, struct foo * self);
+extern sqInt push(sqInt object, struct foo * self);
+extern sqInt pushInteger(sqInt integerValue, struct foo * self);
+extern sqInt pushRemappableOop(sqInt oop, struct foo * self);
 extern sqInt signalSemaphoreWithIndex(sqInt semaIndex);
-extern sqInt sizeOfSTArrayFromCPrimitive(void *cPtr);
-extern sqInt stObjectatput(sqInt array, sqInt index, sqInt value);
-extern sqInt stSizeOf(sqInt oop);
-extern sqInt stackIntegerValue(sqInt offset);
-extern sqInt stackObjectValue(sqInt offset);
-extern sqInt stackValue(sqInt offset);
-extern sqInt trueObject(void);
+extern sqInt sizeOfSTArrayFromCPrimitive(void *cPtr, struct foo * self);
+extern sqInt stObjectatput(sqInt array, sqInt index, sqInt value, struct foo * self);
+extern sqInt stSizeOf(sqInt oop, struct foo * self);
+extern sqInt stackIntegerValue(sqInt offset, struct foo * self);
+extern sqInt stackObjectValue(sqInt offset, struct foo * self);
+extern sqInt stackValue(sqInt offset, struct foo * self);
+extern sqInt trueObject(struct foo * self);
 extern
 #endif
 struct VirtualMachine* interpreterProxy;
@@ -374,18 +374,18 @@ argumentAtAsType(sqInt classIdentifier)
 
     int argCnt = getProcessArgumentCount();
 
-	index = stackIntegerValue(0);
+	index = stackIntegerValue(0, interpreterProxy->interpreterState);
 	if ((index > argCnt) || (index < 1)) {
-		popthenPush(2, nilObject());
+		popthenPush(2, nilObject(interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 	}
 	else {
 		sPtr = argVec[index - 1];
 		/* begin cString:asCollection: */
 		len = strlen(sPtr);
-		newString = instantiateClassindexableSize(classIdentifier, len);
-		strncpy(arrayValueOf(newString), sPtr, len);
+		newString = instantiateClassindexableSize(classIdentifier, len, interpreterProxy->interpreterState);
+		strncpy(arrayValueOf(newString, interpreterProxy->interpreterState), sPtr, len);
 		s = newString;
-		popthenPush(2, s);
+		popthenPush(2, s, interpreterProxy->interpreterState);
 	}
 	return 0;
 }
@@ -453,8 +453,8 @@ cStringFromString(sqInt aString)
     sqInt len;
     char *sPtr;
 
-	sPtr = arrayValueOf(aString);
-	len = sizeOfSTArrayFromCPrimitive(sPtr);
+	sPtr = arrayValueOf(aString, interpreterProxy->interpreterState);
+	len = sizeOfSTArrayFromCPrimitive(sPtr, interpreterProxy->interpreterState);
 
 	/* Space for a null terminated C string. */
 	cString = callocWrappersize(len + 1, 1);
@@ -476,8 +476,8 @@ cStringasCollection(const char *aCString, sqInt classIdentifier)
     sqInt newString;
 
 	len = strlen(aCString);
-	newString = instantiateClassindexableSize(classIdentifier, len);
-	strncpy(arrayValueOf(newString), aCString, len);
+	newString = instantiateClassindexableSize(classIdentifier, len, interpreterProxy->interpreterState);
+	strncpy(arrayValueOf(newString, interpreterProxy->interpreterState), aCString, len);
 	return newString;
 }
 
@@ -520,9 +520,9 @@ dupToStdErr(sqInt anSQFileDataStructure)
     sqInt filenoToDup;
 
 	/* begin fileDescriptorFrom: */
-	if (!((((isBytes(anSQFileDataStructure))
-		 && ((byteSizeOf(anSQFileDataStructure)) == (sizeof(SQFile))))
-		 && ((getThisSessionID()) == (sessionIdentifierFromSqFile(arrayValueOf(anSQFileDataStructure)))))
+	if (!((((isBytes(anSQFileDataStructure, interpreterProxy->interpreterState))
+		 && ((byteSizeOf(anSQFileDataStructure, interpreterProxy->interpreterState)) == (sizeof(SQFile))))
+		 && ((getThisSessionID(interpreterProxy->interpreterState)) == (sessionIdentifierFromSqFile(arrayValueOf(anSQFileDataStructure, interpreterProxy->interpreterState)))))
 		 && (isNonNullSQFile(anSQFileDataStructure)))) {
 		filenoToDup = -1;
 		goto l1;
@@ -556,9 +556,9 @@ dupToStdIn(sqInt anSQFileDataStructure)
     sqInt filenoToDup;
 
 	/* begin fileDescriptorFrom: */
-	if (!((((isBytes(anSQFileDataStructure))
-		 && ((byteSizeOf(anSQFileDataStructure)) == (sizeof(SQFile))))
-		 && ((getThisSessionID()) == (sessionIdentifierFromSqFile(arrayValueOf(anSQFileDataStructure)))))
+	if (!((((isBytes(anSQFileDataStructure, interpreterProxy->interpreterState))
+		 && ((byteSizeOf(anSQFileDataStructure, interpreterProxy->interpreterState)) == (sizeof(SQFile))))
+		 && ((getThisSessionID(interpreterProxy->interpreterState)) == (sessionIdentifierFromSqFile(arrayValueOf(anSQFileDataStructure, interpreterProxy->interpreterState)))))
 		 && (isNonNullSQFile(anSQFileDataStructure)))) {
 		filenoToDup = -1;
 		goto l1;
@@ -593,9 +593,9 @@ dupToStdOut(sqInt anSQFileDataStructure)
     sqInt filenoToDup;
 
 	/* begin fileDescriptorFrom: */
-	if (!((((isBytes(anSQFileDataStructure))
-		 && ((byteSizeOf(anSQFileDataStructure)) == (sizeof(SQFile))))
-		 && ((getThisSessionID()) == (sessionIdentifierFromSqFile(arrayValueOf(anSQFileDataStructure)))))
+	if (!((((isBytes(anSQFileDataStructure, interpreterProxy->interpreterState))
+		 && ((byteSizeOf(anSQFileDataStructure, interpreterProxy->interpreterState)) == (sizeof(SQFile))))
+		 && ((getThisSessionID(interpreterProxy->interpreterState)) == (sessionIdentifierFromSqFile(arrayValueOf(anSQFileDataStructure, interpreterProxy->interpreterState)))))
 		 && (isNonNullSQFile(anSQFileDataStructure)))) {
 		filenoToDup = -1;
 		goto l1;
@@ -630,27 +630,27 @@ environmentAtAsType(sqInt classIdentifier)
 	/* Count number of environment variables. */
 	p = getEnvironmentVector();
 	if (p == null) {
-		return primitiveFail();
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
 	envCnt = 0;
 	while (*p++) envCnt++;
 
 	/* restore pointer */
 	p = getEnvironmentVector();
-	index = stackIntegerValue(0);
+	index = stackIntegerValue(0, interpreterProxy->interpreterState);
 	if ((index > envCnt) || (index < 1)) {
-		pop(2);
-		push(nilObject());
+		pop(2, interpreterProxy->interpreterState);
+		push(nilObject(interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 	}
 	else {
 		sPtr = p[index - 1];
 		/* begin cString:asCollection: */
 		len = strlen(sPtr);
-		newString = instantiateClassindexableSize(classIdentifier, len);
-		strncpy(arrayValueOf(newString), sPtr, len);
+		newString = instantiateClassindexableSize(classIdentifier, len, interpreterProxy->interpreterState);
+		strncpy(arrayValueOf(newString, interpreterProxy->interpreterState), sPtr, len);
 		s = newString;
-		pop(2);
-		push(s);
+		pop(2, interpreterProxy->interpreterState);
+		push(s, interpreterProxy->interpreterState);
 	}
 	return 0;
 }
@@ -664,13 +664,13 @@ environmentAtSymbolAsType(sqInt classIdentifier)
 {
     char * getenvResult;
 
-	getenvResult = getenv(transientCStringFromString(stackObjectValue(0)));
+	getenvResult = getenv(transientCStringFromString(stackObjectValue(0, interpreterProxy->interpreterState)));
 	if (getenvResult == 0) {
-		return primitiveFail();
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
 	else {
-		pop(2);
-		push(cStringasCollection(getenvResult, classIdentifier));
+		pop(2, interpreterProxy->interpreterState);
+		push(cStringasCollection(getenvResult, classIdentifier), interpreterProxy->interpreterState);
 	}
 	return 0;
 }
@@ -687,9 +687,9 @@ environmentAtSymbolAsType(sqInt classIdentifier)
 static sqInt
 fileDescriptorFrom(sqInt aSQFileByteArray)
 {
-	if (!((((isBytes(aSQFileByteArray))
-		 && ((byteSizeOf(aSQFileByteArray)) == (sizeof(SQFile))))
-		 && ((getThisSessionID()) == (sessionIdentifierFromSqFile(arrayValueOf(aSQFileByteArray)))))
+	if (!((((isBytes(aSQFileByteArray, interpreterProxy->interpreterState))
+		 && ((byteSizeOf(aSQFileByteArray, interpreterProxy->interpreterState)) == (sizeof(SQFile))))
+		 && ((getThisSessionID(interpreterProxy->interpreterState)) == (sessionIdentifierFromSqFile(arrayValueOf(aSQFileByteArray, interpreterProxy->interpreterState)))))
 		 && (isNonNullSQFile(aSQFileByteArray)))) {
 		return -1;
 	}
@@ -706,7 +706,7 @@ fileHandleFrom(sqInt sqFileStructByteArray)
 {
     SQFile *sqFile;
 
-	sqFile = arrayValueOf(sqFileStructByteArray);
+	sqFile = arrayValueOf(sqFileStructByteArray, interpreterProxy->interpreterState);
 	return sqFile->file;
 }
 
@@ -731,7 +731,7 @@ fileRecordSize(void)
 static SQFile *
 fileValueOf(sqInt anSQFileRecord)
 {
-	return arrayValueOf(anSQFileRecord);
+	return arrayValueOf(anSQFileRecord, interpreterProxy->interpreterState);
 }
 
 
@@ -756,28 +756,28 @@ fixPointersInArrayOfStringswithOffsets(sqInt flattenedStrings, sqInt offsets)
     usqInt sz;
     sqInt val;
 
-	count = stSizeOf(offsets);
-	offsetArray = firstIndexableField(offsets);
-	sz = ((usqInt)(byteSizeOf(flattenedStrings)));
+	count = stSizeOf(offsets, interpreterProxy->interpreterState);
+	offsetArray = firstIndexableField(offsets, interpreterProxy->interpreterState);
+	sz = ((usqInt)(byteSizeOf(flattenedStrings, interpreterProxy->interpreterState)));
 	if ((count * (sizeof(char *))) >= sz) {
-		primitiveFailFor(PrimErrBadArgument);
+		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 		return 0;
 	}
-	ptr = ((char **) (arrayValueOf(flattenedStrings)));
+	ptr = ((char **) (arrayValueOf(flattenedStrings, interpreterProxy->interpreterState)));
 	idx = 0;
 	while (idx < count) {
-		val = integerValueOf(offsetArray[idx]);
+		val = integerValueOf(offsetArray[idx], interpreterProxy->interpreterState);
 		if ((((usqInt)val)) >= sz) {
-			primitiveFailFor(PrimErrBadArgument);
+			primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 			return 0;
 		}
 		ptr[idx] = ((((char *) ptr)) + val);
 		idx += 1;
 	}
 	if ((ptr[idx]) != 0) {
-		primitiveFailFor(PrimErrBadArgument);
+		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
-	return (failed()
+	return (failed(interpreterProxy->interpreterState)
 		? 0
 		: ptr);
 }
@@ -860,28 +860,28 @@ forkAndExecInDirectory(sqInt useSignalHandler)
 
     char **envVec = getProcessEnvironmentVector();
 
-    if ((methodArgumentCount()) != 9) {
-		return primitiveFailFor(PrimErrBadNumArgs);
+    if ((methodArgumentCount(interpreterProxy->interpreterState)) != 9) {
+		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
 	}
 	if (useSignalHandler) {
 		setSigChldHandler();
 	}
 	if ((sandboxSecurity()) == 1) {
-		pop(10);
-		pushInteger(-1);
+		pop(10, interpreterProxy->interpreterState);
+		pushInteger(-1, interpreterProxy->interpreterState);
 		return null;
 	}
-	workingDir = stackObjectValue(0);
-	envOffsets = stackObjectValue(1);
-	envVecBuffer = stackObjectValue(2);
-	argOffsets = stackObjectValue(3);
-	argVecBuffer = stackObjectValue(4);
-	stdErr = stackObjectValue(5);
-	stdOut = stackObjectValue(6);
-	stdIn = stackObjectValue(7);
-	executableFile = stackObjectValue(8);
-	if (failed()) {
-		return primitiveFailFor(PrimErrBadArgument);
+	workingDir = stackObjectValue(0, interpreterProxy->interpreterState);
+	envOffsets = stackObjectValue(1, interpreterProxy->interpreterState);
+	envVecBuffer = stackObjectValue(2, interpreterProxy->interpreterState);
+	argOffsets = stackObjectValue(3, interpreterProxy->interpreterState);
+	argVecBuffer = stackObjectValue(4, interpreterProxy->interpreterState);
+	stdErr = stackObjectValue(5, interpreterProxy->interpreterState);
+	stdOut = stackObjectValue(6, interpreterProxy->interpreterState);
+	stdIn = stackObjectValue(7, interpreterProxy->interpreterState);
+	executableFile = stackObjectValue(8, interpreterProxy->interpreterState);
+	if (failed(interpreterProxy->interpreterState)) {
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	intervalTimer.it_interval.tv_sec = 0;
 	intervalTimer.it_interval.tv_usec = 0;
@@ -893,24 +893,24 @@ forkAndExecInDirectory(sqInt useSignalHandler)
 		/* Normal return to Smalltalk - this is the old parent process. */
 		/* Enable the timer again before resuming Smalltalk. */
 		setitimer (ITIMER_REAL, &saveIntervalTimer, 0L);
-		if (!(failed())) {
+		if (!(failed(interpreterProxy->interpreterState))) {
 
 			/* Pop 9 arguments plus receiver, push pid. */
-			pop(10);
-			pushInteger(pid);
+			pop(10, interpreterProxy->interpreterState);
+			pushInteger(pid, interpreterProxy->interpreterState);
 		}
 		return null;
 	}
-	if (workingDir != (nilObject())) {
-		pwdPtr = arrayValueOf(workingDir);
-		if ((failed())
+	if (workingDir != (nilObject(interpreterProxy->interpreterState))) {
+		pwdPtr = arrayValueOf(workingDir, interpreterProxy->interpreterState);
+		if ((failed(interpreterProxy->interpreterState))
 		 || (pwdPtr == 0)) {
-			primitiveFailFor(PrimErrBadArgument);
+			primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 			fprintf(stderr, "bad workingDir parameter\n");
 			_exit(-1);
 		}
 		if ((chdir(pwdPtr)) != 0) {
-			primitiveFailFor(PrimErrNotFound);
+			primitiveFailFor(PrimErrNotFound, interpreterProxy->interpreterState);
 			perror("chdir");
 			_exit(-1);
 		}
@@ -918,20 +918,20 @@ forkAndExecInDirectory(sqInt useSignalHandler)
 
 	/* Dup the file handles to attach the new child process to the right streams
 	   on descriptors 0, 1 and 2. */
-	progNamePtr = arrayValueOf(executableFile);
-	if (!(stdErr == (nilObject()))) {
+	progNamePtr = arrayValueOf(executableFile, interpreterProxy->interpreterState);
+	if (!(stdErr == (nilObject(interpreterProxy->interpreterState)))) {
 		dupToStdErr(stdErr);
 	}
-	if (!(stdOut == (nilObject()))) {
+	if (!(stdOut == (nilObject(interpreterProxy->interpreterState)))) {
 		dupToStdOut(stdOut);
 	}
-	if (!(stdIn == (nilObject()))) {
+	if (!(stdIn == (nilObject(interpreterProxy->interpreterState)))) {
 		dupToStdIn(stdIn);
 	}
 	for (fd = 3, fdLimiT = ((getdtablesize()) - 1); fd <= fdLimiT; fd += 1) {
 		close(fd);
 	}
-	if (envVecBuffer == (nilObject())) {
+	if (envVecBuffer == (nilObject(interpreterProxy->interpreterState))) {
 		env = envVec;
 	}
 	else {
@@ -1109,11 +1109,11 @@ getCurrentWorkingDirectoryAsType(sqInt classIdentifier)
 	incrementBy = 100;
 	maxSize = 5000;
 	while (1) {
-		cwdString = instantiateClassindexableSize(classString(), bufferSize);
+		cwdString = instantiateClassindexableSize(classString(interpreterProxy->interpreterState), bufferSize, interpreterProxy->interpreterState);
 		if (cwdString == null) {
-			primitiveFailFor(PrimErrNoMemory);
+			primitiveFailFor(PrimErrNoMemory, interpreterProxy->interpreterState);
 		}
-		buffer = arrayValueOf(cwdString);
+		buffer = arrayValueOf(cwdString, interpreterProxy->interpreterState);
 
 		/* getcwd(buffer, bufferSize) */
 		cwd = getcwd(buffer, bufferSize);
@@ -1122,15 +1122,15 @@ getCurrentWorkingDirectoryAsType(sqInt classIdentifier)
 		bufferSize += incrementBy;
 	}
 	if (cwd == 0) {
-		primitiveFail();
+		primitiveFail(interpreterProxy->interpreterState);
 	}
 	else {
 		/* begin cString:asCollection: */
 		len = strlen(cwd);
-		newString = instantiateClassindexableSize(classIdentifier, len);
-		strncpy(arrayValueOf(newString), cwd, len);
+		newString = instantiateClassindexableSize(classIdentifier, len, interpreterProxy->interpreterState);
+		strncpy(arrayValueOf(newString, interpreterProxy->interpreterState), cwd, len);
 		cwdString = newString;
-		methodReturnValue(cwdString);
+		methodReturnValue(cwdString, interpreterProxy->interpreterState);
 	}
 	return 0;
 }
@@ -1192,21 +1192,21 @@ getStdHandle(sqInt n)
 
 	validMask = sqFileStdioHandlesInto(fileRecords);
 	if ((validMask & (1U << n)) == 0) {
-		return primitiveFailFor(PrimErrUnsupported);
+		return primitiveFailFor(PrimErrUnsupported, interpreterProxy->interpreterState);
 	}
-	fileOop = instantiateClassindexableSize(classByteArray(), sizeof(SQFile));
-	if (failed()) {
-		return primitiveFailFor(PrimErrNoMemory);
+	fileOop = instantiateClassindexableSize(classByteArray(interpreterProxy->interpreterState), sizeof(SQFile), interpreterProxy->interpreterState);
+	if (failed(interpreterProxy->interpreterState)) {
+		return primitiveFailFor(PrimErrNoMemory, interpreterProxy->interpreterState);
 	}
-	memcpy(firstIndexableField(fileOop), &fileRecords[n], sizeof(SQFile));
-	return popthenPush(1, fileOop);
+	memcpy(firstIndexableField(fileOop, interpreterProxy->interpreterState), &fileRecords[n], sizeof(SQFile));
+	return popthenPush(1, fileOop, interpreterProxy->interpreterState);
 }
 
 	/* OSProcessPlugin>>#getThisSessionIdentifier */
 static sqInt
 getThisSessionIdentifier(void)
 {
-	return getThisSessionID();
+	return getThisSessionID(interpreterProxy->interpreterState);
 }
 
 	/* UnixOSProcessPlugin>>#handleSignalFunctionAddress */
@@ -1277,7 +1277,7 @@ isNonNullSQFile(sqInt objectPointer)
     unsigned idx;
     unsigned char *sqFileBytes;
 
-	sqFileBytes = arrayValueOf(objectPointer);
+	sqFileBytes = arrayValueOf(objectPointer, interpreterProxy->interpreterState);
 	idx = 0;
 	while (idx < (sizeof(SQFile))) {
 		if ((sqFileBytes[idx]) != 0) {
@@ -1298,7 +1298,7 @@ isNullSQSocket(sqInt objectPointer)
     sqInt idx;
     unsigned char *sqSocketBytes;
 
-	sqSocketBytes = arrayValueOf(objectPointer);
+	sqSocketBytes = arrayValueOf(objectPointer, interpreterProxy->interpreterState);
 	idx = 0;
 	while (idx < (sizeof(SQSocket))) {
 		if ((sqSocketBytes[idx]) != 0) {
@@ -1318,9 +1318,9 @@ isNullSQSocket(sqInt objectPointer)
 static sqInt
 isSQFileObject(sqInt objectPointer)
 {
-	return (((isBytes(objectPointer))
-	 && ((byteSizeOf(objectPointer)) == (sizeof(SQFile))))
-	 && ((getThisSessionID()) == (sessionIdentifierFromSqFile(arrayValueOf(objectPointer)))))
+	return (((isBytes(objectPointer, interpreterProxy->interpreterState))
+	 && ((byteSizeOf(objectPointer, interpreterProxy->interpreterState)) == (sizeof(SQFile))))
+	 && ((getThisSessionID(interpreterProxy->interpreterState)) == (sessionIdentifierFromSqFile(arrayValueOf(objectPointer, interpreterProxy->interpreterState)))))
 	 && (isNonNullSQFile(objectPointer));
 }
 
@@ -1336,8 +1336,8 @@ isSQFileObject(sqInt objectPointer)
 static sqInt
 isSQSocketObject(sqInt objectPointer)
 {
-	return ((isBytes(objectPointer))
-	 && ((byteSizeOf(objectPointer)) == (sizeof(SQSocket))))
+	return ((isBytes(objectPointer, interpreterProxy->interpreterState))
+	 && ((byteSizeOf(objectPointer, interpreterProxy->interpreterState)) == (sizeof(SQSocket))))
 	 && (!(isNullSQSocket(objectPointer)));
 }
 
@@ -1350,7 +1350,7 @@ isSQSocketObject(sqInt objectPointer)
 static sqInt
 isValidFileSession(sqInt objectPointer)
 {
-	return (getThisSessionID()) == (sessionIdentifierFromSqFile(arrayValueOf(objectPointer)));
+	return (getThisSessionID(interpreterProxy->interpreterState)) == (sessionIdentifierFromSqFile(arrayValueOf(objectPointer, interpreterProxy->interpreterState)));
 }
 
 
@@ -1434,7 +1434,7 @@ maskSignalForThisThread(int sigNum)
 
 	/* OSProcessPlugin>>#moduleUnloaded: */
 EXPORT(sqInt)
-moduleUnloaded(char *aModuleName)
+moduleUnloaded(char *aModuleName, struct foo * self)
 {
 	return 0;
 }
@@ -1518,8 +1518,8 @@ newPthreadTypeByteArray(pthread_t aPthreadType)
     pthread_t *ptr;
 
 	len = sizeof(pthread_t);
-	byteArray = instantiateClassindexableSize(classByteArray(), len);
-	ptr = arrayValueOf(byteArray);
+	byteArray = instantiateClassindexableSize(classByteArray(interpreterProxy->interpreterState), len, interpreterProxy->interpreterState);
+	ptr = arrayValueOf(byteArray, interpreterProxy->interpreterState);
 	ptr[0] = aPthreadType;
 	return byteArray;
 }
@@ -1531,7 +1531,7 @@ newPthreadTypeByteArray(pthread_t aPthreadType)
 static sqInt
 newSQFileByteArray(void)
 {
-	return instantiateClassindexableSize(classByteArray(), sizeof(SQFile));
+	return instantiateClassindexableSize(classByteArray(interpreterProxy->interpreterState), sizeof(SQFile), interpreterProxy->interpreterState);
 }
 
 
@@ -1541,7 +1541,7 @@ newSQFileByteArray(void)
 static sqInt
 newSQSocketByteArray(void)
 {
-	return instantiateClassindexableSize(classByteArray(), sizeof(SQSocket));
+	return instantiateClassindexableSize(classByteArray(interpreterProxy->interpreterState), sizeof(SQSocket), interpreterProxy->interpreterState);
 }
 
 
@@ -1569,11 +1569,11 @@ pointerFrom(sqInt aByteArray)
     union {void *address; unsigned char bytes[sizeof(void *)];} pointerUnion;
     unsigned char *ptr;
 
-	if (!((isBytes(aByteArray))
-		 && ((stSizeOf(aByteArray)) == (sizeof(void *))))) {
+	if (!((isBytes(aByteArray, interpreterProxy->interpreterState))
+		 && ((stSizeOf(aByteArray, interpreterProxy->interpreterState)) == (sizeof(void *))))) {
 		return null;
 	}
-	ptr = arrayValueOf(aByteArray);
+	ptr = arrayValueOf(aByteArray, interpreterProxy->interpreterState);
 	idx = 0;
 	while (idx < (sizeof(void *))) {
 		pointerUnion.bytes[idx] = ptr[idx];
@@ -1603,19 +1603,19 @@ primitiveArgumentAt(void)
     int argCnt = getProcessArgumentCount();
 
 	/* begin argumentAtAsType: */
-	classIdentifier = classString();
-	index = stackIntegerValue(0);
+	classIdentifier = classString(interpreterProxy->interpreterState);
+	index = stackIntegerValue(0, interpreterProxy->interpreterState);
 	if ((index > argCnt) || (index < 1)) {
-		popthenPush(2, nilObject());
+		popthenPush(2, nilObject(interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 	}
 	else {
 		sPtr = argVec[index - 1];
 		/* begin cString:asCollection: */
 		len = strlen(sPtr);
-		newString = instantiateClassindexableSize(classIdentifier, len);
-		strncpy(arrayValueOf(newString), sPtr, len);
+		newString = instantiateClassindexableSize(classIdentifier, len, interpreterProxy->interpreterState);
+		strncpy(arrayValueOf(newString, interpreterProxy->interpreterState), sPtr, len);
 		s = newString;
-		popthenPush(2, s);
+		popthenPush(2, s, interpreterProxy->interpreterState);
 	}
 	return 0;
 }
@@ -1639,19 +1639,19 @@ primitiveArgumentAtAsBytes(void)
     int argCnt = getProcessArgumentCount();
 
 	/* begin argumentAtAsType: */
-	classIdentifier = classByteArray();
-	index = stackIntegerValue(0);
+	classIdentifier = classByteArray(interpreterProxy->interpreterState);
+	index = stackIntegerValue(0, interpreterProxy->interpreterState);
 	if ((index > argCnt) || (index < 1)) {
-		popthenPush(2, nilObject());
+		popthenPush(2, nilObject(interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 	}
 	else {
 		sPtr = argVec[index - 1];
 		/* begin cString:asCollection: */
 		len = strlen(sPtr);
-		newString = instantiateClassindexableSize(classIdentifier, len);
-		strncpy(arrayValueOf(newString), sPtr, len);
+		newString = instantiateClassindexableSize(classIdentifier, len, interpreterProxy->interpreterState);
+		strncpy(arrayValueOf(newString, interpreterProxy->interpreterState), sPtr, len);
 		s = newString;
-		popthenPush(2, s);
+		popthenPush(2, s, interpreterProxy->interpreterState);
 	}
 	return 0;
 }
@@ -1674,20 +1674,20 @@ primitiveCanReceiveSignals(void)
     pid_t pidToSignal;
     int result;
 
-	if (isIntegerObject(stackValue(0))) {
-		pidToSignal = stackIntegerValue(0);
+	if (isIntegerObject(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState)) {
+		pidToSignal = stackIntegerValue(0, interpreterProxy->interpreterState);
 		result = kill(pidToSignal, 0);
-		pop(2);
+		pop(2, interpreterProxy->interpreterState);
 		if (result == 0) {
-			push(trueObject());
+			push(trueObject(interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 		}
 		else {
-			push(falseObject());
+			push(falseObject(interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 		}
 	}
 	else {
-		pop(2);
-		push(falseObject());
+		pop(2, interpreterProxy->interpreterState);
+		push(falseObject(interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 	}
 	return 0;
 }
@@ -1705,14 +1705,14 @@ primitiveChdir(void)
     extern int errno;
     char *path;
 
-	path = transientCStringFromString(stackObjectValue(0));
+	path = transientCStringFromString(stackObjectValue(0, interpreterProxy->interpreterState));
 	if (chdir(path)) {
-		pop(2);
-		pushInteger(errno);
+		pop(2, interpreterProxy->interpreterState);
+		pushInteger(errno, interpreterProxy->interpreterState);
 	}
 	else {
-		pop(2);
-		push(nilObject());
+		pop(2, interpreterProxy->interpreterState);
+		push(nilObject(interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 	}
 	return 0;
 }
@@ -1744,34 +1744,34 @@ primitiveCreatePipe(void)
     SQFile *writerPtr;
 
 	/* begin getThisSessionIdentifier */
-	thisSession = getThisSessionID();
+	thisSession = getThisSessionID(interpreterProxy->interpreterState);
 	readerIOStreamPtr = (&readerIOStream);
 	writerIOStreamPtr = (&writerIOStream);
 	if (!(createPipeForReaderwriter(readerIOStreamPtr, writerIOStreamPtr))) {
-		return primitiveFail();
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
 	/* begin newSQFileByteArray */
-	writer = instantiateClassindexableSize(classByteArray(), sizeof(SQFile));
+	writer = instantiateClassindexableSize(classByteArray(interpreterProxy->interpreterState), sizeof(SQFile), interpreterProxy->interpreterState);
 	/* begin fileValueOf: */
-	writerPtr = arrayValueOf(writer);
+	writerPtr = arrayValueOf(writer, interpreterProxy->interpreterState);
 	writerPtr->file = writerIOStream;
 	writerPtr->sessionID = thisSession;
 	writerPtr->writable = 1;
 	writerPtr->lastOp = 0;
-	pushRemappableOop(writer);
+	pushRemappableOop(writer, interpreterProxy->interpreterState);
 	/* begin newSQFileByteArray */
-	reader = instantiateClassindexableSize(classByteArray(), sizeof(SQFile));
+	reader = instantiateClassindexableSize(classByteArray(interpreterProxy->interpreterState), sizeof(SQFile), interpreterProxy->interpreterState);
 	/* begin fileValueOf: */
-	readerPtr = arrayValueOf(reader);
+	readerPtr = arrayValueOf(reader, interpreterProxy->interpreterState);
 	readerPtr->file = readerIOStream;
 	readerPtr->sessionID = thisSession;
 	readerPtr->writable = 0;
 	readerPtr->lastOp = 0;
-	pushRemappableOop(reader);
-	arrayResult = instantiateClassindexableSize(classArray(), 2);
-	stObjectatput(arrayResult, 1, popRemappableOop());
-	stObjectatput(arrayResult, 2, popRemappableOop());
-	popthenPush(1, arrayResult);
+	pushRemappableOop(reader, interpreterProxy->interpreterState);
+	arrayResult = instantiateClassindexableSize(classArray(interpreterProxy->interpreterState), 2, interpreterProxy->interpreterState);
+	stObjectatput(arrayResult, 1, popRemappableOop(interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	stObjectatput(arrayResult, 2, popRemappableOop(interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	popthenPush(1, arrayResult, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -1808,34 +1808,34 @@ primitiveCreatePipeWithSessionIdentifier(void)
 
 
 	/* Create the anonymous OS pipe */
-	thisSession = sessionIdentifierFrom(stackObjectValue(0));
+	thisSession = sessionIdentifierFrom(stackObjectValue(0, interpreterProxy->interpreterState));
 	readerIOStreamPtr = (&readerIOStream);
 	writerIOStreamPtr = (&writerIOStream);
 	if (!(createPipeForReaderwriter(readerIOStreamPtr, writerIOStreamPtr))) {
-		return primitiveFail();
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
 	/* begin newSQFileByteArray */
-	writer = instantiateClassindexableSize(classByteArray(), sizeof(SQFile));
+	writer = instantiateClassindexableSize(classByteArray(interpreterProxy->interpreterState), sizeof(SQFile), interpreterProxy->interpreterState);
 	/* begin fileValueOf: */
-	writerPtr = arrayValueOf(writer);
+	writerPtr = arrayValueOf(writer, interpreterProxy->interpreterState);
 	writerPtr->file = writerIOStream;
 	writerPtr->sessionID = thisSession;
 	writerPtr->writable = 1;
 	writerPtr->lastOp = 0;
-	pushRemappableOop(writer);
+	pushRemappableOop(writer, interpreterProxy->interpreterState);
 	/* begin newSQFileByteArray */
-	reader = instantiateClassindexableSize(classByteArray(), sizeof(SQFile));
+	reader = instantiateClassindexableSize(classByteArray(interpreterProxy->interpreterState), sizeof(SQFile), interpreterProxy->interpreterState);
 	/* begin fileValueOf: */
-	readerPtr = arrayValueOf(reader);
+	readerPtr = arrayValueOf(reader, interpreterProxy->interpreterState);
 	readerPtr->file = readerIOStream;
 	readerPtr->sessionID = thisSession;
 	readerPtr->writable = 0;
 	readerPtr->lastOp = 0;
-	pushRemappableOop(reader);
-	arrayResult = instantiateClassindexableSize(classArray(), 2);
-	stObjectatput(arrayResult, 1, popRemappableOop());
-	stObjectatput(arrayResult, 2, popRemappableOop());
-	popthenPush(2, arrayResult);
+	pushRemappableOop(reader, interpreterProxy->interpreterState);
+	arrayResult = instantiateClassindexableSize(classArray(interpreterProxy->interpreterState), 2, interpreterProxy->interpreterState);
+	stObjectatput(arrayResult, 1, popRemappableOop(interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	stObjectatput(arrayResult, 2, popRemappableOop(interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	popthenPush(2, arrayResult, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -1852,10 +1852,10 @@ primitiveDup(sqInt fileDescriptor)
     int fd;
     int result;
 
-	fd = stackIntegerValue(0);
+	fd = stackIntegerValue(0, interpreterProxy->interpreterState);
 	result = dup(fd);
-	pop(2);
-	pushInteger(result);
+	pop(2, interpreterProxy->interpreterState);
+	pushInteger(result, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -1871,11 +1871,11 @@ primitiveDupTo(sqInt oldFileDescriptor, sqInt newFileDescriptor)
     int oldfd;
     int result;
 
-	newfd = stackIntegerValue(0);
-	oldfd = stackIntegerValue(1);
+	newfd = stackIntegerValue(0, interpreterProxy->interpreterState);
+	oldfd = stackIntegerValue(1, interpreterProxy->interpreterState);
 	result = dup2(oldfd, newfd);
-	pop(3);
-	pushInteger(result);
+	pop(3, interpreterProxy->interpreterState);
+	pushInteger(result, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -1887,7 +1887,7 @@ primitiveDupTo(sqInt oldFileDescriptor, sqInt newFileDescriptor)
 EXPORT(sqInt)
 primitiveEnvironmentAt(void)
 {
-	environmentAtAsType(classString());
+	environmentAtAsType(classString(interpreterProxy->interpreterState));
 	return 0;
 }
 
@@ -1899,7 +1899,7 @@ primitiveEnvironmentAt(void)
 EXPORT(sqInt)
 primitiveEnvironmentAtAsBytes(void)
 {
-	environmentAtAsType(classByteArray());
+	environmentAtAsType(classByteArray(interpreterProxy->interpreterState));
 	return 0;
 }
 
@@ -1914,14 +1914,14 @@ primitiveEnvironmentAtSymbol(void)
     char * getenvResult;
 
 	/* begin environmentAtSymbolAsType: */
-	classIdentifier = classString();
-	getenvResult = getenv(transientCStringFromString(stackObjectValue(0)));
+	classIdentifier = classString(interpreterProxy->interpreterState);
+	getenvResult = getenv(transientCStringFromString(stackObjectValue(0, interpreterProxy->interpreterState)));
 	if (getenvResult == 0) {
-		return primitiveFail();
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
 	else {
-		pop(2);
-		push(cStringasCollection(getenvResult, classIdentifier));
+		pop(2, interpreterProxy->interpreterState);
+		push(cStringasCollection(getenvResult, classIdentifier), interpreterProxy->interpreterState);
 	}
 	return null;
 }
@@ -1938,14 +1938,14 @@ primitiveEnvironmentAtSymbolAsBytes(void)
     char * getenvResult;
 
 	/* begin environmentAtSymbolAsType: */
-	classIdentifier = classByteArray();
-	getenvResult = getenv(transientCStringFromString(stackObjectValue(0)));
+	classIdentifier = classByteArray(interpreterProxy->interpreterState);
+	getenvResult = getenv(transientCStringFromString(stackObjectValue(0, interpreterProxy->interpreterState)));
 	if (getenvResult == 0) {
-		return primitiveFail();
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
 	else {
-		pop(2);
-		push(cStringasCollection(getenvResult, classIdentifier));
+		pop(2, interpreterProxy->interpreterState);
+		push(cStringasCollection(getenvResult, classIdentifier), interpreterProxy->interpreterState);
 	}
 	return null;
 }
@@ -1964,16 +1964,16 @@ primitiveErrorMessageAt(void)
     sqInt newString;
     char *p;
 
-	index = stackIntegerValue(0);
+	index = stackIntegerValue(0, interpreterProxy->interpreterState);
 	p = ((char *) (strerror(index)));
 	/* begin cString:asCollection: */
-	classIdentifier = classString();
+	classIdentifier = classString(interpreterProxy->interpreterState);
 	len = strlen(p);
-	newString = instantiateClassindexableSize(classIdentifier, len);
-	strncpy(arrayValueOf(newString), p, len);
+	newString = instantiateClassindexableSize(classIdentifier, len, interpreterProxy->interpreterState);
+	strncpy(arrayValueOf(newString, interpreterProxy->interpreterState), p, len);
 	errMessage = newString;
-	pop(2);
-	push(errMessage);
+	pop(2, interpreterProxy->interpreterState);
+	push(errMessage, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -2004,23 +2004,23 @@ primitiveFileProtectionMask(void)
     sqInt result;
     struct stat *statBuf;
 
-	buffer = instantiateClassindexableSize(classByteArray(), sizeof(struct stat));
-	statBuf = arrayValueOf(buffer);
-	path = transientCStringFromString(stackObjectValue(0));
+	buffer = instantiateClassindexableSize(classByteArray(interpreterProxy->interpreterState), sizeof(struct stat), interpreterProxy->interpreterState);
+	statBuf = arrayValueOf(buffer, interpreterProxy->interpreterState);
+	path = transientCStringFromString(stackObjectValue(0, interpreterProxy->interpreterState));
 	mode = stat(path, statBuf);
 	if (mode == 0) {
 		mode = statBuf->st_mode;
-		result = instantiateClassindexableSize(classArray(), 4);
-		stObjectatput(result, 4, integerObjectOf(mode & 07));
-		stObjectatput(result, 3, integerObjectOf((mode & 070) >> 3));
-		stObjectatput(result, 2, integerObjectOf((mode & 0700) >> 6));
-		stObjectatput(result, 1, integerObjectOf((mode & 07000) >> 9));
-		pop(2);
-		push(result);
+		result = instantiateClassindexableSize(classArray(interpreterProxy->interpreterState), 4, interpreterProxy->interpreterState);
+		stObjectatput(result, 4, integerObjectOf(mode & 07, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+		stObjectatput(result, 3, integerObjectOf((mode & 070) >> 3, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+		stObjectatput(result, 2, integerObjectOf((mode & 0700) >> 6, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+		stObjectatput(result, 1, integerObjectOf((mode & 07000) >> 9, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+		pop(2, interpreterProxy->interpreterState);
+		push(result, interpreterProxy->interpreterState);
 	}
 	else {
-		pop(2);
-		pushInteger(errno);
+		pop(2, interpreterProxy->interpreterState);
+		pushInteger(errno, interpreterProxy->interpreterState);
 	}
 	return 0;
 }
@@ -2060,29 +2060,29 @@ primitiveFileStat(void)
     struct stat *statBuf;
     sqInt uid;
 
-	result = instantiateClassindexableSize(classArray(), 3);
-	uid = instantiateClassindexableSize(classByteArray(), sizeof(uid_t));
-	gid = instantiateClassindexableSize(classByteArray(), sizeof(gid_t));
-	mask = instantiateClassindexableSize(classArray(), 4);
-	buffer = instantiateClassindexableSize(classByteArray(), sizeof(struct stat));
-	statBuf = arrayValueOf(buffer);
-	path = transientCStringFromString(stackObjectValue(0));
+	result = instantiateClassindexableSize(classArray(interpreterProxy->interpreterState), 3, interpreterProxy->interpreterState);
+	uid = instantiateClassindexableSize(classByteArray(interpreterProxy->interpreterState), sizeof(uid_t), interpreterProxy->interpreterState);
+	gid = instantiateClassindexableSize(classByteArray(interpreterProxy->interpreterState), sizeof(gid_t), interpreterProxy->interpreterState);
+	mask = instantiateClassindexableSize(classArray(interpreterProxy->interpreterState), 4, interpreterProxy->interpreterState);
+	buffer = instantiateClassindexableSize(classByteArray(interpreterProxy->interpreterState), sizeof(struct stat), interpreterProxy->interpreterState);
+	statBuf = arrayValueOf(buffer, interpreterProxy->interpreterState);
+	path = transientCStringFromString(stackObjectValue(0, interpreterProxy->interpreterState));
 	mode = stat(path, statBuf);
 	if (mode == 0) {
 		mode = statBuf->st_mode;
-		stObjectatput(mask, 4, integerObjectOf(mode & 07));
-		stObjectatput(mask, 3, integerObjectOf((mode & 070) >> 3));
-		stObjectatput(mask, 2, integerObjectOf((mode & 0700) >> 6));
-		stObjectatput(mask, 1, integerObjectOf((mode & 07000) >> 9));
-		stObjectatput(result, 3, mask);
-		stObjectatput(result, 2, integerObjectOf(statBuf->st_gid));
-		stObjectatput(result, 1, integerObjectOf(statBuf->st_uid));
-		pop(2);
-		push(result);
+		stObjectatput(mask, 4, integerObjectOf(mode & 07, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+		stObjectatput(mask, 3, integerObjectOf((mode & 070) >> 3, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+		stObjectatput(mask, 2, integerObjectOf((mode & 0700) >> 6, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+		stObjectatput(mask, 1, integerObjectOf((mode & 07000) >> 9, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+		stObjectatput(result, 3, mask, interpreterProxy->interpreterState);
+		stObjectatput(result, 2, integerObjectOf(statBuf->st_gid, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+		stObjectatput(result, 1, integerObjectOf(statBuf->st_uid, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+		pop(2, interpreterProxy->interpreterState);
+		push(result, interpreterProxy->interpreterState);
 	}
 	else {
-		pop(2);
-		pushInteger(errno);
+		pop(2, interpreterProxy->interpreterState);
+		pushInteger(errno, interpreterProxy->interpreterState);
 	}
 	return 0;
 }
@@ -2102,15 +2102,15 @@ primitiveFixPointersInArrayOfStrings(void)
     sqInt cStringArray;
     sqInt offsetArray;
 
-	count = stackIntegerValue(0);
-	offsetArray = stackObjectValue(1);
-	cStringArray = stackObjectValue(2);
-	if ((failed())
+	count = stackIntegerValue(0, interpreterProxy->interpreterState);
+	offsetArray = stackObjectValue(1, interpreterProxy->interpreterState);
+	cStringArray = stackObjectValue(2, interpreterProxy->interpreterState);
+	if ((failed(interpreterProxy->interpreterState))
 	 || ((fixPointersInArrayOfStringswithOffsets(cStringArray, offsetArray)) == 0)) {
-		primitiveFail();
+		primitiveFail(interpreterProxy->interpreterState);
 	}
 	else {
-		popthenPush(4, cStringArray);
+		popthenPush(4, cStringArray, interpreterProxy->interpreterState);
 	}
 	return 0;
 }
@@ -2196,13 +2196,13 @@ primitiveForkSqueak(void)
 
 	/* Do not fork child if running in secure mode */
 	if ((sandboxSecurity()) == 1) {
-		pop(1);
-		pushInteger(-1);
+		pop(1, interpreterProxy->interpreterState);
+		pushInteger(-1, interpreterProxy->interpreterState);
 	}
 	else {
 		pid = forkSqueak(1);
-		pop(1);
-		pushInteger(pid);
+		pop(1, interpreterProxy->interpreterState);
+		pushInteger(pid, interpreterProxy->interpreterState);
 	}
 	return 0;
 }
@@ -2230,13 +2230,13 @@ primitiveForkSqueakWithoutSigHandler(void)
 
 	/* Do not fork child if running in secure mode */
 	if ((sandboxSecurity()) == 1) {
-		pop(1);
-		pushInteger(-1);
+		pop(1, interpreterProxy->interpreterState);
+		pushInteger(-1, interpreterProxy->interpreterState);
 	}
 	else {
 		pid = forkSqueak(0);
-		pop(1);
-		pushInteger(pid);
+		pop(1, interpreterProxy->interpreterState);
+		pushInteger(pid, interpreterProxy->interpreterState);
 	}
 	return 0;
 }
@@ -2270,32 +2270,32 @@ primitiveForwardSignalToSemaphore(void)
     sqInt sigNum;
 
 	semaphoreIndex = 0;
-	index = stackValue(0);
-	if (index == (nilObject())) {
+	index = stackValue(0, interpreterProxy->interpreterState);
+	if (index == (nilObject(interpreterProxy->interpreterState))) {
 		semaphoreIndex = 0;
 	}
 	else {
-		if (isIntegerObject(index)) {
-			semaphoreIndex = stackIntegerValue(0);
+		if (isIntegerObject(index, interpreterProxy->interpreterState)) {
+			semaphoreIndex = stackIntegerValue(0, interpreterProxy->interpreterState);
 		}
 		else {
-			return primitiveFail();
+			return primitiveFail(interpreterProxy->interpreterState);
 		}
 	}
-	sigNum = stackIntegerValue(1);
+	sigNum = stackIntegerValue(1, interpreterProxy->interpreterState);
 	handler = forwardSignaltoSemaphoreAt(sigNum, semaphoreIndex);
 	if (handler == (sigErrorNumber())) {
-		return primitiveFail();
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
-	priorHandlerObject = instantiateClassindexableSize(classByteArray(), sizeof(void *));
-	hPtr = arrayValueOf(priorHandlerObject);
+	priorHandlerObject = instantiateClassindexableSize(classByteArray(interpreterProxy->interpreterState), sizeof(void *), interpreterProxy->interpreterState);
+	hPtr = arrayValueOf(priorHandlerObject, interpreterProxy->interpreterState);
 	priorHandler.handler = handler;
 	idx = 0;
 	while (idx < (sizeof(void *))) {
 		hPtr[idx] = priorHandler.bytes[idx];
 		idx += 1;
 	}
-	popthenPush(3, priorHandlerObject);
+	popthenPush(3, priorHandlerObject, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -2306,7 +2306,7 @@ primitiveForwardSignalToSemaphore(void)
 EXPORT(sqInt)
 primitiveGetCurrentWorkingDirectory(void)
 {
-	getCurrentWorkingDirectoryAsType(classString());
+	getCurrentWorkingDirectoryAsType(classString(interpreterProxy->interpreterState));
 	return 0;
 }
 
@@ -2317,7 +2317,7 @@ primitiveGetCurrentWorkingDirectory(void)
 EXPORT(sqInt)
 primitiveGetCurrentWorkingDirectoryAsBytes(void)
 {
-	getCurrentWorkingDirectoryAsType(classByteArray());
+	getCurrentWorkingDirectoryAsType(classByteArray(interpreterProxy->interpreterState));
 	return 0;
 }
 
@@ -2331,8 +2331,8 @@ primitiveGetEGid(void)
     gid_t eGid;
 
 	eGid = getegid();
-	pop(1);
-	pushInteger(eGid);
+	pop(1, interpreterProxy->interpreterState);
+	pushInteger(eGid, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -2346,8 +2346,8 @@ primitiveGetEUid(void)
     uid_t eUid;
 
 	eUid = geteuid();
-	pop(1);
-	pushInteger(eUid);
+	pop(1, interpreterProxy->interpreterState);
+	pushInteger(eUid, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -2361,8 +2361,8 @@ primitiveGetGid(void)
     gid_t gid;
 
 	gid = getgid();
-	pop(1);
-	pushInteger(gid);
+	pop(1, interpreterProxy->interpreterState);
+	pushInteger(gid, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -2376,13 +2376,13 @@ primitiveGetPGid(void)
     pid_t pgid;
     pid_t pid;
 
-	pid = stackIntegerValue(0);
+	pid = stackIntegerValue(0, interpreterProxy->interpreterState);
 	pgid = getpgid(pid);
 	if (pgid == -1) {
-		return primitiveFail();
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
-	pop(2);
-	pushInteger(pgid);
+	pop(2, interpreterProxy->interpreterState);
+	pushInteger(pgid, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -2397,10 +2397,10 @@ primitiveGetPGrp(void)
 
 	pgid = getpgrp();
 	if (pgid == -1) {
-		return primitiveFail();
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
-	pop(1);
-	pushInteger(pgid);
+	pop(1, interpreterProxy->interpreterState);
+	pushInteger(pgid, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -2414,8 +2414,8 @@ primitiveGetPid(void)
     pid_t pid;
 
 	pid = getpid();
-	pop(1);
-	pushInteger(pid);
+	pop(1, interpreterProxy->interpreterState);
+	pushInteger(pid, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -2429,8 +2429,8 @@ primitiveGetPPid(void)
     pid_t ppid;
 
 	ppid = getppid();
-	pop(1);
-	pushInteger(ppid);
+	pop(1, interpreterProxy->interpreterState);
+	pushInteger(ppid, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -2452,17 +2452,17 @@ primitiveGetSession(void)
     SESSIONIDENTIFIERTYPE thisSessionID;
 
 	/* begin getThisSessionIdentifier */
-	thisSessionID = getThisSessionID();
+	thisSessionID = getThisSessionID(interpreterProxy->interpreterState);
 	sessionIDSize = sizeof(thisSessionID);
-	sessionOop = instantiateClassindexableSize(classByteArray(), sessionIDSize);
-	sessionByteArrayPointer = arrayValueOf(sessionOop);
+	sessionOop = instantiateClassindexableSize(classByteArray(interpreterProxy->interpreterState), sessionIDSize, interpreterProxy->interpreterState);
+	sessionByteArrayPointer = arrayValueOf(sessionOop, interpreterProxy->interpreterState);
 	if (thisSessionID == null) {
-		return primitiveFail();
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
 	/* begin copyBytesFrom:to:length: */
 	charArray1 = ((void *) ((unsigned char *)&thisSessionID));
 	memcpy(sessionByteArrayPointer, charArray1, sessionIDSize);
-	popthenPush(1, sessionOop);
+	popthenPush(1, sessionOop, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -2493,16 +2493,16 @@ primitiveGetStdErrHandleWithSessionIdentifier(void)
     SESSIONIDENTIFIERTYPE thisSession;
 
 	/* begin newSQFileByteArray */
-	fileOop = instantiateClassindexableSize(classByteArray(), sizeof(SQFile));
+	fileOop = instantiateClassindexableSize(classByteArray(interpreterProxy->interpreterState), sizeof(SQFile), interpreterProxy->interpreterState);
 	/* begin fileValueOf: */
-	file = arrayValueOf(fileOop);
-	thisSession = sessionIdentifierFrom(stackObjectValue(0));
+	file = arrayValueOf(fileOop, interpreterProxy->interpreterState);
+	thisSession = sessionIdentifierFrom(stackObjectValue(0, interpreterProxy->interpreterState));
 	file->file = stderr;
 	file->sessionID = thisSession;
 	file->writable = 1;
 	file->lastOp = 0;
-	pop(2);
-	push(fileOop);
+	pop(2, interpreterProxy->interpreterState);
+	push(fileOop, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -2533,16 +2533,16 @@ primitiveGetStdInHandleWithSessionIdentifier(void)
     SESSIONIDENTIFIERTYPE thisSession;
 
 	/* begin newSQFileByteArray */
-	fileOop = instantiateClassindexableSize(classByteArray(), sizeof(SQFile));
+	fileOop = instantiateClassindexableSize(classByteArray(interpreterProxy->interpreterState), sizeof(SQFile), interpreterProxy->interpreterState);
 	/* begin fileValueOf: */
-	file = arrayValueOf(fileOop);
-	thisSession = sessionIdentifierFrom(stackObjectValue(0));
+	file = arrayValueOf(fileOop, interpreterProxy->interpreterState);
+	thisSession = sessionIdentifierFrom(stackObjectValue(0, interpreterProxy->interpreterState));
 	file->file = stdin;
 	file->sessionID = thisSession;
 	file->writable = 0;
 	file->lastOp = 0;
-	pop(2);
-	push(fileOop);
+	pop(2, interpreterProxy->interpreterState);
+	push(fileOop, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -2573,16 +2573,16 @@ primitiveGetStdOutHandleWithSessionIdentifier(void)
     SESSIONIDENTIFIERTYPE thisSession;
 
 	/* begin newSQFileByteArray */
-	fileOop = instantiateClassindexableSize(classByteArray(), sizeof(SQFile));
+	fileOop = instantiateClassindexableSize(classByteArray(interpreterProxy->interpreterState), sizeof(SQFile), interpreterProxy->interpreterState);
 	/* begin fileValueOf: */
-	file = arrayValueOf(fileOop);
-	thisSession = sessionIdentifierFrom(stackObjectValue(0));
+	file = arrayValueOf(fileOop, interpreterProxy->interpreterState);
+	thisSession = sessionIdentifierFrom(stackObjectValue(0, interpreterProxy->interpreterState));
 	file->file = stdout;
 	file->sessionID = thisSession;
 	file->writable = 1;
 	file->lastOp = 0;
-	pop(2);
-	push(fileOop);
+	pop(2, interpreterProxy->interpreterState);
+	push(fileOop, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -2597,7 +2597,7 @@ primitiveGetStdOutHandleWithSessionIdentifier(void)
 EXPORT(sqInt)
 primitiveGetThreadID(void)
 {
-	popthenPush(1, newPthreadTypeByteArray(vmThread));
+	popthenPush(1, newPthreadTypeByteArray(vmThread), interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -2611,8 +2611,8 @@ primitiveGetUid(void)
     uid_t uid;
 
 	uid = getuid();
-	pop(1);
-	pushInteger(uid);
+	pop(1, interpreterProxy->interpreterState);
+	pushInteger(uid, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -2633,25 +2633,25 @@ primitiveIsAtEndOfFile(void)
     sqInt result;
     sqInt sqFileOop;
 
-	sqFileOop = stackValue(0);
-	if (!((((isBytes(sqFileOop))
-		 && ((byteSizeOf(sqFileOop)) == (sizeof(SQFile))))
-		 && ((getThisSessionID()) == (sessionIdentifierFromSqFile(arrayValueOf(sqFileOop)))))
+	sqFileOop = stackValue(0, interpreterProxy->interpreterState);
+	if (!((((isBytes(sqFileOop, interpreterProxy->interpreterState))
+		 && ((byteSizeOf(sqFileOop, interpreterProxy->interpreterState)) == (sizeof(SQFile))))
+		 && ((getThisSessionID(interpreterProxy->interpreterState)) == (sessionIdentifierFromSqFile(arrayValueOf(sqFileOop, interpreterProxy->interpreterState)))))
 		 && (isNonNullSQFile(sqFileOop)))) {
-		return primitiveFail();
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
 	file = fileHandleFrom(sqFileOop);
 	if (file == 0) {
-		return primitiveFail();
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
 	if (feof(file)) {
-		result = trueObject();
+		result = trueObject(interpreterProxy->interpreterState);
 	}
 	else {
-		result = falseObject();
+		result = falseObject(interpreterProxy->interpreterState);
 	}
-	pop(2);
-	push(result);
+	pop(2, interpreterProxy->interpreterState);
+	push(result, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -2670,10 +2670,10 @@ primitiveKillOnExit(void)
     sqInt pids;
     sqInt signum;
 
-	pids = stackValue(1);
-	signum = stackValue(0);
-	pidCount = stSizeOf(pids);
-	if (failed()) {
+	pids = stackValue(1, interpreterProxy->interpreterState);
+	signum = stackValue(0, interpreterProxy->interpreterState);
+	pidCount = stSizeOf(pids, interpreterProxy->interpreterState);
+	if (failed(interpreterProxy->interpreterState)) {
 		return null;
 	}
 	if (!(pidArray == 0)) {
@@ -2682,23 +2682,23 @@ primitiveKillOnExit(void)
 	pidArray = malloc(pidCount * sizeof(pid_t));
 	if (pidArray == 0) {
 		pidCount = 0;
-		return primitiveFail();
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
-	pidPointer = firstIndexableField(pids);
+	pidPointer = firstIndexableField(pids, interpreterProxy->interpreterState);
 	count = 0;
 	p = pidArray;
 	while (count <= pidCount) {
-		pid = integerValueOf(*pidPointer++);
+		pid = integerValueOf(*pidPointer++, interpreterProxy->interpreterState);
 		*p++ = pid;
 		count += 1;
 	}
-	if (!(signum == (nilObject()))) {
-		sigNumToSend = checkedIntegerValueOf(signum);
+	if (!(signum == (nilObject(interpreterProxy->interpreterState)))) {
+		sigNumToSend = checkedIntegerValueOf(signum, interpreterProxy->interpreterState);
 	}
-	if (failed()) {
+	if (failed(interpreterProxy->interpreterState)) {
 		pidCount = 0;
 	}
-	pop(2);
+	pop(2, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -2730,15 +2730,15 @@ primitiveLockFileRegion(void)
 
 
 	/* Get the parameters from the stack */
-	exclusive = (stackValue(0)) == (trueObject());
-	len = stackIntegerValue(1);
-	start = stackIntegerValue(2);
-	sqFileOop = stackValue(3);
-	if (!((((isBytes(sqFileOop))
-		 && ((byteSizeOf(sqFileOop)) == (sizeof(SQFile))))
-		 && ((getThisSessionID()) == (sessionIdentifierFromSqFile(arrayValueOf(sqFileOop)))))
+	exclusive = (stackValue(0, interpreterProxy->interpreterState)) == (trueObject(interpreterProxy->interpreterState));
+	len = stackIntegerValue(1, interpreterProxy->interpreterState);
+	start = stackIntegerValue(2, interpreterProxy->interpreterState);
+	sqFileOop = stackValue(3, interpreterProxy->interpreterState);
+	if (!((((isBytes(sqFileOop, interpreterProxy->interpreterState))
+		 && ((byteSizeOf(sqFileOop, interpreterProxy->interpreterState)) == (sizeof(SQFile))))
+		 && ((getThisSessionID(interpreterProxy->interpreterState)) == (sessionIdentifierFromSqFile(arrayValueOf(sqFileOop, interpreterProxy->interpreterState)))))
 		 && (isNonNullSQFile(sqFileOop)))) {
-		return primitiveFail();
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
 	/* begin unixFileNumber: */
 	fileHandle = fileHandleFrom(sqFileOop);
@@ -2754,8 +2754,8 @@ primitiveLockFileRegion(void)
 	lockStruct.l_len = len;
 	lockStruct.l_pid = 0;
 	result = fcntl(fileNo, F_SETLK, &lockStruct);
-	pop(5);
-	pushInteger(result);
+	pop(5, interpreterProxy->interpreterState);
+	pushInteger(result, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -2786,35 +2786,35 @@ primitiveMakePipe(void)
     SQFile *writerPtr;
 
 	/* begin getThisSessionIdentifier */
-	thisSession = getThisSessionID();
+	thisSession = getThisSessionID(interpreterProxy->interpreterState);
 	readerIOStreamPtr = (&readerIOStream);
 	writerIOStreamPtr = (&writerIOStream);
 	if (!(makePipeForReaderwriter(readerIOStreamPtr, writerIOStreamPtr))) {
-		return primitiveFail();
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
 	/* begin newSQFileByteArray */
-	writer = instantiateClassindexableSize(classByteArray(), sizeof(SQFile));
+	writer = instantiateClassindexableSize(classByteArray(interpreterProxy->interpreterState), sizeof(SQFile), interpreterProxy->interpreterState);
 	/* begin fileValueOf: */
-	writerPtr = arrayValueOf(writer);
+	writerPtr = arrayValueOf(writer, interpreterProxy->interpreterState);
 	writerPtr->file = writerIOStream;
 	writerPtr->sessionID = thisSession;
 	writerPtr->writable = 1;
 	writerPtr->lastOp = 0;
-	pushRemappableOop(writer);
+	pushRemappableOop(writer, interpreterProxy->interpreterState);
 	/* begin newSQFileByteArray */
-	reader = instantiateClassindexableSize(classByteArray(), sizeof(SQFile));
+	reader = instantiateClassindexableSize(classByteArray(interpreterProxy->interpreterState), sizeof(SQFile), interpreterProxy->interpreterState);
 	/* begin fileValueOf: */
-	readerPtr = arrayValueOf(reader);
+	readerPtr = arrayValueOf(reader, interpreterProxy->interpreterState);
 	readerPtr->file = readerIOStream;
 	readerPtr->sessionID = thisSession;
 	readerPtr->writable = 0;
 	readerPtr->lastOp = 0;
-	pushRemappableOop(reader);
-	arrayResult = instantiateClassindexableSize(classArray(), 2);
-	stObjectatput(arrayResult, 1, popRemappableOop());
-	stObjectatput(arrayResult, 2, popRemappableOop());
-	pop(1);
-	push(arrayResult);
+	pushRemappableOop(reader, interpreterProxy->interpreterState);
+	arrayResult = instantiateClassindexableSize(classArray(interpreterProxy->interpreterState), 2, interpreterProxy->interpreterState);
+	stObjectatput(arrayResult, 1, popRemappableOop(interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	stObjectatput(arrayResult, 2, popRemappableOop(interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	pop(1, interpreterProxy->interpreterState);
+	push(arrayResult, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -2851,35 +2851,35 @@ primitiveMakePipeWithSessionIdentifier(void)
 
 
 	/* Create the anonymous OS pipe */
-	thisSession = sessionIdentifierFrom(stackObjectValue(0));
+	thisSession = sessionIdentifierFrom(stackObjectValue(0, interpreterProxy->interpreterState));
 	readerIOStreamPtr = (&readerIOStream);
 	writerIOStreamPtr = (&writerIOStream);
 	if (!(makePipeForReaderwriter(readerIOStreamPtr, writerIOStreamPtr))) {
-		return primitiveFail();
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
 	/* begin newSQFileByteArray */
-	writer = instantiateClassindexableSize(classByteArray(), sizeof(SQFile));
+	writer = instantiateClassindexableSize(classByteArray(interpreterProxy->interpreterState), sizeof(SQFile), interpreterProxy->interpreterState);
 	/* begin fileValueOf: */
-	writerPtr = arrayValueOf(writer);
+	writerPtr = arrayValueOf(writer, interpreterProxy->interpreterState);
 	writerPtr->file = writerIOStream;
 	writerPtr->sessionID = thisSession;
 	writerPtr->writable = 1;
 	writerPtr->lastOp = 0;
-	pushRemappableOop(writer);
+	pushRemappableOop(writer, interpreterProxy->interpreterState);
 	/* begin newSQFileByteArray */
-	reader = instantiateClassindexableSize(classByteArray(), sizeof(SQFile));
+	reader = instantiateClassindexableSize(classByteArray(interpreterProxy->interpreterState), sizeof(SQFile), interpreterProxy->interpreterState);
 	/* begin fileValueOf: */
-	readerPtr = arrayValueOf(reader);
+	readerPtr = arrayValueOf(reader, interpreterProxy->interpreterState);
 	readerPtr->file = readerIOStream;
 	readerPtr->sessionID = thisSession;
 	readerPtr->writable = 0;
 	readerPtr->lastOp = 0;
-	pushRemappableOop(reader);
-	arrayResult = instantiateClassindexableSize(classArray(), 2);
-	stObjectatput(arrayResult, 1, popRemappableOop());
-	stObjectatput(arrayResult, 2, popRemappableOop());
-	pop(2);
-	push(arrayResult);
+	pushRemappableOop(reader, interpreterProxy->interpreterState);
+	arrayResult = instantiateClassindexableSize(classArray(interpreterProxy->interpreterState), 2, interpreterProxy->interpreterState);
+	stObjectatput(arrayResult, 1, popRemappableOop(interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	stObjectatput(arrayResult, 2, popRemappableOop(interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	pop(2, interpreterProxy->interpreterState);
+	push(arrayResult, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -2890,7 +2890,7 @@ primitiveMakePipeWithSessionIdentifier(void)
 EXPORT(sqInt)
 primitiveModuleName(void)
 {
-	popthenPush(1, stringFromCString(getModuleName()));
+	popthenPush(1, stringFromCString(getModuleName()), interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -2914,18 +2914,18 @@ primitiveNice(void)
     int niceIncrement;
     sqInt result;
 
-	niceIncrement = stackIntegerValue(0);
+	niceIncrement = stackIntegerValue(0, interpreterProxy->interpreterState);
 	errno = 0;
 	result = nice(niceIncrement);
 	if (result == -1) {
 
 		/* sys call may have failed, test errno to be sure */
 		if (!(errno == 0)) {
-			return primitiveFail();
+			return primitiveFail(interpreterProxy->interpreterState);
 		}
 	}
-	pop(2);
-	pushInteger(result);
+	pop(2, interpreterProxy->interpreterState);
+	pushInteger(result, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -2943,16 +2943,16 @@ primitivePutEnv(void)
     char *cStringPtr;
     sqInt keyValueString;
 
-	keyValueString = stackObjectValue(0);
+	keyValueString = stackObjectValue(0, interpreterProxy->interpreterState);
 	cStringPtr = cStringFromString(keyValueString);
 	if ((putenv(cStringPtr)) == 0) {
 
 		/* Set environment variable. */
-		pop(2);
-		push(keyValueString);
+		pop(2, interpreterProxy->interpreterState);
+		push(keyValueString, interpreterProxy->interpreterState);
 	}
 	else {
-		return primitiveFail();
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
 	return 0;
 }
@@ -2964,7 +2964,7 @@ primitivePutEnv(void)
 EXPORT(sqInt)
 primitiveRealpath(void)
 {
-	return realpathAsType(classString());
+	return realpathAsType(classString(interpreterProxy->interpreterState));
 }
 
 
@@ -2976,7 +2976,7 @@ primitiveRealpath(void)
 EXPORT(sqInt)
 primitiveRealpathAsBytes(void)
 {
-	return realpathAsType(classByteArray());
+	return realpathAsType(classByteArray(interpreterProxy->interpreterState));
 }
 
 
@@ -3000,23 +3000,23 @@ primitiveReapChildProcess(void)
 
 	/* Force C code translator to declare the variable */
 	exitStatus = 0;
-	pidToHandle = stackIntegerValue(0);
+	pidToHandle = stackIntegerValue(0, interpreterProxy->interpreterState);
 	pidResult = waitpid ( pidToHandle, &exitStatus, WNOHANG );
 	if (pidResult <= 0) {
-		pop(2);
-		push(nilObject());
+		pop(2, interpreterProxy->interpreterState);
+		push(nilObject(interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 	}
 	else {
 
 		/* Answer an array with pid and result status */
-		pid = integerObjectOf(pidResult);
-		status = integerObjectOf(exitStatus);
-		resultArray = instantiateClassindexableSize(classArray(), 2);
-		arrayPtr = firstIndexableField(resultArray);
+		pid = integerObjectOf(pidResult, interpreterProxy->interpreterState);
+		status = integerObjectOf(exitStatus, interpreterProxy->interpreterState);
+		resultArray = instantiateClassindexableSize(classArray(interpreterProxy->interpreterState), 2, interpreterProxy->interpreterState);
+		arrayPtr = firstIndexableField(resultArray, interpreterProxy->interpreterState);
 		arrayPtr[0] = pid;
 		arrayPtr[1] = status;
-		pop(2);
-		push(resultArray);
+		pop(2, interpreterProxy->interpreterState);
+		push(resultArray, interpreterProxy->interpreterState);
 	}
 	return 0;
 }
@@ -3032,7 +3032,7 @@ primitiveSemaIndexFor(void)
     sqInt index;
     sqInt sigNum;
 
-	sigNum = stackIntegerValue(0);
+	sigNum = stackIntegerValue(0, interpreterProxy->interpreterState);
 	if (semaIndices == null) {
 
 		/* interpreter simulation */
@@ -3041,8 +3041,8 @@ primitiveSemaIndexFor(void)
 	else {
 		index = semaIndices[sigNum];
 	}
-	pop(2);
-	pushInteger(index);
+	pop(2, interpreterProxy->interpreterState);
+	pushInteger(index, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -3063,20 +3063,20 @@ primitiveSendSigabrtTo(void)
 
 	/* Do not allow signal sending if running in secure mode */
 	if ((sandboxSecurity()) == 1) {
-		pop(2);
-		pushInteger(-1);
+		pop(2, interpreterProxy->interpreterState);
+		pushInteger(-1, interpreterProxy->interpreterState);
 	}
 	else {
-		if (isIntegerObject(stackValue(0))) {
-			pidToSignal = stackIntegerValue(0);
+		if (isIntegerObject(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState)) {
+			pidToSignal = stackIntegerValue(0, interpreterProxy->interpreterState);
 			/* begin sendSignal:toPid: */
 			result = kill(pidToSignal, SIGABRT);
-			pop(2);
-			pushInteger(result);
+			pop(2, interpreterProxy->interpreterState);
+			pushInteger(result, interpreterProxy->interpreterState);
 		}
 		else {
-			pop(2);
-			pushInteger(-1);
+			pop(2, interpreterProxy->interpreterState);
+			pushInteger(-1, interpreterProxy->interpreterState);
 		}
 	}
 	return 0;
@@ -3100,20 +3100,20 @@ primitiveSendSigalrmTo(void)
 
 	/* Do not allow signal sending if running in secure mode */
 	if ((sandboxSecurity()) == 1) {
-		pop(2);
-		pushInteger(-1);
+		pop(2, interpreterProxy->interpreterState);
+		pushInteger(-1, interpreterProxy->interpreterState);
 	}
 	else {
-		if (isIntegerObject(stackValue(0))) {
-			pidToSignal = stackIntegerValue(0);
+		if (isIntegerObject(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState)) {
+			pidToSignal = stackIntegerValue(0, interpreterProxy->interpreterState);
 			/* begin sendSignal:toPid: */
 			result = kill(pidToSignal, SIGALRM);
-			pop(2);
-			pushInteger(result);
+			pop(2, interpreterProxy->interpreterState);
+			pushInteger(result, interpreterProxy->interpreterState);
 		}
 		else {
-			pop(2);
-			pushInteger(-1);
+			pop(2, interpreterProxy->interpreterState);
+			pushInteger(-1, interpreterProxy->interpreterState);
 		}
 	}
 	return 0;
@@ -3138,20 +3138,20 @@ primitiveSendSigchldTo(void)
 
 	/* Do not allow signal sending if running in secure mode */
 	if ((sandboxSecurity()) == 1) {
-		pop(2);
-		pushInteger(-1);
+		pop(2, interpreterProxy->interpreterState);
+		pushInteger(-1, interpreterProxy->interpreterState);
 	}
 	else {
-		if (isIntegerObject(stackValue(0))) {
-			pidToSignal = stackIntegerValue(0);
+		if (isIntegerObject(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState)) {
+			pidToSignal = stackIntegerValue(0, interpreterProxy->interpreterState);
 			/* begin sendSignal:toPid: */
 			result = kill(pidToSignal, SIGCHLD);
-			pop(2);
-			pushInteger(result);
+			pop(2, interpreterProxy->interpreterState);
+			pushInteger(result, interpreterProxy->interpreterState);
 		}
 		else {
-			pop(2);
-			pushInteger(-1);
+			pop(2, interpreterProxy->interpreterState);
+			pushInteger(-1, interpreterProxy->interpreterState);
 		}
 	}
 	return 0;
@@ -3175,20 +3175,20 @@ primitiveSendSigcontTo(void)
 
 	/* Do not allow signal sending if running in secure mode */
 	if ((sandboxSecurity()) == 1) {
-		pop(2);
-		pushInteger(-1);
+		pop(2, interpreterProxy->interpreterState);
+		pushInteger(-1, interpreterProxy->interpreterState);
 	}
 	else {
-		if (isIntegerObject(stackValue(0))) {
-			pidToSignal = stackIntegerValue(0);
+		if (isIntegerObject(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState)) {
+			pidToSignal = stackIntegerValue(0, interpreterProxy->interpreterState);
 			/* begin sendSignal:toPid: */
 			result = kill(pidToSignal, SIGCONT);
-			pop(2);
-			pushInteger(result);
+			pop(2, interpreterProxy->interpreterState);
+			pushInteger(result, interpreterProxy->interpreterState);
 		}
 		else {
-			pop(2);
-			pushInteger(-1);
+			pop(2, interpreterProxy->interpreterState);
+			pushInteger(-1, interpreterProxy->interpreterState);
 		}
 	}
 	return 0;
@@ -3211,20 +3211,20 @@ primitiveSendSighupTo(void)
 
 	/* Do not allow signal sending if running in secure mode */
 	if ((sandboxSecurity()) == 1) {
-		pop(2);
-		pushInteger(-1);
+		pop(2, interpreterProxy->interpreterState);
+		pushInteger(-1, interpreterProxy->interpreterState);
 	}
 	else {
-		if (isIntegerObject(stackValue(0))) {
-			pidToSignal = stackIntegerValue(0);
+		if (isIntegerObject(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState)) {
+			pidToSignal = stackIntegerValue(0, interpreterProxy->interpreterState);
 			/* begin sendSignal:toPid: */
 			result = kill(pidToSignal, SIGHUP);
-			pop(2);
-			pushInteger(result);
+			pop(2, interpreterProxy->interpreterState);
+			pushInteger(result, interpreterProxy->interpreterState);
 		}
 		else {
-			pop(2);
-			pushInteger(-1);
+			pop(2, interpreterProxy->interpreterState);
+			pushInteger(-1, interpreterProxy->interpreterState);
 		}
 	}
 	return 0;
@@ -3248,20 +3248,20 @@ primitiveSendSigintTo(void)
 
 	/* Do not allow signal sending if running in secure mode */
 	if ((sandboxSecurity()) == 1) {
-		pop(2);
-		pushInteger(-1);
+		pop(2, interpreterProxy->interpreterState);
+		pushInteger(-1, interpreterProxy->interpreterState);
 	}
 	else {
-		if (isIntegerObject(stackValue(0))) {
-			pidToSignal = stackIntegerValue(0);
+		if (isIntegerObject(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState)) {
+			pidToSignal = stackIntegerValue(0, interpreterProxy->interpreterState);
 			/* begin sendSignal:toPid: */
 			result = kill(pidToSignal, SIGINT);
-			pop(2);
-			pushInteger(result);
+			pop(2, interpreterProxy->interpreterState);
+			pushInteger(result, interpreterProxy->interpreterState);
 		}
 		else {
-			pop(2);
-			pushInteger(-1);
+			pop(2, interpreterProxy->interpreterState);
+			pushInteger(-1, interpreterProxy->interpreterState);
 		}
 	}
 	return 0;
@@ -3285,20 +3285,20 @@ primitiveSendSigkillTo(void)
 
 	/* Do not allow signal sending if running in secure mode */
 	if ((sandboxSecurity()) == 1) {
-		pop(2);
-		pushInteger(-1);
+		pop(2, interpreterProxy->interpreterState);
+		pushInteger(-1, interpreterProxy->interpreterState);
 	}
 	else {
-		if (isIntegerObject(stackValue(0))) {
-			pidToSignal = stackIntegerValue(0);
+		if (isIntegerObject(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState)) {
+			pidToSignal = stackIntegerValue(0, interpreterProxy->interpreterState);
 			/* begin sendSignal:toPid: */
 			result = kill(pidToSignal, SIGKILL);
-			pop(2);
-			pushInteger(result);
+			pop(2, interpreterProxy->interpreterState);
+			pushInteger(result, interpreterProxy->interpreterState);
 		}
 		else {
-			pop(2);
-			pushInteger(-1);
+			pop(2, interpreterProxy->interpreterState);
+			pushInteger(-1, interpreterProxy->interpreterState);
 		}
 	}
 	return 0;
@@ -3322,20 +3322,20 @@ primitiveSendSigpipeTo(void)
 
 	/* Do not allow signal sending if running in secure mode */
 	if ((sandboxSecurity()) == 1) {
-		pop(2);
-		pushInteger(-1);
+		pop(2, interpreterProxy->interpreterState);
+		pushInteger(-1, interpreterProxy->interpreterState);
 	}
 	else {
-		if (isIntegerObject(stackValue(0))) {
-			pidToSignal = stackIntegerValue(0);
+		if (isIntegerObject(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState)) {
+			pidToSignal = stackIntegerValue(0, interpreterProxy->interpreterState);
 			/* begin sendSignal:toPid: */
 			result = kill(pidToSignal, SIGPIPE);
-			pop(2);
-			pushInteger(result);
+			pop(2, interpreterProxy->interpreterState);
+			pushInteger(result, interpreterProxy->interpreterState);
 		}
 		else {
-			pop(2);
-			pushInteger(-1);
+			pop(2, interpreterProxy->interpreterState);
+			pushInteger(-1, interpreterProxy->interpreterState);
 		}
 	}
 	return 0;
@@ -3358,20 +3358,20 @@ primitiveSendSigquitTo(void)
 
 	/* Do not allow signal sending if running in secure mode */
 	if ((sandboxSecurity()) == 1) {
-		pop(2);
-		pushInteger(-1);
+		pop(2, interpreterProxy->interpreterState);
+		pushInteger(-1, interpreterProxy->interpreterState);
 	}
 	else {
-		if (isIntegerObject(stackValue(0))) {
-			pidToSignal = stackIntegerValue(0);
+		if (isIntegerObject(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState)) {
+			pidToSignal = stackIntegerValue(0, interpreterProxy->interpreterState);
 			/* begin sendSignal:toPid: */
 			result = kill(pidToSignal, SIGQUIT);
-			pop(2);
-			pushInteger(result);
+			pop(2, interpreterProxy->interpreterState);
+			pushInteger(result, interpreterProxy->interpreterState);
 		}
 		else {
-			pop(2);
-			pushInteger(-1);
+			pop(2, interpreterProxy->interpreterState);
+			pushInteger(-1, interpreterProxy->interpreterState);
 		}
 	}
 	return 0;
@@ -3395,20 +3395,20 @@ primitiveSendSigstopTo(void)
 
 	/* Do not allow signal sending if running in secure mode */
 	if ((sandboxSecurity()) == 1) {
-		pop(2);
-		pushInteger(-1);
+		pop(2, interpreterProxy->interpreterState);
+		pushInteger(-1, interpreterProxy->interpreterState);
 	}
 	else {
-		if (isIntegerObject(stackValue(0))) {
-			pidToSignal = stackIntegerValue(0);
+		if (isIntegerObject(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState)) {
+			pidToSignal = stackIntegerValue(0, interpreterProxy->interpreterState);
 			/* begin sendSignal:toPid: */
 			result = kill(pidToSignal, SIGSTOP);
-			pop(2);
-			pushInteger(result);
+			pop(2, interpreterProxy->interpreterState);
+			pushInteger(result, interpreterProxy->interpreterState);
 		}
 		else {
-			pop(2);
-			pushInteger(-1);
+			pop(2, interpreterProxy->interpreterState);
+			pushInteger(-1, interpreterProxy->interpreterState);
 		}
 	}
 	return 0;
@@ -3432,20 +3432,20 @@ primitiveSendSigtermTo(void)
 
 	/* Do not allow signal sending if running in secure mode */
 	if ((sandboxSecurity()) == 1) {
-		pop(2);
-		pushInteger(-1);
+		pop(2, interpreterProxy->interpreterState);
+		pushInteger(-1, interpreterProxy->interpreterState);
 	}
 	else {
-		if (isIntegerObject(stackValue(0))) {
-			pidToSignal = stackIntegerValue(0);
+		if (isIntegerObject(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState)) {
+			pidToSignal = stackIntegerValue(0, interpreterProxy->interpreterState);
 			/* begin sendSignal:toPid: */
 			result = kill(pidToSignal, SIGTERM);
-			pop(2);
-			pushInteger(result);
+			pop(2, interpreterProxy->interpreterState);
+			pushInteger(result, interpreterProxy->interpreterState);
 		}
 		else {
-			pop(2);
-			pushInteger(-1);
+			pop(2, interpreterProxy->interpreterState);
+			pushInteger(-1, interpreterProxy->interpreterState);
 		}
 	}
 	return 0;
@@ -3469,20 +3469,20 @@ primitiveSendSigusr1To(void)
 
 	/* Do not allow signal sending if running in secure mode */
 	if ((sandboxSecurity()) == 1) {
-		pop(2);
-		pushInteger(-1);
+		pop(2, interpreterProxy->interpreterState);
+		pushInteger(-1, interpreterProxy->interpreterState);
 	}
 	else {
-		if (isIntegerObject(stackValue(0))) {
-			pidToSignal = stackIntegerValue(0);
+		if (isIntegerObject(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState)) {
+			pidToSignal = stackIntegerValue(0, interpreterProxy->interpreterState);
 			/* begin sendSignal:toPid: */
 			result = kill(pidToSignal, SIGUSR1);
-			pop(2);
-			pushInteger(result);
+			pop(2, interpreterProxy->interpreterState);
+			pushInteger(result, interpreterProxy->interpreterState);
 		}
 		else {
-			pop(2);
-			pushInteger(-1);
+			pop(2, interpreterProxy->interpreterState);
+			pushInteger(-1, interpreterProxy->interpreterState);
 		}
 	}
 	return 0;
@@ -3506,20 +3506,20 @@ primitiveSendSigusr2To(void)
 
 	/* Do not allow signal sending if running in secure mode */
 	if ((sandboxSecurity()) == 1) {
-		pop(2);
-		pushInteger(-1);
+		pop(2, interpreterProxy->interpreterState);
+		pushInteger(-1, interpreterProxy->interpreterState);
 	}
 	else {
-		if (isIntegerObject(stackValue(0))) {
-			pidToSignal = stackIntegerValue(0);
+		if (isIntegerObject(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState)) {
+			pidToSignal = stackIntegerValue(0, interpreterProxy->interpreterState);
 			/* begin sendSignal:toPid: */
 			result = kill(pidToSignal, SIGUSR2);
-			pop(2);
-			pushInteger(result);
+			pop(2, interpreterProxy->interpreterState);
+			pushInteger(result, interpreterProxy->interpreterState);
 		}
 		else {
-			pop(2);
-			pushInteger(-1);
+			pop(2, interpreterProxy->interpreterState);
+			pushInteger(-1, interpreterProxy->interpreterState);
 		}
 	}
 	return 0;
@@ -3536,12 +3536,12 @@ primitiveSetPGid(void)
     pid_t pgid;
     pid_t pid;
 
-	pid = stackIntegerValue(1);
-	pgid = stackIntegerValue(0);
+	pid = stackIntegerValue(1, interpreterProxy->interpreterState);
+	pgid = stackIntegerValue(0, interpreterProxy->interpreterState);
 	if ((setpgid(pid, pgid)) == -1) {
-		return primitiveFail();
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
-	pop(2);
+	pop(2, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -3556,7 +3556,7 @@ EXPORT(sqInt)
 primitiveSetPGrp(void)
 {
 	if ((setpgid(0, 0)) == -1) {
-		return primitiveFail();
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
 	return 0;
 }
@@ -3576,9 +3576,9 @@ primitiveSetPGrp(void)
 EXPORT(sqInt)
 primitiveSetSemaIndex(void)
 {
-	sigChldSemaIndex = stackIntegerValue(0);
-	pop(2);
-	pushInteger(sigChldSemaIndex);
+	sigChldSemaIndex = stackIntegerValue(0, interpreterProxy->interpreterState);
+	pop(2, interpreterProxy->interpreterState);
+	pushInteger(sigChldSemaIndex, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -3602,10 +3602,10 @@ primitiveSetSid(void)
 
 	sessionId = setsid();
 	if (sessionId == -1) {
-		return primitiveFail();
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
-	pop(1);
-	pushInteger(sessionId);
+	pop(1, interpreterProxy->interpreterState);
+	pushInteger(sessionId, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -3616,8 +3616,8 @@ primitiveSetSid(void)
 EXPORT(sqInt)
 primitiveSigChldNumber(void)
 {
-	pop(1);
-	pushInteger(SIGCHLD);
+	pop(1, interpreterProxy->interpreterState);
+	pushInteger(SIGCHLD, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -3628,8 +3628,8 @@ primitiveSigChldNumber(void)
 EXPORT(sqInt)
 primitiveSigHupNumber(void)
 {
-	pop(1);
-	pushInteger(SIGHUP);
+	pop(1, interpreterProxy->interpreterState);
+	pushInteger(SIGHUP, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -3640,8 +3640,8 @@ primitiveSigHupNumber(void)
 EXPORT(sqInt)
 primitiveSigIntNumber(void)
 {
-	pop(1);
-	pushInteger(SIGINT);
+	pop(1, interpreterProxy->interpreterState);
+	pushInteger(SIGINT, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -3652,8 +3652,8 @@ primitiveSigIntNumber(void)
 EXPORT(sqInt)
 primitiveSigKillNumber(void)
 {
-	pop(1);
-	pushInteger(SIGKILL);
+	pop(1, interpreterProxy->interpreterState);
+	pushInteger(SIGKILL, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -3664,8 +3664,8 @@ primitiveSigKillNumber(void)
 EXPORT(sqInt)
 primitiveSigPipeNumber(void)
 {
-	pop(1);
-	pushInteger(SIGPIPE);
+	pop(1, interpreterProxy->interpreterState);
+	pushInteger(SIGPIPE, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -3676,8 +3676,8 @@ primitiveSigPipeNumber(void)
 EXPORT(sqInt)
 primitiveSigQuitNumber(void)
 {
-	pop(1);
-	pushInteger(SIGQUIT);
+	pop(1, interpreterProxy->interpreterState);
+	pushInteger(SIGQUIT, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -3688,8 +3688,8 @@ primitiveSigQuitNumber(void)
 EXPORT(sqInt)
 primitiveSigTermNumber(void)
 {
-	pop(1);
-	pushInteger(SIGTERM);
+	pop(1, interpreterProxy->interpreterState);
+	pushInteger(SIGTERM, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -3700,8 +3700,8 @@ primitiveSigTermNumber(void)
 EXPORT(sqInt)
 primitiveSigUsr1Number(void)
 {
-	pop(1);
-	pushInteger(SIGUSR1);
+	pop(1, interpreterProxy->interpreterState);
+	pushInteger(SIGUSR1, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -3712,8 +3712,8 @@ primitiveSigUsr1Number(void)
 EXPORT(sqInt)
 primitiveSigUsr2Number(void)
 {
-	pop(1);
-	pushInteger(SIGUSR2);
+	pop(1, interpreterProxy->interpreterState);
+	pushInteger(SIGUSR2, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -3724,8 +3724,8 @@ primitiveSigUsr2Number(void)
 EXPORT(sqInt)
 primitiveSizeOfInt(void)
 {
-	pop(1);
-	pushInteger(sizeof(int));
+	pop(1, interpreterProxy->interpreterState);
+	pushInteger(sizeof(int), interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -3736,8 +3736,8 @@ primitiveSizeOfInt(void)
 EXPORT(sqInt)
 primitiveSizeOfPointer(void)
 {
-	pop(1);
-	pushInteger(sizeof(void *));
+	pop(1, interpreterProxy->interpreterState);
+	pushInteger(sizeof(void *), interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -3757,16 +3757,16 @@ primitiveSQFileFlush(void)
     int result;
     sqInt sqFileOop;
 
-	sqFileOop = stackValue(0);
-	if (!((((isBytes(sqFileOop))
-		 && ((byteSizeOf(sqFileOop)) == (sizeof(SQFile))))
-		 && ((getThisSessionID()) == (sessionIdentifierFromSqFile(arrayValueOf(sqFileOop)))))
+	sqFileOop = stackValue(0, interpreterProxy->interpreterState);
+	if (!((((isBytes(sqFileOop, interpreterProxy->interpreterState))
+		 && ((byteSizeOf(sqFileOop, interpreterProxy->interpreterState)) == (sizeof(SQFile))))
+		 && ((getThisSessionID(interpreterProxy->interpreterState)) == (sessionIdentifierFromSqFile(arrayValueOf(sqFileOop, interpreterProxy->interpreterState)))))
 		 && (isNonNullSQFile(sqFileOop)))) {
-		return primitiveFail();
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
 	result = fflush(fileHandleFrom(sqFileOop));
-	pop(2);
-	pushInteger(result);
+	pop(2, interpreterProxy->interpreterState);
+	pushInteger(result, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -3791,16 +3791,16 @@ primitiveSQFileFlushWithSessionIdentifier(void)
     int result;
     sqInt sqFileOop;
 
-	sqFileOop = stackValue(1);
-	if (!((((isBytes(sqFileOop))
-		 && ((byteSizeOf(sqFileOop)) == (sizeof(SQFile))))
-		 && ((getThisSessionID()) == (sessionIdentifierFromSqFile(arrayValueOf(sqFileOop)))))
+	sqFileOop = stackValue(1, interpreterProxy->interpreterState);
+	if (!((((isBytes(sqFileOop, interpreterProxy->interpreterState))
+		 && ((byteSizeOf(sqFileOop, interpreterProxy->interpreterState)) == (sizeof(SQFile))))
+		 && ((getThisSessionID(interpreterProxy->interpreterState)) == (sessionIdentifierFromSqFile(arrayValueOf(sqFileOop, interpreterProxy->interpreterState)))))
 		 && (isNonNullSQFile(sqFileOop)))) {
-		return primitiveFail();
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
 	result = fflush(fileHandleFrom(sqFileOop));
-	pop(3);
-	pushInteger(result);
+	pop(3, interpreterProxy->interpreterState);
+	pushInteger(result, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -3818,17 +3818,17 @@ primitiveSQFileSetBlocking(void)
     sqInt retVal;
     sqInt sqFileOop;
 
-	sqFileOop = stackValue(0);
-	if (!((((isBytes(sqFileOop))
-		 && ((byteSizeOf(sqFileOop)) == (sizeof(SQFile))))
-		 && ((getThisSessionID()) == (sessionIdentifierFromSqFile(arrayValueOf(sqFileOop)))))
+	sqFileOop = stackValue(0, interpreterProxy->interpreterState);
+	if (!((((isBytes(sqFileOop, interpreterProxy->interpreterState))
+		 && ((byteSizeOf(sqFileOop, interpreterProxy->interpreterState)) == (sizeof(SQFile))))
+		 && ((getThisSessionID(interpreterProxy->interpreterState)) == (sessionIdentifierFromSqFile(arrayValueOf(sqFileOop, interpreterProxy->interpreterState)))))
 		 && (isNonNullSQFile(sqFileOop)))) {
-		return primitiveFail();
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
 	/* begin fileDescriptorFrom: */
-	if (!((((isBytes(sqFileOop))
-		 && ((byteSizeOf(sqFileOop)) == (sizeof(SQFile))))
-		 && ((getThisSessionID()) == (sessionIdentifierFromSqFile(arrayValueOf(sqFileOop)))))
+	if (!((((isBytes(sqFileOop, interpreterProxy->interpreterState))
+		 && ((byteSizeOf(sqFileOop, interpreterProxy->interpreterState)) == (sizeof(SQFile))))
+		 && ((getThisSessionID(interpreterProxy->interpreterState)) == (sessionIdentifierFromSqFile(arrayValueOf(sqFileOop, interpreterProxy->interpreterState)))))
 		 && (isNonNullSQFile(sqFileOop)))) {
 		descriptor = -1;
 		goto l1;
@@ -3836,12 +3836,12 @@ primitiveSQFileSetBlocking(void)
 	descriptor = fileno(fileHandleFrom(sqFileOop));
 	l1:	/* end fileDescriptorFrom: */;
 	if (descriptor == -1) {
-		return primitiveFail();
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
 	flags = fcntl(descriptor, F_GETFL);
 	retVal = fcntl(descriptor, F_SETFL, flags & ~O_NONBLOCK);
-	pop(2);
-	pushInteger(retVal);
+	pop(2, interpreterProxy->interpreterState);
+	pushInteger(retVal, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -3865,20 +3865,20 @@ primitiveSQFileSetBlockingWithSessionIdentifier(void)
     sqInt sqFileOop;
     SESSIONIDENTIFIERTYPE thisSession;
 
-	sqFileOop = stackValue(1);
-	if (!((((isBytes(sqFileOop))
-		 && ((byteSizeOf(sqFileOop)) == (sizeof(SQFile))))
-		 && ((getThisSessionID()) == (sessionIdentifierFromSqFile(arrayValueOf(sqFileOop)))))
+	sqFileOop = stackValue(1, interpreterProxy->interpreterState);
+	if (!((((isBytes(sqFileOop, interpreterProxy->interpreterState))
+		 && ((byteSizeOf(sqFileOop, interpreterProxy->interpreterState)) == (sizeof(SQFile))))
+		 && ((getThisSessionID(interpreterProxy->interpreterState)) == (sessionIdentifierFromSqFile(arrayValueOf(sqFileOop, interpreterProxy->interpreterState)))))
 		 && (isNonNullSQFile(sqFileOop)))) {
-		return primitiveFail();
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
-	sqFile = arrayValueOf(sqFileOop);
-	thisSession = sessionIdentifierFrom(stackObjectValue(0));
+	sqFile = arrayValueOf(sqFileOop, interpreterProxy->interpreterState);
+	thisSession = sessionIdentifierFrom(stackObjectValue(0, interpreterProxy->interpreterState));
 	if (thisSession == (sqFile->sessionID)) {
 		/* begin fileDescriptorFrom: */
-		if (!((((isBytes(sqFileOop))
-			 && ((byteSizeOf(sqFileOop)) == (sizeof(SQFile))))
-			 && ((getThisSessionID()) == (sessionIdentifierFromSqFile(arrayValueOf(sqFileOop)))))
+		if (!((((isBytes(sqFileOop, interpreterProxy->interpreterState))
+			 && ((byteSizeOf(sqFileOop, interpreterProxy->interpreterState)) == (sizeof(SQFile))))
+			 && ((getThisSessionID(interpreterProxy->interpreterState)) == (sessionIdentifierFromSqFile(arrayValueOf(sqFileOop, interpreterProxy->interpreterState)))))
 			 && (isNonNullSQFile(sqFileOop)))) {
 			descriptor = -1;
 			goto l1;
@@ -3886,15 +3886,15 @@ primitiveSQFileSetBlockingWithSessionIdentifier(void)
 		descriptor = fileno(fileHandleFrom(sqFileOop));
 	l1:	/* end fileDescriptorFrom: */;
 		if (descriptor < 0) {
-			return primitiveFail();
+			return primitiveFail(interpreterProxy->interpreterState);
 		}
 		flags = fcntl(descriptor, F_GETFL);
 		retVal = fcntl(descriptor, F_SETFL, flags & ~O_NONBLOCK);
-		pop(3);
-		pushInteger(retVal);
+		pop(3, interpreterProxy->interpreterState);
+		pushInteger(retVal, interpreterProxy->interpreterState);
 	}
 	else {
-		return primitiveFail();
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
 	return 0;
 }
@@ -3913,17 +3913,17 @@ primitiveSQFileSetNonBlocking(void)
     sqInt retVal;
     sqInt sqFileOop;
 
-	sqFileOop = stackValue(0);
-	if (!((((isBytes(sqFileOop))
-		 && ((byteSizeOf(sqFileOop)) == (sizeof(SQFile))))
-		 && ((getThisSessionID()) == (sessionIdentifierFromSqFile(arrayValueOf(sqFileOop)))))
+	sqFileOop = stackValue(0, interpreterProxy->interpreterState);
+	if (!((((isBytes(sqFileOop, interpreterProxy->interpreterState))
+		 && ((byteSizeOf(sqFileOop, interpreterProxy->interpreterState)) == (sizeof(SQFile))))
+		 && ((getThisSessionID(interpreterProxy->interpreterState)) == (sessionIdentifierFromSqFile(arrayValueOf(sqFileOop, interpreterProxy->interpreterState)))))
 		 && (isNonNullSQFile(sqFileOop)))) {
-		return primitiveFail();
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
 	/* begin fileDescriptorFrom: */
-	if (!((((isBytes(sqFileOop))
-		 && ((byteSizeOf(sqFileOop)) == (sizeof(SQFile))))
-		 && ((getThisSessionID()) == (sessionIdentifierFromSqFile(arrayValueOf(sqFileOop)))))
+	if (!((((isBytes(sqFileOop, interpreterProxy->interpreterState))
+		 && ((byteSizeOf(sqFileOop, interpreterProxy->interpreterState)) == (sizeof(SQFile))))
+		 && ((getThisSessionID(interpreterProxy->interpreterState)) == (sessionIdentifierFromSqFile(arrayValueOf(sqFileOop, interpreterProxy->interpreterState)))))
 		 && (isNonNullSQFile(sqFileOop)))) {
 		descriptor = -1;
 		goto l1;
@@ -3931,12 +3931,12 @@ primitiveSQFileSetNonBlocking(void)
 	descriptor = fileno(fileHandleFrom(sqFileOop));
 	l1:	/* end fileDescriptorFrom: */;
 	if (descriptor < 0) {
-		return primitiveFail();
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
 	flags = fcntl(descriptor, F_GETFL);
 	retVal = fcntl(descriptor, F_SETFL, flags | O_NONBLOCK);
-	pop(2);
-	pushInteger(retVal);
+	pop(2, interpreterProxy->interpreterState);
+	pushInteger(retVal, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -3960,20 +3960,20 @@ primitiveSQFileSetNonBlockingWithSessionIdentifier(void)
     sqInt sqFileOop;
     SESSIONIDENTIFIERTYPE thisSession;
 
-	sqFileOop = stackValue(1);
-	if (!((((isBytes(sqFileOop))
-		 && ((byteSizeOf(sqFileOop)) == (sizeof(SQFile))))
-		 && ((getThisSessionID()) == (sessionIdentifierFromSqFile(arrayValueOf(sqFileOop)))))
+	sqFileOop = stackValue(1, interpreterProxy->interpreterState);
+	if (!((((isBytes(sqFileOop, interpreterProxy->interpreterState))
+		 && ((byteSizeOf(sqFileOop, interpreterProxy->interpreterState)) == (sizeof(SQFile))))
+		 && ((getThisSessionID(interpreterProxy->interpreterState)) == (sessionIdentifierFromSqFile(arrayValueOf(sqFileOop, interpreterProxy->interpreterState)))))
 		 && (isNonNullSQFile(sqFileOop)))) {
-		return primitiveFail();
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
-	sqFile = arrayValueOf(sqFileOop);
-	thisSession = sessionIdentifierFrom(stackObjectValue(0));
+	sqFile = arrayValueOf(sqFileOop, interpreterProxy->interpreterState);
+	thisSession = sessionIdentifierFrom(stackObjectValue(0, interpreterProxy->interpreterState));
 	if (thisSession == (sqFile->sessionID)) {
 		/* begin fileDescriptorFrom: */
-		if (!((((isBytes(sqFileOop))
-			 && ((byteSizeOf(sqFileOop)) == (sizeof(SQFile))))
-			 && ((getThisSessionID()) == (sessionIdentifierFromSqFile(arrayValueOf(sqFileOop)))))
+		if (!((((isBytes(sqFileOop, interpreterProxy->interpreterState))
+			 && ((byteSizeOf(sqFileOop, interpreterProxy->interpreterState)) == (sizeof(SQFile))))
+			 && ((getThisSessionID(interpreterProxy->interpreterState)) == (sessionIdentifierFromSqFile(arrayValueOf(sqFileOop, interpreterProxy->interpreterState)))))
 			 && (isNonNullSQFile(sqFileOop)))) {
 			descriptor = -1;
 			goto l1;
@@ -3981,15 +3981,15 @@ primitiveSQFileSetNonBlockingWithSessionIdentifier(void)
 		descriptor = fileno(fileHandleFrom(sqFileOop));
 	l1:	/* end fileDescriptorFrom: */;
 		if (descriptor < 0) {
-			return primitiveFail();
+			return primitiveFail(interpreterProxy->interpreterState);
 		}
 		flags = fcntl(descriptor, F_GETFL);
 		retVal = fcntl(descriptor, F_SETFL, flags | O_NONBLOCK);
-		pop(3);
-		pushInteger(retVal);
+		pop(3, interpreterProxy->interpreterState);
+		pushInteger(retVal, interpreterProxy->interpreterState);
 	}
 	else {
-		return primitiveFail();
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
 	return 0;
 }
@@ -4012,18 +4012,18 @@ primitiveSQFileSetUnbuffered(void)
     sqInt retVal;
     sqInt sqFileOop;
 
-	sqFileOop = stackValue(0);
-	if (!((((isBytes(sqFileOop))
-		 && ((byteSizeOf(sqFileOop)) == (sizeof(SQFile))))
-		 && ((getThisSessionID()) == (sessionIdentifierFromSqFile(arrayValueOf(sqFileOop)))))
+	sqFileOop = stackValue(0, interpreterProxy->interpreterState);
+	if (!((((isBytes(sqFileOop, interpreterProxy->interpreterState))
+		 && ((byteSizeOf(sqFileOop, interpreterProxy->interpreterState)) == (sizeof(SQFile))))
+		 && ((getThisSessionID(interpreterProxy->interpreterState)) == (sessionIdentifierFromSqFile(arrayValueOf(sqFileOop, interpreterProxy->interpreterState)))))
 		 && (isNonNullSQFile(sqFileOop)))) {
-		return primitiveFail();
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
 	file = fileHandleFrom(sqFileOop);
 	retVal = fflush(file);
 	setbuf(file, 0);
-	pop(2);
-	pushInteger(retVal);
+	pop(2, interpreterProxy->interpreterState);
+	pushInteger(retVal, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -4050,23 +4050,23 @@ primitiveSQFileSetUnbufferedWithSessionIdentifier(void)
     sqInt sqFileOop;
     SESSIONIDENTIFIERTYPE thisSession;
 
-	sqFileOop = stackValue(1);
-	if (!((((isBytes(sqFileOop))
-		 && ((byteSizeOf(sqFileOop)) == (sizeof(SQFile))))
-		 && ((getThisSessionID()) == (sessionIdentifierFromSqFile(arrayValueOf(sqFileOop)))))
+	sqFileOop = stackValue(1, interpreterProxy->interpreterState);
+	if (!((((isBytes(sqFileOop, interpreterProxy->interpreterState))
+		 && ((byteSizeOf(sqFileOop, interpreterProxy->interpreterState)) == (sizeof(SQFile))))
+		 && ((getThisSessionID(interpreterProxy->interpreterState)) == (sessionIdentifierFromSqFile(arrayValueOf(sqFileOop, interpreterProxy->interpreterState)))))
 		 && (isNonNullSQFile(sqFileOop)))) {
-		return primitiveFail();
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
-	sqFile = arrayValueOf(sqFileOop);
-	thisSession = sessionIdentifierFrom(stackObjectValue(0));
+	sqFile = arrayValueOf(sqFileOop, interpreterProxy->interpreterState);
+	thisSession = sessionIdentifierFrom(stackObjectValue(0, interpreterProxy->interpreterState));
 	if (thisSession == (sqFile->sessionID)) {
 		retVal = fflush(sqFile->file);
 		setbuf(sqFile->file, NULL);
-		pop(3);
-		pushInteger(retVal);
+		pop(3, interpreterProxy->interpreterState);
+		pushInteger(retVal, interpreterProxy->interpreterState);
 	}
 	else {
-		return primitiveFail();
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
 	return 0;
 }
@@ -4088,25 +4088,25 @@ primitiveTestEndOfFileFlag(void)
     sqInt result;
     sqInt sqFileOop;
 
-	sqFileOop = stackValue(0);
-	if (!((((isBytes(sqFileOop))
-		 && ((byteSizeOf(sqFileOop)) == (sizeof(SQFile))))
-		 && ((getThisSessionID()) == (sessionIdentifierFromSqFile(arrayValueOf(sqFileOop)))))
+	sqFileOop = stackValue(0, interpreterProxy->interpreterState);
+	if (!((((isBytes(sqFileOop, interpreterProxy->interpreterState))
+		 && ((byteSizeOf(sqFileOop, interpreterProxy->interpreterState)) == (sizeof(SQFile))))
+		 && ((getThisSessionID(interpreterProxy->interpreterState)) == (sessionIdentifierFromSqFile(arrayValueOf(sqFileOop, interpreterProxy->interpreterState)))))
 		 && (isNonNullSQFile(sqFileOop)))) {
-		return primitiveFail();
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
 	file = fileHandleFrom(sqFileOop);
 	if (file == 0) {
-		return primitiveFail();
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
 	if (feof(file)) {
-		result = trueObject();
+		result = trueObject(interpreterProxy->interpreterState);
 	}
 	else {
-		result = falseObject();
+		result = falseObject(interpreterProxy->interpreterState);
 	}
-	pop(2);
-	push(result);
+	pop(2, interpreterProxy->interpreterState);
+	push(result, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -4150,15 +4150,15 @@ primitiveTestLockableFileRegion(void)
 
 
 	/* Get the parameters from the stack */
-	exclusive = (stackValue(0)) == (trueObject());
-	len = stackIntegerValue(1);
-	start = stackIntegerValue(2);
-	sqFileOop = stackValue(3);
-	if (!((((isBytes(sqFileOop))
-		 && ((byteSizeOf(sqFileOop)) == (sizeof(SQFile))))
-		 && ((getThisSessionID()) == (sessionIdentifierFromSqFile(arrayValueOf(sqFileOop)))))
+	exclusive = (stackValue(0, interpreterProxy->interpreterState)) == (trueObject(interpreterProxy->interpreterState));
+	len = stackIntegerValue(1, interpreterProxy->interpreterState);
+	start = stackIntegerValue(2, interpreterProxy->interpreterState);
+	sqFileOop = stackValue(3, interpreterProxy->interpreterState);
+	if (!((((isBytes(sqFileOop, interpreterProxy->interpreterState))
+		 && ((byteSizeOf(sqFileOop, interpreterProxy->interpreterState)) == (sizeof(SQFile))))
+		 && ((getThisSessionID(interpreterProxy->interpreterState)) == (sessionIdentifierFromSqFile(arrayValueOf(sqFileOop, interpreterProxy->interpreterState)))))
 		 && (isNonNullSQFile(sqFileOop)))) {
-		return primitiveFail();
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
 	/* begin unixFileNumber: */
 	fileHandle = fileHandleFrom(sqFileOop);
@@ -4175,24 +4175,24 @@ primitiveTestLockableFileRegion(void)
 	lockStruct.l_pid = 0;
 	result = fcntl(fileNo, F_GETLK, &lockStruct);
 	if (result == -1) {
-		pop(5);
-		pushInteger(result);
+		pop(5, interpreterProxy->interpreterState);
+		pushInteger(result, interpreterProxy->interpreterState);
 	}
 	else {
 		if (lockStruct.l_type == F_UNLCK) {
-			canObtainLock = trueObject();
+			canObtainLock = trueObject(interpreterProxy->interpreterState);
 		}
 		else {
-			canObtainLock = falseObject();
+			canObtainLock = falseObject(interpreterProxy->interpreterState);
 		}
-		resultArray = instantiateClassindexableSize(classArray(), 6);
-		stObjectatput(resultArray, 1, canObtainLock);
-		stObjectatput(resultArray, 2, integerObjectOf(lockStruct.l_pid));
-		stObjectatput(resultArray, 3, integerObjectOf(lockStruct.l_type));
-		stObjectatput(resultArray, 4, integerObjectOf(lockStruct.l_whence));
-		stObjectatput(resultArray, 5, integerObjectOf(lockStruct.l_start));
-		stObjectatput(resultArray, 6, integerObjectOf(lockStruct.l_len));
-		popthenPush(5, resultArray);
+		resultArray = instantiateClassindexableSize(classArray(interpreterProxy->interpreterState), 6, interpreterProxy->interpreterState);
+		stObjectatput(resultArray, 1, canObtainLock, interpreterProxy->interpreterState);
+		stObjectatput(resultArray, 2, integerObjectOf(lockStruct.l_pid, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+		stObjectatput(resultArray, 3, integerObjectOf(lockStruct.l_type, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+		stObjectatput(resultArray, 4, integerObjectOf(lockStruct.l_whence, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+		stObjectatput(resultArray, 5, integerObjectOf(lockStruct.l_start, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+		stObjectatput(resultArray, 6, integerObjectOf(lockStruct.l_len, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+		popthenPush(5, resultArray, interpreterProxy->interpreterState);
 	}
 	return 0;
 }
@@ -4208,10 +4208,10 @@ primitiveUnixFileClose(sqInt anIntegerFileNumber)
     int handle;
     int result;
 
-	handle = stackIntegerValue(0);
+	handle = stackIntegerValue(0, interpreterProxy->interpreterState);
 	result = close(handle);
-	pop(2);
-	pushInteger(result);
+	pop(2, interpreterProxy->interpreterState);
+	pushInteger(result, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -4230,18 +4230,18 @@ primitiveUnixFileNumber(void)
     int fileNo;
     sqInt sqFileOop;
 
-	sqFileOop = stackValue(0);
-	if (!((((isBytes(sqFileOop))
-		 && ((byteSizeOf(sqFileOop)) == (sizeof(SQFile))))
-		 && ((getThisSessionID()) == (sessionIdentifierFromSqFile(arrayValueOf(sqFileOop)))))
+	sqFileOop = stackValue(0, interpreterProxy->interpreterState);
+	if (!((((isBytes(sqFileOop, interpreterProxy->interpreterState))
+		 && ((byteSizeOf(sqFileOop, interpreterProxy->interpreterState)) == (sizeof(SQFile))))
+		 && ((getThisSessionID(interpreterProxy->interpreterState)) == (sessionIdentifierFromSqFile(arrayValueOf(sqFileOop, interpreterProxy->interpreterState)))))
 		 && (isNonNullSQFile(sqFileOop)))) {
-		return primitiveFail();
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
 	/* begin unixFileNumber: */
 	fileHandle = fileHandleFrom(sqFileOop);
 	fileNo = fileno(fileHandle);
-	pop(2);
-	pushInteger(fileNo);
+	pop(2, interpreterProxy->interpreterState);
+	pushInteger(fileNo, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -4271,14 +4271,14 @@ primitiveUnlockFileRegion(void)
 
 
 	/* Get the parameters from the stack */
-	len = stackIntegerValue(0);
-	start = stackIntegerValue(1);
-	sqFileOop = stackValue(2);
-	if (!((((isBytes(sqFileOop))
-		 && ((byteSizeOf(sqFileOop)) == (sizeof(SQFile))))
-		 && ((getThisSessionID()) == (sessionIdentifierFromSqFile(arrayValueOf(sqFileOop)))))
+	len = stackIntegerValue(0, interpreterProxy->interpreterState);
+	start = stackIntegerValue(1, interpreterProxy->interpreterState);
+	sqFileOop = stackValue(2, interpreterProxy->interpreterState);
+	if (!((((isBytes(sqFileOop, interpreterProxy->interpreterState))
+		 && ((byteSizeOf(sqFileOop, interpreterProxy->interpreterState)) == (sizeof(SQFile))))
+		 && ((getThisSessionID(interpreterProxy->interpreterState)) == (sessionIdentifierFromSqFile(arrayValueOf(sqFileOop, interpreterProxy->interpreterState)))))
 		 && (isNonNullSQFile(sqFileOop)))) {
-		return primitiveFail();
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
 	/* begin unixFileNumber: */
 	fileHandle = fileHandleFrom(sqFileOop);
@@ -4289,8 +4289,8 @@ primitiveUnlockFileRegion(void)
 	lockStruct.l_len = len;
 	lockStruct.l_pid = 0;
 	result = fcntl(fileNo, F_SETLK, &lockStruct);
-	pop(4);
-	pushInteger(result);
+	pop(4, interpreterProxy->interpreterState);
+	pushInteger(result, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -4306,8 +4306,8 @@ primitiveUnlockFileRegion(void)
 EXPORT(sqInt)
 primitiveUnsetEnv(void)
 {
-	unsetenv(transientCStringFromString(stackObjectValue(0)));
-	pop(1);
+	unsetenv(transientCStringFromString(stackObjectValue(0, interpreterProxy->interpreterState)));
+	pop(1, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -4318,8 +4318,8 @@ primitiveUnsetEnv(void)
 EXPORT(sqInt)
 primitiveVersionString(void)
 {
-	pop(1);
-	push(stringFromCString(versionString()));
+	pop(1, interpreterProxy->interpreterState);
+	push(stringFromCString(versionString()), interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -4340,27 +4340,27 @@ realpathAsType(sqInt classIdentifier)
     sqInt s;
 
 	bufferSize = 1024;
-	newPathString = instantiateClassindexableSize(classString(), bufferSize);
-	pushRemappableOop(newPathString);
-	pathString = transientCStringFromString(stackObjectValue(0));
-	newPathString = popRemappableOop();
-	buffer = arrayValueOf(newPathString);
+	newPathString = instantiateClassindexableSize(classString(interpreterProxy->interpreterState), bufferSize, interpreterProxy->interpreterState);
+	pushRemappableOop(newPathString, interpreterProxy->interpreterState);
+	pathString = transientCStringFromString(stackObjectValue(0, interpreterProxy->interpreterState));
+	newPathString = popRemappableOop(interpreterProxy->interpreterState);
+	buffer = arrayValueOf(newPathString, interpreterProxy->interpreterState);
 	realpathResult = realpath(pathString, buffer);
 	if (realpathResult == 0) {
-		return primitiveFail();
+		return primitiveFail(interpreterProxy->interpreterState);
 	}
 	else {
 		if ((strlen(realpathResult)) >= 1024) {
 			perror("warning: statically allocated array exceeded in UnixOSProcessPlugin>>primitiveRealPath, object memory may have been corrupted");
-			return primitiveFail();
+			return primitiveFail(interpreterProxy->interpreterState);
 		}
 		/* begin cString:asCollection: */
 		len = strlen(realpathResult);
-		newString = instantiateClassindexableSize(classIdentifier, len);
-		strncpy(arrayValueOf(newString), realpathResult, len);
+		newString = instantiateClassindexableSize(classIdentifier, len, interpreterProxy->interpreterState);
+		strncpy(arrayValueOf(newString, interpreterProxy->interpreterState), realpathResult, len);
 		s = newString;
-		pop(2);
-		push(s);
+		pop(2, interpreterProxy->interpreterState);
+		push(s, interpreterProxy->interpreterState);
 	}
 	return 0;
 }
@@ -4540,11 +4540,11 @@ sessionIdentifierFrom(sqInt aByteArray)
     unsigned char *session;
     union {SESSIONIDENTIFIERTYPE session; unsigned char bytes[sizeof(SESSIONIDENTIFIERTYPE)];} sessionUnion;
 
-	if (!((isBytes(aByteArray))
-		 && ((stSizeOf(aByteArray)) == (sizeOfSession())))) {
+	if (!((isBytes(aByteArray, interpreterProxy->interpreterState))
+		 && ((stSizeOf(aByteArray, interpreterProxy->interpreterState)) == (sizeOfSession())))) {
 		return null;
 	}
-	session = arrayValueOf(aByteArray);
+	session = arrayValueOf(aByteArray, interpreterProxy->interpreterState);
 	idx = 0;
 	while (idx < (sizeOfSession())) {
 		sessionUnion.bytes[idx] = session[idx];
@@ -4973,7 +4973,7 @@ socketDescriptorFrom(sqInt sqSocketOop)
     SocketPtr sqSocket;
 
 	/* begin socketValueOf: */
-	sqSocket = arrayValueOf(sqSocketOop);
+	sqSocket = arrayValueOf(sqSocketOop, interpreterProxy->interpreterState);
 	privateSocketStruct = sqSocket->privateSocketPtr;
 	if (privateSocketStruct == 0) {
 		return -1;
@@ -5002,7 +5002,7 @@ socketRecordSize(void)
 static SocketPtr
 socketValueOf(sqInt anSQSocketRecord)
 {
-	return arrayValueOf(anSQSocketRecord);
+	return arrayValueOf(anSQSocketRecord, interpreterProxy->interpreterState);
 }
 
 
@@ -5018,10 +5018,10 @@ stringFromCString(const char *aCString)
     sqInt newString;
 
 	/* begin cString:asCollection: */
-	classIdentifier = classString();
+	classIdentifier = classString(interpreterProxy->interpreterState);
 	len = strlen(aCString);
-	newString = instantiateClassindexableSize(classIdentifier, len);
-	strncpy(arrayValueOf(newString), aCString, len);
+	newString = instantiateClassindexableSize(classIdentifier, len, interpreterProxy->interpreterState);
+	strncpy(arrayValueOf(newString, interpreterProxy->interpreterState), aCString, len);
 	return newString;
 }
 
@@ -5053,13 +5053,13 @@ transientCStringFromString(sqInt aString)
 
 
 	/* Allocate space for a null terminated C string. */
-	len = sizeOfSTArrayFromCPrimitive(arrayValueOf(aString));
-	pushRemappableOop(aString);
-	newString = instantiateClassindexableSize(classString(), len + 1);
-	stringPtr = arrayValueOf(popRemappableOop());
+	len = sizeOfSTArrayFromCPrimitive(arrayValueOf(aString, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	pushRemappableOop(aString, interpreterProxy->interpreterState);
+	newString = instantiateClassindexableSize(classString(interpreterProxy->interpreterState), len + 1, interpreterProxy->interpreterState);
+	stringPtr = arrayValueOf(popRemappableOop(interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 
 	/* Point to the actual C string. */
-	cString = arrayValueOf(newString);
+	cString = arrayValueOf(newString, interpreterProxy->interpreterState);
 	(char *)strncpy(cString, stringPtr, len);
 	cString[len] = 0;
 	return cString;

@@ -160,7 +160,7 @@ int ffiPushStructureOfLength(int pointer, int* structSpec, int structSize)
 	int nItems, i;
 	nItems = ((*structSpec & FFIStructSizeMask) + 3) / 4;
 	if(pointer == 0) 
-		return primitiveFail();
+		return primitiveFail(interpreterProxy->interpreterState);
 	for(i=0; i < nItems;i++)
 		ARG_PUSH(((int*)pointer)[i]);
 	return 1;
@@ -177,7 +177,7 @@ int ffiPushStringOfLength(int srcIndex, int length)
 	char *ptr;
 	ARG_CHECK(); /* fail before allocating */
 	ptr = (char*) malloc(length+1);
-	if(!ptr) return primitiveFail();
+	if(!ptr) return primitiveFail(interpreterProxy->interpreterState);
 	memcpy(ptr, (void*)srcIndex, length);
 	ptr[length] = 0;
 	ffiTempStrings[ffiTempStringCount++] = ptr;

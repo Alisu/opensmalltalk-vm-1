@@ -64,11 +64,10 @@ static char __buildInfo[] = "FileAttributesPlugin FileAttributesPlugin.oscog-akg
 #define PrimErrNoCMemory 10
 #define PrimErrNoMemory 9
 
-struct foo;
 
 /*** Function Prototypes ***/
-static sqInt addressObjectFor(void *aMachineAddress, struct foo * self);
-static sqInt attributeArrayformask(sqInt *attributeArrayPtr, fapath *faPath, sqInt attributeMask, struct foo * self);
+static sqInt addressObjectFor(void *aMachineAddress);
+static sqInt attributeArrayformask(sqInt *attributeArrayPtr, fapath *faPath, sqInt attributeMask);
 static sqInt badSessionId(void);
 static sqInt canOpenDirectoryStreamForlength(char *aPathCString, sqInt length);
 static sqInt canStatFilePathlength(char *aPathCString, sqInt length);
@@ -77,89 +76,89 @@ static sqLong convertWinToSqueakTime(SYSTEMTIME st);
 #endif /* _WIN32 */
 static sqInt faSuccess(void);
 EXPORT(const char*) getModuleName(void);
-EXPORT(sqInt) initialiseModule(struct foo * self);
-static sqInt objectFromStructsize(void *aMachineAddress, sqInt structSize, struct foo * self);
+EXPORT(sqInt) initialiseModule(void);
+static sqInt objectFromStructsize(void *aMachineAddress, sqInt structSize);
 static int pathOoptoBuffermaxLen(sqInt pathNameOop, char *cPathName, sqInt maxLen);
 static void * pointerFrom(sqInt directoryPointerBytes);
-EXPORT(sqInt) primitiveChangeMode(struct foo * self);
-EXPORT(sqInt) primitiveChangeOwner(struct foo * self);
-EXPORT(sqInt) primitiveClosedir(struct foo * self);
-EXPORT(sqInt) primitiveFileAttribute(struct foo * self);
-EXPORT(sqInt) primitiveFileAttributes(struct foo * self);
-EXPORT(sqInt) primitiveFileExists(struct foo * self);
-EXPORT(sqInt) primitiveFileMasks(struct foo * self);
-EXPORT(sqInt) primitiveLogicalDrives(struct foo * self);
-EXPORT(sqInt) primitiveOpendir(struct foo * self);
-EXPORT(sqInt) primitivePathMax(struct foo * self);
-EXPORT(sqInt) primitivePlatToStPath(struct foo * self);
-EXPORT(sqInt) primitiveReaddir(struct foo * self);
-EXPORT(sqInt) primitiveRewinddir(struct foo * self);
-EXPORT(sqInt) primitiveStToPlatPath(struct foo * self);
-EXPORT(sqInt) primitiveSymlinkChangeOwner(struct foo * self);
-EXPORT(sqInt) primitiveVersionString(struct foo * self);
-static sqInt processDirectory(fapath *faPath, struct foo * self);
+EXPORT(sqInt) primitiveChangeMode(void);
+EXPORT(sqInt) primitiveChangeOwner(void);
+EXPORT(sqInt) primitiveClosedir(void);
+EXPORT(sqInt) primitiveFileAttribute(void);
+EXPORT(sqInt) primitiveFileAttributes(void);
+EXPORT(sqInt) primitiveFileExists(void);
+EXPORT(sqInt) primitiveFileMasks(void);
+EXPORT(sqInt) primitiveLogicalDrives(void);
+EXPORT(sqInt) primitiveOpendir(void);
+EXPORT(sqInt) primitivePathMax(void);
+EXPORT(sqInt) primitivePlatToStPath(void);
+EXPORT(sqInt) primitiveReaddir(void);
+EXPORT(sqInt) primitiveRewinddir(void);
+EXPORT(sqInt) primitiveStToPlatPath(void);
+EXPORT(sqInt) primitiveSymlinkChangeOwner(void);
+EXPORT(sqInt) primitiveVersionString(void);
+static sqInt processDirectory(fapath *faPath);
 static sqInt readLinkintomaxLength(char *cPathName, char *cLinkPtr, size_t maxLength);
 EXPORT(sqInt) setInterpreter(struct VirtualMachine *anInterpreter);
 static sqInt sizeOfFaPath(void);
 static sqInt sizeOfFaPathPtr(void);
-static sqInt stringFromCString(const char *aCString, struct foo * self);
+static sqInt stringFromCString(const char *aCString);
 
 
 /*** Variables ***/
 static int hasSecurityPlugin = 1;
 
 #if !defined(SQUEAK_BUILTIN_PLUGIN)
-static void * (*arrayValueOf)(sqInt oop);
+static void * (*arrayValueOf)(sqInt oop, struct foo * self);
 static sqInt (*classArray)(struct foo * self);
-static sqInt (*classByteArray)(void);
-static sqInt (*classString)(void);
+static sqInt (*classByteArray)(struct foo * self);
+static sqInt (*classString)(struct foo * self);
 static sqInt (*failed)(struct foo * self);
 static sqInt (*instantiateClassindexableSize)(sqInt classPointer, sqInt size, struct foo * self);
-static sqInt (*integerObjectOf)(sqInt value);
+static sqInt (*integerObjectOf)(sqInt value, struct foo * self);
 static void * (*ioLoadFunctionFrom)(char *functionName, char *moduleName, struct foo * self);
-static sqInt (*isKindOf)(sqInt oop, char *aString);
+static sqInt (*isKindOf)(sqInt oop, char *aString, struct foo * self);
 static sqInt (*isBytes)(sqInt oop, struct foo * self);
 static sqInt (*methodReturnValue)(sqInt oop, struct foo * self);
-static sqInt (*nilObject)(void);
+static sqInt (*nilObject)(struct foo * self);
 static sqInt (*popthenPush)(sqInt nItems, sqInt oop, struct foo * self);
-static sqInt (*popRemappableOop)(void);
-static sqInt (*positive32BitIntegerFor)(unsigned int integerValue);
+static sqInt (*popRemappableOop)(struct foo * self);
+static sqInt (*positive32BitIntegerFor)(unsigned int integerValue, struct foo * self);
 static sqInt (*primitiveFail)(struct foo * self);
 static sqInt (*primitiveFailFor)(sqInt reasonCode, struct foo * self);
-static sqInt (*primitiveFailForOSError)(sqLong osError);
-static sqInt (*primitiveFailureCode)(void);
-static sqInt (*pushRemappableOop)(sqInt oop);
-static sqInt (*stSizeOf)(sqInt oop);
+static sqInt (*primitiveFailForOSError)(sqLong osError, struct foo * self);
+static sqInt (*primitiveFailureCode)(struct foo * self);
+static sqInt (*pushRemappableOop)(sqInt oop, struct foo * self);
+static sqInt (*stSizeOf)(sqInt oop, struct foo * self);
 static sqInt (*stackIntegerValue)(sqInt offset, struct foo * self);
 static sqInt (*stackObjectValue)(sqInt offset, struct foo * self);
 static sqInt (*stackValue)(sqInt offset, struct foo * self);
 static sqInt (*storePointerofObjectwithValue)(sqInt index, sqInt oop, sqInt valuePointer, struct foo * self);
 #else /* !defined(SQUEAK_BUILTIN_PLUGIN) */
-extern void * arrayValueOf(sqInt oop);
+extern void * arrayValueOf(sqInt oop, struct foo * self);
 extern sqInt classArray(struct foo * self);
-extern sqInt classByteArray(void);
-extern sqInt classString(void);
+extern sqInt classByteArray(struct foo * self);
+extern sqInt classString(struct foo * self);
 extern sqInt failed(struct foo * self);
 extern sqInt instantiateClassindexableSize(sqInt classPointer, sqInt size, struct foo * self);
-extern sqInt integerObjectOf(sqInt value);
-extern void * ioLoadFunctionFrom(char *functionName, char *moduleName);
-extern sqInt isKindOf(sqInt oop, char *aString);
+extern sqInt integerObjectOf(sqInt value, struct foo * self);
+extern void * ioLoadFunctionFrom(char *functionName, char *moduleName, struct foo * self);
+extern sqInt isKindOf(sqInt oop, char *aString, struct foo * self);
 extern sqInt isBytes(sqInt oop, struct foo * self);
 extern sqInt methodReturnValue(sqInt oop, struct foo * self);
-extern sqInt nilObject(void);
-extern sqInt popthenPush(sqInt nItems, sqInt oop);
-extern sqInt popRemappableOop(void);
-extern sqInt positive32BitIntegerFor(unsigned int integerValue);
+extern sqInt nilObject(struct foo * self);
+extern sqInt popthenPush(sqInt nItems, sqInt oop, struct foo * self);
+extern sqInt popRemappableOop(struct foo * self);
+extern sqInt positive32BitIntegerFor(unsigned int integerValue, struct foo * self);
 extern sqInt primitiveFail(struct foo * self);
 extern sqInt primitiveFailFor(sqInt reasonCode, struct foo * self);
 #if VM_PROXY_MAJOR > 1 || (VM_PROXY_MAJOR == 1 && VM_PROXY_MINOR >= 14)
-extern sqInt primitiveFailForOSError(sqLong osError);
+extern sqInt primitiveFailForOSError(sqLong osError, struct foo * self);
 #else
 # define primitiveFailForOSError(osError) 0
 #endif
-extern sqInt primitiveFailureCode(void);
-extern sqInt pushRemappableOop(sqInt oop);
-extern sqInt stSizeOf(sqInt oop);
+extern sqInt primitiveFailureCode(struct foo * self);
+extern sqInt pushRemappableOop(sqInt oop, struct foo * self);
+extern sqInt stSizeOf(sqInt oop, struct foo * self);
 extern sqInt stackIntegerValue(sqInt offset, struct foo * self);
 extern sqInt stackObjectValue(sqInt offset, struct foo * self);
 extern sqInt stackValue(sqInt offset, struct foo * self);
@@ -183,18 +182,18 @@ static void * sCOFfn;
 
 	/* FileAttributesPlugin>>#addressObjectFor: */
 static sqInt
-addressObjectFor(void *aMachineAddress, struct foo * self)
+addressObjectFor(void *aMachineAddress)
 {
     sqInt addressOop;
     unsigned char *addressOopArrayPointer;
     union {void *address; unsigned char bytes[sizeof(void *)];} addressUnion;
     sqInt idx;
 
-	addressOop = instantiateClassindexableSize(classByteArray(), sizeof(void *), self);
+	addressOop = instantiateClassindexableSize(classByteArray(interpreterProxy->interpreterState), sizeof(void *), interpreterProxy->interpreterState);
 	if (!(addressOop)) {
-		return primitiveFailFor(PrimErrNoMemory, self);
+		return primitiveFailFor(PrimErrNoMemory, interpreterProxy->interpreterState);
 	}
-	addressOopArrayPointer = arrayValueOf(addressOop);
+	addressOopArrayPointer = arrayValueOf(addressOop, interpreterProxy->interpreterState);
 	addressUnion.address = aMachineAddress;
 	idx = 0;
 	while (idx < (sizeof(void *))) {
@@ -214,7 +213,7 @@ addressObjectFor(void *aMachineAddress, struct foo * self)
 
 	/* FileAttributesPlugin>>#attributeArray:for:mask: */
 static sqInt
-attributeArrayformask(sqInt *attributeArrayPtr, fapath *faPath, sqInt attributeMask, struct foo * self)
+attributeArrayformask(sqInt *attributeArrayPtr, fapath *faPath, sqInt attributeMask)
 {
     sqInt accessArray;
     sqInt attributeArray;
@@ -235,14 +234,14 @@ attributeArrayformask(sqInt *attributeArrayPtr, fapath *faPath, sqInt attributeM
 		 || (getAccess))) {
 
 		/* No information has been requested, which doesn't make sense */
-		primitiveFailForOSError(-6 /* invalidArguments */);
+		primitiveFailForOSError(-6 /* invalidArguments */, interpreterProxy->interpreterState);
 		return -6 /* invalidArguments */;
 	}
 	getLinkStats = attributeMask & 4;
 	if (getStats) {
-		attributeArray = instantiateClassindexableSize(classArray(self), 13, self);
+		attributeArray = instantiateClassindexableSize(classArray(interpreterProxy->interpreterState), 13, interpreterProxy->interpreterState);
 		if (!(attributeArray)) {
-			primitiveFailFor(PrimErrNoMemory, self);
+			primitiveFailFor(PrimErrNoMemory, interpreterProxy->interpreterState);
 			return -15 /* interpreterError */;
 		}
 		
@@ -250,9 +249,9 @@ attributeArrayformask(sqInt *attributeArrayPtr, fapath *faPath, sqInt attributeM
 		status = faFileStatAttributes(faPath, getLinkStats, attributeArray);
 
 #else /* SPURVM */
-		pushRemappableOop(attributeArray);
+		pushRemappableOop(attributeArray, interpreterProxy->interpreterState);
 		status = faFileStatAttributes(faPath, getLinkStats, attributeArray);
-		attributeArray = popRemappableOop()
+		attributeArray = popRemappableOop(interpreterProxy->interpreterState)
 #endif /* SPURVM */
 ;
 		if (status != 0) {
@@ -263,21 +262,21 @@ attributeArrayformask(sqInt *attributeArrayPtr, fapath *faPath, sqInt attributeM
 	if (getAccess) {
 		
 #if SPURVM
-		accessArray = instantiateClassindexableSize(classArray(self), 3, self);
+		accessArray = instantiateClassindexableSize(classArray(interpreterProxy->interpreterState), 3, interpreterProxy->interpreterState);
 
 #else /* SPURVM */
-		pushRemappableOop(attributeArray);
-		accessArray = instantiateClassindexableSize(classArray(self), 3, self);
-		attributeArray = popRemappableOop()
+		pushRemappableOop(attributeArray, interpreterProxy->interpreterState);
+		accessArray = instantiateClassindexableSize(classArray(interpreterProxy->interpreterState), 3, interpreterProxy->interpreterState);
+		attributeArray = popRemappableOop(interpreterProxy->interpreterState)
 #endif /* SPURVM */
 ;
 		if (!(accessArray)) {
-			primitiveFailFor(PrimErrNoMemory, self);
+			primitiveFailFor(PrimErrNoMemory, interpreterProxy->interpreterState);
 
 			/* interpreterError */
 		}
 		faAccessAttributes(faPath, accessArray, 0);
-		if (failed(self)) {
+		if (failed(interpreterProxy->interpreterState)) {
 			return -15 /* interpreterError */;
 		}
 		resultOop = accessArray;
@@ -286,23 +285,23 @@ attributeArrayformask(sqInt *attributeArrayPtr, fapath *faPath, sqInt attributeM
 	 && (getAccess)) {
 		
 #if SPURVM
-		resultOop = instantiateClassindexableSize(classArray(self), 2, self);
+		resultOop = instantiateClassindexableSize(classArray(interpreterProxy->interpreterState), 2, interpreterProxy->interpreterState);
 
 #else /* SPURVM */
-		pushRemappableOop(attributeArray);
-		pushRemappableOop(accessArray);
-		resultOop = instantiateClassindexableSize(classArray(self), 2, self);
-		accessArray = popRemappableOop();
-		attributeArray = popRemappableOop()
+		pushRemappableOop(attributeArray, interpreterProxy->interpreterState);
+		pushRemappableOop(accessArray, interpreterProxy->interpreterState);
+		resultOop = instantiateClassindexableSize(classArray(interpreterProxy->interpreterState), 2, interpreterProxy->interpreterState);
+		accessArray = popRemappableOop(interpreterProxy->interpreterState);
+		attributeArray = popRemappableOop(interpreterProxy->interpreterState)
 #endif /* SPURVM */
 ;
 		if (!(resultOop)) {
-			primitiveFailFor(PrimErrNoMemory, self);
+			primitiveFailFor(PrimErrNoMemory, interpreterProxy->interpreterState);
 
 			/* interpreterError */
 		}
-		storePointerofObjectwithValue(0, resultOop, attributeArray, self);
-		storePointerofObjectwithValue(1, resultOop, accessArray, self);
+		storePointerofObjectwithValue(0, resultOop, attributeArray, interpreterProxy->interpreterState);
+		storePointerofObjectwithValue(1, resultOop, accessArray, interpreterProxy->interpreterState);
 	}
 	attributeArrayPtr[0] = resultOop;
 	return 0 /* faSuccess */;
@@ -427,10 +426,10 @@ getModuleName(void)
 
 	/* FileAttributesPlugin>>#initialiseModule */
 EXPORT(sqInt)
-initialiseModule(struct foo * self)
+initialiseModule(void)
 {
-	sCOFfn = ioLoadFunctionFrom("secCanOpenFileOfSizeWritable", "SecurityPlugin", self);
-	sCLPfn = ioLoadFunctionFrom("secCanListPathOfSize", "SecurityPlugin", self);
+	sCOFfn = ioLoadFunctionFrom("secCanOpenFileOfSizeWritable", "SecurityPlugin", interpreterProxy->interpreterState);
+	sCLPfn = ioLoadFunctionFrom("secCanListPathOfSize", "SecurityPlugin", interpreterProxy->interpreterState);
 	return 1;
 }
 
@@ -439,16 +438,16 @@ initialiseModule(struct foo * self)
 
 	/* FileAttributesPlugin>>#objectFromStruct:size: */
 static sqInt
-objectFromStructsize(void *aMachineAddress, sqInt structSize, struct foo * self)
+objectFromStructsize(void *aMachineAddress, sqInt structSize)
 {
     sqInt addressOop;
     unsigned char *addressOopArrayPointer;
 
-	addressOop = instantiateClassindexableSize(classByteArray(), structSize, self);
+	addressOop = instantiateClassindexableSize(classByteArray(interpreterProxy->interpreterState), structSize, interpreterProxy->interpreterState);
 	if (!(addressOop)) {
-		return primitiveFailFor(PrimErrNoMemory, self);
+		return primitiveFailFor(PrimErrNoMemory, interpreterProxy->interpreterState);
 	}
-	addressOopArrayPointer = arrayValueOf(addressOop);
+	addressOopArrayPointer = arrayValueOf(addressOop, interpreterProxy->interpreterState);
 	memcpy(addressOopArrayPointer, aMachineAddress, structSize);
 	return addressOop;
 }
@@ -463,11 +462,11 @@ pathOoptoBuffermaxLen(sqInt pathNameOop, char *cPathName, sqInt maxLen)
     sqInt len;
     char *sPtr;
 
-	len = stSizeOf(pathNameOop);
+	len = stSizeOf(pathNameOop, interpreterProxy->interpreterState);
 	if (len >= maxLen) {
 		return -1 /* stringTooLong */;
 	}
-	sPtr = arrayValueOf(pathNameOop);
+	sPtr = arrayValueOf(pathNameOop, interpreterProxy->interpreterState);
 	if ((canStatFilePathlength(sPtr, len)) == 0) {
 		/* begin cantStatPath */
 		return ((sqInt) -3);
@@ -488,11 +487,11 @@ pointerFrom(sqInt directoryPointerBytes)
     sqInt idx;
     unsigned char *ptr;
 
-	if (!((isKindOf(directoryPointerBytes, "ByteArray"))
-		 && ((stSizeOf(directoryPointerBytes)) == (sizeof(void *))))) {
+	if (!((isKindOf(directoryPointerBytes, "ByteArray", interpreterProxy->interpreterState))
+		 && ((stSizeOf(directoryPointerBytes, interpreterProxy->interpreterState)) == (sizeof(void *))))) {
 		return null;
 	}
-	ptr = arrayValueOf(directoryPointerBytes);
+	ptr = arrayValueOf(directoryPointerBytes, interpreterProxy->interpreterState);
 	idx = 0;
 	while (idx < (sizeof(void *))) {
 		addressUnion.bytes[idx] = ptr[idx];
@@ -506,32 +505,32 @@ pointerFrom(sqInt directoryPointerBytes)
 
 	/* FileAttributesPlugin>>#primitiveChangeMode */
 EXPORT(sqInt)
-primitiveChangeMode(struct foo * self)
+primitiveChangeMode(void)
 {
     fapath faPath;
     sqInt fileNameOop;
     sqInt newMode;
     sqInt status;
 
-	fileNameOop = stackObjectValue(1, self);
-	newMode = stackIntegerValue(0, self);
-	if ((failed(self))
-	 || (!(isBytes(fileNameOop, self)))) {
-		return primitiveFailFor(PrimErrBadArgument, self);
+	fileNameOop = stackObjectValue(1, interpreterProxy->interpreterState);
+	newMode = stackIntegerValue(0, interpreterProxy->interpreterState);
+	if ((failed(interpreterProxy->interpreterState))
+	 || (!(isBytes(fileNameOop, interpreterProxy->interpreterState)))) {
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	
 #  if HAVE_CHMOD
 	faSetStPathOop((&faPath), fileNameOop);
-	if (failed(self)) {
-		return primitiveFailureCode();
+	if (failed(interpreterProxy->interpreterState)) {
+		return primitiveFailureCode(interpreterProxy->interpreterState);
 	}
 	status = chmod(faGetPlatPath((&faPath)), newMode);
 	if (status != 0) {
-		return primitiveFailForOSError(errno);
+		return primitiveFailForOSError(errno, interpreterProxy->interpreterState);
 	}
-	return methodReturnValue(nilObject(), self);
+	return methodReturnValue(nilObject(interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 #  endif /* HAVE_CHMOD */
-	return primitiveFailForOSError(-13 /* unsupportedOperation */);
+	return primitiveFailForOSError(-13 /* unsupportedOperation */, interpreterProxy->interpreterState);
 }
 
 
@@ -539,7 +538,7 @@ primitiveChangeMode(struct foo * self)
 
 	/* FileAttributesPlugin>>#primitiveChangeOwner */
 EXPORT(sqInt)
-primitiveChangeOwner(struct foo * self)
+primitiveChangeOwner(void)
 {
     fapath faPath;
     sqInt fileNameOop;
@@ -547,26 +546,26 @@ primitiveChangeOwner(struct foo * self)
     sqInt ownerId;
     sqInt status;
 
-	fileNameOop = stackObjectValue(2, self);
-	ownerId = stackIntegerValue(1, self);
-	groupId = stackIntegerValue(0, self);
-	if ((failed(self))
-	 || (!(isBytes(fileNameOop, self)))) {
-		return primitiveFailFor(PrimErrBadArgument, self);
+	fileNameOop = stackObjectValue(2, interpreterProxy->interpreterState);
+	ownerId = stackIntegerValue(1, interpreterProxy->interpreterState);
+	groupId = stackIntegerValue(0, interpreterProxy->interpreterState);
+	if ((failed(interpreterProxy->interpreterState))
+	 || (!(isBytes(fileNameOop, interpreterProxy->interpreterState)))) {
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	
 #  if HAVE_CHOWN
 	faSetStPathOop((&faPath), fileNameOop);
-	if (failed(self)) {
-		return primitiveFailureCode();
+	if (failed(interpreterProxy->interpreterState)) {
+		return primitiveFailureCode(interpreterProxy->interpreterState);
 	}
 	status = chown(faGetPlatPath((&faPath)), ownerId, groupId);
 	if (status != 0) {
-		return primitiveFailForOSError(errno);
+		return primitiveFailForOSError(errno, interpreterProxy->interpreterState);
 	}
-	return methodReturnValue(nilObject(), self);
+	return methodReturnValue(nilObject(interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 #  endif /* HAVE_CHOWN */
-	return primitiveFailForOSError(-13 /* unsupportedOperation */);
+	return primitiveFailForOSError(-13 /* unsupportedOperation */, interpreterProxy->interpreterState);
 }
 
 
@@ -578,7 +577,7 @@ primitiveChangeOwner(struct foo * self)
 
 	/* FileAttributesPlugin>>#primitiveClosedir */
 EXPORT(sqInt)
-primitiveClosedir(struct foo * self)
+primitiveClosedir(void)
 {
     void *buffer;
     sqInt dirPointerOop;
@@ -587,37 +586,37 @@ primitiveClosedir(struct foo * self)
     sqInt result;
     sqInt structSize;
 
-	dirPointerOop = stackValue(0, self);
+	dirPointerOop = stackValue(0, interpreterProxy->interpreterState);
 	/* begin structFromObject:size: */
 	structSize = sizeof(FAPathPtr);
-	if (!((stSizeOf(dirPointerOop)) == structSize)) {
-		primitiveFailFor(PrimErrBadArgument, self);
+	if (!((stSizeOf(dirPointerOop, interpreterProxy->interpreterState)) == structSize)) {
+		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 		faPathPtr = ((void *) 0);
 		goto l1;
 	}
 	buffer = alloca(structSize);
 	if (buffer == 0) {
-		primitiveFailFor(PrimErrNoCMemory, self);
+		primitiveFailFor(PrimErrNoCMemory, interpreterProxy->interpreterState);
 	}
 	else {
-		memcpy(buffer, arrayValueOf(dirPointerOop), structSize);
+		memcpy(buffer, arrayValueOf(dirPointerOop, interpreterProxy->interpreterState), structSize);
 	}
 	faPathPtr = buffer;
 	l1:	/* end structFromObject:size: */;
 	if (faPathPtr == 0) {
-		return primitiveFailFor(PrimErrBadArgument, self);
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	if (!(faValidateSessionId((faPathPtr->sessionId)))) {
-		return primitiveFailForOSError(-17 /* badSessionId */);
+		return primitiveFailForOSError(-17 /* badSessionId */, interpreterProxy->interpreterState);
 	}
 	faPath = (faPathPtr->faPath);
 	result = faCloseDirectory(faPath);
 	faInvalidateSessionId(&faPathPtr->sessionId);
 	if (!(result == 0)) {
-		return primitiveFailForOSError(result);
+		return primitiveFailForOSError(result, interpreterProxy->interpreterState);
 	}
 	free(faPath);
-	methodReturnValue(dirPointerOop, self);
+	methodReturnValue(dirPointerOop, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -636,35 +635,35 @@ primitiveClosedir(struct foo * self)
 
 	/* FileAttributesPlugin>>#primitiveFileAttribute */
 EXPORT(sqInt)
-primitiveFileAttribute(struct foo * self)
+primitiveFileAttribute(void)
 {
     sqInt attributeNumber;
     fapath faPath;
     sqInt fileName;
     sqInt resultOop;
 
-	fileName = stackObjectValue(1, self);
-	attributeNumber = stackIntegerValue(0, self);
-	if ((failed(self))
+	fileName = stackObjectValue(1, interpreterProxy->interpreterState);
+	attributeNumber = stackIntegerValue(0, interpreterProxy->interpreterState);
+	if ((failed(interpreterProxy->interpreterState))
 	 || ((!(((attributeNumber >= 1) && (attributeNumber <= 16))))
-	 || (!(isBytes(fileName, self))))) {
-		return primitiveFailFor(PrimErrBadArgument, self);
+	 || (!(isBytes(fileName, interpreterProxy->interpreterState))))) {
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	faSetStPathOop((&faPath), fileName);
-	if (failed(self)) {
-		return primitiveFailureCode();
+	if (failed(interpreterProxy->interpreterState)) {
+		return primitiveFailureCode(interpreterProxy->interpreterState);
 	}
 	resultOop = faFileAttribute((&faPath), attributeNumber);
-	if (failed(self)) {
-		return primitiveFailureCode();
+	if (failed(interpreterProxy->interpreterState)) {
+		return primitiveFailureCode(interpreterProxy->interpreterState);
 	}
 	if (resultOop == 0) {
 
 		/* It shouldn't be possible to get here */
-		primitiveFailForOSError(-14 /* unexpectedError */);
+		primitiveFailForOSError(-14 /* unexpectedError */, interpreterProxy->interpreterState);
 	}
 	else {
-		methodReturnValue(resultOop, self);
+		methodReturnValue(resultOop, interpreterProxy->interpreterState);
 	}
 	return 0;
 }
@@ -681,7 +680,7 @@ primitiveFileAttribute(struct foo * self)
 
 	/* FileAttributesPlugin>>#primitiveFileAttributes */
 EXPORT(sqInt)
-primitiveFileAttributes(struct foo * self)
+primitiveFileAttributes(void)
 {
     sqInt attributeMask;
     fapath faPath;
@@ -692,21 +691,21 @@ primitiveFileAttributes(struct foo * self)
 
 	resultOop = 0;
 	val = 0;
-	fileName = stackObjectValue(1, self);
-	attributeMask = stackIntegerValue(0, self);
-	if ((failed(self))
-	 || (!(isBytes(fileName, self)))) {
-		return primitiveFailFor(PrimErrBadArgument, self);
+	fileName = stackObjectValue(1, interpreterProxy->interpreterState);
+	attributeMask = stackIntegerValue(0, interpreterProxy->interpreterState);
+	if ((failed(interpreterProxy->interpreterState))
+	 || (!(isBytes(fileName, interpreterProxy->interpreterState)))) {
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	faSetStPathOop((&faPath), fileName);
-	if (failed(self)) {
-		return primitiveFailureCode();
+	if (failed(interpreterProxy->interpreterState)) {
+		return primitiveFailureCode(interpreterProxy->interpreterState);
 	}
-	status = attributeArrayformask((&resultOop), (&faPath), attributeMask, self);
+	status = attributeArrayformask((&resultOop), (&faPath), attributeMask);
 	if (status != 0) {
-		return primitiveFailForOSError(status);
+		return primitiveFailForOSError(status, interpreterProxy->interpreterState);
 	}
-	return methodReturnValue(resultOop, self);
+	return methodReturnValue(resultOop, interpreterProxy->interpreterState);
 }
 
 
@@ -714,22 +713,22 @@ primitiveFileAttributes(struct foo * self)
 
 	/* FileAttributesPlugin>>#primitiveFileExists */
 EXPORT(sqInt)
-primitiveFileExists(struct foo * self)
+primitiveFileExists(void)
 {
     fapath faPath;
     sqInt fileNameOop;
     sqInt resultOop;
 
-	fileNameOop = stackObjectValue(0, self);
-	if (!(isBytes(fileNameOop, self))) {
-		return primitiveFailFor(PrimErrBadArgument, self);
+	fileNameOop = stackObjectValue(0, interpreterProxy->interpreterState);
+	if (!(isBytes(fileNameOop, interpreterProxy->interpreterState))) {
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	faSetStPathOop((&faPath), fileNameOop);
-	if (failed(self)) {
-		return primitiveFailureCode();
+	if (failed(interpreterProxy->interpreterState)) {
+		return primitiveFailureCode(interpreterProxy->interpreterState);
 	}
 	resultOop = faExists((&faPath));
-	return methodReturnValue(resultOop, self);
+	return methodReturnValue(resultOop, interpreterProxy->interpreterState);
 }
 
 
@@ -737,26 +736,26 @@ primitiveFileExists(struct foo * self)
 
 	/* FileAttributesPlugin>>#primitiveFileMasks */
 EXPORT(sqInt)
-primitiveFileMasks(struct foo * self)
+primitiveFileMasks(void)
 {
     sqInt masks;
 
-	masks = instantiateClassindexableSize(classArray(self), 8, self);
+	masks = instantiateClassindexableSize(classArray(interpreterProxy->interpreterState), 8, interpreterProxy->interpreterState);
 	if (!(masks)) {
-		return primitiveFailFor(PrimErrNoMemory, self);
+		return primitiveFailFor(PrimErrNoMemory, interpreterProxy->interpreterState);
 	}
-	storePointerofObjectwithValue(0, masks, positive32BitIntegerFor(S_IFMT), self);
+	storePointerofObjectwithValue(0, masks, positive32BitIntegerFor(S_IFMT, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 	
 #  if !(defined(_WIN32))
-	storePointerofObjectwithValue(1, masks, positive32BitIntegerFor(S_IFSOCK), self);
-	storePointerofObjectwithValue(2, masks, positive32BitIntegerFor(S_IFLNK), self);
+	storePointerofObjectwithValue(1, masks, positive32BitIntegerFor(S_IFSOCK, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	storePointerofObjectwithValue(2, masks, positive32BitIntegerFor(S_IFLNK, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 #  endif /* !(defined(_WIN32)) */
-	storePointerofObjectwithValue(3, masks, positive32BitIntegerFor(S_IFREG), self);
-	storePointerofObjectwithValue(4, masks, positive32BitIntegerFor(S_IFBLK), self);
-	storePointerofObjectwithValue(5, masks, positive32BitIntegerFor(S_IFDIR), self);
-	storePointerofObjectwithValue(6, masks, positive32BitIntegerFor(S_IFCHR), self);
-	storePointerofObjectwithValue(7, masks, positive32BitIntegerFor(S_IFIFO), self);
-	popthenPush(1, masks, self);
+	storePointerofObjectwithValue(3, masks, positive32BitIntegerFor(S_IFREG, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	storePointerofObjectwithValue(4, masks, positive32BitIntegerFor(S_IFBLK, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	storePointerofObjectwithValue(5, masks, positive32BitIntegerFor(S_IFDIR, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	storePointerofObjectwithValue(6, masks, positive32BitIntegerFor(S_IFCHR, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	storePointerofObjectwithValue(7, masks, positive32BitIntegerFor(S_IFIFO, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	popthenPush(1, masks, interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -765,7 +764,7 @@ primitiveFileMasks(struct foo * self)
 
 	/* FileAttributesPlugin>>#primitiveLogicalDrives */
 EXPORT(sqInt)
-primitiveLogicalDrives(struct foo * self)
+primitiveLogicalDrives(void)
 {
     unsigned int mask;
 
@@ -773,10 +772,10 @@ primitiveLogicalDrives(struct foo * self)
 #  if defined(_WIN32)
 	mask = GetLogicalDrives();
 	if (mask != 0) {
-		return popthenPush(1, positive32BitIntegerFor(mask));
+		return popthenPush(1, positive32BitIntegerFor(mask, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 	}
 #  endif /* defined(_WIN32) */
-	primitiveFail(self);
+	primitiveFail(interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -788,7 +787,7 @@ primitiveLogicalDrives(struct foo * self)
 
 	/* FileAttributesPlugin>>#primitiveOpendir */
 EXPORT(sqInt)
-primitiveOpendir(struct foo * self)
+primitiveOpendir(void)
 {
     sqInt addressOop;
     unsigned char *addressOopArrayPointer;
@@ -803,35 +802,35 @@ primitiveOpendir(struct foo * self)
 
 
 	/* Process the parameters */
-	dirName = stackObjectValue(0, self);
-	if (!(isBytes(dirName, self))) {
-		return primitiveFailFor(PrimErrBadArgument, self);
+	dirName = stackObjectValue(0, interpreterProxy->interpreterState);
+	if (!(isBytes(dirName, interpreterProxy->interpreterState))) {
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	faPath = (fapath *) calloc(1, sizeof(fapath));
 	if (faPath == null) {
-		return primitiveFailForOSError(-10 /* cantAllocateMemory */);
+		return primitiveFailForOSError(-10 /* cantAllocateMemory */, interpreterProxy->interpreterState);
 	}
 	faSetStDirOop(faPath, dirName);
-	if (failed(self)) {
-		return primitiveFailureCode();
+	if (failed(interpreterProxy->interpreterState)) {
+		return primitiveFailureCode(interpreterProxy->interpreterState);
 	}
 	if (!(canOpenDirectoryStreamForlength(faGetStPath(faPath), faGetStPathLen(faPath)))) {
 		free(faPath);
-		return primitiveFailForOSError(-9 /* cantOpenDir */);
+		return primitiveFailForOSError(-9 /* cantOpenDir */, interpreterProxy->interpreterState);
 	}
 	status = faOpenDirectory(faPath);
 	if (status == 1 /* noMoreData */) {
 		free(faPath);
-		return methodReturnValue(nilObject(), self);
+		return methodReturnValue(nilObject(interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 	}
 	if (status < 0) {
 		free(faPath);
-		return primitiveFailForOSError(status);
+		return primitiveFailForOSError(status, interpreterProxy->interpreterState);
 	}
-	resultOop = processDirectory(faPath, self);
-	if (failed(self)) {
+	resultOop = processDirectory(faPath);
+	if (failed(interpreterProxy->interpreterState)) {
 		free(faPath);
-		return primitiveFailureCode();
+		return primitiveFailureCode(interpreterProxy->interpreterState);
 	}
 	faInitSessionId(&faPathPtr.sessionId);
 	(faPathPtr.faPath = faPath);
@@ -840,35 +839,35 @@ primitiveOpendir(struct foo * self)
 	/* begin objectFromStruct:size: */
 	aMachineAddress = (&faPathPtr);
 	structSize = sizeOfFaPathPtr();
-	addressOop = instantiateClassindexableSize(classByteArray(), structSize, self);
+	addressOop = instantiateClassindexableSize(classByteArray(interpreterProxy->interpreterState), structSize, interpreterProxy->interpreterState);
 	if (!(addressOop)) {
-		dirOop = primitiveFailFor(PrimErrNoMemory, self);
+		dirOop = primitiveFailFor(PrimErrNoMemory, interpreterProxy->interpreterState);
 		goto l1;
 	}
-	addressOopArrayPointer = arrayValueOf(addressOop);
+	addressOopArrayPointer = arrayValueOf(addressOop, interpreterProxy->interpreterState);
 	memcpy(addressOopArrayPointer, aMachineAddress, structSize);
 	dirOop = addressOop;
 	l1:	/* end objectFromStruct:size: */;
 
 #else /* SPURVM */
-	pushRemappableOop(resultOop);
+	pushRemappableOop(resultOop, interpreterProxy->interpreterState);
 	/* begin objectFromStruct:size: */
 	aMachineAddress = (&faPathPtr);
 	structSize = sizeOfFaPathPtr();
-	addressOop = instantiateClassindexableSize(classByteArray(), structSize, self);
+	addressOop = instantiateClassindexableSize(classByteArray(interpreterProxy->interpreterState), structSize, interpreterProxy->interpreterState);
 	if (!(addressOop)) {
-		dirOop = primitiveFailFor(PrimErrNoMemory, self);
+		dirOop = primitiveFailFor(PrimErrNoMemory, interpreterProxy->interpreterState);
 		goto l1;
 	}
-	addressOopArrayPointer = arrayValueOf(addressOop);
+	addressOopArrayPointer = arrayValueOf(addressOop, interpreterProxy->interpreterState);
 	memcpy(addressOopArrayPointer, aMachineAddress, structSize);
 	dirOop = addressOop;
 	l1:	/* end objectFromStruct:size: */;
-	resultOop = popRemappableOop()
+	resultOop = popRemappableOop(interpreterProxy->interpreterState)
 #endif /* SPURVM */
 ;
-	return (storePointerofObjectwithValue(2, resultOop, dirOop, self),
-		methodReturnValue(resultOop, self));
+	return (storePointerofObjectwithValue(2, resultOop, dirOop, interpreterProxy->interpreterState),
+		methodReturnValue(resultOop, interpreterProxy->interpreterState));
 }
 
 
@@ -876,9 +875,9 @@ primitiveOpendir(struct foo * self)
 
 	/* FileAttributesPlugin>>#primitivePathMax */
 EXPORT(sqInt)
-primitivePathMax(struct foo * self)
+primitivePathMax(void)
 {
-	return popthenPush(1, integerObjectOf(FA_PATH_MAX), self);
+	return popthenPush(1, integerObjectOf(FA_PATH_MAX, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 }
 
 
@@ -888,29 +887,29 @@ primitivePathMax(struct foo * self)
 
 	/* FileAttributesPlugin>>#primitivePlatToStPath */
 EXPORT(sqInt)
-primitivePlatToStPath(struct foo * self)
+primitivePlatToStPath(void)
 {
     unsigned char *byteArrayPtr;
     fapath faPath;
     sqInt fileName;
     sqInt resultOop;
 
-	fileName = stackObjectValue(0, self);
-	if ((failed(self))
-	 || (!(isBytes(fileName, self)))) {
-		return primitiveFailFor(PrimErrBadArgument, self);
+	fileName = stackObjectValue(0, interpreterProxy->interpreterState);
+	if ((failed(interpreterProxy->interpreterState))
+	 || (!(isBytes(fileName, interpreterProxy->interpreterState)))) {
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	faSetPlatPathOop((&faPath), fileName);
-	if (failed(self)) {
-		return primitiveFailureCode();
+	if (failed(interpreterProxy->interpreterState)) {
+		return primitiveFailureCode(interpreterProxy->interpreterState);
 	}
-	resultOop = instantiateClassindexableSize(classByteArray(), faGetStPathLen((&faPath)), self);
+	resultOop = instantiateClassindexableSize(classByteArray(interpreterProxy->interpreterState), faGetStPathLen((&faPath)), interpreterProxy->interpreterState);
 	if (!(resultOop)) {
-		return primitiveFailFor(PrimErrNoMemory, self);
+		return primitiveFailFor(PrimErrNoMemory, interpreterProxy->interpreterState);
 	}
-	byteArrayPtr = arrayValueOf(resultOop);
+	byteArrayPtr = arrayValueOf(resultOop, interpreterProxy->interpreterState);
 	memcpy(byteArrayPtr, faGetStPath((&faPath)), faGetStPathLen((&faPath)));
-	return methodReturnValue(resultOop, self);
+	return methodReturnValue(resultOop, interpreterProxy->interpreterState);
 }
 
 
@@ -921,7 +920,7 @@ primitivePlatToStPath(struct foo * self)
 
 	/* FileAttributesPlugin>>#primitiveReaddir */
 EXPORT(sqInt)
-primitiveReaddir(struct foo * self)
+primitiveReaddir(void)
 {
     void *buffer;
     sqInt dirPointerOop;
@@ -931,41 +930,41 @@ primitiveReaddir(struct foo * self)
     sqInt status;
     sqInt structSize;
 
-	dirPointerOop = stackValue(0, self);
+	dirPointerOop = stackValue(0, interpreterProxy->interpreterState);
 	/* begin structFromObject:size: */
 	structSize = sizeof(FAPathPtr);
-	if (!((stSizeOf(dirPointerOop)) == structSize)) {
-		primitiveFailFor(PrimErrBadArgument, self);
+	if (!((stSizeOf(dirPointerOop, interpreterProxy->interpreterState)) == structSize)) {
+		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 		faPathPtr = ((void *) 0);
 		goto l1;
 	}
 	buffer = alloca(structSize);
 	if (buffer == 0) {
-		primitiveFailFor(PrimErrNoCMemory, self);
+		primitiveFailFor(PrimErrNoCMemory, interpreterProxy->interpreterState);
 	}
 	else {
-		memcpy(buffer, arrayValueOf(dirPointerOop), structSize);
+		memcpy(buffer, arrayValueOf(dirPointerOop, interpreterProxy->interpreterState), structSize);
 	}
 	faPathPtr = buffer;
 	l1:	/* end structFromObject:size: */;
 	if (faPathPtr == 0) {
-		return primitiveFailFor(PrimErrBadArgument, self);
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	if (!(faValidateSessionId((faPathPtr->sessionId)))) {
-		return primitiveFailForOSError(-17 /* badSessionId */);
+		return primitiveFailForOSError(-17 /* badSessionId */, interpreterProxy->interpreterState);
 	}
 	faPath = (faPathPtr->faPath);
 	status = faReadDirectory(faPath);
 	if (status == 1 /* noMoreData */) {
-		return methodReturnValue(nilObject(), self);
+		return methodReturnValue(nilObject(interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 	}
 	if (status < 0) {
-		return primitiveFailForOSError(status);
+		return primitiveFailForOSError(status, interpreterProxy->interpreterState);
 	}
 
 	/* no need to check the status of #processDirectory: as it will have flagged an error with interpreterProxy */
-	resultArray = processDirectory(faPath, self);
-	return methodReturnValue(resultArray, self);
+	resultArray = processDirectory(faPath);
+	return methodReturnValue(resultArray, interpreterProxy->interpreterState);
 }
 
 
@@ -973,7 +972,7 @@ primitiveReaddir(struct foo * self)
 
 	/* FileAttributesPlugin>>#primitiveRewinddir */
 EXPORT(sqInt)
-primitiveRewinddir(struct foo * self)
+primitiveRewinddir(void)
 {
     void *buffer;
     sqInt dirPointerOop;
@@ -983,38 +982,38 @@ primitiveRewinddir(struct foo * self)
     sqInt status;
     sqInt structSize;
 
-	dirPointerOop = stackValue(0, self);
+	dirPointerOop = stackValue(0, interpreterProxy->interpreterState);
 	/* begin structFromObject:size: */
 	structSize = sizeof(FAPathPtr);
-	if (!((stSizeOf(dirPointerOop)) == structSize)) {
-		primitiveFailFor(PrimErrBadArgument, self);
+	if (!((stSizeOf(dirPointerOop, interpreterProxy->interpreterState)) == structSize)) {
+		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 		faPathPtr = ((void *) 0);
 		goto l1;
 	}
 	buffer = alloca(structSize);
 	if (buffer == 0) {
-		primitiveFailFor(PrimErrNoCMemory, self);
+		primitiveFailFor(PrimErrNoCMemory, interpreterProxy->interpreterState);
 	}
 	else {
-		memcpy(buffer, arrayValueOf(dirPointerOop), structSize);
+		memcpy(buffer, arrayValueOf(dirPointerOop, interpreterProxy->interpreterState), structSize);
 	}
 	faPathPtr = buffer;
 	l1:	/* end structFromObject:size: */;
 	if (faPathPtr == 0) {
-		return primitiveFailFor(PrimErrBadArgument, self);
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	if (!(faValidateSessionId((faPathPtr->sessionId)))) {
-		return primitiveFailForOSError(-17 /* badSessionId */);
+		return primitiveFailForOSError(-17 /* badSessionId */, interpreterProxy->interpreterState);
 	}
 	faPath = (faPathPtr->faPath);
 	status = faRewindDirectory(faPath);
 	if (status < 0) {
-		return primitiveFailForOSError(status);
+		return primitiveFailForOSError(status, interpreterProxy->interpreterState);
 	}
 
 	/* no need to check the status of #processDirectory: as it will have flagged an error with interpreterProxy */
-	resultOop = processDirectory(faPath, self);
-	return methodReturnValue(resultOop, self);
+	resultOop = processDirectory(faPath);
+	return methodReturnValue(resultOop, interpreterProxy->interpreterState);
 }
 
 
@@ -1024,29 +1023,29 @@ primitiveRewinddir(struct foo * self)
 
 	/* FileAttributesPlugin>>#primitiveStToPlatPath */
 EXPORT(sqInt)
-primitiveStToPlatPath(struct foo * self)
+primitiveStToPlatPath(void)
 {
     unsigned char *byteArrayPtr;
     fapath faPath;
     sqInt fileName;
     sqInt resultOop;
 
-	fileName = stackObjectValue(0, self);
-	if ((failed(self))
-	 || (!(isBytes(fileName, self)))) {
-		return primitiveFailFor(PrimErrBadArgument, self);
+	fileName = stackObjectValue(0, interpreterProxy->interpreterState);
+	if ((failed(interpreterProxy->interpreterState))
+	 || (!(isBytes(fileName, interpreterProxy->interpreterState)))) {
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	faSetStPathOop((&faPath), fileName);
-	if (failed(self)) {
-		return primitiveFailureCode();
+	if (failed(interpreterProxy->interpreterState)) {
+		return primitiveFailureCode(interpreterProxy->interpreterState);
 	}
-	resultOop = instantiateClassindexableSize(classByteArray(), faGetPlatPathByteCount((&faPath)), self);
+	resultOop = instantiateClassindexableSize(classByteArray(interpreterProxy->interpreterState), faGetPlatPathByteCount((&faPath)), interpreterProxy->interpreterState);
 	if (!(resultOop)) {
-		return primitiveFailFor(PrimErrNoMemory, self);
+		return primitiveFailFor(PrimErrNoMemory, interpreterProxy->interpreterState);
 	}
-	byteArrayPtr = arrayValueOf(resultOop);
+	byteArrayPtr = arrayValueOf(resultOop, interpreterProxy->interpreterState);
 	memcpy(byteArrayPtr, faGetPlatPath((&faPath)), faGetPlatPathByteCount((&faPath)));
-	return methodReturnValue(resultOop, self);
+	return methodReturnValue(resultOop, interpreterProxy->interpreterState);
 }
 
 
@@ -1054,7 +1053,7 @@ primitiveStToPlatPath(struct foo * self)
 
 	/* FileAttributesPlugin>>#primitiveSymlinkChangeOwner */
 EXPORT(sqInt)
-primitiveSymlinkChangeOwner(struct foo * self)
+primitiveSymlinkChangeOwner(void)
 {
     fapath faPath;
     sqInt fileNameOop;
@@ -1062,26 +1061,26 @@ primitiveSymlinkChangeOwner(struct foo * self)
     sqInt ownerId;
     sqInt status;
 
-	fileNameOop = stackObjectValue(2, self);
-	ownerId = stackIntegerValue(1, self);
-	groupId = stackIntegerValue(0, self);
-	if ((failed(self))
-	 || (!(isBytes(fileNameOop, self)))) {
-		return primitiveFailFor(PrimErrBadArgument, self);
+	fileNameOop = stackObjectValue(2, interpreterProxy->interpreterState);
+	ownerId = stackIntegerValue(1, interpreterProxy->interpreterState);
+	groupId = stackIntegerValue(0, interpreterProxy->interpreterState);
+	if ((failed(interpreterProxy->interpreterState))
+	 || (!(isBytes(fileNameOop, interpreterProxy->interpreterState)))) {
+		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
 	}
 	
 #  if HAVE_CHOWN
 	faSetStPathOop((&faPath), fileNameOop);
-	if (failed(self)) {
-		return primitiveFailureCode();
+	if (failed(interpreterProxy->interpreterState)) {
+		return primitiveFailureCode(interpreterProxy->interpreterState);
 	}
 	status = lchown(faGetPlatPath((&faPath)), ownerId, groupId);
 	if (status != 0) {
-		return primitiveFailForOSError(errno);
+		return primitiveFailForOSError(errno, interpreterProxy->interpreterState);
 	}
-	return methodReturnValue(nilObject(), self);
+	return methodReturnValue(nilObject(interpreterProxy->interpreterState), interpreterProxy->interpreterState);
 #  endif /* HAVE_CHOWN */
-	return primitiveFailForOSError(-13 /* unsupportedOperation */);
+	return primitiveFailForOSError(-13 /* unsupportedOperation */, interpreterProxy->interpreterState);
 }
 
 
@@ -1089,9 +1088,9 @@ primitiveSymlinkChangeOwner(struct foo * self)
 
 	/* FileAttributesPlugin>>#primitiveVersionString */
 EXPORT(sqInt)
-primitiveVersionString(struct foo * self)
+primitiveVersionString(void)
 {
-	popthenPush(1, stringFromCString("2.0.8", self), self);
+	popthenPush(1, stringFromCString("2.0.8"), interpreterProxy->interpreterState);
 	return 0;
 }
 
@@ -1104,7 +1103,7 @@ primitiveVersionString(struct foo * self)
 
 	/* FileAttributesPlugin>>#processDirectory: */
 static sqInt
-processDirectory(fapath *faPath, struct foo * self)
+processDirectory(fapath *faPath)
 {
     sqInt attributeArray;
     sqInt entryName;
@@ -1117,36 +1116,36 @@ processDirectory(fapath *faPath, struct foo * self)
 	val = 0;
 	status = faCharToByteArray(faGetStFile(faPath), (&entryName));
 	if (status != 0) {
-		return primitiveFailForOSError(status);
+		return primitiveFailForOSError(status, interpreterProxy->interpreterState);
 	}
 
 	/* If the stat() fails, still return the filename, just no attributes */
-	status = attributeArrayformask((&attributeArray), faPath, 1, self);
+	status = attributeArrayformask((&attributeArray), faPath, 1);
 	if (status != 0) {
 		if (status == -3 /* cantStatPath */) {
-			attributeArray = nilObject();
+			attributeArray = nilObject(interpreterProxy->interpreterState);
 		}
 		else {
-			return primitiveFailForOSError(status);
+			return primitiveFailForOSError(status, interpreterProxy->interpreterState);
 		}
 	}
 	
 #if SPURVM
-	resultArray = instantiateClassindexableSize(classArray(self), 3, self);
+	resultArray = instantiateClassindexableSize(classArray(interpreterProxy->interpreterState), 3, interpreterProxy->interpreterState);
 
 #else /* SPURVM */
-	pushRemappableOop(entryName);
-	pushRemappableOop(attributeArray);
-	resultArray = instantiateClassindexableSize(classArray(self), 3, self);
-	attributeArray = popRemappableOop();
-	entryName = popRemappableOop()
+	pushRemappableOop(entryName, interpreterProxy->interpreterState);
+	pushRemappableOop(attributeArray, interpreterProxy->interpreterState);
+	resultArray = instantiateClassindexableSize(classArray(interpreterProxy->interpreterState), 3, interpreterProxy->interpreterState);
+	attributeArray = popRemappableOop(interpreterProxy->interpreterState);
+	entryName = popRemappableOop(interpreterProxy->interpreterState)
 #endif /* SPURVM */
 ;
 	if (!(resultArray)) {
-		return primitiveFailFor(PrimErrNoMemory, self);
+		return primitiveFailFor(PrimErrNoMemory, interpreterProxy->interpreterState);
 	}
-	storePointerofObjectwithValue(0, resultArray, entryName, self);
-	storePointerofObjectwithValue(1, resultArray, attributeArray, self);
+	storePointerofObjectwithValue(0, resultArray, entryName, interpreterProxy->interpreterState);
+	storePointerofObjectwithValue(1, resultArray, attributeArray, interpreterProxy->interpreterState);
 	return resultArray;
 }
 
@@ -1258,17 +1257,17 @@ sizeOfFaPathPtr(void)
 
 	/* FileAttributesPlugin>>#stringFromCString: */
 static sqInt
-stringFromCString(const char *aCString, struct foo * self)
+stringFromCString(const char *aCString)
 {
     sqInt len;
     sqInt newString;
 
 	len = strlen(aCString);
-	newString = instantiateClassindexableSize(classString(), len, self);
+	newString = instantiateClassindexableSize(classString(interpreterProxy->interpreterState), len, interpreterProxy->interpreterState);
 	if (!(newString)) {
-		return primitiveFailFor(PrimErrNoMemory, self);
+		return primitiveFailFor(PrimErrNoMemory, interpreterProxy->interpreterState);
 	}
-	strncpy(arrayValueOf(newString), aCString, len);
+	strncpy(arrayValueOf(newString, interpreterProxy->interpreterState), aCString, len);
 	return newString;
 }
 

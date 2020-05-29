@@ -50,11 +50,12 @@
 typedef struct _VMCallbackContext *vmccp;
 #endif
 
-struct foo;
-
 typedef sqInt (*CompilerHook)();
 
+struct foo;
+
 typedef struct VirtualMachine {
+
 
 	struct foo* interpreterState;
 	sqInt (*minorVersion)(void);
@@ -75,14 +76,14 @@ typedef struct VirtualMachine {
 
 	/* InterpreterProxy methodsFor: 'object access' */
 
-	sqInt  (*argumentCountOf)(sqInt methodPointer);
+	sqInt  (*argumentCountOf)(sqInt methodPointer, struct foo * self);
 	void  *(*arrayValueOf)(sqInt oop, struct foo * self);
 	sqInt  (*byteSizeOf)(sqInt oop, struct foo * self);
-	void  *(*fetchArrayofObject)(sqInt fieldIndex, sqInt objectPointer);
-	sqInt  (*fetchClassOf)(sqInt oop);
+	void  *(*fetchArrayofObject)(sqInt fieldIndex, sqInt objectPointer, struct foo * self);
+	sqInt  (*fetchClassOf)(sqInt oop, struct foo * self);
 	double (*fetchFloatofObject)(sqInt fieldIndex, sqInt objectPointer, struct foo * self);
 	sqInt  (*fetchIntegerofObject)(sqInt fieldIndex, sqInt objectPointer, struct foo * self);
-	sqInt  (*fetchPointerofObject)(sqInt fieldIndex, sqInt oop);
+	sqInt  (*fetchPointerofObject)(sqInt fieldIndex, sqInt oop, struct foo * self);
 /*  sqInt  (*fetchWordofObject)(sqInt fieldFieldIndex, sqInt oop); *
  * has been rescinded as of VMMaker 3.8 and the 64bitclean VM      *
  * work. To support old plugins we keep a valid function in        *
@@ -90,94 +91,94 @@ typedef struct VirtualMachine {
  * something utterly horrible to scare off the natives. A new      *
  * equivalent but 64 bit valid function is added as                *
  * 'fetchLong32OfObject'                                           */
-	sqInt  (*obsoleteDontUseThisFetchWordofObject)(sqInt fieldFieldIndex, sqInt oop);
-	void  *(*firstFixedField)(sqInt oop);
-	void  *(*firstIndexableField)(sqInt oop);
-	sqInt  (*literalofMethod)(sqInt offset, sqInt methodPointer);
-	sqInt  (*literalCountOf)(sqInt methodPointer);
+	sqInt  (*obsoleteDontUseThisFetchWordofObject)(sqInt fieldFieldIndex, sqInt oop, struct foo * self);
+	void  *(*firstFixedField)(sqInt oop, struct foo * self);
+	void  *(*firstIndexableField)(sqInt oop, struct foo * self);
+	sqInt  (*literalofMethod)(sqInt offset, sqInt methodPointer, struct foo * self);
+	sqInt  (*literalCountOf)(sqInt methodPointer, struct foo * self);
 	sqInt  (*methodArgumentCount)(struct foo * self);
-	sqInt  (*methodPrimitiveIndex)(void);
-	sqInt  (*primitiveIndexOf)(sqInt methodPointer);
-	sqInt  (*sizeOfSTArrayFromCPrimitive)(void *cPtr);
-	sqInt  (*slotSizeOf)(sqInt oop);
-	sqInt  (*stObjectat)(sqInt array, sqInt fieldIndex);
-	sqInt  (*stObjectatput)(sqInt array, sqInt fieldIndex, sqInt value);
-	sqInt  (*stSizeOf)(sqInt oop);
-	sqInt  (*storeIntegerofObjectwithValue)(sqInt fieldIndex, sqInt oop, sqInt integer);
+	sqInt  (*methodPrimitiveIndex)(struct foo * self);
+	sqInt  (*primitiveIndexOf)(sqInt methodPointer, struct foo * self);
+	sqInt  (*sizeOfSTArrayFromCPrimitive)(void *cPtr, struct foo * self);
+	sqInt  (*slotSizeOf)(sqInt oop, struct foo * self);
+	sqInt  (*stObjectat)(sqInt array, sqInt fieldIndex, struct foo * self);
+	sqInt  (*stObjectatput)(sqInt array, sqInt fieldIndex, sqInt value, struct foo * self);
+	sqInt  (*stSizeOf)(sqInt oop, struct foo * self);
+	sqInt  (*storeIntegerofObjectwithValue)(sqInt fieldIndex, sqInt oop, sqInt integer, struct foo * self);
 	sqInt  (*storePointerofObjectwithValue)(sqInt fieldIndex, sqInt oop, sqInt valuePointer, struct foo * self);
 
 	/* InterpreterProxy methodsFor: 'testing' */
 
-	sqInt (*isKindOf)(sqInt oop, char *aString);
-	sqInt (*isMemberOf)(sqInt oop, char *aString);
+	sqInt (*isKindOf)(sqInt oop, char *aString, struct foo * self);
+	sqInt (*isMemberOf)(sqInt oop, char *aString, struct foo * self);
 	sqInt (*isBytes)(sqInt oop, struct foo * self);
-	sqInt (*isFloatObject)(sqInt oop);
-	sqInt (*isIndexable)(sqInt oop);
-	sqInt (*isIntegerObject)(sqInt oop);
-	sqInt (*isIntegerValue)(sqInt intValue);
-	sqInt (*isPointers)(sqInt oop);
-	sqInt (*isWeak)(sqInt oop);
-	sqInt (*isWords)(sqInt oop);
-	sqInt (*isWordsOrBytes)(sqInt oop);
+	sqInt (*isFloatObject)(sqInt oop, struct foo * self);
+	sqInt (*isIndexable)(sqInt oop, struct foo * self);
+	sqInt (*isIntegerObject)(sqInt oop, struct foo * self);
+	sqInt (*isIntegerValue)(sqInt intValue, struct foo * self);
+	sqInt (*isPointers)(sqInt oop, struct foo * self);
+	sqInt (*isWeak)(sqInt oop, struct foo * self);
+	sqInt (*isWords)(sqInt oop, struct foo * self);
+	sqInt (*isWordsOrBytes)(sqInt oop, struct foo * self);
 
 	/* InterpreterProxy methodsFor: 'converting' */
 
 	sqInt  (*booleanValueOf)(sqInt obj, struct foo * self);
-	sqInt  (*checkedIntegerValueOf)(sqInt intOop);
-	sqInt  (*floatObjectOf)(double aFloat);
-	double (*floatValueOf)(sqInt oop);
-	sqInt  (*integerObjectOf)(sqInt value);
-	sqInt  (*integerValueOf)(sqInt oop);
-	sqInt  (*positive32BitIntegerFor)(unsigned int integerValue);
-	usqInt (*positive32BitValueOf)(sqInt oop);
+	sqInt  (*checkedIntegerValueOf)(sqInt intOop, struct foo * self);
+	sqInt  (*floatObjectOf)(double aFloat, struct foo * self);
+	double (*floatValueOf)(sqInt oop, struct foo * self);
+	sqInt  (*integerObjectOf)(sqInt value, struct foo * self);
+	sqInt  (*integerValueOf)(sqInt oop, struct foo * self);
+	sqInt  (*positive32BitIntegerFor)(unsigned int integerValue, struct foo * self);
+	usqInt (*positive32BitValueOf)(sqInt oop, struct foo * self);
 
 	/* InterpreterProxy methodsFor: 'special objects' */
 
-	sqInt (*characterTable)(void);
-	sqInt (*displayObject)(void);
+	sqInt (*characterTable)(struct foo * self);
+	sqInt (*displayObject)(struct foo * self);
 	sqInt (*falseObject)(struct foo * self);
 	sqInt (*nilObject)(struct foo * self);
 	sqInt (*trueObject)(struct foo * self);
 
 	/* InterpreterProxy methodsFor: 'special classes' */
 
-	sqInt (*classArray)(void);
+	sqInt (*classArray)(struct foo * self);
 	sqInt (*classBitmap)(struct foo * self);
-	sqInt (*classByteArray)(void);
-	sqInt (*classCharacter)(void);
-	sqInt (*classFloat)(void);
-	sqInt (*classLargePositiveInteger)(void);
+	sqInt (*classByteArray)(struct foo * self);
+	sqInt (*classCharacter)(struct foo * self);
+	sqInt (*classFloat)(struct foo * self);
+	sqInt (*classLargePositiveInteger)(struct foo * self);
 	sqInt (*classPoint)(struct foo * self);
-	sqInt (*classSemaphore)(void);
-	sqInt (*classSmallInteger)(void);
-	sqInt (*classString)(void);
+	sqInt (*classSemaphore)(struct foo * self);
+	sqInt (*classSmallInteger)(struct foo * self);
+	sqInt (*classString)(struct foo * self);
 
 	/* InterpreterProxy methodsFor: 'instance creation' */
 
-	sqInt (*clone)(sqInt oop);
-	sqInt (*instantiateClassindexableSize)(sqInt classPointer, sqInt size);
-	sqInt (*makePointwithxValueyValue)(sqInt xValue, sqInt yValue);
-	sqInt (*popRemappableOop)(void);
-	sqInt (*pushRemappableOop)(sqInt oop);
+	sqInt (*clone)(sqInt oop, struct foo * self);
+	sqInt (*instantiateClassindexableSize)(sqInt classPointer, sqInt size, struct foo * self);
+	sqInt (*makePointwithxValueyValue)(sqInt xValue, sqInt yValue, struct foo * self);
+	sqInt (*popRemappableOop)(struct foo * self);
+	sqInt (*pushRemappableOop)(sqInt oop, struct foo * self);
 
 	/* InterpreterProxy methodsFor: 'other' */
 
-	sqInt (*becomewith)(sqInt array1, sqInt array2);
-	sqInt (*byteSwapped)(sqInt w);
+	sqInt (*becomewith)(sqInt array1, sqInt array2, struct foo * self);
+	sqInt (*byteSwapped)(sqInt w, struct foo * self);
 	sqInt (*failed)(struct foo * self);
-	sqInt (*fullDisplayUpdate)(void);
-	void (*fullGC)(void);
-	void (*incrementalGC)(void);
-	sqInt (*primitiveFail)(void);
+	sqInt (*fullDisplayUpdate)(struct foo * self);
+	void (*fullGC)(struct foo * self);
+	void (*incrementalGC)(struct foo * self);
+	sqInt (*primitiveFail)(struct foo * self);
 	sqInt (*showDisplayBitsLeftTopRightBottom)(sqInt aForm, sqInt l, sqInt t, sqInt r, sqInt b, struct foo * self);
 	sqInt (*signalSemaphoreWithIndex)(sqInt semaIndex);
 	sqInt (*success)(sqInt aBoolean, struct foo * self);
-	sqInt (*superclassOf)(sqInt classPointer);
+	sqInt (*superclassOf)(sqInt classPointer, struct foo * self);
 
 # if VM_PROXY_MINOR > 13
 	/* Reuse these now that Cog provides a production JIT. */
 	sqInt (*statNumGCs)(struct foo * self);
-	sqInt (*stringForCString)(char *nullTerminatedCString);
+	sqInt (*stringForCString)(char *nullTerminatedCString, struct foo * self);
 # else
 	/* InterpreterProxy methodsFor: 'compiler' */
 
@@ -189,18 +190,18 @@ typedef struct VirtualMachine {
 
 	/* InterpreterProxy methodsFor: 'BitBlt support' */
 
-	sqInt (*loadBitBltFrom)(sqInt bbOop);
-	sqInt (*copyBits)(void);
-	sqInt (*copyBitsFromtoat)(sqInt leftX, sqInt rightX, sqInt yValue);
+	sqInt (*loadBitBltFrom)(sqInt bbOop, struct foo * self);
+	sqInt (*copyBits)(struct foo * self);
+	sqInt (*copyBitsFromtoat)(sqInt leftX, sqInt rightX, sqInt yValue, struct foo * self);
 
 #endif
 
 #if VM_PROXY_MINOR > 2
 
-	sqInt (*classLargeNegativeInteger)(void);
-	sqInt (*signed32BitIntegerFor)(sqInt integerValue);
-	int   (*signed32BitValueOf)(sqInt oop);
-	sqInt (*includesBehaviorThatOf)(sqInt aClass, sqInt aSuperClass);
+	sqInt (*classLargeNegativeInteger)(struct foo * self);
+	sqInt (*signed32BitIntegerFor)(sqInt integerValue, struct foo * self);
+	int   (*signed32BitValueOf)(sqInt oop, struct foo * self);
+	sqInt (*includesBehaviorThatOf)(sqInt aClass, sqInt aSuperClass, struct foo * self);
 	sqInt (*primitiveMethod)(struct foo * self);
 
 	/* InterpreterProxy methodsFor: 'FFI support' */
@@ -236,22 +237,22 @@ typedef struct VirtualMachine {
 #  endif
 
 	sqInt  (*positive64BitIntegerFor)(usqLong integerValue, struct foo * self);
-	usqLong(*positive64BitValueOf)(sqInt oop);
-	sqInt  (*signed64BitIntegerFor)(sqLong integerValue);
-	sqLong (*signed64BitValueOf)(sqInt oop);
+	usqLong(*positive64BitValueOf)(sqInt oop, struct foo * self);
+	sqInt  (*signed64BitIntegerFor)(sqLong integerValue, struct foo * self);
+	sqLong (*signed64BitValueOf)(sqInt oop, struct foo * self);
 
 #endif
 
 #if VM_PROXY_MINOR > 5
-	sqInt (*isArray)(sqInt oop);
-	void (*forceInterruptCheck)(void);
+	sqInt (*isArray)(sqInt oop, struct foo * self);
+	void (*forceInterruptCheck)(struct foo * self);
 #endif
 
 #if VM_PROXY_MINOR > 6
-	sqInt  (*fetchLong32ofObject)(sqInt fieldFieldIndex, sqInt oop);
-	sqInt  (*getThisSessionID)(void);
-	sqInt  (*ioFilenamefromStringofLengthresolveAliases)(char* aCharBuffer, char* filenameIndex, sqInt filenameLength, sqInt resolveFlag);
-	sqInt  (*vmEndianness)(void);	
+	sqInt  (*fetchLong32ofObject)(sqInt fieldFieldIndex, sqInt oop, struct foo * self);
+	sqInt  (*getThisSessionID)(struct foo * self);
+	sqInt  (*ioFilenamefromStringofLengthresolveAliases)(char* aCharBuffer, char* filenameIndex, sqInt filenameLength, sqInt resolveFlag, struct foo * self);
+	sqInt  (*vmEndianness)(struct foo * self);	
 #endif
 
 #if VM_PROXY_MINOR > 7
@@ -262,49 +263,49 @@ typedef struct VirtualMachine {
        callbackID: Pointer to a location receiving the callback ID
                    used in callbackLeave
      Returns: True if successful, false otherwise */
-  sqInt (*callbackEnter)(sqInt *callbackID);
+  sqInt (*callbackEnter)(sqInt *callbackID, struct foo * self);
 
   /* callbackLeave: Leave the interpreter from a previous callback
      Arguments:
        callbackID: The ID of the callback received from callbackEnter()
      Returns: True if succcessful, false otherwise. */
-  sqInt (*callbackLeave)(sqInt  callbackID);
+  sqInt (*callbackLeave)(sqInt  callbackID, struct foo * self);
 
   /* addGCRoot: Add a variable location to the garbage collector.
      The contents of the variable location will be updated accordingly.
      Arguments:
        varLoc: Pointer to the variable location
      Returns: True if successful, false otherwise. */
-  sqInt (*addGCRoot)(sqInt *varLoc);
+  sqInt (*addGCRoot)(sqInt *varLoc, struct foo * self);
 
   /* removeGCRoot: Remove a variable location from the garbage collector.
      Arguments:
        varLoc: Pointer to the variable location
      Returns: True if successful, false otherwise.
   */
-  sqInt (*removeGCRoot)(sqInt *varLoc);
+  sqInt (*removeGCRoot)(sqInt *varLoc, struct foo * self);
 #endif
 
 #if VM_PROXY_MINOR > 8
 	/* See interp.h and above for standard error codes. */
 	sqInt  (*primitiveFailFor)(sqInt code, struct foo * self);
 	void (*(*setInterruptCheckChain)(void (*aFunction)(void)))();
-	sqInt  (*classAlien)(void);
-	sqInt  (*classUnsafeAlien)(void);
-	sqInt  (*sendInvokeCallbackStackRegistersJmpbuf)(sqInt thunkPtrAsInt, sqInt stackPtrAsInt, sqInt regsPtrAsInt, sqInt jmpBufPtrAsInt);
-	sqInt  (*reestablishContextPriorToCallback)(sqInt callbackContext);
-	sqInt *(*getStackPointer)(void);
-	sqInt  (*isOopImmutable)(sqInt oop);
-	sqInt  (*isOopMutable)(sqInt oop);
+	sqInt  (*classAlien)(struct foo * self);
+	sqInt  (*classUnsafeAlien)(struct foo * self);
+	sqInt  (*sendInvokeCallbackStackRegistersJmpbuf)(sqInt thunkPtrAsInt, sqInt stackPtrAsInt, sqInt regsPtrAsInt, sqInt jmpBufPtrAsInt, struct foo * self);
+	sqInt  (*reestablishContextPriorToCallback)(sqInt callbackContext, struct foo * self);
+	sqInt *(*getStackPointer)(struct foo * self);
+	sqInt  (*isOopImmutable)(sqInt oop, struct foo * self);
+	sqInt  (*isOopMutable)(sqInt oop, struct foo * self);
 #endif
 
 #if VM_PROXY_MINOR > 9
 # if VM_PROXY_MINOR > 13 /* OS Errors available in primitives; easy return forms */
-  sqInt  (*methodReturnBool)(sqInt);
-  sqInt  (*methodReturnFloat)(double);
-  sqInt  (*methodReturnInteger)(sqInt);
-  sqInt  (*methodReturnString)(char *);
-#	define returnSelf() methodReturnValue(0, self)
+  sqInt  (*methodReturnBool)(sqInt, struct foo * self);
+  sqInt  (*methodReturnFloat)(double, struct foo * self);
+  sqInt  (*methodReturnInteger)(sqInt, struct foo * self);
+  sqInt  (*methodReturnString)(char *, struct foo * self);
+#	define returnSelf() methodReturnValue(0)
 # else
   sqInt  (*methodArg)  (sqInt index); /* These ended up never being used. */
   sqInt  (*objectArg)  (sqInt index);
@@ -312,7 +313,7 @@ typedef struct VirtualMachine {
   double (*floatArg)   (sqInt index);
 # endif
   sqInt  (*methodReturnValue) (sqInt oop, struct foo * self);
-  sqInt  (*topRemappableOop)  (void);
+  sqInt  (*topRemappableOop)  (struct foo * self);
 #endif
 
 #if VM_PROXY_MINOR > 10
@@ -324,56 +325,56 @@ typedef struct VirtualMachine {
   void  (*addHighPriorityTickee)(void (*ticker)(void), unsigned periodms);
   void  (*addSynchronousTickee)(void (*ticker)(void), unsigned periodms, unsigned roundms);
   volatile usqLong (*utcMicroseconds)(void);
-  void (*tenuringIncrementalGC)(void);
-  sqInt (*isYoung) (sqInt anOop);
-  sqInt (*isKindOfClass)(sqInt oop, sqInt aClass);
-  sqInt (*primitiveErrorTable)(void);
-  sqInt (*primitiveFailureCode)(void);
-  sqInt (*instanceSizeOf)(sqInt aClass);
+  void (*tenuringIncrementalGC)(struct foo * self);
+  sqInt (*isYoung) (sqInt anOop, struct foo * self);
+  sqInt (*isKindOfClass)(sqInt oop, sqInt aClass, struct foo * self);
+  sqInt (*primitiveErrorTable)(struct foo * self);
+  sqInt (*primitiveFailureCode)(struct foo * self);
+  sqInt (*instanceSizeOf)(sqInt aClass, struct foo * self);
 #endif
 
 #if VM_PROXY_MINOR > 11
 /* VMCallbackContext opaque type avoids all including setjmp.h & vmCallback.h */
-  sqInt (*sendInvokeCallbackContext)(vmccp);
-  sqInt (*returnAsThroughCallbackContext)(int, vmccp, sqInt);
-  sqIntptr_t  (*signedMachineIntegerValueOf)(sqInt);
-  sqIntptr_t  (*stackSignedMachineIntegerValue)(sqInt);
-  usqIntptr_t (*positiveMachineIntegerValueOf)(sqInt);
-  usqIntptr_t (*stackPositiveMachineIntegerValue)(sqInt);
-  sqInt	 (*getInterruptPending)(void);
-  char  *(*cStringOrNullFor)(sqInt);
-  void  *(*startOfAlienData)(sqInt);
-  usqInt (*sizeOfAlienData)(sqInt);
-  sqInt  (*signalNoResume)(sqInt);
+  sqInt (*sendInvokeCallbackContext)(vmccp, struct foo * self);
+  sqInt (*returnAsThroughCallbackContext)(int, vmccp, sqInt, struct foo * self);
+  sqIntptr_t  (*signedMachineIntegerValueOf)(sqInt, struct foo * self);
+  sqIntptr_t  (*stackSignedMachineIntegerValue)(sqInt, struct foo * self);
+  usqIntptr_t (*positiveMachineIntegerValueOf)(sqInt, struct foo * self);
+  usqIntptr_t (*stackPositiveMachineIntegerValue)(sqInt, struct foo * self);
+  sqInt	 (*getInterruptPending)(struct foo * self);
+  char  *(*cStringOrNullFor)(sqInt, struct foo * self);
+  void  *(*startOfAlienData)(sqInt, struct foo * self);
+  usqInt (*sizeOfAlienData)(sqInt, struct foo * self);
+  sqInt  (*signalNoResume)(sqInt, struct foo * self);
 #endif
 
 #if VM_PROXY_MINOR > 12 /* Spur */
-  sqInt (*isImmediate)(sqInt objOop);
-  sqInt (*characterObjectOf)(int charCode);
-  sqInt (*characterValueOf)(sqInt objOop);
-  sqInt (*isCharacterObject)(sqInt objOop);
-  sqInt (*isCharacterValue)(int charCode);
-  sqInt (*isPinned)(sqInt objOop);
-  sqInt (*pinObject)(sqInt objOop);
-  sqInt (*unpinObject)(sqInt objOop);
+  sqInt (*isImmediate)(sqInt objOop, struct foo * self);
+  sqInt (*characterObjectOf)(int charCode, struct foo * self);
+  sqInt (*characterValueOf)(sqInt objOop, struct foo * self);
+  sqInt (*isCharacterObject)(sqInt objOop, struct foo * self);
+  sqInt (*isCharacterValue)(int charCode, struct foo * self);
+  sqInt (*isPinned)(sqInt objOop, struct foo * self);
+  sqInt (*pinObject)(sqInt objOop, struct foo * self);
+  sqInt (*unpinObject)(sqInt objOop, struct foo * self);
 #endif
 
 #if VM_PROXY_MINOR > 13 /* OS Errors available in primitives; easy return forms (see above) */
-  sqInt  (*primitiveFailForOSError)(sqLong osErrorCode);
-  sqInt  (*methodReturnReceiver)(void);
-  sqInt  (*primitiveFailForFFIExceptionat)(usqLong exceptionCode, usqInt pc);
+  sqInt  (*primitiveFailForOSError)(sqLong osErrorCode, struct foo * self);
+  sqInt  (*methodReturnReceiver)(struct foo * self);
+  sqInt  (*primitiveFailForFFIExceptionat)(usqLong exceptionCode, usqInt pc, struct foo * self);
 #endif
 
 #if VM_PROXY_MINOR > 14 /* SmartSyntaxPlugin validation rewrite support */
-  sqInt  (*isBooleanObject)(sqInt oop);
-  sqInt  (*isPositiveMachineIntegerObject)(sqInt);
+  sqInt  (*isBooleanObject)(sqInt oop, struct foo * self);
+  sqInt  (*isPositiveMachineIntegerObject)(sqInt, struct foo * self);
 #endif
 
   sqInt (*ptEnterInterpreterFromCallback)(vmccp);
   sqInt (*ptExitInterpreterToCallback)(vmccp);
   sqInt (*ptDisableCogIt)(void*);
 
-  sqInt (*isNonImmediate)(sqInt oop);
+  sqInt (*isNonImmediate)(sqInt oop, struct foo * self);
 
 } VirtualMachine;
 
