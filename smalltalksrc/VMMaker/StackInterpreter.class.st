@@ -418,7 +418,8 @@ Class {
 		'myCurrentThread',
 		'mutexForFetchBytecode',
 		'isStepable',
-		'step'
+		'step',
+		'forStepping'
 	],
 	#classVars : [
 		'AccessModifierPrivate',
@@ -1800,13 +1801,13 @@ StackInterpreter class >> mustBeGlobal: var [
 
 	^(super mustBeGlobal: var)
 	   or: [(self objectMemoryClass mustBeGlobal: var)
-	   or: [(#('interpreterProxy' 'interpreterVersion' 'inIOProcessEvents' 'sendWheelEvents'
+	   or: [(#('interpreterVersion' 'inIOProcessEvents' 'sendWheelEvents'
 			'deferDisplayUpdates' 'extraVMMemory'
 			'showSurfaceFn' 'displayBits' 'displayWidth' 'displayHeight' 'displayDepth'
 			'desiredNumStackPages' 'desiredEdenBytes'
 			'breakLookupClassTag' 'breakSelector' 'breakSelectorLength' 'sendTrace' 'checkedPluginName'
 			'reenterInterpreter' 'suppressHeartbeatFlag' 'ffiExceptionResponse'
-			'debugCallbackInvokes' 'debugCallbackPath' 'debugCallbackReturns') includes: var)
+			'debugCallbackInvokes' 'debugCallbackPath' 'debugCallbackReturns' 'forStepping') includes: var)
 	   or: [ "This allows slow machines to define bytecodeSetSelector as 0
 			to avoid the interpretation overhead."
 			MULTIPLEBYTECODESETS not and: [var = 'bytecodeSetSelector']]]]
@@ -2047,19 +2048,17 @@ StackInterpreter class >> requiredMethodNames: options [
 		setFullScreenFlag: setInterruptKeycode: setInterruptPending: setInterruptCheckChain:
 			setSavedWindowSize: success:
 		
-		validInstructionPointer:inMethod:framePointer:) asSet.
-		
+		validInstructionPointer:inMethod:framePointer:
+		)asSet.
 		"returnGlobalStructForCurrentThread
-		returnGlobalStructFor:
-		setMyCurrentThread:_:
+		returnGlobalStructFor:	
 		setNumberOfImage:
 		getNumberOfImage
 		getThreadsID
 		initializeAllGlobalsStruct:
 		growAllGlobalsStruct:
-		loadAndExecute:
 		initMutexForFetchNextBytecode:andCond:
-			mutexLock:andCond:
+		mutexLock:andCond:
 		mutexUnlock:andCond:
 		returnGIVNumberForCurrentThread
 		forceInterruptCheckFromHeartbeatV2:
@@ -6819,16 +6818,6 @@ StackInterpreter >> fetchInteger: fieldIndex ofObject: objectPointer [
 StackInterpreter >> fetchNextBytecode [
 	"This method fetches the next instruction (bytecode). Each bytecode method is responsible for fetching the next bytecode, preferably as early as possible to allow the memory system time to process the request before the next dispatch."
 
-	isStepable
-		ifTrue: ["	self
-				printLocalSP: localSP
-				LocalFP: localSP
-				LocalIP: localIP
-				CurrentBytecode: currentBytecode.
-			self externalizeIPandSP.
-			self printCallStack.
-			self lockFetchNextBytecode."
- ].
 	MULTIPLEBYTECODESETS
 		ifTrue: [ currentBytecode := self fetchByte + bytecodeSetSelector ]
 		ifFalse: [ currentBytecode := self fetchByte ]
@@ -8232,15 +8221,9 @@ StackInterpreter >> getWord32FromFile: aFile swap: swapFlag [
 { #category : #thInter }
 StackInterpreter >> growAllGlobalsStruct: numberImages [
 	<var: #numberImages type: 'int'>
-
+	
 	self
-		cCode: 	
-	'/**Pointers to the old struc will be lost, in fact realloc does not behave like i expect him to so this whole piece of code does not work
-			realloc and pthread_cond_broadcast(aCond) seems to not work well together
-	**/
-	all_threads_global = realloc(all_threads_global, sizeof(struct foo) * numberImages);
-	memset(&all_threads_global[numberImages-1], 0, sizeof(struct foo));
-	thread_id = realloc(thread_id, sizeof(pthread_t) * numberImages);'
+		cCode: 'thread_id = realloc(thread_id, sizeof(pthread_t) * numberImages);'
 		inSmalltalk: [ self growAllGlobalsStruct: numberImages ]
 ]
 
@@ -8557,7 +8540,7 @@ StackInterpreter >> includesBehavior: aClass ThatOf: aSuperclass [
 StackInterpreter >> initAllGlobalsStruct [
 
 	self
-		cCode: 'all_threads_global = calloc(sizeof(struct foo), 1);
+		cCode: '
 		thread_id = malloc(sizeof(pthread_t));'
 	inSmalltalk: [ self initAllGlobalsStruct ]
 ]
@@ -8607,14 +8590,15 @@ StackInterpreter >> initMutexForFetchNextBytecode: aMutex andCond: aCond [
 		abort();
 	}
 	
-	//Init so we can use the first interpreter normally but he can become stepable too
-	if(pthread_equal(returnGlobalStructFor(0)->myCurrentThread,selfThread)){
+		//Init so we can use the first interpreter normally but he can become stepable too
+	if(forStepping != 1){
 		GIV(isStepable) = 0;
+		forStepping = 1;
 	}else{
 		GIV(isStepable) = 1;
 	};
 	'
-	inSmalltalk: [ self initMutexForFetchNextBytecode: aMutex ]
+	inSmalltalk: [ self initMutexForFetchNextBytecode: aMutex andCond: aCond ]
 ]
 
 { #category : #'object memory support' }
@@ -9605,7 +9589,6 @@ StackInterpreter >> interpret [
 	self browserPluginInitialiseIfNeeded.
 	self internalizeIPandSP.
 	self initExtensions.
-	self cCode: 'initMutexForFetchNextBytecodeandCond(&GIV(mutexForFetchBytecode), &GIV(step));'.
 	self fetchNextBytecode.
 	[true] whileTrue: [self dispatchOn: currentBytecode in: BytecodeTable].
 	localIP := localIP - 1.  "undo the pre-increment of IP before returning"
@@ -10348,8 +10331,8 @@ StackInterpreter >> literalCountOfOriginalHeader: headerPointer [
 ]
 
 { #category : #thInter }
-StackInterpreter >> loadAndExecute: imageParameters [
-	<var: #imageParameters type: 'char **'>
+StackInterpreter >> loadAndExecute: threadInterpreterParameters [
+	<var: #threadInterpreterParameters type: 'ThreadInterpreterParameter* '>
 	
 	" self cCode: [ 
 		self preInitImage.
@@ -10357,17 +10340,15 @@ StackInterpreter >> loadAndExecute: imageParameters [
 		self interpret]."
 	 
 	self cCode: '
+	
 	//Preinit
 	ioInitTime();
-
    ioVMThread = ioCurrentOSThread();
 	ioInitExternalSemaphores();
-
 	aioInit();
 	
-	/*Param init*/
-	 
-	setImageParams(imageParameters[1]);
+	/*Param init*/ 
+	setImageParams(threadInterpreterParameters->imageArguments);
 		
 	/* Open image and create globals. */
 	static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
@@ -10375,18 +10356,18 @@ StackInterpreter >> loadAndExecute: imageParameters [
 		FILE* imageFile = NULL;
 
    		/*Open the image file. */
-   		imageFile = fopen(imageParameters[0], "rb");
+   		imageFile = fopen(threadInterpreterParameters->imagePath, "rb");
    		if(!imageFile){
     		perror("Opening Image");
        	return;
     	}
 
-    	readImageFromFileHeapSizeStartingAtV2(imageFile, 0, 0);
+    	readImageFromFileHeapSizeStartingAtV2(imageFile, 0, 0, threadInterpreterParameters->interpreterState);
     	fclose(imageFile);
 	   /*setImageName(imageParameters[0]); */
 	}
 		pthread_mutex_unlock(&mutex);
-		interpret();
+		interpret(threadInterpreterParameters->interpreterState);
 	'
 	
 
@@ -10423,7 +10404,6 @@ StackInterpreter >> loadInitialContext [
 
 { #category : #thInterCom }
 StackInterpreter >> lockFetchNextBytecode [
-
 "localSP and localFP are in the scope of interpret not in GIV"
 	self cCode: '
 	mutexLockandCond(&GIV(mutexForFetchBytecode), &GIV(step));
@@ -17227,67 +17207,75 @@ StackInterpreter >> nativeStackSize [
 ]
 
 { #category : #thInter }
+StackInterpreter >> newExternalAddressOn: anOop [
+
+	| newExternalAddress onlySlot |
+	newExternalAddress := objectMemory 
+			instantiateClass: objectMemory classExternalAddress 
+			indexableSize: BytesPerWord.
+	onlySlot := objectMemory firstIndexableField: newExternalAddress.
+	onlySlot at: 0 put: anOop.
+	^newExternalAddress
+]
+
+{ #category : #thInter }
 StackInterpreter >> newGIV [
 	<returnTypeC: #'struct foo *'>
 	<api>
-	
-	self setNumberOfImage: self getNumberOfImage + 1.
-	self initAllGlobalsStruct.
-	self cCode: 'return &all_threads_global[0]'
-	
-	
+	| numberOfImage |
+	numberOfImage := self getNumberOfImage.
+	numberOfImage = 0
+		ifTrue: [ self setNumberOfImage: 1.
+			self initAllGlobalsStruct ]
+		ifFalse: [ self setNumberOfImage: numberOfImage + 1.
+			self growAllGlobalsStruct: numberOfImage + 1 ].
+		self cCode: '
+		return calloc(sizeof(struct foo), 1);'
+
 ]
 
 { #category : #thInter }
 StackInterpreter >> newImage: imagePath WithArguments: imageArgs [
 	<var: #imageArgs type: 'char *'>
 	<var: #imagePath type: 'char *'>
-	<returnTypeC: #int>
+	<returnTypeC: #'struct foo *'>
 	
 
 	self cCode: '	
-	char **params = malloc(sizeof(char *) * 2);
-	params [ 0 ] = imagePath;
-	params [ 1 ] = imageArgs;
+	ThreadInterpreterParameter* tip = malloc(sizeof(ThreadInterpreterParameter));
+	tip->imagePath = imagePath;
+	tip->imageArguments = imageArgs;
+	tip->interpreterState = newGIV();
 	
-	printf ("Launching imageAt: %s which is gonna: %s\n", params[0], params[1]);	
+	printf ("Launching imageAt: %s which is gonna: %s\n", tip->imagePath, tip->imageArguments);	
 	
 	pthread_attr_t tattr;
-
 	pthread_attr_init(&tattr);
-
 	size_t size;
 	pthread_attr_getstacksize(&tattr, &size);
-
    if(pthread_attr_setstacksize(&tattr, size*4)){
 		perror("Thread attr");
    }
 	
-	//Pointers to the old struc will be lost
-	
-	growAllGlobalsStruct(numberOfImage + 1);
-	
-	if(pthread_create(&thread_id[numberOfImage], &tattr, loadAndExecute, params)){
+	if(pthread_create(&thread_id[numberOfImage], &tattr, loadAndExecute, tip)){
 			perror("Thread creation");
 		}
-	setMyCurrentThread(thread_id[numberOfImage],numberOfImage);
-	numberOfImage = numberOfImage + 1;
-	return (numberOfImage - 1);
+	return tip->interpreterState;
 	'
 ]
 
 { #category : #thInterCom }
-StackInterpreter >> nextInInterpreter: anInt [
-	<var: #anInt type: 'int'>
+StackInterpreter >> nextInInterpreter: anInterpreterState [
+	<var: #anInterpreterState type: 'struct foo *'>
 	<returnTypeC: #int>
 	
 	self cCode: 
-	'pthread_mutex_t * mut = &returnGlobalStructFor(anInt)->mutexForFetchBytecode;
+	'pthread_mutex_t * mut = &anInterpreterState->mutexForFetchBytecode;
 	if(pthread_mutex_lock(mut) != 0){
 		printf("Mutex lock error: %s\n", strerror(errno));
 		abort();
 	}
-	pthread_cond_t * cond = returnGlobalStructFor(anInt)->step;
+	pthread_cond_t * cond = anInterpreterState->step;
 	if(pthread_cond_broadcast(cond) != 0){
 		printf("Cond broadcast error: %s\n", strerror(errno));
 		exit(1);

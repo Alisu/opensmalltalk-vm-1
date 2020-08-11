@@ -333,7 +333,7 @@ CCodeGeneratorTheoGlobalStructure >> selectorExcludedForCommodities [
 		#ioHeartbeatFrequency: "***heartbeat.c"
 		#ioSetHeartbeatMilliseconds:
 		#ioHeartbeatFrequency:
-		#ioRelinquishProcessorForMicroseconds:
+		"#ioRelinquishProcessorForMicroseconds:"
 		#ioGetClockLogSize:Usecs:Idx:Msecs:Idx:
 		#sqAllocateMemorySegmentOfSize:Above:AllocatedSizeInto: "memoryUnix.c"
 		#sqDeallocateMemorySegmentAt:OfSize:
@@ -353,6 +353,10 @@ CCodeGeneratorTheoGlobalStructure >> selectorExcludedForFunctionPrototype [
 	#setNumberOfImage:
 	#getNumberOfImage
 	#initAllGlobalsStruct
+	#growAllGlobalsStruct:
+	#loadAndExecute:
+	#setMyCurrentThread:_:
+	#mutexLock:andCond:
 	)	"#( sqVirtualMachine.c
 		#fetchInteger:ofObject:
 		#floatValueOf:

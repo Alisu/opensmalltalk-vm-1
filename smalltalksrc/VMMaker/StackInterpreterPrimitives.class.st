@@ -945,7 +945,7 @@ StackInterpreterPrimitives >> primitiveFullGC [
 StackInterpreterPrimitives >> primitiveGIVElementOfInterpreter [
 	<var: #ptr type: #'sqInt *'>
 	
-	| interpreterIndex desiredGIV ptr GIVElement anInt address |
+	| interpreterIndex GIVElement anInt address |
 	anInt := self stackTop.
 	GIVElement :=  self cStringOrNullFor: (self stackValue: 1).
 	interpreterIndex := self integerValueOf: anInt.
@@ -1163,11 +1163,18 @@ StackInterpreterPrimitives >> primitiveLongRunningPrimitiveSemaphore [
 
 { #category : #toto }
 StackInterpreterPrimitives >> primitiveNextInInterpreter [
-
-	| anInt anOop |
-	anOop := self stackTop.
-	anInt := self integerValueOf: anOop.
-	self pop: 2 thenPushInteger: (self nextInInterpreter: anInt).
+	
+	| anExternalAddress externalAddressClass interpreterState |
+	anExternalAddress := self stackTop.
+	externalAddressClass := objectMemory fetchClassOf: anExternalAddress.
+	externalAddressClass == objectMemory classExternalAddress
+		ifFalse: [ ^ self primitiveFailFor: PrimErrBadArgument ].
+	interpreterState := objectMemory
+		fetchPointer: 0
+		ofObject: anExternalAddress.
+	self
+		pop: 2
+		thenPushInteger: (self nextInInterpreter: interpreterState)
 ]
 
 { #category : #toto }
@@ -1260,11 +1267,26 @@ StackInterpreterPrimitives >> primitiveOldBaseAddressInInterpreter [
 { #category : #toto }
 StackInterpreterPrimitives >> primitiveOpenNewImage [
 	"Start a new thread allocating new space; loading an image and running an interpreter on it"	
-		
-	|imagePath imageArguments|
+	<var: #onlySlot type: #'struct foo **'>
+	|imagePath imageArguments receiver interpreterState  newExternalAddress onlySlot |
+	receiver := self stackValue: 2.
+	"We should check the receiver is a proxy-interpreter object with two slots
+	1st slot is an ExternalAddress object pointing to the interpreterState
+	2nd slot is a Channel object to send objects but primarly others channels"
 	imagePath :=  self cStringOrNullFor: (self stackValue: 1).
 	imageArguments := self cStringOrNullFor: (self stackTop).
-	self pop: 3 thenPushInteger: (self newImage: imagePath WithArguments: imageArguments)
+
+	interpreterState := (self newImage: imagePath WithArguments: imageArguments).
+	newExternalAddress := objectMemory 
+			instantiateClass: objectMemory classExternalAddress 
+			indexableSize: BytesPerWord.
+	onlySlot := objectMemory firstIndexableField: newExternalAddress.
+	onlySlot at: 0 put: interpreterState.
+	
+	objectMemory storePointer: 0
+	 ofObject: receiver
+	 withValue: newExternalAddress.
+	self pop: 4 thenPush: receiver
 	
 
 ]

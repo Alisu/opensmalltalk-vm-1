@@ -4,6 +4,12 @@ Class {
 	#category : #VMMakerTheo
 }
 
+{ #category : #translation }
+TheoStackInterpreter class >> ancilliaryClasses [
+	"Answer any extra classes to be included in the translation."
+	^super ancilliaryClasses, { ThreadInterpreterParameter }
+]
+
 { #category : #initialization }
 TheoStackInterpreter class >> initializePrimitiveTable [
 	"This table generates a C function address table used in slowPrimitiveResponse along with dispatchFunctionPointerOn:in:"
@@ -161,7 +167,7 @@ TheoStackInterpreter class >> initializePrimitiveTable [
 		(120 primitiveCalloutToFFI)
 		(121 primitiveImageName)
 		(122 primitiveNoop)					"Blue Book: primitiveImageVolume"
-		(123 primitiveFail)					"was primitiveValueUninterruptably"
+		(123 primitiveOpenNewImage)					"was primitiveValueUninterruptably"
 		(124 primitiveLowSpaceSemaphore)
 		(125 primitiveSignalAtBytesLeft)
 
@@ -197,7 +203,8 @@ TheoStackInterpreter class >> initializePrimitiveTable [
 
 		"Were File Primitives (150-169) - NO LONGER INDEXED"
 		"Queue primitive"
-		(150 157 primitiveFail)
+		(150 primitiveNextInInterpreter)
+		(151 157 primitiveFail)
 		(158 primitiveCompareWith)
 		(159 primitiveHashMultiply)
 		(160 primitiveAdoptInstance)
@@ -435,7 +442,27 @@ TheoStackInterpreter class >> requiredMethodNames: options [
 		setFullScreenFlag: setInterruptKeycode: setInterruptPending: setInterruptCheckChain:
 			setSavedWindowSize: success:
 		
-		validInstructionPointer:inMethod:framePointer:) asSet.
+		validInstructionPointer:inMethod:framePointer:
+		loadAndExecute: 
+		setMyCurrentThread:_:
+		readImageFromFile:HeapSize:StartingAtV2:
+		initMutexForFetchNextBytecode:andCond:
+		mutexLock:andCond:
+		)asSet.
+		"returnGlobalStructForCurrentThread
+		returnGlobalStructFor:	
+		setNumberOfImage:
+		getNumberOfImage
+		getThreadsID
+		initializeAllGlobalsStruct:
+		growAllGlobalsStruct:
+		initMutexForFetchNextBytecode:andCond:
+		mutexLock:andCond:
+		mutexUnlock:andCond:
+		returnGIVNumberForCurrentThread
+		forceInterruptCheckFromHeartbeatV2:
+		forceInterruptCheckV2:
+		readImageFromFile:HeapSize:StartingAtV2:"
 
 	"Nice to actually have all the primitives available"
 	requiredList addAll: (self primitiveTable select: [:each| each isSymbol]).
@@ -450,6 +477,62 @@ TheoStackInterpreter class >> requiredMethodNames: options [
 ]
 
 { #category : #'interpreter shell' }
+TheoStackInterpreter >> fetchNextBytecode [
+	"This method fetches the next instruction (bytecode). Each bytecode method is responsible for fetching the next bytecode, preferably as early as possible to allow the memory system time to process the request before the next dispatch."
+
+	isStepable
+		ifTrue: [	self
+				printLocalSP: localSP
+				LocalFP: localSP
+				LocalIP: localIP
+				CurrentBytecode: currentBytecode.
+			self externalizeIPandSP.
+			self printCallStack.
+			self lockFetchNextBytecode.
+ ].
+	MULTIPLEBYTECODESETS
+		ifTrue: [ currentBytecode := self fetchByte + bytecodeSetSelector ]
+		ifFalse: [ currentBytecode := self fetchByte ]
+]
+
+{ #category : #'interpreter shell' }
+TheoStackInterpreter >> getInterpreterProxy [
+	
+	<api>
+	<returnTypeC: #'VirtualMachine * '>
+	
+	self cCode: 'return GIV(interpreterProxy);'
+]
+
+{ #category : #thInterCom }
+TheoStackInterpreter >> initMutexForFetchNextBytecode: aMutex andCond: aCond [
+	<var: #aMutex type: 'pthread_mutex_t *'>
+	<var: #aCond type: 'pthread_cond_t **'>
+
+	self cCode: '
+	if(pthread_mutex_init(aMutex, NULL) != 0){
+		printf("Mutex init error: %s\n", strerror(errno));
+		exit(1);
+	}
+	
+	* aCond = malloc(sizeof(pthread_cond_t));
+	if(pthread_cond_init(* aCond, NULL) != 0){
+		printf("Cond init error: %s\n", strerror(errno));
+		abort();
+	}
+	
+	//Init so we can use the first interpreter normally but he can become stepable too
+	if(forStepping != 1){
+		GIV(isStepable) = 0;
+		forStepping = 1;
+	}else{
+		GIV(isStepable) = 1;
+	};
+	'
+	inSmalltalk: [ self initMutexForFetchNextBytecode: aMutex andCond: aCond]
+]
+
+{ #category : #'interpreter shell' }
 TheoStackInterpreter >> interpret [
 	"This is the main interpreter loop. It normally loops forever, fetching and executing bytecodes. When running in the context of a browser plugin VM, however, it must return control to the browser periodically. This should done only when the state of the currently running Squeak thread is safely stored in the object heap. Since this is the case at the moment that a check for interrupts is performed, that is when we return to the browser if it is time to do so. Interrupt checks happen quite frequently."
 
@@ -461,12 +544,31 @@ TheoStackInterpreter >> interpret [
 	self browserPluginInitialiseIfNeeded.
 	self internalizeIPandSP.
 	self initExtensions.
+	self cCode: 'initMutexForFetchNextBytecodeandCond(&GIV(mutexForFetchBytecode), &GIV(step), self);'.
 	self fetchNextBytecode.
 	[true] whileTrue: [self dispatchOn: currentBytecode in: BytecodeTable].
 	localIP := localIP - 1.  "undo the pre-increment of IP before returning"
 	self externalizeIPandSP.
 	^nil
 
+]
+
+{ #category : #thInterCom }
+TheoStackInterpreter >> mutexLock: aMutex andCond: aCond [
+	<var: #aMutex type: 'pthread_mutex_t *'>
+	<var: #aCond type: 'pthread_cond_t **'>
+	
+	self
+		cCode: '
+		if(pthread_mutex_lock(aMutex) != 0){
+			printf("Mutex lock error: %s\n", strerror(errno));
+			abort();
+		}
+		if(pthread_cond_wait(* aCond, aMutex) != 0){
+			printf("Cond lock error: %s\n", strerror(errno));
+			abort();
+		}
+		pthread_mutex_unlock(aMutex);' inSmalltalk: [ self mutexLock: aMutex andCond: aCond ]
 ]
 
 { #category : #'debug printing' }
