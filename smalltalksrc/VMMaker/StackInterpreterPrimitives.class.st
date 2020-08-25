@@ -321,6 +321,22 @@ StackInterpreterPrimitives >> primitiveAllVMParameters: paramsArraySize [
 	self methodReturnValue: result
 ]
 
+{ #category : #toto }
+StackInterpreterPrimitives >> primitiveChannelBootstrap [
+	| anExternalAddress externalAddressClass interpreterState aChannel |
+	anExternalAddress := self stackTop.
+	externalAddressClass := objectMemory fetchClassOf: anExternalAddress.
+	externalAddressClass == objectMemory classExternalAddress
+		ifFalse: [ ^ self primitiveFailFor: PrimErrBadArgument ].
+	interpreterState := objectMemory
+		fetchPointer: 0
+		ofObject: anExternalAddress.
+	aChannel := (self channelIn: interpreterState).
+	self
+		pop: 2
+		thenPush: aChannel
+]
+
 { #category : #'object access primitives' }
 StackInterpreterPrimitives >> primitiveClone [
 	"Return a shallow copy of the receiver.
@@ -441,22 +457,6 @@ StackInterpreterPrimitives >> primitiveContextAtPut [
 		 ^self].
 	self temporary: index - 1 in: spouseFP put: value.
 	self pop: argumentCount + 1 thenPush: value
-]
-
-{ #category : #toto }
-StackInterpreterPrimitives >> primitiveContextForCurrentFrameInInterpreter [
-
-	| anOop anInt desiredGIV context |
-	anOop := self stackTop.
-	anInt := self integerValueOf: anOop.
-	
-	desiredGIV := self returnGlobalStructFor: anInt.
-	
-	context := self ensureFrameIsMarried: (self cCode:'desiredGIV->framePointer') SP: (self cCode:'desiredGIV->stackPointer').
-	
-	self pop: 2 thenPush: context.
-	
-	 
 ]
 
 { #category : #'indexing primitives' }
@@ -943,18 +943,15 @@ StackInterpreterPrimitives >> primitiveFullGC [
 
 { #category : #toto }
 StackInterpreterPrimitives >> primitiveGIVElementOfInterpreter [
-	<var: #ptr type: #'sqInt *'>
+
+	| GIVElement address image anExternalAddress interpreterState |
+	anExternalAddress := self stackTop.
+	GIVElement := self cStringOrNullFor: (self stackValue: 1).
 	
-	| interpreterIndex GIVElement anInt address |
-	anInt := self stackTop.
-	GIVElement :=  self cStringOrNullFor: (self stackValue: 1).
-	interpreterIndex := self integerValueOf: anInt.
+	interpreterState := objectMemory fetchPointer: 0 ofObject: anExternalAddress.
 	
-	address := self addressOf: GIVElement inGIV: interpreterIndex.
-	
-	self pop: 3 thenPush: address.
-	
-	 
+	address := self addressOf: GIVElement inGIV: interpreterState.
+	self pop: 3 thenPush: address
 ]
 
 { #category : #'system control primitives' }
@@ -1049,6 +1046,22 @@ StackInterpreterPrimitives >> primitiveGetVMParameter: arg [
 			[74] ->	[^objectMemory hasSpurMemoryManagerAPI ifTrue:
 						[objectMemory integerObjectOf: objectMemory statMaxAllocSegmentTime + 500 // 1000]] }
 		otherwise: [^nil]
+]
+
+{ #category : #toto }
+StackInterpreterPrimitives >> primitiveHaltInterpreter [
+
+	| anExternalAddress interpreterState |
+	anExternalAddress := self stackTop.
+	interpreterState := objectMemory
+		fetchPointer: 0
+		ofObject: anExternalAddress.
+		
+	self
+		pop: 2
+		thenPushInteger: (self haltIn: interpreterState)
+		
+	
 ]
 
 { #category : #'memory space primitives' }
@@ -1177,26 +1190,6 @@ StackInterpreterPrimitives >> primitiveNextInInterpreter [
 		thenPushInteger: (self nextInInterpreter: interpreterState)
 ]
 
-{ #category : #toto }
-StackInterpreterPrimitives >> primitiveNilObjectInInterpreter [
-	<var: #ptr type: #'sqInt *'>
-	
-	| anOop interpreterIndex desiredGIV externalAddressOop ptr |
-	anOop := self stackTop.
-	interpreterIndex := self integerValueOf: anOop.
-	
-	desiredGIV := self returnGlobalStructFor: interpreterIndex.
-	
-	externalAddressOop := objectMemory 
-			instantiateClass: objectMemory classExternalAddress 
-			indexableSize: BytesPerWord.
-	ptr := objectMemory firstIndexableField: externalAddressOop.
-	ptr at: 0 put:  (self cCode:'desiredGIV->nilObj').
-	self pop: 2 thenPush: externalAddressOop.
-	
-	 
-]
-
 { #category : #'object access primitives' }
 StackInterpreterPrimitives >> primitiveObjectPointsTo [
 	"This primitive is assumed to be fast (see e.g. MethodDictionary>>includesKey:) so make it so.
@@ -1245,26 +1238,6 @@ StackInterpreterPrimitives >> primitiveObjectPointsTo [
 ]
 
 { #category : #toto }
-StackInterpreterPrimitives >> primitiveOldBaseAddressInInterpreter [
-	<var: #ptr type: #'sqInt *'>
-	
-	| anOop interpreterIndex desiredGIV externalAddressOop ptr |
-	anOop := self stackTop.
-	interpreterIndex := self integerValueOf: anOop.
-	
-	desiredGIV := self returnGlobalStructFor: interpreterIndex.
-	
-	externalAddressOop := objectMemory 
-			instantiateClass: objectMemory classExternalAddress 
-			indexableSize: BytesPerWord.
-	ptr := objectMemory firstIndexableField: externalAddressOop.
-	ptr at: 0 put:  (self cCode:'desiredGIV->oldSpaceStart').
-	self pop: 2 thenPush: externalAddressOop.
-	
-	 
-]
-
-{ #category : #toto }
 StackInterpreterPrimitives >> primitiveOpenNewImage [
 	"Start a new thread allocating new space; loading an image and running an interpreter on it"	
 	<var: #onlySlot type: #'struct foo **'>
@@ -1289,6 +1262,20 @@ StackInterpreterPrimitives >> primitiveOpenNewImage [
 	self pop: 4 thenPush: receiver
 	
 
+]
+
+{ #category : #toto }
+StackInterpreterPrimitives >> primitiveOwnInterpreterState [
+	<var:'interpreterState' type:'struct foo *' >
+		<var: #onlySlot type: #'struct foo **'>
+	| interpreterState newExternalAddress onlySlot |
+	interpreterState := self cCode:'self'.
+	newExternalAddress := objectMemory 
+			instantiateClass: objectMemory classExternalAddress 
+			indexableSize: BytesPerWord.
+	onlySlot := objectMemory firstIndexableField: newExternalAddress.
+	onlySlot at: 0 put: interpreterState.
+	self pop: 1 thenPush: newExternalAddress.
 ]
 
 { #category : #'control primitives' }
@@ -1909,20 +1896,19 @@ StackInterpreterPrimitives >> primitiveTerminateTo [
 
 { #category : #toto }
 StackInterpreterPrimitives >> primitiveTopFrameInInterpreter [
+	<var:'interpreterState' type:'struct foo *' >
 	<var: #ptr type: #'sqInt *'>
-	
-	| anOop interpreterIndex desiredGIV externalAddressOop ptr |
-	anOop := self stackTop.
-	interpreterIndex := self integerValueOf: anOop.
-	
-	desiredGIV := self returnGlobalStructFor: interpreterIndex.
-	
+	|   externalAddressOop  receiver anExternalAddress interpreterState ptr |
+	receiver := self stackTop.
+	anExternalAddress := objectMemory fetchPointer: 0 ofObject: receiver.
+	interpreterState := objectMemory fetchPointer: 0 ofObject: anExternalAddress.
+	"We return and ExternalAddress object containing our frame pointer"
 	externalAddressOop := objectMemory 
 			instantiateClass: objectMemory classExternalAddress 
 			indexableSize: BytesPerWord.
 	ptr := objectMemory firstIndexableField: externalAddressOop.
-	ptr at: 0 put: (self cCoerceSimple: (self cCode:'desiredGIV->framePointer') to: #sqInt).
-	self pop: 2 thenPush: externalAddressOop.
+	ptr at: 0 put: (self cCoerceSimple: (self cCode:'interpreterState->framePointer') to: #sqInt).
+	self pop: 1 thenPush: externalAddressOop.
 	
 	 
 ]

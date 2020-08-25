@@ -204,7 +204,13 @@ TheoStackInterpreter class >> initializePrimitiveTable [
 		"Were File Primitives (150-169) - NO LONGER INDEXED"
 		"Queue primitive"
 		(150 primitiveNextInInterpreter)
-		(151 157 primitiveFail)
+		(151 primitiveChannelBootstrap)
+		(152 primitiveTopFrameInInterpreter)
+		(153 primitiveGIVElementOfInterpreter)
+		(154 primitiveHaltInterpreter)
+		(155 primitiveOwnInterpreterState)
+		(156 primitiveFail)
+		(157 primitiveFail)
 		(158 primitiveCompareWith)
 		(159 primitiveHashMultiply)
 		(160 primitiveAdoptInstance)
@@ -496,12 +502,30 @@ TheoStackInterpreter >> fetchNextBytecode [
 ]
 
 { #category : #'interpreter shell' }
+TheoStackInterpreter >> getFirstModule [
+	
+	<api>
+	<returnTypeC: #'ModuleEntry * '>
+	
+	^firstModule 
+]
+
+{ #category : #'interpreter shell' }
 TheoStackInterpreter >> getInterpreterProxy [
 	
 	<api>
 	<returnTypeC: #'VirtualMachine * '>
 	
-	self cCode: 'return GIV(interpreterProxy);'
+	^interpreterProxy
+]
+
+{ #category : #'interpreter shell' }
+TheoStackInterpreter >> getSqueakModule [
+	
+	<api>
+	<returnTypeC: #'ModuleEntry * '>
+	
+	^squeakModule
 ]
 
 { #category : #thInterCom }
@@ -522,14 +546,62 @@ TheoStackInterpreter >> initMutexForFetchNextBytecode: aMutex andCond: aCond [
 	}
 	
 	//Init so we can use the first interpreter normally but he can become stepable too
-	if(forStepping != 1){
+	//if(forStepping != 1){
 		GIV(isStepable) = 0;
-		forStepping = 1;
-	}else{
-		GIV(isStepable) = 1;
-	};
+		//forStepping = 1;
+	//}else{
+		//GIV(isStepable) = 1;
+	//};
 	'
 	inSmalltalk: [ self initMutexForFetchNextBytecode: aMutex andCond: aCond]
+]
+
+{ #category : #accessing }
+TheoStackInterpreter >> initializeBootstrapChannel [
+	| channelOop channelClassOop nilOop anArray index1 index2 |
+	
+	nilOop := objectMemory nilObject.
+	channelOop := objectMemory splObj: SpecialChannel.
+	nilOop == channelOop
+		ifTrue: [ "We don't have a channel"
+			channelClassOop := objectMemory splObj: ClassChannelQueue.
+			nilOop = channelClassOop
+				ifTrue: [ "We don't have the class neither there is nothing we can do" channelOop := nilOop ]
+				ifFalse: [ "We check that the class is at the fix index in order for other memory to look at this specific place"
+					(objectMemory
+						knownClassAtIndex: ClassChannelQueueCompactIndex) = channelClassOop
+						ifFalse:
+							[ "our class exist but is not in the classTable at the expected index. We remove the entry and enter our class a the fix index."
+							objectMemory expungeFromClassTable: channelClassOop.
+							objectMemory
+								setHashBitsOf: channelClassOop
+								to: ClassChannelQueueCompactIndex.
+							objectMemory
+								storePointer: ClassChannelQueueCompactIndex
+								ofObject: objectMemory classTableFirstPage
+								withValue: channelClassOop ].
+					"We now have the class setup correctly, we create a new channel we initialize it"
+					channelOop := objectMemory instantiateClass: channelClassOop indexableSize: 0.
+					"for now it is a subclass of OrderedCollection, we need to initialize an array of size 10 and 2 index"
+					anArray := objectMemory allocateSlots: 10 format: 2 classIndex: objectMemory arrayClassIndexPun.
+					objectMemory fillObj: anArray numSlots: 10 with: nilOop.
+					index1 := objectMemory integerObjectOf: 1.
+					index2 := objectMemory integerObjectOf: 0.
+					objectMemory
+								storePointer: 0
+								ofObject: channelOop
+								withValue: anArray.
+					objectMemory
+								storePointer: 1
+								ofObject: channelOop
+								withValue: index1.
+					objectMemory
+								storePointer: 2
+								ofObject: channelOop 
+								withValue: index2.	
+					objectMemory splObj: SpecialChannel put: channelOop.					
+					 ] ].		
+	channel := channelOop
 ]
 
 { #category : #'interpreter shell' }
@@ -544,7 +616,6 @@ TheoStackInterpreter >> interpret [
 	self browserPluginInitialiseIfNeeded.
 	self internalizeIPandSP.
 	self initExtensions.
-	self cCode: 'initMutexForFetchNextBytecodeandCond(&GIV(mutexForFetchBytecode), &GIV(step), self);'.
 	self fetchNextBytecode.
 	[true] whileTrue: [self dispatchOn: currentBytecode in: BytecodeTable].
 	localIP := localIP - 1.  "undo the pre-increment of IP before returning"
@@ -607,4 +678,24 @@ TheoStackInterpreter >> printMethodCacheFor: thing [
 			self cr]].
 	n > 1 ifTrue:
 		[self printNum: n; cr]
+]
+
+{ #category : #'interpreter shell' }
+TheoStackInterpreter >> setFirstModule: aModuleEntry [
+	
+	<api>
+	<returnTypeC: #'void'>
+	<var: #aModuleEntry type: 'ModuleEntry *'>
+	
+	firstModule := aModuleEntry
+]
+
+{ #category : #'interpreter shell' }
+TheoStackInterpreter >> setSqueakModule: aModuleEntry [
+	
+	<api>
+	<returnTypeC: #'void'>
+	<var: #aModuleEntry type: 'ModuleEntry *'>
+	
+	squeakModule := aModuleEntry
 ]

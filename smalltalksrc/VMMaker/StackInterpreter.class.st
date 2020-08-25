@@ -419,7 +419,8 @@ Class {
 		'mutexForFetchBytecode',
 		'isStepable',
 		'step',
-		'forStepping'
+		'forStepping',
+		'channel'
 	],
 	#classVars : [
 		'AccessModifierPrivate',
@@ -467,7 +468,9 @@ Class {
 		'StackPageTraceInvalid',
 		'StackPageTraced',
 		'StackPageUnreached',
-		'V3PrimitiveBitsMask'
+		'V3PrimitiveBitsMask',
+		'firstModule',
+		'squeakModule'
 	],
 	#pools : [
 		'VMBasicConstants',
@@ -536,7 +539,9 @@ StackInterpreter class >> declareCVarsIn: aCCodeGenerator [
 		declareVar: #myCurrentThread type: 'pthread_t';
 		declareVar: #mutexForFetchBytecode type:'pthread_mutex_t';
 		declareVar: #step type: 'pthread_cond_t *';
-		declareVar: #isStepable type: 'int'
+		declareVar: #isStepable type: 'int';
+		declareVar: #squeakModule type: 'ModuleEntry *';
+		declareVar: #firstModule type: 'ModuleEntry *'
 		.
 		"var: #primitiveFunctionPointer type: 'void (*)()'."
 		
@@ -2511,23 +2516,23 @@ StackInterpreter >> addressCouldBeClassObj: maybeClassObj [
 ]
 
 { #category : #thInterCom }
-StackInterpreter >> addressOf: GIVElement inGIV: interpreterIndex [
-<var: #interpreterIndex type: 'int'>
+StackInterpreter >> addressOf: GIVElement inGIV: interpreterState [
+<var: #interpreterState type: 'struct foo *'>
 <var: #GIVElement type: 'char *'>
 <var: #ptr type: #'sqInt *'>
 	
-	| externalAddress  ptr desiredGIV |
-	desiredGIV := self returnGlobalStructFor: interpreterIndex.
+	| externalAddress  ptr  |
 	externalAddress := objectMemory 
 			instantiateClass: objectMemory classExternalAddress 
 			indexableSize: BytesPerWord.
 	ptr := objectMemory firstIndexableField: externalAddress.	
 
-	(GIVElement strcmp: 'method') = 0 ifTrue:[ptr at: 0 put:  (self cCode:'desiredGIV->method'). ^externalAddress].
-	(GIVElement strcmp: 'nilObj') = 0 ifTrue:[ptr at: 0 put:  (self cCode:'desiredGIV->nilObj'). ^externalAddress].
-	(GIVElement strcmp: 'instructionPointer') = 0 ifTrue:[ptr at: 0 put:  (self cCode:'desiredGIV->instructionPointer'). ^externalAddress].
-	(GIVElement strcmp: 'specialObjectsOop') = 0 ifTrue:[ptr at: 0 put:  (self cCode:'desiredGIV->specialObjectsOop'). ^externalAddress].
-	(GIVElement strcmp: 'oldSpaceStart') = 0 ifTrue:[ptr at: 0 put:  (self cCode:'desiredGIV->oldSpaceStart'). ^externalAddress].		
+"It could be a caseOf but at the time i was even worst than a caseOf"
+	(GIVElement strcmp: 'method') = 0 ifTrue:[ptr at: 0 put:  (self cCode:'interpreterState->method'). ^externalAddress].
+	(GIVElement strcmp: 'nilObj') = 0 ifTrue:[ptr at: 0 put:  (self cCode:'interpreterState->nilObj'). ^externalAddress].
+	(GIVElement strcmp: 'instructionPointer') = 0 ifTrue:[ptr at: 0 put:  (self cCode:'interpreterState->instructionPointer'). ^externalAddress].
+	(GIVElement strcmp: 'specialObjectsOop') = 0 ifTrue:[ptr at: 0 put:  (self cCode:'interpreterState->specialObjectsOop'). ^externalAddress].
+	(GIVElement strcmp: 'oldSpaceStart') = 0 ifTrue:[ptr at: 0 put:  (self cCode:'interpreterState->oldSpaceStart'). ^externalAddress].		
 	^nil
 ]
 
@@ -4273,6 +4278,13 @@ StackInterpreter >> cannotAssign: resultObj to: targetObj withIndex: index [
 StackInterpreter >> capturePendingFinalizationSignals [
 	statPendingFinalizationSignals := pendingFinalizationSignals.
 
+]
+
+{ #category : #thInterCom }
+StackInterpreter >> channelIn: anInterpreterState [
+<var: #anInterpreterState type:#'struct foo *'>
+<returnTypeC: 'sqInt'>
+	self cCode: 'return anInterpreterState->channel'
 ]
 
 { #category : #'indexing primitive support' }
@@ -8227,6 +8239,13 @@ StackInterpreter >> growAllGlobalsStruct: numberImages [
 		inSmalltalk: [ self growAllGlobalsStruct: numberImages ]
 ]
 
+{ #category : #thInterCom }
+StackInterpreter >> haltIn: interpreterState [
+	<returnTypeC: #sqInt>
+	<var: #interpreterState type: 'struct foo *'>
+	self cCode: 'interpreterState->isStepable = 1;'
+]
+
 { #category : #'message sending' }
 StackInterpreter >> handleForwardedSelectorFaultFor: selectorOop [
 	"Handle a send fault that is due to a send using a forwarded selector.
@@ -8671,6 +8690,8 @@ StackInterpreter >> initStackPagesAndInterpret [
 	self loadInitialContext.
 	"We're ready for the heartbeat (poll interrupt)"
 	"self cCode: 'setIOHeartbeatGIVToUse(returnGIVNumberForCurrentThread());'."
+	self cCode: 'initMutexForFetchNextBytecodeandCond(&GIV(mutexForFetchBytecode), &GIV(step), self);'.
+	self initializeBootstrapChannel.
 	self ioInitHeartbeat.
 	self initialEnterSmalltalkExecutive.
 	^nil
@@ -10362,7 +10383,7 @@ StackInterpreter >> loadAndExecute: threadInterpreterParameters [
        	return;
     	}
 
-    	readImageFromFileHeapSizeStartingAtV2(imageFile, 0, 0, threadInterpreterParameters->interpreterState);
+    	readImageFromFileHeapSizeStartingAt(imageFile, 0, 0, threadInterpreterParameters->interpreterState);
     	fclose(imageFile);
 	   /*setImageName(imageParameters[0]); */
 	}
@@ -17207,18 +17228,6 @@ StackInterpreter >> nativeStackSize [
 ]
 
 { #category : #thInter }
-StackInterpreter >> newExternalAddressOn: anOop [
-
-	| newExternalAddress onlySlot |
-	newExternalAddress := objectMemory 
-			instantiateClass: objectMemory classExternalAddress 
-			indexableSize: BytesPerWord.
-	onlySlot := objectMemory firstIndexableField: newExternalAddress.
-	onlySlot at: 0 put: anOop.
-	^newExternalAddress
-]
-
-{ #category : #thInter }
 StackInterpreter >> newGIV [
 	<returnTypeC: #'struct foo *'>
 	<api>
@@ -18995,12 +19004,6 @@ StackInterpreter >> printOopShortInner: oop [
 StackInterpreter >> printPageHeadFrame [
 	<inline: false>
 	self printFrame: stackPage headFP WithSP: stackPage headSP
-]
-
-{ #category : #thInter }
-StackInterpreter >> printPouet [
-
-	self cCode:'printf("Pouet \n");'
 ]
 
 { #category : #'debug printing' }

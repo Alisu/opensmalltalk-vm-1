@@ -844,7 +844,7 @@ Interpreter class >> mustBeGlobal: var [
 	"Answer if a variable must be global and exported.  Used for inst vars that are accessed from VM support code."
 
 	^(super mustBeGlobal: var)
-	   or: [ #('deferDisplayUpdates' 'extraVMMemory' 'interpreterProxy' 'interpreterVersion' 'showSurfaceFn') includes: var]
+	   or: [ #('deferDisplayUpdates' 'extraVMMemory' 'interpreterVersion' 'showSurfaceFn') includes: var]
 ]
 
 { #category : #translation }

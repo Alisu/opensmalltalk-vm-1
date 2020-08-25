@@ -909,7 +909,9 @@ SpurMemoryManager class >> initializeCompactClassIndices [
 	ClassByteArrayCompactIndex := 50.
 	ClassArrayCompactIndex := 51.
 	ClassByteStringCompactIndex := 52.
-	ClassBitmapCompactIndex := 53
+	ClassBitmapCompactIndex := 53.
+	
+	ClassChannelQueueCompactIndex := 70.
 ]
 
 { #category : #'class initialization' }
@@ -959,6 +961,11 @@ SpurMemoryManager class >> initializeSpecialObjectIndices [
 	CompactClasses := 28.
 	TheTimerSemaphore := 29.
 	TheInterruptSemaphore := 30.
+	
+	"Bootstrap channel"
+	SpecialChannel := 31.
+	ClassChannelQueue := 32.
+		
 	SelectorCannotInterpret := 34.
 	"Was MethodContextProto := 35."
 	ClassBlockClosure := 36.
@@ -3599,7 +3606,7 @@ SpurMemoryManager >> classTableEntriesDo: binaryBlock [
 
 { #category : #accessing }
 SpurMemoryManager >> classTableFirstPage [
-	<cmacro>
+
 	^classTableFirstPage
 ]
 

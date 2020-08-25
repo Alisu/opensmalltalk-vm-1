@@ -125,7 +125,8 @@ CCodeGeneratorTheoGlobalStructure >> emitCFunctionPrototypes: methodList on: aSt
 			[aStream nextPutAll: '\\#if !PRODUCTION && defined(PlatformNoDbgRegParms)\# define NoDbgRegParms PlatformNoDbgRegParms\#endif' withCRs.
 			 aStream nextPutAll: '\\#if !defined(NoDbgRegParms)\# define NoDbgRegParms /*empty*/\#endif\\' withCRs].
 		 aStream nextPutAll: '\\#if !defined(NeverInline)\# define NeverInline /*empty*/\#endif\\' withCRs.
-		aStream nextPutAll: 'struct foo;';cr;cr.].
+		aStream nextPutAll: 'struct foo;';cr;
+		nextPutAll: 'typedef struct ModuleEntry ModuleEntry;';cr;cr.].
 	(methodList select: [:m| m isRealMethod and: [self shouldGenerateMethod: m]]) do:
 		[:m |
 		vmClass ifNotNil:
@@ -201,7 +202,8 @@ CCodeGeneratorTheoGlobalStructure >> emitCVariablesOn: aStream [
 					ifTrue:
 						[varString = 'interpreterProxy'
 							ifTrue: "quite special..."
-								[self preDeclareInterpreterProxyOn: target]
+								[
+								self preDeclareInterpreterProxyOn: target]
 							ifFalse: [target nextPutAll: 'static ']]
 					ifFalse:
 						[(vmClass mustBeGlobal: varString) ifFalse:
@@ -269,6 +271,25 @@ CCodeGeneratorTheoGlobalStructure >> nonUnarySelector [
  ^  #(#highBit
 		#isFree
 		)
+]
+
+{ #category : #'C code generator' }
+CCodeGeneratorTheoGlobalStructure >> placeInStructure: var [
+	"See if we should put this array into a structure.
+	The variables listed are hardcoded as C in the interpreter thus they don't get resolved via TVariableNode logic.
+	Also let's ignore variables that have special definitions that require initialization, and the function def which has problems."
+
+	| check |
+	check := variableDeclarations at: var ifAbsent: [''].
+	(var includesSubstring: 'primitiveFunctionPointer') ifTrue: [^false].
+	(var includesSubstring: 'externalPrimitiveTable') ifTrue: [^true].
+	(check includes: $=) ifTrue: [^false].
+	(check includes: $() ifTrue: [^false].
+	(check includesSubstring: 'static') ifTrue: [^false].
+	(check includesSubstring: 'volatile') ifTrue: [^false].
+	(var includesSubstring: 'primitiveFunctionPointer') ifTrue: [^true].
+
+	^(vmClass mustBeGlobal: var) not
 ]
 
 { #category : #'as yet unclassified' }
