@@ -211,15 +211,16 @@ extern struct VirtualMachine *interpreterProxy;
 int setHookFn;
 
 
-static void acceptHandler(int, void *, int);
-static void connectHandler(int, void *, int);
-static void dataHandler(int, void *, int);
-static void closeHandler(int, void *, int);
+static void acceptHandler(int, void *, int, struct foo * self);
+static void connectHandler(int, void *, int, struct foo * self);
+static void dataHandler(int, void *, int, struct foo * self);
+static void closeHandler(int, void *, int, struct foo * self);
 
 
 
 #ifdef AIO_DEBUG
-char *socketHandlerName(aioHandler h)
+char *
+socketHandlerName(aioHandler h, struct foo * self)
 {
   if (h == acceptHandler)     return "acceptHandler";
   if (h == connectHandler)    return "connectHandler";
@@ -233,15 +234,17 @@ char *socketHandlerName(aioHandler h)
 /*** module initialisation/shutdown ***/
 
 
-sqInt socketInit(void)
+sqInt 
+socketInit(struct foo * self)
 {
   return 1;
 }
 
-sqInt socketShutdown(void)
+sqInt 
+socketShutdown(struct foo * self)
 {
   /* shutdown the network */
-  sqNetworkShutdown();
+  sqNetworkShutdown(self);
   return 1;
 }
 
@@ -250,7 +253,8 @@ sqInt socketShutdown(void)
 
 /* set linger on a connected stream */
 
-static void setLinger(int fd, int flag)
+static void 
+setLinger(int fd, int flag, struct foo * self)
 {
   struct linger linger= { flag, flag * LINGER_SECS };
   setsockopt(fd, SOL_SOCKET, SO_LINGER, (char *)&linger, sizeof(linger));
@@ -258,7 +262,8 @@ static void setLinger(int fd, int flag)
 
 /* answer the hostname for the given IP address */
 
-static const char *addrToName(int netAddress)
+static const char *
+addrToName(int netAddress, struct foo * self)
 {
   u_long nAddr;
   struct hostent *he;
@@ -273,7 +278,8 @@ static const char *addrToName(int netAddress)
 
 /* answer the IP address for the given hostname */
 
-static int nameToAddr(char *hostName)
+static int 
+nameToAddr(char *hostName, struct foo * self)
 {
   struct hostent *he;
 
@@ -286,11 +292,12 @@ static int nameToAddr(char *hostName)
 
 /* answer whether the given socket is valid in this net session */
 
-static int socketValid(SocketPtr s)
+static int 
+socketValid(SocketPtr s, struct foo * self)
 {
   if (s && s->privateSocketPtr && thisNetSession && (s->sessionID == thisNetSession))
     return true;
-  success(false, interpreterProxy->interpreterState);
+  success(false, self);
   return false;
 }
 
@@ -298,7 +305,8 @@ static int socketValid(SocketPtr s)
           0 if read would block, or
          -1 if the socket is no longer connected */
 
-static int socketReadable(int s)
+static int 
+socketReadable(int s, struct foo * self)
 {
   char buf[1];
   int n= recv(s, (void *)buf, 1, MSG_PEEK);
@@ -310,7 +318,8 @@ static int socketReadable(int s)
 
 /* answer whether the socket can be written without blocking */
 
-static int socketWritable(int s)
+static int 
+socketWritable(int s, struct foo * self)
 {
   struct timeval tv= { 0, 0 };
   fd_set fds;
@@ -322,7 +331,8 @@ static int socketWritable(int s)
 
 /* answer the error condition on the given socket */
 
-static int socketError(int s)
+static int 
+socketError(int s, struct foo * self)
 {
   int error= 0;
   socklen_t errsz= sizeof(error);
@@ -340,15 +350,16 @@ static int socketError(int s)
    and replace the server socket with the new client socket
    leaving the client socket unhandled
 */
-static void acceptHandler(int fd, void *data, int flags)
+static void 
+acceptHandler(int fd, void *data, int flags, struct foo * self)
 {
   privateSocketStruct *pss= (privateSocketStruct *)data;
-  FPRINTF((stderr, "acceptHandler(%d, %p ,%d)\n", fd, data, flags));
+  FPRINTF((stderr, "acceptHandler(%d, %p ,%d, self)\n", fd, data, flags));
   if (flags & AIO_X) /* -- exception */
     {
       /* error during listen() */
       aioDisable(fd);
-      pss->sockError= socketError(fd);
+      pss->sockError= socketError(fd, self);
       pss->sockState= Invalid;
       pss->s= -1;
       close(fd);
@@ -376,7 +387,7 @@ static void acceptHandler(int fd, void *data, int flags)
       else /* newSock >= 0 -- connection accepted */
 	{
 	  pss->sockState= Connected;
-	  setLinger(newSock, 1);
+	  setLinger(newSock, 1, self);
 	  if (pss->multiListen)
 	    {
 	      pss->acceptedSock= newSock;
@@ -396,22 +407,23 @@ static void acceptHandler(int fd, void *data, int flags)
 
 /* connect() has completed: check errors, leaving the socket unhandled */
 
-static void connectHandler(int fd, void *data, int flags)
+static void 
+connectHandler(int fd, void *data, int flags, struct foo * self)
 {
   privateSocketStruct *pss= (privateSocketStruct *)data;
-  FPRINTF((stderr, "connectHandler(%d, %p, %d)\n", fd, data, flags));
+  FPRINTF((stderr, "connectHandler(%d, %p, %d, self)\n", fd, data, flags));
   if (flags & AIO_X) /* -- exception */
     {
       /* error during asynchronous connect() */
       aioDisable(fd);
-      pss->sockError= socketError(fd);
+      pss->sockError= socketError(fd, self);
       pss->sockState= Unconnected;
       perror("connectHandler");
     }
   else /* (flags & AIO_W) -- connect completed */
     {
       /* connect() has completed */
-      int error= socketError(fd);
+      int error= socketError(fd, self);
       if (error)
 	{
 	  FPRINTF((stderr, "connectHandler: error %d (%s)\n", error, strerror(error)));
@@ -421,7 +433,7 @@ static void connectHandler(int fd, void *data, int flags)
       else
 	{
 	  pss->sockState= Connected;
-	  setLinger(pss->s, 1);
+	  setLinger(pss->s, 1, self);
 	}
     }
   notify(pss, CONN_NOTIFY);
@@ -430,10 +442,11 @@ static void connectHandler(int fd, void *data, int flags)
 
 /* read or write data transfer is now possible for the socket. */
 
-static void dataHandler(int fd, void *data, int flags)
+static void 
+dataHandler(int fd, void *data, int flags, struct foo * self)
 {
   privateSocketStruct *pss= (privateSocketStruct *)data;
-  FPRINTF((stderr, "dataHandler(%d=%d, %p, %d)\n", fd, pss->s, data, flags));
+  FPRINTF((stderr, "dataHandler(%d=%d, %p, %d, self)\n", fd, pss->s, data, flags));
 
   if (pss == NULL)
     {
@@ -443,14 +456,14 @@ static void dataHandler(int fd, void *data, int flags)
 
   if (flags & AIO_R)
     {
-      int n= socketReadable(fd);
+      int n= socketReadable(fd, self);
       if (n == 0)
 	{
 	  fprintf(stderr, "dataHandler: selected socket fd=%d flags=0x%x would block (why?)\n", fd, flags);
 	}
       if (n != 1)
 	{
-	  pss->sockError= socketError(fd);
+	  pss->sockError= socketError(fd, self);
 	  pss->sockState= OtherEndClosed;
 	}
     }
@@ -470,11 +483,12 @@ static void dataHandler(int fd, void *data, int flags)
 
 /* a non-blocking close() has completed -- finish tidying up */
 
-static void closeHandler(int fd, void *data, int flags)
+static void 
+closeHandler(int fd, void *data, int flags, struct foo * self)
 {
   privateSocketStruct *pss= (privateSocketStruct *)data;
   aioDisable(fd);
-  FPRINTF((stderr, "closeHandler(%d, %p, %d)\n", fd, data, flags));
+  FPRINTF((stderr, "closeHandler(%d, %p, %d, self)\n", fd, data, flags));
   pss->sockState= Unconnected;
   pss->s= -1;
   notify(pss, CONN_NOTIFY);
@@ -486,12 +500,13 @@ static void closeHandler(int fd, void *data, int flags)
 
 /* start a new network session */
 
-sqInt sqNetworkInit(sqInt resolverSemaIndex)
+sqInt 
+sqNetworkInit(sqInt resolverSemaIndex, struct foo * self)
 {
   if (0 != thisNetSession)
     return 0;  /* already initialised */
   gethostname(localHostName, MAXHOSTNAMELEN);
-  localHostAddress= nameToAddr(localHostName);
+  localHostAddress= nameToAddr(localHostName, self);
   thisNetSession= clock() + time(0);
   if (0 == thisNetSession)
     thisNetSession= 1;  /* 0 => uninitialised */
@@ -502,7 +517,8 @@ sqInt sqNetworkInit(sqInt resolverSemaIndex)
 
 /* terminate the current network session (invalidates all open sockets) */
 
-void sqNetworkShutdown(void)
+void 
+sqNetworkShutdown(struct foo * self)
 {
   thisNetSession= 0;
   resolverSema= 0;
@@ -516,12 +532,14 @@ void sqNetworkShutdown(void)
 
 /* create a new socket */
 
-void sqSocketCreateNetTypeSocketTypeRecvBytesSendBytesSemaID(SocketPtr s, sqInt domain, sqInt socketType, sqInt recvBufSize, sqInt sendBufSize, sqInt semaIndex)
+void 
+sqSocketCreateNetTypeSocketTypeRecvBytesSendBytesSemaID(SocketPtr s, sqInt domain, sqInt socketType, sqInt recvBufSize, sqInt sendBufSize, sqInt semaIndex, struct foo * self)
 {
-  sqSocketCreateNetTypeSocketTypeRecvBytesSendBytesSemaIDReadSemaIDWriteSemaID(s, domain, socketType,recvBufSize, sendBufSize, semaIndex, semaIndex, semaIndex);
+  sqSocketCreateNetTypeSocketTypeRecvBytesSendBytesSemaIDReadSemaIDWriteSemaID(s, domain, socketType,recvBufSize, sendBufSize, semaIndex, semaIndex, semaIndex, self);
 }
 
-void sqSocketCreateNetTypeSocketTypeRecvBytesSendBytesSemaIDReadSemaIDWriteSemaID(SocketPtr s, sqInt domain, sqInt socketType, sqInt recvBufSize, sqInt sendBufSize, sqInt semaIndex, sqInt readSemaIndex, sqInt writeSemaIndex)
+void 
+sqSocketCreateNetTypeSocketTypeRecvBytesSendBytesSemaIDReadSemaIDWriteSemaID(SocketPtr s, sqInt domain, sqInt socketType, sqInt recvBufSize, sqInt sendBufSize, sqInt semaIndex, sqInt readSemaIndex, sqInt writeSemaIndex, struct foo * self)
 {
   int newSocket= -1;
   privateSocketStruct *pss;
@@ -555,14 +573,14 @@ void sqSocketCreateNetTypeSocketTypeRecvBytesSendBytesSemaIDReadSemaIDWriteSemaI
         }
       else
         {
-          success(false, interpreterProxy->interpreterState);
+          success(false, self);
           return;
         }
     }
   if (-1 == newSocket)
     {
       /* socket() failed, or incorrect socketType */
-      success(false, interpreterProxy->interpreterState);
+      success(false, self);
       return;
     }
   setsockopt(newSocket, SOL_SOCKET, SO_REUSEADDR, (char *)&one, sizeof(one));
@@ -571,7 +589,7 @@ void sqSocketCreateNetTypeSocketTypeRecvBytesSendBytesSemaIDReadSemaIDWriteSemaI
   if (pss == NULL)
     {
       fprintf(stderr, "acceptFrom: out of memory\n");
-      success(false, interpreterProxy->interpreterState);
+      success(false, self);
       return;
     }
   pss->s= newSocket;
@@ -603,7 +621,8 @@ void sqSocketCreateNetTypeSocketTypeRecvBytesSendBytesSemaIDReadSemaIDWriteSemaI
   /* Note: socket is in BLOCKING mode until aioEnable is called for it! */
 }
 
-void sqSocketCreateRawProtoTypeRecvBytesSendBytesSemaIDReadSemaIDWriteSemaID(SocketPtr s, sqInt domain, sqInt protocol, sqInt recvBufSize, sqInt sendBufSize, sqInt semaIndex, sqInt readSemaIndex, sqInt writeSemaIndex)
+void 
+sqSocketCreateRawProtoTypeRecvBytesSendBytesSemaIDReadSemaIDWriteSemaID(SocketPtr s, sqInt domain, sqInt protocol, sqInt recvBufSize, sqInt sendBufSize, sqInt semaIndex, sqInt readSemaIndex, sqInt writeSemaIndex, struct foo * self)
 {
   int newSocket= -1;
   privateSocketStruct *pss;
@@ -616,7 +635,7 @@ void sqSocketCreateRawProtoTypeRecvBytesSendBytesSemaIDReadSemaIDWriteSemaID(Soc
     {
       /* socket() failed, or incorrect protocol type */
       fprintf(stderr, "primSocketCreateRAW: socket() failed; protocol = %ld, errno = %d\n", protocol, errno);
-      success(false, interpreterProxy->interpreterState);
+      success(false, self);
       return;
     }
 
@@ -625,7 +644,7 @@ void sqSocketCreateRawProtoTypeRecvBytesSendBytesSemaIDReadSemaIDWriteSemaID(Soc
   if (pss == NULL)
     {
       fprintf(stderr, "acceptFrom: out of memory\n");
-      success(false, interpreterProxy->interpreterState);
+      success(false, self);
       return;
     }
   pss->s= newSocket;
@@ -653,17 +672,18 @@ void sqSocketCreateRawProtoTypeRecvBytesSendBytesSemaIDReadSemaIDWriteSemaID(Soc
 
 /* return the state of a socket */
 
-sqInt sqSocketConnectionStatus(SocketPtr s)
+sqInt 
+sqSocketConnectionStatus(SocketPtr s, struct foo * self)
 {
-  if (!socketValid(s))
+  if (!socketValid(s, self))
     return Invalid;
   /* we now know that the net session is valid, so if state is Invalid... */
-  if (SOCKETSTATE(s) == Invalid)	/* see acceptHandler() */
+  if (SOCKETSTATE(s) == Invalid)	/* see acceptHandler(self) */
     {
       fprintf(stderr, "socketStatus: freeing invalidated pss=%p\n", PSP(s));
       /*free(PSP(s));*/	/* this almost never happens -- safer not to free()?? */
       _PSP(s)= 0;
-      success(false, interpreterProxy->interpreterState);
+      success(false, self);
       return Invalid;
     }
 #if 0
@@ -671,7 +691,7 @@ sqInt sqSocketConnectionStatus(SocketPtr s)
   if (SOCKETSTATE(s) == Connected)
     {
       int fd= SOCKET(s);
-      int n=  socketReadable(fd);
+      int n=  socketReadable(fd, self);
       if (n < 0)
 	{
 	  FPRINTF((stderr, "socketStatus(%d): detected other end closed\n", fd));
@@ -688,22 +708,24 @@ sqInt sqSocketConnectionStatus(SocketPtr s)
 /* TCP => start listening for incoming connections.
  * UDP => associate the local port number with the socket.
  */
-void sqSocketListenOnPort(SocketPtr s, sqInt port)
+void 
+sqSocketListenOnPort(SocketPtr s, sqInt port, struct foo * self)
 {
-  sqSocketListenOnPortBacklogSize(s, port, 1);
+  sqSocketListenOnPortBacklogSize(s, port, 1, self);
 }
 
-void sqSocketListenOnPortBacklogSizeInterface(SocketPtr s, sqInt port, sqInt backlogSize, sqInt addr)
+void 
+sqSocketListenOnPortBacklogSizeInterface(SocketPtr s, sqInt port, sqInt backlogSize, sqInt addr, struct foo * self)
 {
   struct sockaddr_in saddr;
 
-  if (!socketValid(s))
+  if (!socketValid(s, self))
     return;
 
   /* only TCP sockets have a backlog */
   if ((backlogSize > 1) && (s->socketType != TCPSocketType))
     {
-      success(false, interpreterProxy->interpreterState);
+      success(false, self);
       return;
     }
 
@@ -728,19 +750,21 @@ void sqSocketListenOnPortBacklogSizeInterface(SocketPtr s, sqInt port, sqInt bac
     }
 }
 
-void sqSocketListenOnPortBacklogSize(SocketPtr s, sqInt port, sqInt backlogSize)
+void 
+sqSocketListenOnPortBacklogSize(SocketPtr s, sqInt port, sqInt backlogSize, struct foo * self)
 {
-  sqSocketListenOnPortBacklogSizeInterface(s, port, backlogSize, INADDR_ANY);
+  sqSocketListenOnPortBacklogSizeInterface(s, port, backlogSize, INADDR_ANY, self);
 }
 
 /* TCP => open a connection.
  * UDP => set remote address.
  */
-void sqSocketConnectToPort(SocketPtr s, sqInt addr, sqInt port)
+void 
+sqSocketConnectToPort(SocketPtr s, sqInt addr, sqInt port, struct foo * self)
 {
   struct sockaddr_in saddr;
 
-  if (!socketValid(s))
+  if (!socketValid(s, self))
     return;
   FPRINTF((stderr, "connectTo(%d)\n", SOCKET(s)));
   memset(&saddr, 0, sizeof(saddr));
@@ -772,7 +796,7 @@ void sqSocketConnectToPort(SocketPtr s, sqInt addr, sqInt port)
 	  /* connection completed synchronously */
 	  SOCKETSTATE(s)= Connected;
 	  notify(PSP(s), CONN_NOTIFY);
-	  setLinger(SOCKET(s), 1);
+	  setLinger(SOCKET(s), 1, self);
 	}
       else
 	{
@@ -795,13 +819,15 @@ void sqSocketConnectToPort(SocketPtr s, sqInt addr, sqInt port)
 }
 
 
-void sqSocketAcceptFromRecvBytesSendBytesSemaID(SocketPtr s, SocketPtr serverSocket, sqInt recvBufSize, sqInt sendBufSize, sqInt semaIndex)
+void 
+sqSocketAcceptFromRecvBytesSendBytesSemaID(SocketPtr s, SocketPtr serverSocket, sqInt recvBufSize, sqInt sendBufSize, sqInt semaIndex, struct foo * self)
 {
-  sqSocketAcceptFromRecvBytesSendBytesSemaIDReadSemaIDWriteSemaID(s, serverSocket, recvBufSize, sendBufSize, semaIndex, semaIndex, semaIndex);
+  sqSocketAcceptFromRecvBytesSendBytesSemaIDReadSemaIDWriteSemaID(s, serverSocket, recvBufSize, sendBufSize, semaIndex, semaIndex, semaIndex, self);
 }
 
 
-void sqSocketAcceptFromRecvBytesSendBytesSemaIDReadSemaIDWriteSemaID(SocketPtr s, SocketPtr serverSocket, sqInt recvBufSize, sqInt sendBufSize, sqInt semaIndex, sqInt readSemaIndex, sqInt writeSemaIndex)
+void 
+sqSocketAcceptFromRecvBytesSendBytesSemaIDReadSemaIDWriteSemaID(SocketPtr s, SocketPtr serverSocket, sqInt recvBufSize, sqInt sendBufSize, sqInt semaIndex, sqInt readSemaIndex, sqInt writeSemaIndex, struct foo * self)
 {
   /* The image has already called waitForConnection, so there is no
      need to signal the server's connection semaphore again. */
@@ -811,10 +837,10 @@ void sqSocketAcceptFromRecvBytesSendBytesSemaIDReadSemaIDWriteSemaID(SocketPtr s
   FPRINTF((stderr, "acceptFrom(%p, %d)\n", s, SOCKET(serverSocket)));
 
   /* sanity checks */
-  if (!socketValid(serverSocket) || !PSP(serverSocket)->multiListen)
+  if (!socketValid(serverSocket, self) || !PSP(serverSocket)->multiListen)
     {
       FPRINTF((stderr, "accept failed: (multi->%d)\n", PSP(serverSocket)->multiListen));
-      success(false, interpreterProxy->interpreterState);
+      success(false, self);
       return;
     }
 
@@ -822,7 +848,7 @@ void sqSocketAcceptFromRecvBytesSendBytesSemaIDReadSemaIDWriteSemaID(SocketPtr s
   if (PSP(serverSocket)->acceptedSock < 0)
     {
       fprintf(stderr, "acceptFrom: no socket available\n");
-      success(false, interpreterProxy->interpreterState);
+      success(false, self);
       return;
     }
 
@@ -832,7 +858,7 @@ void sqSocketAcceptFromRecvBytesSendBytesSemaIDReadSemaIDWriteSemaID(SocketPtr s
   if (pss == NULL)
     {
       fprintf(stderr, "acceptFrom: out of memory\n");
-      success(false, interpreterProxy->interpreterState);
+      success(false, self);
       return;
     }
 
@@ -853,11 +879,12 @@ void sqSocketAcceptFromRecvBytesSendBytesSemaIDReadSemaIDWriteSemaID(SocketPtr s
 
 /* close the socket */
 
-void sqSocketCloseConnection(SocketPtr s)
+void 
+sqSocketCloseConnection(SocketPtr s, struct foo * self)
 {
   int result= 0;
 
-  if (!socketValid(s))
+  if (!socketValid(s, self))
     return;
 
   FPRINTF((stderr, "closeConnection(%d)\n", SOCKET(s)));
@@ -895,28 +922,30 @@ void sqSocketCloseConnection(SocketPtr s)
 
 /* close the socket without lingering */
 
-void sqSocketAbortConnection(SocketPtr s)
+void 
+sqSocketAbortConnection(SocketPtr s, struct foo * self)
 {
   FPRINTF((stderr, "abortConnection(%d)\n", SOCKET(s)));
-  if (!socketValid(s))
+  if (!socketValid(s, self))
     return;
-  setLinger(SOCKET(s), 0);
-  sqSocketCloseConnection(s);
+  setLinger(SOCKET(s), 0, self);
+  sqSocketCloseConnection(s, self);
 }
 
 
 /* Release the resources associated with this socket. 
    If a connection is open, abort it. */
 
-void sqSocketDestroy(SocketPtr s)
+void 
+sqSocketDestroy(SocketPtr s, struct foo * self)
 {
-  if (!socketValid(s))
+  if (!socketValid(s, self))
     return;
 
   FPRINTF((stderr, "destroy(%d)\n", SOCKET(s)));
 
   if (SOCKET(s))
-    sqSocketAbortConnection(s);		/* close if necessary */
+    sqSocketAbortConnection(s, self);		/* close if necessary */
 
   if (PSP(s))
     free(PSP(s));			/* release private struct */
@@ -927,9 +956,10 @@ void sqSocketDestroy(SocketPtr s)
 
 /* answer the OS error code for the last socket operation */
 
-sqInt sqSocketError(SocketPtr s)
+sqInt 
+sqSocketError(SocketPtr s, struct foo * self)
 {
-  if (!socketValid(s))
+  if (!socketValid(s, self))
     return -1;
   return SOCKETERROR(s);
 }
@@ -937,12 +967,13 @@ sqInt sqSocketError(SocketPtr s)
 
 /* return the local IP address bound to a socket */
 
-sqInt sqSocketLocalAddress(SocketPtr s)
+sqInt 
+sqSocketLocalAddress(SocketPtr s, struct foo * self)
 {
   struct sockaddr_in saddr;
   socklen_t saddrSize= sizeof(saddr);
 
-  if (!socketValid(s))
+  if (!socketValid(s, self))
     return -1;
   if (getsockname(SOCKET(s), (struct sockaddr *)&saddr, &saddrSize)
       || (AF_INET != saddr.sin_family))
@@ -953,12 +984,13 @@ sqInt sqSocketLocalAddress(SocketPtr s)
 
 /* return the peer's IP address */
 
-sqInt sqSocketRemoteAddress(SocketPtr s)
+sqInt 
+sqSocketRemoteAddress(SocketPtr s, struct foo * self)
 {
   struct sockaddr_in saddr;
   socklen_t saddrSize= sizeof(saddr);
 
-  if (!socketValid(s))
+  if (!socketValid(s, self))
     return -1;
   if (TCPSocketType == s->socketType)
     {
@@ -975,12 +1007,13 @@ sqInt sqSocketRemoteAddress(SocketPtr s)
 
 /* return the local port number of a socket */
 
-sqInt sqSocketLocalPort(SocketPtr s)
+sqInt 
+sqSocketLocalPort(SocketPtr s, struct foo * self)
 {
   struct sockaddr_in saddr;
   socklen_t saddrSize= sizeof(saddr);
 
-  if (!socketValid(s))
+  if (!socketValid(s, self))
     return -1;
   if (getsockname(SOCKET(s), (struct sockaddr *)&saddr, &saddrSize)
       || (AF_INET != saddr.sin_family))
@@ -991,12 +1024,13 @@ sqInt sqSocketLocalPort(SocketPtr s)
 
 /* return the peer's port number */
 
-sqInt sqSocketRemotePort(SocketPtr s)
+sqInt 
+sqSocketRemotePort(SocketPtr s, struct foo * self)
 {
   struct sockaddr_in saddr;
   socklen_t saddrSize= sizeof(saddr);
 
-  if (!socketValid(s))
+  if (!socketValid(s, self))
     return -1;
   if (TCPSocketType == s->socketType)
     {
@@ -1018,13 +1052,14 @@ sqInt sqSocketRemotePort(SocketPtr s)
    if the socket is closed by peer, change the state to OtherEndClosed
 	and answer "false";
 */
-sqInt sqSocketReceiveDataAvailable(SocketPtr s)
+sqInt 
+sqSocketReceiveDataAvailable(SocketPtr s, struct foo * self)
 {
-  if (!socketValid(s)) return false;
+  if (!socketValid(s, self)) return false;
   if (SOCKETSTATE(s) == Connected)
     {
       int fd= SOCKET(s);
-      int n=  socketReadable(fd);
+      int n=  socketReadable(fd, self);
       if (n > 0)
 	{
 	  FPRINTF((stderr, "receiveDataAvailable(%d) -> true\n", fd));
@@ -1048,13 +1083,14 @@ sqInt sqSocketReceiveDataAvailable(SocketPtr s)
 
 /* answer whether the socket has space to receive more data */
 
-sqInt sqSocketSendDone(SocketPtr s)
+sqInt 
+sqSocketSendDone(SocketPtr s, struct foo * self)
 {
-  if (!socketValid(s))
+  if (!socketValid(s, self))
     return false;
   if (SOCKETSTATE(s) == Connected)
     {
-      if (socketWritable(SOCKET(s))) return true;
+      if (socketWritable(SOCKET(s), self)) return true;
       aioHandle(SOCKET(s), dataHandler, AIO_WX);
     }
   return false;
@@ -1065,11 +1101,12 @@ sqInt sqSocketSendDone(SocketPtr s)
    answer the number actually read.  For UDP, fill in the peer's address
    with the approriate value.
 */
-sqInt sqSocketReceiveDataBufCount(SocketPtr s, char *buf, sqInt bufSize)
+sqInt 
+sqSocketReceiveDataBufCount(SocketPtr s, char *buf, sqInt bufSize, struct foo * self)
 {
   int nread= 0;
 
-  if (!socketValid(s))
+  if (!socketValid(s, self))
     return -1;
 
   SOCKETPEERSIZE(s)= 0;
@@ -1118,11 +1155,12 @@ sqInt sqSocketReceiveDataBufCount(SocketPtr s, char *buf, sqInt bufSize)
 /* write data to the socket s from buf for at most bufSize bytes.
    answer the number of bytes actually written.
 */ 
-sqInt sqSocketSendDataBufCount(SocketPtr s, char *buf, sqInt bufSize)
+sqInt 
+sqSocketSendDataBufCount(SocketPtr s, char *buf, sqInt bufSize, struct foo * self)
 {
   int nsent= 0;
 
-  if (!socketValid(s))
+  if (!socketValid(s, self))
     return -1;
 
   if (TCPSocketType != s->socketType)
@@ -1170,9 +1208,10 @@ sqInt sqSocketSendDataBufCount(SocketPtr s, char *buf, sqInt bufSize)
 /* read data from the UDP socket s into buf for at most bufSize bytes.
    answer the number of bytes actually read.
 */ 
-sqInt sqSocketReceiveUDPDataBufCountaddressportmoreFlag(SocketPtr s, char *buf, sqInt bufSize,  sqInt *address,  sqInt *port, sqInt *moreFlag)
+sqInt 
+sqSocketReceiveUDPDataBufCountaddressportmoreFlag(SocketPtr s, char *buf, sqInt bufSize,  sqInt *address,  sqInt *port, sqInt *moreFlag, struct foo * self)
 {
-  if (socketValid(s) && (TCPSocketType != s->socketType)) /* --- UDP/RAW --- */
+  if (socketValid(s, self) && (TCPSocketType != s->socketType)) /* --- UDP/RAW --- */
     {
       struct sockaddr_in saddr;
       socklen_t addrSize= sizeof(saddr);
@@ -1193,7 +1232,7 @@ sqInt sqSocketReceiveUDPDataBufCountaddressportmoreFlag(SocketPtr s, char *buf, 
 	FPRINTF((stderr, "receiveData(%d)= %da\n", SOCKET(s), 0));
       }
     }
-  success(false, interpreterProxy->interpreterState);
+  success(false, self);
   return 0;
 }
 
@@ -1201,9 +1240,10 @@ sqInt sqSocketReceiveUDPDataBufCountaddressportmoreFlag(SocketPtr s, char *buf, 
 /* write data to the UDP socket s from buf for at most bufSize bytes.
  * answer the number of bytes actually written.
  */ 
-sqInt sqSockettoHostportSendDataBufCount(SocketPtr s, sqInt address, sqInt port, char *buf, sqInt bufSize)
+sqInt 
+sqSockettoHostportSendDataBufCount(SocketPtr s, sqInt address, sqInt port, char *buf, sqInt bufSize, struct foo * self)
 {
-  if (socketValid(s) && (TCPSocketType != s->socketType))
+  if (socketValid(s, self) && (TCPSocketType != s->socketType))
     {
       struct sockaddr_in saddr;
 
@@ -1223,7 +1263,7 @@ sqInt sqSockettoHostportSendDataBufCount(SocketPtr s, sqInt address, sqInt port,
 	SOCKETERROR(s)= errno;
       }
     }
-  success(false, interpreterProxy->interpreterState);
+  success(false, self);
   return 0;
 }
 
@@ -1332,9 +1372,10 @@ static socketOption *findOption(char *name, size_t nameSize)
  * copy it verbatim, assuming it's really a ByteArray pretending to be
  * a struct.  caveat hackor.)
  */
-sqInt sqSocketSetOptionsoptionNameStartoptionNameSizeoptionValueStartoptionValueSizereturnedValue(SocketPtr s, char *optionName, sqInt optionNameSize, char *optionValue, sqInt optionValueSize, sqInt *result)
+sqInt 
+sqSocketSetOptionsoptionNameStartoptionNameSizeoptionValueStartoptionValueSizereturnedValue(SocketPtr s, char *optionName, sqInt optionNameSize, char *optionValue, sqInt optionValueSize, sqInt *result, struct foo * self)
 {
-  if (socketValid(s))
+  if (socketValid(s, self))
     {
       socketOption *opt= findOption(optionName, (size_t)optionNameSize);
       if (opt != 0)
@@ -1383,15 +1424,16 @@ sqInt sqSocketSetOptionsoptionNameStartoptionNameSizeoptionValueStartoptionValue
 	}
     }
  barf:
-  success(false, interpreterProxy->interpreterState);
+  success(false, self);
   return false;
 }
 
 
 /* query the socket for the given option.  */
-sqInt sqSocketGetOptionsoptionNameStartoptionNameSizereturnedValue(SocketPtr s, char *optionName, sqInt optionNameSize, sqInt *result)
+sqInt 
+sqSocketGetOptionsoptionNameStartoptionNameSizereturnedValue(SocketPtr s, char *optionName, sqInt optionNameSize, sqInt *result, struct foo * self)
 {
-  if (socketValid(s))
+  if (socketValid(s, self))
     {
       socketOption *opt= findOption(optionName, (size_t)optionNameSize);
       if (opt != 0)
@@ -1407,16 +1449,17 @@ sqInt sqSocketGetOptionsoptionNameStartoptionNameSizereturnedValue(SocketPtr s, 
 	}
     }
  barf:
-  success(false, interpreterProxy->interpreterState);
+  success(false, self);
   return errno;
 }
 
-void sqSocketBindToPort(SocketPtr s, int addr, int port)
+void 
+sqSocketBindToPort(SocketPtr s, int addr, int port, struct foo * self)
 {
   struct sockaddr_in inaddr;
   privateSocketStruct *pss= PSP(s);
 
-  if (!socketValid(s)) return;
+  if (!socketValid(s, self)) return;
 
   /* bind the socket */
   memset(&inaddr, 0, sizeof(inaddr));
@@ -1427,24 +1470,25 @@ void sqSocketBindToPort(SocketPtr s, int addr, int port)
   if (bind(SOCKET(s), (struct sockaddr *)&inaddr, sizeof(struct sockaddr_in)) < 0)
     {
       pss->sockError= errno;
-      success(false, interpreterProxy->interpreterState);
+      success(false, self);
       return;
     }
 }
 
-void sqSocketSetReusable(SocketPtr s)
+void 
+sqSocketSetReusable(SocketPtr s, struct foo * self)
 {
   size_t bufSize;
   unsigned char buf[4];
 
-  if (!socketValid(s)) return;
+  if (!socketValid(s, self)) return;
 
   *(int *)buf= 1;
   bufSize= 4;
   if (setsockopt(SOCKET(s), SOL_SOCKET, SO_REUSEADDR, buf, bufSize) < 0)
     {
       PSP(s)->sockError= errno;
-      success(false, interpreterProxy->interpreterState);
+      success(false, self);
       return;
     }
 }
@@ -1461,18 +1505,21 @@ void sqSocketSetReusable(SocketPtr s)
 
 /*** irrelevancies ***/
 
-void sqResolverAbort(void) {}
+void 
+sqResolverAbort(struct foo * self) {}
 
-void sqResolverStartAddrLookup(sqInt address)
+void 
+sqResolverStartAddrLookup(sqInt address, struct foo * self)
 {
   const char *res;
-  res= addrToName(address);
+  res= addrToName(address, self);
   strncpy(lastName, res, MAXHOSTNAMELEN);
   FPRINTF((stderr, "startAddrLookup %s\n", lastName));
 }
 
 
-sqInt sqResolverStatus(void)
+sqInt 
+sqResolverStatus(struct foo * self)
 {
   if (!thisNetSession)
     return ResolverUninitialised;
@@ -1483,14 +1530,16 @@ sqInt sqResolverStatus(void)
 
 /*** trivialities ***/
 
-sqInt sqResolverAddrLookupResultSize(void)	{ return strlen(lastName); }
-sqInt sqResolverError(void)			{ return lastError; }
-sqInt sqResolverLocalAddress(void)
+sqInt 
+sqResolverAddrLookupResultSize(struct foo * self)	{ return strlen(lastName); }
+sqInt 
+sqResolverError(struct foo * self)			{ return lastError; }
+sqInt sqResolverLocalAddress(struct foo * self)
 #if 0 
 /* old code */
-{	sqInt localaddr = nameToAddr(localHostName);
+{	sqInt localaddr = nameToAddr(localHostName, self);
 	if (!localaddr)
-		localaddr = nameToAddr("localhost");
+		localaddr = nameToAddr("localhost", self);
 	return localaddr;
 }
 #else
@@ -1502,7 +1551,7 @@ sqInt sqResolverLocalAddress(void)
     sqInt localAddr = 0;
 
     if (getifaddrs(&ifaddr) == -1) {
-        success(false, interpreterProxy->interpreterState);
+        success(false, self);
         return 0;
     }
 
@@ -1518,7 +1567,7 @@ sqInt sqResolverLocalAddress(void)
         {
             if (s != 0)
             {
-                success(false, interpreterProxy->interpreterState);
+                success(false, self);
                 return 0;
             }
             FPRINTF((stderr, "\tInterface : <%s>\n",ifa->ifa_name ));
@@ -1535,22 +1584,25 @@ sqInt sqResolverLocalAddress(void)
 
 }
 #endif
-sqInt sqResolverNameLookupResult(void)		{ return lastAddr; }
+sqInt 
+sqResolverNameLookupResult(struct foo * self)		{ return lastAddr; }
 
-void sqResolverAddrLookupResult(char *nameForAddress, sqInt nameSize)
+void 
+sqResolverAddrLookupResult(char *nameForAddress, sqInt nameSize, struct foo * self)
 {
   memcpy(nameForAddress, lastName, nameSize);
 }
 
 /*** name resolution ***/
 
-void sqResolverStartNameLookup(char *hostName, sqInt nameSize)
+void 
+sqResolverStartNameLookup(char *hostName, sqInt nameSize, struct foo * self)
 {
   int len= (nameSize < MAXHOSTNAMELEN) ? nameSize : MAXHOSTNAMELEN;
   memcpy(lastName, hostName, len);
   lastName[len]= lastError= 0;
   FPRINTF((stderr, "name lookup %s\n", lastName));
-  lastAddr= nameToAddr(lastName);
+  lastAddr= nameToAddr(lastName, self);
   /* we're done before we even started */
   interpreterProxy->signalSemaphoreWithIndex(resolverSema);
 }
@@ -1586,37 +1638,37 @@ void sqResolverStartNameLookup(char *hostName, sqInt nameSize)
 #define SQ_SOCKET_PROTOCOL_MAX		3
 
 void  sqResolverGetAddressInfoHostSizeServiceSizeFlagsFamilyTypeProtocol(char *hostName, sqInt hostSize, char *servName, sqInt servSize,
-									 sqInt flags, sqInt family, sqInt type, sqInt protocol);
-sqInt sqResolverGetAddressInfoSize(void);
-void  sqResolverGetAddressInfoResultSize(char *addr, sqInt addrSize);
-sqInt sqResolverGetAddressInfoFamily(void);
-sqInt sqResolverGetAddressInfoType(void);
-sqInt sqResolverGetAddressInfoProtocol(void);
-sqInt sqResolverGetAddressInfoNext(void);
+									 sqInt flags, sqInt family, sqInt type, sqInt protocol, struct foo * self);
+sqInt sqResolverGetAddressInfoSize(struct foo * self);
+void  sqResolverGetAddressInfoResultSize(char *addr, sqInt addrSize, struct foo * self);
+sqInt sqResolverGetAddressInfoFamily(struct foo * self);
+sqInt sqResolverGetAddressInfoType(struct foo * self);
+sqInt sqResolverGetAddressInfoProtocol(struct foo * self);
+sqInt sqResolverGetAddressInfoNext(struct foo * self);
 
-sqInt sqSocketAddressSizeGetPort(char *addr, sqInt addrSize);
-void  sqSocketAddressSizeSetPort(char *addr, sqInt addrSize, sqInt port);
+sqInt sqSocketAddressSizeGetPort(char *addr, sqInt addrSize, struct foo * self);
+void  sqSocketAddressSizeSetPort(char *addr, sqInt addrSize, sqInt port, struct foo * self);
 
-void  sqResolverGetNameInfoSizeFlags(char *addr, sqInt addrSize, sqInt flags);
-sqInt sqResolverGetNameInfoHostSize(void);
-void  sqResolverGetNameInfoHostResultSize(char *name, sqInt nameSize);
-sqInt sqResolverGetNameInfoServiceSize(void);
-void  sqResolverGetNameInfoServiceResultSize(char *name, sqInt nameSize);
+void  sqResolverGetNameInfoSizeFlags(char *addr, sqInt addrSize, sqInt flags, struct foo * self);
+sqInt sqResolverGetNameInfoHostSize(struct foo * self);
+void  sqResolverGetNameInfoHostResultSize(char *name, sqInt nameSize, struct foo * self);
+sqInt sqResolverGetNameInfoServiceSize(struct foo * self);
+void  sqResolverGetNameInfoServiceResultSize(char *name, sqInt nameSize, struct foo * self);
 
-sqInt sqResolverHostNameSize(void);
-void  sqResolverHostNameResultSize(char *name, sqInt nameSize);
+sqInt sqResolverHostNameSize(struct foo * self);
+void  sqResolverHostNameResultSize(char *name, sqInt nameSize, struct foo * self);
 
-void  sqSocketBindToAddressSize(SocketPtr s, char *addr, sqInt addrSize);
-void  sqSocketListenBacklog(SocketPtr s, sqInt backlogSize);
-void  sqSocketConnectToAddressSize(SocketPtr s, char *addr, sqInt addrSize);
+void  sqSocketBindToAddressSize(SocketPtr s, char *addr, sqInt addrSize, struct foo * self);
+void  sqSocketListenBacklog(SocketPtr s, sqInt backlogSize, struct foo * self);
+void  sqSocketConnectToAddressSize(SocketPtr s, char *addr, sqInt addrSize, struct foo * self);
 
-sqInt sqSocketLocalAddressSize(SocketPtr s);
-void  sqSocketLocalAddressResultSize(SocketPtr s, char *addr, int addrSize);
-sqInt sqSocketRemoteAddressSize(SocketPtr s);
-void  sqSocketRemoteAddressResultSize(SocketPtr s, char *addr, int addrSize);
+sqInt sqSocketLocalAddressSize(SocketPtr s, struct foo * self);
+void  sqSocketLocalAddressResultSize(SocketPtr s, char *addr, int addrSize, struct foo * self);
+sqInt sqSocketRemoteAddressSize(SocketPtr s, struct foo * self);
+void  sqSocketRemoteAddressResultSize(SocketPtr s, char *addr, int addrSize, struct foo * self);
 
-sqInt sqSocketSendUDPToSizeDataBufCount(SocketPtr s, char *addr, sqInt addrSize, char *buf, sqInt bufSize);
-sqInt sqSocketReceiveUDPDataBufCount(SocketPtr s, char *buf, sqInt bufSize);
+sqInt sqSocketSendUDPToSizeDataBufCount(SocketPtr s, char *addr, sqInt addrSize, char *buf, sqInt bufSize, struct foo * self);
+sqInt sqSocketReceiveUDPDataBufCount(SocketPtr s, char *buf, sqInt bufSize, struct foo * self);
 
 
 /* ---- address and service lookup ---- */
@@ -1628,7 +1680,7 @@ static struct addrinfo *localInfo= 0;
 
 
 void sqResolverGetAddressInfoHostSizeServiceSizeFlagsFamilyTypeProtocol(char *hostName, sqInt hostSize, char *servName, sqInt servSize,
-									sqInt flags, sqInt family, sqInt type, sqInt protocol)
+									sqInt flags, sqInt family, sqInt type, sqInt protocol, struct foo * self)
 {
   char host[MAXHOSTNAMELEN+1], serv[MAXHOSTNAMELEN+1];
   struct addrinfo request;
@@ -1737,7 +1789,7 @@ void sqResolverGetAddressInfoHostSizeServiceSizeFlagsFamilyTypeProtocol(char *ho
   return;
 
  fail:
-  success(false, interpreterProxy->interpreterState);
+  success(false, self);
   return;
 }
 
@@ -1774,7 +1826,8 @@ static void dumpAddr(struct sockaddr *addr, int addrSize)
 }
 #endif
 
-sqInt sqResolverGetAddressInfoSize(void)
+sqInt 
+sqResolverGetAddressInfoSize(struct foo * self)
 {
   if (!addrInfo)
     return -1;
@@ -1782,11 +1835,12 @@ sqInt sqResolverGetAddressInfoSize(void)
 }
 
 
-void sqResolverGetAddressInfoResultSize(char *addr, sqInt addrSize)
+void 
+sqResolverGetAddressInfoResultSize(char *addr, sqInt addrSize, struct foo * self)
 {
   if ((!addrInfo) || (addrSize < (AddressHeaderSize + addrInfo->ai_addrlen)))
     {
-      success(false, interpreterProxy->interpreterState);
+      success(false, self);
       return;
     }
 
@@ -1797,11 +1851,12 @@ void sqResolverGetAddressInfoResultSize(char *addr, sqInt addrSize)
 }
 
 
-sqInt sqResolverGetAddressInfoFamily(void)
+sqInt 
+sqResolverGetAddressInfoFamily(struct foo * self)
 {
   if (!addrInfo)
     {
-      success(false, interpreterProxy->interpreterState);
+      success(false, self);
       return 0;
     }
 
@@ -1816,11 +1871,12 @@ sqInt sqResolverGetAddressInfoFamily(void)
 }
 
 
-sqInt sqResolverGetAddressInfoType(void)
+sqInt 
+sqResolverGetAddressInfoType(struct foo * self)
 {
   if (!addrInfo)
     {
-      success(false, interpreterProxy->interpreterState);
+      success(false, self);
       return 0;
     }
 
@@ -1834,11 +1890,12 @@ sqInt sqResolverGetAddressInfoType(void)
 }
 
 
-sqInt sqResolverGetAddressInfoProtocol(void)
+sqInt 
+sqResolverGetAddressInfoProtocol(struct foo * self)
 {
   if (!addrInfo)
     {
-      success(false, interpreterProxy->interpreterState);
+      success(false, self);
       return 0;
     }
 
@@ -1852,7 +1909,8 @@ sqInt sqResolverGetAddressInfoProtocol(void)
 }
 
 
-sqInt sqResolverGetAddressInfoNext(void)
+sqInt 
+sqResolverGetAddressInfoNext(struct foo * self)
 {
   return (addrInfo && (addrInfo= addrInfo->ai_next)) ? true : false;
 }
@@ -1861,7 +1919,8 @@ sqInt sqResolverGetAddressInfoNext(void)
 /* ---- address manipulation ---- */
 
 
-sqInt sqSocketAddressSizeGetPort(char *addr, sqInt addrSize)
+sqInt 
+sqSocketAddressSizeGetPort(char *addr, sqInt addrSize, struct foo * self)
 {
   if (addressValid(addr, addrSize))
     switch (socketAddress(addr)->sa_family)
@@ -1870,12 +1929,13 @@ sqInt sqSocketAddressSizeGetPort(char *addr, sqInt addrSize)
       case AF_INET6:	return ntohs(((struct sockaddr_in6 *)socketAddress(addr))->sin6_port);
       }
 
-  success(false, interpreterProxy->interpreterState);
+  success(false, self);
   return 0;
 }
 
 
-void sqSocketAddressSizeSetPort(char *addr, sqInt addrSize, sqInt port)
+void 
+sqSocketAddressSizeSetPort(char *addr, sqInt addrSize, sqInt port, struct foo * self)
 {
   if (addressValid(addr, addrSize))
     switch (socketAddress(addr)->sa_family)
@@ -1884,7 +1944,7 @@ void sqSocketAddressSizeSetPort(char *addr, sqInt addrSize, sqInt port)
       case AF_INET6:	((struct sockaddr_in6 *)socketAddress(addr))->sin6_port= htons(port);	return;
       }
 
-  success(false, interpreterProxy->interpreterState);
+  success(false, self);
 }
 
 
@@ -1897,7 +1957,8 @@ static char servNameInfo[MAXHOSTNAMELEN+1];
 static int nameInfoValid= 0;
 
 
-void sqResolverGetNameInfoSizeFlags(char *addr, sqInt addrSize, sqInt flags)
+void 
+sqResolverGetNameInfoSizeFlags(char *addr, sqInt addrSize, sqInt flags, struct foo * self)
 {
   int niFlags= 0;
   int gaiError= 0;
@@ -1932,22 +1993,24 @@ void sqResolverGetNameInfoSizeFlags(char *addr, sqInt addrSize, sqInt flags)
   return;
 
  fail:
-  success(false, interpreterProxy->interpreterState);
+  success(false, self);
 }
 
 
-sqInt sqResolverGetNameInfoHostSize(void)
+sqInt 
+sqResolverGetNameInfoHostSize(struct foo * self)
 {
   if (!nameInfoValid)
     {
-      success(false, interpreterProxy->interpreterState);
+      success(false, self);
       return 0;
     }
   return strlen(hostNameInfo);
 }
 
 
-void sqResolverGetNameInfoHostResultSize(char *name, sqInt nameSize)
+void 
+sqResolverGetNameInfoHostResultSize(char *name, sqInt nameSize, struct foo * self)
 {
   int len;
 
@@ -1962,22 +2025,24 @@ void sqResolverGetNameInfoHostResultSize(char *name, sqInt nameSize)
   return;
 
  fail:
-  success(false, interpreterProxy->interpreterState);
+  success(false, self);
 }
 
 
-sqInt sqResolverGetNameInfoServiceSize(void)
+sqInt 
+sqResolverGetNameInfoServiceSize(struct foo * self)
 {
   if (!nameInfoValid)
     {
-      success(false, interpreterProxy->interpreterState);
+      success(false, self);
       return 0;
     }
   return strlen(servNameInfo);
 }
 
 
-void sqResolverGetNameInfoServiceResultSize(char *name, sqInt nameSize)
+void 
+sqResolverGetNameInfoServiceResultSize(char *name, sqInt nameSize, struct foo * self)
 {
   int len;
 
@@ -1992,29 +2057,31 @@ void sqResolverGetNameInfoServiceResultSize(char *name, sqInt nameSize)
   return;
 
  fail:
-  success(false, interpreterProxy->interpreterState);
+  success(false, self);
 }
 
 
-sqInt sqResolverHostNameSize(void)
+sqInt 
+sqResolverHostNameSize(struct foo * self)
 {
   char buf[MAXHOSTNAMELEN+1];
   if (gethostname(buf, sizeof(buf)))
     {
-      success(false, interpreterProxy->interpreterState);
+      success(false, self);
       return 0;
     }
   return strlen(buf);
 }
 
 
-void sqResolverHostNameResultSize(char *name, sqInt nameSize)
+void 
+sqResolverHostNameResultSize(char *name, sqInt nameSize, struct foo * self)
 {
   char buf[MAXHOSTNAMELEN+1];
   int len;
   if (gethostname(buf, sizeof(buf)) || (nameSize < (len= strlen(buf))))
     {
-      success(false, interpreterProxy->interpreterState);
+      success(false, self);
       return;
     }
   memcpy(name, buf, len);
@@ -2024,11 +2091,12 @@ void sqResolverHostNameResultSize(char *name, sqInt nameSize)
 /* ---- circuit setup ---- */
 
 
-void sqSocketBindToAddressSize(SocketPtr s, char *addr, sqInt addrSize)
+void 
+sqSocketBindToAddressSize(SocketPtr s, char *addr, sqInt addrSize, struct foo * self)
 {
   privateSocketStruct *pss= PSP(s);
 
-  if (!(socketValid(s) && addressValid(addr, addrSize)))
+  if (!(socketValid(s, self) && addressValid(addr, addrSize)))
     goto fail;
 
   if (bind(SOCKET(s), socketAddress(addr), addressSize(addr)) == 0)
@@ -2037,13 +2105,14 @@ void sqSocketBindToAddressSize(SocketPtr s, char *addr, sqInt addrSize)
   pss->sockError= errno;
 
  fail:
-  success(false, interpreterProxy->interpreterState);
+  success(false, self);
 }
 
 
-void sqSocketListenBacklog(SocketPtr s, sqInt backlogSize)
+void 
+sqSocketListenBacklog(SocketPtr s, sqInt backlogSize, struct foo * self)
 {
-  if (!socketValid(s))
+  if (!socketValid(s, self))
     goto fail;
 
   if ((backlogSize > 1) && (s->socketType != TCPSocketType))
@@ -2064,19 +2133,20 @@ void sqSocketListenBacklog(SocketPtr s, sqInt backlogSize)
   return;
 
  fail:
-  success(false, interpreterProxy->interpreterState);
+  success(false, self);
   return;
 }
 
 
-void sqSocketConnectToAddressSize(SocketPtr s, char *addr, sqInt addrSize)
+void 
+sqSocketConnectToAddressSize(SocketPtr s, char *addr, sqInt addrSize, struct foo * self)
 {
   /* TCP => open a connection.
    * UDP => set remote address.
    */
-  if (!(socketValid(s) && addressValid(addr, addrSize)))
+  if (!(socketValid(s, self) && addressValid(addr, addrSize)))
     {
-      success(false, interpreterProxy->interpreterState);
+      success(false, self);
       return;
     }
 
@@ -2105,7 +2175,7 @@ void sqSocketConnectToAddressSize(SocketPtr s, char *addr, sqInt addrSize)
 	  /* connection completed synchronously */
 	  SOCKETSTATE(s)= Connected;
 	  notify(PSP(s), CONN_NOTIFY);
-	  setLinger(SOCKET(s), 1);
+	  setLinger(SOCKET(s), 1, self);
 	}
       else
 	{
@@ -2128,12 +2198,13 @@ void sqSocketConnectToAddressSize(SocketPtr s, char *addr, sqInt addrSize)
 }
 
 
-sqInt sqSocketLocalAddressSize(SocketPtr s)
+sqInt 
+sqSocketLocalAddressSize(SocketPtr s, struct foo * self)
 {
   union sockaddr_any saddr;
   socklen_t saddrSize= sizeof(saddr);
 
-  if (!socketValid(s))
+  if (!socketValid(s, self))
     return -1;
 
   if (getsockname(SOCKET(s), &saddr.sa, &saddrSize))
@@ -2143,12 +2214,13 @@ sqInt sqSocketLocalAddressSize(SocketPtr s)
 }
 
 
-void sqSocketLocalAddressResultSize(SocketPtr s, char *addr, int addrSize)
+void 
+sqSocketLocalAddressResultSize(SocketPtr s, char *addr, int addrSize, struct foo * self)
 {
   union sockaddr_any saddr;
   socklen_t saddrSize= sizeof(saddr);
 
-  if (!socketValid(s))
+  if (!socketValid(s, self))
     goto fail;
 
   if (getsockname(SOCKET(s), &saddr.sa, &saddrSize))
@@ -2163,17 +2235,18 @@ void sqSocketLocalAddressResultSize(SocketPtr s, char *addr, int addrSize)
   return;
 
  fail:
-  success(false, interpreterProxy->interpreterState);
+  success(false, self);
   return;
 }
 
 
-sqInt sqSocketRemoteAddressSize(SocketPtr s)
+sqInt 
+sqSocketRemoteAddressSize(SocketPtr s, struct foo * self)
 {
   union sockaddr_any saddr;
   socklen_t saddrSize= sizeof(saddr);
 
-  if (!socketValid(s))
+  if (!socketValid(s, self))
     return -1;
 
   if (TCPSocketType == s->socketType)		/* --- TCP --- */
@@ -2196,12 +2269,13 @@ sqInt sqSocketRemoteAddressSize(SocketPtr s)
 }
 
 
-void sqSocketRemoteAddressResultSize(SocketPtr s, char *addr, int addrSize)
+void 
+sqSocketRemoteAddressResultSize(SocketPtr s, char *addr, int addrSize, struct foo * self)
 {
-  if (!socketValid(s)
+  if (!socketValid(s, self)
    || !SOCKETPEERSIZE(s)
    || (addrSize != (AddressHeaderSize + SOCKETPEERSIZE(s)))) {
-    success(false, interpreterProxy->interpreterState);
+    success(false, self);
     return;
   }
 
@@ -2215,10 +2289,11 @@ void sqSocketRemoteAddressResultSize(SocketPtr s, char *addr, int addrSize)
 /* ---- communication ---- */
 
 
-sqInt sqSocketSendUDPToSizeDataBufCount(SocketPtr s, char *addr, sqInt addrSize, char *buf, sqInt bufSize)
+sqInt 
+sqSocketSendUDPToSizeDataBufCount(SocketPtr s, char *addr, sqInt addrSize, char *buf, sqInt bufSize, struct foo * self)
 {
   FPRINTF((stderr, "sendTo(%d)\n", SOCKET(s)));
-  if (socketValid(s) && addressValid(addr, addrSize) && (TCPSocketType != s->socketType)) /* --- UDP/RAW --- */
+  if (socketValid(s, self) && addressValid(addr, addrSize) && (TCPSocketType != s->socketType)) /* --- UDP/RAW --- */
     {
       int nsent= sendto(SOCKET(s), buf, bufSize, 0, socketAddress(addr), addrSize - AddressHeaderSize);
       if (nsent >= 0)
@@ -2231,15 +2306,16 @@ sqInt sqSocketSendUDPToSizeDataBufCount(SocketPtr s, char *addr, sqInt addrSize,
       SOCKETERROR(s)= errno;
     }
 
-  success(false, interpreterProxy->interpreterState);
+  success(false, self);
   return 0;
 }
 
 
-sqInt sqSocketReceiveUDPDataBufCount(SocketPtr s, char *buf, sqInt bufSize)
+sqInt 
+sqSocketReceiveUDPDataBufCount(SocketPtr s, char *buf, sqInt bufSize, struct foo * self)
 {
   FPRINTF((stderr, "recvFrom(%d)\n", SOCKET(s)));
-  if (socketValid(s) && (TCPSocketType != s->socketType)) /* --- UDP/RAW --- */
+  if (socketValid(s, self) && (TCPSocketType != s->socketType)) /* --- UDP/RAW --- */
     {
       socklen_t saddrSize= sizeof(SOCKETPEER(s));
       int nread= recvfrom(SOCKET(s), buf, bufSize, 0, &SOCKETPEER(s).sa, &saddrSize);
@@ -2254,6 +2330,6 @@ sqInt sqSocketReceiveUDPDataBufCount(SocketPtr s, char *buf, sqInt bufSize)
       SOCKETERROR(s)= errno;
       FPRINTF((stderr, "receiveData(%d)= %da\n", SOCKET(s), 0));
     }
-  success(false, interpreterProxy->interpreterState);
+  success(false, self);
   return 0;
 }

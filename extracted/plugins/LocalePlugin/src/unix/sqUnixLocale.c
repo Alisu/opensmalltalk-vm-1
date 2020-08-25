@@ -23,7 +23,7 @@
 #endif
 
 /* Locale support functions */
-sqInt sqLocInitialize(void) {
+sqInt sqLocInitialize(void) {
 	return true;
 }
 
@@ -32,7 +32,7 @@ sqInt sqLocInitialize(void) {
 /* write the country code into the string ptr. ISO 3166 is the relevant source
  * here; see http://www.unicode.org/onlinedat/countries.html for details.
  * Using the 3 character Alpha-3 codes */
-void	sqLocGetCountryInto(char * str) {
+void	sqLocGetCountryInto(char * str) {
 
 	char currString[6];
 	int length;
@@ -45,7 +45,7 @@ void	sqLocGetCountryInto(char * str) {
  * ISO 639 is the relevant source here;
  * see http://www.w3.org/WAI/ER/IG/ert/iso639.html
  * for details */
-void	sqLocGetLanguageInto(char * str) {
+void	sqLocGetLanguageInto(char * str) {
 
 	char currString[6];
 	int length;
@@ -57,7 +57,7 @@ void	sqLocGetLanguageInto(char * str) {
 
 /* return 1 (true) if the currency symbol is to be placed in front of the
  *currency amount */
-sqInt	sqLocCurrencyNotation(void) {
+sqInt	sqLocCurrencyNotation(void) {
 	DWORD icurrency;
 	if (GetLocaleInfoA(LOCALE_USER_DEFAULT,LOCALE_ICURRENCY | LOCALE_RETURN_NUMBER,(char *)&icurrency, sizeof(icurrency)/sizeof(TCHAR)) != 0){
 		return((icurrency % 2) == 0);
@@ -66,13 +66,13 @@ sqInt	sqLocCurrencyNotation(void) {
 }
 
 /* return the length in chars of the curency symbol string */
-sqInt	sqLocCurrencySymbolSize(void) {
+sqInt	sqLocCurrencySymbolSize(void) {
 	char currString[6];
 	return GetLocaleInfoA(LOCALE_USER_DEFAULT,LOCALE_SCURRENCY,currString, 6)-1;
 }
 
 /* write the currency symbol into the string ptr */
-void	sqLocGetCurrencySymbolInto(char * str) {
+void	sqLocGetCurrencySymbolInto(char * str) {
 	char currString[6];
 	int length;
 	length = GetLocaleInfoA(LOCALE_USER_DEFAULT,LOCALE_SCURRENCY,currString, 6);
@@ -86,7 +86,7 @@ void	sqLocGetCurrencySymbolInto(char * str) {
 
 /* return true if the metric measurements system is to be used, false otherwise
  * (USA is about it) */
-sqInt	sqLocMeasurementMetric(void) {
+sqInt	sqLocMeasurementMetric(void) {
 	char resultString[2];
 	if (GetLocaleInfoA(LOCALE_USER_DEFAULT,LOCALE_IMEASURE,resultString, 2) != 0){
 		if (strcmp (resultString,"0")) return false;
@@ -97,7 +97,7 @@ sqInt	sqLocMeasurementMetric(void) {
 
 /* write the 1 char used for digit grouping into string ptr.
  * Usually this is . or ,  as in 1,000,000 */
-void	sqLocGetDigitGroupingSymbolInto(char * str) {
+void	sqLocGetDigitGroupingSymbolInto(char * str) {
 	char groupString[4];
 	GetLocaleInfoA(LOCALE_USER_DEFAULT,LOCALE_STHOUSAND,groupString, 4);
 	strncpy(str, groupString, 1);
@@ -105,7 +105,7 @@ void	sqLocGetDigitGroupingSymbolInto(char * str) {
 }
 /* write the 1 char used for decimal separation into string ptr.
  * Usually this is . or , */
-void	sqLocGetDecimalSymbolInto(char * str) {
+void	sqLocGetDecimalSymbolInto(char * str) {
 	char deciString[4];
 	GetLocaleInfoA(LOCALE_USER_DEFAULT,LOCALE_SDECIMAL, deciString, 4);
 	strncpy(str, deciString, 1);
@@ -114,12 +114,12 @@ void	sqLocGetDecimalSymbolInto(char * str) {
 
 /****************** time and date *********************/
 
-sqInt	sqLocGetVMOffsetToUTC(void) {
+sqInt	sqLocGetVMOffsetToUTC(void) {
 	/* return 0 for now */
 	return 0;
 }
 
-sqInt	sqLocGetTimezoneOffset(void) {
+sqInt	sqLocGetTimezoneOffset(void) {
   DWORD tzid;
   TIME_ZONE_INFORMATION timeZoneInformation;
   tzid = GetTimeZoneInformation(&timeZoneInformation);
@@ -134,14 +134,14 @@ sqInt	sqLocGetTimezoneOffset(void) {
 }
 
 /* return true if DST is in use, false otherwise */
-sqInt	sqLocDaylightSavings(void) {
+sqInt	sqLocDaylightSavings(void) {
   TIME_ZONE_INFORMATION timeZoneInformation;
   return GetTimeZoneInformation(&timeZoneInformation) == 2;
 }
 
 static char longDateFormat[] = "dddd dd mmmm yy";
 /* return the size in chars of the long date format string */
-sqInt	sqLocLongDateFormatSize(void) {
+sqInt	sqLocLongDateFormatSize(void) {
 	return GetLocaleInfoA(LOCALE_USER_DEFAULT,LOCALE_SLONGDATE, NULL, 0)-1;
 }
 
@@ -152,7 +152,7 @@ sqInt	sqLocLongDateFormatSize(void) {
  * 		dddd weekday
  * 		mmmm month name
 */
-void	sqLocGetLongDateFormatInto(char * str) {
+void	sqLocGetLongDateFormatInto(char * str) {
 	char dateString[80];
 	int length;
 	length = GetLocaleInfoA(LOCALE_USER_DEFAULT,LOCALE_SLONGDATE, dateString, 80);
@@ -161,7 +161,7 @@ void	sqLocGetLongDateFormatInto(char * str) {
 
 static char shortDateFormat[] = "dd/mm/yy";
 /* return the size in chars of the short date format string */
-sqInt	sqLocShortDateFormatSize(void) {
+sqInt	sqLocShortDateFormatSize(void) {
 	return GetLocaleInfoA(LOCALE_USER_DEFAULT,LOCALE_SSHORTDATE, NULL, 0)-1;
 }
 
@@ -171,7 +171,7 @@ sqInt	sqLocShortDateFormatSize(void) {
  * 		double symbol is null padded, single not padded (m=6, mm=06)
  * 		dddd weekday
  * 		mmmm month name */
-void	sqLocGetShortDateFormatInto(char * str) {
+void	sqLocGetShortDateFormatInto(char * str) {
 	char dateString[80];
 	int length;
 	length = GetLocaleInfoA(LOCALE_USER_DEFAULT,LOCALE_SSHORTDATE, dateString, 80);
@@ -180,7 +180,7 @@ void	sqLocGetShortDateFormatInto(char * str) {
 
 static char timeFormat[] = "h:m:s";
 /* return the size in chars of the time format string */
-sqInt	sqLocTimeFormatSize(void) {
+sqInt	sqLocTimeFormatSize(void) {
 	return GetLocaleInfoA(LOCALE_USER_DEFAULT,LOCALE_STIMEFORMAT, NULL, 0)-1;
 }
 
@@ -188,7 +188,7 @@ sqInt	sqLocTimeFormatSize(void) {
  * Format is made up of
  * 		h hour (h 12, H 24), m minute, s seconds, x (am/pm String)
  * 		double symbol is null padded, single not padded (h=6, hh=06)  */
-void	sqLocGetTimeFormatInto(char * str) {
+void	sqLocGetTimeFormatInto(char * str) {
 	char timeString[80];
 	int length;
 	length = GetLocaleInfoA(LOCALE_USER_DEFAULT,LOCALE_STIMEFORMAT, timeString, 80);

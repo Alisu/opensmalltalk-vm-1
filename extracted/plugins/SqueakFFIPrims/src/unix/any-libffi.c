@@ -24,7 +24,7 @@
 #endif
 
 #if defined(FFI_TEST)
-  static int primitiveFail(void, interpreterProxy->interpreterState) { puts("primitive fail"); exit(1); return 0; }
+  static int primitiveFail(struct foo * self) { puts("primitive fail"); exit(1); return 0; }
 #else
   extern struct VirtualMachine *interpreterProxy;
 # define primitiveFail() interpreterProxy->primitiveFail();
@@ -100,7 +100,7 @@ static int   ffiTempStringCount = 0;
 
 /*  ffiInitialize:
     Announce that the VM is about to do an external function call. */
-int ffiInitialize(void)
+int ffiInitialize(struct foo * self)
 {
   ffiArgIndex = 0;
   ffiTempStringCount = 0;
@@ -112,7 +112,7 @@ int ffiInitialize(void)
 
 /*  ffiSupportsCallingConvention:
     Return true if the support code supports the given calling convention */
-int ffiSupportsCallingConvention(int callType)
+int ffiSupportsCallingConvention(int callType, struct foo * self)
 {
   if(callType == FFICallTypeCDecl) return 1;
   return 0;
@@ -120,7 +120,7 @@ int ffiSupportsCallingConvention(int callType)
 
 /*  ffiAlloc:
     Allocate space from the external heap */
-int ffiAlloc(int byteSize)
+int ffiAlloc(int byteSize, struct foo * self)
 {
   return (int)malloc(byteSize);
 }
@@ -135,96 +135,96 @@ int ffiFree(sqIntptr_t pointer)
 /*****************************************************************************/
 /*****************************************************************************/
 
-int ffiPushSignedByte(int value)
+int ffiPushSignedByte(int value, struct foo * self)
 {
   BARG_PUSH((char)value, ffi_type_sint8);
   return 1;
 }
 
-int ffiPushUnsignedByte(int value)
+int ffiPushUnsignedByte(int value, struct foo * self)
 {
   BARG_PUSH((char)value, ffi_type_uint8);
   return 1;
 }
 
-int ffiPushSignedShort(int value)
+int ffiPushSignedShort(int value, struct foo * self)
 {
   SARG_PUSH((short)value, ffi_type_sint16);
   return 1;
 }
 
-int ffiPushUnsignedShort(int value)
+int ffiPushUnsignedShort(int value, struct foo * self)
 {
   SARG_PUSH((short)value, ffi_type_uint16);
   return 1;
 }
 
-int ffiPushSignedInt(int value)
+int ffiPushSignedInt(int value, struct foo * self)
 {
   IARG_PUSH(value, ffi_type_sint32);
   return 1;
 }
 
-int ffiPushUnsignedInt(int value)
+int ffiPushUnsignedInt(int value, struct foo * self)
 {
   IARG_PUSH(value, ffi_type_uint32);
   return 1;
 }
 
-int ffiPushSignedLongLong(int low, int high)
+int ffiPushSignedLongLong(int low, int high, struct foo * self)
 {
 #if HAS_LONGLONG
   LONGLONG value = (((LONGLONG) high) << 32)  | ((LONGLONG) (unsigned) low);
   LARG_PUSH(value, ffi_type_sint64);
   return 1;
 #else
-  return primitiveFail(interpreterProxy->interpreterState);
+  return primitiveFail(self);
 #endif
 }
 
-int ffiPushUnsignedLongLong(int low, int high)
+int ffiPushUnsignedLongLong(int low, int high, struct foo * self)
 {
 #if HAS_LONGLONG
   LONGLONG value = (((LONGLONG) high) << 32)  | ((LONGLONG) (unsigned) low);
   LARG_PUSH(value, ffi_type_uint64);
   return 1;
 #else
-  return primitiveFail(interpreterProxy->interpreterState);
+  return primitiveFail(self);
 #endif
 }
 
-int ffiPushSignedChar(int value)
+int ffiPushSignedChar(int value, struct foo * self)
 {
   BARG_PUSH(value, ffi_type_sint8);
   return 1;
 }
 
-int ffiPushUnsignedChar(int value)
+int ffiPushUnsignedChar(int value, struct foo * self)
 {
   BARG_PUSH(value, ffi_type_uint8);
   return 1;
 }
 
-int ffiPushBool(int value)
+int ffiPushBool(int value, struct foo * self)
 {
   IARG_PUSH(value, ffi_type_uint8);
   return 1;
 }
 
-int ffiPushSingleFloat(double value)
+int ffiPushSingleFloat(double value, struct foo * self)
 {
   FARG_PUSH((float)value);
   return 1;
 }
 
-int ffiPushDoubleFloat(double value)
+int ffiPushDoubleFloat(double value, struct foo * self)
 {
   DARG_PUSH(value);
   return 1;
 }
 
 
-ffi_type* ffiCreateType(int *structSpec, int structSize)
+ffi_type* ffiCreateType(int *structSpec, int structSize, struct foo * self)
 {
   ffi_type *structType, **newTypes;
   int nTypes, i, typeSpec;
@@ -299,14 +299,14 @@ ffi_type* ffiCreateType(int *structSpec, int structSize)
   return structType;
 }
 
-int ffiPushStructureOfLength(int pointer, int* structSpec, int structSize)
+int ffiPushStructureOfLength(int pointer, int* structSpec, int structSize, struct foo * self)
 {
   ffi_type *structType;
 
-  if(pointer == 0) return primitiveFail(interpreterProxy->interpreterState);
+  if(pointer == 0) return primitiveFail(self);
   CHECK_ARGS(); /* fail early on */
-  structType = ffiCreateType(structSpec, structSize);
-  if(structType == NULL) return primitiveFail(interpreterProxy->interpreterState);
+  structType = ffiCreateType(structSpec, structSize, self);
+  if(structType == NULL) return primitiveFail(self);
   ffiStructTypes[ffiStructIndex++] = structType;
   ffiTypes[ffiArgIndex] = structType;
   ffiArgs[ffiArgIndex] = (void*) pointer;
@@ -314,17 +314,17 @@ int ffiPushStructureOfLength(int pointer, int* structSpec, int structSize)
   return 1;
 }
 
-int ffiPushPointer(int pointer)
+int ffiPushPointer(int pointer, struct foo * self)
 {
   IARG_PUSH(pointer, ffi_type_pointer);
   return 1;
 }
 
-int ffiPushStringOfLength(int srcIndex, int length)
+int ffiPushStringOfLength(int srcIndex, int length, struct foo * self)
 {
   char *ptr;
   ptr = (char*) malloc(length+1);
-  if(!ptr) return primitiveFail(interpreterProxy->interpreterState);
+  if(!ptr) return primitiveFail(self);
   memcpy(ptr, (void*)srcIndex, length);
   ptr[length] = 0;
   ffiTempStrings[ffiTempStringCount++] = ptr;
@@ -337,13 +337,13 @@ int ffiPushStringOfLength(int srcIndex, int length)
 
 /*  ffiCanReturn:
 	Return true if the support code can return the given type. */
-int ffiCanReturn(int *structSpec, int specSize)
+int ffiCanReturn(int *structSpec, int specSize, struct foo * self)
 {
   int header = *structSpec;
   if(header & FFIFlagPointer) return 1;
   if(header & FFIFlagStructure) {
     int structSize = header & FFIStructSizeMask;
-    structReturnType = ffiCreateType(structSpec, specSize);
+    structReturnType = ffiCreateType(structSpec, specSize, self);
     if(!structReturnType) return 0;
     if(structSize > 8) {
       structReturnValue = calloc(1,structSize);
@@ -356,14 +356,14 @@ int ffiCanReturn(int *structSpec, int specSize)
 
 /*  ffiReturnFloatValue:
     Return the value from a previous ffi call with float return type. */
-double ffiReturnFloatValue(void)
+double ffiReturnFloatValue(struct foo * self)
 {
   return returnValue;
 }
 
 /*  ffiLongLongResultLow:
     Return the low 32bit from the 64bit result of a call to an external function */
-int ffiLongLongResultLow(void)
+int ffiLongLongResultLow(struct foo * self)
 {
 #if HAS_LONGLONG
   return (int) ( (*(LONGLONG*)&returnValue) & (LONGLONG)0xFFFFFFFFU);
@@ -374,7 +374,7 @@ int ffiLongLongResultLow(void)
 
 /*  ffiLongLongResultHigh:
     Return the high 32bit from the 64bit result of a call to an external function */
-int ffiLongLongResultHigh(void)
+int ffiLongLongResultHigh(struct foo * self)
 {
 #if HAS_LONGLONG
   return (int) ( (*(LONGLONG*)&returnValue) >> 32);
@@ -385,7 +385,7 @@ int ffiLongLongResultHigh(void)
 
 /*  ffiStoreStructure:
     Store the structure result of a previous ffi call into the given address*/
-int ffiStoreStructure(int address, int structSize)
+int ffiStoreStructure(int address, int structSize, struct foo * self)
 {
   if(structReturnValue) {
     memcpy((void*)address, (void*)structReturnValue, structSize);
@@ -399,7 +399,7 @@ int ffiStoreStructure(int address, int structSize)
     Cleanup after a foreign function call has completed.
     The generic support code only frees the temporarily
     allocated strings. */
-int ffiCleanup(void)
+int ffiCleanup(struct foo * self)
 {
   int i;
   for(i=0; i<ffiTempStringCount; i++)
@@ -425,7 +425,7 @@ int ffiCleanup(void)
 
 /*****************************************************************************/
 /*****************************************************************************/
-int ffiCallAddress(int fn, ffi_type *returnType, int atomicArgType)
+int ffiCallAddress(int fn, ffi_type *returnType, int atomicArgType, self)
 {
   ffi_cif cif;
   ffi_status result;
@@ -433,7 +433,7 @@ int ffiCallAddress(int fn, ffi_type *returnType, int atomicArgType)
 
   result = ffi_prep_cif(&cif, FFI_DEFAULT_ABI, ffiArgIndex, 
 			returnType, ffiTypes);
-  if(result != FFI_OK) return primitiveFail(interpreterProxy->interpreterState);
+  if(result != FFI_OK) return primitiveFail(self);
   if(structReturnValue) {
     ffi_call(&cif, (void *)fn, (void *)structReturnValue, (void **)ffiArgs);
     return (int) structReturnValue;
@@ -458,19 +458,19 @@ int ffiCallAddress(int fn, ffi_type *returnType, int atomicArgType)
   return retVal;
 }
 
-int ffiCallAddressOfWithPointerReturn(int fn, int callType)
+int ffiCallAddressOfWithPointerReturn(int fn, int callType, struct foo * self)
 {
-  return ffiCallAddress(fn, &ffi_type_pointer,-1);
+  return ffiCallAddress(fn, &ffi_type_pointer,-1, self);
 }
 
 int ffiCallAddressOfWithStructReturn(int fn, int callType, 
-				     int *structSpec, int specSize)
+				     int *structSpec, int specSize, self)
 {
-  if(!structReturnType) return primitiveFail(interpreterProxy->interpreterState);
-  return ffiCallAddress(fn, structReturnType,-1);
+  if(!structReturnType) return primitiveFail(self);
+  return ffiCallAddress(fn, structReturnType,-1, self);
 }
 
-int ffiCallAddressOfWithReturnType(int fn, int callType, int typeSpec)
+int ffiCallAddressOfWithReturnType(int fn, int callType, int typeSpec, struct foo * self)
 {
   ffi_type *returnType;
   int atomicType;
@@ -491,14 +491,14 @@ int ffiCallAddressOfWithReturnType(int fn, int callType, int typeSpec)
   case FFITypeSingleFloat:	returnType = &ffi_type_float; break;
   case FFITypeDoubleFloat:	returnType = &ffi_type_double; break;
   default:
-    return primitiveFail(interpreterProxy->interpreterState);
+    return primitiveFail(self);
   }
-  return ffiCallAddress(fn, returnType, atomicType);
+  return ffiCallAddress(fn, returnType, atomicType, self);
 }
 
 
 #if defined(FFI_TEST)
-void ffiDoAssertions(void) {}
+void ffiDoAssertions(void) {}
 #endif
 
 

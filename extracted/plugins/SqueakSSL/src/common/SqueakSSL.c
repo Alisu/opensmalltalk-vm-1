@@ -36,16 +36,16 @@ static char __buildInfo[] = "SqueakSSLPlugin VMMaker.oscog-eem.2480 uuid: bb3ffd
 
 /*** Function Prototypes ***/
 EXPORT(const char*) getModuleName(void);
-EXPORT(sqInt) primitiveAccept(void);
-EXPORT(sqInt) primitiveConnect(void);
-EXPORT(sqInt) primitiveCreate(void);
-EXPORT(sqInt) primitiveDecrypt(void);
-EXPORT(sqInt) primitiveDestroy(void);
-EXPORT(sqInt) primitiveEncrypt(void);
-EXPORT(sqInt) primitiveGetIntProperty(void);
-EXPORT(sqInt) primitiveGetStringProperty(void);
-EXPORT(sqInt) primitiveSetIntProperty(void);
-EXPORT(sqInt) primitiveSetStringProperty(void);
+EXPORT(sqInt) primitiveAccept(struct foo * self);
+EXPORT(sqInt) primitiveConnect(struct foo * self);
+EXPORT(sqInt) primitiveCreate(struct foo * self);
+EXPORT(sqInt) primitiveDecrypt(struct foo * self);
+EXPORT(sqInt) primitiveDestroy(struct foo * self);
+EXPORT(sqInt) primitiveEncrypt(struct foo * self);
+EXPORT(sqInt) primitiveGetIntProperty(struct foo * self);
+EXPORT(sqInt) primitiveGetStringProperty(struct foo * self);
+EXPORT(sqInt) primitiveSetIntProperty(struct foo * self);
+EXPORT(sqInt) primitiveSetStringProperty(struct foo * self);
 EXPORT(sqInt) setInterpreter(struct VirtualMachine *anInterpreter);
 
 
@@ -123,8 +123,7 @@ getModuleName(void)
 	 */
 
 	/* SqueakSSLPlugin>>#primitiveAccept */
-EXPORT(sqInt)
-primitiveAccept(void)
+EXPORT(sqInt)primitiveAccept(struct foo * self)
 {
     sqInt dstLen;
     sqInt dstOop;
@@ -136,34 +135,34 @@ primitiveAccept(void)
     char *srcPtr;
     sqInt start;
 
-	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 5)) {
-		return primitiveFail(interpreterProxy->interpreterState);
+	if (!((methodArgumentCount(self)) == 5)) {
+		return primitiveFail(self);
 	}
-	dstOop = stackValue(0, interpreterProxy->interpreterState);
-	srcLen = stackIntegerValue(1, interpreterProxy->interpreterState);
-	start = stackIntegerValue(2, interpreterProxy->interpreterState);
-	srcOop = stackValue(3, interpreterProxy->interpreterState);
-	handle = stackIntegerValue(4, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	dstOop = stackValue(0, self);
+	srcLen = stackIntegerValue(1, self);
+	start = stackIntegerValue(2, self);
+	srcOop = stackValue(3, self);
+	handle = stackIntegerValue(4, self);
+	if (failed(self)) {
 		return null;
 	}
 	if (!(((start > 0)
 		 && (srcLen >= 0))
-		 && ((isBytes(srcOop, interpreterProxy->interpreterState))
-		 && ((isBytes(dstOop, interpreterProxy->interpreterState))
-		 && ((byteSizeOf(srcOop, interpreterProxy->interpreterState)) >= ((start + srcLen) - 1)))))) {
-		return primitiveFail(interpreterProxy->interpreterState);
+		 && ((isBytes(srcOop, self))
+		 && ((isBytes(dstOop, self))
+		 && ((byteSizeOf(srcOop, self)) >= ((start + srcLen) - 1)))))) {
+		return primitiveFail(self);
 	}
-	srcPtr = firstIndexableField(srcOop, interpreterProxy->interpreterState);
-	dstPtr = firstIndexableField(dstOop, interpreterProxy->interpreterState);
+	srcPtr = firstIndexableField(srcOop, self);
+	dstPtr = firstIndexableField(dstOop, self);
 	srcPtr = (srcPtr + start) - 1;
-	dstLen = byteSizeOf(dstOop, interpreterProxy->interpreterState);
+	dstLen = byteSizeOf(dstOop, self);
 	result = sqAcceptSSL(handle, srcPtr, srcLen, dstPtr, dstLen);
-	if (failed(interpreterProxy->interpreterState)) {
+	if (failed(self)) {
 		return null;
 	}
-	pop((methodArgumentCount(interpreterProxy->interpreterState)) + 1, interpreterProxy->interpreterState);
-	pushInteger(result, interpreterProxy->interpreterState);
+	pop((methodArgumentCount(self)) + 1, self);
+	pushInteger(result, self);
 	return 0;
 }
 
@@ -179,8 +178,7 @@ primitiveAccept(void)
 	 */
 
 	/* SqueakSSLPlugin>>#primitiveConnect */
-EXPORT(sqInt)
-primitiveConnect(void)
+EXPORT(sqInt)primitiveConnect(struct foo * self)
 {
     sqInt dstLen;
     sqInt dstOop;
@@ -192,34 +190,34 @@ primitiveConnect(void)
     char *srcPtr;
     sqInt start;
 
-	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 5)) {
-		return primitiveFail(interpreterProxy->interpreterState);
+	if (!((methodArgumentCount(self)) == 5)) {
+		return primitiveFail(self);
 	}
-	dstOop = stackValue(0, interpreterProxy->interpreterState);
-	srcLen = stackIntegerValue(1, interpreterProxy->interpreterState);
-	start = stackIntegerValue(2, interpreterProxy->interpreterState);
-	srcOop = stackValue(3, interpreterProxy->interpreterState);
-	handle = stackIntegerValue(4, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	dstOop = stackValue(0, self);
+	srcLen = stackIntegerValue(1, self);
+	start = stackIntegerValue(2, self);
+	srcOop = stackValue(3, self);
+	handle = stackIntegerValue(4, self);
+	if (failed(self)) {
 		return null;
 	}
 	if (!(((start > 0)
 		 && (srcLen >= 0))
-		 && ((isBytes(srcOop, interpreterProxy->interpreterState))
-		 && ((isBytes(dstOop, interpreterProxy->interpreterState))
-		 && ((byteSizeOf(srcOop, interpreterProxy->interpreterState)) >= ((start + srcLen) - 1)))))) {
-		return primitiveFail(interpreterProxy->interpreterState);
+		 && ((isBytes(srcOop, self))
+		 && ((isBytes(dstOop, self))
+		 && ((byteSizeOf(srcOop, self)) >= ((start + srcLen) - 1)))))) {
+		return primitiveFail(self);
 	}
-	srcPtr = firstIndexableField(srcOop, interpreterProxy->interpreterState);
-	dstPtr = firstIndexableField(dstOop, interpreterProxy->interpreterState);
+	srcPtr = firstIndexableField(srcOop, self);
+	dstPtr = firstIndexableField(dstOop, self);
 	srcPtr = (srcPtr + start) - 1;
-	dstLen = byteSizeOf(dstOop, interpreterProxy->interpreterState);
+	dstLen = byteSizeOf(dstOop, self);
 	result = sqConnectSSL(handle, srcPtr, srcLen, dstPtr, dstLen);
-	if (failed(interpreterProxy->interpreterState)) {
+	if (failed(self)) {
 		return null;
 	}
-	pop((methodArgumentCount(interpreterProxy->interpreterState)) + 1, interpreterProxy->interpreterState);
-	pushInteger(result, interpreterProxy->interpreterState);
+	pop((methodArgumentCount(self)) + 1, self);
+	pushInteger(result, self);
 	return 0;
 }
 
@@ -227,20 +225,19 @@ primitiveConnect(void)
 /*	Primitive. Creates a new SSL session and returns its handle. */
 
 	/* SqueakSSLPlugin>>#primitiveCreate */
-EXPORT(sqInt)
-primitiveCreate(void)
+EXPORT(sqInt)primitiveCreate(struct foo * self)
 {
     sqInt handle;
 
-	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 0)) {
-		return primitiveFail(interpreterProxy->interpreterState);
+	if (!((methodArgumentCount(self)) == 0)) {
+		return primitiveFail(self);
 	}
 	handle = sqCreateSSL();
 	if (handle == 0) {
-		return primitiveFail(interpreterProxy->interpreterState);
+		return primitiveFail(self);
 	}
-	pop((methodArgumentCount(interpreterProxy->interpreterState)) + 1, interpreterProxy->interpreterState);
-	pushInteger(handle, interpreterProxy->interpreterState);
+	pop((methodArgumentCount(self)) + 1, self);
+	pushInteger(handle, self);
 	return 0;
 }
 
@@ -253,8 +250,7 @@ primitiveCreate(void)
 	 */
 
 	/* SqueakSSLPlugin>>#primitiveDecrypt */
-EXPORT(sqInt)
-primitiveDecrypt(void)
+EXPORT(sqInt)primitiveDecrypt(struct foo * self)
 {
     sqInt dstLen;
     sqInt dstOop;
@@ -266,34 +262,34 @@ primitiveDecrypt(void)
     char *srcPtr;
     sqInt start;
 
-	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 5)) {
-		return primitiveFail(interpreterProxy->interpreterState);
+	if (!((methodArgumentCount(self)) == 5)) {
+		return primitiveFail(self);
 	}
-	dstOop = stackValue(0, interpreterProxy->interpreterState);
-	srcLen = stackIntegerValue(1, interpreterProxy->interpreterState);
-	start = stackIntegerValue(2, interpreterProxy->interpreterState);
-	srcOop = stackValue(3, interpreterProxy->interpreterState);
-	handle = stackIntegerValue(4, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	dstOop = stackValue(0, self);
+	srcLen = stackIntegerValue(1, self);
+	start = stackIntegerValue(2, self);
+	srcOop = stackValue(3, self);
+	handle = stackIntegerValue(4, self);
+	if (failed(self)) {
 		return null;
 	}
 	if (!(((start > 0)
 		 && (srcLen >= 0))
-		 && ((isBytes(srcOop, interpreterProxy->interpreterState))
-		 && ((isBytes(dstOop, interpreterProxy->interpreterState))
-		 && ((byteSizeOf(srcOop, interpreterProxy->interpreterState)) >= ((start + srcLen) - 1)))))) {
-		return primitiveFail(interpreterProxy->interpreterState);
+		 && ((isBytes(srcOop, self))
+		 && ((isBytes(dstOop, self))
+		 && ((byteSizeOf(srcOop, self)) >= ((start + srcLen) - 1)))))) {
+		return primitiveFail(self);
 	}
-	srcPtr = firstIndexableField(srcOop, interpreterProxy->interpreterState);
-	dstPtr = firstIndexableField(dstOop, interpreterProxy->interpreterState);
+	srcPtr = firstIndexableField(srcOop, self);
+	dstPtr = firstIndexableField(dstOop, self);
 	srcPtr = (srcPtr + start) - 1;
-	dstLen = byteSizeOf(dstOop, interpreterProxy->interpreterState);
+	dstLen = byteSizeOf(dstOop, self);
 	result = sqDecryptSSL(handle, srcPtr, srcLen, dstPtr, dstLen);
-	if (failed(interpreterProxy->interpreterState)) {
+	if (failed(self)) {
 		return null;
 	}
-	pop((methodArgumentCount(interpreterProxy->interpreterState)) + 1, interpreterProxy->interpreterState);
-	pushInteger(result, interpreterProxy->interpreterState);
+	pop((methodArgumentCount(self)) + 1, self);
+	pushInteger(result, self);
 	return 0;
 }
 
@@ -301,24 +297,23 @@ primitiveDecrypt(void)
 /*	Primitive. Destroys an SSL session. */
 
 	/* SqueakSSLPlugin>>#primitiveDestroy */
-EXPORT(sqInt)
-primitiveDestroy(void)
+EXPORT(sqInt)primitiveDestroy(struct foo * self)
 {
     sqInt handle;
     sqInt result;
 
-	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 1)) {
-		return primitiveFail(interpreterProxy->interpreterState);
+	if (!((methodArgumentCount(self)) == 1)) {
+		return primitiveFail(self);
 	}
-	handle = stackIntegerValue(0, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	handle = stackIntegerValue(0, self);
+	if (failed(self)) {
 		return null;
 	}
 	result = sqDestroySSL(handle);
 	if (result == 0) {
-		return primitiveFail(interpreterProxy->interpreterState);
+		return primitiveFail(self);
 	}
-	pop(methodArgumentCount(interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	pop(methodArgumentCount(self), self);
 	return 0;
 }
 
@@ -331,8 +326,7 @@ primitiveDestroy(void)
 	 */
 
 	/* SqueakSSLPlugin>>#primitiveEncrypt */
-EXPORT(sqInt)
-primitiveEncrypt(void)
+EXPORT(sqInt)primitiveEncrypt(struct foo * self)
 {
     sqInt dstLen;
     sqInt dstOop;
@@ -344,34 +338,34 @@ primitiveEncrypt(void)
     char *srcPtr;
     sqInt start;
 
-	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 5)) {
-		return primitiveFail(interpreterProxy->interpreterState);
+	if (!((methodArgumentCount(self)) == 5)) {
+		return primitiveFail(self);
 	}
-	dstOop = stackValue(0, interpreterProxy->interpreterState);
-	srcLen = stackIntegerValue(1, interpreterProxy->interpreterState);
-	start = stackIntegerValue(2, interpreterProxy->interpreterState);
-	srcOop = stackValue(3, interpreterProxy->interpreterState);
-	handle = stackIntegerValue(4, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	dstOop = stackValue(0, self);
+	srcLen = stackIntegerValue(1, self);
+	start = stackIntegerValue(2, self);
+	srcOop = stackValue(3, self);
+	handle = stackIntegerValue(4, self);
+	if (failed(self)) {
 		return null;
 	}
 	if (!(((start > 0)
 		 && (srcLen >= 0))
-		 && ((isBytes(srcOop, interpreterProxy->interpreterState))
-		 && ((isBytes(dstOop, interpreterProxy->interpreterState))
-		 && ((byteSizeOf(srcOop, interpreterProxy->interpreterState)) >= ((start + srcLen) - 1)))))) {
-		return primitiveFail(interpreterProxy->interpreterState);
+		 && ((isBytes(srcOop, self))
+		 && ((isBytes(dstOop, self))
+		 && ((byteSizeOf(srcOop, self)) >= ((start + srcLen) - 1)))))) {
+		return primitiveFail(self);
 	}
-	srcPtr = firstIndexableField(srcOop, interpreterProxy->interpreterState);
-	dstPtr = firstIndexableField(dstOop, interpreterProxy->interpreterState);
+	srcPtr = firstIndexableField(srcOop, self);
+	dstPtr = firstIndexableField(dstOop, self);
 	srcPtr = (srcPtr + start) - 1;
-	dstLen = byteSizeOf(dstOop, interpreterProxy->interpreterState);
+	dstLen = byteSizeOf(dstOop, self);
 	result = sqEncryptSSL(handle, srcPtr, srcLen, dstPtr, dstLen);
-	if (failed(interpreterProxy->interpreterState)) {
+	if (failed(self)) {
 		return null;
 	}
-	pop((methodArgumentCount(interpreterProxy->interpreterState)) + 1, interpreterProxy->interpreterState);
-	pushInteger(result, interpreterProxy->interpreterState);
+	pop((methodArgumentCount(self)) + 1, self);
+	pushInteger(result, self);
 	return 0;
 }
 
@@ -379,26 +373,25 @@ primitiveEncrypt(void)
 /*	Primitive. Returns an integer property for the session */
 
 	/* SqueakSSLPlugin>>#primitiveGetIntProperty */
-EXPORT(sqInt)
-primitiveGetIntProperty(void)
+EXPORT(sqInt)primitiveGetIntProperty(struct foo * self)
 {
     sqInt handle;
     sqInt propID;
     sqInt value;
 
-	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 2)) {
-		return primitiveFail(interpreterProxy->interpreterState);
+	if (!((methodArgumentCount(self)) == 2)) {
+		return primitiveFail(self);
 	}
-	propID = stackIntegerValue(0, interpreterProxy->interpreterState);
-	handle = stackIntegerValue(1, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	propID = stackIntegerValue(0, self);
+	handle = stackIntegerValue(1, self);
+	if (failed(self)) {
 		return null;
 	}
 	value = sqGetIntPropertySSL(handle, propID);
-	if (failed(interpreterProxy->interpreterState)) {
+	if (failed(self)) {
 		return null;
 	}
-	popthenPush((methodArgumentCount(interpreterProxy->interpreterState)) + 1, signed32BitIntegerFor(value, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	popthenPush((methodArgumentCount(self)) + 1, signed32BitIntegerFor(value, self), self);
 	return 0;
 }
 
@@ -406,8 +399,7 @@ primitiveGetIntProperty(void)
 /*	Primitive. Returns a string property for the session */
 
 	/* SqueakSSLPlugin>>#primitiveGetStringProperty */
-EXPORT(sqInt)
-primitiveGetStringProperty(void)
+EXPORT(sqInt)primitiveGetStringProperty(struct foo * self)
 {
     sqInt handle;
     sqInt i;
@@ -417,30 +409,30 @@ primitiveGetStringProperty(void)
     sqInt stringOop;
     char *stringPtr;
 
-	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 2)) {
-		return primitiveFail(interpreterProxy->interpreterState);
+	if (!((methodArgumentCount(self)) == 2)) {
+		return primitiveFail(self);
 	}
-	propID = stackIntegerValue(0, interpreterProxy->interpreterState);
-	handle = stackIntegerValue(1, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	propID = stackIntegerValue(0, self);
+	handle = stackIntegerValue(1, self);
+	if (failed(self)) {
 		return null;
 	}
 	stringPtr = sqGetStringPropertySSL(handle, propID);
-	if (failed(interpreterProxy->interpreterState)) {
+	if (failed(self)) {
 		return null;
 	}
 	if (stringPtr == null) {
-		stringOop = nilObject(interpreterProxy->interpreterState);
+		stringOop = nilObject(self);
 	}
 	else {
 		stringLen = strlen(stringPtr);
-		stringOop = instantiateClassindexableSize(classString(interpreterProxy->interpreterState), stringLen, interpreterProxy->interpreterState);
-		oopPtr = firstIndexableField(stringOop, interpreterProxy->interpreterState);
+		stringOop = instantiateClassindexableSize(classString(self), stringLen, self);
+		oopPtr = firstIndexableField(stringOop, self);
 		for (i = 0; i < stringLen; i += 1) {
 			oopPtr[i] = (stringPtr[i]);
 		}
 	}
-	popthenPush((methodArgumentCount(interpreterProxy->interpreterState)) + 1, stringOop, interpreterProxy->interpreterState);
+	popthenPush((methodArgumentCount(self)) + 1, stringOop, self);
 	return 0;
 }
 
@@ -448,31 +440,30 @@ primitiveGetStringProperty(void)
 /*	Primitive. Sets a integer property for the session */
 
 	/* SqueakSSLPlugin>>#primitiveSetIntProperty */
-EXPORT(sqInt)
-primitiveSetIntProperty(void)
+EXPORT(sqInt)primitiveSetIntProperty(struct foo * self)
 {
     sqInt handle;
     sqInt propID;
     sqInt result;
     sqInt value;
 
-	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 3)) {
-		return primitiveFail(interpreterProxy->interpreterState);
+	if (!((methodArgumentCount(self)) == 3)) {
+		return primitiveFail(self);
 	}
-	value = signed32BitValueOf(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	propID = stackIntegerValue(1, interpreterProxy->interpreterState);
-	handle = stackIntegerValue(2, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	value = signed32BitValueOf(stackValue(0, self), self);
+	propID = stackIntegerValue(1, self);
+	handle = stackIntegerValue(2, self);
+	if (failed(self)) {
 		return null;
 	}
 	result = sqSetIntPropertySSL(handle, propID, value);
 	if (!result) {
-		return primitiveFail(interpreterProxy->interpreterState);
+		return primitiveFail(self);
 	}
-	if (failed(interpreterProxy->interpreterState)) {
+	if (failed(self)) {
 		return null;
 	}
-	pop(methodArgumentCount(interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	pop(methodArgumentCount(self), self);
 	return 0;
 }
 
@@ -480,8 +471,7 @@ primitiveSetIntProperty(void)
 /*	Primitive. Sets a string property for the session */
 
 	/* SqueakSSLPlugin>>#primitiveSetStringProperty */
-EXPORT(sqInt)
-primitiveSetStringProperty(void)
+EXPORT(sqInt)primitiveSetStringProperty(struct foo * self)
 {
     sqInt handle;
     sqInt propID;
@@ -490,28 +480,28 @@ primitiveSetStringProperty(void)
     sqInt srcOop;
     char *srcPtr;
 
-	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 3)) {
-		return primitiveFail(interpreterProxy->interpreterState);
+	if (!((methodArgumentCount(self)) == 3)) {
+		return primitiveFail(self);
 	}
-	srcOop = stackValue(0, interpreterProxy->interpreterState);
-	propID = stackIntegerValue(1, interpreterProxy->interpreterState);
-	handle = stackIntegerValue(2, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	srcOop = stackValue(0, self);
+	propID = stackIntegerValue(1, self);
+	handle = stackIntegerValue(2, self);
+	if (failed(self)) {
 		return null;
 	}
-	if (!(isBytes(srcOop, interpreterProxy->interpreterState))) {
-		return primitiveFail(interpreterProxy->interpreterState);
+	if (!(isBytes(srcOop, self))) {
+		return primitiveFail(self);
 	}
-	srcPtr = firstIndexableField(srcOop, interpreterProxy->interpreterState);
-	srcLen = byteSizeOf(srcOop, interpreterProxy->interpreterState);
+	srcPtr = firstIndexableField(srcOop, self);
+	srcLen = byteSizeOf(srcOop, self);
 	result = sqSetStringPropertySSL(handle, propID, srcPtr, srcLen);
 	if (!result) {
-		return primitiveFail(interpreterProxy->interpreterState);
+		return primitiveFail(self);
 	}
-	if (failed(interpreterProxy->interpreterState)) {
+	if (failed(self)) {
 		return null;
 	}
-	pop(methodArgumentCount(interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	pop(methodArgumentCount(self), self);
 	return 0;
 }
 

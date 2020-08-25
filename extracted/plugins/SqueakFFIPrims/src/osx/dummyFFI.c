@@ -39,35 +39,35 @@ such third-party acknowledgments.
 #include "dummyFFI.h"
 #include "sqFFI.h"
 
-int ffiPushSignedByte(int value)
+int ffiPushSignedByte(int value, struct foo * self)
 {
 return 1;
 }
 
-int ffiPushUnsignedByte(int value)
+int ffiPushUnsignedByte(int value, struct foo * self)
 {
 return 1;
 }
 
-int ffiPushSignedShort(int value)
-{
-
-return 1;
-}
-
-int ffiPushUnsignedShort(int value)
+int ffiPushSignedShort(int value, struct foo * self)
 {
 
 return 1;
 }
 
-int ffiPushSignedInt(int value)
+int ffiPushUnsignedShort(int value, struct foo * self)
 {
 
 return 1;
 }
 
-int ffiPushUnsignedInt(int value)
+int ffiPushSignedInt(int value, struct foo * self)
+{
+
+return 1;
+}
+
+int ffiPushUnsignedInt(int value, struct foo * self)
 {
 
 return 1;
@@ -76,51 +76,51 @@ return 1;
 # define primitiveFail() 0
 
 
-int ffiPushSignedLongLong(int low, int high)
+int ffiPushSignedLongLong(int low, int high, struct foo * self)
 {
-return primitiveFail(interpreterProxy->interpreterState);
+return primitiveFail(self);
 }
 
-int ffiPushUnsignedLongLong(int low, int high)
+int ffiPushUnsignedLongLong(int low, int high, struct foo * self)
 {
-return primitiveFail(interpreterProxy->interpreterState);
+return primitiveFail(self);
 }
 
-int ffiPushSignedChar(int value)
-{
-return 1;
-}
-
-int ffiPushUnsignedChar(int value)
+int ffiPushSignedChar(int value, struct foo * self)
 {
 return 1;
 }
 
-int ffiPushBool(int value)
+int ffiPushUnsignedChar(int value, struct foo * self)
 {
 return 1;
 }
 
-int ffiPushSingleFloat(double value)
+int ffiPushBool(int value, struct foo * self)
 {
 return 1;
 }
 
-int ffiPushDoubleFloat(double value)
+int ffiPushSingleFloat(double value, struct foo * self)
+{
+return 1;
+}
+
+int ffiPushDoubleFloat(double value, struct foo * self)
 {
 return 1;
 }
 
 /*  ffiReturnFloatValue:
 Return the value from a previous ffi call with float return type. */
-double ffiReturnFloatValue(void)
+double ffiReturnFloatValue(struct foo * self)
 {
 return 0;
 }
 
 /*  ffiLongLongResultLow:
 Return the low 32bit from the 64bit result of a call to an external function */
-int ffiLongLongResultLow(void)
+int ffiLongLongResultLow(struct foo * self)
 {
 return 0;
 }
@@ -128,29 +128,29 @@ return 0;
 
 /*  ffiLongLongResultHigh:
 Return the high 32bit from the 64bit result of a call to an external function */
-int ffiLongLongResultHigh(void)
+int ffiLongLongResultHigh(struct foo * self)
 {
 return 0;
 }
 
 /*  ffiStoreStructure:
 Store the structure result of a previous ffi call into the given address*/
-int ffiStoreStructure(int address, int structSize)
+int ffiStoreStructure(int address, int structSize, struct foo * self)
 {
 return 1;
 }
 
-int ffiCallAddressOfWithPointerReturn(int fn, int callType) 
+int ffiCallAddressOfWithPointerReturn(int fn, int callType, struct foo * self) 
 {
 	return 0;
 }
-int ffiPushStringOfLength(int srcIndex, int length)
+int ffiPushStringOfLength(int srcIndex, int length, struct foo * self)
 {
 	return 0;
 }
 /*  ffiAlloc:
 Allocate space from the external heap */
-int ffiAlloc(int byteSize)
+int ffiAlloc(int byteSize, struct foo * self)
 {
 	return 0;
 }
@@ -162,22 +162,22 @@ int ffiFree(sqIntptr_t pointer)
 return 1;
 }
 
-int ffiInitialize(void) {
+int ffiInitialize(struct foo * self) {
 	return 1;
 }
 
 int ffiCallAddressOfWithStructReturn(int fn, int callType, 
-int *structSpec, int specSize)
+int *structSpec, int specSize, self)
 {
 	return 0;
 }
 
-int ffiCallAddressOfWithReturnType(int fn, int callType, int typeSpec)
+int ffiCallAddressOfWithReturnType(int fn, int callType, int typeSpec, struct foo * self)
 {
 return 0;
 }
 
-int ffiCanReturn(int *structSpec, int specSize) 
+int ffiCanReturn(int *structSpec, int specSize, struct foo * self) 
 {
 return 0;
 }
@@ -186,23 +186,23 @@ return 0;
  Cleanup after a foreign function call has completed.
  The generic support code only frees the temporarily
  allocated strings. */
-int ffiCleanup(void)
+int ffiCleanup(struct foo * self)
 {
 	return 0;
 }
 
 /*  ffiSupportsCallingConvention:
  Return true if the support code supports the given calling convention */
-int ffiSupportsCallingConvention(int callType)
+int ffiSupportsCallingConvention(int callType, struct foo * self)
 {
 	return 0;
 }
 
-int ffiPushStructureOfLength(int pointer, int* structSpec, int structSize)
+int ffiPushStructureOfLength(int pointer, int* structSpec, int structSize, struct foo * self)
 {
 	return 0;
 }
-int ffiPushPointer(int pointer)
+int ffiPushPointer(int pointer, struct foo * self)
 {
 	return 0;
 }

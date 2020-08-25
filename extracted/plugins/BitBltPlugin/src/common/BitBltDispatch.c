@@ -95,7 +95,7 @@ compare_colors_fn_t compareColorsFns[3*2*3*3];
 
 
 #ifdef PROFILING
-static uint64_t gettime(void)
+static uint64_t gettime(void)
 {
 	struct timeval tv;
 
@@ -122,7 +122,7 @@ static uint32_t clz(uint32_t x)
 
 #define BPP_FLAG_TO_BPP(flags, type) (1u << (31 - clz(((flags) / FAST_PATH_##type##_1BPP) & 0x3F)))
 
-static void profile_atexit(void)
+static void profile_atexit(void)
 {
 	size_t i;
 	fprintf(stderr, "BitBltDispatch profiling results:\n");
@@ -196,7 +196,7 @@ static void profile_record(combination_rule_t combinationRule, uint32_t flags, u
 #endif
 
 
-void initialiseCopyBits(void)
+void initialiseCopyBits(void)
 {
 	addGenericFastPaths();
 #ifdef __arm__

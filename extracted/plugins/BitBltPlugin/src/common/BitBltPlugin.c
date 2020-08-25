@@ -80,124 +80,124 @@ static char __buildInfo[] = "BitBltSimulation VMMaker.oscog-eem.2493 uuid: d7437
 
 
 /*** Function Prototypes ***/
-static unsigned int addWordwith(unsigned int sourceWord, unsigned int destinationWord);
-static sqInt affectedBottom(void);
-static sqInt affectedLeft(void);
-static sqInt affectedRight(void);
-static sqInt affectedTop(void);
-static unsigned int alphaBlendConstwith(unsigned int sourceWord, unsigned int destinationWord);
-static unsigned int alphaBlendConstwithpaintMode(unsigned int sourceWord, unsigned int destinationWord, sqInt paintMode);
-static unsigned int alphaBlendScaledwith(unsigned int sourceWord, unsigned int destinationWord);
-static unsigned int alphaBlendwith(unsigned int sourceWord, unsigned int destinationWord);
-static unsigned int alphaPaintConstwith(unsigned int sourceWord, unsigned int destinationWord);
-static sqInt alphaSourceBlendBits16(void);
-static sqInt alphaSourceBlendBits32(void);
-static sqInt alphaSourceBlendBits8(void);
-static unsigned int bitAndInvertwith(unsigned int sourceWord, unsigned int destinationWord);
-static unsigned int bitAndwith(unsigned int sourceWord, unsigned int destinationWord);
-static unsigned int bitInvertAndInvertwith(unsigned int sourceWord, unsigned int destinationWord);
-static unsigned int bitInvertAndwith(unsigned int sourceWord, unsigned int destinationWord);
-static unsigned int bitInvertDestinationwith(unsigned int sourceWord, unsigned int destinationWord);
-static unsigned int bitInvertOrInvertwith(unsigned int sourceWord, unsigned int destinationWord);
-static unsigned int bitInvertOrwith(unsigned int sourceWord, unsigned int destinationWord);
-static unsigned int bitInvertSourcewith(unsigned int sourceWord, unsigned int destinationWord);
-static unsigned int bitInvertXorwith(unsigned int sourceWord, unsigned int destinationWord);
-static unsigned int bitOrInvertwith(unsigned int sourceWord, unsigned int destinationWord);
-static unsigned int bitOrwith(unsigned int sourceWord, unsigned int destinationWord);
-static unsigned int bitXorwith(unsigned int sourceWord, unsigned int destinationWord);
-static sqInt checkSourceOverlap(void);
-static unsigned int clearWordwith(unsigned int sourceWord, unsigned int destinationWord);
-static sqInt clipRange(void);
+static unsigned int addWordwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self);
+static sqInt affectedBottom(struct foo * self);
+static sqInt affectedLeft(struct foo * self);
+static sqInt affectedRight(struct foo * self);
+static sqInt affectedTop(struct foo * self);
+static unsigned int alphaBlendConstwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self);
+static unsigned int alphaBlendConstwithpaintMode(unsigned int sourceWord, unsigned int destinationWord, sqInt paintMode, struct foo * self);
+static unsigned int alphaBlendScaledwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self);
+static unsigned int alphaBlendwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self);
+static unsigned int alphaPaintConstwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self);
+static sqInt alphaSourceBlendBits16(struct foo * self);
+static sqInt alphaSourceBlendBits32(struct foo * self);
+static sqInt alphaSourceBlendBits8(struct foo * self);
+static unsigned int bitAndInvertwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self);
+static unsigned int bitAndwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self);
+static unsigned int bitInvertAndInvertwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self);
+static unsigned int bitInvertAndwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self);
+static unsigned int bitInvertDestinationwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self);
+static unsigned int bitInvertOrInvertwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self);
+static unsigned int bitInvertOrwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self);
+static unsigned int bitInvertSourcewith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self);
+static unsigned int bitInvertXorwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self);
+static unsigned int bitOrInvertwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self);
+static unsigned int bitOrwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self);
+static unsigned int bitXorwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self);
+static sqInt checkSourceOverlap(struct foo * self);
+static unsigned int clearWordwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self);
+static sqInt clipRange(struct foo * self);
 EXPORT(sqInt) copyBits(struct foo * self);
-static sqInt copyBitsFastPathSpecialised(void);
+static sqInt copyBitsFastPathSpecialised(struct foo * self);
 EXPORT(sqInt) copyBitsFromtoat(sqInt startX, sqInt stopX, sqInt yValue, struct foo * self);
-static sqInt copyBitsLockedAndClipped(void);
-static sqInt copyBitsRule41Test(void);
+static sqInt copyBitsLockedAndClipped(struct foo * self);
+static sqInt copyBitsRule41Test(struct foo * self);
 extern void copyBitsFallback(operation_t *op, unsigned int flags);
-static sqInt copyLoop(void);
-static sqInt copyLoopNoSource(void);
-static sqInt copyLoopPixMap(void);
-static unsigned int * default8To32Table(void);
-static sqInt deltaFromtonSteps(sqInt x1, sqInt x2, sqInt n);
-static unsigned int destinationWordwith(unsigned int sourceWord, unsigned int destinationWord);
-static sqInt destMaskAndPointerInit(void);
-static unsigned int dither32To16threshold(unsigned int srcWord, sqInt ditherValue);
-static sqInt drawLoopXY(sqInt xDelta, sqInt yDelta);
-static unsigned int expensiveDither32To16threshold(unsigned int srcWord, sqInt ditherValue);
-static sqInt fetchIntOrFloatofObject(sqInt fieldIndex, sqInt objectPointer);
-static sqInt fetchIntOrFloatofObjectifNil(sqInt fieldIndex, sqInt objectPointer, sqInt defaultValue);
-static unsigned int fixAlphawith(unsigned int sourceWord, unsigned int destinationWord);
+static sqInt copyLoop(struct foo * self);
+static sqInt copyLoopNoSource(struct foo * self);
+static sqInt copyLoopPixMap(struct foo * self);
+static unsigned int * default8To32Table(struct foo * self);
+static sqInt deltaFromtonSteps(sqInt x1, sqInt x2, sqInt n, struct foo * self);
+static unsigned int destinationWordwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self);
+static sqInt destMaskAndPointerInit(struct foo * self);
+static unsigned int dither32To16threshold(unsigned int srcWord, sqInt ditherValue, struct foo * self);
+static sqInt drawLoopXY(sqInt xDelta, sqInt yDelta, struct foo * self);
+static unsigned int expensiveDither32To16threshold(unsigned int srcWord, sqInt ditherValue, struct foo * self);
+static sqInt fetchIntOrFloatofObject(sqInt fieldIndex, sqInt objectPointer, struct foo * self);
+static sqInt fetchIntOrFloatofObjectifNil(sqInt fieldIndex, sqInt objectPointer, sqInt defaultValue, struct foo * self);
+static unsigned int fixAlphawith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self);
 EXPORT(const char*) getModuleName(void);
-static sqInt ignoreSourceOrHalftone(sqInt formPointer);
-static sqInt initBBOpTable(void);
-static sqInt initDither8Lookup(void);
-EXPORT(sqInt) initialiseModule(void);
-static sqInt isIdentityMapwith(int *shifts, unsigned int *masks);
-static sqInt loadBitBltDestForm(void);
+static sqInt ignoreSourceOrHalftone(sqInt formPointer, struct foo * self);
+static sqInt initBBOpTable(struct foo * self);
+static sqInt initDither8Lookup(struct foo * self);
+EXPORT(sqInt) initialiseModule(struct foo * self);
+static sqInt isIdentityMapwith(int *shifts, unsigned int *masks, struct foo * self);
+static sqInt loadBitBltDestForm(struct foo * self);
 EXPORT(sqInt) loadBitBltFrom(sqInt bbObj, struct foo * self);
-static sqInt loadBitBltFromwarping(sqInt bbObj, sqInt aBool);
-static sqInt loadBitBltSourceForm(void);
-static sqInt loadColorMap(void);
-static void * loadColorMapShiftOrMaskFrom(sqInt mapOop);
-static sqInt loadHalftoneForm(void);
-static sqInt loadSurfacePlugin(void);
-static sqInt loadWarpBltFrom(sqInt bbObj);
-static sqInt lockSurfaces(void);
-static sqInt mapPixelflags(sqInt sourcePixel, sqInt mapperFlags);
-static unsigned int mergewith(unsigned int sourceWord, unsigned int destinationWord);
+static sqInt loadBitBltFromwarping(sqInt bbObj, sqInt aBool, struct foo * self);
+static sqInt loadBitBltSourceForm(struct foo * self);
+static sqInt loadColorMap(struct foo * self);
+static void * loadColorMapShiftOrMaskFrom(sqInt mapOop, struct foo * self);
+static sqInt loadHalftoneForm(struct foo * self);
+static sqInt loadSurfacePlugin(struct foo * self);
+static sqInt loadWarpBltFrom(sqInt bbObj, struct foo * self);
+static sqInt lockSurfaces(struct foo * self);
+static sqInt mapPixelflags(sqInt sourcePixel, sqInt mapperFlags, struct foo * self);
+static unsigned int mergewith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self);
 EXPORT(sqInt) moduleUnloaded(char *aModuleName, struct foo * self);
-static sqInt OLDrgbDiffwith(sqInt sourceWord, sqInt destinationWord);
-static sqInt OLDtallyIntoMapwith(sqInt sourceWord, sqInt destinationWord);
-static unsigned int partitionedAddtonBitscomponentMaskcarryOverflowMask(unsigned int word1, unsigned int word2, sqInt nBits, unsigned int componentMask, unsigned int carryOverflowMask);
-static unsigned int partitionedANDtonBitsnPartitions(unsigned int word1, unsigned int word2, sqInt nBits, sqInt nParts);
-static unsigned int partitionedMaxwithnBitsnPartitions(unsigned int word1, unsigned int word2, sqInt nBits, sqInt nParts);
-static unsigned int partitionedMinwithnBitsnPartitions(unsigned int word1, unsigned int word2, sqInt nBits, sqInt nParts);
-static unsigned int partitionedMulwithnBitsnPartitions(unsigned int word1, unsigned int word2, sqInt nBits, sqInt nParts);
-static unsigned int partitionedRgbComponentAlphadestnBitsnPartitions(unsigned int sourceWord, unsigned int destWord, sqInt nBits, sqInt nParts);
-static unsigned int partitionedSubfromnBitsnPartitions(unsigned int word1, unsigned int word2, sqInt nBits, sqInt nParts);
-static sqInt performCopyLoop(void);
-static unsigned int pickSourcePixelsflagssrcMaskdestMasksrcShiftIncdstShiftInc(sqInt nPixels, sqInt mapperFlags, sqInt srcMask, sqInt dstMask, sqInt srcShiftInc, sqInt dstShiftInc);
-static unsigned int pickWarpPixelAtXy(sqInt xx, sqInt yy);
-static unsigned int pixClearwith(unsigned int sourceWord, unsigned int destinationWord);
-static unsigned int pixMaskwith(unsigned int sourceWord, unsigned int destinationWord);
-static unsigned int pixPaintwith(unsigned int sourceWord, unsigned int destinationWord);
-static unsigned int pixSwapwith(unsigned int sourceWord, unsigned int destWord);
-EXPORT(sqInt) primitiveCompareColors(void);
-EXPORT(sqInt) primitiveCopyBits(void);
-EXPORT(sqInt) primitiveDisplayString(void);
-EXPORT(sqInt) primitiveDrawLoop(void);
-EXPORT(sqInt) primitivePixelValueAt(void);
-EXPORT(sqInt) primitiveWarpBits(void);
-static sqInt reloadDestAndSourceForms(void);
-static unsigned int rgbAddwith(unsigned int sourceWord, unsigned int destinationWord);
-static sqInt rgbComponentAlpha16(void);
-static sqInt rgbComponentAlpha32(void);
-static sqInt rgbComponentAlpha32with(sqInt sourceWord, sqInt destinationWord);
-static sqInt rgbComponentAlpha8(void);
-static sqInt rgbComponentAlphawith(sqInt sourceWord, sqInt destinationWord);
-static unsigned int rgbDiffwith(unsigned int sourceWord, unsigned int destinationWord);
-static sqInt rgbMap16To32(sqInt sourcePixel);
-static sqInt rgbMap32To32(sqInt sourcePixel);
-static sqInt rgbMapPixelflags(sqInt sourcePixel, sqInt mapperFlags);
-static sqInt rgbMapfromto(sqInt sourcePixel, sqInt nBitsIn, sqInt nBitsOut);
-static unsigned int rgbMaxwith(unsigned int sourceWord, unsigned int destinationWord);
-static unsigned int rgbMinInvertwith(unsigned int wordToInvert, unsigned int destinationWord);
-static unsigned int rgbMinwith(unsigned int sourceWord, unsigned int destinationWord);
-static unsigned int rgbMulwith(unsigned int sourceWord, unsigned int destinationWord);
-static unsigned int rgbSubwith(unsigned int sourceWord, unsigned int destinationWord);
+static sqInt OLDrgbDiffwith(sqInt sourceWord, sqInt destinationWord, struct foo * self);
+static sqInt OLDtallyIntoMapwith(sqInt sourceWord, sqInt destinationWord, struct foo * self);
+static unsigned int partitionedAddtonBitscomponentMaskcarryOverflowMask(unsigned int word1, unsigned int word2, sqInt nBits, unsigned int componentMask, unsigned int carryOverflowMask, struct foo * self);
+static unsigned int partitionedANDtonBitsnPartitions(unsigned int word1, unsigned int word2, sqInt nBits, sqInt nParts, struct foo * self);
+static unsigned int partitionedMaxwithnBitsnPartitions(unsigned int word1, unsigned int word2, sqInt nBits, sqInt nParts, struct foo * self);
+static unsigned int partitionedMinwithnBitsnPartitions(unsigned int word1, unsigned int word2, sqInt nBits, sqInt nParts, struct foo * self);
+static unsigned int partitionedMulwithnBitsnPartitions(unsigned int word1, unsigned int word2, sqInt nBits, sqInt nParts, struct foo * self);
+static unsigned int partitionedRgbComponentAlphadestnBitsnPartitions(unsigned int sourceWord, unsigned int destWord, sqInt nBits, sqInt nParts, struct foo * self);
+static unsigned int partitionedSubfromnBitsnPartitions(unsigned int word1, unsigned int word2, sqInt nBits, sqInt nParts, struct foo * self);
+static sqInt performCopyLoop(struct foo * self);
+static unsigned int pickSourcePixelsflagssrcMaskdestMasksrcShiftIncdstShiftInc(sqInt nPixels, sqInt mapperFlags, sqInt srcMask, sqInt dstMask, sqInt srcShiftInc, sqInt dstShiftInc, struct foo * self);
+static unsigned int pickWarpPixelAtXy(sqInt xx, sqInt yy, struct foo * self);
+static unsigned int pixClearwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self);
+static unsigned int pixMaskwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self);
+static unsigned int pixPaintwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self);
+static unsigned int pixSwapwith(unsigned int sourceWord, unsigned int destWord, struct foo * self);
+EXPORT(sqInt) primitiveCompareColors(struct foo * self);
+EXPORT(sqInt) primitiveCopyBits(struct foo * self);
+EXPORT(sqInt) primitiveDisplayString(struct foo * self);
+EXPORT(sqInt) primitiveDrawLoop(struct foo * self);
+EXPORT(sqInt) primitivePixelValueAt(struct foo * self);
+EXPORT(sqInt) primitiveWarpBits(struct foo * self);
+static sqInt reloadDestAndSourceForms(struct foo * self);
+static unsigned int rgbAddwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self);
+static sqInt rgbComponentAlpha16(struct foo * self);
+static sqInt rgbComponentAlpha32(struct foo * self);
+static sqInt rgbComponentAlpha32with(sqInt sourceWord, sqInt destinationWord, struct foo * self);
+static sqInt rgbComponentAlpha8(struct foo * self);
+static sqInt rgbComponentAlphawith(sqInt sourceWord, sqInt destinationWord, struct foo * self);
+static unsigned int rgbDiffwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self);
+static sqInt rgbMap16To32(sqInt sourcePixel, struct foo * self);
+static sqInt rgbMap32To32(sqInt sourcePixel, struct foo * self);
+static sqInt rgbMapPixelflags(sqInt sourcePixel, sqInt mapperFlags, struct foo * self);
+static sqInt rgbMapfromto(sqInt sourcePixel, sqInt nBitsIn, sqInt nBitsOut, struct foo * self);
+static unsigned int rgbMaxwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self);
+static unsigned int rgbMinInvertwith(unsigned int wordToInvert, unsigned int destinationWord, struct foo * self);
+static unsigned int rgbMinwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self);
+static unsigned int rgbMulwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self);
+static unsigned int rgbSubwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self);
 EXPORT(sqInt) setInterpreter(struct VirtualMachine *anInterpreter);
-static sqInt setupColorMasks(void);
-static sqInt setupColorMasksFromto(sqInt srcBits, sqInt targetBits);
-static sqInt showDisplayBits(void);
-static sqInt sourceSkewAndPointerInit(void);
-static unsigned int sourceWordwith(unsigned int sourceWord, unsigned int destinationWord);
-static sqInt sqAssert(sqInt aBool);
-static unsigned int subWordwith(unsigned int sourceWord, unsigned int destinationWord);
-static unsigned int tallyIntoMapwith(unsigned int sourceWord, unsigned int destinationWord);
-static sqInt tryCopyingBitsQuickly(void);
-static sqInt unlockSurfaces(void);
-static sqInt warpBits(void);
-static sqInt warpLoop(void);
+static sqInt setupColorMasks(struct foo * self);
+static sqInt setupColorMasksFromto(sqInt srcBits, sqInt targetBits, struct foo * self);
+static sqInt showDisplayBits(struct foo * self);
+static sqInt sourceSkewAndPointerInit(struct foo * self);
+static unsigned int sourceWordwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self);
+static sqInt sqAssert(sqInt aBool, struct foo * self);
+static unsigned int subWordwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self);
+static unsigned int tallyIntoMapwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self);
+static sqInt tryCopyingBitsQuickly(struct foo * self);
+static sqInt unlockSurfaces(struct foo * self);
+static sqInt warpBits(struct foo * self);
+static sqInt warpLoop(struct foo * self);
 static sqInt warpLoopSetup(void);
 static sqInt warpPickSmoothPixelsxDeltahyDeltahxDeltavyDeltavsourceMapsmoothingdstShiftInc(sqInt nPixels, sqInt xDeltah, sqInt yDeltah, sqInt xDeltav, sqInt yDeltav, sqInt sourceMap, sqInt n, sqInt dstShiftInc);
 static sqInt warpPickSourcePixelsxDeltahyDeltahxDeltavyDeltavdstShiftIncflags(sqInt nPixels, sqInt xDeltah, sqInt yDeltah, sqInt xDeltav, sqInt yDeltav, sqInt dstShiftInc, sqInt mapperFlags);
@@ -274,7 +274,7 @@ static void * (*firstIndexableField)(sqInt oop, struct foo * self);
 static double (*floatValueOf)(sqInt oop, struct foo * self);
 static sqInt (*integerObjectOf)(sqInt value, struct foo * self);
 static sqInt (*integerValueOf)(sqInt oop, struct foo * self);
-static void * (*ioLoadFunctionFrom)(char *functionName, char *moduleName);
+static void * (*ioLoadFunctionFrom)(char *functionName, char *moduleName, struct foo * self);
 static sqInt (*isArray)(sqInt oop, struct foo * self);
 static sqInt (*isBytes)(sqInt oop, struct foo * self);
 static sqInt (*isIntegerObject)(sqInt objectPointer, struct foo * self);
@@ -310,7 +310,7 @@ extern void * firstIndexableField(sqInt oop, struct foo * self);
 extern double floatValueOf(sqInt oop, struct foo * self);
 extern sqInt integerObjectOf(sqInt value, struct foo * self);
 extern sqInt integerValueOf(sqInt oop, struct foo * self);
-extern void * ioLoadFunctionFrom(char *functionName, char *moduleName);
+extern void * ioLoadFunctionFrom(char *functionName, char *moduleName, struct foo * self);
 extern sqInt isArray(sqInt oop, struct foo * self);
 extern sqInt isBytes(sqInt oop, struct foo * self);
 #if !defined(isIntegerObject)
@@ -400,45 +400,39 @@ static sqInt width;
 
 
 	/* BitBltSimulation>>#addWord:with: */
-static unsigned int
-addWordwith(unsigned int sourceWord, unsigned int destinationWord)
+static unsigned intaddWordwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self)
 {
 	return sourceWord + destinationWord;
 }
 
 	/* BitBltSimulation>>#affectedBottom */
-static sqInt
-affectedBottom(void)
+static sqIntaffectedBottom(struct foo * self)
 {
 	return affectedB;
 }
 
 	/* BitBltSimulation>>#affectedLeft */
-static sqInt
-affectedLeft(void)
+static sqIntaffectedLeft(struct foo * self)
 {
 	return affectedL;
 }
 
 	/* BitBltSimulation>>#affectedRight */
-static sqInt
-affectedRight(void)
+static sqIntaffectedRight(struct foo * self)
 {
 	return affectedR;
 }
 
 	/* BitBltSimulation>>#affectedTop */
-static sqInt
-affectedTop(void)
+static sqIntaffectedTop(struct foo * self)
 {
 	return affectedT;
 }
 
 	/* BitBltSimulation>>#alphaBlendConst:with: */
-static unsigned int
-alphaBlendConstwith(unsigned int sourceWord, unsigned int destinationWord)
+static unsigned intalphaBlendConstwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self)
 {
-	return alphaBlendConstwithpaintMode(sourceWord, destinationWord, 0);
+	return alphaBlendConstwithpaintMode(sourceWord, destinationWord, 0, self);
 }
 
 
@@ -458,8 +452,7 @@ alphaBlendConstwith(unsigned int sourceWord, unsigned int destinationWord)
  */
 
 	/* BitBltSimulation>>#alphaBlendConst:with:paintMode: */
-static unsigned int
-alphaBlendConstwithpaintMode(unsigned int sourceWord, unsigned int destinationWord, sqInt paintMode)
+static unsigned intalphaBlendConstwithpaintMode(unsigned int sourceWord, unsigned int destinationWord, sqInt paintMode, struct foo * self)
 {
 	sqInt bitsPerColor;
 	unsigned int blend;
@@ -542,8 +535,7 @@ alphaBlendConstwithpaintMode(unsigned int sourceWord, unsigned int destinationWo
  */
 
 	/* BitBltSimulation>>#alphaBlendScaled:with: */
-static unsigned int
-alphaBlendScaledwith(unsigned int sourceWord, unsigned int destinationWord)
+static unsigned intalphaBlendScaledwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self)
 {
 	unsigned int ag;
 	unsigned int rb;
@@ -578,8 +570,7 @@ alphaBlendScaledwith(unsigned int sourceWord, unsigned int destinationWord)
 	component. The high byte of the result will be 0. */
 
 	/* BitBltSimulation>>#alphaBlend:with: */
-static unsigned int
-alphaBlendwith(unsigned int sourceWord, unsigned int destinationWord)
+static unsigned intalphaBlendwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self)
 {
 	unsigned int alpha;
 	unsigned int blendAG;
@@ -612,13 +603,12 @@ alphaBlendwith(unsigned int sourceWord, unsigned int destinationWord)
 }
 
 	/* BitBltSimulation>>#alphaPaintConst:with: */
-static unsigned int
-alphaPaintConstwith(unsigned int sourceWord, unsigned int destinationWord)
+static unsigned intalphaPaintConstwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self)
 {
 	if (sourceWord == 0) {
 		return destinationWord;
 	}
-	return alphaBlendConstwithpaintMode(sourceWord, destinationWord, 1);
+	return alphaBlendConstwithpaintMode(sourceWord, destinationWord, 1, self);
 }
 
 
@@ -630,8 +620,7 @@ alphaPaintConstwith(unsigned int sourceWord, unsigned int destinationWord)
 	 */
 
 	/* BitBltSimulation>>#alphaSourceBlendBits16 */
-static sqInt
-alphaSourceBlendBits16(void)
+static sqIntalphaSourceBlendBits16(struct foo * self)
 {
 	sqInt addThreshold;
 	sqInt addThreshold1;
@@ -726,7 +715,7 @@ alphaSourceBlendBits16(void)
 					destWord = ((((usqInt) (destWord & 0x7C00) << 9)) | (((usqInt) (destWord & 0x3E0) << 6))) | ((((usqInt) (destWord & 0x1F) << 3)) | 0xFF000000U);
 
 					/* And dither */
-					sourceWord = alphaBlendScaledwith(sourceWord, destWord);
+					sourceWord = alphaBlendScaledwith(sourceWord, destWord, self);
 					/* begin dither32To16:threshold: */
 					addThreshold1 = ((usqInt) ditherThreshold << 8);
 					sourceWord = ((((usqInt) (dither8Lookup[addThreshold1 + ((((usqInt) sourceWord >> 16)) & 0xFF)]) << 10)) + (((usqInt) (dither8Lookup[addThreshold1 + ((((usqInt) sourceWord >> 8)) & 0xFF)]) << 5))) + (dither8Lookup[addThreshold1 + (sourceWord & 0xFF)]);
@@ -777,8 +766,7 @@ alphaSourceBlendBits16(void)
 	 */
 
 	/* BitBltSimulation>>#alphaSourceBlendBits32 */
-static sqInt
-alphaSourceBlendBits32(void)
+static sqIntalphaSourceBlendBits32(struct foo * self)
 {
 	int deltaX;
 	int deltaY;
@@ -853,7 +841,7 @@ alphaSourceBlendBits32(void)
 					/* If we have to mix colors then just copy a single word */
 					assert((((usqInt)dstIndex)) < endOfDestination);
 					destWord = long32At(dstIndex);
-					destWord = alphaBlendScaledwith(sourceWord, destWord);
+					destWord = alphaBlendScaledwith(sourceWord, destWord, self);
 					long32Atput(dstIndex, destWord);
 					srcIndex += 4;
 					dstIndex += 4;
@@ -876,8 +864,7 @@ alphaSourceBlendBits32(void)
 	available.  */
 
 	/* BitBltSimulation>>#alphaSourceBlendBits8 */
-static sqInt
-alphaSourceBlendBits8(void)
+static sqIntalphaSourceBlendBits8(struct foo * self)
 {
 	sqInt adjust;
 	int deltaX;
@@ -977,7 +964,7 @@ long32At(srcIndex))) & ((unsigned int)~adjust)) + adjust;
 					destWord = destWord & ((unsigned int)~dstMask);
 					destWord = ((usqInt) destWord) >> srcShift;
 					destWord = mappingTable[destWord];
-					sourceWord = alphaBlendScaledwith(sourceWord, destWord);
+					sourceWord = alphaBlendScaledwith(sourceWord, destWord, self);
 				}
 				/* begin mapPixel:flags: */
 				pv = sourceWord;
@@ -1041,85 +1028,73 @@ long32At(srcIndex))) & ((unsigned int)~adjust)) + adjust;
 }
 
 	/* BitBltSimulation>>#bitAndInvert:with: */
-static unsigned int
-bitAndInvertwith(unsigned int sourceWord, unsigned int destinationWord)
+static unsigned intbitAndInvertwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self)
 {
 	return sourceWord & ((unsigned int)~destinationWord);
 }
 
 	/* BitBltSimulation>>#bitAnd:with: */
-static unsigned int
-bitAndwith(unsigned int sourceWord, unsigned int destinationWord)
+static unsigned intbitAndwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self)
 {
 	return sourceWord & destinationWord;
 }
 
 	/* BitBltSimulation>>#bitInvertAndInvert:with: */
-static unsigned int
-bitInvertAndInvertwith(unsigned int sourceWord, unsigned int destinationWord)
+static unsigned intbitInvertAndInvertwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self)
 {
 	return ((unsigned int)~sourceWord) & ((unsigned int)~destinationWord);
 }
 
 	/* BitBltSimulation>>#bitInvertAnd:with: */
-static unsigned int
-bitInvertAndwith(unsigned int sourceWord, unsigned int destinationWord)
+static unsigned intbitInvertAndwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self)
 {
 	return ((unsigned int)~sourceWord) & destinationWord;
 }
 
 	/* BitBltSimulation>>#bitInvertDestination:with: */
-static unsigned int
-bitInvertDestinationwith(unsigned int sourceWord, unsigned int destinationWord)
+static unsigned intbitInvertDestinationwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self)
 {
 	return (unsigned int)~destinationWord;
 }
 
 	/* BitBltSimulation>>#bitInvertOrInvert:with: */
-static unsigned int
-bitInvertOrInvertwith(unsigned int sourceWord, unsigned int destinationWord)
+static unsigned intbitInvertOrInvertwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self)
 {
 	return ((unsigned int)~sourceWord) | ((unsigned int)~destinationWord);
 }
 
 	/* BitBltSimulation>>#bitInvertOr:with: */
-static unsigned int
-bitInvertOrwith(unsigned int sourceWord, unsigned int destinationWord)
+static unsigned intbitInvertOrwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self)
 {
 	return ((unsigned int)~sourceWord) | destinationWord;
 }
 
 	/* BitBltSimulation>>#bitInvertSource:with: */
-static unsigned int
-bitInvertSourcewith(unsigned int sourceWord, unsigned int destinationWord)
+static unsigned intbitInvertSourcewith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self)
 {
 	return (unsigned int)~sourceWord;
 }
 
 	/* BitBltSimulation>>#bitInvertXor:with: */
-static unsigned int
-bitInvertXorwith(unsigned int sourceWord, unsigned int destinationWord)
+static unsigned intbitInvertXorwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self)
 {
 	return ((unsigned int)~sourceWord) ^ destinationWord;
 }
 
 	/* BitBltSimulation>>#bitOrInvert:with: */
-static unsigned int
-bitOrInvertwith(unsigned int sourceWord, unsigned int destinationWord)
+static unsigned intbitOrInvertwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self)
 {
 	return sourceWord | ((unsigned int)~destinationWord);
 }
 
 	/* BitBltSimulation>>#bitOr:with: */
-static unsigned int
-bitOrwith(unsigned int sourceWord, unsigned int destinationWord)
+static unsigned intbitOrwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self)
 {
 	return sourceWord | destinationWord;
 }
 
 	/* BitBltSimulation>>#bitXor:with: */
-static unsigned int
-bitXorwith(unsigned int sourceWord, unsigned int destinationWord)
+static unsigned intbitXorwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self)
 {
 	return sourceWord ^ destinationWord;
 }
@@ -1129,8 +1104,7 @@ bitXorwith(unsigned int sourceWord, unsigned int destinationWord)
 /*	ar 10/19/1999: This method requires surfaces to be locked. */
 
 	/* BitBltSimulation>>#checkSourceOverlap */
-static sqInt
-checkSourceOverlap(void)
+static sqIntcheckSourceOverlap(struct foo * self)
 {
 	sqInt t;
 
@@ -1168,8 +1142,7 @@ checkSourceOverlap(void)
 }
 
 	/* BitBltSimulation>>#clearWord:with: */
-static unsigned int
-clearWordwith(unsigned int sourceWord, unsigned int destinationWord)
+static unsigned intclearWordwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self)
 {
 	return 0;
 }
@@ -1179,8 +1152,7 @@ clearWordwith(unsigned int sourceWord, unsigned int destinationWord)
 /*	first in x */
 
 	/* BitBltSimulation>>#clipRange */
-static sqInt
-clipRange(void)
+static sqIntclipRange(struct foo * self)
 {
 	if (destX >= clipX) {
 		sx = sourceX;
@@ -1234,10 +1206,9 @@ clipRange(void)
 /*	This function is exported for the Balloon engine */
 
 	/* BitBltSimulation>>#copyBits */
-EXPORT(sqInt)
-copyBits(struct foo * self)
+EXPORT(sqInt)copyBits(struct foo * self)
 {
-	clipRange();
+	clipRange(self);
 	if ((bbW <= 0)
 	 || (bbH <= 0)) {
 
@@ -1245,18 +1216,18 @@ copyBits(struct foo * self)
 		affectedL = (affectedR = (affectedT = (affectedB = 0)));
 		return null;
 	}
-	if (!(lockSurfaces())) {
-		return primitiveFail(interpreterProxy->interpreterState);
+	if (!(lockSurfaces(self))) {
+		return primitiveFail(self);
 	}
 	
 #  if ENABLE_FAST_BLT
 
 	/* you really, really mustn't call this unless you have the rest of the code to link to */
-	copyBitsFastPathSpecialised();
+	copyBitsFastPathSpecialised(self);
 #  else /* ENABLE_FAST_BLT */
-	copyBitsLockedAndClipped();
+	copyBitsLockedAndClipped(self);
 #  endif /* ENABLE_FAST_BLT */
-	unlockSurfaces();
+	unlockSurfaces(self);
 	return 0;
 }
 
@@ -1267,30 +1238,29 @@ copyBits(struct foo * self)
  */
 
 	/* BitBltSimulation>>#copyBitsFastPathSpecialised */
-static sqInt
-copyBitsFastPathSpecialised(void)
+static sqIntcopyBitsFastPathSpecialised(struct foo * self)
 {
 	
 #  if ENABLE_FAST_BLT
 
 	/* set the affected area to 0 first */
 	affectedL = (affectedR = (affectedT = (affectedB = 0)));
-	copyBitsRule41Test();
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFail(interpreterProxy->interpreterState);
+	copyBitsRule41Test(self);
+	if (failed(self)) {
+		return primitiveFail(self);
 	}
 	if ((combinationRule == 30) || (combinationRule == 0x1F)) {
 
 		/* Check and fetch source alpha parameter for alpha blend */
-		if ((methodArgumentCount(interpreterProxy->interpreterState)) == 1) {
-			sourceAlpha = stackIntegerValue(0, interpreterProxy->interpreterState);
-			if (!((!(failed(interpreterProxy->interpreterState)))
+		if ((methodArgumentCount(self)) == 1) {
+			sourceAlpha = stackIntegerValue(0, self);
+			if (!((!(failed(self)))
 				 && ((sourceAlpha >= 0) && (sourceAlpha <= 0xFF)))) {
-				return primitiveFail(interpreterProxy->interpreterState);
+				return primitiveFail(self);
 			}
 		}
 		else {
-			return primitiveFail(interpreterProxy->interpreterState);
+			return primitiveFail(self);
 		}
 	}
 	if ((combinationRule != 22) && (combinationRule != 32)) {
@@ -1347,19 +1317,18 @@ copyBitsFastPathSpecialised(void)
 /*	Support for the balloon engine. */
 
 	/* BitBltSimulation>>#copyBitsFrom:to:at: */
-EXPORT(sqInt)
-copyBitsFromtoat(sqInt startX, sqInt stopX, sqInt yValue, struct foo * self)
+EXPORT(sqInt)copyBitsFromtoat(sqInt startX, sqInt stopX, sqInt yValue, struct foo * self)
 {
 	destX = startX;
 	destY = yValue;
 	sourceX = startX;
 	width = stopX - startX;
-	copyBits(interpreterProxy->interpreterState);
+	copyBits(self);
 	/* begin showDisplayBits */
-	if (numGCsOnInvocation != (statNumGCs(interpreterProxy->interpreterState))) {
-		reloadDestAndSourceForms();
+	if (numGCsOnInvocation != (statNumGCs(self))) {
+		reloadDestAndSourceForms(self);
 	}
-	showDisplayBitsLeftTopRightBottom(destForm, affectedL, affectedT, affectedR, affectedB, interpreterProxy->interpreterState);
+	showDisplayBitsLeftTopRightBottom(destForm, affectedL, affectedT, affectedR, affectedB, self);
 	return 0;
 }
 
@@ -1368,8 +1337,7 @@ copyBitsFromtoat(sqInt startX, sqInt stopX, sqInt yValue, struct foo * self)
 	Assume: Surfaces have been locked and clipping was performed. */
 
 	/* BitBltSimulation>>#copyBitsLockedAndClipped */
-static sqInt
-copyBitsLockedAndClipped(void)
+static sqIntcopyBitsLockedAndClipped(struct foo * self)
 {
 	sqInt dxLowBits;
 	sqInt endBits;
@@ -1381,9 +1349,9 @@ copyBitsLockedAndClipped(void)
 	sqInt sxLowBits;
 	sqInt t;
 
-	copyBitsRule41Test();
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFail(interpreterProxy->interpreterState);
+	copyBitsRule41Test(self);
+	if (failed(self)) {
+		return primitiveFail(self);
 	}
 	
 	/* inline tryCopyingBitsQuickly */
@@ -1402,7 +1370,7 @@ copyBitsLockedAndClipped(void)
 	}
 	if (combinationRule == 41) {
 		if (destDepth == 32) {
-			rgbComponentAlpha32();
+			rgbComponentAlpha32(self);
 			affectedL = dx;
 			affectedR = dx + bbW;
 			affectedT = dy;
@@ -1410,7 +1378,7 @@ copyBitsLockedAndClipped(void)
 			return null;
 		}
 		if (destDepth == 16) {
-			rgbComponentAlpha16();
+			rgbComponentAlpha16(self);
 			affectedL = dx;
 			affectedR = dx + bbW;
 			affectedT = dy;
@@ -1418,7 +1386,7 @@ copyBitsLockedAndClipped(void)
 			return null;
 		}
 		if (destDepth == 8) {
-			rgbComponentAlpha8();
+			rgbComponentAlpha8(self);
 			affectedL = dx;
 			affectedR = dx + bbW;
 			affectedT = dy;
@@ -1435,13 +1403,13 @@ copyBitsLockedAndClipped(void)
 		goto l1;
 	}
 	if (destDepth == 32) {
-		alphaSourceBlendBits32();
+		alphaSourceBlendBits32(self);
 	}
 	if (destDepth == 16) {
-		alphaSourceBlendBits16();
+		alphaSourceBlendBits16(self);
 	}
 	if (destDepth == 8) {
-		alphaSourceBlendBits8();
+		alphaSourceBlendBits8(self);
 	}
 	affectedL = dx;
 	affectedR = dx + bbW;
@@ -1452,14 +1420,14 @@ copyBitsLockedAndClipped(void)
 	if (((combinationRule >= 30) && (combinationRule <= 0x1F))) {
 
 		/* Check and fetch source alpha parameter for alpha blend */
-		if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 1)) {
-			return primitiveFail(interpreterProxy->interpreterState);
+		if (!((methodArgumentCount(self)) == 1)) {
+			return primitiveFail(self);
 		}
-		sourceAlpha = stackIntegerValue(0, interpreterProxy->interpreterState);
-		if ((failed(interpreterProxy->interpreterState))
+		sourceAlpha = stackIntegerValue(0, self);
+		if ((failed(self))
 		 || ((sourceAlpha < 0)
 		 || (sourceAlpha > 0xFF))) {
-			return primitiveFail(interpreterProxy->interpreterState);
+			return primitiveFail(self);
 		}
 	}
 
@@ -1502,7 +1470,7 @@ copyBitsLockedAndClipped(void)
 	if (noSource) {
 
 		/* Simple fill loop */
-		copyLoopNoSource();
+		copyLoopNoSource(self);
 	}
 	else {
 
@@ -1544,7 +1512,7 @@ copyBitsLockedAndClipped(void)
 
 			/* If we must convert between pixel depths or use
 			   color lookups or swap pixels use the general version */
-			copyLoopPixMap();
+			copyLoopPixMap(self);
 		}
 		else {
 
@@ -1592,7 +1560,7 @@ copyBitsLockedAndClipped(void)
 			assert(!((preload
  && (skew == 0))));
 			assert(((skew >= -31) && (skew <= 0x1F)));
-			copyLoop();
+			copyLoop(self);
 		}
 	}
 	if (((combinationRule >= 30) && (combinationRule <= 0x1F))) {
@@ -1627,8 +1595,7 @@ copyBitsLockedAndClipped(void)
  */
 
 	/* BitBltSimulation>>#copyBitsRule41Test */
-static sqInt
-copyBitsRule41Test(void)
+static sqIntcopyBitsRule41Test(struct foo * self)
 {
 	sqInt gammaLookupTableOop;
 	sqInt ungammaLookupTableOop;
@@ -1640,35 +1607,35 @@ copyBitsRule41Test(void)
 		componentAlphaModeColor = 0xFFFFFF;
 		gammaLookupTable = null;
 		ungammaLookupTable = null;
-		if ((methodArgumentCount(interpreterProxy->interpreterState)) >= 2) {
-			componentAlphaModeAlpha = stackIntegerValue((methodArgumentCount(interpreterProxy->interpreterState)) - 2, interpreterProxy->interpreterState);
-			if (failed(interpreterProxy->interpreterState)) {
-				return primitiveFail(interpreterProxy->interpreterState);
+		if ((methodArgumentCount(self)) >= 2) {
+			componentAlphaModeAlpha = stackIntegerValue((methodArgumentCount(self)) - 2, self);
+			if (failed(self)) {
+				return primitiveFail(self);
 			}
-			componentAlphaModeColor = stackIntegerValue((methodArgumentCount(interpreterProxy->interpreterState)) - 1, interpreterProxy->interpreterState);
-			if (failed(interpreterProxy->interpreterState)) {
-				return primitiveFail(interpreterProxy->interpreterState);
+			componentAlphaModeColor = stackIntegerValue((methodArgumentCount(self)) - 1, self);
+			if (failed(self)) {
+				return primitiveFail(self);
 			}
-			if ((methodArgumentCount(interpreterProxy->interpreterState)) == 4) {
-				gammaLookupTableOop = stackObjectValue(1, interpreterProxy->interpreterState);
-				if (isBytes(gammaLookupTableOop, interpreterProxy->interpreterState)) {
-					gammaLookupTable = firstIndexableField(gammaLookupTableOop, interpreterProxy->interpreterState);
+			if ((methodArgumentCount(self)) == 4) {
+				gammaLookupTableOop = stackObjectValue(1, self);
+				if (isBytes(gammaLookupTableOop, self)) {
+					gammaLookupTable = firstIndexableField(gammaLookupTableOop, self);
 				}
-				ungammaLookupTableOop = stackObjectValue(0, interpreterProxy->interpreterState);
-				if (isBytes(ungammaLookupTableOop, interpreterProxy->interpreterState)) {
-					ungammaLookupTable = firstIndexableField(ungammaLookupTableOop, interpreterProxy->interpreterState);
+				ungammaLookupTableOop = stackObjectValue(0, self);
+				if (isBytes(ungammaLookupTableOop, self)) {
+					ungammaLookupTable = firstIndexableField(ungammaLookupTableOop, self);
 				}
 			}
 		}
 		else {
-			if ((methodArgumentCount(interpreterProxy->interpreterState)) == 1) {
-				componentAlphaModeColor = stackIntegerValue(0, interpreterProxy->interpreterState);
-				if (failed(interpreterProxy->interpreterState)) {
-					return primitiveFail(interpreterProxy->interpreterState);
+			if ((methodArgumentCount(self)) == 1) {
+				componentAlphaModeColor = stackIntegerValue(0, self);
+				if (failed(self)) {
+					return primitiveFail(self);
 				}
 			}
 			else {
-				return primitiveFail(interpreterProxy->interpreterState);
+				return primitiveFail(self);
 			}
 		}
 	}
@@ -1762,7 +1729,7 @@ copyBitsFallback(operation_t *op, unsigned int flags)
 	}
 	if (combinationRule == 41) {
 		if (destDepth == 32) {
-			rgbComponentAlpha32();
+			rgbComponentAlpha32(self);
 			affectedL = dx;
 			affectedR = dx + bbW;
 			affectedT = dy;
@@ -1771,7 +1738,7 @@ copyBitsFallback(operation_t *op, unsigned int flags)
 			goto l1;
 		}
 		if (destDepth == 16) {
-			rgbComponentAlpha16();
+			rgbComponentAlpha16(self);
 			affectedL = dx;
 			affectedR = dx + bbW;
 			affectedT = dy;
@@ -1780,7 +1747,7 @@ copyBitsFallback(operation_t *op, unsigned int flags)
 			goto l1;
 		}
 		if (destDepth == 8) {
-			rgbComponentAlpha8();
+			rgbComponentAlpha8(self);
 			affectedL = dx;
 			affectedR = dx + bbW;
 			affectedT = dy;
@@ -1801,13 +1768,13 @@ copyBitsFallback(operation_t *op, unsigned int flags)
 		goto l1;
 	}
 	if (destDepth == 32) {
-		alphaSourceBlendBits32();
+		alphaSourceBlendBits32(self);
 	}
 	if (destDepth == 16) {
-		alphaSourceBlendBits16();
+		alphaSourceBlendBits16(self);
 	}
 	if (destDepth == 8) {
-		alphaSourceBlendBits8();
+		alphaSourceBlendBits8(self);
 	}
 	affectedL = dx;
 	affectedR = dx + bbW;
@@ -1858,7 +1825,7 @@ copyBitsFallback(operation_t *op, unsigned int flags)
 	if (noSource) {
 
 		/* Simple fill loop */
-		copyLoopNoSource();
+		copyLoopNoSource(self);
 	}
 	else {
 
@@ -1900,7 +1867,7 @@ copyBitsFallback(operation_t *op, unsigned int flags)
 
 			/* If we must convert between pixel depths or use
 			   color lookups or swap pixels use the general version */
-			copyLoopPixMap();
+			copyLoopPixMap(self);
 		}
 		else {
 
@@ -1948,7 +1915,7 @@ copyBitsFallback(operation_t *op, unsigned int flags)
 			assert(!((preload
  && (skew == 0))));
 			assert(((skew >= -31) && (skew <= 0x1F)));
-			copyLoop();
+			copyLoop(self);
 		}
 	}
 #  endif /* ENABLE_FAST_BLT */
@@ -1958,8 +1925,7 @@ copyBitsFallback(operation_t *op, unsigned int flags)
 /*	This version of the inner loop assumes noSource = false. */
 
 	/* BitBltSimulation>>#copyLoop */
-static sqInt
-copyLoop(void)
+static sqIntcopyLoop(struct foo * self)
 {
 	unsigned int destWord;
 	unsigned int halftoneWord;
@@ -2189,8 +2155,7 @@ copyLoop(void)
 	positive, and perload and skew are unused */
 
 	/* BitBltSimulation>>#copyLoopNoSource */
-static sqInt
-copyLoopNoSource(void)
+static sqIntcopyLoopNoSource(struct foo * self)
 {
 	unsigned int destWord;
 	unsigned int halftoneWord;
@@ -2268,8 +2233,7 @@ copyLoopNoSource(void)
 	to inline pickSourcePixels we could optimize the loop instead. */
 
 	/* BitBltSimulation>>#copyLoopPixMap */
-static sqInt
-copyLoopPixMap(void)
+static sqIntcopyLoopPixMap(struct foo * self)
 {
 	sqInt destPix;
 	unsigned int destPixMask;
@@ -2490,8 +2454,7 @@ copyLoopPixMap(void)
 	]. */
 
 	/* BitBltSimulation>>#default8To32Table */
-static unsigned int *
-default8To32Table(void)
+static unsigned int *default8To32Table(struct foo * self)
 {
 	static unsigned int theTable[256] = { 
 0x0, 0xFF000001, 0xFFFFFFFF, 0xFF808080, 0xFFFF0000, 0xFF00FF00, 0xFF0000FF, 0xFF00FFFF, 
@@ -2534,8 +2497,7 @@ default8To32Table(void)
 /*	Utility routine for computing Warp increments. */
 
 	/* BitBltSimulation>>#deltaFrom:to:nSteps: */
-static sqInt
-deltaFromtonSteps(sqInt x1, sqInt x2, sqInt n)
+static sqIntdeltaFromtonSteps(sqInt x1, sqInt x2, sqInt n, struct foo * self)
 {
 	if (x2 > x1) {
 		return (((x2 - x1) + FixedPt1) / (n + 1)) + 1;
@@ -2549,8 +2511,7 @@ deltaFromtonSteps(sqInt x1, sqInt x2, sqInt n)
 }
 
 	/* BitBltSimulation>>#destinationWord:with: */
-static unsigned int
-destinationWordwith(unsigned int sourceWord, unsigned int destinationWord)
+static unsigned intdestinationWordwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self)
 {
 	return destinationWord;
 }
@@ -2559,8 +2520,7 @@ destinationWordwith(unsigned int sourceWord, unsigned int destinationWord)
 /*	Compute masks for left and right destination words */
 
 	/* BitBltSimulation>>#destMaskAndPointerInit */
-static sqInt
-destMaskAndPointerInit(void)
+static sqIntdestMaskAndPointerInit(struct foo * self)
 {
 	sqInt endBits;
 	sqInt pixPerM1;
@@ -2606,8 +2566,7 @@ destMaskAndPointerInit(void)
 /*	Dither the given 32bit word to 16 bit. Ignore alpha. */
 
 	/* BitBltSimulation>>#dither32To16:threshold: */
-static unsigned int
-dither32To16threshold(unsigned int srcWord, sqInt ditherValue)
+static unsigned intdither32To16threshold(unsigned int srcWord, sqInt ditherValue, struct foo * self)
 {
 	sqInt addThreshold;
 
@@ -2622,8 +2581,7 @@ dither32To16threshold(unsigned int srcWord, sqInt ditherValue)
 	See the comments in BitBlt>>drawLoopX:Y: */
 
 	/* BitBltSimulation>>#drawLoopX:Y: */
-static sqInt
-drawLoopXY(sqInt xDelta, sqInt yDelta)
+static sqIntdrawLoopXY(sqInt xDelta, sqInt yDelta, struct foo * self)
 {
 	sqInt affB;
 	sqInt affL;
@@ -2675,8 +2633,8 @@ drawLoopXY(sqInt xDelta, sqInt yDelta)
 				P += py;
 			}
 			if (i < py) {
-				copyBits(interpreterProxy->interpreterState);
-				if (failed(interpreterProxy->interpreterState)) {
+				copyBits(self);
+				if (failed(self)) {
 					return null;
 				}
 				if ((affectedL < affectedR)
@@ -2695,10 +2653,10 @@ drawLoopXY(sqInt xDelta, sqInt yDelta)
 						affectedT = affT;
 						affectedB = affB;
 						/* begin showDisplayBits */
-						if (numGCsOnInvocation != (statNumGCs(interpreterProxy->interpreterState))) {
-							reloadDestAndSourceForms();
+						if (numGCsOnInvocation != (statNumGCs(self))) {
+							reloadDestAndSourceForms(self);
 						}
-						showDisplayBitsLeftTopRightBottom(destForm, affectedL, affectedT, affectedR, affectedB, interpreterProxy->interpreterState);
+						showDisplayBitsLeftTopRightBottom(destForm, affectedL, affectedT, affectedR, affectedB, self);
 
 						/* init null rectangle */
 						affL = (affT = 9999);
@@ -2719,8 +2677,8 @@ drawLoopXY(sqInt xDelta, sqInt yDelta)
 				P += px;
 			}
 			if (i < px) {
-				copyBits(interpreterProxy->interpreterState);
-				if (failed(interpreterProxy->interpreterState)) {
+				copyBits(self);
+				if (failed(self)) {
 					return null;
 				}
 				if ((affectedL < affectedR)
@@ -2739,10 +2697,10 @@ drawLoopXY(sqInt xDelta, sqInt yDelta)
 						affectedT = affT;
 						affectedB = affB;
 						/* begin showDisplayBits */
-						if (numGCsOnInvocation != (statNumGCs(interpreterProxy->interpreterState))) {
-							reloadDestAndSourceForms();
+						if (numGCsOnInvocation != (statNumGCs(self))) {
+							reloadDestAndSourceForms(self);
 						}
-						showDisplayBitsLeftTopRightBottom(destForm, affectedL, affectedT, affectedR, affectedB, interpreterProxy->interpreterState);
+						showDisplayBitsLeftTopRightBottom(destForm, affectedL, affectedT, affectedR, affectedB, self);
 
 						/* init null rectangle */
 						affL = (affT = 9999);
@@ -2758,8 +2716,8 @@ drawLoopXY(sqInt xDelta, sqInt yDelta)
 
 	/* store destX, Y back */
 	affectedB = affB;
-	storeIntegerofObjectwithValue(BBDestXIndex, bitBltOop, destX, interpreterProxy->interpreterState);
-	storeIntegerofObjectwithValue(BBDestYIndex, bitBltOop, destY, interpreterProxy->interpreterState);
+	storeIntegerofObjectwithValue(BBDestXIndex, bitBltOop, destX, self);
+	storeIntegerofObjectwithValue(BBDestYIndex, bitBltOop, destY, self);
 	return 0;
 }
 
@@ -2767,8 +2725,7 @@ drawLoopXY(sqInt xDelta, sqInt yDelta)
 /*	Dither the given 32bit word to 16 bit. Ignore alpha. */
 
 	/* BitBltSimulation>>#expensiveDither32To16:threshold: */
-static unsigned int
-expensiveDither32To16threshold(unsigned int srcWord, sqInt ditherValue)
+static unsigned intexpensiveDither32To16threshold(unsigned int srcWord, sqInt ditherValue, struct foo * self)
 {
 	int out;
 	unsigned int pv;
@@ -2815,20 +2772,19 @@ expensiveDither32To16threshold(unsigned int srcWord, sqInt ditherValue)
  */
 
 	/* BitBltSimulation>>#fetchIntOrFloat:ofObject: */
-static sqInt
-fetchIntOrFloatofObject(sqInt fieldIndex, sqInt objectPointer)
+static sqIntfetchIntOrFloatofObject(sqInt fieldIndex, sqInt objectPointer, struct foo * self)
 {
 	sqInt fieldOop;
 	double floatValue;
 
-	fieldOop = fetchPointerofObject(fieldIndex, objectPointer, interpreterProxy->interpreterState);
-	if (isIntegerObject(fieldOop, interpreterProxy->interpreterState)) {
-		return integerValueOf(fieldOop, interpreterProxy->interpreterState);
+	fieldOop = fetchPointerofObject(fieldIndex, objectPointer, self);
+	if (isIntegerObject(fieldOop, self)) {
+		return integerValueOf(fieldOop, self);
 	}
-	floatValue = floatValueOf(fieldOop, interpreterProxy->interpreterState);
+	floatValue = floatValueOf(fieldOop, self);
 	if (!((-2.147483648e9 <= floatValue)
 		 && (floatValue <= 2.147483647e9))) {
-		primitiveFail(interpreterProxy->interpreterState);
+		primitiveFail(self);
 		return 0;
 	}
 	return ((sqInt)floatValue);
@@ -2842,23 +2798,22 @@ fetchIntOrFloatofObject(sqInt fieldIndex, sqInt objectPointer)
  */
 
 	/* BitBltSimulation>>#fetchIntOrFloat:ofObject:ifNil: */
-static sqInt
-fetchIntOrFloatofObjectifNil(sqInt fieldIndex, sqInt objectPointer, sqInt defaultValue)
+static sqIntfetchIntOrFloatofObjectifNil(sqInt fieldIndex, sqInt objectPointer, sqInt defaultValue, struct foo * self)
 {
 	sqInt fieldOop;
 	double floatValue;
 
-	fieldOop = fetchPointerofObject(fieldIndex, objectPointer, interpreterProxy->interpreterState);
-	if (isIntegerObject(fieldOop, interpreterProxy->interpreterState)) {
-		return integerValueOf(fieldOop, interpreterProxy->interpreterState);
+	fieldOop = fetchPointerofObject(fieldIndex, objectPointer, self);
+	if (isIntegerObject(fieldOop, self)) {
+		return integerValueOf(fieldOop, self);
 	}
-	if (fieldOop == (nilObject(interpreterProxy->interpreterState))) {
+	if (fieldOop == (nilObject(self))) {
 		return defaultValue;
 	}
-	floatValue = floatValueOf(fieldOop, interpreterProxy->interpreterState);
+	floatValue = floatValueOf(fieldOop, self);
 	if (!((-2.147483648e9 <= floatValue)
 		 && (floatValue <= 2.147483647e9))) {
-		primitiveFail(interpreterProxy->interpreterState);
+		primitiveFail(self);
 		return 0;
 	}
 	return ((sqInt)floatValue);
@@ -2871,8 +2826,7 @@ fetchIntOrFloatofObjectifNil(sqInt fieldIndex, sqInt objectPointer, sqInt defaul
  */
 
 	/* BitBltSimulation>>#fixAlpha:with: */
-static unsigned int
-fixAlphawith(unsigned int sourceWord, unsigned int destinationWord)
+static unsigned intfixAlphawith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self)
 {
 	if (!(destDepth == 32)) {
 		return destinationWord;
@@ -2900,10 +2854,9 @@ getModuleName(void)
 }
 
 	/* BitBltSimulation>>#ignoreSourceOrHalftone: */
-static sqInt
-ignoreSourceOrHalftone(sqInt formPointer)
+static sqIntignoreSourceOrHalftone(sqInt formPointer, struct foo * self)
 {
-	if (formPointer == (nilObject(interpreterProxy->interpreterState))) {
+	if (formPointer == (nilObject(self))) {
 		return 1;
 	}
 	if (combinationRule == 0) {
@@ -2922,8 +2875,7 @@ ignoreSourceOrHalftone(sqInt formPointer)
 }
 
 	/* BitBltSimulation>>#initBBOpTable */
-static sqInt
-initBBOpTable(void)
+static sqIntinitBBOpTable(struct foo * self)
 {
 	opTable[0+1] = (void *)clearWordwith;
 	opTable[1+1] = (void *)bitAndwith;
@@ -2971,8 +2923,7 @@ initBBOpTable(void)
 }
 
 	/* BitBltSimulation>>#initDither8Lookup */
-static sqInt
-initDither8Lookup(void)
+static sqIntinitDither8Lookup(struct foo * self)
 {
 	sqInt b;
 	int out;
@@ -3020,11 +2971,10 @@ initDither8Lookup(void)
 }
 
 	/* BitBltSimulation>>#initialiseModule */
-EXPORT(sqInt)
-initialiseModule(void)
+EXPORT(sqInt)initialiseModule(struct foo * self)
 {
-	initBBOpTable();
-	initDither8Lookup();
+	initBBOpTable(self);
+	initDither8Lookup(self);
 	
 #  if ENABLE_FAST_BLT
 	initialiseCopyBits();
@@ -3036,8 +2986,7 @@ initialiseModule(void)
 /*	Return true if shiftTable/maskTable define an identity mapping. */
 
 	/* BitBltSimulation>>#isIdentityMap:with: */
-static sqInt
-isIdentityMapwith(int *shifts, unsigned int *masks)
+static sqIntisIdentityMapwith(int *shifts, unsigned int *masks, struct foo * self)
 {
 	if ((shifts == null)
 	 || (masks == null)) {
@@ -3062,54 +3011,53 @@ isIdentityMapwith(int *shifts, unsigned int *masks)
  */
 
 	/* BitBltSimulation>>#loadBitBltDestForm */
-static sqInt
-loadBitBltDestForm(void)
+static sqIntloadBitBltDestForm(struct foo * self)
 {
 	sqInt destBitsSize;
 	sqInt v;
 
 	v = 0;
-	if (!((isPointers(destForm, interpreterProxy->interpreterState))
-		 && ((slotSizeOf(destForm, interpreterProxy->interpreterState)) >= 4))) {
+	if (!((isPointers(destForm, self))
+		 && ((slotSizeOf(destForm, self)) >= 4))) {
 		return 0;
 	}
-	destBits = fetchPointerofObject(FormBitsIndex, destForm, interpreterProxy->interpreterState);
-	destWidth = fetchIntegerofObject(FormWidthIndex, destForm, interpreterProxy->interpreterState);
-	destHeight = fetchIntegerofObject(FormHeightIndex, destForm, interpreterProxy->interpreterState);
+	destBits = fetchPointerofObject(FormBitsIndex, destForm, self);
+	destWidth = fetchIntegerofObject(FormWidthIndex, destForm, self);
+	destHeight = fetchIntegerofObject(FormHeightIndex, destForm, self);
 	if (!((destWidth >= 0)
 		 && (destHeight >= 0))) {
 		return 0;
 	}
-	destDepth = fetchIntegerofObject(FormDepthIndex, destForm, interpreterProxy->interpreterState);
+	destDepth = fetchIntegerofObject(FormDepthIndex, destForm, self);
 	if (!((destMSB = destDepth > 0))) {
 		destDepth = 0 - destDepth;
 	}
-	if (isIntegerObject(destBits, interpreterProxy->interpreterState)) {
+	if (isIntegerObject(destBits, self)) {
 
 		/* Query for actual surface dimensions */
 		if (querySurfaceFn == 0) {
-			if (!(loadSurfacePlugin())) {
+			if (!(loadSurfacePlugin(self))) {
 				return 0;
 			}
 		}
-		if (!(querySurfaceFn(integerValueOf(destBits, interpreterProxy->interpreterState), (&destWidth), (&destHeight), (&destDepth), (&destMSB)))) {
-			primitiveFailFor(PrimErrCallbackError, interpreterProxy->interpreterState);
+		if (!(querySurfaceFn(integerValueOf(destBits, self), (&destWidth), (&destHeight), (&destDepth), (&destMSB)))) {
+			primitiveFailFor(PrimErrCallbackError, self);
 			return 0;
 		}
 		destPPW = 32 / destDepth;
 		destBits = (destPitch = 0);
 	}
 	else {
-		if (!(isWordsOrBytes(destBits, interpreterProxy->interpreterState))) {
+		if (!(isWordsOrBytes(destBits, self))) {
 			return 0;
 		}
 		destPPW = 32 / destDepth;
 		destPitch = ((destWidth + (destPPW - 1)) / destPPW) * 4;
-		destBitsSize = byteSizeOf(destBits, interpreterProxy->interpreterState);
+		destBitsSize = byteSizeOf(destBits, self);
 		if (!(destBitsSize >= (destPitch * destHeight))) {
 			return 0;
 		}
-		destBits = oopForPointer(firstIndexableField(destBits, interpreterProxy->interpreterState));
+		destBits = oopForPointer(firstIndexableField(destBits, self));
 	}
 	return 1;
 }
@@ -3119,10 +3067,9 @@ loadBitBltDestForm(void)
 	This function is exported for the Balloon engine. */
 
 	/* BitBltSimulation>>#loadBitBltFrom: */
-EXPORT(sqInt)
-loadBitBltFrom(sqInt bbObj, struct foo * self)
+EXPORT(sqInt)loadBitBltFrom(sqInt bbObj, struct foo * self)
 {
-	return loadBitBltFromwarping(bbObj, 0);
+	return loadBitBltFromwarping(bbObj, 0, self);
 }
 
 
@@ -3131,8 +3078,7 @@ loadBitBltFrom(sqInt bbObj, struct foo * self)
 	clipping -- once it works! */
 
 	/* BitBltSimulation>>#loadBitBltFrom:warping: */
-static sqInt
-loadBitBltFromwarping(sqInt bbObj, sqInt aBool)
+static sqIntloadBitBltFromwarping(sqInt bbObj, sqInt aBool, struct foo * self)
 {
 	sqInt cmOop;
 	sqInt cmSize;
@@ -3155,10 +3101,10 @@ loadBitBltFromwarping(sqInt bbObj, sqInt aBool)
 	v1 = 0;
 	bitBltOop = bbObj;
 	isWarping = aBool;
-	bitBltIsReceiver = bbObj == (stackValue(methodArgumentCount(interpreterProxy->interpreterState), interpreterProxy->interpreterState));
-	numGCsOnInvocation = statNumGCs(interpreterProxy->interpreterState);
-	combinationRule = fetchIntegerofObject(BBRuleIndex, bitBltOop, interpreterProxy->interpreterState);
-	if ((failed(interpreterProxy->interpreterState))
+	bitBltIsReceiver = bbObj == (stackValue(methodArgumentCount(self), self));
+	numGCsOnInvocation = statNumGCs(self);
+	combinationRule = fetchIntegerofObject(BBRuleIndex, bitBltOop, self);
+	if ((failed(self))
 	 || ((combinationRule < 0)
 	 || (combinationRule > (OpTableSize - 2)))) {
 		return 0;
@@ -3167,9 +3113,9 @@ loadBitBltFromwarping(sqInt bbObj, sqInt aBool)
 	 && (combinationRule <= 17)) {
 		return 0;
 	}
-	sourceForm = fetchPointerofObject(BBSourceFormIndex, bitBltOop, interpreterProxy->interpreterState);
+	sourceForm = fetchPointerofObject(BBSourceFormIndex, bitBltOop, self);
 	/* begin ignoreSourceOrHalftone: */
-	if (sourceForm == (nilObject(interpreterProxy->interpreterState))) {
+	if (sourceForm == (nilObject(self))) {
 		noSource = 1;
 		goto l1;
 	}
@@ -3191,9 +3137,9 @@ loadBitBltFromwarping(sqInt bbObj, sqInt aBool)
 	}
 	noSource = 0;
 	l1:	/* end ignoreSourceOrHalftone: */;
-	halftoneForm = fetchPointerofObject(BBHalftoneFormIndex, bitBltOop, interpreterProxy->interpreterState);
+	halftoneForm = fetchPointerofObject(BBHalftoneFormIndex, bitBltOop, self);
 	/* begin ignoreSourceOrHalftone: */
-	if (halftoneForm == (nilObject(interpreterProxy->interpreterState))) {
+	if (halftoneForm == (nilObject(self))) {
 		noHalftone = 1;
 		goto l2;
 	}
@@ -3215,36 +3161,36 @@ loadBitBltFromwarping(sqInt bbObj, sqInt aBool)
 	}
 	noHalftone = 0;
 	l2:	/* end ignoreSourceOrHalftone: */;
-	destForm = fetchPointerofObject(BBDestFormIndex, bbObj, interpreterProxy->interpreterState);
+	destForm = fetchPointerofObject(BBDestFormIndex, bbObj, self);
 	/* begin loadBitBltDestForm */
-	if (!((isPointers(destForm, interpreterProxy->interpreterState))
-		 && ((slotSizeOf(destForm, interpreterProxy->interpreterState)) >= 4))) {
+	if (!((isPointers(destForm, self))
+		 && ((slotSizeOf(destForm, self)) >= 4))) {
 		ok = 0;
 		goto l3;
 	}
-	destBits = fetchPointerofObject(FormBitsIndex, destForm, interpreterProxy->interpreterState);
-	destWidth = fetchIntegerofObject(FormWidthIndex, destForm, interpreterProxy->interpreterState);
-	destHeight = fetchIntegerofObject(FormHeightIndex, destForm, interpreterProxy->interpreterState);
+	destBits = fetchPointerofObject(FormBitsIndex, destForm, self);
+	destWidth = fetchIntegerofObject(FormWidthIndex, destForm, self);
+	destHeight = fetchIntegerofObject(FormHeightIndex, destForm, self);
 	if (!((destWidth >= 0)
 		 && (destHeight >= 0))) {
 		ok = 0;
 		goto l3;
 	}
-	destDepth = fetchIntegerofObject(FormDepthIndex, destForm, interpreterProxy->interpreterState);
+	destDepth = fetchIntegerofObject(FormDepthIndex, destForm, self);
 	if (!((destMSB = destDepth > 0))) {
 		destDepth = 0 - destDepth;
 	}
-	if (isIntegerObject(destBits, interpreterProxy->interpreterState)) {
+	if (isIntegerObject(destBits, self)) {
 
 		/* Query for actual surface dimensions */
 		if (querySurfaceFn == 0) {
-			if (!(loadSurfacePlugin())) {
+			if (!(loadSurfacePlugin(self))) {
 				ok = 0;
 				goto l3;
 			}
 		}
-		if (!(querySurfaceFn(integerValueOf(destBits, interpreterProxy->interpreterState), (&destWidth), (&destHeight), (&destDepth), (&destMSB)))) {
-			primitiveFailFor(PrimErrCallbackError, interpreterProxy->interpreterState);
+		if (!(querySurfaceFn(integerValueOf(destBits, self), (&destWidth), (&destHeight), (&destDepth), (&destMSB)))) {
+			primitiveFailFor(PrimErrCallbackError, self);
 			ok = 0;
 			goto l3;
 		}
@@ -3252,29 +3198,29 @@ loadBitBltFromwarping(sqInt bbObj, sqInt aBool)
 		destBits = (destPitch = 0);
 	}
 	else {
-		if (!(isWordsOrBytes(destBits, interpreterProxy->interpreterState))) {
+		if (!(isWordsOrBytes(destBits, self))) {
 			ok = 0;
 			goto l3;
 		}
 		destPPW = 32 / destDepth;
 		destPitch = ((destWidth + (destPPW - 1)) / destPPW) * 4;
-		destBitsSize = byteSizeOf(destBits, interpreterProxy->interpreterState);
+		destBitsSize = byteSizeOf(destBits, self);
 		if (!(destBitsSize >= (destPitch * destHeight))) {
 			ok = 0;
 			goto l3;
 		}
-		destBits = oopForPointer(firstIndexableField(destBits, interpreterProxy->interpreterState));
+		destBits = oopForPointer(firstIndexableField(destBits, self));
 	}
 	ok = 1;
 	l3:	/* end loadBitBltDestForm */;
 	if (!ok) {
 		return 0;
 	}
-	destX = fetchIntOrFloatofObjectifNil(BBDestXIndex, bitBltOop, 0);
-	destY = fetchIntOrFloatofObjectifNil(BBDestYIndex, bitBltOop, 0);
-	width = fetchIntOrFloatofObjectifNil(BBWidthIndex, bitBltOop, destWidth);
-	height = fetchIntOrFloatofObjectifNil(BBHeightIndex, bitBltOop, destHeight);
-	if (failed(interpreterProxy->interpreterState)) {
+	destX = fetchIntOrFloatofObjectifNil(BBDestXIndex, bitBltOop, 0, self);
+	destY = fetchIntOrFloatofObjectifNil(BBDestYIndex, bitBltOop, 0, self);
+	width = fetchIntOrFloatofObjectifNil(BBWidthIndex, bitBltOop, destWidth, self);
+	height = fetchIntOrFloatofObjectifNil(BBHeightIndex, bitBltOop, destHeight, self);
+	if (failed(self)) {
 		return 0;
 	}
 	if (noSource) {
@@ -3282,37 +3228,37 @@ loadBitBltFromwarping(sqInt bbObj, sqInt aBool)
 	}
 	else {
 		/* begin loadBitBltSourceForm */
-		if (!((isPointers(sourceForm, interpreterProxy->interpreterState))
-			 && ((slotSizeOf(sourceForm, interpreterProxy->interpreterState)) >= 4))) {
+		if (!((isPointers(sourceForm, self))
+			 && ((slotSizeOf(sourceForm, self)) >= 4))) {
 			ok = 0;
 			goto l7;
 		}
-		sourceBits = fetchPointerofObject(FormBitsIndex, sourceForm, interpreterProxy->interpreterState);
+		sourceBits = fetchPointerofObject(FormBitsIndex, sourceForm, self);
 		/* begin fetchIntOrFloat:ofObject: */
-		fieldOop = fetchPointerofObject(FormWidthIndex, sourceForm, interpreterProxy->interpreterState);
-		if (isIntegerObject(fieldOop, interpreterProxy->interpreterState)) {
-			sourceWidth = integerValueOf(fieldOop, interpreterProxy->interpreterState);
+		fieldOop = fetchPointerofObject(FormWidthIndex, sourceForm, self);
+		if (isIntegerObject(fieldOop, self)) {
+			sourceWidth = integerValueOf(fieldOop, self);
 			goto l5;
 		}
-		floatValue = floatValueOf(fieldOop, interpreterProxy->interpreterState);
+		floatValue = floatValueOf(fieldOop, self);
 		if (!((-2.147483648e9 <= floatValue)
 			 && (floatValue <= 2.147483647e9))) {
-			primitiveFail(interpreterProxy->interpreterState);
+			primitiveFail(self);
 			sourceWidth = 0;
 			goto l5;
 		}
 		sourceWidth = ((sqInt)floatValue);
 	l5:	/* end fetchIntOrFloat:ofObject: */;
 		/* begin fetchIntOrFloat:ofObject: */
-		fieldOop1 = fetchPointerofObject(FormHeightIndex, sourceForm, interpreterProxy->interpreterState);
-		if (isIntegerObject(fieldOop1, interpreterProxy->interpreterState)) {
-			sourceHeight = integerValueOf(fieldOop1, interpreterProxy->interpreterState);
+		fieldOop1 = fetchPointerofObject(FormHeightIndex, sourceForm, self);
+		if (isIntegerObject(fieldOop1, self)) {
+			sourceHeight = integerValueOf(fieldOop1, self);
 			goto l6;
 		}
-		floatValue1 = floatValueOf(fieldOop1, interpreterProxy->interpreterState);
+		floatValue1 = floatValueOf(fieldOop1, self);
 		if (!((-2.147483648e9 <= floatValue1)
 			 && (floatValue1 <= 2.147483647e9))) {
-			primitiveFail(interpreterProxy->interpreterState);
+			primitiveFail(self);
 			sourceHeight = 0;
 			goto l6;
 		}
@@ -3323,21 +3269,21 @@ loadBitBltFromwarping(sqInt bbObj, sqInt aBool)
 			ok = 0;
 			goto l7;
 		}
-		sourceDepth = fetchIntegerofObject(FormDepthIndex, sourceForm, interpreterProxy->interpreterState);
+		sourceDepth = fetchIntegerofObject(FormDepthIndex, sourceForm, self);
 		if (!((sourceMSB = sourceDepth > 0))) {
 			sourceDepth = 0 - sourceDepth;
 		}
-		if (isIntegerObject(sourceBits, interpreterProxy->interpreterState)) {
+		if (isIntegerObject(sourceBits, self)) {
 
 			/* Query for actual surface dimensions */
 			if (querySurfaceFn == 0) {
-				if (!(loadSurfacePlugin())) {
+				if (!(loadSurfacePlugin(self))) {
 					ok = 0;
 					goto l7;
 				}
 			}
-			if (!(querySurfaceFn(integerValueOf(sourceBits, interpreterProxy->interpreterState), (&sourceWidth), (&sourceHeight), (&sourceDepth), (&sourceMSB)))) {
-				primitiveFailFor(PrimErrCallbackError, interpreterProxy->interpreterState);
+			if (!(querySurfaceFn(integerValueOf(sourceBits, self), (&sourceWidth), (&sourceHeight), (&sourceDepth), (&sourceMSB)))) {
+				primitiveFailFor(PrimErrCallbackError, self);
 				ok = 0;
 				goto l7;
 			}
@@ -3345,18 +3291,18 @@ loadBitBltFromwarping(sqInt bbObj, sqInt aBool)
 			sourceBits = (sourcePitch = 0);
 		}
 		else {
-			if (!(isWordsOrBytes(sourceBits, interpreterProxy->interpreterState))) {
+			if (!(isWordsOrBytes(sourceBits, self))) {
 				ok = 0;
 				goto l7;
 			}
 			sourcePPW = 32 / sourceDepth;
 			sourcePitch = ((sourceWidth + (sourcePPW - 1)) / sourcePPW) * 4;
-			sourceBitsSize = byteSizeOf(sourceBits, interpreterProxy->interpreterState);
+			sourceBitsSize = byteSizeOf(sourceBits, self);
 			if (!(sourceBitsSize >= (sourcePitch * sourceHeight))) {
 				ok = 0;
 				goto l7;
 			}
-			sourceBits = oopForPointer(firstIndexableField(sourceBits, interpreterProxy->interpreterState));
+			sourceBits = oopForPointer(firstIndexableField(sourceBits, self));
 		}
 		ok = 1;
 	l7:	/* end loadBitBltSourceForm */;
@@ -3368,8 +3314,8 @@ loadBitBltFromwarping(sqInt bbObj, sqInt aBool)
 		cmShiftTable = null;
 		cmMaskTable = null;
 		cmLookupTable = null;
-		cmOop = fetchPointerofObject(BBColorMapIndex, bitBltOop, interpreterProxy->interpreterState);
-		if (cmOop == (nilObject(interpreterProxy->interpreterState))) {
+		cmOop = fetchPointerofObject(BBColorMapIndex, bitBltOop, self);
+		if (cmOop == (nilObject(self))) {
 			ok = 1;
 			goto l10;
 		}
@@ -3377,60 +3323,60 @@ loadBitBltFromwarping(sqInt bbObj, sqInt aBool)
 		/* even if identity or somesuch - may be cleared later */
 		cmFlags = ColorMapPresent;
 		oldStyle = 0;
-		if (isWords(cmOop, interpreterProxy->interpreterState)) {
+		if (isWords(cmOop, self)) {
 
 			/* This is an old-style color map (indexed only, with implicit RGBA conversion) */
-			cmSize = slotSizeOf(cmOop, interpreterProxy->interpreterState);
-			cmLookupTable = firstIndexableField(cmOop, interpreterProxy->interpreterState);
+			cmSize = slotSizeOf(cmOop, self);
+			cmLookupTable = firstIndexableField(cmOop, self);
 			oldStyle = 1;
 		}
 		else {
 
 			/* A new-style color map (fully qualified) */
-			if (!((isPointers(cmOop, interpreterProxy->interpreterState))
-				 && ((slotSizeOf(cmOop, interpreterProxy->interpreterState)) >= 3))) {
+			if (!((isPointers(cmOop, self))
+				 && ((slotSizeOf(cmOop, self)) >= 3))) {
 				ok = 0;
 				goto l10;
 			}
 			/* begin loadColorMapShiftOrMaskFrom: */
-			mapOop = fetchPointerofObject(0, cmOop, interpreterProxy->interpreterState);
-			if (mapOop == (nilObject(interpreterProxy->interpreterState))) {
+			mapOop = fetchPointerofObject(0, cmOop, self);
+			if (mapOop == (nilObject(self))) {
 				cmShiftTable = ((void *) null);
 				goto l8;
 			}
-			if (!((isWords(mapOop, interpreterProxy->interpreterState))
-				 && ((slotSizeOf(mapOop, interpreterProxy->interpreterState)) == 4))) {
-				primitiveFail(interpreterProxy->interpreterState);
+			if (!((isWords(mapOop, self))
+				 && ((slotSizeOf(mapOop, self)) == 4))) {
+				primitiveFail(self);
 				cmShiftTable = ((void *) null);
 				goto l8;
 			}
-			cmShiftTable = ((void *) (firstIndexableField(mapOop, interpreterProxy->interpreterState)));
+			cmShiftTable = ((void *) (firstIndexableField(mapOop, self)));
 	l8:	/* end loadColorMapShiftOrMaskFrom: */;
 			/* begin loadColorMapShiftOrMaskFrom: */
-			mapOop1 = fetchPointerofObject(1, cmOop, interpreterProxy->interpreterState);
-			if (mapOop1 == (nilObject(interpreterProxy->interpreterState))) {
+			mapOop1 = fetchPointerofObject(1, cmOop, self);
+			if (mapOop1 == (nilObject(self))) {
 				cmMaskTable = ((void *) null);
 				goto l9;
 			}
-			if (!((isWords(mapOop1, interpreterProxy->interpreterState))
-				 && ((slotSizeOf(mapOop1, interpreterProxy->interpreterState)) == 4))) {
-				primitiveFail(interpreterProxy->interpreterState);
+			if (!((isWords(mapOop1, self))
+				 && ((slotSizeOf(mapOop1, self)) == 4))) {
+				primitiveFail(self);
 				cmMaskTable = ((void *) null);
 				goto l9;
 			}
-			cmMaskTable = ((void *) (firstIndexableField(mapOop1, interpreterProxy->interpreterState)));
+			cmMaskTable = ((void *) (firstIndexableField(mapOop1, self)));
 	l9:	/* end loadColorMapShiftOrMaskFrom: */;
-			oop = fetchPointerofObject(2, cmOop, interpreterProxy->interpreterState);
-			if (oop == (nilObject(interpreterProxy->interpreterState))) {
+			oop = fetchPointerofObject(2, cmOop, self);
+			if (oop == (nilObject(self))) {
 				cmSize = 0;
 			}
 			else {
-				if (!(isWords(oop, interpreterProxy->interpreterState))) {
+				if (!(isWords(oop, self))) {
 					ok = 0;
 					goto l10;
 				}
-				cmSize = slotSizeOf(oop, interpreterProxy->interpreterState);
-				cmLookupTable = firstIndexableField(oop, interpreterProxy->interpreterState);
+				cmSize = slotSizeOf(oop, self);
+				cmLookupTable = firstIndexableField(oop, self);
 			}
 			cmFlags = cmFlags | ColorMapNewStyle;
 		}
@@ -3459,9 +3405,9 @@ loadBitBltFromwarping(sqInt bbObj, sqInt aBool)
 		if (oldStyle) {
 
 			/* needs implicit conversion */
-			setupColorMasks();
+			setupColorMasks(self);
 		}
-		if (isIdentityMapwith(cmShiftTable, cmMaskTable)) {
+		if (isIdentityMapwith(cmShiftTable, cmMaskTable, self)) {
 			cmMaskTable = null;
 			cmShiftTable = null;
 		}
@@ -3474,10 +3420,10 @@ loadBitBltFromwarping(sqInt bbObj, sqInt aBool)
 			return 0;
 		}
 		if ((cmFlags & ColorMapNewStyle) == 0) {
-			setupColorMasks();
+			setupColorMasks(self);
 		}
-		sourceX = fetchIntOrFloatofObjectifNil(BBSourceXIndex, bitBltOop, 0);
-		sourceY = fetchIntOrFloatofObjectifNil(BBSourceYIndex, bitBltOop, 0);
+		sourceX = fetchIntOrFloatofObjectifNil(BBSourceXIndex, bitBltOop, 0, self);
+		sourceY = fetchIntOrFloatofObjectifNil(BBSourceYIndex, bitBltOop, 0, self);
 	}
 	/* begin loadHalftoneForm */
 	if (noHalftone) {
@@ -3485,37 +3431,37 @@ loadBitBltFromwarping(sqInt bbObj, sqInt aBool)
 		ok = 1;
 		goto l4;
 	}
-	if ((isPointers(halftoneForm, interpreterProxy->interpreterState))
-	 && ((slotSizeOf(halftoneForm, interpreterProxy->interpreterState)) >= 4)) {
+	if ((isPointers(halftoneForm, self))
+	 && ((slotSizeOf(halftoneForm, self)) >= 4)) {
 
 		/* Old-style 32xN monochrome halftone Forms */
-		halftoneBits = fetchPointerofObject(FormBitsIndex, halftoneForm, interpreterProxy->interpreterState);
-		halftoneHeight = fetchIntegerofObject(FormHeightIndex, halftoneForm, interpreterProxy->interpreterState);
-		if (!(isWords(halftoneBits, interpreterProxy->interpreterState))) {
+		halftoneBits = fetchPointerofObject(FormBitsIndex, halftoneForm, self);
+		halftoneHeight = fetchIntegerofObject(FormHeightIndex, halftoneForm, self);
+		if (!(isWords(halftoneBits, self))) {
 			noHalftone = 1;
 		}
 	}
 	else {
 
 		/* New spec accepts, basically, a word array */
-		if (!(isWords(halftoneForm, interpreterProxy->interpreterState))) {
+		if (!(isWords(halftoneForm, self))) {
 			ok = 0;
 			goto l4;
 		}
 		halftoneBits = halftoneForm;
-		halftoneHeight = slotSizeOf(halftoneBits, interpreterProxy->interpreterState);
+		halftoneHeight = slotSizeOf(halftoneBits, self);
 	}
-	halftoneBase = oopForPointer(firstIndexableField(halftoneBits, interpreterProxy->interpreterState));
+	halftoneBase = oopForPointer(firstIndexableField(halftoneBits, self));
 	ok = 1;
 	l4:	/* end loadHalftoneForm */;
 	if (!ok) {
 		return 0;
 	}
-	clipX = fetchIntOrFloatofObjectifNil(BBClipXIndex, bitBltOop, 0);
-	clipY = fetchIntOrFloatofObjectifNil(BBClipYIndex, bitBltOop, 0);
-	clipWidth = fetchIntOrFloatofObjectifNil(BBClipWidthIndex, bitBltOop, destWidth);
-	clipHeight = fetchIntOrFloatofObjectifNil(BBClipHeightIndex, bitBltOop, destHeight);
-	if (failed(interpreterProxy->interpreterState)) {
+	clipX = fetchIntOrFloatofObjectifNil(BBClipXIndex, bitBltOop, 0, self);
+	clipY = fetchIntOrFloatofObjectifNil(BBClipYIndex, bitBltOop, 0, self);
+	clipWidth = fetchIntOrFloatofObjectifNil(BBClipWidthIndex, bitBltOop, destWidth, self);
+	clipHeight = fetchIntOrFloatofObjectifNil(BBClipHeightIndex, bitBltOop, destHeight, self);
+	if (failed(self)) {
 		return 0;
 	}
 	if (clipX < 0) {
@@ -3532,10 +3478,10 @@ loadBitBltFromwarping(sqInt bbObj, sqInt aBool)
 	if ((clipY + clipHeight) > destHeight) {
 		clipHeight = destHeight - clipY;
 	}
-	if (numGCsOnInvocation != (statNumGCs(interpreterProxy->interpreterState))) {
+	if (numGCsOnInvocation != (statNumGCs(self))) {
 
 		/* querySurface could be a callback in loadSourceFor: and loadDestForm: */
-		primitiveFailFor(PrimErrObjectMoved, interpreterProxy->interpreterState);
+		primitiveFailFor(PrimErrObjectMoved, self);
 		return 0;
 	}
 	return 1;
@@ -3547,8 +3493,7 @@ loadBitBltFromwarping(sqInt bbObj, sqInt aBool)
  */
 
 	/* BitBltSimulation>>#loadBitBltSourceForm */
-static sqInt
-loadBitBltSourceForm(void)
+static sqIntloadBitBltSourceForm(struct foo * self)
 {
 	sqInt fieldOop;
 	sqInt fieldOop1;
@@ -3558,36 +3503,36 @@ loadBitBltSourceForm(void)
 	sqInt v;
 
 	v = 0;
-	if (!((isPointers(sourceForm, interpreterProxy->interpreterState))
-		 && ((slotSizeOf(sourceForm, interpreterProxy->interpreterState)) >= 4))) {
+	if (!((isPointers(sourceForm, self))
+		 && ((slotSizeOf(sourceForm, self)) >= 4))) {
 		return 0;
 	}
-	sourceBits = fetchPointerofObject(FormBitsIndex, sourceForm, interpreterProxy->interpreterState);
+	sourceBits = fetchPointerofObject(FormBitsIndex, sourceForm, self);
 	/* begin fetchIntOrFloat:ofObject: */
-	fieldOop = fetchPointerofObject(FormWidthIndex, sourceForm, interpreterProxy->interpreterState);
-	if (isIntegerObject(fieldOop, interpreterProxy->interpreterState)) {
-		sourceWidth = integerValueOf(fieldOop, interpreterProxy->interpreterState);
+	fieldOop = fetchPointerofObject(FormWidthIndex, sourceForm, self);
+	if (isIntegerObject(fieldOop, self)) {
+		sourceWidth = integerValueOf(fieldOop, self);
 		goto l1;
 	}
-	floatValue = floatValueOf(fieldOop, interpreterProxy->interpreterState);
+	floatValue = floatValueOf(fieldOop, self);
 	if (!((-2.147483648e9 <= floatValue)
 		 && (floatValue <= 2.147483647e9))) {
-		primitiveFail(interpreterProxy->interpreterState);
+		primitiveFail(self);
 		sourceWidth = 0;
 		goto l1;
 	}
 	sourceWidth = ((sqInt)floatValue);
 	l1:	/* end fetchIntOrFloat:ofObject: */;
 	/* begin fetchIntOrFloat:ofObject: */
-	fieldOop1 = fetchPointerofObject(FormHeightIndex, sourceForm, interpreterProxy->interpreterState);
-	if (isIntegerObject(fieldOop1, interpreterProxy->interpreterState)) {
-		sourceHeight = integerValueOf(fieldOop1, interpreterProxy->interpreterState);
+	fieldOop1 = fetchPointerofObject(FormHeightIndex, sourceForm, self);
+	if (isIntegerObject(fieldOop1, self)) {
+		sourceHeight = integerValueOf(fieldOop1, self);
 		goto l2;
 	}
-	floatValue1 = floatValueOf(fieldOop1, interpreterProxy->interpreterState);
+	floatValue1 = floatValueOf(fieldOop1, self);
 	if (!((-2.147483648e9 <= floatValue1)
 		 && (floatValue1 <= 2.147483647e9))) {
-		primitiveFail(interpreterProxy->interpreterState);
+		primitiveFail(self);
 		sourceHeight = 0;
 		goto l2;
 	}
@@ -3597,36 +3542,36 @@ loadBitBltSourceForm(void)
 		 && (sourceHeight >= 0))) {
 		return 0;
 	}
-	sourceDepth = fetchIntegerofObject(FormDepthIndex, sourceForm, interpreterProxy->interpreterState);
+	sourceDepth = fetchIntegerofObject(FormDepthIndex, sourceForm, self);
 	if (!((sourceMSB = sourceDepth > 0))) {
 		sourceDepth = 0 - sourceDepth;
 	}
-	if (isIntegerObject(sourceBits, interpreterProxy->interpreterState)) {
+	if (isIntegerObject(sourceBits, self)) {
 
 		/* Query for actual surface dimensions */
 		if (querySurfaceFn == 0) {
-			if (!(loadSurfacePlugin())) {
+			if (!(loadSurfacePlugin(self))) {
 				return 0;
 			}
 		}
-		if (!(querySurfaceFn(integerValueOf(sourceBits, interpreterProxy->interpreterState), (&sourceWidth), (&sourceHeight), (&sourceDepth), (&sourceMSB)))) {
-			primitiveFailFor(PrimErrCallbackError, interpreterProxy->interpreterState);
+		if (!(querySurfaceFn(integerValueOf(sourceBits, self), (&sourceWidth), (&sourceHeight), (&sourceDepth), (&sourceMSB)))) {
+			primitiveFailFor(PrimErrCallbackError, self);
 			return 0;
 		}
 		sourcePPW = 32 / sourceDepth;
 		sourceBits = (sourcePitch = 0);
 	}
 	else {
-		if (!(isWordsOrBytes(sourceBits, interpreterProxy->interpreterState))) {
+		if (!(isWordsOrBytes(sourceBits, self))) {
 			return 0;
 		}
 		sourcePPW = 32 / sourceDepth;
 		sourcePitch = ((sourceWidth + (sourcePPW - 1)) / sourcePPW) * 4;
-		sourceBitsSize = byteSizeOf(sourceBits, interpreterProxy->interpreterState);
+		sourceBitsSize = byteSizeOf(sourceBits, self);
 		if (!(sourceBitsSize >= (sourcePitch * sourceHeight))) {
 			return 0;
 		}
-		sourceBits = oopForPointer(firstIndexableField(sourceBits, interpreterProxy->interpreterState));
+		sourceBits = oopForPointer(firstIndexableField(sourceBits, self));
 	}
 	return 1;
 }
@@ -3637,8 +3582,7 @@ loadBitBltSourceForm(void)
 	or N = 9, 12, or 15 (3, 4, 5 bits per color) for 16 or 32 bits. */
 
 	/* BitBltSimulation>>#loadColorMap */
-static sqInt
-loadColorMap(void)
+static sqIntloadColorMap(struct foo * self)
 {
 	sqInt cmOop;
 	sqInt cmSize;
@@ -3651,66 +3595,66 @@ loadColorMap(void)
 	cmShiftTable = null;
 	cmMaskTable = null;
 	cmLookupTable = null;
-	cmOop = fetchPointerofObject(BBColorMapIndex, bitBltOop, interpreterProxy->interpreterState);
-	if (cmOop == (nilObject(interpreterProxy->interpreterState))) {
+	cmOop = fetchPointerofObject(BBColorMapIndex, bitBltOop, self);
+	if (cmOop == (nilObject(self))) {
 		return 1;
 	}
 
 	/* even if identity or somesuch - may be cleared later */
 	cmFlags = ColorMapPresent;
 	oldStyle = 0;
-	if (isWords(cmOop, interpreterProxy->interpreterState)) {
+	if (isWords(cmOop, self)) {
 
 		/* This is an old-style color map (indexed only, with implicit RGBA conversion) */
-		cmSize = slotSizeOf(cmOop, interpreterProxy->interpreterState);
-		cmLookupTable = firstIndexableField(cmOop, interpreterProxy->interpreterState);
+		cmSize = slotSizeOf(cmOop, self);
+		cmLookupTable = firstIndexableField(cmOop, self);
 		oldStyle = 1;
 	}
 	else {
 
 		/* A new-style color map (fully qualified) */
-		if (!((isPointers(cmOop, interpreterProxy->interpreterState))
-			 && ((slotSizeOf(cmOop, interpreterProxy->interpreterState)) >= 3))) {
+		if (!((isPointers(cmOop, self))
+			 && ((slotSizeOf(cmOop, self)) >= 3))) {
 			return 0;
 		}
 		/* begin loadColorMapShiftOrMaskFrom: */
-		mapOop = fetchPointerofObject(0, cmOop, interpreterProxy->interpreterState);
-		if (mapOop == (nilObject(interpreterProxy->interpreterState))) {
+		mapOop = fetchPointerofObject(0, cmOop, self);
+		if (mapOop == (nilObject(self))) {
 			cmShiftTable = ((void *) null);
 			goto l1;
 		}
-		if (!((isWords(mapOop, interpreterProxy->interpreterState))
-			 && ((slotSizeOf(mapOop, interpreterProxy->interpreterState)) == 4))) {
-			primitiveFail(interpreterProxy->interpreterState);
+		if (!((isWords(mapOop, self))
+			 && ((slotSizeOf(mapOop, self)) == 4))) {
+			primitiveFail(self);
 			cmShiftTable = ((void *) null);
 			goto l1;
 		}
-		cmShiftTable = ((void *) (firstIndexableField(mapOop, interpreterProxy->interpreterState)));
+		cmShiftTable = ((void *) (firstIndexableField(mapOop, self)));
 	l1:	/* end loadColorMapShiftOrMaskFrom: */;
 		/* begin loadColorMapShiftOrMaskFrom: */
-		mapOop1 = fetchPointerofObject(1, cmOop, interpreterProxy->interpreterState);
-		if (mapOop1 == (nilObject(interpreterProxy->interpreterState))) {
+		mapOop1 = fetchPointerofObject(1, cmOop, self);
+		if (mapOop1 == (nilObject(self))) {
 			cmMaskTable = ((void *) null);
 			goto l2;
 		}
-		if (!((isWords(mapOop1, interpreterProxy->interpreterState))
-			 && ((slotSizeOf(mapOop1, interpreterProxy->interpreterState)) == 4))) {
-			primitiveFail(interpreterProxy->interpreterState);
+		if (!((isWords(mapOop1, self))
+			 && ((slotSizeOf(mapOop1, self)) == 4))) {
+			primitiveFail(self);
 			cmMaskTable = ((void *) null);
 			goto l2;
 		}
-		cmMaskTable = ((void *) (firstIndexableField(mapOop1, interpreterProxy->interpreterState)));
+		cmMaskTable = ((void *) (firstIndexableField(mapOop1, self)));
 	l2:	/* end loadColorMapShiftOrMaskFrom: */;
-		oop = fetchPointerofObject(2, cmOop, interpreterProxy->interpreterState);
-		if (oop == (nilObject(interpreterProxy->interpreterState))) {
+		oop = fetchPointerofObject(2, cmOop, self);
+		if (oop == (nilObject(self))) {
 			cmSize = 0;
 		}
 		else {
-			if (!(isWords(oop, interpreterProxy->interpreterState))) {
+			if (!(isWords(oop, self))) {
 				return 0;
 			}
-			cmSize = slotSizeOf(oop, interpreterProxy->interpreterState);
-			cmLookupTable = firstIndexableField(oop, interpreterProxy->interpreterState);
+			cmSize = slotSizeOf(oop, self);
+			cmLookupTable = firstIndexableField(oop, self);
 		}
 		cmFlags = cmFlags | ColorMapNewStyle;
 	}
@@ -3738,9 +3682,9 @@ loadColorMap(void)
 	if (oldStyle) {
 
 		/* needs implicit conversion */
-		setupColorMasks();
+		setupColorMasks(self);
 	}
-	if (isIdentityMapwith(cmShiftTable, cmMaskTable)) {
+	if (isIdentityMapwith(cmShiftTable, cmMaskTable, self)) {
 		cmMaskTable = null;
 		cmShiftTable = null;
 	}
@@ -3751,26 +3695,24 @@ loadColorMap(void)
 }
 
 	/* BitBltSimulation>>#loadColorMapShiftOrMaskFrom: */
-static void *
-loadColorMapShiftOrMaskFrom(sqInt mapOop)
+static void *loadColorMapShiftOrMaskFrom(sqInt mapOop, struct foo * self)
 {
-	if (mapOop == (nilObject(interpreterProxy->interpreterState))) {
+	if (mapOop == (nilObject(self))) {
 		return null;
 	}
-	if (!((isWords(mapOop, interpreterProxy->interpreterState))
-		 && ((slotSizeOf(mapOop, interpreterProxy->interpreterState)) == 4))) {
-		primitiveFail(interpreterProxy->interpreterState);
+	if (!((isWords(mapOop, self))
+		 && ((slotSizeOf(mapOop, self)) == 4))) {
+		primitiveFail(self);
 		return null;
 	}
-	return firstIndexableField(mapOop, interpreterProxy->interpreterState);
+	return firstIndexableField(mapOop, self);
 }
 
 
 /*	Load the halftone form */
 
 	/* BitBltSimulation>>#loadHalftoneForm */
-static sqInt
-loadHalftoneForm(void)
+static sqIntloadHalftoneForm(struct foo * self)
 {
 	sqInt halftoneBits;
 
@@ -3778,26 +3720,26 @@ loadHalftoneForm(void)
 		halftoneBase = null;
 		return 1;
 	}
-	if ((isPointers(halftoneForm, interpreterProxy->interpreterState))
-	 && ((slotSizeOf(halftoneForm, interpreterProxy->interpreterState)) >= 4)) {
+	if ((isPointers(halftoneForm, self))
+	 && ((slotSizeOf(halftoneForm, self)) >= 4)) {
 
 		/* Old-style 32xN monochrome halftone Forms */
-		halftoneBits = fetchPointerofObject(FormBitsIndex, halftoneForm, interpreterProxy->interpreterState);
-		halftoneHeight = fetchIntegerofObject(FormHeightIndex, halftoneForm, interpreterProxy->interpreterState);
-		if (!(isWords(halftoneBits, interpreterProxy->interpreterState))) {
+		halftoneBits = fetchPointerofObject(FormBitsIndex, halftoneForm, self);
+		halftoneHeight = fetchIntegerofObject(FormHeightIndex, halftoneForm, self);
+		if (!(isWords(halftoneBits, self))) {
 			noHalftone = 1;
 		}
 	}
 	else {
 
 		/* New spec accepts, basically, a word array */
-		if (!(isWords(halftoneForm, interpreterProxy->interpreterState))) {
+		if (!(isWords(halftoneForm, self))) {
 			return 0;
 		}
 		halftoneBits = halftoneForm;
-		halftoneHeight = slotSizeOf(halftoneBits, interpreterProxy->interpreterState);
+		halftoneHeight = slotSizeOf(halftoneBits, self);
 	}
-	halftoneBase = oopForPointer(firstIndexableField(halftoneBits, interpreterProxy->interpreterState));
+	halftoneBase = oopForPointer(firstIndexableField(halftoneBits, self));
 	return 1;
 }
 
@@ -3805,22 +3747,20 @@ loadHalftoneForm(void)
 /*	Load the surface support plugin */
 
 	/* BitBltSimulation>>#loadSurfacePlugin */
-static sqInt
-loadSurfacePlugin(void)
+static sqIntloadSurfacePlugin(struct foo * self)
 {
-	querySurfaceFn = ioLoadFunctionFrom("ioGetSurfaceFormat", "SurfacePlugin");
-	lockSurfaceFn = ioLoadFunctionFrom("ioLockSurface", "SurfacePlugin");
-	unlockSurfaceFn = ioLoadFunctionFrom("ioUnlockSurface", "SurfacePlugin");
+	querySurfaceFn = ioLoadFunctionFrom("ioGetSurfaceFormat", "SurfacePlugin", self);
+	lockSurfaceFn = ioLoadFunctionFrom("ioLockSurface", "SurfacePlugin", self);
+	unlockSurfaceFn = ioLoadFunctionFrom("ioUnlockSurface", "SurfacePlugin", self);
 	return (querySurfaceFn != 0)
 	 && ((lockSurfaceFn != 0)
 	 && (unlockSurfaceFn != 0));
 }
 
 	/* BitBltSimulation>>#loadWarpBltFrom: */
-static sqInt
-loadWarpBltFrom(sqInt bbObj)
+static sqIntloadWarpBltFrom(sqInt bbObj, struct foo * self)
 {
-	return loadBitBltFromwarping(bbObj, 1);
+	return loadBitBltFromwarping(bbObj, 1, self);
 }
 
 
@@ -3865,8 +3805,7 @@ loadWarpBltFrom(sqInt bbObj)
  */
 
 	/* BitBltSimulation>>#lockSurfaces */
-static sqInt
-lockSurfaces(void)
+static sqIntlockSurfaces(struct foo * self)
 {
 	sqInt b;
 	sqInt destHandle;
@@ -3877,22 +3816,22 @@ lockSurfaces(void)
 	sqInt v;
 
 	v = 0;
-	assert(numGCsOnInvocation == (statNumGCs(interpreterProxy->interpreterState)));
+	assert(numGCsOnInvocation == (statNumGCs(self)));
 	hasSurfaceLock = 0;
 	if (destBits == 0) {
 
 		/* Blitting *to* OS surface */
 		if (lockSurfaceFn == 0) {
-			if (!(loadSurfacePlugin())) {
+			if (!(loadSurfacePlugin(self))) {
 				return 0;
 			}
 		}
-		destHandle = fetchIntegerofObject(FormBitsIndex, destForm, interpreterProxy->interpreterState);
+		destHandle = fetchIntegerofObject(FormBitsIndex, destForm, self);
 		if (!((sourceBits != 0)
 			 || (noSource))) {
 
 			/* Handle the special case of equal source and dest handles */
-			sourceHandle = fetchIntegerofObject(FormBitsIndex, sourceForm, interpreterProxy->interpreterState);
+			sourceHandle = fetchIntegerofObject(FormBitsIndex, sourceForm, self);
 			if (sourceHandle == destHandle) {
 
 				/* If we have overlapping source/dest we lock the entire area
@@ -3914,14 +3853,14 @@ lockSurfaces(void)
 				destBits = sourceBits;
 				destPitch = sourcePitch;
 				hasSurfaceLock = 1;
-				if (numGCsOnInvocation != (statNumGCs(interpreterProxy->interpreterState))) {
-					unlockSurfaces();
-					primitiveFailFor(PrimErrObjectMoved, interpreterProxy->interpreterState);
+				if (numGCsOnInvocation != (statNumGCs(self))) {
+					unlockSurfaces(self);
+					primitiveFailFor(PrimErrObjectMoved, self);
 					return 0;
 				}
 				if (destBits == 0) {
-					unlockSurfaces();
-					primitiveFailFor(PrimErrCallbackError, interpreterProxy->interpreterState);
+					unlockSurfaces(self);
+					primitiveFailFor(PrimErrCallbackError, self);
 					return 0;
 				}
 				endOfDestination = (endOfSource = sourceBits + (sourcePitch * sourceHeight));
@@ -3930,25 +3869,25 @@ lockSurfaces(void)
 		}
 		destBits = lockSurfaceFn(destHandle, (&destPitch), dx, dy, bbW, bbH);
 		hasSurfaceLock = 1;
-		if (numGCsOnInvocation != (statNumGCs(interpreterProxy->interpreterState))) {
-			unlockSurfaces();
-			primitiveFailFor(PrimErrObjectMoved, interpreterProxy->interpreterState);
+		if (numGCsOnInvocation != (statNumGCs(self))) {
+			unlockSurfaces(self);
+			primitiveFailFor(PrimErrObjectMoved, self);
 			return 0;
 		}
 		if (destBits == 0) {
-			primitiveFailFor(PrimErrCallbackError, interpreterProxy->interpreterState);
+			primitiveFailFor(PrimErrCallbackError, self);
 		}
 	}
 	if (!((sourceBits != 0)
 		 || (noSource))) {
 
 		/* Blitting *from* OS surface */
-		sourceHandle = fetchIntegerofObject(FormBitsIndex, sourceForm, interpreterProxy->interpreterState);
-		if (failed(interpreterProxy->interpreterState)) {
+		sourceHandle = fetchIntegerofObject(FormBitsIndex, sourceForm, self);
+		if (failed(self)) {
 			return 0;
 		}
 		if (lockSurfaceFn == 0) {
-			if (!(loadSurfacePlugin())) {
+			if (!(loadSurfacePlugin(self))) {
 				return 0;
 			}
 		}
@@ -3959,13 +3898,13 @@ lockSurfaces(void)
 			sourceBits = lockSurfaceFn(sourceHandle, (&sourcePitch), sx, sy, bbW, bbH);
 		}
 		hasSurfaceLock = 1;
-		if (numGCsOnInvocation != (statNumGCs(interpreterProxy->interpreterState))) {
-			unlockSurfaces();
-			primitiveFailFor(PrimErrObjectMoved, interpreterProxy->interpreterState);
+		if (numGCsOnInvocation != (statNumGCs(self))) {
+			unlockSurfaces(self);
+			primitiveFailFor(PrimErrObjectMoved, self);
 			return 0;
 		}
 		if (sourceBits == 0) {
-			primitiveFailFor(PrimErrCallbackError, interpreterProxy->interpreterState);
+			primitiveFailFor(PrimErrCallbackError, self);
 		}
 	}
 	endOfSource = (noSource
@@ -3982,8 +3921,7 @@ lockSurfaces(void)
 /*	Color map the given source pixel. */
 
 	/* BitBltSimulation>>#mapPixel:flags: */
-static sqInt
-mapPixelflags(sqInt sourcePixel, sqInt mapperFlags)
+static sqIntmapPixelflags(sqInt sourcePixel, sqInt mapperFlags, struct foo * self)
 {
 	sqInt pv;
 	sqInt val;
@@ -4012,8 +3950,7 @@ mapPixelflags(sqInt sourcePixel, sqInt mapperFlags)
 /*	Sender warpLoop is too big to include this in-line */
 
 	/* BitBltSimulation>>#merge:with: */
-static unsigned int
-mergewith(unsigned int sourceWord, unsigned int destinationWord)
+static unsigned intmergewith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self)
 {
 	unsigned int (*mergeFnwith)(unsigned int, unsigned int);
 
@@ -4026,8 +3963,7 @@ mergewith(unsigned int sourceWord, unsigned int destinationWord)
 	Make sure we have no dangling references. */
 
 	/* BitBltSimulation>>#moduleUnloaded: */
-EXPORT(sqInt)
-moduleUnloaded(char *aModuleName, struct foo * self)
+EXPORT(sqInt)moduleUnloaded(char *aModuleName, struct foo * self)
 {
 	if ((strcmp(aModuleName, "SurfacePlugin")) == 0) {
 
@@ -4049,8 +3985,7 @@ moduleUnloaded(char *aModuleName, struct foo * self)
 	values obtained from the left and right fringes. */
 
 	/* BitBltSimulation>>#OLDrgbDiff:with: */
-static sqInt
-OLDrgbDiffwith(sqInt sourceWord, sqInt destinationWord)
+static sqIntOLDrgbDiffwith(sqInt sourceWord, sqInt destinationWord, struct foo * self)
 {
 	sqInt diff;
 	int pixMask;
@@ -4069,13 +4004,13 @@ OLDrgbDiffwith(sqInt sourceWord, sqInt destinationWord)
 		return destinationWord;
 	}
 	if (destDepth == 16) {
-		diff = partitionedSubfromnBitsnPartitions(sourceWord, destinationWord, 5, 3);
+		diff = partitionedSubfromnBitsnPartitions(sourceWord, destinationWord, 5, 3, self);
 		bitCount = ((bitCount + (diff & 0x1F)) + ((((usqInt) diff) >> 5) & 0x1F)) + ((((usqInt) diff) >> 10) & 0x1F);
-		diff = partitionedSubfromnBitsnPartitions(((usqInt) sourceWord) >> 16, ((usqInt) destinationWord) >> 16, 5, 3);
+		diff = partitionedSubfromnBitsnPartitions(((usqInt) sourceWord) >> 16, ((usqInt) destinationWord) >> 16, 5, 3, self);
 		bitCount = ((bitCount + (diff & 0x1F)) + ((((usqInt) diff) >> 5) & 0x1F)) + ((((usqInt) diff) >> 10) & 0x1F);
 	}
 	else {
-		diff = partitionedSubfromnBitsnPartitions(sourceWord, destinationWord, 8, 3);
+		diff = partitionedSubfromnBitsnPartitions(sourceWord, destinationWord, 8, 3, self);
 		bitCount = ((bitCount + (diff & 0xFF)) + ((((usqInt) diff) >> 8) & 0xFF)) + ((((usqInt) diff) >> 16) & 0xFF);
 	}
 	return destinationWord;
@@ -4091,8 +4026,7 @@ OLDrgbDiffwith(sqInt sourceWord, sqInt destinationWord)
 	values obtained from the left and right fringes. */
 
 	/* BitBltSimulation>>#OLDtallyIntoMap:with: */
-static sqInt
-OLDtallyIntoMapwith(sqInt sourceWord, sqInt destinationWord)
+static sqIntOLDtallyIntoMapwith(sqInt sourceWord, sqInt destinationWord, struct foo * self)
 {
 	sqInt d;
 	sqInt d1;
@@ -4331,8 +4265,7 @@ OLDtallyIntoMapwith(sqInt sourceWord, sqInt destinationWord)
  */
 
 	/* BitBltSimulation>>#partitionedAdd:to:nBits:componentMask:carryOverflowMask: */
-static unsigned int
-partitionedAddtonBitscomponentMaskcarryOverflowMask(unsigned int word1, unsigned int word2, sqInt nBits, unsigned int componentMask, unsigned int carryOverflowMask)
+static unsigned intpartitionedAddtonBitscomponentMaskcarryOverflowMask(unsigned int word1, unsigned int word2, sqInt nBits, unsigned int componentMask, unsigned int carryOverflowMask, struct foo * self)
 {
 	unsigned int carryOverflow;
 	unsigned int sum;
@@ -4358,8 +4291,7 @@ partitionedAddtonBitscomponentMaskcarryOverflowMask(unsigned int word1, unsigned
 	Used for erasing, eg, brush shapes prior to ORing in a color */
 
 	/* BitBltSimulation>>#partitionedAND:to:nBits:nPartitions: */
-static unsigned int
-partitionedANDtonBitsnPartitions(unsigned int word1, unsigned int word2, sqInt nBits, sqInt nParts)
+static unsigned intpartitionedANDtonBitsnPartitions(unsigned int word1, unsigned int word2, sqInt nBits, sqInt nParts, struct foo * self)
 {
 	sqInt i;
 	sqInt mask;
@@ -4390,8 +4322,7 @@ partitionedANDtonBitsnPartitions(unsigned int word1, unsigned int word2, sqInt n
  */
 
 	/* BitBltSimulation>>#partitionedMax:with:nBits:nPartitions: */
-static unsigned int
-partitionedMaxwithnBitsnPartitions(unsigned int word1, unsigned int word2, sqInt nBits, sqInt nParts)
+static unsigned intpartitionedMaxwithnBitsnPartitions(unsigned int word1, unsigned int word2, sqInt nBits, sqInt nParts, struct foo * self)
 {
 	sqInt i;
 	unsigned int mask;
@@ -4420,8 +4351,7 @@ partitionedMaxwithnBitsnPartitions(unsigned int word1, unsigned int word2, sqInt
  */
 
 	/* BitBltSimulation>>#partitionedMin:with:nBits:nPartitions: */
-static unsigned int
-partitionedMinwithnBitsnPartitions(unsigned int word1, unsigned int word2, sqInt nBits, sqInt nParts)
+static unsigned intpartitionedMinwithnBitsnPartitions(unsigned int word1, unsigned int word2, sqInt nBits, sqInt nParts, struct foo * self)
 {
 	sqInt i;
 	unsigned int mask;
@@ -4452,8 +4382,7 @@ partitionedMinwithnBitsnPartitions(unsigned int word1, unsigned int word2, sqInt
  */
 
 	/* BitBltSimulation>>#partitionedMul:with:nBits:nPartitions: */
-static unsigned int
-partitionedMulwithnBitsnPartitions(unsigned int word1, unsigned int word2, sqInt nBits, sqInt nParts)
+static unsigned intpartitionedMulwithnBitsnPartitions(unsigned int word1, unsigned int word2, sqInt nBits, sqInt nParts, struct foo * self)
 {
 	unsigned int dMask;
 	unsigned int product;
@@ -4486,8 +4415,7 @@ partitionedMulwithnBitsnPartitions(unsigned int word1, unsigned int word2, sqInt
 }
 
 	/* BitBltSimulation>>#partitionedRgbComponentAlpha:dest:nBits:nPartitions: */
-static unsigned int
-partitionedRgbComponentAlphadestnBitsnPartitions(unsigned int sourceWord, unsigned int destWord, sqInt nBits, sqInt nParts)
+static unsigned intpartitionedRgbComponentAlphadestnBitsnPartitions(unsigned int sourceWord, unsigned int destWord, sqInt nBits, sqInt nParts, struct foo * self)
 {
 	sqInt d;
 	sqInt destPix;
@@ -4513,11 +4441,11 @@ partitionedRgbComponentAlphadestnBitsnPartitions(unsigned int sourceWord, unsign
 				p2 = (((((usqInt)((p2 & 0x1F)) << 3)) | (((usqInt)((p2 & 0x3E0)) << 6))) | (((usqInt)((p2 & 0x7C00)) << 9))) | 0xFF000000U;
 			}
 			else {
-				p1 = (rgbMapfromto(p1, nBits, 32)) | 0xFF000000U;
-				p2 = (rgbMapfromto(p2, nBits, 32)) | 0xFF000000U;
+				p1 = (rgbMapfromto(p1, nBits, 32, self)) | 0xFF000000U;
+				p2 = (rgbMapfromto(p2, nBits, 32, self)) | 0xFF000000U;
 			}
 		}
-		v = rgbComponentAlpha32with(p1, p2);
+		v = rgbComponentAlpha32with(p1, p2, self);
 		if (!(nBits == 32)) {
 			/* begin rgbMap:from:to: */
 			if (((d = nBits - 32)) > 0) {
@@ -4596,8 +4524,7 @@ partitionedRgbComponentAlphadestnBitsnPartitions(unsigned int sourceWord, unsign
  */
 
 	/* BitBltSimulation>>#partitionedSub:from:nBits:nPartitions: */
-static unsigned int
-partitionedSubfromnBitsnPartitions(unsigned int word1, unsigned int word2, sqInt nBits, sqInt nParts)
+static unsigned intpartitionedSubfromnBitsnPartitions(unsigned int word1, unsigned int word2, sqInt nBits, sqInt nParts, struct foo * self)
 {
 	sqInt i;
 	unsigned int mask;
@@ -4633,8 +4560,7 @@ partitionedSubfromnBitsnPartitions(unsigned int word1, unsigned int word2, sqInt
 /*	Should be inlined into caller for speed */
 
 	/* BitBltSimulation>>#performCopyLoop */
-static sqInt
-performCopyLoop(void)
+static sqIntperformCopyLoop(struct foo * self)
 {
 	sqInt dxLowBits;
 	sqInt endBits;
@@ -4683,7 +4609,7 @@ performCopyLoop(void)
 	if (noSource) {
 
 		/* Simple fill loop */
-		copyLoopNoSource();
+		copyLoopNoSource(self);
 	}
 	else {
 
@@ -4725,7 +4651,7 @@ performCopyLoop(void)
 
 			/* If we must convert between pixel depths or use
 			   color lookups or swap pixels use the general version */
-			copyLoopPixMap();
+			copyLoopPixMap(self);
 		}
 		else {
 
@@ -4773,7 +4699,7 @@ performCopyLoop(void)
 			assert(!((preload
  && (skew == 0))));
 			assert(((skew >= -31) && (skew <= 0x1F)));
-			copyLoop();
+			copyLoop(self);
 		}
 	}
 	return 0;
@@ -4786,8 +4712,7 @@ performCopyLoop(void)
  */
 
 	/* BitBltSimulation>>#pickSourcePixels:flags:srcMask:destMask:srcShiftInc:dstShiftInc: */
-static unsigned int
-pickSourcePixelsflagssrcMaskdestMasksrcShiftIncdstShiftInc(sqInt nPixels, sqInt mapperFlags, sqInt srcMask, sqInt dstMask, sqInt srcShiftInc, sqInt dstShiftInc)
+static unsigned intpickSourcePixelsflagssrcMaskdestMasksrcShiftIncdstShiftInc(sqInt nPixels, sqInt mapperFlags, sqInt srcMask, sqInt dstMask, sqInt srcShiftInc, sqInt dstShiftInc, struct foo * self)
 {
 	sqInt destPix;
 	unsigned int destWord;
@@ -4888,8 +4813,7 @@ pickSourcePixelsflagssrcMaskdestMasksrcShiftIncdstShiftInc(sqInt nPixels, sqInt 
 	and still relatively important when smoothing is used. */
 
 	/* BitBltSimulation>>#pickWarpPixelAtX:y: */
-static unsigned int
-pickWarpPixelAtXy(sqInt xx, sqInt yy)
+static unsigned intpickWarpPixelAtXy(sqInt xx, sqInt yy, struct foo * self)
 {
 	sqInt sourcePix;
 	unsigned int sourceWord;
@@ -4923,8 +4847,7 @@ pickWarpPixelAtXy(sqInt xx, sqInt yy)
  */
 
 	/* BitBltSimulation>>#pixClear:with: */
-static unsigned int
-pixClearwith(unsigned int sourceWord, unsigned int destinationWord)
+static unsigned intpixClearwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self)
 {
 	sqInt i;
 	unsigned int mask;
@@ -4959,28 +4882,25 @@ pixClearwith(unsigned int sourceWord, unsigned int destinationWord)
 }
 
 	/* BitBltSimulation>>#pixMask:with: */
-static unsigned int
-pixMaskwith(unsigned int sourceWord, unsigned int destinationWord)
+static unsigned intpixMaskwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self)
 {
-	return partitionedANDtonBitsnPartitions((unsigned int)~sourceWord, destinationWord, destDepth, destPPW);
+	return partitionedANDtonBitsnPartitions((unsigned int)~sourceWord, destinationWord, destDepth, destPPW, self);
 }
 
 	/* BitBltSimulation>>#pixPaint:with: */
-static unsigned int
-pixPaintwith(unsigned int sourceWord, unsigned int destinationWord)
+static unsigned intpixPaintwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self)
 {
 	if (sourceWord == 0) {
 		return destinationWord;
 	}
-	return sourceWord | (partitionedANDtonBitsnPartitions((unsigned int)~sourceWord, destinationWord, destDepth, destPPW));
+	return sourceWord | (partitionedANDtonBitsnPartitions((unsigned int)~sourceWord, destinationWord, destDepth, destPPW, self));
 }
 
 
 /*	Swap the pixels in destWord */
 
 	/* BitBltSimulation>>#pixSwap:with: */
-static unsigned int
-pixSwapwith(unsigned int sourceWord, unsigned int destWord)
+static unsigned intpixSwapwith(unsigned int sourceWord, unsigned int destWord, struct foo * self)
 {
 	unsigned int highMask;
 	sqInt i;
@@ -5017,8 +4937,7 @@ pixSwapwith(unsigned int sourceWord, unsigned int destWord)
 	with ENABLE_FAST_BLT */
 
 	/* BitBltSimulation>>#primitiveCompareColorA:to:test: */
-EXPORT(sqInt)
-primitiveCompareColors(void)
+EXPORT(sqInt)primitiveCompareColors(struct foo * self)
 {
 	usqIntptr_t colorA;
 	usqIntptr_t colorB;
@@ -5028,35 +4947,35 @@ primitiveCompareColors(void)
 	sqInt _return_value;
 
 	val = 0;
-	if (!((isPositiveMachineIntegerObject(stackValue(2, interpreterProxy->interpreterState), interpreterProxy->interpreterState))
-		 && ((isPositiveMachineIntegerObject(stackValue(1, interpreterProxy->interpreterState), interpreterProxy->interpreterState))
-		 && (isIntegerObject(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState))))) {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	if (!((isPositiveMachineIntegerObject(stackValue(2, self), self))
+		 && ((isPositiveMachineIntegerObject(stackValue(1, self), self))
+		 && (isIntegerObject(stackValue(0, self), self))))) {
+		primitiveFailFor(PrimErrBadArgument, self);
 		return null;
 	}
 	colorA = (BytesPerOop == 4
-		? positive32BitValueOf(stackValue(2, interpreterProxy->interpreterState), interpreterProxy->interpreterState)
-		: positive64BitValueOf(stackValue(2, interpreterProxy->interpreterState), interpreterProxy->interpreterState));
+		? positive32BitValueOf(stackValue(2, self), self)
+		: positive64BitValueOf(stackValue(2, self), self));
 	colorB = (BytesPerOop == 4
-		? positive32BitValueOf(stackValue(1, interpreterProxy->interpreterState), interpreterProxy->interpreterState)
-		: positive64BitValueOf(stackValue(1, interpreterProxy->interpreterState), interpreterProxy->interpreterState));
-	testID = stackIntegerValue(0, interpreterProxy->interpreterState);
-	rcvr = stackValue(3, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+		? positive32BitValueOf(stackValue(1, self), self)
+		: positive64BitValueOf(stackValue(1, self), self));
+	testID = stackIntegerValue(0, self);
+	rcvr = stackValue(3, self);
+	if (failed(self)) {
 		return null;
 	}
 	
 #  if ENABLE_FAST_BLT
-	if (!(loadBitBltFromwarping(rcvr, 0))) {
-		primitiveFail(interpreterProxy->interpreterState);
+	if (!(loadBitBltFromwarping(rcvr, 0, self))) {
+		primitiveFail(self);
 		return null;
 	}
-	clipRange();
+	clipRange(self);
 	if ((bbW <= 0)
 	 || (bbH <= 0)) {
 
 		/* zero width or height; noop */
-		primitiveFail(interpreterProxy->interpreterState);
+		primitiveFail(self);
 		return null;
 	}
 	
@@ -5081,18 +5000,18 @@ primitiveCompareColors(void)
 	op.colorB = colorB;
 
 	val = compareColorsDispatch(&op);
-	if (!(failed(interpreterProxy->interpreterState))) {
-		_return_value = positive32BitIntegerFor(val, interpreterProxy->interpreterState);
-		if (!(failed(interpreterProxy->interpreterState))) {
-			popthenPush(4, _return_value, interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		_return_value = positive32BitIntegerFor(val, self);
+		if (!(failed(self))) {
+			popthenPush(4, _return_value, self);
 		}
 	}
 	return null;
 #  else /* ENABLE_FAST_BLT */
-	primitiveFail(interpreterProxy->interpreterState);
+	primitiveFail(self);
 #  endif /* ENABLE_FAST_BLT */
-	if (!(failed(interpreterProxy->interpreterState))) {
-		pop(3, interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		pop(3, self);
 	}
 	return null;
 }
@@ -5103,40 +5022,38 @@ primitiveCompareColors(void)
  */
 
 	/* BitBltSimulation>>#primitiveCopyBits */
-EXPORT(sqInt)
-primitiveCopyBits(void)
+EXPORT(sqInt)primitiveCopyBits(struct foo * self)
 {
 	sqInt rcvr;
 
-	rcvr = stackValue(methodArgumentCount(interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	if (!(loadBitBltFromwarping(rcvr, 0))) {
-		return primitiveFail(interpreterProxy->interpreterState);
+	rcvr = stackValue(methodArgumentCount(self), self);
+	if (!(loadBitBltFromwarping(rcvr, 0, self))) {
+		return primitiveFail(self);
 	}
-	copyBits(interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	copyBits(self);
+	if (failed(self)) {
 		return null;
 	}
 	/* begin showDisplayBits */
-	if (numGCsOnInvocation != (statNumGCs(interpreterProxy->interpreterState))) {
-		reloadDestAndSourceForms();
+	if (numGCsOnInvocation != (statNumGCs(self))) {
+		reloadDestAndSourceForms(self);
 	}
-	showDisplayBitsLeftTopRightBottom(destForm, affectedL, affectedT, affectedR, affectedB, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	showDisplayBitsLeftTopRightBottom(destForm, affectedL, affectedT, affectedR, affectedB, self);
+	if (failed(self)) {
 		return null;
 	}
 	if ((combinationRule == 22)
 	 || (combinationRule == 32)) {
-		methodReturnInteger(bitCount, interpreterProxy->interpreterState);
+		methodReturnInteger(bitCount, self);
 	}
 	else {
-		methodReturnReceiver(interpreterProxy->interpreterState);
+		methodReturnReceiver(self);
 	}
 	return 0;
 }
 
 	/* BitBltSimulation>>#primitiveDisplayString */
-EXPORT(sqInt)
-primitiveDisplayString(void)
+EXPORT(sqInt)primitiveDisplayString(struct foo * self)
 {
 	sqInt ascii;
 	sqInt bbObj;
@@ -5156,37 +5073,37 @@ primitiveDisplayString(void)
 	sqInt stopIndex;
 	sqInt xTable;
 
-	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 6)) {
-		return primitiveFail(interpreterProxy->interpreterState);
+	if (!((methodArgumentCount(self)) == 6)) {
+		return primitiveFail(self);
 	}
-	kernDelta = stackIntegerValue(0, interpreterProxy->interpreterState);
-	xTable = stackValue(1, interpreterProxy->interpreterState);
-	glyphMap = stackValue(2, interpreterProxy->interpreterState);
-	stopIndex = stackIntegerValue(3, interpreterProxy->interpreterState);
-	startIndex = stackIntegerValue(4, interpreterProxy->interpreterState);
-	sourceString = stackValue(5, interpreterProxy->interpreterState);
-	bbObj = stackObjectValue(6, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	kernDelta = stackIntegerValue(0, self);
+	xTable = stackValue(1, self);
+	glyphMap = stackValue(2, self);
+	stopIndex = stackIntegerValue(3, self);
+	startIndex = stackIntegerValue(4, self);
+	sourceString = stackValue(5, self);
+	bbObj = stackObjectValue(6, self);
+	if (failed(self)) {
 		return null;
 	}
-	if (!((isArray(xTable, interpreterProxy->interpreterState))
-		 && ((isArray(glyphMap, interpreterProxy->interpreterState))
-		 && (((slotSizeOf(glyphMap, interpreterProxy->interpreterState)) == 256)
-		 && ((isBytes(sourceString, interpreterProxy->interpreterState))
+	if (!((isArray(xTable, self))
+		 && ((isArray(glyphMap, self))
+		 && (((slotSizeOf(glyphMap, self)) == 256)
+		 && ((isBytes(sourceString, self))
 		 && ((startIndex > 0)
 		 && ((stopIndex >= 0)
-		 && ((stopIndex <= (byteSizeOf(sourceString, interpreterProxy->interpreterState)))
-		 && ((loadBitBltFromwarping(bbObj, 0))
+		 && ((stopIndex <= (byteSizeOf(sourceString, self)))
+		 && ((loadBitBltFromwarping(bbObj, 0, self))
 		 && ((combinationRule != 30)
 		 && (combinationRule != 0x1F))))))))))) {
-		return primitiveFail(interpreterProxy->interpreterState);
+		return primitiveFail(self);
 	}
 	if (stopIndex == 0) {
-		return pop(6, interpreterProxy->interpreterState);
+		return pop(6, self);
 	}
 
 	/* See if we can go directly into copyLoopPixMap (usually we can) */
-	maxGlyph = (slotSizeOf(xTable, interpreterProxy->interpreterState)) - 2;
+	maxGlyph = (slotSizeOf(xTable, self)) - 2;
 
 	/* no point using slower version */
 	quickBlt = (destBits != 0)
@@ -5201,25 +5118,25 @@ primitiveDisplayString(void)
 		endOfDestination = destBits + (destPitch * destHeight);
 	}
 	else {
-		if (!(lockSurfaces())) {
-			return primitiveFail(interpreterProxy->interpreterState);
+		if (!(lockSurfaces(self))) {
+			return primitiveFail(self);
 		}
 	}
 	left = destX;
-	sourcePtr = firstIndexableField(sourceString, interpreterProxy->interpreterState);
+	sourcePtr = firstIndexableField(sourceString, self);
 	for (charIndex = startIndex; charIndex <= stopIndex; charIndex += 1) {
 		ascii = byteAtPointer((sourcePtr + charIndex) - 1);
-		glyphIndex = fetchIntegerofObject(ascii, glyphMap, interpreterProxy->interpreterState);
+		glyphIndex = fetchIntegerofObject(ascii, glyphMap, self);
 		if ((glyphIndex < 0)
 		 || (glyphIndex > maxGlyph)) {
-			return primitiveFail(interpreterProxy->interpreterState);
+			return primitiveFail(self);
 		}
-		sourceX = fetchIntegerofObject(glyphIndex, xTable, interpreterProxy->interpreterState);
-		width = (fetchIntegerofObject(glyphIndex + 1, xTable, interpreterProxy->interpreterState)) - sourceX;
-		if (failed(interpreterProxy->interpreterState)) {
+		sourceX = fetchIntegerofObject(glyphIndex, xTable, self);
+		width = (fetchIntegerofObject(glyphIndex + 1, xTable, self)) - sourceX;
+		if (failed(self)) {
 			return null;
 		}
-		clipRange();
+		clipRange(self);
 		if ((bbW > 0)
 		 && (bbH > 0)) {
 			if (quickBlt) {
@@ -5257,32 +5174,32 @@ primitiveDisplayString(void)
 
 				/* byte addr delta */
 				destDelta = (destPitch * vDir) - (4 * (nWords * hDir));
-				copyLoopPixMap();
+				copyLoopPixMap(self);
 				affectedL = dx;
 				affectedR = dx + bbW;
 				affectedT = dy;
 				affectedB = dy + bbH;
 			}
 			else {
-				copyBitsLockedAndClipped();
+				copyBitsLockedAndClipped(self);
 			}
 		}
-		if (failed(interpreterProxy->interpreterState)) {
+		if (failed(self)) {
 			return null;
 		}
 		destX = (destX + width) + kernDelta;
 	}
 	affectedL = left;
 	if (!quickBlt) {
-		unlockSurfaces();
+		unlockSurfaces(self);
 	}
 	/* begin showDisplayBits */
-	if (numGCsOnInvocation != (statNumGCs(interpreterProxy->interpreterState))) {
-		reloadDestAndSourceForms();
+	if (numGCsOnInvocation != (statNumGCs(self))) {
+		reloadDestAndSourceForms(self);
 	}
-	showDisplayBitsLeftTopRightBottom(destForm, affectedL, affectedT, affectedR, affectedB, interpreterProxy->interpreterState);
-	storeIntegerofObjectwithValue(BBDestXIndex, bbObj, destX, interpreterProxy->interpreterState);
-	pop(6, interpreterProxy->interpreterState);
+	showDisplayBitsLeftTopRightBottom(destForm, affectedL, affectedT, affectedR, affectedB, self);
+	storeIntegerofObjectwithValue(BBDestXIndex, bbObj, destX, self);
+	pop(6, self);
 	return 0;
 }
 
@@ -5290,8 +5207,7 @@ primitiveDisplayString(void)
 /*	Invoke the line drawing primitive. */
 
 	/* BitBltSimulation>>#primitiveDrawLoop */
-EXPORT(sqInt)
-primitiveDrawLoop(void)
+EXPORT(sqInt)primitiveDrawLoop(struct foo * self)
 {
 	sqInt affB;
 	sqInt affL;
@@ -5307,13 +5223,13 @@ primitiveDrawLoop(void)
 	sqInt xDelta;
 	sqInt yDelta;
 
-	rcvr = stackValue(2, interpreterProxy->interpreterState);
-	xDelta = stackIntegerValue(1, interpreterProxy->interpreterState);
-	yDelta = stackIntegerValue(0, interpreterProxy->interpreterState);
-	if (!(loadBitBltFromwarping(rcvr, 0))) {
-		return primitiveFail(interpreterProxy->interpreterState);
+	rcvr = stackValue(2, self);
+	xDelta = stackIntegerValue(1, self);
+	yDelta = stackIntegerValue(0, self);
+	if (!(loadBitBltFromwarping(rcvr, 0, self))) {
+		return primitiveFail(self);
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
+	if (!(failed(self))) {
 		/* begin drawLoopX:Y: */
 		if (xDelta > 0) {
 			dx1 = 1;
@@ -5354,8 +5270,8 @@ primitiveDrawLoop(void)
 					P += py;
 				}
 				if (i < py) {
-					copyBits(interpreterProxy->interpreterState);
-					if (failed(interpreterProxy->interpreterState)) {
+					copyBits(self);
+					if (failed(self)) {
 						goto l1;
 					}
 					if ((affectedL < affectedR)
@@ -5374,10 +5290,10 @@ primitiveDrawLoop(void)
 							affectedT = affT;
 							affectedB = affB;
 							/* begin showDisplayBits */
-							if (numGCsOnInvocation != (statNumGCs(interpreterProxy->interpreterState))) {
-								reloadDestAndSourceForms();
+							if (numGCsOnInvocation != (statNumGCs(self))) {
+								reloadDestAndSourceForms(self);
 							}
-							showDisplayBitsLeftTopRightBottom(destForm, affectedL, affectedT, affectedR, affectedB, interpreterProxy->interpreterState);
+							showDisplayBitsLeftTopRightBottom(destForm, affectedL, affectedT, affectedR, affectedB, self);
 
 							/* init null rectangle */
 							affL = (affT = 9999);
@@ -5398,8 +5314,8 @@ primitiveDrawLoop(void)
 					P += px;
 				}
 				if (i < px) {
-					copyBits(interpreterProxy->interpreterState);
-					if (failed(interpreterProxy->interpreterState)) {
+					copyBits(self);
+					if (failed(self)) {
 						goto l1;
 					}
 					if ((affectedL < affectedR)
@@ -5418,10 +5334,10 @@ primitiveDrawLoop(void)
 							affectedT = affT;
 							affectedB = affB;
 							/* begin showDisplayBits */
-							if (numGCsOnInvocation != (statNumGCs(interpreterProxy->interpreterState))) {
-								reloadDestAndSourceForms();
+							if (numGCsOnInvocation != (statNumGCs(self))) {
+								reloadDestAndSourceForms(self);
 							}
-							showDisplayBitsLeftTopRightBottom(destForm, affectedL, affectedT, affectedR, affectedB, interpreterProxy->interpreterState);
+							showDisplayBitsLeftTopRightBottom(destForm, affectedL, affectedT, affectedR, affectedB, self);
 
 							/* init null rectangle */
 							affL = (affT = 9999);
@@ -5437,17 +5353,17 @@ primitiveDrawLoop(void)
 
 		/* store destX, Y back */
 		affectedB = affB;
-		storeIntegerofObjectwithValue(BBDestXIndex, bitBltOop, destX, interpreterProxy->interpreterState);
-		storeIntegerofObjectwithValue(BBDestYIndex, bitBltOop, destY, interpreterProxy->interpreterState);
+		storeIntegerofObjectwithValue(BBDestXIndex, bitBltOop, destX, self);
+		storeIntegerofObjectwithValue(BBDestYIndex, bitBltOop, destY, self);
 	l1:	/* end drawLoopX:Y: */;
 		/* begin showDisplayBits */
-		if (numGCsOnInvocation != (statNumGCs(interpreterProxy->interpreterState))) {
-			reloadDestAndSourceForms();
+		if (numGCsOnInvocation != (statNumGCs(self))) {
+			reloadDestAndSourceForms(self);
 		}
-		showDisplayBitsLeftTopRightBottom(destForm, affectedL, affectedT, affectedR, affectedB, interpreterProxy->interpreterState);
+		showDisplayBitsLeftTopRightBottom(destForm, affectedL, affectedT, affectedR, affectedB, self);
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		pop(2, interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		pop(2, self);
 	}
 	return 0;
 }
@@ -5462,8 +5378,7 @@ primitiveDrawLoop(void)
  */
 
 	/* BitBltSimulation>>#primitivePixelValueAtX:y: */
-EXPORT(sqInt)
-primitivePixelValueAt(void)
+EXPORT(sqInt)primitivePixelValueAt(struct foo * self)
 {
 	sqInt bitmap;
 	sqInt bitsSize;
@@ -5479,54 +5394,54 @@ primitivePixelValueAt(void)
 	sqInt yVal;
 	sqInt _return_value;
 
-	if (!((isIntegerObject(stackValue(1, interpreterProxy->interpreterState), interpreterProxy->interpreterState))
-		 && (isIntegerObject(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState)))) {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	if (!((isIntegerObject(stackValue(1, self), self))
+		 && (isIntegerObject(stackValue(0, self), self)))) {
+		primitiveFailFor(PrimErrBadArgument, self);
 		return null;
 	}
-	xVal = stackIntegerValue(1, interpreterProxy->interpreterState);
-	yVal = stackIntegerValue(0, interpreterProxy->interpreterState);
-	rcvr = stackValue(2, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	xVal = stackIntegerValue(1, self);
+	yVal = stackIntegerValue(0, self);
+	rcvr = stackValue(2, self);
+	if (failed(self)) {
 		return null;
 	}
 	if ((xVal < 0)
 	 || (yVal < 0)) {
-		_return_value = integerObjectOf(0, interpreterProxy->interpreterState);
-		if (!(failed(interpreterProxy->interpreterState))) {
-			popthenPush(3, _return_value, interpreterProxy->interpreterState);
+		_return_value = integerObjectOf(0, self);
+		if (!(failed(self))) {
+			popthenPush(3, _return_value, self);
 		}
 		return null;
 	}
-	rcvr = stackValue(methodArgumentCount(interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	if (!((isPointers(rcvr, interpreterProxy->interpreterState))
-		 && ((slotSizeOf(rcvr, interpreterProxy->interpreterState)) >= 4))) {
-		primitiveFail(interpreterProxy->interpreterState);
+	rcvr = stackValue(methodArgumentCount(self), self);
+	if (!((isPointers(rcvr, self))
+		 && ((slotSizeOf(rcvr, self)) >= 4))) {
+		primitiveFail(self);
 		return null;
 	}
-	bitmap = fetchPointerofObject(FormBitsIndex, rcvr, interpreterProxy->interpreterState);
-	if (!(isWordsOrBytes(bitmap, interpreterProxy->interpreterState))) {
-		primitiveFail(interpreterProxy->interpreterState);
+	bitmap = fetchPointerofObject(FormBitsIndex, rcvr, self);
+	if (!(isWordsOrBytes(bitmap, self))) {
+		primitiveFail(self);
 		return null;
 	}
-	width = fetchIntegerofObject(FormWidthIndex, rcvr, interpreterProxy->interpreterState);
-	height = fetchIntegerofObject(FormHeightIndex, rcvr, interpreterProxy->interpreterState);
+	width = fetchIntegerofObject(FormWidthIndex, rcvr, self);
+	height = fetchIntegerofObject(FormHeightIndex, rcvr, self);
 
 	/* if width/height/depth are not integer, fail */
-	depth = fetchIntegerofObject(FormDepthIndex, rcvr, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	depth = fetchIntegerofObject(FormDepthIndex, rcvr, self);
+	if (failed(self)) {
 		return null;
 	}
 	if ((xVal >= width)
 	 || (yVal >= height)) {
-		_return_value = integerObjectOf(0, interpreterProxy->interpreterState);
-		if (!(failed(interpreterProxy->interpreterState))) {
-			popthenPush(3, _return_value, interpreterProxy->interpreterState);
+		_return_value = integerObjectOf(0, self);
+		if (!(failed(self))) {
+			popthenPush(3, _return_value, self);
 		}
 		return null;
 	}
 	if (depth < 0) {
-		primitiveFail(interpreterProxy->interpreterState);
+		primitiveFail(self);
 		return null;
 	}
 
@@ -5535,16 +5450,16 @@ primitivePixelValueAt(void)
 
 	/* how many words per row of pixels */
 	stride = (width + (ppW - 1)) / ppW;
-	bitsSize = byteSizeOf(bitmap, interpreterProxy->interpreterState);
+	bitsSize = byteSizeOf(bitmap, self);
 	if (!(bitsSize >= ((stride * height) * 4))) {
 
 		/* bytes per word */
-		primitiveFail(interpreterProxy->interpreterState);
+		primitiveFail(self);
 		return null;
 	}
 
 	/* load the word that contains our target */
-	word = fetchLong32ofObject((yVal * stride) + (xVal / ppW), bitmap, interpreterProxy->interpreterState);
+	word = fetchLong32ofObject((yVal * stride) + (xVal / ppW), bitmap, self);
 
 	/* make a mask to isolate the pixel within that word */
 	mask = ((usqInt) 0xFFFFFFFFU) >> (32 - depth);
@@ -5554,10 +5469,10 @@ primitivePixelValueAt(void)
 
 	/* shift, mask and dim the lights */
 	pixel = (((usqInt) word) >> shift) & mask;
-	if (!(failed(interpreterProxy->interpreterState))) {
-		_return_value = positive32BitIntegerFor(pixel, interpreterProxy->interpreterState);
-		if (!(failed(interpreterProxy->interpreterState))) {
-			popthenPush(3, _return_value, interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		_return_value = positive32BitIntegerFor(pixel, self);
+		if (!(failed(self))) {
+			popthenPush(3, _return_value, self);
 		}
 	}
 	return null;
@@ -5569,8 +5484,7 @@ primitivePixelValueAt(void)
  */
 
 	/* BitBltSimulation>>#primitiveWarpBits */
-EXPORT(sqInt)
-primitiveWarpBits(void)
+EXPORT(sqInt)primitiveWarpBits(struct foo * self)
 {
 	sqInt endBits;
 	sqInt ns;
@@ -5578,14 +5492,14 @@ primitiveWarpBits(void)
 	sqInt rcvr;
 	sqInt startBits;
 
-	rcvr = stackValue(methodArgumentCount(interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	if (!(loadBitBltFromwarping(rcvr, 1))) {
-		return primitiveFail(interpreterProxy->interpreterState);
+	rcvr = stackValue(methodArgumentCount(self), self);
+	if (!(loadBitBltFromwarping(rcvr, 1, self))) {
+		return primitiveFail(self);
 	}
 	/* begin warpBits */
 	ns = noSource;
 	noSource = 1;
-	clipRange();
+	clipRange(self);
 	noSource = ns;
 	if (noSource
 	 || ((bbW <= 0)
@@ -5595,8 +5509,8 @@ primitiveWarpBits(void)
 		affectedL = (affectedR = (affectedT = (affectedB = 0)));
 		goto l1;
 	}
-	if (!(lockSurfaces())) {
-		primitiveFail(interpreterProxy->interpreterState);
+	if (!(lockSurfaces(self))) {
+		primitiveFail(self);
 		goto l1;
 	}
 	/* begin destMaskAndPointerInit */
@@ -5633,7 +5547,7 @@ primitiveWarpBits(void)
 
 	/* byte addr delta */
 	destDelta = (destPitch * vDir) - (4 * (nWords * hDir));
-	warpLoop();
+	warpLoop(self);
 	if (hDir > 0) {
 		affectedL = dx;
 		affectedR = dx + bbW;
@@ -5650,20 +5564,20 @@ primitiveWarpBits(void)
 		affectedT = (dy - bbH) + 1;
 		affectedB = dy + 1;
 	}
-	unlockSurfaces();
+	unlockSurfaces(self);
 	l1:	/* end warpBits */;
-	if (failed(interpreterProxy->interpreterState)) {
+	if (failed(self)) {
 		return null;
 	}
 	/* begin showDisplayBits */
-	if (numGCsOnInvocation != (statNumGCs(interpreterProxy->interpreterState))) {
-		reloadDestAndSourceForms();
+	if (numGCsOnInvocation != (statNumGCs(self))) {
+		reloadDestAndSourceForms(self);
 	}
-	showDisplayBitsLeftTopRightBottom(destForm, affectedL, affectedT, affectedR, affectedB, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	showDisplayBitsLeftTopRightBottom(destForm, affectedL, affectedT, affectedR, affectedB, self);
+	if (failed(self)) {
 		return null;
 	}
-	methodReturnReceiver(interpreterProxy->interpreterState);
+	methodReturnReceiver(self);
 	return 0;
 }
 
@@ -5675,23 +5589,21 @@ primitiveWarpBits(void)
 	For the moment implement something that works for these two cases. */
 
 	/* BitBltSimulation>>#reloadDestAndSourceForms */
-static sqInt
-reloadDestAndSourceForms(void)
+static sqIntreloadDestAndSourceForms(struct foo * self)
 {
 	sqInt receiver;
 
-	receiver = stackValue(methodArgumentCount(interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	receiver = stackValue(methodArgumentCount(self), self);
 	if (!bitBltIsReceiver) {
-		receiver = fetchPointerofObject(BEBitBltIndex, receiver, interpreterProxy->interpreterState);
+		receiver = fetchPointerofObject(BEBitBltIndex, receiver, self);
 	}
-	destForm = fetchPointerofObject(BBDestFormIndex, receiver, interpreterProxy->interpreterState);
-	sourceForm = fetchPointerofObject(BBSourceFormIndex, receiver, interpreterProxy->interpreterState);
+	destForm = fetchPointerofObject(BBDestFormIndex, receiver, self);
+	sourceForm = fetchPointerofObject(BBSourceFormIndex, receiver, self);
 	return 0;
 }
 
 	/* BitBltSimulation>>#rgbAdd:with: */
-static unsigned int
-rgbAddwith(unsigned int sourceWord, unsigned int destinationWord)
+static unsigned intrgbAddwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self)
 {
 	unsigned int carryOverflowMask;
 	unsigned int componentMask;
@@ -5701,21 +5613,21 @@ rgbAddwith(unsigned int sourceWord, unsigned int destinationWord)
 		/* Add each pixel separately */
 		componentMask = (1U << destDepth) - 1;
 		carryOverflowMask = ((usqInt)((0xFFFFFFFFU / componentMask)) << (destDepth - 1));
-		return partitionedAddtonBitscomponentMaskcarryOverflowMask(sourceWord, destinationWord, destDepth, componentMask, carryOverflowMask);
+		return partitionedAddtonBitscomponentMaskcarryOverflowMask(sourceWord, destinationWord, destDepth, componentMask, carryOverflowMask, self);
 	}
 	if (destDepth == 16) {
 
 		/* Add RGB components of each pixel separately */
 		componentMask = 0x1F;
 		carryOverflowMask = 1108361744;
-		return partitionedAddtonBitscomponentMaskcarryOverflowMask(sourceWord & 2147450879, destinationWord & 2147450879, 5, componentMask, carryOverflowMask);
+		return partitionedAddtonBitscomponentMaskcarryOverflowMask(sourceWord & 2147450879, destinationWord & 2147450879, 5, componentMask, carryOverflowMask, self);
 	}
 	else {
 
 		/* Add RGBA components of the pixel separately */
 		componentMask = 0xFF;
 		carryOverflowMask = 2155905152U;
-		return partitionedAddtonBitscomponentMaskcarryOverflowMask(sourceWord, destinationWord, 8, componentMask, carryOverflowMask);
+		return partitionedAddtonBitscomponentMaskcarryOverflowMask(sourceWord, destinationWord, 8, componentMask, carryOverflowMask, self);
 	}
 }
 
@@ -5729,8 +5641,7 @@ rgbAddwith(unsigned int sourceWord, unsigned int destinationWord)
 /*	This particular method should be optimized in itself */
 
 	/* BitBltSimulation>>#rgbComponentAlpha16 */
-static sqInt
-rgbComponentAlpha16(void)
+static sqIntrgbComponentAlpha16(struct foo * self)
 {
 	sqInt addThreshold;
 	int deltaX;
@@ -5799,7 +5710,7 @@ rgbComponentAlpha16(void)
 				destWord = ((((usqInt) (destWord & 0x7C00) << 9)) | (((usqInt) (destWord & 0x3E0) << 6))) | ((((usqInt) (destWord & 0x1F) << 3)) | 0xFF000000U);
 
 				/* And dither */
-				sourceWord = rgbComponentAlpha32with(sourceWord, destWord);
+				sourceWord = rgbComponentAlpha32with(sourceWord, destWord, self);
 				/* begin dither32To16:threshold: */
 				addThreshold = ((usqInt) ditherThreshold << 8);
 				sourceWord = ((((usqInt) (dither8Lookup[addThreshold + ((((usqInt) sourceWord >> 16)) & 0xFF)]) << 10)) + (((usqInt) (dither8Lookup[addThreshold + ((((usqInt) sourceWord >> 8)) & 0xFF)]) << 5))) + (dither8Lookup[addThreshold + (sourceWord & 0xFF)]);
@@ -5849,8 +5760,7 @@ rgbComponentAlpha16(void)
 	 */
 
 	/* BitBltSimulation>>#rgbComponentAlpha32 */
-static sqInt
-rgbComponentAlpha32(void)
+static sqIntrgbComponentAlpha32(struct foo * self)
 {
 	register sqInt deltaX;
 	int deltaY;
@@ -5908,7 +5818,7 @@ rgbComponentAlpha32(void)
 				/* begin dstLongAt: */
 				assert((((usqInt)dstIndex)) < endOfDestination);
 				destWord = ((sqInt) (long32At(dstIndex)));
-				destWord = rgbComponentAlpha32with(sourceWord, destWord);
+				destWord = rgbComponentAlpha32with(sourceWord, destWord, self);
 				/* begin dstLongAt:put: */
 				long32Atput(dstIndex, destWord);
 				srcIndex += 4;
@@ -5939,8 +5849,7 @@ rgbComponentAlpha32(void)
 /*	Do NOT inline this into optimized loops */
 
 	/* BitBltSimulation>>#rgbComponentAlpha32:with: */
-static sqInt
-rgbComponentAlpha32with(sqInt sourceWord, sqInt destinationWord)
+static sqIntrgbComponentAlpha32with(sqInt sourceWord, sqInt destinationWord, struct foo * self)
 {
 	sqInt a;
 	sqInt aA;
@@ -6043,8 +5952,7 @@ rgbComponentAlpha32with(sqInt sourceWord, sqInt destinationWord)
 	available.  */
 
 	/* BitBltSimulation>>#rgbComponentAlpha8 */
-static sqInt
-rgbComponentAlpha8(void)
+static sqIntrgbComponentAlpha8(struct foo * self)
 {
 	sqInt adjust;
 	int deltaX;
@@ -6153,7 +6061,7 @@ long32At(srcIndex))) & ((unsigned int)~adjust)) + adjust;
 				destWord = destWord & ((unsigned int)~dstMask);
 				destWord = ((usqInt) destWord) >> srcShift;
 				destWord = mappingTable[destWord];
-				sourceWord = rgbComponentAlpha32with(sourceWord, destWord);
+				sourceWord = rgbComponentAlpha32with(sourceWord, destWord, self);
 				/* begin mapPixel:flags: */
 				pv = sourceWord;
 				if ((mapperFlags & ColorMapPresent) != 0) {
@@ -6233,8 +6141,7 @@ long32At(srcIndex))) & ((unsigned int)~adjust)) + adjust;
 /*	Do NOT inline this into optimized loops */
 
 	/* BitBltSimulation>>#rgbComponentAlpha:with: */
-static sqInt
-rgbComponentAlphawith(sqInt sourceWord, sqInt destinationWord)
+static sqIntrgbComponentAlphawith(sqInt sourceWord, sqInt destinationWord, struct foo * self)
 {
 	sqInt alpha;
 	sqInt d;
@@ -6266,11 +6173,11 @@ rgbComponentAlphawith(sqInt sourceWord, sqInt destinationWord)
 				p2 = (((((usqInt)((p2 & 0x1F)) << 3)) | (((usqInt)((p2 & 0x3E0)) << 6))) | (((usqInt)((p2 & 0x7C00)) << 9))) | 0xFF000000U;
 			}
 			else {
-				p1 = (rgbMapfromto(p1, destDepth, 32)) | 0xFF000000U;
-				p2 = (rgbMapfromto(p2, destDepth, 32)) | 0xFF000000U;
+				p1 = (rgbMapfromto(p1, destDepth, 32, self)) | 0xFF000000U;
+				p2 = (rgbMapfromto(p2, destDepth, 32, self)) | 0xFF000000U;
 			}
 		}
-		v = rgbComponentAlpha32with(p1, p2);
+		v = rgbComponentAlpha32with(p1, p2, self);
 		if (!(destDepth == 32)) {
 			/* begin rgbMap:from:to: */
 			if (((d = destDepth - 32)) > 0) {
@@ -6344,8 +6251,7 @@ rgbComponentAlphawith(sqInt sourceWord, sqInt destinationWord)
 	For non-rgb, return the number of differing pixels. */
 
 	/* BitBltSimulation>>#rgbDiff:with: */
-static unsigned int
-rgbDiffwith(unsigned int sourceWord, unsigned int destinationWord)
+static unsigned intrgbDiffwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self)
 {
 	sqInt bitsPerColor;
 	unsigned int destPixVal;
@@ -6385,7 +6291,7 @@ rgbDiffwith(unsigned int sourceWord, unsigned int destinationWord)
 				}
 			}
 			else {
-				diff = partitionedSubfromnBitsnPartitions(sourcePixVal, destPixVal, bitsPerColor, 3);
+				diff = partitionedSubfromnBitsnPartitions(sourcePixVal, destPixVal, bitsPerColor, 3, self);
 				diff = ((diff & rgbMask) + ((((usqInt) diff) >> bitsPerColor) & rgbMask)) + ((((usqInt) (((usqInt) diff) >> bitsPerColor)) >> bitsPerColor) & rgbMask);
 			}
 			bitCount += diff;
@@ -6402,8 +6308,7 @@ rgbDiffwith(unsigned int sourceWord, unsigned int destinationWord)
 	Note: This method is intended to deal with different source formats. */
 
 	/* BitBltSimulation>>#rgbMap16To32: */
-static sqInt
-rgbMap16To32(sqInt sourcePixel)
+static sqIntrgbMap16To32(sqInt sourcePixel, struct foo * self)
 {
 	return ((((sqInt)((usqInt)((sourcePixel & 0x1F)) << 3))) | (((sqInt)((usqInt)((sourcePixel & 0x3E0)) << 6)))) | (((sqInt)((usqInt)((sourcePixel & 0x7C00)) << 9)));
 }
@@ -6413,8 +6318,7 @@ rgbMap16To32(sqInt sourcePixel)
 	Note: This method is intended to deal with different source formats. */
 
 	/* BitBltSimulation>>#rgbMap32To32: */
-static sqInt
-rgbMap32To32(sqInt sourcePixel)
+static sqIntrgbMap32To32(sqInt sourcePixel, struct foo * self)
 {
 	return sourcePixel;
 }
@@ -6423,8 +6327,7 @@ rgbMap32To32(sqInt sourcePixel)
 /*	Perform the RGBA conversion for the given source pixel */
 
 	/* BitBltSimulation>>#rgbMapPixel:flags: */
-static sqInt
-rgbMapPixelflags(sqInt sourcePixel, sqInt mapperFlags)
+static sqIntrgbMapPixelflags(sqInt sourcePixel, sqInt mapperFlags, struct foo * self)
 {
 	sqInt val;
 
@@ -6441,8 +6344,7 @@ rgbMapPixelflags(sqInt sourcePixel, sqInt mapperFlags)
  */
 
 	/* BitBltSimulation>>#rgbMap:from:to: */
-static sqInt
-rgbMapfromto(sqInt sourcePixel, sqInt nBitsIn, sqInt nBitsOut)
+static sqIntrgbMapfromto(sqInt sourcePixel, sqInt nBitsIn, sqInt nBitsOut, struct foo * self)
 {
 	sqInt d;
 	sqInt destPix;
@@ -6500,29 +6402,27 @@ rgbMapfromto(sqInt sourcePixel, sqInt nBitsIn, sqInt nBitsOut)
 }
 
 	/* BitBltSimulation>>#rgbMax:with: */
-static unsigned int
-rgbMaxwith(unsigned int sourceWord, unsigned int destinationWord)
+static unsigned intrgbMaxwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self)
 {
 	if (destDepth < 16) {
 
 		/* Max each pixel separately */
-		return partitionedMaxwithnBitsnPartitions(sourceWord, destinationWord, destDepth, destPPW);
+		return partitionedMaxwithnBitsnPartitions(sourceWord, destinationWord, destDepth, destPPW, self);
 	}
 	if (destDepth == 16) {
 
 		/* Max RGB components of each pixel separately */
-		return (partitionedMaxwithnBitsnPartitions(sourceWord, destinationWord, 5, 3)) + (((usqInt)((partitionedMaxwithnBitsnPartitions(((usqInt) sourceWord) >> 16, ((usqInt) destinationWord) >> 16, 5, 3))) << 16));
+		return (partitionedMaxwithnBitsnPartitions(sourceWord, destinationWord, 5, 3, self)) + (((usqInt)((partitionedMaxwithnBitsnPartitions(((usqInt) sourceWord) >> 16, ((usqInt) destinationWord) >> 16, 5, 3, self))) << 16));
 	}
 	else {
 
 		/* Max RGBA components of the pixel separately */
-		return partitionedMaxwithnBitsnPartitions(sourceWord, destinationWord, 8, 4);
+		return partitionedMaxwithnBitsnPartitions(sourceWord, destinationWord, 8, 4, self);
 	}
 }
 
 	/* BitBltSimulation>>#rgbMinInvert:with: */
-static unsigned int
-rgbMinInvertwith(unsigned int wordToInvert, unsigned int destinationWord)
+static unsigned intrgbMinInvertwith(unsigned int wordToInvert, unsigned int destinationWord, struct foo * self)
 {
 	unsigned int sourceWord;
 
@@ -6530,80 +6430,77 @@ rgbMinInvertwith(unsigned int wordToInvert, unsigned int destinationWord)
 	if (destDepth < 16) {
 
 		/* Min each pixel separately */
-		return partitionedMinwithnBitsnPartitions(sourceWord, destinationWord, destDepth, destPPW);
+		return partitionedMinwithnBitsnPartitions(sourceWord, destinationWord, destDepth, destPPW, self);
 	}
 	if (destDepth == 16) {
 
 		/* Min RGB components of each pixel separately */
-		return (partitionedMinwithnBitsnPartitions(sourceWord, destinationWord, 5, 3)) + (((usqInt)((partitionedMinwithnBitsnPartitions(((usqInt) sourceWord) >> 16, ((usqInt) destinationWord) >> 16, 5, 3))) << 16));
+		return (partitionedMinwithnBitsnPartitions(sourceWord, destinationWord, 5, 3, self)) + (((usqInt)((partitionedMinwithnBitsnPartitions(((usqInt) sourceWord) >> 16, ((usqInt) destinationWord) >> 16, 5, 3, self))) << 16));
 	}
 	else {
 
 		/* Min RGBA components of the pixel separately */
-		return partitionedMinwithnBitsnPartitions(sourceWord, destinationWord, 8, 4);
+		return partitionedMinwithnBitsnPartitions(sourceWord, destinationWord, 8, 4, self);
 	}
 }
 
 	/* BitBltSimulation>>#rgbMin:with: */
-static unsigned int
-rgbMinwith(unsigned int sourceWord, unsigned int destinationWord)
+static unsigned intrgbMinwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self)
 {
 	if (destDepth < 16) {
 
 		/* Min each pixel separately */
-		return partitionedMinwithnBitsnPartitions(sourceWord, destinationWord, destDepth, destPPW);
+		return partitionedMinwithnBitsnPartitions(sourceWord, destinationWord, destDepth, destPPW, self);
 	}
 	if (destDepth == 16) {
 
 		/* Min RGB components of each pixel separately */
-		return (partitionedMinwithnBitsnPartitions(sourceWord, destinationWord, 5, 3)) + (((usqInt)((partitionedMinwithnBitsnPartitions(((usqInt) sourceWord) >> 16, ((usqInt) destinationWord) >> 16, 5, 3))) << 16));
+		return (partitionedMinwithnBitsnPartitions(sourceWord, destinationWord, 5, 3, self)) + (((usqInt)((partitionedMinwithnBitsnPartitions(((usqInt) sourceWord) >> 16, ((usqInt) destinationWord) >> 16, 5, 3, self))) << 16));
 	}
 	else {
 
 		/* Min RGBA components of the pixel separately */
-		return partitionedMinwithnBitsnPartitions(sourceWord, destinationWord, 8, 4);
+		return partitionedMinwithnBitsnPartitions(sourceWord, destinationWord, 8, 4, self);
 	}
 }
 
 	/* BitBltSimulation>>#rgbMul:with: */
-static unsigned int
-rgbMulwith(unsigned int sourceWord, unsigned int destinationWord)
+static unsigned intrgbMulwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self)
 {
 	if (destDepth < 16) {
 
 		/* Mul each pixel separately */
-		return partitionedMulwithnBitsnPartitions(sourceWord, destinationWord, destDepth, destPPW);
+		return partitionedMulwithnBitsnPartitions(sourceWord, destinationWord, destDepth, destPPW, self);
 	}
 	if (destDepth == 16) {
 
 		/* Mul RGB components of each pixel separately */
-		return (partitionedMulwithnBitsnPartitions(sourceWord, destinationWord, 5, 3)) + (((usqInt)((partitionedMulwithnBitsnPartitions(((usqInt) sourceWord) >> 16, ((usqInt) destinationWord) >> 16, 5, 3))) << 16));
+		return (partitionedMulwithnBitsnPartitions(sourceWord, destinationWord, 5, 3, self)) + (((usqInt)((partitionedMulwithnBitsnPartitions(((usqInt) sourceWord) >> 16, ((usqInt) destinationWord) >> 16, 5, 3, self))) << 16));
 	}
 	else {
 
 		/* Mul RGBA components of the pixel separately */
-		return partitionedMulwithnBitsnPartitions(sourceWord, destinationWord, 8, 4);
+		return partitionedMulwithnBitsnPartitions(sourceWord, destinationWord, 8, 4, self);
 	}
 }
 
 	/* BitBltSimulation>>#rgbSub:with: */
-static unsigned int
-rgbSubwith(unsigned int sourceWord, unsigned int destinationWord)
+static unsigned intrgbSubwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self)
 {
 	if (destDepth < 16) {
 
 		/* Sub each pixel separately */
-		return partitionedSubfromnBitsnPartitions(sourceWord, destinationWord, destDepth, destPPW);
+		return partitionedSubfromnBitsnPartitions(sourceWord, destinationWord, destDepth, destPPW, self);
 	}
 	if (destDepth == 16) {
 
 		/* Sub RGB components of each pixel separately */
-		return (partitionedSubfromnBitsnPartitions(sourceWord, destinationWord, 5, 3)) + (((usqInt)((partitionedSubfromnBitsnPartitions(((usqInt) sourceWord) >> 16, ((usqInt) destinationWord) >> 16, 5, 3))) << 16));
+		return (partitionedSubfromnBitsnPartitions(sourceWord, destinationWord, 5, 3, self)) + (((usqInt)((partitionedSubfromnBitsnPartitions(((usqInt) sourceWord) >> 16, ((usqInt) destinationWord) >> 16, 5, 3, self))) << 16));
 	}
 	else {
 
 		/* Sub RGBA components of the pixel separately */
-		return partitionedSubfromnBitsnPartitions(sourceWord, destinationWord, 8, 4);
+		return partitionedSubfromnBitsnPartitions(sourceWord, destinationWord, 8, 4, self);
 	}
 }
 
@@ -6678,8 +6575,7 @@ setInterpreter(struct VirtualMachine *anInterpreter)
 /*	WARNING: For WarpBlt w/ smoothing the source depth is wrong here! */
 
 	/* BitBltSimulation>>#setupColorMasks */
-static sqInt
-setupColorMasks(void)
+static sqIntsetupColorMasks(struct foo * self)
 {
 	sqInt bits;
 	sqInt targetBits;
@@ -6710,7 +6606,7 @@ setupColorMasks(void)
 	else {
 		targetBits = cmBitsPerColor;
 	}
-	setupColorMasksFromto(bits, targetBits);
+	setupColorMasksFromto(bits, targetBits, self);
 	return 0;
 }
 
@@ -6720,8 +6616,7 @@ setupColorMasks(void)
  */
 
 	/* BitBltSimulation>>#setupColorMasksFrom:to: */
-static sqInt
-setupColorMasksFromto(sqInt srcBits, sqInt targetBits)
+static sqIntsetupColorMasksFromto(sqInt srcBits, sqInt targetBits, struct foo * self)
 {
 	sqInt deltaBits;
 	int mask;
@@ -6760,14 +6655,13 @@ setupColorMasksFromto(sqInt srcBits, sqInt targetBits)
 }
 
 	/* BitBltSimulation>>#showDisplayBits */
-static sqInt
-showDisplayBits(void)
+static sqIntshowDisplayBits(struct foo * self)
 {
 	/* begin ensureDestAndSourceFormsAreValid */
-	if (numGCsOnInvocation != (statNumGCs(interpreterProxy->interpreterState))) {
-		reloadDestAndSourceForms();
+	if (numGCsOnInvocation != (statNumGCs(self))) {
+		reloadDestAndSourceForms(self);
 	}
-	showDisplayBitsLeftTopRightBottom(destForm, affectedL, affectedT, affectedR, affectedB, interpreterProxy->interpreterState);
+	showDisplayBitsLeftTopRightBottom(destForm, affectedL, affectedT, affectedR, affectedB, self);
 	return 0;
 }
 
@@ -6776,8 +6670,7 @@ showDisplayBits(void)
 	ie, when the barrel-shift copy loop is used. */
 
 	/* BitBltSimulation>>#sourceSkewAndPointerInit */
-static sqInt
-sourceSkewAndPointerInit(void)
+static sqIntsourceSkewAndPointerInit(struct foo * self)
 {
 	sqInt dxLowBits;
 	unsigned int m1;
@@ -6831,23 +6724,20 @@ sourceSkewAndPointerInit(void)
 }
 
 	/* BitBltSimulation>>#sourceWord:with: */
-static unsigned int
-sourceWordwith(unsigned int sourceWord, unsigned int destinationWord)
+static unsigned intsourceWordwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self)
 {
 	return sourceWord;
 }
 
 	/* SmartSyntaxInterpreterPlugin>>#sqAssert: */
-static sqInt
-sqAssert(sqInt aBool)
+static sqIntsqAssert(sqInt aBool, struct foo * self)
 {
 	/* missing DebugCode */;
 	return aBool;
 }
 
 	/* BitBltSimulation>>#subWord:with: */
-static unsigned int
-subWordwith(unsigned int sourceWord, unsigned int destinationWord)
+static unsigned intsubWordwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self)
 {
 	return sourceWord - destinationWord;
 }
@@ -6859,8 +6749,7 @@ subWordwith(unsigned int sourceWord, unsigned int destinationWord)
 	to be performed at setup. */
 
 	/* BitBltSimulation>>#tallyIntoMap:with: */
-static unsigned int
-tallyIntoMapwith(unsigned int sourceWord, unsigned int destinationWord)
+static unsigned inttallyIntoMapwith(unsigned int sourceWord, unsigned int destinationWord, struct foo * self)
 {
 	sqInt d;
 	sqInt d1;
@@ -7029,8 +6918,7 @@ tallyIntoMapwith(unsigned int sourceWord, unsigned int destinationWord)
 /*	We need a source. */
 
 	/* BitBltSimulation>>#tryCopyingBitsQuickly */
-static sqInt
-tryCopyingBitsQuickly(void)
+static sqInttryCopyingBitsQuickly(struct foo * self)
 {
 	if (noSource) {
 		return 0;
@@ -7047,7 +6935,7 @@ tryCopyingBitsQuickly(void)
 	}
 	if (combinationRule == 41) {
 		if (destDepth == 32) {
-			rgbComponentAlpha32();
+			rgbComponentAlpha32(self);
 			affectedL = dx;
 			affectedR = dx + bbW;
 			affectedT = dy;
@@ -7055,7 +6943,7 @@ tryCopyingBitsQuickly(void)
 			return 1;
 		}
 		if (destDepth == 16) {
-			rgbComponentAlpha16();
+			rgbComponentAlpha16(self);
 			affectedL = dx;
 			affectedR = dx + bbW;
 			affectedT = dy;
@@ -7063,7 +6951,7 @@ tryCopyingBitsQuickly(void)
 			return 1;
 		}
 		if (destDepth == 8) {
-			rgbComponentAlpha8();
+			rgbComponentAlpha8(self);
 			affectedL = dx;
 			affectedR = dx + bbW;
 			affectedT = dy;
@@ -7080,13 +6968,13 @@ tryCopyingBitsQuickly(void)
 		return 0;
 	}
 	if (destDepth == 32) {
-		alphaSourceBlendBits32();
+		alphaSourceBlendBits32(self);
 	}
 	if (destDepth == 16) {
-		alphaSourceBlendBits16();
+		alphaSourceBlendBits16(self);
 	}
 	if (destDepth == 8) {
-		alphaSourceBlendBits8();
+		alphaSourceBlendBits8(self);
 	}
 	affectedL = dx;
 	affectedR = dx + bbW;
@@ -7107,8 +6995,7 @@ tryCopyingBitsQuickly(void)
 	unlock.  */
 
 	/* BitBltSimulation>>#unlockSurfaces */
-static sqInt
-unlockSurfaces(void)
+static sqIntunlockSurfaces(struct foo * self)
 {
 	sqInt destHandle;
 	sqInt destLocked;
@@ -7118,35 +7005,35 @@ unlockSurfaces(void)
 		return 0;
 	}
 	if (unlockSurfaceFn == 0) {
-		if (!(loadSurfacePlugin())) {
+		if (!(loadSurfacePlugin(self))) {
 			return 0;
 		}
 	}
 	/* begin ensureDestAndSourceFormsAreValid */
-	if (numGCsOnInvocation != (statNumGCs(interpreterProxy->interpreterState))) {
-		reloadDestAndSourceForms();
+	if (numGCsOnInvocation != (statNumGCs(self))) {
+		reloadDestAndSourceForms(self);
 	}
 	destLocked = 0;
-	destHandle = fetchPointerofObject(FormBitsIndex, destForm, interpreterProxy->interpreterState);
-	if (isIntegerObject(destHandle, interpreterProxy->interpreterState)) {
+	destHandle = fetchPointerofObject(FormBitsIndex, destForm, self);
+	if (isIntegerObject(destHandle, self)) {
 
 		/* The destBits are always assumed to be dirty */
-		unlockSurfaceFn(integerValueOf(destHandle, interpreterProxy->interpreterState), affectedL, affectedT, affectedR - affectedL, affectedB - affectedT);
+		unlockSurfaceFn(integerValueOf(destHandle, self), affectedL, affectedT, affectedR - affectedL, affectedB - affectedT);
 		destBits = (destPitch = 0);
 		destLocked = 1;
 	}
 	if (!noSource) {
 		/* begin ensureDestAndSourceFormsAreValid */
-		if (numGCsOnInvocation != (statNumGCs(interpreterProxy->interpreterState))) {
-			reloadDestAndSourceForms();
+		if (numGCsOnInvocation != (statNumGCs(self))) {
+			reloadDestAndSourceForms(self);
 		}
-		sourceHandle = fetchPointerofObject(FormBitsIndex, sourceForm, interpreterProxy->interpreterState);
-		if (isIntegerObject(sourceHandle, interpreterProxy->interpreterState)) {
+		sourceHandle = fetchPointerofObject(FormBitsIndex, sourceForm, self);
+		if (isIntegerObject(sourceHandle, self)) {
 
 			/* Only unlock sourceHandle if different from destHandle */
 			if (!(destLocked
 				 && (sourceHandle == destHandle))) {
-				unlockSurfaceFn(integerValueOf(sourceHandle, interpreterProxy->interpreterState), 0, 0, 0, 0);
+				unlockSurfaceFn(integerValueOf(sourceHandle, self), 0, 0, 0, 0);
 			}
 			sourceBits = (sourcePitch = 0);
 		}
@@ -7156,8 +7043,7 @@ unlockSurfaces(void)
 }
 
 	/* BitBltSimulation>>#warpBits */
-static sqInt
-warpBits(void)
+static sqIntwarpBits(struct foo * self)
 {
 	sqInt endBits;
 	sqInt ns;
@@ -7166,7 +7052,7 @@ warpBits(void)
 
 	ns = noSource;
 	noSource = 1;
-	clipRange();
+	clipRange(self);
 	noSource = ns;
 	if (noSource
 	 || ((bbW <= 0)
@@ -7176,8 +7062,8 @@ warpBits(void)
 		affectedL = (affectedR = (affectedT = (affectedB = 0)));
 		return null;
 	}
-	if (!(lockSurfaces())) {
-		return primitiveFail(interpreterProxy->interpreterState);
+	if (!(lockSurfaces(self))) {
+		return primitiveFail(self);
 	}
 	/* begin destMaskAndPointerInit */
 
@@ -7213,7 +7099,7 @@ warpBits(void)
 
 	/* byte addr delta */
 	destDelta = (destPitch * vDir) - (4 * (nWords * hDir));
-	warpLoop();
+	warpLoop(self);
 	if (hDir > 0) {
 		affectedL = dx;
 		affectedR = dx + bbW;
@@ -7230,7 +7116,7 @@ warpBits(void)
 		affectedT = (dy - bbH) + 1;
 		affectedB = dy + 1;
 	}
-	unlockSurfaces();
+	unlockSurfaces(self);
 	return 0;
 }
 
@@ -7239,8 +7125,7 @@ warpBits(void)
 	source, thus producing a general affine transformation. */
 
 	/* BitBltSimulation>>#warpLoop */
-static sqInt
-warpLoop(void)
+static sqIntwarpLoop(struct foo * self)
 {
 	sqInt deltaP12x;
 	sqInt deltaP12y;
@@ -7306,38 +7191,38 @@ warpLoop(void)
 
 	halftoneWord = 0;
 	mergeFnwith = ((unsigned int (*)(unsigned int, unsigned int)) (opTable[combinationRule + 1]));
-	if (!((slotSizeOf(bitBltOop, interpreterProxy->interpreterState)) >= (BBWarpBase + 12))) {
-		return primitiveFail(interpreterProxy->interpreterState);
+	if (!((slotSizeOf(bitBltOop, self)) >= (BBWarpBase + 12))) {
+		return primitiveFail(self);
 	}
 	nSteps = height - 1;
 	if (nSteps <= 0) {
 		nSteps = 1;
 	}
 	/* begin fetchIntOrFloat:ofObject: */
-	fieldOop = fetchPointerofObject(BBWarpBase, bitBltOop, interpreterProxy->interpreterState);
-	if (isIntegerObject(fieldOop, interpreterProxy->interpreterState)) {
-		pAx = integerValueOf(fieldOop, interpreterProxy->interpreterState);
+	fieldOop = fetchPointerofObject(BBWarpBase, bitBltOop, self);
+	if (isIntegerObject(fieldOop, self)) {
+		pAx = integerValueOf(fieldOop, self);
 		goto l9;
 	}
-	floatValue = floatValueOf(fieldOop, interpreterProxy->interpreterState);
+	floatValue = floatValueOf(fieldOop, self);
 	if (!((-2.147483648e9 <= floatValue)
 		 && (floatValue <= 2.147483647e9))) {
-		primitiveFail(interpreterProxy->interpreterState);
+		primitiveFail(self);
 		pAx = 0;
 		goto l9;
 	}
 	pAx = ((sqInt)floatValue);
 	l9:	/* end fetchIntOrFloat:ofObject: */;
 	/* begin fetchIntOrFloat:ofObject: */
-	fieldOop1 = fetchPointerofObject(BBWarpBase + 3, bitBltOop, interpreterProxy->interpreterState);
-	if (isIntegerObject(fieldOop1, interpreterProxy->interpreterState)) {
-		words = integerValueOf(fieldOop1, interpreterProxy->interpreterState);
+	fieldOop1 = fetchPointerofObject(BBWarpBase + 3, bitBltOop, self);
+	if (isIntegerObject(fieldOop1, self)) {
+		words = integerValueOf(fieldOop1, self);
 		goto l10;
 	}
-	floatValue1 = floatValueOf(fieldOop1, interpreterProxy->interpreterState);
+	floatValue1 = floatValueOf(fieldOop1, self);
 	if (!((-2.147483648e9 <= floatValue1)
 		 && (floatValue1 <= 2.147483647e9))) {
-		primitiveFail(interpreterProxy->interpreterState);
+		primitiveFail(self);
 		words = 0;
 		goto l10;
 	}
@@ -7361,30 +7246,30 @@ warpLoop(void)
 		pAx = words - (nSteps * deltaP12x);
 	}
 	/* begin fetchIntOrFloat:ofObject: */
-	fieldOop2 = fetchPointerofObject(BBWarpBase + 1, bitBltOop, interpreterProxy->interpreterState);
-	if (isIntegerObject(fieldOop2, interpreterProxy->interpreterState)) {
-		pAy = integerValueOf(fieldOop2, interpreterProxy->interpreterState);
+	fieldOop2 = fetchPointerofObject(BBWarpBase + 1, bitBltOop, self);
+	if (isIntegerObject(fieldOop2, self)) {
+		pAy = integerValueOf(fieldOop2, self);
 		goto l12;
 	}
-	floatValue2 = floatValueOf(fieldOop2, interpreterProxy->interpreterState);
+	floatValue2 = floatValueOf(fieldOop2, self);
 	if (!((-2.147483648e9 <= floatValue2)
 		 && (floatValue2 <= 2.147483647e9))) {
-		primitiveFail(interpreterProxy->interpreterState);
+		primitiveFail(self);
 		pAy = 0;
 		goto l12;
 	}
 	pAy = ((sqInt)floatValue2);
 	l12:	/* end fetchIntOrFloat:ofObject: */;
 	/* begin fetchIntOrFloat:ofObject: */
-	fieldOop3 = fetchPointerofObject(BBWarpBase + 4, bitBltOop, interpreterProxy->interpreterState);
-	if (isIntegerObject(fieldOop3, interpreterProxy->interpreterState)) {
-		words = integerValueOf(fieldOop3, interpreterProxy->interpreterState);
+	fieldOop3 = fetchPointerofObject(BBWarpBase + 4, bitBltOop, self);
+	if (isIntegerObject(fieldOop3, self)) {
+		words = integerValueOf(fieldOop3, self);
 		goto l13;
 	}
-	floatValue3 = floatValueOf(fieldOop3, interpreterProxy->interpreterState);
+	floatValue3 = floatValueOf(fieldOop3, self);
 	if (!((-2.147483648e9 <= floatValue3)
 		 && (floatValue3 <= 2.147483647e9))) {
-		primitiveFail(interpreterProxy->interpreterState);
+		primitiveFail(self);
 		words = 0;
 		goto l13;
 	}
@@ -7408,30 +7293,30 @@ warpLoop(void)
 		pAy = words - (nSteps * deltaP12y);
 	}
 	/* begin fetchIntOrFloat:ofObject: */
-	fieldOop4 = fetchPointerofObject(BBWarpBase + 9, bitBltOop, interpreterProxy->interpreterState);
-	if (isIntegerObject(fieldOop4, interpreterProxy->interpreterState)) {
-		pBx = integerValueOf(fieldOop4, interpreterProxy->interpreterState);
+	fieldOop4 = fetchPointerofObject(BBWarpBase + 9, bitBltOop, self);
+	if (isIntegerObject(fieldOop4, self)) {
+		pBx = integerValueOf(fieldOop4, self);
 		goto l15;
 	}
-	floatValue4 = floatValueOf(fieldOop4, interpreterProxy->interpreterState);
+	floatValue4 = floatValueOf(fieldOop4, self);
 	if (!((-2.147483648e9 <= floatValue4)
 		 && (floatValue4 <= 2.147483647e9))) {
-		primitiveFail(interpreterProxy->interpreterState);
+		primitiveFail(self);
 		pBx = 0;
 		goto l15;
 	}
 	pBx = ((sqInt)floatValue4);
 	l15:	/* end fetchIntOrFloat:ofObject: */;
 	/* begin fetchIntOrFloat:ofObject: */
-	fieldOop5 = fetchPointerofObject(BBWarpBase + 6, bitBltOop, interpreterProxy->interpreterState);
-	if (isIntegerObject(fieldOop5, interpreterProxy->interpreterState)) {
-		words = integerValueOf(fieldOop5, interpreterProxy->interpreterState);
+	fieldOop5 = fetchPointerofObject(BBWarpBase + 6, bitBltOop, self);
+	if (isIntegerObject(fieldOop5, self)) {
+		words = integerValueOf(fieldOop5, self);
 		goto l16;
 	}
-	floatValue5 = floatValueOf(fieldOop5, interpreterProxy->interpreterState);
+	floatValue5 = floatValueOf(fieldOop5, self);
 	if (!((-2.147483648e9 <= floatValue5)
 		 && (floatValue5 <= 2.147483647e9))) {
-		primitiveFail(interpreterProxy->interpreterState);
+		primitiveFail(self);
 		words = 0;
 		goto l16;
 	}
@@ -7455,30 +7340,30 @@ warpLoop(void)
 		pBx = words - (nSteps * deltaP43x);
 	}
 	/* begin fetchIntOrFloat:ofObject: */
-	fieldOop6 = fetchPointerofObject(BBWarpBase + 10, bitBltOop, interpreterProxy->interpreterState);
-	if (isIntegerObject(fieldOop6, interpreterProxy->interpreterState)) {
-		pBy = integerValueOf(fieldOop6, interpreterProxy->interpreterState);
+	fieldOop6 = fetchPointerofObject(BBWarpBase + 10, bitBltOop, self);
+	if (isIntegerObject(fieldOop6, self)) {
+		pBy = integerValueOf(fieldOop6, self);
 		goto l18;
 	}
-	floatValue6 = floatValueOf(fieldOop6, interpreterProxy->interpreterState);
+	floatValue6 = floatValueOf(fieldOop6, self);
 	if (!((-2.147483648e9 <= floatValue6)
 		 && (floatValue6 <= 2.147483647e9))) {
-		primitiveFail(interpreterProxy->interpreterState);
+		primitiveFail(self);
 		pBy = 0;
 		goto l18;
 	}
 	pBy = ((sqInt)floatValue6);
 	l18:	/* end fetchIntOrFloat:ofObject: */;
 	/* begin fetchIntOrFloat:ofObject: */
-	fieldOop7 = fetchPointerofObject(BBWarpBase + 7, bitBltOop, interpreterProxy->interpreterState);
-	if (isIntegerObject(fieldOop7, interpreterProxy->interpreterState)) {
-		words = integerValueOf(fieldOop7, interpreterProxy->interpreterState);
+	fieldOop7 = fetchPointerofObject(BBWarpBase + 7, bitBltOop, self);
+	if (isIntegerObject(fieldOop7, self)) {
+		words = integerValueOf(fieldOop7, self);
 		goto l19;
 	}
-	floatValue7 = floatValueOf(fieldOop7, interpreterProxy->interpreterState);
+	floatValue7 = floatValueOf(fieldOop7, self);
 	if (!((-2.147483648e9 <= floatValue7)
 		 && (floatValue7 <= 2.147483647e9))) {
-		primitiveFail(interpreterProxy->interpreterState);
+		primitiveFail(self);
 		words = 0;
 		goto l19;
 	}
@@ -7501,31 +7386,31 @@ warpLoop(void)
 	if (deltaP43y < 0) {
 		pBy = words - (nSteps * deltaP43y);
 	}
-	if (failed(interpreterProxy->interpreterState)) {
+	if (failed(self)) {
 		return 0;
 	}
-	if ((methodArgumentCount(interpreterProxy->interpreterState)) == 2) {
-		smoothingCount = stackIntegerValue(1, interpreterProxy->interpreterState);
-		sourceMapOop = stackValue(0, interpreterProxy->interpreterState);
-		if (sourceMapOop == (nilObject(interpreterProxy->interpreterState))) {
+	if ((methodArgumentCount(self)) == 2) {
+		smoothingCount = stackIntegerValue(1, self);
+		sourceMapOop = stackValue(0, self);
+		if (sourceMapOop == (nilObject(self))) {
 			if (sourceDepth < 16) {
 
 				/* color map is required to smooth non-RGB dest */
-				return primitiveFail(interpreterProxy->interpreterState);
+				return primitiveFail(self);
 			}
 		}
 		else {
-			if ((slotSizeOf(sourceMapOop, interpreterProxy->interpreterState)) < (1U << sourceDepth)) {
+			if ((slotSizeOf(sourceMapOop, self)) < (1U << sourceDepth)) {
 
 				/* sourceMap must be long enough for sourceDepth */
-				return primitiveFail(interpreterProxy->interpreterState);
+				return primitiveFail(self);
 			}
-			sourceMapOop = oopForPointer(firstIndexableField(sourceMapOop, interpreterProxy->interpreterState));
+			sourceMapOop = oopForPointer(firstIndexableField(sourceMapOop, self));
 		}
 	}
 	else {
 		smoothingCount = 1;
-		sourceMapOop = nilObject(interpreterProxy->interpreterState);
+		sourceMapOop = nilObject(self);
 	}
 	nSteps = width - 1;
 	if (nSteps <= 0) {
@@ -7575,11 +7460,11 @@ warpLoop(void)
 	 && ((cmFlags & ColorMapNewStyle) == 0)) {
 		if (cmLookupTable == null) {
 			if (destDepth == 16) {
-				setupColorMasksFromto(8, 5);
+				setupColorMasksFromto(8, 5, self);
 			}
 		}
 		else {
-			setupColorMasksFromto(8, cmBitsPerColor);
+			setupColorMasksFromto(8, cmBitsPerColor, self);
 		}
 	}
 	mapperFlags = cmFlags & ((unsigned int)~ColorMapNewStyle);
@@ -7798,8 +7683,7 @@ warpLoop(void)
 /*	Setup values for faster pixel fetching. */
 
 	/* BitBltSimulation>>#warpLoopSetup */
-static sqInt
-warpLoopSetup(void)
+static sqIntwarpLoopSetup(void)
 {
 	sqInt i;
 	sqInt words;
@@ -7841,8 +7725,7 @@ warpLoopSetup(void)
 	This version is only called from WarpBlt with smoothingCount > 1 */
 
 	/* BitBltSimulation>>#warpPickSmoothPixels:xDeltah:yDeltah:xDeltav:yDeltav:sourceMap:smoothing:dstShiftInc: */
-static sqInt
-warpPickSmoothPixelsxDeltahyDeltahxDeltavyDeltavsourceMapsmoothingdstShiftInc(sqInt nPixels, sqInt xDeltah, sqInt yDeltah, sqInt xDeltav, sqInt yDeltav, sqInt sourceMap, sqInt n, sqInt dstShiftInc)
+static sqIntwarpPickSmoothPixelsxDeltahyDeltahxDeltavyDeltavsourceMapsmoothingdstShiftInc(sqInt nPixels, sqInt xDeltah, sqInt yDeltah, sqInt xDeltav, sqInt yDeltav, sqInt sourceMap, sqInt n, sqInt dstShiftInc)
 {
 	sqInt a;
 	sqInt b;
@@ -8023,8 +7906,7 @@ warpPickSmoothPixelsxDeltahyDeltahxDeltavyDeltavsourceMapsmoothingdstShiftInc(sq
 	This version is only called from WarpBlt with smoothingCount = 1 */
 
 	/* BitBltSimulation>>#warpPickSourcePixels:xDeltah:yDeltah:xDeltav:yDeltav:dstShiftInc:flags: */
-static sqInt
-warpPickSourcePixelsxDeltahyDeltahxDeltavyDeltavdstShiftIncflags(sqInt nPixels, sqInt xDeltah, sqInt yDeltah, sqInt xDeltav, sqInt yDeltav, sqInt dstShiftInc, sqInt mapperFlags)
+static sqIntwarpPickSourcePixelsxDeltahyDeltahxDeltavyDeltavdstShiftIncflags(sqInt nPixels, sqInt xDeltah, sqInt yDeltah, sqInt xDeltav, sqInt yDeltav, sqInt dstShiftInc, sqInt mapperFlags)
 {
 	sqInt destPix;
 	sqInt destWord;

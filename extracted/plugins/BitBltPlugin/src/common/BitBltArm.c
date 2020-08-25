@@ -28,7 +28,7 @@
 
 arm_cpu_features_t armCpuFeatures;
 
-void addArmFastPaths(void)
+void addArmFastPaths(void)
 {
 	armCpuFeatures = detectCpuFeatures();
 	if (armCpuFeatures & ARM_V6)

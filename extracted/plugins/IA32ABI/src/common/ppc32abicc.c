@@ -50,8 +50,8 @@
 
 struct objc_class *baz;
 
-void setbaz(void *p) { baz = p; }
-void *getbaz() { return baz; }
+void setbaz(void *p, struct foo * self) { baz = p; }
+void *getbaz(struct foo * self) { return baz; }
 # endif
 
 # include <sys/mman.h> /* for mprotect */
@@ -139,14 +139,14 @@ char *volatile longReturnValueLocation = (char*) &longReturnValue;
 volatile double floatReturnValue;
 volatile double *floatReturnValueLocation = &floatReturnValue;
 
-int figureOutFloatSize(int typeSignatureArray,int index) {
+int figureOutFloatSize(int typeSignatureArray,int index, struct foo * self) {
 	int floatSize,objectSize;
 	char *floatSizePointer;
-	sqInt oops = interpreterProxy->stackValue(typeSignatureArray, interpreterProxy->interpreterState);
-	objectSize = interpreterProxy->stSizeOf(oops, interpreterProxy->interpreterState);
+	sqInt oops = interpreterProxy->stackValue(typeSignatureArray, self);
+	objectSize = interpreterProxy->stSizeOf(oops, self);
 	if (index >= objectSize) 
 		return sizeof(double);
-	floatSizePointer = interpreterProxy->firstIndexableField(oops, interpreterProxy->interpreterState);
+	floatSizePointer = interpreterProxy->firstIndexableField(oops, self);
 	floatSize = floatSizePointer[index];
 	return floatSize;
 }
@@ -155,8 +155,7 @@ int figureOutFloatSize(int typeSignatureArray,int index) {
  * Call a foreign function that answers an integral result in %eax (and
  * possibly %edx) according to IA32-ish ABI rules.
  */
-sqInt
-callIA32IntegralReturn(SIGNATURE) {
+sqIntcallIA32IntegralReturn(SIGNATURE, struct foo * self) {
 long long (*f)(), r;
 
 #include "dabusinessppc.h"
@@ -167,8 +166,7 @@ long long (*f)(), r;
  * Call a foreign function that answers a single-precision floating-point
  * result in %f0 according to IA32-ish ABI rules.
  */
-sqInt
-callIA32FloatReturn(SIGNATURE) { float (*f)(), r;
+sqIntcallIA32FloatReturn(SIGNATURE, struct foo * self) { float (*f)(), r;
 #include "dabusinessppc.h"
 #include "dabusinessppcPostLogicFloat.h"
 }
@@ -177,8 +175,7 @@ callIA32FloatReturn(SIGNATURE) { float (*f)(), r;
  * Call a foreign function that answers a double-precision floating-point
  * result in %f0 according to IA32-ish ABI rules.
  */
-sqInt
-callIA32DoubleReturn(SIGNATURE) { double (*f)(), r;
+sqIntcallIA32DoubleReturn(SIGNATURE, struct foo * self) { double (*f)(), r;
 #include "dabusinessppc.h"
 #include "dabusinessppcPostLogicDouble.h"
 }
@@ -229,7 +226,7 @@ thunkEntry(void *thunkp, sqIntptr_t *stackp)
 			sendInvokeCallbackStackRegistersJmpbuf(	(sqInt)thunkp,
 													(sqInt)(stackp + 2),
 													0,
-													(sqInt)&trampoline, interpreterProxy->interpreterState);
+													(sqInt)&trampoline, self);
 		perror("Warning; callback failed to invoke\n");
 		return 0;
 	}
@@ -289,8 +286,7 @@ thunkEntry(void *thunkp, sqIntptr_t *stackp)
 static unsigned long pagesize = 0;
 #endif
 
-void *
-allocateExecutablePage(long *size)
+void *allocateExecutablePage(long *size)
 {
 	void *mem;
 

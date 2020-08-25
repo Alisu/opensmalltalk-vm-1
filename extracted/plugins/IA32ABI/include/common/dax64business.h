@@ -26,10 +26,10 @@
 		/* Stack or Cog VM. Need to access args downwards from first arg. */
 		for (i = size = 0; --i >= numArgs;) {
 			sqInt arg = argVector[i + 1];
-			if (objIsAlien(arg, interpreterProxy->interpreterState) && (sizeField(arg) != 0))
+			if (objIsAlien(arg, self) && (sizeField(arg) != 0))
 				/* Direct or indirect Alien. */
                         	size += RoundUpPowerOfTwo(SQABS(sizeField(arg)), 8);
-			else if (interpreterProxy->isFloatObject(arg, interpreterProxy->interpreterState))
+			else if (interpreterProxy->isFloatObject(arg, self))
 				size += sizeof(double);
 			else 
 				/* Assume an integer or pointer Alien. Check below. */
@@ -40,10 +40,10 @@
 		/* Context Interpreter or array version of callout primitive. */
 		for (i = numArgs, size = 0; --i >= 0;) {
 			sqInt arg = argVector[i];
-			if (objIsAlien(arg, interpreterProxy->interpreterState) && (sizeField(arg) != 0))
+			if (objIsAlien(arg, self) && (sizeField(arg) != 0))
 				/* Direct or indirect Alien. */
                           size += RoundUpPowerOfTwo(SQABS(sizeField(arg)), 8);
-			else if (interpreterProxy->isFloatObject(arg, interpreterProxy->interpreterState))
+			else if (interpreterProxy->isFloatObject(arg, self))
 				size += sizeof(double);
 			else
 				/* Assume an integer or pointer Alien. Check below. */
@@ -82,7 +82,7 @@
 			if (isSmallInt(arg)) {
 				MaybePassAsRegArg(intVal(arg))
 			}
-			else if (objIsAlien(arg, interpreterProxy->interpreterState)) {
+			else if (objIsAlien(arg, self)) {
 				long argByteSize;
 				if ((size = sizeField(arg)) == 0) /* Pointer Alien. */
 					size = argByteSize = sizeof(void *);
@@ -96,21 +96,21 @@
 					argvec += RoundUpPowerOfTwo(argByteSize, 8);
 				}
 			}
-			else if (objIsUnsafeAlien(arg, interpreterProxy->interpreterState)) {
-				sqInt bitsObj = interpreterProxy->fetchPointerofObject(0, arg , interpreterProxy->interpreterState);
-				long v = (long)interpreterProxy->firstIndexableField(bitsObj, interpreterProxy->interpreterState);
+			else if (objIsUnsafeAlien(arg, self)) {
+				sqInt bitsObj = interpreterProxy->fetchPointerofObject(0, arg , self);
+				long v = (long)interpreterProxy->firstIndexableField(bitsObj, self);
 				MaybePassAsRegArg(v)
 			}
-			else if (interpreterProxy->isFloatObject(arg, interpreterProxy->interpreterState)) {
-				double d = interpreterProxy->floatValueOf(arg, interpreterProxy->interpreterState);
+			else if (interpreterProxy->isFloatObject(arg, self)) {
+				double d = interpreterProxy->floatValueOf(arg, self);
 				MaybePassAsDRegArg(d)
 			}
 			else {
-				long v = interpreterProxy->signed64BitValueOf(arg, interpreterProxy->interpreterState);
-				if (interpreterProxy->failed(interpreterProxy->interpreterState)) {
-					interpreterProxy->primitiveFailFor(0, interpreterProxy->interpreterState);
-					v = interpreterProxy->positive64BitValueOf(arg, interpreterProxy->interpreterState);
-					if (interpreterProxy->failed(interpreterProxy->interpreterState)) {
+				long v = interpreterProxy->signed64BitValueOf(arg, self);
+				if (interpreterProxy->failed(self)) {
+					interpreterProxy->primitiveFailFor(0, self);
+					v = interpreterProxy->positive64BitValueOf(arg, self);
+					if (interpreterProxy->failed(self)) {
 						return PrimErrBadArgument;
 					}
 				}
@@ -124,7 +124,7 @@
 			sqInt arg = argVector[i];
 			if (isSmallInt(arg))
 				MaybePassAsDRegArg(intVal(arg))
-			else if (objIsAlien(arg, interpreterProxy->interpreterState)) {
+			else if (objIsAlien(arg, self)) {
 				long argByteSize;
 				if ((size = sizeField(arg)) == 0) /* Pointer Alien. */
 					size = argByteSize = sizeof(void *);
@@ -138,21 +138,21 @@
 					argvec += RoundUpPowerOfTwo(argByteSize, 8);
 				}
 			}
-			else if (objIsUnsafeAlien(arg, interpreterProxy->interpreterState)) {
-				sqInt bitsObj = interpreterProxy->fetchPointerofObject(0, arg , interpreterProxy->interpreterState);
-				long v = (long)interpreterProxy->firstIndexableField(bitsObj, interpreterProxy->interpreterState);
+			else if (objIsUnsafeAlien(arg, self)) {
+				sqInt bitsObj = interpreterProxy->fetchPointerofObject(0, arg , self);
+				long v = (long)interpreterProxy->firstIndexableField(bitsObj, self);
 				MaybePassAsRegArg(v)
 			}
-			else if (interpreterProxy->isFloatObject(arg, interpreterProxy->interpreterState)) {
-				double d = interpreterProxy->floatValueOf(arg, interpreterProxy->interpreterState);
+			else if (interpreterProxy->isFloatObject(arg, self)) {
+				double d = interpreterProxy->floatValueOf(arg, self);
 				MaybePassAsDRegArg(d)
 			}
 			else {
-				long v = interpreterProxy->signed64BitValueOf(arg, interpreterProxy->interpreterState);
-				if (interpreterProxy->failed(interpreterProxy->interpreterState)) {
-					interpreterProxy->primitiveFailFor(0, interpreterProxy->interpreterState);
-					v = interpreterProxy->positive64BitValueOf(arg, interpreterProxy->interpreterState);
-					if (interpreterProxy->failed(interpreterProxy->interpreterState)) {
+				long v = interpreterProxy->signed64BitValueOf(arg, self);
+				if (interpreterProxy->failed(self)) {
+					interpreterProxy->primitiveFailFor(0, self);
+					v = interpreterProxy->positive64BitValueOf(arg, self);
+					if (interpreterProxy->failed(self)) {
 						return PrimErrBadArgument;
 					}
 				}
@@ -161,7 +161,7 @@
 		}
 	}
 
-	funcAlien = interpreterProxy->stackValue(funcOffset, interpreterProxy->interpreterState);
+	funcAlien = interpreterProxy->stackValue(funcOffset, self);
 	f = *(void**)startOfParameterData(funcAlien);
 
 	/* Note that this call a) passes the integer reg args in regs in the core
@@ -181,8 +181,8 @@
 		  dregs[4], dregs[5], dregs[6], dregs[7]);
 
 	/* Post call need to refresh stack pointer in case of call-back and GC. */
-	resultMaybeAlien = interpreterProxy->stackValue(resultOffset, interpreterProxy->interpreterState);
-	if (objIsAlien(resultMaybeAlien, interpreterProxy->interpreterState)) {
+	resultMaybeAlien = interpreterProxy->stackValue(resultOffset, self);
+	if (objIsAlien(resultMaybeAlien, self)) {
 		size = sizeField(resultMaybeAlien);
 		if (size == 0) /* Pointer Alien. */
 			size = sizeof(long);

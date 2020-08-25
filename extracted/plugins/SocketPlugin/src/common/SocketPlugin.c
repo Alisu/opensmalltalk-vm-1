@@ -40,77 +40,77 @@ static char __buildInfo[] = "SocketPlugin VMMaker.oscog-eem.2495 uuid: fcbf4c90-
 
 /*** Function Prototypes ***/
 EXPORT(const char*) getModuleName(void);
-EXPORT(sqInt) initialiseModule(void);
-static sqInt intToNetAddress(sqInt addr);
+EXPORT(sqInt) initialiseModule(struct foo * self);
+static sqInt intToNetAddress(sqInt addr, struct foo * self);
 EXPORT(sqInt) moduleUnloaded(char *aModuleName, struct foo * self);
-static sqInt netAddressToInt(unsigned char *ptrToByteArray);
-EXPORT(sqInt) primitiveDisableSocketAccess(void);
-EXPORT(sqInt) primitiveHasSocketAccess(void);
-EXPORT(sqInt) primitiveInitializeNetwork(void);
-EXPORT(sqInt) primitiveResolverAbortLookup(void);
-EXPORT(sqInt) primitiveResolverAddressLookupResult(void);
-EXPORT(sqInt) primitiveResolverError(void);
-EXPORT(sqInt) primitiveResolverGetAddressInfo(void);
-EXPORT(sqInt) primitiveResolverGetAddressInfoFamily(void);
-EXPORT(sqInt) primitiveResolverGetAddressInfoNext(void);
-EXPORT(sqInt) primitiveResolverGetAddressInfoProtocol(void);
-EXPORT(sqInt) primitiveResolverGetAddressInfoResult(void);
-EXPORT(sqInt) primitiveResolverGetAddressInfoSize(void);
-EXPORT(sqInt) primitiveResolverGetAddressInfoType(void);
-EXPORT(sqInt) primitiveResolverGetNameInfo(void);
-EXPORT(sqInt) primitiveResolverGetNameInfoHostResult(void);
-EXPORT(sqInt) primitiveResolverGetNameInfoHostSize(void);
-EXPORT(sqInt) primitiveResolverGetNameInfoServiceResult(void);
-EXPORT(sqInt) primitiveResolverGetNameInfoServiceSize(void);
-EXPORT(sqInt) primitiveResolverHostNameResult(void);
-EXPORT(sqInt) primitiveResolverHostNameSize(void);
-EXPORT(sqInt) primitiveResolverLocalAddress(void);
-EXPORT(sqInt) primitiveResolverNameLookupResult(void);
-EXPORT(sqInt) primitiveResolverStartAddressLookup(void);
-EXPORT(sqInt) primitiveResolverStartNameLookup(void);
-EXPORT(sqInt) primitiveResolverStatus(void);
-EXPORT(sqInt) primitiveSocketAbortConnection(void);
-EXPORT(sqInt) primitiveSocketAccept(void);
-EXPORT(sqInt) primitiveSocketAccept3Semaphores(void);
-EXPORT(sqInt) primitiveSocketAddressGetPort(void);
-EXPORT(sqInt) primitiveSocketAddressSetPort(void);
-EXPORT(sqInt) primitiveSocketBindTo(void);
-EXPORT(sqInt) primitiveSocketBindToPort(void);
-EXPORT(sqInt) primitiveSocketCloseConnection(void);
-EXPORT(sqInt) primitiveSocketConnectionStatus(void);
-EXPORT(sqInt) primitiveSocketConnectTo(void);
-EXPORT(sqInt) primitiveSocketConnectToPort(void);
-EXPORT(sqInt) primitiveSocketCreate(void);
-EXPORT(sqInt) primitiveSocketCreate3Semaphores(void);
-EXPORT(sqInt) primitiveSocketCreateRAW(void);
-EXPORT(sqInt) primitiveSocketDestroy(void);
-EXPORT(sqInt) primitiveSocketError(void);
-EXPORT(sqInt) primitiveSocketGetOptions(void);
-EXPORT(sqInt) primitiveSocketListenOnPort(void);
-EXPORT(sqInt) primitiveSocketListenOnPortBacklog(void);
-EXPORT(sqInt) primitiveSocketListenOnPortBacklogInterface(void);
-EXPORT(sqInt) primitiveSocketListenWithBacklog(void);
-EXPORT(sqInt) primitiveSocketListenWithOrWithoutBacklog(void);
-EXPORT(sqInt) primitiveSocketLocalAddress(void);
-EXPORT(sqInt) primitiveSocketLocalAddressResult(void);
-EXPORT(sqInt) primitiveSocketLocalAddressSize(void);
-EXPORT(sqInt) primitiveSocketLocalPort(void);
-EXPORT(sqInt) primitiveSocketReceiveDataAvailable(void);
-EXPORT(sqInt) primitiveSocketReceiveDataBufCount(void);
-EXPORT(sqInt) primitiveSocketReceiveUDPDataBufCount(void);
-EXPORT(sqInt) primitiveSocketRemoteAddress(void);
-EXPORT(sqInt) primitiveSocketRemoteAddressResult(void);
-EXPORT(sqInt) primitiveSocketRemoteAddressSize(void);
-EXPORT(sqInt) primitiveSocketRemotePort(void);
-EXPORT(sqInt) primitiveSocketSendDataBufCount(void);
-EXPORT(sqInt) primitiveSocketSendDone(void);
-EXPORT(sqInt) primitiveSocketSendUDPDataBufCount(void);
-EXPORT(sqInt) primitiveSocketSetOptions(void);
+static sqInt netAddressToInt(unsigned char *ptrToByteArray, struct foo * self);
+EXPORT(sqInt) primitiveDisableSocketAccess(struct foo * self);
+EXPORT(sqInt) primitiveHasSocketAccess(struct foo * self);
+EXPORT(sqInt) primitiveInitializeNetwork(struct foo * self);
+EXPORT(sqInt) primitiveResolverAbortLookup(struct foo * self);
+EXPORT(sqInt) primitiveResolverAddressLookupResult(struct foo * self);
+EXPORT(sqInt) primitiveResolverError(struct foo * self);
+EXPORT(sqInt) primitiveResolverGetAddressInfo(struct foo * self);
+EXPORT(sqInt) primitiveResolverGetAddressInfoFamily(struct foo * self);
+EXPORT(sqInt) primitiveResolverGetAddressInfoNext(struct foo * self);
+EXPORT(sqInt) primitiveResolverGetAddressInfoProtocol(struct foo * self);
+EXPORT(sqInt) primitiveResolverGetAddressInfoResult(struct foo * self);
+EXPORT(sqInt) primitiveResolverGetAddressInfoSize(struct foo * self);
+EXPORT(sqInt) primitiveResolverGetAddressInfoType(struct foo * self);
+EXPORT(sqInt) primitiveResolverGetNameInfo(struct foo * self);
+EXPORT(sqInt) primitiveResolverGetNameInfoHostResult(struct foo * self);
+EXPORT(sqInt) primitiveResolverGetNameInfoHostSize(struct foo * self);
+EXPORT(sqInt) primitiveResolverGetNameInfoServiceResult(struct foo * self);
+EXPORT(sqInt) primitiveResolverGetNameInfoServiceSize(struct foo * self);
+EXPORT(sqInt) primitiveResolverHostNameResult(struct foo * self);
+EXPORT(sqInt) primitiveResolverHostNameSize(struct foo * self);
+EXPORT(sqInt) primitiveResolverLocalAddress(struct foo * self);
+EXPORT(sqInt) primitiveResolverNameLookupResult(struct foo * self);
+EXPORT(sqInt) primitiveResolverStartAddressLookup(struct foo * self);
+EXPORT(sqInt) primitiveResolverStartNameLookup(struct foo * self);
+EXPORT(sqInt) primitiveResolverStatus(struct foo * self);
+EXPORT(sqInt) primitiveSocketAbortConnection(struct foo * self);
+EXPORT(sqInt) primitiveSocketAccept(struct foo * self);
+EXPORT(sqInt) primitiveSocketAccept3Semaphores(struct foo * self);
+EXPORT(sqInt) primitiveSocketAddressGetPort(struct foo * self);
+EXPORT(sqInt) primitiveSocketAddressSetPort(struct foo * self);
+EXPORT(sqInt) primitiveSocketBindTo(struct foo * self);
+EXPORT(sqInt) primitiveSocketBindToPort(struct foo * self);
+EXPORT(sqInt) primitiveSocketCloseConnection(struct foo * self);
+EXPORT(sqInt) primitiveSocketConnectionStatus(struct foo * self);
+EXPORT(sqInt) primitiveSocketConnectTo(struct foo * self);
+EXPORT(sqInt) primitiveSocketConnectToPort(struct foo * self);
+EXPORT(sqInt) primitiveSocketCreate(struct foo * self);
+EXPORT(sqInt) primitiveSocketCreate3Semaphores(struct foo * self);
+EXPORT(sqInt) primitiveSocketCreateRAW(struct foo * self);
+EXPORT(sqInt) primitiveSocketDestroy(struct foo * self);
+EXPORT(sqInt) primitiveSocketError(struct foo * self);
+EXPORT(sqInt) primitiveSocketGetOptions(struct foo * self);
+EXPORT(sqInt) primitiveSocketListenOnPort(struct foo * self);
+EXPORT(sqInt) primitiveSocketListenOnPortBacklog(struct foo * self);
+EXPORT(sqInt) primitiveSocketListenOnPortBacklogInterface(struct foo * self);
+EXPORT(sqInt) primitiveSocketListenWithBacklog(struct foo * self);
+EXPORT(sqInt) primitiveSocketListenWithOrWithoutBacklog(struct foo * self);
+EXPORT(sqInt) primitiveSocketLocalAddress(struct foo * self);
+EXPORT(sqInt) primitiveSocketLocalAddressResult(struct foo * self);
+EXPORT(sqInt) primitiveSocketLocalAddressSize(struct foo * self);
+EXPORT(sqInt) primitiveSocketLocalPort(struct foo * self);
+EXPORT(sqInt) primitiveSocketReceiveDataAvailable(struct foo * self);
+EXPORT(sqInt) primitiveSocketReceiveDataBufCount(struct foo * self);
+EXPORT(sqInt) primitiveSocketReceiveUDPDataBufCount(struct foo * self);
+EXPORT(sqInt) primitiveSocketRemoteAddress(struct foo * self);
+EXPORT(sqInt) primitiveSocketRemoteAddressResult(struct foo * self);
+EXPORT(sqInt) primitiveSocketRemoteAddressSize(struct foo * self);
+EXPORT(sqInt) primitiveSocketRemotePort(struct foo * self);
+EXPORT(sqInt) primitiveSocketSendDataBufCount(struct foo * self);
+EXPORT(sqInt) primitiveSocketSendDone(struct foo * self);
+EXPORT(sqInt) primitiveSocketSendUDPDataBufCount(struct foo * self);
+EXPORT(sqInt) primitiveSocketSetOptions(struct foo * self);
 EXPORT(sqInt) setInterpreter(struct VirtualMachine *anInterpreter);
-EXPORT(sqInt) shutdownModule(void);
-static sqInt socketRecordSize(void);
-static SocketPtr socketValueOf(sqInt socketOop);
-static sqInt sqAssert(sqInt aBool);
+EXPORT(sqInt) shutdownModule(struct foo * self);
+static sqInt socketRecordSize(struct foo * self);
+static SocketPtr socketValueOf(sqInt socketOop, struct foo * self);
+static sqInt sqAssert(sqInt aBool, struct foo * self);
 
 
 /*** Variables ***/
@@ -205,14 +205,14 @@ getModuleName(void)
 
 	/* SocketPlugin>>#initialiseModule */
 EXPORT(sqInt)
-initialiseModule(void)
+initialiseModule(struct foo * self)
 {
-	sDSAfn = ioLoadFunctionFrom("secDisableSocketAccess", "SecurityPlugin", interpreterProxy->interpreterState);
-	sHSAfn = ioLoadFunctionFrom("secHasSocketAccess", "SecurityPlugin", interpreterProxy->interpreterState);
-	sCCTPfn = ioLoadFunctionFrom("secCanConnectToPort", "SecurityPlugin", interpreterProxy->interpreterState);
-	sCCLOPfn = ioLoadFunctionFrom("secCanListenOnPort", "SecurityPlugin", interpreterProxy->interpreterState);
-	sCCSOTfn = ioLoadFunctionFrom("secCanCreateSocketOfType", "SecurityPlugin", interpreterProxy->interpreterState);
-	return socketInit();
+	sDSAfn = ioLoadFunctionFrom("secDisableSocketAccess", "SecurityPlugin", self);
+	sHSAfn = ioLoadFunctionFrom("secHasSocketAccess", "SecurityPlugin", self);
+	sCCTPfn = ioLoadFunctionFrom("secCanConnectToPort", "SecurityPlugin", self);
+	sCCLOPfn = ioLoadFunctionFrom("secCanListenOnPort", "SecurityPlugin", self);
+	sCCSOTfn = ioLoadFunctionFrom("secCanCreateSocketOfType", "SecurityPlugin", self);
+	return socketInit(self);
 }
 
 
@@ -222,13 +222,13 @@ initialiseModule(void)
 
 	/* SocketPlugin>>#intToNetAddress: */
 static sqInt
-intToNetAddress(sqInt addr)
+intToNetAddress(sqInt addr, struct foo * self)
 {
 	char *naPtr;
 	sqInt netAddressOop;
 
-	netAddressOop = instantiateClassindexableSize(classByteArray(interpreterProxy->interpreterState), 4, interpreterProxy->interpreterState);
-	naPtr = ((char *)firstIndexableField(netAddressOop, interpreterProxy->interpreterState));
+	netAddressOop = instantiateClassindexableSize(classByteArray(self), 4, self);
+	naPtr = ((char *)firstIndexableField(netAddressOop, self));
 	naPtr[0] = (((char) ((((usqInt) addr) >> 24) & 0xFF)));
 	naPtr[1] = (((char) ((((usqInt) addr) >> 16) & 0xFF)));
 	naPtr[2] = (((char) ((((usqInt) addr) >> 8) & 0xFF)));
@@ -260,13 +260,13 @@ moduleUnloaded(char *aModuleName, struct foo * self)
 
 	/* SocketPlugin>>#netAddressToInt: */
 static sqInt
-netAddressToInt(unsigned char *ptrToByteArray)
+netAddressToInt(unsigned char *ptrToByteArray, struct foo * self)
 {
 	sqInt sz;
 
-	sz = byteSizeOf(((sqInt)(sqIntptr_t)(ptrToByteArray) - BaseHeaderSize), interpreterProxy->interpreterState);
+	sz = byteSizeOf(((sqInt)(sqIntptr_t)(ptrToByteArray) - BaseHeaderSize), self);
 	if (!(sz == 4)) {
-		return primitiveFail(interpreterProxy->interpreterState);
+		return primitiveFail(self);
 	}
 	return (((ptrToByteArray[3]) + (((usqInt)((ptrToByteArray[2])) << 8))) + (((usqInt)((ptrToByteArray[1])) << 16))) + (((usqInt)((ptrToByteArray[0])) << 24));
 }
@@ -277,7 +277,7 @@ netAddressToInt(unsigned char *ptrToByteArray)
 
 	/* SocketPlugin>>#primitiveDisableSocketAccess */
 EXPORT(sqInt)
-primitiveDisableSocketAccess(void)
+primitiveDisableSocketAccess(struct foo * self)
 {
 	if (sDSAfn != 0) {
 		((sqInt (*) (void)) sDSAfn)();
@@ -287,74 +287,74 @@ primitiveDisableSocketAccess(void)
 
 	/* SocketPlugin>>#primitiveHasSocketAccess */
 EXPORT(sqInt)
-primitiveHasSocketAccess(void)
+primitiveHasSocketAccess(struct foo * self)
 {
 	popthenPush(1, ((((sHSAfn == 0)
- || ( ((sqInt (*) (void)) sHSAfn)()))) ? trueObject(interpreterProxy->interpreterState) : falseObject(interpreterProxy->interpreterState)), interpreterProxy->interpreterState);
+ || ( ((sqInt (*) (void)) sHSAfn)()))) ? trueObject(self) : falseObject(self)), self);
 	return null;
 }
 
 	/* SocketPlugin>>#primitiveInitializeNetwork: */
 EXPORT(sqInt)
-primitiveInitializeNetwork(void)
+primitiveInitializeNetwork(struct foo * self)
 {
 	sqInt err;
 	sqInt resolverSemaIndex;
 
-	if (!(isIntegerObject(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState))) {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	if (!(isIntegerObject(stackValue(0, self), self))) {
+		primitiveFailFor(PrimErrBadArgument, self);
 		return null;
 	}
-	resolverSemaIndex = stackIntegerValue(0, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	resolverSemaIndex = stackIntegerValue(0, self);
+	if (failed(self)) {
 		return null;
 	}
-	err = sqNetworkInit(resolverSemaIndex);
-	success(err == 0, interpreterProxy->interpreterState);
-	if (!(failed(interpreterProxy->interpreterState))) {
-		pop(1, interpreterProxy->interpreterState);
+	err = sqNetworkInit(resolverSemaIndex, self);
+	success(err == 0, self);
+	if (!(failed(self))) {
+		pop(1, self);
 	}
 	return null;
 }
 
 	/* SocketPlugin>>#primitiveResolverAbortLookup */
 EXPORT(sqInt)
-primitiveResolverAbortLookup(void)
+primitiveResolverAbortLookup(struct foo * self)
 {
-	sqResolverAbort();
+	sqResolverAbort(self);
 	return null;
 }
 
 	/* SocketPlugin>>#primitiveResolverAddressLookupResult */
 EXPORT(sqInt)
-primitiveResolverAddressLookupResult(void)
+primitiveResolverAddressLookupResult(struct foo * self)
 {
 	sqInt s;
 	sqInt sz;
 
 	s = 0;
-	sz = sqResolverAddrLookupResultSize();
-	if (!(failed(interpreterProxy->interpreterState))) {
-		s = instantiateClassindexableSize(classString(interpreterProxy->interpreterState), sz, interpreterProxy->interpreterState);
-		sqResolverAddrLookupResult(((char *)firstIndexableField(s, interpreterProxy->interpreterState)), sz);
+	sz = sqResolverAddrLookupResultSize(self);
+	if (!(failed(self))) {
+		s = instantiateClassindexableSize(classString(self), sz, self);
+		sqResolverAddrLookupResult(((char *)firstIndexableField(s, self)), sz, self);
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		popthenPush(1, s, interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		popthenPush(1, s, self);
 	}
 	return null;
 }
 
 	/* SocketPlugin>>#primitiveResolverError */
 EXPORT(sqInt)
-primitiveResolverError(void)
+primitiveResolverError(struct foo * self)
 {
-	popthenPush(1, integerObjectOf((sqResolverError()), interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	popthenPush(1, integerObjectOf((sqResolverError(self)), self), self);
 	return null;
 }
 
 	/* SocketPlugin>>#primitiveResolverGetAddressInfoHost:service:flags:family:type:protocol: */
 EXPORT(sqInt)
-primitiveResolverGetAddressInfo(void)
+primitiveResolverGetAddressInfo(struct foo * self)
 {
 	sqInt family;
 	sqInt flags;
@@ -365,45 +365,45 @@ primitiveResolverGetAddressInfo(void)
 	sqInt servSize;
 	sqInt type;
 
-	if (!((isBytes(stackValue(5, interpreterProxy->interpreterState), interpreterProxy->interpreterState))
-		 && ((isBytes(stackValue(4, interpreterProxy->interpreterState), interpreterProxy->interpreterState))
-		 && ((isIntegerObject(stackValue(3, interpreterProxy->interpreterState), interpreterProxy->interpreterState))
-		 && ((isIntegerObject(stackValue(2, interpreterProxy->interpreterState), interpreterProxy->interpreterState))
-		 && ((isIntegerObject(stackValue(1, interpreterProxy->interpreterState), interpreterProxy->interpreterState))
-		 && (isIntegerObject(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState)))))))) {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	if (!((isBytes(stackValue(5, self), self))
+		 && ((isBytes(stackValue(4, self), self))
+		 && ((isIntegerObject(stackValue(3, self), self))
+		 && ((isIntegerObject(stackValue(2, self), self))
+		 && ((isIntegerObject(stackValue(1, self), self))
+		 && (isIntegerObject(stackValue(0, self), self)))))))) {
+		primitiveFailFor(PrimErrBadArgument, self);
 		return null;
 	}
-	hostName = ((char *) (firstIndexableField(stackValue(5, interpreterProxy->interpreterState), interpreterProxy->interpreterState)));
-	servName = ((char *) (firstIndexableField(stackValue(4, interpreterProxy->interpreterState), interpreterProxy->interpreterState)));
-	flags = stackIntegerValue(3, interpreterProxy->interpreterState);
-	family = stackIntegerValue(2, interpreterProxy->interpreterState);
-	type = stackIntegerValue(1, interpreterProxy->interpreterState);
-	protocol = stackIntegerValue(0, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	hostName = ((char *) (firstIndexableField(stackValue(5, self), self)));
+	servName = ((char *) (firstIndexableField(stackValue(4, self), self)));
+	flags = stackIntegerValue(3, self);
+	family = stackIntegerValue(2, self);
+	type = stackIntegerValue(1, self);
+	protocol = stackIntegerValue(0, self);
+	if (failed(self)) {
 		return null;
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		hostSize = byteSizeOf(((sqInt)(sqIntptr_t)(hostName) - BaseHeaderSize), interpreterProxy->interpreterState);
-		servSize = byteSizeOf(((sqInt)(sqIntptr_t)(servName) - BaseHeaderSize), interpreterProxy->interpreterState);
-		sqResolverGetAddressInfoHostSizeServiceSizeFlagsFamilyTypeProtocol(hostName, hostSize, servName, servSize, flags, family, type, protocol);
+	if (!(failed(self))) {
+		hostSize = byteSizeOf(((sqInt)(sqIntptr_t)(hostName) - BaseHeaderSize), self);
+		servSize = byteSizeOf(((sqInt)(sqIntptr_t)(servName) - BaseHeaderSize), self);
+		sqResolverGetAddressInfoHostSizeServiceSizeFlagsFamilyTypeProtocol(hostName, hostSize, servName, servSize, flags, family, type, protocol, self);
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		pop(6, interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		pop(6, self);
 	}
 	return null;
 }
 
 	/* SocketPlugin>>#primitiveResolverGetAddressInfoFamily */
 EXPORT(sqInt)
-primitiveResolverGetAddressInfoFamily(void)
+primitiveResolverGetAddressInfoFamily(struct foo * self)
 {
 	sqInt family;
 
-	if (!(failed(interpreterProxy->interpreterState))) {
-		family = sqResolverGetAddressInfoFamily();
-		if (!(failed(interpreterProxy->interpreterState))) {
-			popthenPush(1, integerObjectOf(family, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		family = sqResolverGetAddressInfoFamily(self);
+		if (!(failed(self))) {
+			popthenPush(1, integerObjectOf(family, self), self);
 		}
 		return null;
 	}
@@ -412,30 +412,30 @@ primitiveResolverGetAddressInfoFamily(void)
 
 	/* SocketPlugin>>#primitiveResolverGetAddressInfoNext */
 EXPORT(sqInt)
-primitiveResolverGetAddressInfoNext(void)
+primitiveResolverGetAddressInfoNext(struct foo * self)
 {
 	sqInt more;
 
-	more = sqResolverGetAddressInfoNext();
-	if (failed(interpreterProxy->interpreterState)) {
+	more = sqResolverGetAddressInfoNext(self);
+	if (failed(self)) {
 		return null;
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		popthenPush(1, ((more) ? trueObject(interpreterProxy->interpreterState) : falseObject(interpreterProxy->interpreterState)), interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		popthenPush(1, ((more) ? trueObject(self) : falseObject(self)), self);
 	}
 	return null;
 }
 
 	/* SocketPlugin>>#primitiveResolverGetAddressInfoProtocol */
 EXPORT(sqInt)
-primitiveResolverGetAddressInfoProtocol(void)
+primitiveResolverGetAddressInfoProtocol(struct foo * self)
 {
 	sqInt protocol;
 
-	if (!(failed(interpreterProxy->interpreterState))) {
-		protocol = sqResolverGetAddressInfoProtocol();
-		if (!(failed(interpreterProxy->interpreterState))) {
-			popthenPush(1, integerObjectOf(protocol, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		protocol = sqResolverGetAddressInfoProtocol(self);
+		if (!(failed(self))) {
+			popthenPush(1, integerObjectOf(protocol, self), self);
 		}
 		return null;
 	}
@@ -444,39 +444,39 @@ primitiveResolverGetAddressInfoProtocol(void)
 
 	/* SocketPlugin>>#primitiveResolverGetAddressInfoResult: */
 EXPORT(sqInt)
-primitiveResolverGetAddressInfoResult(void)
+primitiveResolverGetAddressInfoResult(struct foo * self)
 {
 	sqInt addrSize;
 	char *socketAddress;
 
-	if (!(isBytes(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState))) {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	if (!(isBytes(stackValue(0, self), self))) {
+		primitiveFailFor(PrimErrBadArgument, self);
 		return null;
 	}
-	socketAddress = ((char *) (firstIndexableField(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState)));
-	if (failed(interpreterProxy->interpreterState)) {
+	socketAddress = ((char *) (firstIndexableField(stackValue(0, self), self)));
+	if (failed(self)) {
 		return null;
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		addrSize = byteSizeOf(((sqInt)(sqIntptr_t)(socketAddress) - BaseHeaderSize), interpreterProxy->interpreterState);
-		sqResolverGetAddressInfoResultSize(socketAddress, addrSize);
+	if (!(failed(self))) {
+		addrSize = byteSizeOf(((sqInt)(sqIntptr_t)(socketAddress) - BaseHeaderSize), self);
+		sqResolverGetAddressInfoResultSize(socketAddress, addrSize, self);
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		pop(1, interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		pop(1, self);
 	}
 	return null;
 }
 
 	/* SocketPlugin>>#primitiveResolverGetAddressInfoSize */
 EXPORT(sqInt)
-primitiveResolverGetAddressInfoSize(void)
+primitiveResolverGetAddressInfoSize(struct foo * self)
 {
 	sqInt size;
 
-	if (!(failed(interpreterProxy->interpreterState))) {
-		size = sqResolverGetAddressInfoSize();
-		if (!(failed(interpreterProxy->interpreterState))) {
-			popthenPush(1, integerObjectOf(size, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		size = sqResolverGetAddressInfoSize(self);
+		if (!(failed(self))) {
+			popthenPush(1, integerObjectOf(size, self), self);
 		}
 		return null;
 	}
@@ -485,14 +485,14 @@ primitiveResolverGetAddressInfoSize(void)
 
 	/* SocketPlugin>>#primitiveResolverGetAddressInfoType */
 EXPORT(sqInt)
-primitiveResolverGetAddressInfoType(void)
+primitiveResolverGetAddressInfoType(struct foo * self)
 {
 	sqInt type;
 
-	if (!(failed(interpreterProxy->interpreterState))) {
-		type = sqResolverGetAddressInfoType();
-		if (!(failed(interpreterProxy->interpreterState))) {
-			popthenPush(1, integerObjectOf(type, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		type = sqResolverGetAddressInfoType(self);
+		if (!(failed(self))) {
+			popthenPush(1, integerObjectOf(type, self), self);
 		}
 		return null;
 	}
@@ -501,68 +501,68 @@ primitiveResolverGetAddressInfoType(void)
 
 	/* SocketPlugin>>#primitiveResolverGetNameInfo:flags: */
 EXPORT(sqInt)
-primitiveResolverGetNameInfo(void)
+primitiveResolverGetNameInfo(struct foo * self)
 {
 	char *addrBase;
 	sqInt addrSize;
 	sqInt flags;
 	sqInt socketAddress;
 
-	if (!(isIntegerObject(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState))) {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	if (!(isIntegerObject(stackValue(0, self), self))) {
+		primitiveFailFor(PrimErrBadArgument, self);
 		return null;
 	}
-	socketAddress = stackValue(1, interpreterProxy->interpreterState);
-	flags = stackIntegerValue(0, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	socketAddress = stackValue(1, self);
+	flags = stackIntegerValue(0, self);
+	if (failed(self)) {
 		return null;
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		addrSize = byteSizeOf(socketAddress, interpreterProxy->interpreterState);
-		addrBase = ((char *) (firstIndexableField(socketAddress, interpreterProxy->interpreterState)));
-		sqResolverGetNameInfoSizeFlags(addrBase, addrSize, flags);
+	if (!(failed(self))) {
+		addrSize = byteSizeOf(socketAddress, self);
+		addrBase = ((char *) (firstIndexableField(socketAddress, self)));
+		sqResolverGetNameInfoSizeFlags(addrBase, addrSize, flags, self);
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		pop(2, interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		pop(2, self);
 	}
 	return null;
 }
 
 	/* SocketPlugin>>#primitiveResolverGetNameInfoHostResult: */
 EXPORT(sqInt)
-primitiveResolverGetNameInfoHostResult(void)
+primitiveResolverGetNameInfoHostResult(struct foo * self)
 {
 	sqInt addrSize;
 	char *socketName;
 
-	if (!(isBytes(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState))) {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	if (!(isBytes(stackValue(0, self), self))) {
+		primitiveFailFor(PrimErrBadArgument, self);
 		return null;
 	}
-	socketName = ((char *) (firstIndexableField(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState)));
-	if (failed(interpreterProxy->interpreterState)) {
+	socketName = ((char *) (firstIndexableField(stackValue(0, self), self)));
+	if (failed(self)) {
 		return null;
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		addrSize = byteSizeOf(((sqInt)(sqIntptr_t)(socketName) - BaseHeaderSize), interpreterProxy->interpreterState);
-		sqResolverGetNameInfoHostResultSize(socketName, addrSize);
+	if (!(failed(self))) {
+		addrSize = byteSizeOf(((sqInt)(sqIntptr_t)(socketName) - BaseHeaderSize), self);
+		sqResolverGetNameInfoHostResultSize(socketName, addrSize, self);
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		pop(1, interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		pop(1, self);
 	}
 	return null;
 }
 
 	/* SocketPlugin>>#primitiveResolverGetNameInfoHostSize */
 EXPORT(sqInt)
-primitiveResolverGetNameInfoHostSize(void)
+primitiveResolverGetNameInfoHostSize(struct foo * self)
 {
 	sqInt size;
 
-	if (!(failed(interpreterProxy->interpreterState))) {
-		size = sqResolverGetNameInfoHostSize();
-		if (!(failed(interpreterProxy->interpreterState))) {
-			popthenPush(1, integerObjectOf(size, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		size = sqResolverGetNameInfoHostSize(self);
+		if (!(failed(self))) {
+			popthenPush(1, integerObjectOf(size, self), self);
 		}
 		return null;
 	}
@@ -571,39 +571,39 @@ primitiveResolverGetNameInfoHostSize(void)
 
 	/* SocketPlugin>>#primitiveResolverGetNameInfoServiceResult: */
 EXPORT(sqInt)
-primitiveResolverGetNameInfoServiceResult(void)
+primitiveResolverGetNameInfoServiceResult(struct foo * self)
 {
 	sqInt addrSize;
 	char *socketName;
 
-	if (!(isBytes(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState))) {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	if (!(isBytes(stackValue(0, self), self))) {
+		primitiveFailFor(PrimErrBadArgument, self);
 		return null;
 	}
-	socketName = ((char *) (firstIndexableField(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState)));
-	if (failed(interpreterProxy->interpreterState)) {
+	socketName = ((char *) (firstIndexableField(stackValue(0, self), self)));
+	if (failed(self)) {
 		return null;
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		addrSize = byteSizeOf(((sqInt)(sqIntptr_t)(socketName) - BaseHeaderSize), interpreterProxy->interpreterState);
-		sqResolverGetNameInfoServiceResultSize(socketName, addrSize);
+	if (!(failed(self))) {
+		addrSize = byteSizeOf(((sqInt)(sqIntptr_t)(socketName) - BaseHeaderSize), self);
+		sqResolverGetNameInfoServiceResultSize(socketName, addrSize, self);
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		pop(1, interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		pop(1, self);
 	}
 	return null;
 }
 
 	/* SocketPlugin>>#primitiveResolverGetNameInfoServiceSize */
 EXPORT(sqInt)
-primitiveResolverGetNameInfoServiceSize(void)
+primitiveResolverGetNameInfoServiceSize(struct foo * self)
 {
 	sqInt size;
 
-	if (!(failed(interpreterProxy->interpreterState))) {
-		size = sqResolverGetNameInfoServiceSize();
-		if (!(failed(interpreterProxy->interpreterState))) {
-			popthenPush(1, integerObjectOf(size, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		size = sqResolverGetNameInfoServiceSize(self);
+		if (!(failed(self))) {
+			popthenPush(1, integerObjectOf(size, self), self);
 		}
 		return null;
 	}
@@ -612,39 +612,39 @@ primitiveResolverGetNameInfoServiceSize(void)
 
 	/* SocketPlugin>>#primitiveResolverHostNameResult: */
 EXPORT(sqInt)
-primitiveResolverHostNameResult(void)
+primitiveResolverHostNameResult(struct foo * self)
 {
 	sqInt nameSize;
 	char *nameString;
 
-	if (!(isBytes(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState))) {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	if (!(isBytes(stackValue(0, self), self))) {
+		primitiveFailFor(PrimErrBadArgument, self);
 		return null;
 	}
-	nameString = ((char *) (firstIndexableField(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState)));
-	if (failed(interpreterProxy->interpreterState)) {
+	nameString = ((char *) (firstIndexableField(stackValue(0, self), self)));
+	if (failed(self)) {
 		return null;
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		nameSize = byteSizeOf(((sqInt)(sqIntptr_t)(nameString) - BaseHeaderSize), interpreterProxy->interpreterState);
-		sqResolverHostNameResultSize(nameString, nameSize);
+	if (!(failed(self))) {
+		nameSize = byteSizeOf(((sqInt)(sqIntptr_t)(nameString) - BaseHeaderSize), self);
+		sqResolverHostNameResultSize(nameString, nameSize, self);
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		pop(1, interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		pop(1, self);
 	}
 	return null;
 }
 
 	/* SocketPlugin>>#primitiveResolverHostNameSize */
 EXPORT(sqInt)
-primitiveResolverHostNameSize(void)
+primitiveResolverHostNameSize(struct foo * self)
 {
 	sqInt size;
 
-	if (!(failed(interpreterProxy->interpreterState))) {
-		size = sqResolverHostNameSize();
-		if (!(failed(interpreterProxy->interpreterState))) {
-			popthenPush(1, integerObjectOf(size, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		size = sqResolverHostNameSize(self);
+		if (!(failed(self))) {
+			popthenPush(1, integerObjectOf(size, self), self);
 			return null;
 		}
 	}
@@ -653,16 +653,16 @@ primitiveResolverHostNameSize(void)
 
 	/* SocketPlugin>>#primitiveResolverLocalAddress */
 EXPORT(sqInt)
-primitiveResolverLocalAddress(void)
+primitiveResolverLocalAddress(struct foo * self)
 {
 	sqInt addr;
 	sqInt _return_value;
 
-	addr = sqResolverLocalAddress();
-	if (!(failed(interpreterProxy->interpreterState))) {
-		_return_value = intToNetAddress(addr);
-		if (!(failed(interpreterProxy->interpreterState))) {
-			popthenPush(1, _return_value, interpreterProxy->interpreterState);
+	addr = sqResolverLocalAddress(self);
+	if (!(failed(self))) {
+		_return_value = intToNetAddress(addr, self);
+		if (!(failed(self))) {
+			popthenPush(1, _return_value, self);
 		}
 	}
 	return null;
@@ -670,16 +670,16 @@ primitiveResolverLocalAddress(void)
 
 	/* SocketPlugin>>#primitiveResolverNameLookupResult */
 EXPORT(sqInt)
-primitiveResolverNameLookupResult(void)
+primitiveResolverNameLookupResult(struct foo * self)
 {
 	sqInt addr;
 	sqInt _return_value;
 
-	addr = sqResolverNameLookupResult();
-	if (!(failed(interpreterProxy->interpreterState))) {
-		_return_value = intToNetAddress(addr);
-		if (!(failed(interpreterProxy->interpreterState))) {
-			popthenPush(1, _return_value, interpreterProxy->interpreterState);
+	addr = sqResolverNameLookupResult(self);
+	if (!(failed(self))) {
+		_return_value = intToNetAddress(addr, self);
+		if (!(failed(self))) {
+			popthenPush(1, _return_value, self);
 		}
 	}
 	return null;
@@ -687,107 +687,107 @@ primitiveResolverNameLookupResult(void)
 
 	/* SocketPlugin>>#primitiveResolverStartAddressLookup: */
 EXPORT(sqInt)
-primitiveResolverStartAddressLookup(void)
+primitiveResolverStartAddressLookup(struct foo * self)
 {
 	sqInt addr;
 	char *address;
 	sqInt sz;
 
-	if (!(isBytes(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState))) {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	if (!(isBytes(stackValue(0, self), self))) {
+		primitiveFailFor(PrimErrBadArgument, self);
 		return null;
 	}
-	address = ((char *) (firstIndexableField(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState)));
-	if (failed(interpreterProxy->interpreterState)) {
+	address = ((char *) (firstIndexableField(stackValue(0, self), self)));
+	if (failed(self)) {
 		return null;
 	}
 	/* begin netAddressToInt: */
-	sz = byteSizeOf(((sqInt)(sqIntptr_t)((((unsigned char *) address))) - BaseHeaderSize), interpreterProxy->interpreterState);
+	sz = byteSizeOf(((sqInt)(sqIntptr_t)((((unsigned char *) address))) - BaseHeaderSize), self);
 	if (!(sz == 4)) {
-		addr = primitiveFail(interpreterProxy->interpreterState);
+		addr = primitiveFail(self);
 		goto l1;
 	}
 	addr = ((((((unsigned char *) address))[3]) + (((usqInt)(((((unsigned char *) address))[2])) << 8))) + (((usqInt)(((((unsigned char *) address))[1])) << 16))) + (((usqInt)(((((unsigned char *) address))[0])) << 24));
 	l1:	/* end netAddressToInt: */;
-	if (!(failed(interpreterProxy->interpreterState))) {
-		sqResolverStartAddrLookup(addr);
+	if (!(failed(self))) {
+		sqResolverStartAddrLookup(addr, self);
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		pop(1, interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		pop(1, self);
 	}
 	return null;
 }
 
 	/* SocketPlugin>>#primitiveResolverStartNameLookup: */
 EXPORT(sqInt)
-primitiveResolverStartNameLookup(void)
+primitiveResolverStartNameLookup(struct foo * self)
 {
 	char *name;
 	sqInt sz;
 
-	if (!(isBytes(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState))) {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	if (!(isBytes(stackValue(0, self), self))) {
+		primitiveFailFor(PrimErrBadArgument, self);
 		return null;
 	}
-	name = ((char *) (firstIndexableField(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState)));
-	if (failed(interpreterProxy->interpreterState)) {
+	name = ((char *) (firstIndexableField(stackValue(0, self), self)));
+	if (failed(self)) {
 		return null;
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		sz = byteSizeOf(((sqInt)(sqIntptr_t)(name) - BaseHeaderSize), interpreterProxy->interpreterState);
-		sqResolverStartNameLookup(name, sz);
+	if (!(failed(self))) {
+		sz = byteSizeOf(((sqInt)(sqIntptr_t)(name) - BaseHeaderSize), self);
+		sqResolverStartNameLookup(name, sz, self);
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		pop(1, interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		pop(1, self);
 	}
 	return null;
 }
 
 	/* SocketPlugin>>#primitiveResolverStatus */
 EXPORT(sqInt)
-primitiveResolverStatus(void)
+primitiveResolverStatus(struct foo * self)
 {
 	sqInt status;
 
-	status = sqResolverStatus();
-	if (!(failed(interpreterProxy->interpreterState))) {
-		popthenPush(1, integerObjectOf(status, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	status = sqResolverStatus(self);
+	if (!(failed(self))) {
+		popthenPush(1, integerObjectOf(status, self), self);
 	}
 	return null;
 }
 
 	/* SocketPlugin>>#primitiveSocketAbortConnection: */
 EXPORT(sqInt)
-primitiveSocketAbortConnection(void)
+primitiveSocketAbortConnection(struct foo * self)
 {
 	SocketPtr s;
 	sqInt socket;
 
-	socket = stackValue(0, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	socket = stackValue(0, self);
+	if (failed(self)) {
 		return null;
 	}
 	/* begin socketValueOf: */
-	if ((isBytes(socket, interpreterProxy->interpreterState))
-	 && ((byteSizeOf(socket, interpreterProxy->interpreterState)) == (sizeof(SQSocket)))) {
-		s = ((SocketPtr) (firstIndexableField(socket, interpreterProxy->interpreterState)));
+	if ((isBytes(socket, self))
+	 && ((byteSizeOf(socket, self)) == (sizeof(SQSocket)))) {
+		s = ((SocketPtr) (firstIndexableField(socket, self)));
 	}
 	else {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+		primitiveFailFor(PrimErrBadArgument, self);
 		s = null;
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		sqSocketAbortConnection(s);
+	if (!(failed(self))) {
+		sqSocketAbortConnection(s, self);
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		pop(1, interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		pop(1, self);
 	}
 	return null;
 }
 
 	/* SocketPlugin>>#primitiveSocketAcceptFrom:rcvBufferSize:sndBufSize:semaIndex: */
 EXPORT(sqInt)
-primitiveSocketAccept(void)
+primitiveSocketAccept(struct foo * self)
 {
 	sqInt recvBufSize;
 	SocketPtr s;
@@ -798,50 +798,50 @@ primitiveSocketAccept(void)
 	sqInt sockHandle;
 
 	socketOop = 0;
-	if (!((isIntegerObject(stackValue(2, interpreterProxy->interpreterState), interpreterProxy->interpreterState))
-		 && ((isIntegerObject(stackValue(1, interpreterProxy->interpreterState), interpreterProxy->interpreterState))
-		 && (isIntegerObject(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState))))) {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	if (!((isIntegerObject(stackValue(2, self), self))
+		 && ((isIntegerObject(stackValue(1, self), self))
+		 && (isIntegerObject(stackValue(0, self), self))))) {
+		primitiveFailFor(PrimErrBadArgument, self);
 		return null;
 	}
-	sockHandle = stackValue(3, interpreterProxy->interpreterState);
-	recvBufSize = stackIntegerValue(2, interpreterProxy->interpreterState);
-	sendBufSize = stackIntegerValue(1, interpreterProxy->interpreterState);
-	semaIndex = stackIntegerValue(0, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	sockHandle = stackValue(3, self);
+	recvBufSize = stackIntegerValue(2, self);
+	sendBufSize = stackIntegerValue(1, self);
+	semaIndex = stackIntegerValue(0, self);
+	if (failed(self)) {
 		return null;
 	}
 	/* begin socketValueOf: */
-	if ((isBytes(sockHandle, interpreterProxy->interpreterState))
-	 && ((byteSizeOf(sockHandle, interpreterProxy->interpreterState)) == (sizeof(SQSocket)))) {
-		serverSocket = ((SocketPtr) (firstIndexableField(sockHandle, interpreterProxy->interpreterState)));
+	if ((isBytes(sockHandle, self))
+	 && ((byteSizeOf(sockHandle, self)) == (sizeof(SQSocket)))) {
+		serverSocket = ((SocketPtr) (firstIndexableField(sockHandle, self)));
 	}
 	else {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+		primitiveFailFor(PrimErrBadArgument, self);
 		serverSocket = null;
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		socketOop = instantiateClassindexableSize(classByteArray(interpreterProxy->interpreterState), sizeof(SQSocket), interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		socketOop = instantiateClassindexableSize(classByteArray(self), sizeof(SQSocket), self);
 		/* begin socketValueOf: */
-		if ((isBytes(socketOop, interpreterProxy->interpreterState))
-		 && ((byteSizeOf(socketOop, interpreterProxy->interpreterState)) == (sizeof(SQSocket)))) {
-			s = ((SocketPtr) (firstIndexableField(socketOop, interpreterProxy->interpreterState)));
+		if ((isBytes(socketOop, self))
+		 && ((byteSizeOf(socketOop, self)) == (sizeof(SQSocket)))) {
+			s = ((SocketPtr) (firstIndexableField(socketOop, self)));
 		}
 		else {
-			primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+			primitiveFailFor(PrimErrBadArgument, self);
 			s = null;
 		}
-		sqSocketAcceptFromRecvBytesSendBytesSemaID(s, serverSocket, recvBufSize, sendBufSize, semaIndex);
+		sqSocketAcceptFromRecvBytesSendBytesSemaID(s, serverSocket, recvBufSize, sendBufSize, semaIndex, self);
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		popthenPush(5, socketOop, interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		popthenPush(5, socketOop, self);
 	}
 	return null;
 }
 
 	/* SocketPlugin>>#primitiveSocketAcceptFrom:rcvBufferSize:sndBufSize:semaIndex:readSemaIndex:writeSemaIndex: */
 EXPORT(sqInt)
-primitiveSocketAccept3Semaphores(void)
+primitiveSocketAccept3Semaphores(struct foo * self)
 {
 	sqInt aReadSema;
 	sqInt aWriteSema;
@@ -854,70 +854,70 @@ primitiveSocketAccept3Semaphores(void)
 	sqInt sockHandle;
 
 	socketOop = 0;
-	if (!((isIntegerObject(stackValue(4, interpreterProxy->interpreterState), interpreterProxy->interpreterState))
-		 && ((isIntegerObject(stackValue(3, interpreterProxy->interpreterState), interpreterProxy->interpreterState))
-		 && ((isIntegerObject(stackValue(2, interpreterProxy->interpreterState), interpreterProxy->interpreterState))
-		 && ((isIntegerObject(stackValue(1, interpreterProxy->interpreterState), interpreterProxy->interpreterState))
-		 && (isIntegerObject(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState))))))) {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	if (!((isIntegerObject(stackValue(4, self), self))
+		 && ((isIntegerObject(stackValue(3, self), self))
+		 && ((isIntegerObject(stackValue(2, self), self))
+		 && ((isIntegerObject(stackValue(1, self), self))
+		 && (isIntegerObject(stackValue(0, self), self))))))) {
+		primitiveFailFor(PrimErrBadArgument, self);
 		return null;
 	}
-	sockHandle = stackValue(5, interpreterProxy->interpreterState);
-	recvBufSize = stackIntegerValue(4, interpreterProxy->interpreterState);
-	sendBufSize = stackIntegerValue(3, interpreterProxy->interpreterState);
-	semaIndex = stackIntegerValue(2, interpreterProxy->interpreterState);
-	aReadSema = stackIntegerValue(1, interpreterProxy->interpreterState);
-	aWriteSema = stackIntegerValue(0, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	sockHandle = stackValue(5, self);
+	recvBufSize = stackIntegerValue(4, self);
+	sendBufSize = stackIntegerValue(3, self);
+	semaIndex = stackIntegerValue(2, self);
+	aReadSema = stackIntegerValue(1, self);
+	aWriteSema = stackIntegerValue(0, self);
+	if (failed(self)) {
 		return null;
 	}
 	/* begin socketValueOf: */
-	if ((isBytes(sockHandle, interpreterProxy->interpreterState))
-	 && ((byteSizeOf(sockHandle, interpreterProxy->interpreterState)) == (sizeof(SQSocket)))) {
-		serverSocket = ((SocketPtr) (firstIndexableField(sockHandle, interpreterProxy->interpreterState)));
+	if ((isBytes(sockHandle, self))
+	 && ((byteSizeOf(sockHandle, self)) == (sizeof(SQSocket)))) {
+		serverSocket = ((SocketPtr) (firstIndexableField(sockHandle, self)));
 	}
 	else {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+		primitiveFailFor(PrimErrBadArgument, self);
 		serverSocket = null;
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		socketOop = instantiateClassindexableSize(classByteArray(interpreterProxy->interpreterState), sizeof(SQSocket), interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		socketOop = instantiateClassindexableSize(classByteArray(self), sizeof(SQSocket), self);
 		/* begin socketValueOf: */
-		if ((isBytes(socketOop, interpreterProxy->interpreterState))
-		 && ((byteSizeOf(socketOop, interpreterProxy->interpreterState)) == (sizeof(SQSocket)))) {
-			s = ((SocketPtr) (firstIndexableField(socketOop, interpreterProxy->interpreterState)));
+		if ((isBytes(socketOop, self))
+		 && ((byteSizeOf(socketOop, self)) == (sizeof(SQSocket)))) {
+			s = ((SocketPtr) (firstIndexableField(socketOop, self)));
 		}
 		else {
-			primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+			primitiveFailFor(PrimErrBadArgument, self);
 			s = null;
 		}
-		sqSocketAcceptFromRecvBytesSendBytesSemaIDReadSemaIDWriteSemaID(s, serverSocket, recvBufSize, sendBufSize, semaIndex, aReadSema, aWriteSema);
+		sqSocketAcceptFromRecvBytesSendBytesSemaIDReadSemaIDWriteSemaID(s, serverSocket, recvBufSize, sendBufSize, semaIndex, aReadSema, aWriteSema, self);
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		popthenPush(7, socketOop, interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		popthenPush(7, socketOop, self);
 	}
 	return null;
 }
 
 	/* SocketPlugin>>#primitiveSocketAddressGetPort */
 EXPORT(sqInt)
-primitiveSocketAddressGetPort(void)
+primitiveSocketAddressGetPort(struct foo * self)
 {
 	sqInt addr;
 	char *addrBase;
 	sqInt addrSize;
 	sqInt port;
 
-	addr = stackValue(0, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	addr = stackValue(0, self);
+	if (failed(self)) {
 		return null;
 	}
-	addrSize = byteSizeOf(addr, interpreterProxy->interpreterState);
-	addrBase = ((char *) (firstIndexableField(addr, interpreterProxy->interpreterState)));
-	if (!(failed(interpreterProxy->interpreterState))) {
-		port = sqSocketAddressSizeGetPort(addrBase, addrSize);
-		if (!(failed(interpreterProxy->interpreterState))) {
-			popthenPush(1, integerObjectOf(port, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	addrSize = byteSizeOf(addr, self);
+	addrBase = ((char *) (firstIndexableField(addr, self)));
+	if (!(failed(self))) {
+		port = sqSocketAddressSizeGetPort(addrBase, addrSize, self);
+		if (!(failed(self))) {
+			popthenPush(1, integerObjectOf(port, self), self);
 			return null;
 		}
 	}
@@ -926,36 +926,36 @@ primitiveSocketAddressGetPort(void)
 
 	/* SocketPlugin>>#primitiveSocketAddressSetPort: */
 EXPORT(sqInt)
-primitiveSocketAddressSetPort(void)
+primitiveSocketAddressSetPort(struct foo * self)
 {
 	sqInt addr;
 	char *addrBase;
 	sqInt addrSize;
 	sqInt portNumber;
 
-	if (!(isIntegerObject(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState))) {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	if (!(isIntegerObject(stackValue(0, self), self))) {
+		primitiveFailFor(PrimErrBadArgument, self);
 		return null;
 	}
-	portNumber = stackIntegerValue(0, interpreterProxy->interpreterState);
-	addr = stackValue(1, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	portNumber = stackIntegerValue(0, self);
+	addr = stackValue(1, self);
+	if (failed(self)) {
 		return null;
 	}
-	addrSize = byteSizeOf(addr, interpreterProxy->interpreterState);
-	addrBase = ((char *) (firstIndexableField(addr, interpreterProxy->interpreterState)));
-	if (!(failed(interpreterProxy->interpreterState))) {
-		sqSocketAddressSizeSetPort(addrBase, addrSize, portNumber);
+	addrSize = byteSizeOf(addr, self);
+	addrBase = ((char *) (firstIndexableField(addr, self)));
+	if (!(failed(self))) {
+		sqSocketAddressSizeSetPort(addrBase, addrSize, portNumber, self);
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		pop(1, interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		pop(1, self);
 	}
 	return null;
 }
 
 	/* SocketPlugin>>#primitiveSocket:bindTo: */
 EXPORT(sqInt)
-primitiveSocketBindTo(void)
+primitiveSocketBindTo(struct foo * self)
 {
 	char *addrBase;
 	sqInt addrSize;
@@ -963,34 +963,34 @@ primitiveSocketBindTo(void)
 	sqInt socket;
 	sqInt socketAddress;
 
-	socket = stackValue(1, interpreterProxy->interpreterState);
-	socketAddress = stackValue(0, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	socket = stackValue(1, self);
+	socketAddress = stackValue(0, self);
+	if (failed(self)) {
 		return null;
 	}
 	/* begin socketValueOf: */
-	if ((isBytes(socket, interpreterProxy->interpreterState))
-	 && ((byteSizeOf(socket, interpreterProxy->interpreterState)) == (sizeof(SQSocket)))) {
-		s = ((SocketPtr) (firstIndexableField(socket, interpreterProxy->interpreterState)));
+	if ((isBytes(socket, self))
+	 && ((byteSizeOf(socket, self)) == (sizeof(SQSocket)))) {
+		s = ((SocketPtr) (firstIndexableField(socket, self)));
 	}
 	else {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+		primitiveFailFor(PrimErrBadArgument, self);
 		s = null;
 	}
-	addrSize = byteSizeOf(socketAddress, interpreterProxy->interpreterState);
-	addrBase = ((char *) (firstIndexableField(socketAddress, interpreterProxy->interpreterState)));
-	if (!(failed(interpreterProxy->interpreterState))) {
-		sqSocketBindToAddressSize(s, addrBase, addrSize);
+	addrSize = byteSizeOf(socketAddress, self);
+	addrBase = ((char *) (firstIndexableField(socketAddress, self)));
+	if (!(failed(self))) {
+		sqSocketBindToAddressSize(s, addrBase, addrSize, self);
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		pop(2, interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		pop(2, self);
 	}
 	return null;
 }
 
 	/* SocketPlugin>>#primitiveSocket:bindTo:port: */
 EXPORT(sqInt)
-primitiveSocketBindToPort(void)
+primitiveSocketBindToPort(struct foo * self)
 {
 	sqInt addr;
 	char *address;
@@ -999,106 +999,106 @@ primitiveSocketBindToPort(void)
 	sqInt socket;
 	sqInt sz;
 
-	if (!((isBytes(stackValue(1, interpreterProxy->interpreterState), interpreterProxy->interpreterState))
-		 && (isIntegerObject(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState)))) {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	if (!((isBytes(stackValue(1, self), self))
+		 && (isIntegerObject(stackValue(0, self), self)))) {
+		primitiveFailFor(PrimErrBadArgument, self);
 		return null;
 	}
-	socket = stackValue(2, interpreterProxy->interpreterState);
-	address = ((char *) (firstIndexableField(stackValue(1, interpreterProxy->interpreterState), interpreterProxy->interpreterState)));
-	port = stackIntegerValue(0, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	socket = stackValue(2, self);
+	address = ((char *) (firstIndexableField(stackValue(1, self), self)));
+	port = stackIntegerValue(0, self);
+	if (failed(self)) {
 		return null;
 	}
 	/* begin netAddressToInt: */
-	sz = byteSizeOf(((sqInt)(sqIntptr_t)((((unsigned char *) address))) - BaseHeaderSize), interpreterProxy->interpreterState);
+	sz = byteSizeOf(((sqInt)(sqIntptr_t)((((unsigned char *) address))) - BaseHeaderSize), self);
 	if (!(sz == 4)) {
-		addr = primitiveFail(interpreterProxy->interpreterState);
+		addr = primitiveFail(self);
 		goto l1;
 	}
 	addr = ((((((unsigned char *) address))[3]) + (((usqInt)(((((unsigned char *) address))[2])) << 8))) + (((usqInt)(((((unsigned char *) address))[1])) << 16))) + (((usqInt)(((((unsigned char *) address))[0])) << 24));
 	l1:	/* end netAddressToInt: */;
 	/* begin socketValueOf: */
-	if ((isBytes(socket, interpreterProxy->interpreterState))
-	 && ((byteSizeOf(socket, interpreterProxy->interpreterState)) == (sizeof(SQSocket)))) {
-		s = ((SocketPtr) (firstIndexableField(socket, interpreterProxy->interpreterState)));
+	if ((isBytes(socket, self))
+	 && ((byteSizeOf(socket, self)) == (sizeof(SQSocket)))) {
+		s = ((SocketPtr) (firstIndexableField(socket, self)));
 	}
 	else {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+		primitiveFailFor(PrimErrBadArgument, self);
 		s = null;
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		sqSocketBindToPort(s, addr, port);
+	if (!(failed(self))) {
+		sqSocketBindToPort(s, addr, port, self);
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		pop(3, interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		pop(3, self);
 	}
 	return null;
 }
 
 	/* SocketPlugin>>#primitiveSocketCloseConnection: */
 EXPORT(sqInt)
-primitiveSocketCloseConnection(void)
+primitiveSocketCloseConnection(struct foo * self)
 {
 	SocketPtr s;
 	sqInt socket;
 
-	socket = stackValue(0, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	socket = stackValue(0, self);
+	if (failed(self)) {
 		return null;
 	}
 	/* begin socketValueOf: */
-	if ((isBytes(socket, interpreterProxy->interpreterState))
-	 && ((byteSizeOf(socket, interpreterProxy->interpreterState)) == (sizeof(SQSocket)))) {
-		s = ((SocketPtr) (firstIndexableField(socket, interpreterProxy->interpreterState)));
+	if ((isBytes(socket, self))
+	 && ((byteSizeOf(socket, self)) == (sizeof(SQSocket)))) {
+		s = ((SocketPtr) (firstIndexableField(socket, self)));
 	}
 	else {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+		primitiveFailFor(PrimErrBadArgument, self);
 		s = null;
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		sqSocketCloseConnection(s);
+	if (!(failed(self))) {
+		sqSocketCloseConnection(s, self);
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		pop(1, interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		pop(1, self);
 	}
 	return null;
 }
 
 	/* SocketPlugin>>#primitiveSocketConnectionStatus: */
 EXPORT(sqInt)
-primitiveSocketConnectionStatus(void)
+primitiveSocketConnectionStatus(struct foo * self)
 {
 	SocketPtr s;
 	sqInt socket;
 	sqInt status;
 
 	status = 0;
-	socket = stackValue(0, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	socket = stackValue(0, self);
+	if (failed(self)) {
 		return null;
 	}
 	/* begin socketValueOf: */
-	if ((isBytes(socket, interpreterProxy->interpreterState))
-	 && ((byteSizeOf(socket, interpreterProxy->interpreterState)) == (sizeof(SQSocket)))) {
-		s = ((SocketPtr) (firstIndexableField(socket, interpreterProxy->interpreterState)));
+	if ((isBytes(socket, self))
+	 && ((byteSizeOf(socket, self)) == (sizeof(SQSocket)))) {
+		s = ((SocketPtr) (firstIndexableField(socket, self)));
 	}
 	else {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+		primitiveFailFor(PrimErrBadArgument, self);
 		s = null;
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		status = sqSocketConnectionStatus(s);
+	if (!(failed(self))) {
+		status = sqSocketConnectionStatus(s, self);
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		popthenPush(2, integerObjectOf(status, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		popthenPush(2, integerObjectOf(status, self), self);
 	}
 	return null;
 }
 
 	/* SocketPlugin>>#primitiveSocket:connectTo: */
 EXPORT(sqInt)
-primitiveSocketConnectTo(void)
+primitiveSocketConnectTo(struct foo * self)
 {
 	char *addrBase;
 	sqInt addrSize;
@@ -1106,34 +1106,34 @@ primitiveSocketConnectTo(void)
 	sqInt socket;
 	sqInt socketAddress;
 
-	socket = stackValue(1, interpreterProxy->interpreterState);
-	socketAddress = stackValue(0, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	socket = stackValue(1, self);
+	socketAddress = stackValue(0, self);
+	if (failed(self)) {
 		return null;
 	}
 	/* begin socketValueOf: */
-	if ((isBytes(socket, interpreterProxy->interpreterState))
-	 && ((byteSizeOf(socket, interpreterProxy->interpreterState)) == (sizeof(SQSocket)))) {
-		s = ((SocketPtr) (firstIndexableField(socket, interpreterProxy->interpreterState)));
+	if ((isBytes(socket, self))
+	 && ((byteSizeOf(socket, self)) == (sizeof(SQSocket)))) {
+		s = ((SocketPtr) (firstIndexableField(socket, self)));
 	}
 	else {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+		primitiveFailFor(PrimErrBadArgument, self);
 		s = null;
 	}
-	addrSize = byteSizeOf(socketAddress, interpreterProxy->interpreterState);
-	addrBase = ((char *) (firstIndexableField(socketAddress, interpreterProxy->interpreterState)));
-	if (!(failed(interpreterProxy->interpreterState))) {
-		sqSocketConnectToAddressSize(s, addrBase, addrSize);
+	addrSize = byteSizeOf(socketAddress, self);
+	addrBase = ((char *) (firstIndexableField(socketAddress, self)));
+	if (!(failed(self))) {
+		sqSocketConnectToAddressSize(s, addrBase, addrSize, self);
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		pop(2, interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		pop(2, self);
 	}
 	return null;
 }
 
 	/* SocketPlugin>>#primitiveSocket:connectTo:port: */
 EXPORT(sqInt)
-primitiveSocketConnectToPort(void)
+primitiveSocketConnectToPort(struct foo * self)
 {
 	sqInt addr;
 	char *address;
@@ -1143,21 +1143,21 @@ primitiveSocketConnectToPort(void)
 	sqInt socket;
 	sqInt sz;
 
-	if (!((isBytes(stackValue(1, interpreterProxy->interpreterState), interpreterProxy->interpreterState))
-		 && (isIntegerObject(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState)))) {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	if (!((isBytes(stackValue(1, self), self))
+		 && (isIntegerObject(stackValue(0, self), self)))) {
+		primitiveFailFor(PrimErrBadArgument, self);
 		return null;
 	}
-	socket = stackValue(2, interpreterProxy->interpreterState);
-	address = ((char *) (firstIndexableField(stackValue(1, interpreterProxy->interpreterState), interpreterProxy->interpreterState)));
-	port = stackIntegerValue(0, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	socket = stackValue(2, self);
+	address = ((char *) (firstIndexableField(stackValue(1, self), self)));
+	port = stackIntegerValue(0, self);
+	if (failed(self)) {
 		return null;
 	}
 	/* begin netAddressToInt: */
-	sz = byteSizeOf(((sqInt)(sqIntptr_t)((((unsigned char *) address))) - BaseHeaderSize), interpreterProxy->interpreterState);
+	sz = byteSizeOf(((sqInt)(sqIntptr_t)((((unsigned char *) address))) - BaseHeaderSize), self);
 	if (!(sz == 4)) {
-		addr = primitiveFail(interpreterProxy->interpreterState);
+		addr = primitiveFail(self);
 		goto l1;
 	}
 	addr = ((((((unsigned char *) address))[3]) + (((usqInt)(((((unsigned char *) address))[2])) << 8))) + (((usqInt)(((((unsigned char *) address))[1])) << 16))) + (((usqInt)(((((unsigned char *) address))[0])) << 24));
@@ -1165,31 +1165,31 @@ primitiveSocketConnectToPort(void)
 	if (sCCTPfn != 0) {
 		okToConnect =  ((sqInt (*) (sqInt, sqInt)) sCCTPfn)(addr, port);
 		if (!okToConnect) {
-			primitiveFail(interpreterProxy->interpreterState);
+			primitiveFail(self);
 			return null;
 		}
 	}
 	/* begin socketValueOf: */
-	if ((isBytes(socket, interpreterProxy->interpreterState))
-	 && ((byteSizeOf(socket, interpreterProxy->interpreterState)) == (sizeof(SQSocket)))) {
-		s = ((SocketPtr) (firstIndexableField(socket, interpreterProxy->interpreterState)));
+	if ((isBytes(socket, self))
+	 && ((byteSizeOf(socket, self)) == (sizeof(SQSocket)))) {
+		s = ((SocketPtr) (firstIndexableField(socket, self)));
 	}
 	else {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+		primitiveFailFor(PrimErrBadArgument, self);
 		s = null;
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		sqSocketConnectToPort(s, addr, port);
+	if (!(failed(self))) {
+		sqSocketConnectToPort(s, addr, port, self);
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		pop(3, interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		pop(3, self);
 	}
 	return null;
 }
 
 	/* SocketPlugin>>#primitiveSocketCreateNetwork:type:receiveBufferSize:sendBufSize:semaIndex: */
 EXPORT(sqInt)
-primitiveSocketCreate(void)
+primitiveSocketCreate(struct foo * self)
 {
 	sqInt netType;
 	sqInt okToCreate;
@@ -1200,51 +1200,51 @@ primitiveSocketCreate(void)
 	sqInt socketOop;
 	sqInt socketType;
 
-	if (!((isIntegerObject(stackValue(4, interpreterProxy->interpreterState), interpreterProxy->interpreterState))
-		 && ((isIntegerObject(stackValue(3, interpreterProxy->interpreterState), interpreterProxy->interpreterState))
-		 && ((isIntegerObject(stackValue(2, interpreterProxy->interpreterState), interpreterProxy->interpreterState))
-		 && ((isIntegerObject(stackValue(1, interpreterProxy->interpreterState), interpreterProxy->interpreterState))
-		 && (isIntegerObject(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState))))))) {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	if (!((isIntegerObject(stackValue(4, self), self))
+		 && ((isIntegerObject(stackValue(3, self), self))
+		 && ((isIntegerObject(stackValue(2, self), self))
+		 && ((isIntegerObject(stackValue(1, self), self))
+		 && (isIntegerObject(stackValue(0, self), self))))))) {
+		primitiveFailFor(PrimErrBadArgument, self);
 		return null;
 	}
-	netType = stackIntegerValue(4, interpreterProxy->interpreterState);
-	socketType = stackIntegerValue(3, interpreterProxy->interpreterState);
-	recvBufSize = stackIntegerValue(2, interpreterProxy->interpreterState);
-	sendBufSize = stackIntegerValue(1, interpreterProxy->interpreterState);
-	semaIndex = stackIntegerValue(0, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	netType = stackIntegerValue(4, self);
+	socketType = stackIntegerValue(3, self);
+	recvBufSize = stackIntegerValue(2, self);
+	sendBufSize = stackIntegerValue(1, self);
+	semaIndex = stackIntegerValue(0, self);
+	if (failed(self)) {
 		return null;
 	}
 	if (sCCSOTfn != 0) {
 		okToCreate =  ((sqInt (*) (sqInt, sqInt)) sCCSOTfn)(netType, socketType);
 		if (!okToCreate) {
-			primitiveFail(interpreterProxy->interpreterState);
+			primitiveFail(self);
 			return null;
 		}
 	}
-	socketOop = instantiateClassindexableSize(classByteArray(interpreterProxy->interpreterState), sizeof(SQSocket), interpreterProxy->interpreterState);
+	socketOop = instantiateClassindexableSize(classByteArray(self), sizeof(SQSocket), self);
 	/* begin socketValueOf: */
-	if ((isBytes(socketOop, interpreterProxy->interpreterState))
-	 && ((byteSizeOf(socketOop, interpreterProxy->interpreterState)) == (sizeof(SQSocket)))) {
-		s = ((SocketPtr) (firstIndexableField(socketOop, interpreterProxy->interpreterState)));
+	if ((isBytes(socketOop, self))
+	 && ((byteSizeOf(socketOop, self)) == (sizeof(SQSocket)))) {
+		s = ((SocketPtr) (firstIndexableField(socketOop, self)));
 	}
 	else {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+		primitiveFailFor(PrimErrBadArgument, self);
 		s = null;
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		sqSocketCreateNetTypeSocketTypeRecvBytesSendBytesSemaID(s, netType, socketType, recvBufSize, sendBufSize, semaIndex);
+	if (!(failed(self))) {
+		sqSocketCreateNetTypeSocketTypeRecvBytesSendBytesSemaID(s, netType, socketType, recvBufSize, sendBufSize, semaIndex, self);
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		popthenPush(6, socketOop, interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		popthenPush(6, socketOop, self);
 	}
 	return null;
 }
 
 	/* SocketPlugin>>#primitiveSocketCreateNetwork:type:receiveBufferSize:sendBufSize:semaIndex:readSemaIndex:writeSemaIndex: */
 EXPORT(sqInt)
-primitiveSocketCreate3Semaphores(void)
+primitiveSocketCreate3Semaphores(struct foo * self)
 {
 	sqInt aReadSema;
 	sqInt aWriteSema;
@@ -1257,55 +1257,55 @@ primitiveSocketCreate3Semaphores(void)
 	sqInt socketOop;
 	sqInt socketType;
 
-	if (!((isIntegerObject(stackValue(6, interpreterProxy->interpreterState), interpreterProxy->interpreterState))
-		 && ((isIntegerObject(stackValue(5, interpreterProxy->interpreterState), interpreterProxy->interpreterState))
-		 && ((isIntegerObject(stackValue(4, interpreterProxy->interpreterState), interpreterProxy->interpreterState))
-		 && ((isIntegerObject(stackValue(3, interpreterProxy->interpreterState), interpreterProxy->interpreterState))
-		 && ((isIntegerObject(stackValue(2, interpreterProxy->interpreterState), interpreterProxy->interpreterState))
-		 && ((isIntegerObject(stackValue(1, interpreterProxy->interpreterState), interpreterProxy->interpreterState))
-		 && (isIntegerObject(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState))))))))) {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	if (!((isIntegerObject(stackValue(6, self), self))
+		 && ((isIntegerObject(stackValue(5, self), self))
+		 && ((isIntegerObject(stackValue(4, self), self))
+		 && ((isIntegerObject(stackValue(3, self), self))
+		 && ((isIntegerObject(stackValue(2, self), self))
+		 && ((isIntegerObject(stackValue(1, self), self))
+		 && (isIntegerObject(stackValue(0, self), self))))))))) {
+		primitiveFailFor(PrimErrBadArgument, self);
 		return null;
 	}
-	netType = stackIntegerValue(6, interpreterProxy->interpreterState);
-	socketType = stackIntegerValue(5, interpreterProxy->interpreterState);
-	recvBufSize = stackIntegerValue(4, interpreterProxy->interpreterState);
-	sendBufSize = stackIntegerValue(3, interpreterProxy->interpreterState);
-	semaIndex = stackIntegerValue(2, interpreterProxy->interpreterState);
-	aReadSema = stackIntegerValue(1, interpreterProxy->interpreterState);
-	aWriteSema = stackIntegerValue(0, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	netType = stackIntegerValue(6, self);
+	socketType = stackIntegerValue(5, self);
+	recvBufSize = stackIntegerValue(4, self);
+	sendBufSize = stackIntegerValue(3, self);
+	semaIndex = stackIntegerValue(2, self);
+	aReadSema = stackIntegerValue(1, self);
+	aWriteSema = stackIntegerValue(0, self);
+	if (failed(self)) {
 		return null;
 	}
 	if (sCCSOTfn != 0) {
 		okToCreate =  ((sqInt (*) (sqInt, sqInt)) sCCSOTfn)(netType, socketType);
 		if (!okToCreate) {
-			primitiveFail(interpreterProxy->interpreterState);
+			primitiveFail(self);
 			return null;
 		}
 	}
-	socketOop = instantiateClassindexableSize(classByteArray(interpreterProxy->interpreterState), sizeof(SQSocket), interpreterProxy->interpreterState);
+	socketOop = instantiateClassindexableSize(classByteArray(self), sizeof(SQSocket), self);
 	/* begin socketValueOf: */
-	if ((isBytes(socketOop, interpreterProxy->interpreterState))
-	 && ((byteSizeOf(socketOop, interpreterProxy->interpreterState)) == (sizeof(SQSocket)))) {
-		s = ((SocketPtr) (firstIndexableField(socketOop, interpreterProxy->interpreterState)));
+	if ((isBytes(socketOop, self))
+	 && ((byteSizeOf(socketOop, self)) == (sizeof(SQSocket)))) {
+		s = ((SocketPtr) (firstIndexableField(socketOop, self)));
 	}
 	else {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+		primitiveFailFor(PrimErrBadArgument, self);
 		s = null;
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		sqSocketCreateNetTypeSocketTypeRecvBytesSendBytesSemaIDReadSemaIDWriteSemaID(s, netType, socketType, recvBufSize, sendBufSize, semaIndex, aReadSema, aWriteSema);
+	if (!(failed(self))) {
+		sqSocketCreateNetTypeSocketTypeRecvBytesSendBytesSemaIDReadSemaIDWriteSemaID(s, netType, socketType, recvBufSize, sendBufSize, semaIndex, aReadSema, aWriteSema, self);
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		popthenPush(8, socketOop, interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		popthenPush(8, socketOop, self);
 	}
 	return null;
 }
 
 	/* SocketPlugin>>#primitiveSocketCreateRaw:type:receiveBufferSize:sendBufSize:semaIndex:readSemaIndex:writeSemaIndex: */
 EXPORT(sqInt)
-primitiveSocketCreateRAW(void)
+primitiveSocketCreateRAW(struct foo * self)
 {
 	sqInt aReadSema;
 	sqInt aWriteSema;
@@ -1318,115 +1318,115 @@ primitiveSocketCreateRAW(void)
 	sqInt sendBufSize;
 	sqInt socketOop;
 
-	if (!((isIntegerObject(stackValue(6, interpreterProxy->interpreterState), interpreterProxy->interpreterState))
-		 && ((isIntegerObject(stackValue(5, interpreterProxy->interpreterState), interpreterProxy->interpreterState))
-		 && ((isIntegerObject(stackValue(4, interpreterProxy->interpreterState), interpreterProxy->interpreterState))
-		 && ((isIntegerObject(stackValue(3, interpreterProxy->interpreterState), interpreterProxy->interpreterState))
-		 && ((isIntegerObject(stackValue(2, interpreterProxy->interpreterState), interpreterProxy->interpreterState))
-		 && ((isIntegerObject(stackValue(1, interpreterProxy->interpreterState), interpreterProxy->interpreterState))
-		 && (isIntegerObject(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState))))))))) {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	if (!((isIntegerObject(stackValue(6, self), self))
+		 && ((isIntegerObject(stackValue(5, self), self))
+		 && ((isIntegerObject(stackValue(4, self), self))
+		 && ((isIntegerObject(stackValue(3, self), self))
+		 && ((isIntegerObject(stackValue(2, self), self))
+		 && ((isIntegerObject(stackValue(1, self), self))
+		 && (isIntegerObject(stackValue(0, self), self))))))))) {
+		primitiveFailFor(PrimErrBadArgument, self);
 		return null;
 	}
-	netType = stackIntegerValue(6, interpreterProxy->interpreterState);
-	protoType = stackIntegerValue(5, interpreterProxy->interpreterState);
-	recvBufSize = stackIntegerValue(4, interpreterProxy->interpreterState);
-	sendBufSize = stackIntegerValue(3, interpreterProxy->interpreterState);
-	semaIndex = stackIntegerValue(2, interpreterProxy->interpreterState);
-	aReadSema = stackIntegerValue(1, interpreterProxy->interpreterState);
-	aWriteSema = stackIntegerValue(0, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	netType = stackIntegerValue(6, self);
+	protoType = stackIntegerValue(5, self);
+	recvBufSize = stackIntegerValue(4, self);
+	sendBufSize = stackIntegerValue(3, self);
+	semaIndex = stackIntegerValue(2, self);
+	aReadSema = stackIntegerValue(1, self);
+	aWriteSema = stackIntegerValue(0, self);
+	if (failed(self)) {
 		return null;
 	}
 	if (sCCSOTfn != 0) {
 		okToCreate =  ((sqInt (*) (sqInt, sqInt)) sCCSOTfn)(netType, protoType);
 		if (!okToCreate) {
-			primitiveFail(interpreterProxy->interpreterState);
+			primitiveFail(self);
 			return null;
 		}
 	}
-	socketOop = instantiateClassindexableSize(classByteArray(interpreterProxy->interpreterState), sizeof(SQSocket), interpreterProxy->interpreterState);
+	socketOop = instantiateClassindexableSize(classByteArray(self), sizeof(SQSocket), self);
 	/* begin socketValueOf: */
-	if ((isBytes(socketOop, interpreterProxy->interpreterState))
-	 && ((byteSizeOf(socketOop, interpreterProxy->interpreterState)) == (sizeof(SQSocket)))) {
-		s = ((SocketPtr) (firstIndexableField(socketOop, interpreterProxy->interpreterState)));
+	if ((isBytes(socketOop, self))
+	 && ((byteSizeOf(socketOop, self)) == (sizeof(SQSocket)))) {
+		s = ((SocketPtr) (firstIndexableField(socketOop, self)));
 	}
 	else {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+		primitiveFailFor(PrimErrBadArgument, self);
 		s = null;
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		sqSocketCreateRawProtoTypeRecvBytesSendBytesSemaIDReadSemaIDWriteSemaID(s, netType, protoType, recvBufSize, sendBufSize, semaIndex, aReadSema, aWriteSema);
+	if (!(failed(self))) {
+		sqSocketCreateRawProtoTypeRecvBytesSendBytesSemaIDReadSemaIDWriteSemaID(s, netType, protoType, recvBufSize, sendBufSize, semaIndex, aReadSema, aWriteSema, self);
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		popthenPush(8, socketOop, interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		popthenPush(8, socketOop, self);
 	}
 	return null;
 }
 
 	/* SocketPlugin>>#primitiveSocketDestroy: */
 EXPORT(sqInt)
-primitiveSocketDestroy(void)
+primitiveSocketDestroy(struct foo * self)
 {
 	SocketPtr s;
 	sqInt socket;
 
-	socket = stackValue(0, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	socket = stackValue(0, self);
+	if (failed(self)) {
 		return null;
 	}
 	/* begin socketValueOf: */
-	if ((isBytes(socket, interpreterProxy->interpreterState))
-	 && ((byteSizeOf(socket, interpreterProxy->interpreterState)) == (sizeof(SQSocket)))) {
-		s = ((SocketPtr) (firstIndexableField(socket, interpreterProxy->interpreterState)));
+	if ((isBytes(socket, self))
+	 && ((byteSizeOf(socket, self)) == (sizeof(SQSocket)))) {
+		s = ((SocketPtr) (firstIndexableField(socket, self)));
 	}
 	else {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+		primitiveFailFor(PrimErrBadArgument, self);
 		s = null;
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		sqSocketDestroy(s);
+	if (!(failed(self))) {
+		sqSocketDestroy(s, self);
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		pop(1, interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		pop(1, self);
 	}
 	return null;
 }
 
 	/* SocketPlugin>>#primitiveSocketError: */
 EXPORT(sqInt)
-primitiveSocketError(void)
+primitiveSocketError(struct foo * self)
 {
 	sqInt err;
 	SocketPtr s;
 	sqInt socket;
 
 	err = 0;
-	socket = stackValue(0, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	socket = stackValue(0, self);
+	if (failed(self)) {
 		return null;
 	}
 	/* begin socketValueOf: */
-	if ((isBytes(socket, interpreterProxy->interpreterState))
-	 && ((byteSizeOf(socket, interpreterProxy->interpreterState)) == (sizeof(SQSocket)))) {
-		s = ((SocketPtr) (firstIndexableField(socket, interpreterProxy->interpreterState)));
+	if ((isBytes(socket, self))
+	 && ((byteSizeOf(socket, self)) == (sizeof(SQSocket)))) {
+		s = ((SocketPtr) (firstIndexableField(socket, self)));
 	}
 	else {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+		primitiveFailFor(PrimErrBadArgument, self);
 		s = null;
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		err = sqSocketError(s);
+	if (!(failed(self))) {
+		err = sqSocketError(s, self);
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		popthenPush(2, integerObjectOf(err, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		popthenPush(2, integerObjectOf(err, self), self);
 	}
 	return null;
 }
 
 	/* SocketPlugin>>#primitiveSocket:getOptions: */
 EXPORT(sqInt)
-primitiveSocketGetOptions(void)
+primitiveSocketGetOptions(struct foo * self)
 {
 	sqInt errorCode;
 	sqInt optionName;
@@ -1437,33 +1437,33 @@ primitiveSocketGetOptions(void)
 	SocketPtr s;
 	sqInt socket;
 
-	socket = stackValue(1, interpreterProxy->interpreterState);
-	optionName = stackValue(0, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	socket = stackValue(1, self);
+	optionName = stackValue(0, self);
+	if (failed(self)) {
 		return null;
 	}
 	/* begin socketValueOf: */
-	if ((isBytes(socket, interpreterProxy->interpreterState))
-	 && ((byteSizeOf(socket, interpreterProxy->interpreterState)) == (sizeof(SQSocket)))) {
-		s = ((SocketPtr) (firstIndexableField(socket, interpreterProxy->interpreterState)));
+	if ((isBytes(socket, self))
+	 && ((byteSizeOf(socket, self)) == (sizeof(SQSocket)))) {
+		s = ((SocketPtr) (firstIndexableField(socket, self)));
 	}
 	else {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+		primitiveFailFor(PrimErrBadArgument, self);
 		s = null;
 	}
-	success(isBytes(optionName, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	optionNameStart = ((char *) (firstIndexableField(optionName, interpreterProxy->interpreterState)));
-	optionNameSize = slotSizeOf(optionName, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	success(isBytes(optionName, self), self);
+	optionNameStart = ((char *) (firstIndexableField(optionName, self)));
+	optionNameSize = slotSizeOf(optionName, self);
+	if (failed(self)) {
 		return null;
 	}
 	returnedValue = 0;
-	errorCode = sqSocketGetOptionsoptionNameStartoptionNameSizereturnedValue(s, optionNameStart, optionNameSize, (&returnedValue));
-	results = instantiateClassindexableSize(classArray(interpreterProxy->interpreterState), 2, interpreterProxy->interpreterState);
-	storePointerofObjectwithValue(0, results, integerObjectOf(errorCode, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	storePointerofObjectwithValue(1, results, integerObjectOf(returnedValue, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	if (!(failed(interpreterProxy->interpreterState))) {
-		popthenPush(3, results, interpreterProxy->interpreterState);
+	errorCode = sqSocketGetOptionsoptionNameStartoptionNameSizereturnedValue(s, optionNameStart, optionNameSize, (&returnedValue), self);
+	results = instantiateClassindexableSize(classArray(self), 2, self);
+	storePointerofObjectwithValue(0, results, integerObjectOf(errorCode, self), self);
+	storePointerofObjectwithValue(1, results, integerObjectOf(returnedValue, self), self);
+	if (!(failed(self))) {
+		popthenPush(3, results, self);
 	}
 	return null;
 }
@@ -1475,43 +1475,43 @@ primitiveSocketGetOptions(void)
 
 	/* SocketPlugin>>#primitiveSocket:listenOnPort: */
 EXPORT(sqInt)
-primitiveSocketListenOnPort(void)
+primitiveSocketListenOnPort(struct foo * self)
 {
 	sqInt okToListen;
 	sqInt port;
 	SocketPtr s;
 	sqInt socket;
 
-	if (!(isIntegerObject(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState))) {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	if (!(isIntegerObject(stackValue(0, self), self))) {
+		primitiveFailFor(PrimErrBadArgument, self);
 		return null;
 	}
-	socket = stackValue(1, interpreterProxy->interpreterState);
-	port = stackIntegerValue(0, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	socket = stackValue(1, self);
+	port = stackIntegerValue(0, self);
+	if (failed(self)) {
 		return null;
 	}
 	/* begin socketValueOf: */
-	if ((isBytes(socket, interpreterProxy->interpreterState))
-	 && ((byteSizeOf(socket, interpreterProxy->interpreterState)) == (sizeof(SQSocket)))) {
-		s = ((SocketPtr) (firstIndexableField(socket, interpreterProxy->interpreterState)));
+	if ((isBytes(socket, self))
+	 && ((byteSizeOf(socket, self)) == (sizeof(SQSocket)))) {
+		s = ((SocketPtr) (firstIndexableField(socket, self)));
 	}
 	else {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+		primitiveFailFor(PrimErrBadArgument, self);
 		s = null;
 	}
 	if (sCCLOPfn != 0) {
 		okToListen =  ((sqInt (*) (sqInt, sqInt)) sCCLOPfn)((sqInt)s, port);
 		if (!okToListen) {
-			primitiveFail(interpreterProxy->interpreterState);
+			primitiveFail(self);
 			return null;
 		}
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		sqSocketListenOnPort(s, port);
+	if (!(failed(self))) {
+		sqSocketListenOnPort(s, port, self);
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		pop(2, interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		pop(2, self);
 	}
 	return null;
 }
@@ -1523,7 +1523,7 @@ primitiveSocketListenOnPort(void)
 
 	/* SocketPlugin>>#primitiveSocket:listenOnPort:backlogSize: */
 EXPORT(sqInt)
-primitiveSocketListenOnPortBacklog(void)
+primitiveSocketListenOnPortBacklog(struct foo * self)
 {
 	sqInt backlog;
 	sqInt okToListen;
@@ -1531,36 +1531,36 @@ primitiveSocketListenOnPortBacklog(void)
 	SocketPtr s;
 	sqInt socket;
 
-	if (!((isIntegerObject(stackValue(1, interpreterProxy->interpreterState), interpreterProxy->interpreterState))
-		 && (isIntegerObject(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState)))) {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	if (!((isIntegerObject(stackValue(1, self), self))
+		 && (isIntegerObject(stackValue(0, self), self)))) {
+		primitiveFailFor(PrimErrBadArgument, self);
 		return null;
 	}
-	socket = stackValue(2, interpreterProxy->interpreterState);
-	port = stackIntegerValue(1, interpreterProxy->interpreterState);
-	backlog = stackIntegerValue(0, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	socket = stackValue(2, self);
+	port = stackIntegerValue(1, self);
+	backlog = stackIntegerValue(0, self);
+	if (failed(self)) {
 		return null;
 	}
 	/* begin socketValueOf: */
-	if ((isBytes(socket, interpreterProxy->interpreterState))
-	 && ((byteSizeOf(socket, interpreterProxy->interpreterState)) == (sizeof(SQSocket)))) {
-		s = ((SocketPtr) (firstIndexableField(socket, interpreterProxy->interpreterState)));
+	if ((isBytes(socket, self))
+	 && ((byteSizeOf(socket, self)) == (sizeof(SQSocket)))) {
+		s = ((SocketPtr) (firstIndexableField(socket, self)));
 	}
 	else {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+		primitiveFailFor(PrimErrBadArgument, self);
 		s = null;
 	}
 	if (sCCLOPfn != 0) {
 		okToListen =  ((sqInt (*) (sqInt, sqInt)) sCCLOPfn)((sqInt)s, port);
 		if (!okToListen) {
-			primitiveFail(interpreterProxy->interpreterState);
+			primitiveFail(self);
 			return null;
 		}
 	}
-	sqSocketListenOnPortBacklogSize(s, port, backlog);
-	if (!(failed(interpreterProxy->interpreterState))) {
-		pop(3, interpreterProxy->interpreterState);
+	sqSocketListenOnPortBacklogSize(s, port, backlog, self);
+	if (!(failed(self))) {
+		pop(3, self);
 	}
 	return null;
 }
@@ -1573,7 +1573,7 @@ primitiveSocketListenOnPortBacklog(void)
 
 	/* SocketPlugin>>#primitiveSocket:listenOnPort:backlogSize:interface: */
 EXPORT(sqInt)
-primitiveSocketListenOnPortBacklogInterface(void)
+primitiveSocketListenOnPortBacklogInterface(struct foo * self)
 {
 	sqInt addr;
 	sqInt backlog;
@@ -1584,81 +1584,81 @@ primitiveSocketListenOnPortBacklogInterface(void)
 	sqInt socket;
 	sqInt sz;
 
-	if (!((isIntegerObject(stackValue(2, interpreterProxy->interpreterState), interpreterProxy->interpreterState))
-		 && ((isIntegerObject(stackValue(1, interpreterProxy->interpreterState), interpreterProxy->interpreterState))
-		 && (isBytes(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState))))) {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	if (!((isIntegerObject(stackValue(2, self), self))
+		 && ((isIntegerObject(stackValue(1, self), self))
+		 && (isBytes(stackValue(0, self), self))))) {
+		primitiveFailFor(PrimErrBadArgument, self);
 		return null;
 	}
-	socket = stackValue(3, interpreterProxy->interpreterState);
-	port = stackIntegerValue(2, interpreterProxy->interpreterState);
-	backlog = stackIntegerValue(1, interpreterProxy->interpreterState);
-	ifAddr = ((char *) (firstIndexableField(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState)));
-	if (failed(interpreterProxy->interpreterState)) {
+	socket = stackValue(3, self);
+	port = stackIntegerValue(2, self);
+	backlog = stackIntegerValue(1, self);
+	ifAddr = ((char *) (firstIndexableField(stackValue(0, self), self)));
+	if (failed(self)) {
 		return null;
 	}
 	/* begin socketValueOf: */
-	if ((isBytes(socket, interpreterProxy->interpreterState))
-	 && ((byteSizeOf(socket, interpreterProxy->interpreterState)) == (sizeof(SQSocket)))) {
-		s = ((SocketPtr) (firstIndexableField(socket, interpreterProxy->interpreterState)));
+	if ((isBytes(socket, self))
+	 && ((byteSizeOf(socket, self)) == (sizeof(SQSocket)))) {
+		s = ((SocketPtr) (firstIndexableField(socket, self)));
 	}
 	else {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+		primitiveFailFor(PrimErrBadArgument, self);
 		s = null;
 	}
 	if (sCCLOPfn != 0) {
 		okToListen =  ((sqInt (*) (sqInt, sqInt)) sCCLOPfn)((sqInt)s, port);
 		if (!okToListen) {
-			primitiveFail(interpreterProxy->interpreterState);
+			primitiveFail(self);
 			return null;
 		}
 	}
 	/* begin netAddressToInt: */
-	sz = byteSizeOf(((sqInt)(sqIntptr_t)((((unsigned char *) ifAddr))) - BaseHeaderSize), interpreterProxy->interpreterState);
+	sz = byteSizeOf(((sqInt)(sqIntptr_t)((((unsigned char *) ifAddr))) - BaseHeaderSize), self);
 	if (!(sz == 4)) {
-		addr = primitiveFail(interpreterProxy->interpreterState);
+		addr = primitiveFail(self);
 		goto l1;
 	}
 	addr = ((((((unsigned char *) ifAddr))[3]) + (((usqInt)(((((unsigned char *) ifAddr))[2])) << 8))) + (((usqInt)(((((unsigned char *) ifAddr))[1])) << 16))) + (((usqInt)(((((unsigned char *) ifAddr))[0])) << 24));
 	l1:	/* end netAddressToInt: */;
-	sqSocketListenOnPortBacklogSizeInterface(s, port, backlog, addr);
-	if (!(failed(interpreterProxy->interpreterState))) {
-		pop(4, interpreterProxy->interpreterState);
+	sqSocketListenOnPortBacklogSizeInterface(s, port, backlog, addr, self);
+	if (!(failed(self))) {
+		pop(4, self);
 	}
 	return null;
 }
 
 	/* SocketPlugin>>#primitiveSocket:listenWithBacklog: */
 EXPORT(sqInt)
-primitiveSocketListenWithBacklog(void)
+primitiveSocketListenWithBacklog(struct foo * self)
 {
 	sqInt backlogSize;
 	SocketPtr s;
 	sqInt socket;
 
-	if (!(isIntegerObject(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState))) {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	if (!(isIntegerObject(stackValue(0, self), self))) {
+		primitiveFailFor(PrimErrBadArgument, self);
 		return null;
 	}
-	socket = stackValue(1, interpreterProxy->interpreterState);
-	backlogSize = stackIntegerValue(0, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	socket = stackValue(1, self);
+	backlogSize = stackIntegerValue(0, self);
+	if (failed(self)) {
 		return null;
 	}
 	/* begin socketValueOf: */
-	if ((isBytes(socket, interpreterProxy->interpreterState))
-	 && ((byteSizeOf(socket, interpreterProxy->interpreterState)) == (sizeof(SQSocket)))) {
-		s = ((SocketPtr) (firstIndexableField(socket, interpreterProxy->interpreterState)));
+	if ((isBytes(socket, self))
+	 && ((byteSizeOf(socket, self)) == (sizeof(SQSocket)))) {
+		s = ((SocketPtr) (firstIndexableField(socket, self)));
 	}
 	else {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+		primitiveFailFor(PrimErrBadArgument, self);
 		s = null;
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		sqSocketListenBacklog(s, backlogSize);
+	if (!(failed(self))) {
+		sqSocketListenBacklog(s, backlogSize, self);
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		pop(2, interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		pop(2, self);
 	}
 	return null;
 }
@@ -1668,43 +1668,43 @@ primitiveSocketListenWithBacklog(void)
 
 	/* SocketPlugin>>#primitiveSocketListenWithOrWithoutBacklog */
 EXPORT(sqInt)
-primitiveSocketListenWithOrWithoutBacklog(void)
+primitiveSocketListenWithOrWithoutBacklog(struct foo * self)
 {
-	if ((methodArgumentCount(interpreterProxy->interpreterState)) == 2) {
-		return primitiveSocketListenOnPort();
+	if ((methodArgumentCount(self)) == 2) {
+		return primitiveSocketListenOnPort(self);
 	}
 	else {
-		return primitiveSocketListenOnPortBacklog();
+		return primitiveSocketListenOnPortBacklog(self);
 	}
 }
 
 	/* SocketPlugin>>#primitiveSocketLocalAddress: */
 EXPORT(sqInt)
-primitiveSocketLocalAddress(void)
+primitiveSocketLocalAddress(struct foo * self)
 {
 	sqInt addr;
 	SocketPtr s;
 	sqInt socket;
 	sqInt _return_value;
 
-	socket = stackValue(0, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	socket = stackValue(0, self);
+	if (failed(self)) {
 		return null;
 	}
 	/* begin socketValueOf: */
-	if ((isBytes(socket, interpreterProxy->interpreterState))
-	 && ((byteSizeOf(socket, interpreterProxy->interpreterState)) == (sizeof(SQSocket)))) {
-		s = ((SocketPtr) (firstIndexableField(socket, interpreterProxy->interpreterState)));
+	if ((isBytes(socket, self))
+	 && ((byteSizeOf(socket, self)) == (sizeof(SQSocket)))) {
+		s = ((SocketPtr) (firstIndexableField(socket, self)));
 	}
 	else {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+		primitiveFailFor(PrimErrBadArgument, self);
 		s = null;
 	}
-	addr = sqSocketLocalAddress(s);
-	if (!(failed(interpreterProxy->interpreterState))) {
-		_return_value = intToNetAddress(addr);
-		if (!(failed(interpreterProxy->interpreterState))) {
-			popthenPush(2, _return_value, interpreterProxy->interpreterState);
+	addr = sqSocketLocalAddress(s, self);
+	if (!(failed(self))) {
+		_return_value = intToNetAddress(addr, self);
+		if (!(failed(self))) {
+			popthenPush(2, _return_value, self);
 		}
 	}
 	return null;
@@ -1712,7 +1712,7 @@ primitiveSocketLocalAddress(void)
 
 	/* SocketPlugin>>#primitiveSocket:localAddressResult: */
 EXPORT(sqInt)
-primitiveSocketLocalAddressResult(void)
+primitiveSocketLocalAddressResult(struct foo * self)
 {
 	char *addrBase;
 	sqInt addrSize;
@@ -1720,124 +1720,124 @@ primitiveSocketLocalAddressResult(void)
 	sqInt socket;
 	sqInt socketAddress;
 
-	socket = stackValue(1, interpreterProxy->interpreterState);
-	socketAddress = stackValue(0, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	socket = stackValue(1, self);
+	socketAddress = stackValue(0, self);
+	if (failed(self)) {
 		return null;
 	}
 	/* begin socketValueOf: */
-	if ((isBytes(socket, interpreterProxy->interpreterState))
-	 && ((byteSizeOf(socket, interpreterProxy->interpreterState)) == (sizeof(SQSocket)))) {
-		s = ((SocketPtr) (firstIndexableField(socket, interpreterProxy->interpreterState)));
+	if ((isBytes(socket, self))
+	 && ((byteSizeOf(socket, self)) == (sizeof(SQSocket)))) {
+		s = ((SocketPtr) (firstIndexableField(socket, self)));
 	}
 	else {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+		primitiveFailFor(PrimErrBadArgument, self);
 		s = null;
 	}
-	addrSize = byteSizeOf(socketAddress, interpreterProxy->interpreterState);
-	addrBase = ((char *) (firstIndexableField(socketAddress, interpreterProxy->interpreterState)));
-	if (!(failed(interpreterProxy->interpreterState))) {
-		sqSocketLocalAddressResultSize(s, addrBase, addrSize);
+	addrSize = byteSizeOf(socketAddress, self);
+	addrBase = ((char *) (firstIndexableField(socketAddress, self)));
+	if (!(failed(self))) {
+		sqSocketLocalAddressResultSize(s, addrBase, addrSize, self);
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		pop(2, interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		pop(2, self);
 	}
 	return null;
 }
 
 	/* SocketPlugin>>#primitiveSocketLocalAddressSize: */
 EXPORT(sqInt)
-primitiveSocketLocalAddressSize(void)
+primitiveSocketLocalAddressSize(struct foo * self)
 {
 	SocketPtr s;
 	sqInt size;
 	sqInt socket;
 
-	socket = stackValue(0, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	socket = stackValue(0, self);
+	if (failed(self)) {
 		return null;
 	}
 	/* begin socketValueOf: */
-	if ((isBytes(socket, interpreterProxy->interpreterState))
-	 && ((byteSizeOf(socket, interpreterProxy->interpreterState)) == (sizeof(SQSocket)))) {
-		s = ((SocketPtr) (firstIndexableField(socket, interpreterProxy->interpreterState)));
+	if ((isBytes(socket, self))
+	 && ((byteSizeOf(socket, self)) == (sizeof(SQSocket)))) {
+		s = ((SocketPtr) (firstIndexableField(socket, self)));
 	}
 	else {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+		primitiveFailFor(PrimErrBadArgument, self);
 		s = null;
 	}
-	if (failed(interpreterProxy->interpreterState)) {
+	if (failed(self)) {
 		return null;
 	}
-	size = sqSocketLocalAddressSize(s);
-	if (failed(interpreterProxy->interpreterState)) {
+	size = sqSocketLocalAddressSize(s, self);
+	if (failed(self)) {
 		return null;
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		popthenPush(2, integerObjectOf(size, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		popthenPush(2, integerObjectOf(size, self), self);
 	}
 	return null;
 }
 
 	/* SocketPlugin>>#primitiveSocketLocalPort: */
 EXPORT(sqInt)
-primitiveSocketLocalPort(void)
+primitiveSocketLocalPort(struct foo * self)
 {
 	sqInt port;
 	SocketPtr s;
 	sqInt socket;
 
-	socket = stackValue(0, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	socket = stackValue(0, self);
+	if (failed(self)) {
 		return null;
 	}
 	/* begin socketValueOf: */
-	if ((isBytes(socket, interpreterProxy->interpreterState))
-	 && ((byteSizeOf(socket, interpreterProxy->interpreterState)) == (sizeof(SQSocket)))) {
-		s = ((SocketPtr) (firstIndexableField(socket, interpreterProxy->interpreterState)));
+	if ((isBytes(socket, self))
+	 && ((byteSizeOf(socket, self)) == (sizeof(SQSocket)))) {
+		s = ((SocketPtr) (firstIndexableField(socket, self)));
 	}
 	else {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+		primitiveFailFor(PrimErrBadArgument, self);
 		s = null;
 	}
-	port = sqSocketLocalPort(s);
-	if (!(failed(interpreterProxy->interpreterState))) {
-		popthenPush(2, integerObjectOf(port, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	port = sqSocketLocalPort(s, self);
+	if (!(failed(self))) {
+		popthenPush(2, integerObjectOf(port, self), self);
 	}
 	return null;
 }
 
 	/* SocketPlugin>>#primitiveSocketReceiveDataAvailable: */
 EXPORT(sqInt)
-primitiveSocketReceiveDataAvailable(void)
+primitiveSocketReceiveDataAvailable(struct foo * self)
 {
 	sqInt dataIsAvailable;
 	SocketPtr s;
 	sqInt socket;
 
-	socket = stackValue(0, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	socket = stackValue(0, self);
+	if (failed(self)) {
 		return null;
 	}
 	/* begin socketValueOf: */
-	if ((isBytes(socket, interpreterProxy->interpreterState))
-	 && ((byteSizeOf(socket, interpreterProxy->interpreterState)) == (sizeof(SQSocket)))) {
-		s = ((SocketPtr) (firstIndexableField(socket, interpreterProxy->interpreterState)));
+	if ((isBytes(socket, self))
+	 && ((byteSizeOf(socket, self)) == (sizeof(SQSocket)))) {
+		s = ((SocketPtr) (firstIndexableField(socket, self)));
 	}
 	else {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+		primitiveFailFor(PrimErrBadArgument, self);
 		s = null;
 	}
-	dataIsAvailable = sqSocketReceiveDataAvailable(s);
-	if (!(failed(interpreterProxy->interpreterState))) {
-		popthenPush(2, ((dataIsAvailable) ? trueObject(interpreterProxy->interpreterState) : falseObject(interpreterProxy->interpreterState)), interpreterProxy->interpreterState);
+	dataIsAvailable = sqSocketReceiveDataAvailable(s, self);
+	if (!(failed(self))) {
+		popthenPush(2, ((dataIsAvailable) ? trueObject(self) : falseObject(self)), self);
 	}
 	return null;
 }
 
 	/* SocketPlugin>>#primitiveSocket:receiveDataBuf:start:count: */
 EXPORT(sqInt)
-primitiveSocketReceiveDataBufCount(void)
+primitiveSocketReceiveDataBufCount(struct foo * self)
 {
 	sqInt array;
 	char *arrayBase;
@@ -1850,29 +1850,29 @@ primitiveSocketReceiveDataBufCount(void)
 	sqInt startIndex;
 
 	bytesReceived = 0;
-	if (!((isIntegerObject(stackValue(1, interpreterProxy->interpreterState), interpreterProxy->interpreterState))
-		 && (isIntegerObject(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState)))) {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	if (!((isIntegerObject(stackValue(1, self), self))
+		 && (isIntegerObject(stackValue(0, self), self)))) {
+		primitiveFailFor(PrimErrBadArgument, self);
 		return null;
 	}
-	socket = stackValue(3, interpreterProxy->interpreterState);
-	array = stackValue(2, interpreterProxy->interpreterState);
-	startIndex = stackIntegerValue(1, interpreterProxy->interpreterState);
-	count = stackIntegerValue(0, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	socket = stackValue(3, self);
+	array = stackValue(2, self);
+	startIndex = stackIntegerValue(1, self);
+	count = stackIntegerValue(0, self);
+	if (failed(self)) {
 		return null;
 	}
 	/* begin socketValueOf: */
-	if ((isBytes(socket, interpreterProxy->interpreterState))
-	 && ((byteSizeOf(socket, interpreterProxy->interpreterState)) == (sizeof(SQSocket)))) {
-		s = ((SocketPtr) (firstIndexableField(socket, interpreterProxy->interpreterState)));
+	if ((isBytes(socket, self))
+	 && ((byteSizeOf(socket, self)) == (sizeof(SQSocket)))) {
+		s = ((SocketPtr) (firstIndexableField(socket, self)));
 	}
 	else {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+		primitiveFailFor(PrimErrBadArgument, self);
 		s = null;
 	}
-	success(isWordsOrBytes(array, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	if (isWords(array, interpreterProxy->interpreterState)) {
+	success(isWordsOrBytes(array, self), self);
+	if (isWords(array, self)) {
 		byteSize = 4;
 	}
 	else {
@@ -1880,23 +1880,23 @@ primitiveSocketReceiveDataBufCount(void)
 	}
 	success((startIndex >= 1)
 	 && ((count >= 0)
-	 && (((startIndex + count) - 1) <= (slotSizeOf(array, interpreterProxy->interpreterState)))), interpreterProxy->interpreterState);
-	if (!(failed(interpreterProxy->interpreterState))) {
+	 && (((startIndex + count) - 1) <= (slotSizeOf(array, self)))), self);
+	if (!(failed(self))) {
 
 		/* Note: adjust bufStart for zero-origin indexing */
-		arrayBase = ((char *) (firstIndexableField(array, interpreterProxy->interpreterState)));
+		arrayBase = ((char *) (firstIndexableField(array, self)));
 		bufStart = arrayBase + ((startIndex - 1) * byteSize);
-		bytesReceived = sqSocketReceiveDataBufCount(s, bufStart, count * byteSize);
+		bytesReceived = sqSocketReceiveDataBufCount(s, bufStart, count * byteSize, self);
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		popthenPush(5, integerObjectOf((bytesReceived / byteSize), interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		popthenPush(5, integerObjectOf((bytesReceived / byteSize), self), self);
 	}
 	return null;
 }
 
 	/* SocketPlugin>>#primitiveSocket:receiveUDPDataBuf:start:count: */
 EXPORT(sqInt)
-primitiveSocketReceiveUDPDataBufCount(void)
+primitiveSocketReceiveUDPDataBufCount(struct foo * self)
 {
 	sqInt address;
 	sqInt array;
@@ -1913,29 +1913,29 @@ primitiveSocketReceiveUDPDataBufCount(void)
 	sqInt startIndex;
 
 	results = 0;
-	if (!((isIntegerObject(stackValue(1, interpreterProxy->interpreterState), interpreterProxy->interpreterState))
-		 && (isIntegerObject(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState)))) {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	if (!((isIntegerObject(stackValue(1, self), self))
+		 && (isIntegerObject(stackValue(0, self), self)))) {
+		primitiveFailFor(PrimErrBadArgument, self);
 		return null;
 	}
-	socket = stackValue(3, interpreterProxy->interpreterState);
-	array = stackValue(2, interpreterProxy->interpreterState);
-	startIndex = stackIntegerValue(1, interpreterProxy->interpreterState);
-	count = stackIntegerValue(0, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	socket = stackValue(3, self);
+	array = stackValue(2, self);
+	startIndex = stackIntegerValue(1, self);
+	count = stackIntegerValue(0, self);
+	if (failed(self)) {
 		return null;
 	}
 	/* begin socketValueOf: */
-	if ((isBytes(socket, interpreterProxy->interpreterState))
-	 && ((byteSizeOf(socket, interpreterProxy->interpreterState)) == (sizeof(SQSocket)))) {
-		s = ((SocketPtr) (firstIndexableField(socket, interpreterProxy->interpreterState)));
+	if ((isBytes(socket, self))
+	 && ((byteSizeOf(socket, self)) == (sizeof(SQSocket)))) {
+		s = ((SocketPtr) (firstIndexableField(socket, self)));
 	}
 	else {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+		primitiveFailFor(PrimErrBadArgument, self);
 		s = null;
 	}
-	success(isWordsOrBytes(array, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	if (isWords(array, interpreterProxy->interpreterState)) {
+	success(isWordsOrBytes(array, self), self);
+	if (isWords(array, self)) {
 		elementSize = 4;
 	}
 	else {
@@ -1943,11 +1943,11 @@ primitiveSocketReceiveUDPDataBufCount(void)
 	}
 	success((startIndex >= 1)
 	 && ((count >= 0)
-	 && (((startIndex + count) - 1) <= (slotSizeOf(array, interpreterProxy->interpreterState)))), interpreterProxy->interpreterState);
-	if (!(failed(interpreterProxy->interpreterState))) {
+	 && (((startIndex + count) - 1) <= (slotSizeOf(array, self)))), self);
+	if (!(failed(self))) {
 
 		/* Note: adjust bufStart for zero-origin indexing */
-		arrayBase = ((char *) (firstIndexableField(array, interpreterProxy->interpreterState)));
+		arrayBase = ((char *) (firstIndexableField(array, self)));
 		bufStart = arrayBase + ((startIndex - 1) * elementSize);
 		address = 0;
 		port = 0;
@@ -1955,49 +1955,49 @@ primitiveSocketReceiveUDPDataBufCount(void)
 
 		/* allocate storage for results, remapping newly allocated
 		   oops in case GC happens during allocation */
-		bytesReceived = sqSocketReceiveUDPDataBufCountaddressportmoreFlag(s, bufStart, count * elementSize, (&address), (&port), (&moreFlag));
-		pushRemappableOop(intToNetAddress(address), interpreterProxy->interpreterState);
-		results = instantiateClassindexableSize(classArray(interpreterProxy->interpreterState), 4, interpreterProxy->interpreterState);
-		storePointerofObjectwithValue(0, results, integerObjectOf((bytesReceived / elementSize), interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-		storePointerofObjectwithValue(1, results, popRemappableOop(interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-		storePointerofObjectwithValue(2, results, integerObjectOf(port, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+		bytesReceived = sqSocketReceiveUDPDataBufCountaddressportmoreFlag(s, bufStart, count * elementSize, (&address), (&port), (&moreFlag), self);
+		pushRemappableOop(intToNetAddress(address, self), self);
+		results = instantiateClassindexableSize(classArray(self), 4, self);
+		storePointerofObjectwithValue(0, results, integerObjectOf((bytesReceived / elementSize), self), self);
+		storePointerofObjectwithValue(1, results, popRemappableOop(self), self);
+		storePointerofObjectwithValue(2, results, integerObjectOf(port, self), self);
 		storePointerofObjectwithValue(3, results, (moreFlag
-			? trueObject(interpreterProxy->interpreterState)
-			: falseObject(interpreterProxy->interpreterState)), interpreterProxy->interpreterState);
+			? trueObject(self)
+			: falseObject(self)), self);
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		popthenPush(5, results, interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		popthenPush(5, results, self);
 	}
 	return null;
 }
 
 	/* SocketPlugin>>#primitiveSocketRemoteAddress: */
 EXPORT(sqInt)
-primitiveSocketRemoteAddress(void)
+primitiveSocketRemoteAddress(struct foo * self)
 {
 	sqInt addr;
 	SocketPtr s;
 	sqInt socket;
 	sqInt _return_value;
 
-	socket = stackValue(0, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	socket = stackValue(0, self);
+	if (failed(self)) {
 		return null;
 	}
 	/* begin socketValueOf: */
-	if ((isBytes(socket, interpreterProxy->interpreterState))
-	 && ((byteSizeOf(socket, interpreterProxy->interpreterState)) == (sizeof(SQSocket)))) {
-		s = ((SocketPtr) (firstIndexableField(socket, interpreterProxy->interpreterState)));
+	if ((isBytes(socket, self))
+	 && ((byteSizeOf(socket, self)) == (sizeof(SQSocket)))) {
+		s = ((SocketPtr) (firstIndexableField(socket, self)));
 	}
 	else {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+		primitiveFailFor(PrimErrBadArgument, self);
 		s = null;
 	}
-	addr = sqSocketRemoteAddress(s);
-	if (!(failed(interpreterProxy->interpreterState))) {
-		_return_value = intToNetAddress(addr);
-		if (!(failed(interpreterProxy->interpreterState))) {
-			popthenPush(2, _return_value, interpreterProxy->interpreterState);
+	addr = sqSocketRemoteAddress(s, self);
+	if (!(failed(self))) {
+		_return_value = intToNetAddress(addr, self);
+		if (!(failed(self))) {
+			popthenPush(2, _return_value, self);
 		}
 	}
 	return null;
@@ -2005,7 +2005,7 @@ primitiveSocketRemoteAddress(void)
 
 	/* SocketPlugin>>#primitiveSocket:remoteAddressResult: */
 EXPORT(sqInt)
-primitiveSocketRemoteAddressResult(void)
+primitiveSocketRemoteAddressResult(struct foo * self)
 {
 	char *addrBase;
 	sqInt addrSize;
@@ -2013,96 +2013,96 @@ primitiveSocketRemoteAddressResult(void)
 	sqInt socket;
 	sqInt socketAddress;
 
-	socket = stackValue(1, interpreterProxy->interpreterState);
-	socketAddress = stackValue(0, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	socket = stackValue(1, self);
+	socketAddress = stackValue(0, self);
+	if (failed(self)) {
 		return null;
 	}
 	/* begin socketValueOf: */
-	if ((isBytes(socket, interpreterProxy->interpreterState))
-	 && ((byteSizeOf(socket, interpreterProxy->interpreterState)) == (sizeof(SQSocket)))) {
-		s = ((SocketPtr) (firstIndexableField(socket, interpreterProxy->interpreterState)));
+	if ((isBytes(socket, self))
+	 && ((byteSizeOf(socket, self)) == (sizeof(SQSocket)))) {
+		s = ((SocketPtr) (firstIndexableField(socket, self)));
 	}
 	else {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+		primitiveFailFor(PrimErrBadArgument, self);
 		s = null;
 	}
-	addrSize = byteSizeOf(socketAddress, interpreterProxy->interpreterState);
-	addrBase = ((char *) (firstIndexableField(socketAddress, interpreterProxy->interpreterState)));
-	if (!(failed(interpreterProxy->interpreterState))) {
-		sqSocketRemoteAddressResultSize(s, addrBase, addrSize);
+	addrSize = byteSizeOf(socketAddress, self);
+	addrBase = ((char *) (firstIndexableField(socketAddress, self)));
+	if (!(failed(self))) {
+		sqSocketRemoteAddressResultSize(s, addrBase, addrSize, self);
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		pop(2, interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		pop(2, self);
 	}
 	return null;
 }
 
 	/* SocketPlugin>>#primitiveSocketRemoteAddressSize: */
 EXPORT(sqInt)
-primitiveSocketRemoteAddressSize(void)
+primitiveSocketRemoteAddressSize(struct foo * self)
 {
 	SocketPtr s;
 	sqInt size;
 	sqInt socket;
 
-	socket = stackValue(0, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	socket = stackValue(0, self);
+	if (failed(self)) {
 		return null;
 	}
 	/* begin socketValueOf: */
-	if ((isBytes(socket, interpreterProxy->interpreterState))
-	 && ((byteSizeOf(socket, interpreterProxy->interpreterState)) == (sizeof(SQSocket)))) {
-		s = ((SocketPtr) (firstIndexableField(socket, interpreterProxy->interpreterState)));
+	if ((isBytes(socket, self))
+	 && ((byteSizeOf(socket, self)) == (sizeof(SQSocket)))) {
+		s = ((SocketPtr) (firstIndexableField(socket, self)));
 	}
 	else {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+		primitiveFailFor(PrimErrBadArgument, self);
 		s = null;
 	}
-	if (failed(interpreterProxy->interpreterState)) {
+	if (failed(self)) {
 		return null;
 	}
-	size = sqSocketRemoteAddressSize(s);
-	if (failed(interpreterProxy->interpreterState)) {
+	size = sqSocketRemoteAddressSize(s, self);
+	if (failed(self)) {
 		return null;
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		popthenPush(2, integerObjectOf(size, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		popthenPush(2, integerObjectOf(size, self), self);
 	}
 	return null;
 }
 
 	/* SocketPlugin>>#primitiveSocketRemotePort: */
 EXPORT(sqInt)
-primitiveSocketRemotePort(void)
+primitiveSocketRemotePort(struct foo * self)
 {
 	sqInt port;
 	SocketPtr s;
 	sqInt socket;
 
-	socket = stackValue(0, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	socket = stackValue(0, self);
+	if (failed(self)) {
 		return null;
 	}
 	/* begin socketValueOf: */
-	if ((isBytes(socket, interpreterProxy->interpreterState))
-	 && ((byteSizeOf(socket, interpreterProxy->interpreterState)) == (sizeof(SQSocket)))) {
-		s = ((SocketPtr) (firstIndexableField(socket, interpreterProxy->interpreterState)));
+	if ((isBytes(socket, self))
+	 && ((byteSizeOf(socket, self)) == (sizeof(SQSocket)))) {
+		s = ((SocketPtr) (firstIndexableField(socket, self)));
 	}
 	else {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+		primitiveFailFor(PrimErrBadArgument, self);
 		s = null;
 	}
-	port = sqSocketRemotePort(s);
-	if (!(failed(interpreterProxy->interpreterState))) {
-		popthenPush(2, integerObjectOf(port, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	port = sqSocketRemotePort(s, self);
+	if (!(failed(self))) {
+		popthenPush(2, integerObjectOf(port, self), self);
 	}
 	return null;
 }
 
 	/* SocketPlugin>>#primitiveSocket:sendData:start:count: */
 EXPORT(sqInt)
-primitiveSocketSendDataBufCount(void)
+primitiveSocketSendDataBufCount(struct foo * self)
 {
 	sqInt array;
 	char *arrayBase;
@@ -2115,29 +2115,29 @@ primitiveSocketSendDataBufCount(void)
 	sqInt startIndex;
 
 	bytesSent = 0;
-	if (!((isIntegerObject(stackValue(1, interpreterProxy->interpreterState), interpreterProxy->interpreterState))
-		 && (isIntegerObject(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState)))) {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	if (!((isIntegerObject(stackValue(1, self), self))
+		 && (isIntegerObject(stackValue(0, self), self)))) {
+		primitiveFailFor(PrimErrBadArgument, self);
 		return null;
 	}
-	socket = stackValue(3, interpreterProxy->interpreterState);
-	array = stackValue(2, interpreterProxy->interpreterState);
-	startIndex = stackIntegerValue(1, interpreterProxy->interpreterState);
-	count = stackIntegerValue(0, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	socket = stackValue(3, self);
+	array = stackValue(2, self);
+	startIndex = stackIntegerValue(1, self);
+	count = stackIntegerValue(0, self);
+	if (failed(self)) {
 		return null;
 	}
 	/* begin socketValueOf: */
-	if ((isBytes(socket, interpreterProxy->interpreterState))
-	 && ((byteSizeOf(socket, interpreterProxy->interpreterState)) == (sizeof(SQSocket)))) {
-		s = ((SocketPtr) (firstIndexableField(socket, interpreterProxy->interpreterState)));
+	if ((isBytes(socket, self))
+	 && ((byteSizeOf(socket, self)) == (sizeof(SQSocket)))) {
+		s = ((SocketPtr) (firstIndexableField(socket, self)));
 	}
 	else {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+		primitiveFailFor(PrimErrBadArgument, self);
 		s = null;
 	}
-	success(isWordsOrBytes(array, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	if (isWords(array, interpreterProxy->interpreterState)) {
+	success(isWordsOrBytes(array, self), self);
+	if (isWords(array, self)) {
 		byteSize = 4;
 	}
 	else {
@@ -2145,51 +2145,51 @@ primitiveSocketSendDataBufCount(void)
 	}
 	success((startIndex >= 1)
 	 && ((count >= 0)
-	 && (((startIndex + count) - 1) <= (slotSizeOf(array, interpreterProxy->interpreterState)))), interpreterProxy->interpreterState);
-	if (!(failed(interpreterProxy->interpreterState))) {
+	 && (((startIndex + count) - 1) <= (slotSizeOf(array, self)))), self);
+	if (!(failed(self))) {
 
 		/* Note: adjust bufStart for zero-origin indexing */
-		arrayBase = ((char *) (firstIndexableField(array, interpreterProxy->interpreterState)));
+		arrayBase = ((char *) (firstIndexableField(array, self)));
 		bufStart = arrayBase + ((startIndex - 1) * byteSize);
-		bytesSent = sqSocketSendDataBufCount(s, bufStart, count * byteSize);
+		bytesSent = sqSocketSendDataBufCount(s, bufStart, count * byteSize, self);
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		popthenPush(5, integerObjectOf((bytesSent / byteSize), interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		popthenPush(5, integerObjectOf((bytesSent / byteSize), self), self);
 	}
 	return null;
 }
 
 	/* SocketPlugin>>#primitiveSocketSendDone: */
 EXPORT(sqInt)
-primitiveSocketSendDone(void)
+primitiveSocketSendDone(struct foo * self)
 {
 	sqInt done;
 	SocketPtr s;
 	sqInt socket;
 
-	socket = stackValue(0, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	socket = stackValue(0, self);
+	if (failed(self)) {
 		return null;
 	}
 	/* begin socketValueOf: */
-	if ((isBytes(socket, interpreterProxy->interpreterState))
-	 && ((byteSizeOf(socket, interpreterProxy->interpreterState)) == (sizeof(SQSocket)))) {
-		s = ((SocketPtr) (firstIndexableField(socket, interpreterProxy->interpreterState)));
+	if ((isBytes(socket, self))
+	 && ((byteSizeOf(socket, self)) == (sizeof(SQSocket)))) {
+		s = ((SocketPtr) (firstIndexableField(socket, self)));
 	}
 	else {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+		primitiveFailFor(PrimErrBadArgument, self);
 		s = null;
 	}
-	done = sqSocketSendDone(s);
-	if (!(failed(interpreterProxy->interpreterState))) {
-		popthenPush(2, ((done) ? trueObject(interpreterProxy->interpreterState) : falseObject(interpreterProxy->interpreterState)), interpreterProxy->interpreterState);
+	done = sqSocketSendDone(s, self);
+	if (!(failed(self))) {
+		popthenPush(2, ((done) ? trueObject(self) : falseObject(self)), self);
 	}
 	return null;
 }
 
 	/* SocketPlugin>>#primitiveSocket:sendUDPData:toHost:port:start:count: */
 EXPORT(sqInt)
-primitiveSocketSendUDPDataBufCount(void)
+primitiveSocketSendUDPDataBufCount(struct foo * self)
 {
 	sqInt address;
 	sqInt array;
@@ -2206,33 +2206,33 @@ primitiveSocketSendUDPDataBufCount(void)
 	sqInt sz;
 
 	bytesSent = 0;
-	if (!((isBytes(stackValue(3, interpreterProxy->interpreterState), interpreterProxy->interpreterState))
-		 && ((isIntegerObject(stackValue(2, interpreterProxy->interpreterState), interpreterProxy->interpreterState))
-		 && ((isIntegerObject(stackValue(1, interpreterProxy->interpreterState), interpreterProxy->interpreterState))
-		 && (isIntegerObject(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState)))))) {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	if (!((isBytes(stackValue(3, self), self))
+		 && ((isIntegerObject(stackValue(2, self), self))
+		 && ((isIntegerObject(stackValue(1, self), self))
+		 && (isIntegerObject(stackValue(0, self), self)))))) {
+		primitiveFailFor(PrimErrBadArgument, self);
 		return null;
 	}
-	socket = stackValue(5, interpreterProxy->interpreterState);
-	array = stackValue(4, interpreterProxy->interpreterState);
-	hostAddress = ((char *) (firstIndexableField(stackValue(3, interpreterProxy->interpreterState), interpreterProxy->interpreterState)));
-	portNumber = stackIntegerValue(2, interpreterProxy->interpreterState);
-	startIndex = stackIntegerValue(1, interpreterProxy->interpreterState);
-	count = stackIntegerValue(0, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	socket = stackValue(5, self);
+	array = stackValue(4, self);
+	hostAddress = ((char *) (firstIndexableField(stackValue(3, self), self)));
+	portNumber = stackIntegerValue(2, self);
+	startIndex = stackIntegerValue(1, self);
+	count = stackIntegerValue(0, self);
+	if (failed(self)) {
 		return null;
 	}
 	/* begin socketValueOf: */
-	if ((isBytes(socket, interpreterProxy->interpreterState))
-	 && ((byteSizeOf(socket, interpreterProxy->interpreterState)) == (sizeof(SQSocket)))) {
-		s = ((SocketPtr) (firstIndexableField(socket, interpreterProxy->interpreterState)));
+	if ((isBytes(socket, self))
+	 && ((byteSizeOf(socket, self)) == (sizeof(SQSocket)))) {
+		s = ((SocketPtr) (firstIndexableField(socket, self)));
 	}
 	else {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+		primitiveFailFor(PrimErrBadArgument, self);
 		s = null;
 	}
-	success(isWordsOrBytes(array, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	if (isWords(array, interpreterProxy->interpreterState)) {
+	success(isWordsOrBytes(array, self), self);
+	if (isWords(array, self)) {
 		byteSize = 4;
 	}
 	else {
@@ -2240,24 +2240,24 @@ primitiveSocketSendUDPDataBufCount(void)
 	}
 	success((startIndex >= 1)
 	 && ((count >= 0)
-	 && (((startIndex + count) - 1) <= (slotSizeOf(array, interpreterProxy->interpreterState)))), interpreterProxy->interpreterState);
-	if (!(failed(interpreterProxy->interpreterState))) {
+	 && (((startIndex + count) - 1) <= (slotSizeOf(array, self)))), self);
+	if (!(failed(self))) {
 
 		/* Note: adjust bufStart for zero-origin indexing */
-		arrayBase = ((char *) (firstIndexableField(array, interpreterProxy->interpreterState)));
+		arrayBase = ((char *) (firstIndexableField(array, self)));
 		bufStart = arrayBase + ((startIndex - 1) * byteSize);
 		/* begin netAddressToInt: */
-		sz = byteSizeOf(((sqInt)(sqIntptr_t)((((unsigned char *) hostAddress))) - BaseHeaderSize), interpreterProxy->interpreterState);
+		sz = byteSizeOf(((sqInt)(sqIntptr_t)((((unsigned char *) hostAddress))) - BaseHeaderSize), self);
 		if (!(sz == 4)) {
-			address = primitiveFail(interpreterProxy->interpreterState);
+			address = primitiveFail(self);
 			goto l1;
 		}
 		address = ((((((unsigned char *) hostAddress))[3]) + (((usqInt)(((((unsigned char *) hostAddress))[2])) << 8))) + (((usqInt)(((((unsigned char *) hostAddress))[1])) << 16))) + (((usqInt)(((((unsigned char *) hostAddress))[0])) << 24));
 	l1:	/* end netAddressToInt: */;
-		bytesSent = sqSockettoHostportSendDataBufCount(s, address, portNumber, bufStart, count * byteSize);
+		bytesSent = sqSockettoHostportSendDataBufCount(s, address, portNumber, bufStart, count * byteSize, self);
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		popthenPush(7, integerObjectOf((bytesSent / byteSize), interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		popthenPush(7, integerObjectOf((bytesSent / byteSize), self), self);
 	}
 	return null;
 }
@@ -2273,7 +2273,7 @@ primitiveSocketSendUDPDataBufCount(void)
 
 	/* SocketPlugin>>#primitiveSocket:setOptions:value: */
 EXPORT(sqInt)
-primitiveSocketSetOptions(void)
+primitiveSocketSetOptions(struct foo * self)
 {
 	sqInt errorCode;
 	sqInt optionName;
@@ -2287,37 +2287,37 @@ primitiveSocketSetOptions(void)
 	SocketPtr s;
 	sqInt socket;
 
-	socket = stackValue(2, interpreterProxy->interpreterState);
-	optionName = stackValue(1, interpreterProxy->interpreterState);
-	optionValue = stackValue(0, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	socket = stackValue(2, self);
+	optionName = stackValue(1, self);
+	optionValue = stackValue(0, self);
+	if (failed(self)) {
 		return null;
 	}
 	/* begin socketValueOf: */
-	if ((isBytes(socket, interpreterProxy->interpreterState))
-	 && ((byteSizeOf(socket, interpreterProxy->interpreterState)) == (sizeof(SQSocket)))) {
-		s = ((SocketPtr) (firstIndexableField(socket, interpreterProxy->interpreterState)));
+	if ((isBytes(socket, self))
+	 && ((byteSizeOf(socket, self)) == (sizeof(SQSocket)))) {
+		s = ((SocketPtr) (firstIndexableField(socket, self)));
 	}
 	else {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+		primitiveFailFor(PrimErrBadArgument, self);
 		s = null;
 	}
-	success(isBytes(optionName, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	optionNameStart = ((char *) (firstIndexableField(optionName, interpreterProxy->interpreterState)));
-	optionNameSize = slotSizeOf(optionName, interpreterProxy->interpreterState);
-	success(isBytes(optionValue, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	optionValueStart = ((char *) (firstIndexableField(optionValue, interpreterProxy->interpreterState)));
-	optionValueSize = slotSizeOf(optionValue, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	success(isBytes(optionName, self), self);
+	optionNameStart = ((char *) (firstIndexableField(optionName, self)));
+	optionNameSize = slotSizeOf(optionName, self);
+	success(isBytes(optionValue, self), self);
+	optionValueStart = ((char *) (firstIndexableField(optionValue, self)));
+	optionValueSize = slotSizeOf(optionValue, self);
+	if (failed(self)) {
 		return null;
 	}
 	returnedValue = 0;
-	errorCode = sqSocketSetOptionsoptionNameStartoptionNameSizeoptionValueStartoptionValueSizereturnedValue(s, optionNameStart, optionNameSize, optionValueStart, optionValueSize, (&returnedValue));
-	results = instantiateClassindexableSize(classArray(interpreterProxy->interpreterState), 2, interpreterProxy->interpreterState);
-	storePointerofObjectwithValue(0, results, integerObjectOf(errorCode, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	storePointerofObjectwithValue(1, results, integerObjectOf(returnedValue, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	if (!(failed(interpreterProxy->interpreterState))) {
-		popthenPush(4, results, interpreterProxy->interpreterState);
+	errorCode = sqSocketSetOptionsoptionNameStartoptionNameSizeoptionValueStartoptionValueSizereturnedValue(s, optionNameStart, optionNameSize, optionValueStart, optionValueSize, (&returnedValue), self);
+	results = instantiateClassindexableSize(classArray(self), 2, self);
+	storePointerofObjectwithValue(0, results, integerObjectOf(errorCode, self), self);
+	storePointerofObjectwithValue(1, results, integerObjectOf(returnedValue, self), self);
+	if (!(failed(self))) {
+		popthenPush(4, results, self);
 	}
 	return null;
 }
@@ -2371,9 +2371,9 @@ setInterpreter(struct VirtualMachine *anInterpreter)
 
 	/* SocketPlugin>>#shutdownModule */
 EXPORT(sqInt)
-shutdownModule(void)
+shutdownModule(struct foo * self)
 {
-	return socketShutdown();
+	return socketShutdown(self);
 }
 
 
@@ -2381,7 +2381,7 @@ shutdownModule(void)
 
 	/* SocketPlugin>>#socketRecordSize */
 static sqInt
-socketRecordSize(void)
+socketRecordSize(struct foo * self)
 {
 	return sizeof(SQSocket);
 }
@@ -2392,18 +2392,18 @@ socketRecordSize(void)
 
 	/* SocketPlugin>>#socketValueOf: */
 static SocketPtr
-socketValueOf(sqInt socketOop)
+socketValueOf(sqInt socketOop, struct foo * self)
 {
-	return ((isBytes(socketOop, interpreterProxy->interpreterState))
-	 && ((byteSizeOf(socketOop, interpreterProxy->interpreterState)) == (sizeof(SQSocket)))
-		? ((SocketPtr) (firstIndexableField(socketOop, interpreterProxy->interpreterState)))
-		: (primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState),
+	return ((isBytes(socketOop, self))
+	 && ((byteSizeOf(socketOop, self)) == (sizeof(SQSocket)))
+		? ((SocketPtr) (firstIndexableField(socketOop, self)))
+		: (primitiveFailFor(PrimErrBadArgument, self),
 			null));
 }
 
 	/* SmartSyntaxInterpreterPlugin>>#sqAssert: */
 static sqInt
-sqAssert(sqInt aBool)
+sqAssert(sqInt aBool, struct foo * self)
 {
 	/* missing DebugCode */;
 	return aBool;

@@ -76,7 +76,7 @@ struct VirtualMachine* interpreterProxy;
 #define isSmallInt(oop) (((oop)&7)==1)
 #define intVal(oop) (((long long)(oop))>>3)
 
-extern void loadFloatRegs(double,double,double,double);
+extern void loadFloatRegs(double,double,double,double, struct foo * self);
 
 typedef union {
     long long i;
@@ -87,7 +87,7 @@ typedef union {
  * Call a foreign function that answers an integral result in %rax
  * according to x64-ish ABI rules.
  */
-sqInt callIA32IntegralReturn(SIGNATURE) {
+sqInt callIA32IntegralReturn(SIGNATURE, struct foo * self) {
     long long (*f0)(long long rcx, long long rdx, long long r8, long long r9);
     long long (*f1)(double   xmm0, long long rdx, long long r8, long long r9);
     long long (*f2)(long long rcx, double   xmm1, long long r8, long long r9);
@@ -112,7 +112,7 @@ sqInt callIA32IntegralReturn(SIGNATURE) {
  * Call a foreign function that answers a single-precision floating-point
  * result in %xmm0 according to x64-ish ABI rules.
  */
-sqInt callIA32FloatReturn(SIGNATURE) {
+sqInt callIA32FloatReturn(SIGNATURE, struct foo * self) {
     float (*f0)(long long rcx, long long rdx, long long r8, long long r9);
     float (*f1)(double   xmm0, long long rdx, long long r8, long long r9);
     float (*f2)(long long rcx, double   xmm1, long long r8, long long r9);
@@ -137,7 +137,7 @@ sqInt callIA32FloatReturn(SIGNATURE) {
  * Call a foreign function that answers a double-precision floating-point
  * result in %xmm0 according to x64-ish ABI rules.
  */
-sqInt callIA32DoubleReturn(SIGNATURE) {
+sqInt callIA32DoubleReturn(SIGNATURE, struct foo * self) {
     double (*f0)(long long rcx, long long rdx, long long r8, long long r9);
     double (*f1)(double   xmm0, long long rdx, long long r8, long long r9);
     double (*f2)(long long rcx, double   xmm1, long long r8, long long r9);
@@ -166,8 +166,7 @@ sqInt callIA32DoubleReturn(SIGNATURE) {
  */
 static VMCallbackContext *mostRecentCallbackContext = 0;
 
-VMCallbackContext *
-getMostRecentCallbackContext() { return mostRecentCallbackContext; }
+VMCallbackContext *getMostRecentCallbackContext(struct foo * self) { return mostRecentCallbackContext; }
 
 #define getMRCC()   mostRecentCallbackContext
 #define setMRCC(t) (mostRecentCallbackContext = (void *)(t))
@@ -214,7 +213,7 @@ thunkEntry(long long rcx, long long rdx,
 extern void saveFloatRegsWin64(long long xmm0,long long xmm1,long long xmm2, long long xmm3,double *fpargs); /* fake passing long long args */
     saveFloatRegsWin64(rcx,rdx,r8,r9,fpargs); /* the callee expects double parameters that it will retrieve thru registers */
 
-	if ((flags = interpreterProxy->ownVM(0, interpreterProxy->interpreterState)) < 0) {
+	if ((flags = interpreterProxy->ownVM(0, self)) < 0) {
 		fprintf(stderr,"Warning; callback failed to own the VM\n");
 		return -1;
 	}
@@ -226,14 +225,14 @@ extern void saveFloatRegsWin64(long long xmm0,long long xmm1,long long xmm2, lon
 		vmcc.stackp = stackp + 2; /* skip address of retpc & retpc (thunk) */
 		vmcc.intregargsp = intargs;
 		vmcc.floatregargsp = fpargs;
-		interpreterProxy->sendInvokeCallbackContext(&vmcc, interpreterProxy->interpreterState);
+		interpreterProxy->sendInvokeCallbackContext(&vmcc, self);
 		fprintf(stderr,"Warning; callback failed to invoke\n");
 		setMRCC(previousCallbackContext);
-		interpreterProxy->disownVM(flags, interpreterProxy->interpreterState);
+		interpreterProxy->disownVM(flags, self);
 		return -1;
 	}
 	setMRCC(previousCallbackContext);
-	interpreterProxy->disownVM(flags, interpreterProxy->interpreterState);
+	interpreterProxy->disownVM(flags, self);
 
 	switch (returnType) {
 
@@ -269,8 +268,7 @@ extern void saveFloatRegsWin64(long long xmm0,long long xmm1,long long xmm2, lon
 static unsigned long pagesize = 0;
 #endif
 
-void *
-allocateExecutablePage(long *size)
+void *allocateExecutablePage(long *size)
 {
 	void *mem;
 

@@ -550,7 +550,7 @@ usqInt genericCompareColors(const compare_operation_t *op, usqInt log2bppA, usqI
     return count;
 }
 
-void addGenericFastPaths(void)
+void addGenericFastPaths(void)
 {
     unsigned int i;
 	addFastPaths(fastPaths, sizeof fastPaths / sizeof *fastPaths);

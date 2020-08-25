@@ -38,16 +38,16 @@ static char __buildInfo[] = "DSAPlugin CryptographyPlugins-eem.14 uuid: 54292ff0
 
 
 /*** Function Prototypes ***/
-static sqInt addBackDivisorDigitShift(sqInt digitShift);
-static sqInt bigDivideLoop(void);
+static sqInt addBackDivisorDigitShift(sqInt digitShift, struct foo * self);
+static sqInt bigDivideLoop(struct foo * self);
 EXPORT(const char*) getModuleName(void);
-static unsigned int leftRotateby(unsigned int anInteger, sqInt bits);
-EXPORT(sqInt) primitiveBigDivide(void);
-EXPORT(sqInt) primitiveBigMultiply(void);
-EXPORT(sqInt) primitiveExpandBlock(void);
-EXPORT(sqInt) primitiveHashBlock(void);
-EXPORT(sqInt) primitiveHasSecureHashPrimitive(void);
-EXPORT(sqInt) primitiveHighestNonZeroDigitIndex(void);
+static unsigned int leftRotateby(unsigned int anInteger, sqInt bits, struct foo * self);
+EXPORT(sqInt) primitiveBigDivide(struct foo * self);
+EXPORT(sqInt) primitiveBigMultiply(struct foo * self);
+EXPORT(sqInt) primitiveExpandBlock(struct foo * self);
+EXPORT(sqInt) primitiveHashBlock(struct foo * self);
+EXPORT(sqInt) primitiveHasSecureHashPrimitive(struct foo * self);
+EXPORT(sqInt) primitiveHighestNonZeroDigitIndex(struct foo * self);
 EXPORT(sqInt) setInterpreter(struct VirtualMachine *anInterpreter);
 static sqInt subtractDivisorMultipliedByDigitdigitShift(sqInt digit, sqInt digitShift);
 
@@ -102,8 +102,7 @@ static sqInt remainderDigitCount;
  */
 
 	/* DSAPlugin>>#addBackDivisorDigitShift: */
-static sqInt
-addBackDivisorDigitShift(sqInt digitShift)
+static sqIntaddBackDivisorDigitShift(sqInt digitShift, struct foo * self)
 {
     sqInt carry;
     sqInt i;
@@ -140,8 +139,7 @@ addBackDivisorDigitShift(sqInt digitShift)
 /*	extract the top two digits of the divisor */
 
 	/* DSAPlugin>>#bigDivideLoop */
-static sqInt
-bigDivideLoop(void)
+static sqIntbigDivideLoop(struct foo * self)
 {
     sqInt borrow;
     sqInt carry;
@@ -261,8 +259,7 @@ getModuleName(void)
  */
 
 	/* DSAPlugin>>#leftRotate:by: */
-static unsigned int
-leftRotateby(unsigned int anInteger, sqInt bits)
+static unsigned intleftRotateby(unsigned int anInteger, sqInt bits, struct foo * self)
 {
 	return (((usqInt)(anInteger) << bits)) | (((usqInt) anInteger) >> (32 - bits));
 }
@@ -275,8 +272,7 @@ leftRotateby(unsigned int anInteger, sqInt bits)
 /*	Assume: quo starts out filled with zeros. */
 
 	/* DSAPlugin>>#primitiveBigDivide */
-EXPORT(sqInt)
-primitiveBigDivide(void)
+EXPORT(sqInt)primitiveBigDivide(struct foo * self)
 {
     sqInt borrow;
     sqInt carry;
@@ -301,22 +297,22 @@ primitiveBigDivide(void)
     sqInt sum;
     unsigned char thirdDigit;
 
-	quo = stackValue(0, interpreterProxy->interpreterState);
-	div = stackValue(1, interpreterProxy->interpreterState);
-	rem = stackValue(2, interpreterProxy->interpreterState);
-	clpi = classLargePositiveInteger(interpreterProxy->interpreterState);
-	if (!(((fetchClassOf(rem, interpreterProxy->interpreterState)) == clpi)
-		 && (((fetchClassOf(div, interpreterProxy->interpreterState)) == clpi)
-		 && ((fetchClassOf(quo, interpreterProxy->interpreterState)) == clpi)))) {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	quo = stackValue(0, self);
+	div = stackValue(1, self);
+	rem = stackValue(2, self);
+	clpi = classLargePositiveInteger(self);
+	if (!(((fetchClassOf(rem, self)) == clpi)
+		 && (((fetchClassOf(div, self)) == clpi)
+		 && ((fetchClassOf(quo, self)) == clpi)))) {
+		primitiveFailFor(PrimErrBadArgument, self);
 	}
-	dsaRemainder = firstIndexableField(rem, interpreterProxy->interpreterState);
-	dsaDivisor = firstIndexableField(div, interpreterProxy->interpreterState);
-	dsaQuotient = firstIndexableField(quo, interpreterProxy->interpreterState);
-	divisorDigitCount = stSizeOf(div, interpreterProxy->interpreterState);
+	dsaRemainder = firstIndexableField(rem, self);
+	dsaDivisor = firstIndexableField(div, self);
+	dsaQuotient = firstIndexableField(quo, self);
+	divisorDigitCount = stSizeOf(div, self);
 
 	/* adjust pointers for base-1 indexing */
-	remainderDigitCount = stSizeOf(rem, interpreterProxy->interpreterState);
+	remainderDigitCount = stSizeOf(rem, self);
 	dsaRemainder -= 1;
 	dsaDivisor -= 1;
 	dsaQuotient -= 1;
@@ -398,7 +394,7 @@ primitiveBigDivide(void)
 		}
 		dsaQuotient[digitShift + 1] = q;
 	}
-	pop(3, interpreterProxy->interpreterState);
+	pop(3, self);
 	return 0;
 }
 
@@ -410,8 +406,7 @@ primitiveBigDivide(void)
 /*	Assume: prod starts out filled with zeros */
 
 	/* DSAPlugin>>#primitiveBigMultiply */
-EXPORT(sqInt)
-primitiveBigMultiply(void)
+EXPORT(sqInt)primitiveBigMultiply(struct foo * self)
 {
     sqInt carry;
     sqInt clpi;
@@ -430,24 +425,24 @@ primitiveBigMultiply(void)
     unsigned char *prodPtr;
     sqInt sum;
 
-	prod = stackValue(0, interpreterProxy->interpreterState);
-	f2 = stackValue(1, interpreterProxy->interpreterState);
-	f1 = stackValue(2, interpreterProxy->interpreterState);
-	clpi = classLargePositiveInteger(interpreterProxy->interpreterState);
-	if (!(((fetchClassOf(prod, interpreterProxy->interpreterState)) == clpi)
-		 && (((fetchClassOf(f2, interpreterProxy->interpreterState)) == clpi)
-		 && ((fetchClassOf(f1, interpreterProxy->interpreterState)) == clpi)))) {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	prod = stackValue(0, self);
+	f2 = stackValue(1, self);
+	f1 = stackValue(2, self);
+	clpi = classLargePositiveInteger(self);
+	if (!(((fetchClassOf(prod, self)) == clpi)
+		 && (((fetchClassOf(f2, self)) == clpi)
+		 && ((fetchClassOf(f1, self)) == clpi)))) {
+		primitiveFailFor(PrimErrBadArgument, self);
 	}
-	prodLen = stSizeOf(prod, interpreterProxy->interpreterState);
-	f1Len = stSizeOf(f1, interpreterProxy->interpreterState);
-	f2Len = stSizeOf(f2, interpreterProxy->interpreterState);
+	prodLen = stSizeOf(prod, self);
+	f1Len = stSizeOf(f1, self);
+	f2Len = stSizeOf(f2, self);
 	if (!(prodLen == (f1Len + f2Len))) {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+		primitiveFailFor(PrimErrBadArgument, self);
 	}
-	prodPtr = firstIndexableField(prod, interpreterProxy->interpreterState);
-	f2Ptr = firstIndexableField(f2, interpreterProxy->interpreterState);
-	f1Ptr = firstIndexableField(f1, interpreterProxy->interpreterState);
+	prodPtr = firstIndexableField(prod, self);
+	f2Ptr = firstIndexableField(f2, self);
+	f1Ptr = firstIndexableField(f1, self);
 	for (i = 0; i < f1Len; i += 1) {
 		if (((digit = f1Ptr[i])) != 0) {
 			carry = 0;
@@ -463,7 +458,7 @@ primitiveBigMultiply(void)
 			prodPtr[k] = carry;
 		}
 	}
-	pop(3, interpreterProxy->interpreterState);
+	pop(3, self);
 	return 0;
 }
 
@@ -475,8 +470,7 @@ primitiveBigMultiply(void)
  */
 
 	/* DSAPlugin>>#primitiveExpandBlock */
-EXPORT(sqInt)
-primitiveExpandBlock(void)
+EXPORT(sqInt)primitiveExpandBlock(struct foo * self)
 {
     sqInt buf;
     unsigned char *bytePtr;
@@ -486,16 +480,16 @@ primitiveExpandBlock(void)
     unsigned int v;
     unsigned int *wordPtr;
 
-	expanded = stackValue(0, interpreterProxy->interpreterState);
-	buf = stackValue(1, interpreterProxy->interpreterState);
-	if (!((isWords(expanded, interpreterProxy->interpreterState))
-		 && ((isBytes(buf, interpreterProxy->interpreterState))
-		 && (((stSizeOf(expanded, interpreterProxy->interpreterState)) == 80)
-		 && ((stSizeOf(buf, interpreterProxy->interpreterState)) == 64))))) {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	expanded = stackValue(0, self);
+	buf = stackValue(1, self);
+	if (!((isWords(expanded, self))
+		 && ((isBytes(buf, self))
+		 && (((stSizeOf(expanded, self)) == 80)
+		 && ((stSizeOf(buf, self)) == 64))))) {
+		primitiveFailFor(PrimErrBadArgument, self);
 	}
-	wordPtr = firstIndexableField(expanded, interpreterProxy->interpreterState);
-	bytePtr = firstIndexableField(buf, interpreterProxy->interpreterState);
+	wordPtr = firstIndexableField(expanded, self);
+	bytePtr = firstIndexableField(buf, self);
 	src = 0;
 	for (i = 0; i <= 15; i += 1) {
 		v = (((((usqInt)((bytePtr[src])) << 24)) + (((usqInt)((bytePtr[src + 1])) << 16))) + (((usqInt)((bytePtr[src + 2])) << 8))) + (bytePtr[src + 3]);
@@ -508,7 +502,7 @@ primitiveExpandBlock(void)
 		v = (((usqInt)(v) << 1)) | (((usqInt) v) >> (32 - 1));
 		wordPtr[i] = v;
 	}
-	pop(2, interpreterProxy->interpreterState);
+	pop(2, self);
 	return 0;
 }
 
@@ -518,8 +512,7 @@ primitiveExpandBlock(void)
  */
 
 	/* DSAPlugin>>#primitiveHashBlock */
-EXPORT(sqInt)
-primitiveHashBlock(void)
+EXPORT(sqInt)primitiveHashBlock(struct foo * self)
 {
     unsigned int a;
     unsigned int b;
@@ -533,16 +526,16 @@ primitiveHashBlock(void)
     unsigned int *statePtr;
     unsigned int tmp;
 
-	state = stackValue(0, interpreterProxy->interpreterState);
-	buf = stackValue(1, interpreterProxy->interpreterState);
-	if (!((isWords(state, interpreterProxy->interpreterState))
-		 && ((isWords(buf, interpreterProxy->interpreterState))
-		 && (((stSizeOf(state, interpreterProxy->interpreterState)) == 5)
-		 && ((stSizeOf(buf, interpreterProxy->interpreterState)) == 80))))) {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	state = stackValue(0, self);
+	buf = stackValue(1, self);
+	if (!((isWords(state, self))
+		 && ((isWords(buf, self))
+		 && (((stSizeOf(state, self)) == 5)
+		 && ((stSizeOf(buf, self)) == 80))))) {
+		primitiveFailFor(PrimErrBadArgument, self);
 	}
-	statePtr = firstIndexableField(state, interpreterProxy->interpreterState);
-	bufPtr = firstIndexableField(buf, interpreterProxy->interpreterState);
+	statePtr = firstIndexableField(state, self);
+	bufPtr = firstIndexableField(buf, self);
 	a = statePtr[0];
 	b = statePtr[1];
 	c = statePtr[2];
@@ -589,7 +582,7 @@ primitiveHashBlock(void)
 	statePtr[2] = ((statePtr[2]) + c);
 	statePtr[3] = ((statePtr[3]) + d);
 	statePtr[4] = ((statePtr[4]) + e);
-	pop(2, interpreterProxy->interpreterState);
+	pop(2, self);
 	return 0;
 }
 
@@ -597,11 +590,10 @@ primitiveHashBlock(void)
 /*	Answer true if the secure hash primitive is implemented. */
 
 	/* DSAPlugin>>#primitiveHasSecureHashPrimitive */
-EXPORT(sqInt)
-primitiveHasSecureHashPrimitive(void)
+EXPORT(sqInt)primitiveHasSecureHashPrimitive(struct foo * self)
 {
-	pop(1, interpreterProxy->interpreterState);
-	pushBool(1, interpreterProxy->interpreterState);
+	pop(1, self);
+	pushBool(1, self);
 	return 0;
 }
 
@@ -611,24 +603,23 @@ primitiveHasSecureHashPrimitive(void)
  */
 
 	/* DSAPlugin>>#primitiveHighestNonZeroDigitIndex */
-EXPORT(sqInt)
-primitiveHighestNonZeroDigitIndex(void)
+EXPORT(sqInt)primitiveHighestNonZeroDigitIndex(struct foo * self)
 {
     sqInt arg;
     unsigned char *bigIntPtr;
     sqInt i;
 
-	arg = stackValue(0, interpreterProxy->interpreterState);
-	if (!((fetchClassOf(arg, interpreterProxy->interpreterState)) == (classLargePositiveInteger(interpreterProxy->interpreterState)))) {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	arg = stackValue(0, self);
+	if (!((fetchClassOf(arg, self)) == (classLargePositiveInteger(self)))) {
+		primitiveFailFor(PrimErrBadArgument, self);
 	}
-	bigIntPtr = firstIndexableField(arg, interpreterProxy->interpreterState);
-	i = stSizeOf(arg, interpreterProxy->interpreterState);
+	bigIntPtr = firstIndexableField(arg, self);
+	i = stSizeOf(arg, self);
 	while ((i > 0)
 	 && ((bigIntPtr[(i -= 1)]) == 0)) {
 	}
-	pop(1, interpreterProxy->interpreterState);
-	pushInteger(i + 1, interpreterProxy->interpreterState);
+	pop(1, self);
+	pushInteger(i + 1, self);
 	return 0;
 }
 
@@ -671,8 +662,7 @@ setInterpreter(struct VirtualMachine *anInterpreter)
  */
 
 	/* DSAPlugin>>#subtractDivisorMultipliedByDigit:digitShift: */
-static sqInt
-subtractDivisorMultipliedByDigitdigitShift(sqInt digit, sqInt digitShift)
+static sqIntsubtractDivisorMultipliedByDigitdigitShift(sqInt digit, sqInt digitShift)
 {
     sqInt borrow;
     sqInt i;

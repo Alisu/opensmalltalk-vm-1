@@ -32,7 +32,7 @@
 
 /* There is no OS-neutral way of determining which type of ARM this is */
 
-arm_cpu_features_t detectCpuFeatures(void)
+arm_cpu_features_t detectCpuFeatures(void)
 {
 	return 0;
 }

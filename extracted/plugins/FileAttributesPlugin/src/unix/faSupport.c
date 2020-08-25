@@ -13,13 +13,14 @@
 extern struct VirtualMachine * interpreterProxy;
 
 
-sqInt faSetStDir(fapath *aFaPath, char *pathName, int len)
+sqInt 
+faSetStDir(fapath *aFaPath, char *pathName, int len, struct foo * self)
 {
 sqInt	status;
 
 	/* Set the St encoded path and ensure trailing delimiter */
 	if (len+1 >= FA_PATH_MAX)
-		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG, interpreterProxy->interpreterState);
+		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG, self);
 	memcpy(aFaPath->path, pathName, len);
 	if (aFaPath->path[len-1] != PATH_SEPARATOR)
 		aFaPath->path[len++] = PATH_SEPARATOR;
@@ -31,7 +32,7 @@ sqInt	status;
 	/* Convert to platform specific form */
 	status = sq2uxPath(aFaPath->path, len, aFaPath->uxpath, FA_PATH_MAX, 1);
 	if (!status)
-		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG, interpreterProxy->interpreterState);
+		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG, self);
 	/* Set aFaPath->uxpath_file and max_file_len to the buffer after the directory */
 	aFaPath->uxpath_len = strlen(aFaPath->uxpath);
 	aFaPath->uxpath_file = aFaPath->uxpath + aFaPath->uxpath_len;
@@ -42,13 +43,14 @@ sqInt	status;
 
 
 
-sqInt faSetStPath(fapath *aFaPath, char *pathName, int len)
+sqInt 
+faSetStPath(fapath *aFaPath, char *pathName, int len, struct foo * self)
 {
 sqInt	status;
 
 	/* Set the St encoded path */
 	if (len >= FA_PATH_MAX)
-		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG, interpreterProxy->interpreterState);
+		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG, self);
 	memcpy(aFaPath->path, pathName, len);
 	aFaPath->path[len] = 0;
 	aFaPath->path_len = len;
@@ -58,7 +60,7 @@ sqInt	status;
 	/* Convert to platform specific form */
 	status = sq2uxPath(aFaPath->path, len, aFaPath->uxpath, FA_PATH_MAX, 1);
 	if (!status)
-		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG, interpreterProxy->interpreterState);
+		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG, self);
 	/* Set aFaPath->uxpath_file and max_file_len to the buffer after the directory */
 	aFaPath->uxpath_len = strlen(aFaPath->uxpath);
 	aFaPath->uxpath_file = 0;
@@ -69,7 +71,8 @@ sqInt	status;
 
 
 
-sqInt faSetStFile(fapath *aFaPath, char *pathName)
+sqInt 
+faSetStFile(fapath *aFaPath, char *pathName, struct foo * self)
 {
 int		len;
 sqInt	status;
@@ -78,20 +81,21 @@ sqInt	status;
 	/* Set the St encoded path */
 	len = strlen(pathName);
 	if (len >= aFaPath->max_file_len)
-		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG, interpreterProxy->interpreterState);
+		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG, self);
 	strcpy(aFaPath->path_file, pathName);
 
 	/* Convert to platform specific form */
 	status = sq2uxPath(aFaPath->path_file, len, aFaPath->uxpath_file, aFaPath->uxmax_file_len, 1);
 	if (!status)
-		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG, interpreterProxy->interpreterState);
+		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG, self);
 
 	return 0;
 }
 
 
 
-sqInt faSetPlatPath(fapath *aFaPath, char *pathName)
+sqInt 
+faSetPlatPath(fapath *aFaPath, char *pathName, struct foo * self)
 {
 int		len;
 sqInt	status;
@@ -99,7 +103,7 @@ sqInt	status;
 	/* Set the platform encoded path */
 	len = strlen(pathName);
 	if (len >= FA_PATH_MAX)
-		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG, interpreterProxy->interpreterState);
+		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG, self);
 	strcpy(aFaPath->uxpath, pathName);
 	aFaPath->uxpath[len] = 0;
 	aFaPath->uxpath_len = len;
@@ -109,7 +113,7 @@ sqInt	status;
 	/* Convert to St specific form */
 	status = ux2sqPath(aFaPath->uxpath, len, aFaPath->path, FA_PATH_MAX, 1);
 	if (!status)
-		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG, interpreterProxy->interpreterState);
+		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG, self);
 	/* Set aFaPath->uxpath_file and max_file_len to the buffer after the directory */
 	aFaPath->path_len = strlen(aFaPath->path);
 	aFaPath->path_file = 0;
@@ -120,16 +124,17 @@ sqInt	status;
 
 
 
-sqInt faSetPlatPathOop(fapath *aFaPath, sqInt pathNameOop)
+sqInt 
+faSetPlatPathOop(fapath *aFaPath, sqInt pathNameOop, struct foo * self)
 {
 int	len;
 char	*bytePtr;
 sqInt	status;
 
-	len = interpreterProxy->stSizeOf(pathNameOop, interpreterProxy->interpreterState);
-	bytePtr = interpreterProxy->arrayValueOf(pathNameOop, interpreterProxy->interpreterState);
+	len = interpreterProxy->stSizeOf(pathNameOop, self);
+	bytePtr = interpreterProxy->arrayValueOf(pathNameOop, self);
 	if (len >= FA_PATH_MAX)
-		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG, interpreterProxy->interpreterState);
+		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG, self);
 	memcpy(aFaPath->uxpath, bytePtr, len);
 	aFaPath->uxpath[len] = 0;
 	aFaPath->uxpath_len = len;
@@ -139,7 +144,7 @@ sqInt	status;
 	/* Convert to St specific form */
 	status = ux2sqPath(aFaPath->uxpath, len, aFaPath->path, FA_PATH_MAX, 1);
 	if (!status)
-		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG, interpreterProxy->interpreterState);
+		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG, self);
 	/* Set aFaPath->uxpath_file and max_file_len to the buffer after the directory */
 	aFaPath->path_len = strlen(aFaPath->path);
 	aFaPath->path_file = 0;
@@ -150,7 +155,8 @@ sqInt	status;
 
 
 
-sqInt faSetPlatFile(fapath *aFaPath, char *pathName)
+sqInt 
+faSetPlatFile(fapath *aFaPath, char *pathName, struct foo * self)
 {
 int		len;
 sqInt	status;
@@ -159,13 +165,13 @@ sqInt	status;
 	/* Set the platform encoded file name */
 	len = strlen(pathName);
 	if (len >= aFaPath->uxmax_file_len)
-		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG, interpreterProxy->interpreterState);
+		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG, self);
 	strcpy(aFaPath->uxpath_file, pathName);
 
 	/* Convert to St specific form */
 	status = ux2sqPath(aFaPath->uxpath_file, len, aFaPath->path_file, aFaPath->max_file_len, 1);
 	if (!status)
-		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG, interpreterProxy->interpreterState);
+		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG, self);
 
 	return 0;
 }
@@ -207,7 +213,8 @@ sqLong	squeakTime;
  * Convert the supplied platform encoded C string to a 
  * precomposed UTF8 ByteArray.
  */
-sqInt pathNameToOop(char *pathName)
+sqInt 
+pathNameToOop(char *pathName, struct foo * self)
 {
 sqInt	pathOop;
 int		status;
@@ -216,13 +223,13 @@ char	uxName[FA_PATH_MAX];
 
 	len = strlen(pathName);
 	if (len >= FA_PATH_MAX)
-   		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG, interpreterProxy->interpreterState);
+   		return interpreterProxy->primitiveFailForOSError(FA_STRING_TOO_LONG, self);
 	status = ux2sqPath(pathName, len, uxName, FA_PATH_MAX, 1);
 	if (!status)
-		return interpreterProxy->primitiveFailForOSError(FA_INVALID_ARGUMENTS, interpreterProxy->interpreterState);
-	status = faCharToByteArray(uxName, &pathOop);
+		return interpreterProxy->primitiveFailForOSError(FA_INVALID_ARGUMENTS, self);
+	status = faCharToByteArray(uxName, &pathOop, self);
 	if (status)
-		return interpreterProxy->primitiveFailForOSError(status, interpreterProxy->interpreterState);
+		return interpreterProxy->primitiveFailForOSError(status, self);
 	return pathOop;
 }
 
@@ -240,7 +247,8 @@ char	uxName[FA_PATH_MAX];
  * If there are no entries, close the directory and return FA_NO_MORE_DATA
  */
 
-sqInt faOpenDirectory(fapath *aFaPath)
+sqInt 
+faOpenDirectory(fapath *aFaPath, struct foo * self)
 {
 sqInt	rstatus, cstatus;
 
@@ -249,9 +257,9 @@ sqInt	rstatus, cstatus;
 	if (aFaPath->platformDir == NULL)
 		return FA_CANT_OPEN_DIR;
 
-	rstatus = faReadDirectory(aFaPath);
+	rstatus = faReadDirectory(aFaPath, self);
 	if (rstatus == FA_NO_MORE_DATA) {
-		cstatus = faCloseDirectory(aFaPath);
+		cstatus = faCloseDirectory(aFaPath, self);
 		if (cstatus != FA_SUCCESS)
 			return cstatus; }
 	return rstatus;
@@ -268,7 +276,8 @@ sqInt	rstatus, cstatus;
  * If there are no entries, return FA_NO_MORE_DATA
  */
 
-sqInt faReadDirectory(fapath *aFaPath)
+sqInt 
+faReadDirectory(fapath *aFaPath, struct foo * self)
 {
 sqInt		haveEntry;
 struct dirent	*entry;
@@ -289,7 +298,7 @@ sqInt		status;
 			haveEntry = 1;
 	} while (!haveEntry);
 
-	status = faSetPlatFile(aFaPath, entry->d_name);
+	status = faSetPlatFile(aFaPath, entry->d_name, self);
 	if (status) return status;
 
 	return FA_SUCCESS;
@@ -303,7 +312,8 @@ sqInt		status;
  * Close the supplied directory.
  */
 
-sqInt faCloseDirectory(fapath *aFaPath)
+sqInt 
+faCloseDirectory(fapath *aFaPath, struct foo * self)
 {
 sqInt	status;
 
@@ -324,13 +334,14 @@ sqInt	status;
  * Rewind the supplied directory and answer the first entry.
  */
 
-sqInt faRewindDirectory(fapath *aFaPath)
+sqInt 
+faRewindDirectory(fapath *aFaPath, struct foo * self)
 {
 
 	if (aFaPath->platformDir == NULL)
 		return FA_CORRUPT_VALUE;
 	rewinddir(aFaPath->platformDir);
-	return faReadDirectory(aFaPath);
+	return faReadDirectory(aFaPath, self);
 }
 
 
@@ -347,7 +358,8 @@ sqInt faRewindDirectory(fapath *aFaPath)
  * See FileAttributesPlugin>>primitiveFileAttribute for the list of attribute
  * numbers.
  */
-sqInt faFileAttribute(fapath *aFaPath, sqInt attributeNumber)
+sqInt 
+faFileAttribute(fapath *aFaPath, sqInt attributeNumber, struct foo * self)
 {
 faStatStruct	statBuf;
 int		status;
@@ -359,63 +371,63 @@ int		mode;
 		/* Requested attribute comes from stat() entry */
 		status = stat(faGetPlatPath(aFaPath), &statBuf);
 		if (status) {
-			interpreterProxy->primitiveFailForOSError(FA_CANT_STAT_PATH, interpreterProxy->interpreterState);
+			interpreterProxy->primitiveFailForOSError(FA_CANT_STAT_PATH, self);
 			return 0; }
 
 		switch (attributeNumber) {
 
 			case 1: /* fileName, not supported for a single attribute */
-				resultOop = interpreterProxy->nilObject(interpreterProxy->interpreterState);
+				resultOop = interpreterProxy->nilObject(self);
 				break;
 
 			case 2: /* Mode */
-				resultOop = interpreterProxy->positive32BitIntegerFor(statBuf.st_mode, interpreterProxy->interpreterState);
+				resultOop = interpreterProxy->positive32BitIntegerFor(statBuf.st_mode, self);
 				break;
 
 			case 3: /* inode */
-				resultOop = interpreterProxy->positive64BitIntegerFor(statBuf.st_ino, interpreterProxy->interpreterState);
+				resultOop = interpreterProxy->positive64BitIntegerFor(statBuf.st_ino, self);
 				break;
 
 			case 4: /* device id */
-				resultOop = interpreterProxy->positive64BitIntegerFor(statBuf.st_dev, interpreterProxy->interpreterState);
+				resultOop = interpreterProxy->positive64BitIntegerFor(statBuf.st_dev, self);
 				break;
 
 			case 5: /* nlink */
-				resultOop = interpreterProxy->positive64BitIntegerFor(statBuf.st_nlink, interpreterProxy->interpreterState);
+				resultOop = interpreterProxy->positive64BitIntegerFor(statBuf.st_nlink, self);
 				break;
 
 			case 6: /* uid */
-				resultOop = interpreterProxy->positive32BitIntegerFor(statBuf.st_uid, interpreterProxy->interpreterState);
+				resultOop = interpreterProxy->positive32BitIntegerFor(statBuf.st_uid, self);
 				break;
 
 			case 7: /* gid */
-				resultOop = interpreterProxy->positive32BitIntegerFor(statBuf.st_gid, interpreterProxy->interpreterState);
+				resultOop = interpreterProxy->positive32BitIntegerFor(statBuf.st_gid, self);
 				break;
 
 			case 8: /* size (if file) */
 				if (S_ISDIR(statBuf.st_mode) == 0)
-					resultOop = interpreterProxy->positive64BitIntegerFor(statBuf.st_size, interpreterProxy->interpreterState);
+					resultOop = interpreterProxy->positive64BitIntegerFor(statBuf.st_size, self);
 				else
-					resultOop = interpreterProxy->positive32BitIntegerFor(0, interpreterProxy->interpreterState);
+					resultOop = interpreterProxy->positive32BitIntegerFor(0, self);
 				break;
 
 			case 9: /* access time */
 				resultOop = interpreterProxy->signed64BitIntegerFor(
-					faConvertUnixToLongSqueakTime(statBuf.st_atime), interpreterProxy->interpreterState);
+					faConvertUnixToLongSqueakTime(statBuf.st_atime), self);
 				break;
 
 			case 10: /* modified time */
 				resultOop = interpreterProxy->signed64BitIntegerFor(
-					faConvertUnixToLongSqueakTime(statBuf.st_mtime), interpreterProxy->interpreterState);
+					faConvertUnixToLongSqueakTime(statBuf.st_mtime), self);
 				break;
 
 			case 11: /* change time */
 				resultOop = interpreterProxy->signed64BitIntegerFor(
-					faConvertUnixToLongSqueakTime(statBuf.st_ctime), interpreterProxy->interpreterState);
+					faConvertUnixToLongSqueakTime(statBuf.st_ctime), self);
 				break;
 
 			case 12: /* creation time */
-				resultOop = interpreterProxy->nilObject(interpreterProxy->interpreterState);
+				resultOop = interpreterProxy->nilObject(self);
 				break;
 		}
 	} else if (attributeNumber < 16) {
@@ -433,19 +445,19 @@ int		mode;
 				break;
 		}
 		if (access(faGetPlatPath(aFaPath), mode) == 0)
-			resultOop = interpreterProxy->trueObject(interpreterProxy->interpreterState);
+			resultOop = interpreterProxy->trueObject(self);
 		else
-			resultOop = interpreterProxy->falseObject(interpreterProxy->interpreterState);
+			resultOop = interpreterProxy->falseObject(self);
 	} else if (attributeNumber == 16) {
 		/* isSymlink */
 		status = lstat(faGetPlatPath(aFaPath), &statBuf);
 		if (status) {
-			interpreterProxy->primitiveFailForOSError(FA_CANT_STAT_PATH, interpreterProxy->interpreterState);
+			interpreterProxy->primitiveFailForOSError(FA_CANT_STAT_PATH, self);
 			 return 0; }
 		if (S_ISLNK(statBuf.st_mode))
-			resultOop = interpreterProxy->trueObject(interpreterProxy->interpreterState);
+			resultOop = interpreterProxy->trueObject(self);
 		else
-			resultOop = interpreterProxy->falseObject(interpreterProxy->interpreterState);
+			resultOop = interpreterProxy->falseObject(self);
 	}
 
 	return resultOop;
@@ -461,7 +473,8 @@ int		mode;
  * On error answer the status.
  *
  */
-sqInt faFileStatAttributes(fapath *aFaPath, int lStat, sqInt attributeArray)
+sqInt 
+faFileStatAttributes(fapath *aFaPath, int lStat, sqInt attributeArray, struct foo * self)
 {
 faStatStruct	statBuf;
 int		status;
@@ -470,7 +483,7 @@ sqInt		targetOop;
 char		targetFile[FA_PATH_MAX];
 
 
-	targetOop = interpreterProxy->nilObject(interpreterProxy->interpreterState);
+	targetOop = interpreterProxy->nilObject(self);
 	if (lStat) {
 		status = lstat(faGetPlatPath(aFaPath), &statBuf);
 		if (status)
@@ -479,7 +492,7 @@ char		targetFile[FA_PATH_MAX];
 			/* This is a symbolic link, provide the target filename */
 			status = readlink(faGetPlatPath(aFaPath), targetFile, FA_PATH_MAX);
 			if (status >= 0)
-				targetOop = pathNameToOop(targetFile); } }
+				targetOop = pathNameToOop(targetFile, self); } }
 	else {
 		status = stat(faGetPlatPath(aFaPath), &statBuf);
 		if (status)
@@ -487,61 +500,61 @@ char		targetFile[FA_PATH_MAX];
 
 	interpreterProxy->storePointerofObjectwithValue(
 		0, attributeArray,
-		targetOop, interpreterProxy->interpreterState);
+		targetOop, self);
 
 	interpreterProxy->storePointerofObjectwithValue(
 		1, attributeArray,
-		interpreterProxy->positive32BitIntegerFor(statBuf.st_mode, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+		interpreterProxy->positive32BitIntegerFor(statBuf.st_mode, self), self);
 
 	interpreterProxy->storePointerofObjectwithValue(
 		2, attributeArray,
-		interpreterProxy->positive64BitIntegerFor(statBuf.st_ino, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+		interpreterProxy->positive64BitIntegerFor(statBuf.st_ino, self), self);
 
 	interpreterProxy->storePointerofObjectwithValue(
 		3, attributeArray,
-		interpreterProxy->positive64BitIntegerFor(statBuf.st_dev, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+		interpreterProxy->positive64BitIntegerFor(statBuf.st_dev, self), self);
 
 	interpreterProxy->storePointerofObjectwithValue(
 		4, attributeArray,
-		interpreterProxy->positive32BitIntegerFor(statBuf.st_nlink, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+		interpreterProxy->positive32BitIntegerFor(statBuf.st_nlink, self), self);
 
 	interpreterProxy->storePointerofObjectwithValue(
 		5, attributeArray,
-		interpreterProxy->positive32BitIntegerFor(statBuf.st_uid, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+		interpreterProxy->positive32BitIntegerFor(statBuf.st_uid, self), self);
 
 	interpreterProxy->storePointerofObjectwithValue(
 		6, attributeArray,
-		interpreterProxy->positive32BitIntegerFor(statBuf.st_gid, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+		interpreterProxy->positive32BitIntegerFor(statBuf.st_gid, self), self);
 
 	interpreterProxy->storePointerofObjectwithValue(
 		7, attributeArray,
 		(S_ISDIR(statBuf.st_mode) == 0) ?
-			interpreterProxy->positive64BitIntegerFor(statBuf.st_size, interpreterProxy->interpreterState) :
-			interpreterProxy->positive32BitIntegerFor(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+			interpreterProxy->positive64BitIntegerFor(statBuf.st_size, self) :
+			interpreterProxy->positive32BitIntegerFor(0, self), self);
 
 	interpreterProxy->storePointerofObjectwithValue(
 		8, attributeArray,
 		interpreterProxy->signed64BitIntegerFor(
-			faConvertUnixToLongSqueakTime(statBuf.st_atime), interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+			faConvertUnixToLongSqueakTime(statBuf.st_atime), self), self);
 
 	interpreterProxy->storePointerofObjectwithValue(
 		9, attributeArray,
 		interpreterProxy->signed64BitIntegerFor(
-			faConvertUnixToLongSqueakTime(statBuf.st_mtime), interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+			faConvertUnixToLongSqueakTime(statBuf.st_mtime), self), self);
 
 	interpreterProxy->storePointerofObjectwithValue(
 		10, attributeArray,
 		interpreterProxy->signed64BitIntegerFor(
-			faConvertUnixToLongSqueakTime(statBuf.st_ctime), interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+			faConvertUnixToLongSqueakTime(statBuf.st_ctime), self), self);
 
 	interpreterProxy->storePointerofObjectwithValue(
 		11, attributeArray,
-		interpreterProxy->nilObject(interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+		interpreterProxy->nilObject(self), self);
 
 	/* Windows file attribute flags - not supported on Unix */
 	interpreterProxy->storePointerofObjectwithValue(
 		12, attributeArray,
-		interpreterProxy->nilObject(interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+		interpreterProxy->nilObject(self), self);
 
 	return FA_SUCCESS;
 }
@@ -554,12 +567,13 @@ char		targetFile[FA_PATH_MAX];
  *
  * Answer a boolean indicating whether the supplied path name exists.
  */
-sqInt faExists(fapath *aFaPath)
+sqInt 
+faExists(fapath *aFaPath, struct foo * self)
 {
 	if (access(faGetPlatPath(aFaPath), F_OK))
-		return interpreterProxy->falseObject(interpreterProxy->interpreterState);
+		return interpreterProxy->falseObject(self);
 	else
-		return interpreterProxy->trueObject(interpreterProxy->interpreterState);
+		return interpreterProxy->trueObject(self);
 }
 
 
@@ -570,7 +584,8 @@ sqInt faExists(fapath *aFaPath)
  * Call access() for each access type (R, W, X) on the supplied path, 
  * storing the results in the st array attributeArray.
  */
-sqInt faAccessAttributes(fapath *aFaPath, sqInt attributeArray, sqInt offset)
+sqInt 
+faAccessAttributes(fapath *aFaPath, sqInt attributeArray, sqInt offset, struct foo * self)
 {
 sqInt	index;
 sqInt	trueOop;
@@ -579,17 +594,17 @@ sqInt	accessOop;
 
 
 	index = offset;
-	trueOop = interpreterProxy->trueObject(interpreterProxy->interpreterState);
-	falseOop = interpreterProxy->falseObject(interpreterProxy->interpreterState);
+	trueOop = interpreterProxy->trueObject(self);
+	falseOop = interpreterProxy->falseObject(self);
 
 	accessOop = access(faGetPlatPath(aFaPath), R_OK) ? falseOop : trueOop;
-	interpreterProxy->storePointerofObjectwithValue(index++, attributeArray, accessOop, interpreterProxy->interpreterState);
+	interpreterProxy->storePointerofObjectwithValue(index++, attributeArray, accessOop, self);
 
 	accessOop = access(faGetPlatPath(aFaPath), W_OK) ? falseOop : trueOop;
-	interpreterProxy->storePointerofObjectwithValue(index++, attributeArray, accessOop, interpreterProxy->interpreterState);
+	interpreterProxy->storePointerofObjectwithValue(index++, attributeArray, accessOop, self);
 
 	accessOop = access(faGetPlatPath(aFaPath), X_OK) ? falseOop : trueOop;
-	interpreterProxy->storePointerofObjectwithValue(index++, attributeArray, accessOop, interpreterProxy->interpreterState);
+	interpreterProxy->storePointerofObjectwithValue(index++, attributeArray, accessOop, self);
 
 	return 0;
 }

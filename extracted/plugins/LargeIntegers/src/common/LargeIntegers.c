@@ -39,63 +39,63 @@ static char __buildInfo[] = "LargeIntegersPlugin VMMaker.oscog-eem.2495 uuid: fc
 
 
 /*** Function Prototypes ***/
-static sqInt anyBitOfLargeIntfromto(sqInt anOop, sqInt start, sqInt stopArg);
-static sqInt byteSizeOfCSI(sqInt csi);
-static unsigned int cDigitAddlenwithleninto(unsigned int *pWordShort, sqInt shortLen, unsigned int *pWordLong, sqInt longLen, unsigned int *pWordRes);
-static sqInt cDigitComparewithlen(unsigned int *pFirst, unsigned int *pSecond, sqInt len);
-static sqInt cDigitCopyFromtolen(unsigned int *pFrom, unsigned int *pTo, sqInt len);
-static sqInt cDigitDivlenremlenquolen(unsigned int *pDiv, sqInt divLen, unsigned int *pRem, sqInt remLen, unsigned int *pQuo, sqInt quoLen);
-static sqInt cDigitHighBitlen(unsigned int *pUint32, sqInt len);
-static sqInt cDigitLshiftfromlentolen(sqInt shiftCount, unsigned int *pFrom, sqInt lenFrom, unsigned int *pTo, sqInt lenTo);
-static sqInt cDigitMontgomerylentimeslenmodulolenmInvModBinto(unsigned int *pFirst, sqInt firstLen, unsigned int *pSecond, sqInt secondLen, unsigned int *pThird, sqInt thirdLen, unsigned int mInv, unsigned int *pRes);
-static unsigned int cDigitMultiplylenwithlenintolen(unsigned int *pWordShort, sqInt shortLen, unsigned int *pWordLong, sqInt longLen, unsigned int *pWordRes, sqInt resLen);
-static unsigned int cDigitOfat(unsigned int *cPointer, sqInt zeroBasedDigitIndex);
-static unsigned int cDigitOfatput(unsigned int *cPointer, sqInt zeroBasedDigitIndex, unsigned int aValue);
-static sqInt cDigitOpshortlenlongleninto(sqInt opIndex, unsigned int *pWordShort, sqInt shortLen, unsigned int *pWordLong, sqInt longLen, unsigned int *pWordRes);
-static sqInt cDigitReplacefromtowithstartingAt(unsigned int *pTo, sqInt start, sqInt stop, unsigned int *pFrom, sqInt repStart);
-static sqInt cDigitRshiftfromlentolen(sqInt shiftCount, unsigned int *pFrom, sqInt lenFrom, unsigned int *pTo, sqInt lenTo);
-static sqInt cDigitSublenwithleninto(unsigned int *pWordSmall, sqInt smallLen, unsigned int *pWordLarge, sqInt largeLen, unsigned int *pWordRes);
-static sqInt cHighBit32(unsigned int anUnsignedInt32);
-static sqInt createLargeFromSmallInteger(sqInt anOop);
-static sqInt digitAddLargewith(sqInt firstInteger, sqInt secondInteger);
-static sqInt digitBitLogicwithopIndex(sqInt firstInteger, sqInt secondInteger, sqInt opIx);
-static sqInt digitCompareLargewith(sqInt firstInteger, sqInt secondInteger);
-static sqInt digitDivLargewithnegative(sqInt firstInteger, sqInt secondInteger, sqInt neg);
-static sqInt digitMontgomerytimesmodulomInvModB(sqInt firstLarge, sqInt secondLarge, sqInt thirdLarge, unsigned int mInv);
-static sqInt digitMultiplyLargewithnegative(sqInt firstInteger, sqInt secondInteger, sqInt neg);
-static sqInt digitOfCSIat(sqInt csi, sqInt ix);
-static sqInt digitOfLargeIntat(sqInt aBytesOop, sqInt ix);
-static sqInt digitSizeOfCSI(sqInt csi);
-static sqInt digitSizeOfLargeInt(sqInt anOop);
-static sqInt digitSubLargewith(sqInt firstInteger, sqInt secondInteger);
-static sqInt digitLshift(sqInt anOop, sqInt shiftCount);
-static sqInt digitRshiftlookfirst(sqInt anOop, sqInt shiftCount, sqInt a);
+static sqInt anyBitOfLargeIntfromto(sqInt anOop, sqInt start, sqInt stopArg, struct foo * self);
+static sqInt byteSizeOfCSI(sqInt csi, struct foo * self);
+static unsigned int cDigitAddlenwithleninto(unsigned int *pWordShort, sqInt shortLen, unsigned int *pWordLong, sqInt longLen, unsigned int *pWordRes, struct foo * self);
+static sqInt cDigitComparewithlen(unsigned int *pFirst, unsigned int *pSecond, sqInt len, struct foo * self);
+static sqInt cDigitCopyFromtolen(unsigned int *pFrom, unsigned int *pTo, sqInt len, struct foo * self);
+static sqInt cDigitDivlenremlenquolen(unsigned int *pDiv, sqInt divLen, unsigned int *pRem, sqInt remLen, unsigned int *pQuo, sqInt quoLen, struct foo * self);
+static sqInt cDigitHighBitlen(unsigned int *pUint32, sqInt len, struct foo * self);
+static sqInt cDigitLshiftfromlentolen(sqInt shiftCount, unsigned int *pFrom, sqInt lenFrom, unsigned int *pTo, sqInt lenTo, struct foo * self);
+static sqInt cDigitMontgomerylentimeslenmodulolenmInvModBinto(unsigned int *pFirst, sqInt firstLen, unsigned int *pSecond, sqInt secondLen, unsigned int *pThird, sqInt thirdLen, unsigned int mInv, unsigned int *pRes, struct foo * self);
+static unsigned int cDigitMultiplylenwithlenintolen(unsigned int *pWordShort, sqInt shortLen, unsigned int *pWordLong, sqInt longLen, unsigned int *pWordRes, sqInt resLen, struct foo * self);
+static unsigned int cDigitOfat(unsigned int *cPointer, sqInt zeroBasedDigitIndex, struct foo * self);
+static unsigned int cDigitOfatput(unsigned int *cPointer, sqInt zeroBasedDigitIndex, unsigned int aValue, struct foo * self);
+static sqInt cDigitOpshortlenlongleninto(sqInt opIndex, unsigned int *pWordShort, sqInt shortLen, unsigned int *pWordLong, sqInt longLen, unsigned int *pWordRes, struct foo * self);
+static sqInt cDigitReplacefromtowithstartingAt(unsigned int *pTo, sqInt start, sqInt stop, unsigned int *pFrom, sqInt repStart, struct foo * self);
+static sqInt cDigitRshiftfromlentolen(sqInt shiftCount, unsigned int *pFrom, sqInt lenFrom, unsigned int *pTo, sqInt lenTo, struct foo * self);
+static sqInt cDigitSublenwithleninto(unsigned int *pWordSmall, sqInt smallLen, unsigned int *pWordLarge, sqInt largeLen, unsigned int *pWordRes, struct foo * self);
+static sqInt cHighBit32(unsigned int anUnsignedInt32, struct foo * self);
+static sqInt createLargeFromSmallInteger(sqInt anOop, struct foo * self);
+static sqInt digitAddLargewith(sqInt firstInteger, sqInt secondInteger, struct foo * self);
+static sqInt digitBitLogicwithopIndex(sqInt firstInteger, sqInt secondInteger, sqInt opIx, struct foo * self);
+static sqInt digitCompareLargewith(sqInt firstInteger, sqInt secondInteger, struct foo * self);
+static sqInt digitDivLargewithnegative(sqInt firstInteger, sqInt secondInteger, sqInt neg, struct foo * self);
+static sqInt digitMontgomerytimesmodulomInvModB(sqInt firstLarge, sqInt secondLarge, sqInt thirdLarge, unsigned int mInv, struct foo * self);
+static sqInt digitMultiplyLargewithnegative(sqInt firstInteger, sqInt secondInteger, sqInt neg, struct foo * self);
+static sqInt digitOfCSIat(sqInt csi, sqInt ix, struct foo * self);
+static sqInt digitOfLargeIntat(sqInt aBytesOop, sqInt ix, struct foo * self);
+static sqInt digitSizeOfCSI(sqInt csi, struct foo * self);
+static sqInt digitSizeOfLargeInt(sqInt anOop, struct foo * self);
+static sqInt digitSubLargewith(sqInt firstInteger, sqInt secondInteger, struct foo * self);
+static sqInt digitLshift(sqInt anOop, sqInt shiftCount, struct foo * self);
+static sqInt digitRshiftlookfirst(sqInt anOop, sqInt shiftCount, sqInt a, struct foo * self);
 EXPORT(const char*) getModuleName(void);
-static sqInt highBitOfLargeInt(sqInt anOop);
-static sqInt isNormalized(sqInt aLargeInteger);
-static sqInt largeIntgrowTo(sqInt aBytesObject, sqInt newByteLen);
-static sqInt msg(char *s);
-static sqInt normalizeNegative(sqInt aLargeNegativeInteger);
-static sqInt normalizePositive(sqInt aLargePositiveInteger);
-static sqInt normalize(sqInt aLargeInteger);
-EXPORT(sqInt) primAnyBitFromTo(void);
-EXPORT(sqInt) primDigitAdd(void);
-EXPORT(sqInt) primDigitBitAnd(void);
-EXPORT(sqInt) primDigitBitOr(void);
-EXPORT(sqInt) primDigitBitShiftMagnitude(void);
-EXPORT(sqInt) primDigitBitXor(void);
-EXPORT(sqInt) primDigitCompare(void);
-EXPORT(sqInt) primDigitDivNegative(void);
-EXPORT(sqInt) primDigitMultiplyNegative(void);
-EXPORT(sqInt) primDigitSubtract(void);
-EXPORT(sqInt) primGetModuleName(void);
-EXPORT(sqInt) primMontgomeryDigitLength(void);
-EXPORT(sqInt) primMontgomeryTimesModulo(void);
-EXPORT(sqInt) primNormalizeNegative(void);
-EXPORT(sqInt) primNormalizePositive(void);
+static sqInt highBitOfLargeInt(sqInt anOop, struct foo * self);
+static sqInt isNormalized(sqInt aLargeInteger, struct foo * self);
+static sqInt largeIntgrowTo(sqInt aBytesObject, sqInt newByteLen, struct foo * self);
+static sqInt msg(char *s, struct foo * self);
+static sqInt normalizeNegative(sqInt aLargeNegativeInteger, struct foo * self);
+static sqInt normalizePositive(sqInt aLargePositiveInteger, struct foo * self);
+static sqInt normalize(sqInt aLargeInteger, struct foo * self);
+EXPORT(sqInt) primAnyBitFromTo(struct foo * self);
+EXPORT(sqInt) primDigitAdd(struct foo * self);
+EXPORT(sqInt) primDigitBitAnd(struct foo * self);
+EXPORT(sqInt) primDigitBitOr(struct foo * self);
+EXPORT(sqInt) primDigitBitShiftMagnitude(struct foo * self);
+EXPORT(sqInt) primDigitBitXor(struct foo * self);
+EXPORT(sqInt) primDigitCompare(struct foo * self);
+EXPORT(sqInt) primDigitDivNegative(struct foo * self);
+EXPORT(sqInt) primDigitMultiplyNegative(struct foo * self);
+EXPORT(sqInt) primDigitSubtract(struct foo * self);
+EXPORT(sqInt) primGetModuleName(struct foo * self);
+EXPORT(sqInt) primMontgomeryDigitLength(struct foo * self);
+EXPORT(sqInt) primMontgomeryTimesModulo(struct foo * self);
+EXPORT(sqInt) primNormalizeNegative(struct foo * self);
+EXPORT(sqInt) primNormalizePositive(struct foo * self);
 EXPORT(sqInt) setInterpreter(struct VirtualMachine *anInterpreter);
-static sqInt sqAssert(sqInt aBool);
-static unsigned char unsafeByteOfLargeIntat(sqInt bytesObj, sqInt ix);
+static sqInt sqAssert(sqInt aBool, struct foo * self);
+static unsigned char unsafeByteOfLargeIntat(sqInt bytesObj, sqInt ix, struct foo * self);
 
 
 /*** Variables ***/
@@ -208,7 +208,7 @@ static const int  xorOpIndex = 2;
 
 	/* LargeIntegersPlugin>>#anyBitOfLargeInt:from:to: */
 static sqInt
-anyBitOfLargeIntfromto(sqInt anOop, sqInt start, sqInt stopArg)
+anyBitOfLargeIntfromto(sqInt anOop, sqInt start, sqInt stopArg, struct foo * self)
 {
 	unsigned int *cPointer;
 	unsigned int digit;
@@ -223,10 +223,10 @@ anyBitOfLargeIntfromto(sqInt anOop, sqInt start, sqInt stopArg)
 
 	/* missing DebugCode */;
 	if ((start < 1) || (stopArg < 1)) {
-		return primitiveFail(interpreterProxy->interpreterState);
+		return primitiveFail(self);
 	}
 	magnitude = anOop;
-	stop = ((stopArg < (cDigitHighBitlen(((unsigned int *) (firstIndexableField(magnitude, interpreterProxy->interpreterState))), ((slotSizeOf(magnitude, interpreterProxy->interpreterState)) + 3) / 4))) ? stopArg : (cDigitHighBitlen(((unsigned int *) (firstIndexableField(magnitude, interpreterProxy->interpreterState))), ((slotSizeOf(magnitude, interpreterProxy->interpreterState)) + 3) / 4)));
+	stop = ((stopArg < (cDigitHighBitlen(((unsigned int *) (firstIndexableField(magnitude, self))), ((slotSizeOf(magnitude, self)) + 3) / 4, self))) ? stopArg : (cDigitHighBitlen(((unsigned int *) (firstIndexableField(magnitude, self))), ((slotSizeOf(magnitude, self)) + 3) / 4, self)));
 	if (start > stop) {
 		return 0;
 	}
@@ -238,20 +238,20 @@ anyBitOfLargeIntfromto(sqInt anOop, sqInt start, sqInt stopArg)
 	lastMask = ((usqInt) 0xFFFFFFFFU) >> (0x1F - ((stop - 1) & 0x1F));
 	if (firstDigitIx == lastDigitIx) {
 		/* begin cDigitOf:at: */
-		cPointer = ((unsigned int *) (firstIndexableField(magnitude, interpreterProxy->interpreterState)));
+		cPointer = ((unsigned int *) (firstIndexableField(magnitude, self)));
 		zeroBasedDigitIndex = firstDigitIx - 1;
 		digit = SQ_SWAP_4_BYTES_IF_BIGENDIAN((cPointer[zeroBasedDigitIndex]));
 		return (digit & (firstMask & lastMask)) != 0;
 	}
-	if (((cDigitOfat(((unsigned int *) (firstIndexableField(magnitude, interpreterProxy->interpreterState))), firstDigitIx - 1)) & firstMask) != 0) {
+	if (((cDigitOfat(((unsigned int *) (firstIndexableField(magnitude, self))), firstDigitIx - 1, self)) & firstMask) != 0) {
 		return 1;
 	}
 	for (ix = (firstDigitIx + 1); ix < lastDigitIx; ix += 1) {
-		if ((cDigitOfat(((unsigned int *) (firstIndexableField(magnitude, interpreterProxy->interpreterState))), ix - 1)) != 0) {
+		if ((cDigitOfat(((unsigned int *) (firstIndexableField(magnitude, self))), ix - 1, self)) != 0) {
 			return 1;
 		}
 	}
-	if (((cDigitOfat(((unsigned int *) (firstIndexableField(magnitude, interpreterProxy->interpreterState))), lastDigitIx - 1)) & lastMask) != 0) {
+	if (((cDigitOfat(((unsigned int *) (firstIndexableField(magnitude, self))), lastDigitIx - 1, self)) & lastMask) != 0) {
 		return 1;
 	}
 	return 0;
@@ -264,7 +264,7 @@ anyBitOfLargeIntfromto(sqInt anOop, sqInt start, sqInt stopArg)
 
 	/* LargeIntegersPlugin>>#byteSizeOfCSI: */
 static sqInt
-byteSizeOfCSI(sqInt csi)
+byteSizeOfCSI(sqInt csi, struct foo * self)
 {
 	if (csi >= 0) {
 		if (csi < 256) {
@@ -330,7 +330,7 @@ byteSizeOfCSI(sqInt csi)
 
 	/* LargeIntegersPlugin>>#cDigitAdd:len:with:len:into: */
 static unsigned int
-cDigitAddlenwithleninto(unsigned int *pWordShort, sqInt shortLen, unsigned int *pWordLong, sqInt longLen, unsigned int *pWordRes)
+cDigitAddlenwithleninto(unsigned int *pWordShort, sqInt shortLen, unsigned int *pWordLong, sqInt longLen, unsigned int *pWordRes, struct foo * self)
 {
 	unsigned long long accum;
 	sqInt i;
@@ -352,7 +352,7 @@ cDigitAddlenwithleninto(unsigned int *pWordShort, sqInt shortLen, unsigned int *
 
 	/* LargeIntegersPlugin>>#cDigitCompare:with:len: */
 static sqInt
-cDigitComparewithlen(unsigned int *pFirst, unsigned int *pSecond, sqInt len)
+cDigitComparewithlen(unsigned int *pFirst, unsigned int *pSecond, sqInt len, struct foo * self)
 {
 	unsigned int firstDigit;
 	sqInt ix;
@@ -375,7 +375,7 @@ cDigitComparewithlen(unsigned int *pFirst, unsigned int *pSecond, sqInt len)
 
 	/* LargeIntegersPlugin>>#cDigitCopyFrom:to:len: */
 static sqInt
-cDigitCopyFromtolen(unsigned int *pFrom, unsigned int *pTo, sqInt len)
+cDigitCopyFromtolen(unsigned int *pFrom, unsigned int *pTo, sqInt len, struct foo * self)
 {
 	sqInt i;
 
@@ -387,7 +387,7 @@ cDigitCopyFromtolen(unsigned int *pFrom, unsigned int *pTo, sqInt len)
 
 	/* LargeIntegersPlugin>>#cDigitDiv:len:rem:len:quo:len: */
 static sqInt
-cDigitDivlenremlenquolen(unsigned int *pDiv, sqInt divLen, unsigned int *pRem, sqInt remLen, unsigned int *pQuo, sqInt quoLen)
+cDigitDivlenremlenquolen(unsigned int *pDiv, sqInt divLen, unsigned int *pRem, sqInt remLen, unsigned int *pQuo, sqInt quoLen, struct foo * self)
 {
 	unsigned long long a;
 	unsigned long long b;
@@ -520,7 +520,7 @@ cDigitDivlenremlenquolen(unsigned int *pDiv, sqInt divLen, unsigned int *pRem, s
 
 	/* LargeIntegersPlugin>>#cDigitHighBit:len: */
 static sqInt
-cDigitHighBitlen(unsigned int *pUint32, sqInt len)
+cDigitHighBitlen(unsigned int *pUint32, sqInt len, struct foo * self)
 {
 	unsigned int lastDigit;
 	sqInt realLength;
@@ -530,8 +530,8 @@ cDigitHighBitlen(unsigned int *pUint32, sqInt len)
 		if (realLength == 0) {
 			return 0;
 		}
-	} while(((lastDigit = cDigitOfat(pUint32, (realLength -= 1)))) == 0);
-	return (cHighBit32(lastDigit)) + (32 * realLength);
+	} while(((lastDigit = cDigitOfat(pUint32, (realLength -= 1), self))) == 0);
+	return (cHighBit32(lastDigit, self)) + (32 * realLength);
 }
 
 
@@ -539,7 +539,7 @@ cDigitHighBitlen(unsigned int *pUint32, sqInt len)
 
 	/* LargeIntegersPlugin>>#cDigitLshift:from:len:to:len: */
 static sqInt
-cDigitLshiftfromlentolen(sqInt shiftCount, unsigned int *pFrom, sqInt lenFrom, unsigned int *pTo, sqInt lenTo)
+cDigitLshiftfromlentolen(sqInt shiftCount, unsigned int *pFrom, sqInt lenFrom, unsigned int *pTo, sqInt lenTo, struct foo * self)
 {
 	sqInt bitShift;
 	unsigned int carry;
@@ -584,7 +584,7 @@ cDigitLshiftfromlentolen(sqInt shiftCount, unsigned int *pFrom, sqInt lenFrom, u
 
 	/* LargeIntegersPlugin>>#cDigitMontgomery:len:times:len:modulo:len:mInvModB:into: */
 static sqInt
-cDigitMontgomerylentimeslenmodulolenmInvModBinto(unsigned int *pFirst, sqInt firstLen, unsigned int *pSecond, sqInt secondLen, unsigned int *pThird, sqInt thirdLen, unsigned int mInv, unsigned int *pRes)
+cDigitMontgomerylentimeslenmodulolenmInvModBinto(unsigned int *pFirst, sqInt firstLen, unsigned int *pSecond, sqInt secondLen, unsigned int *pThird, sqInt thirdLen, unsigned int mInv, unsigned int *pRes, struct foo * self)
 {
 	unsigned long long accum;
 	unsigned long long accum2;
@@ -642,7 +642,7 @@ cDigitMontgomerylentimeslenmodulolenmInvModBinto(unsigned int *pFirst, sqInt fir
 		lastDigit = accum >> 32;
 	}
 	if (!((lastDigit == 0)
-		 && ((cDigitComparewithlen(pThird, pRes, thirdLen)) == 1))) {
+		 && ((cDigitComparewithlen(pThird, pRes, thirdLen, self)) == 1))) {
 
 		/* self cDigitSub: pThird len: thirdLen with: pRes len: thirdLen into: pRes */
 		accum = 0;
@@ -657,7 +657,7 @@ cDigitMontgomerylentimeslenmodulolenmInvModBinto(unsigned int *pFirst, sqInt fir
 
 	/* LargeIntegersPlugin>>#cDigitMultiply:len:with:len:into:len: */
 static unsigned int
-cDigitMultiplylenwithlenintolen(unsigned int *pWordShort, sqInt shortLen, unsigned int *pWordLong, sqInt longLen, unsigned int *pWordRes, sqInt resLen)
+cDigitMultiplylenwithlenintolen(unsigned int *pWordShort, sqInt shortLen, unsigned int *pWordLong, sqInt longLen, unsigned int *pWordRes, sqInt resLen, struct foo * self)
 {
 	unsigned long long ab;
 	unsigned int carry;
@@ -702,14 +702,14 @@ cDigitMultiplylenwithlenintolen(unsigned int *pWordShort, sqInt shortLen, unsign
 
 	/* LargeIntegersPlugin>>#cDigitOf:at: */
 static unsigned int
-cDigitOfat(unsigned int *cPointer, sqInt zeroBasedDigitIndex)
+cDigitOfat(unsigned int *cPointer, sqInt zeroBasedDigitIndex, struct foo * self)
 {
 	return SQ_SWAP_4_BYTES_IF_BIGENDIAN((cPointer[zeroBasedDigitIndex]));
 }
 
 	/* LargeIntegersPlugin>>#cDigitOf:at:put: */
 static unsigned int
-cDigitOfatput(unsigned int *cPointer, sqInt zeroBasedDigitIndex, unsigned int aValue)
+cDigitOfatput(unsigned int *cPointer, sqInt zeroBasedDigitIndex, unsigned int aValue, struct foo * self)
 {
 	return cPointer[zeroBasedDigitIndex] = (SQ_SWAP_4_BYTES_IF_BIGENDIAN(aValue));
 }
@@ -722,7 +722,7 @@ cDigitOfatput(unsigned int *cPointer, sqInt zeroBasedDigitIndex, unsigned int aV
 
 	/* LargeIntegersPlugin>>#cDigitOp:short:len:long:len:into: */
 static sqInt
-cDigitOpshortlenlongleninto(sqInt opIndex, unsigned int *pWordShort, sqInt shortLen, unsigned int *pWordLong, sqInt longLen, unsigned int *pWordRes)
+cDigitOpshortlenlongleninto(sqInt opIndex, unsigned int *pWordShort, sqInt shortLen, unsigned int *pWordLong, sqInt longLen, unsigned int *pWordRes, struct foo * self)
 {
 	sqInt i;
 	sqInt limit;
@@ -758,7 +758,7 @@ cDigitOpshortlenlongleninto(sqInt opIndex, unsigned int *pWordShort, sqInt short
 		}
 		return 0;
 	}
-	return primitiveFail(interpreterProxy->interpreterState);
+	return primitiveFail(self);
 }
 
 
@@ -766,7 +766,7 @@ cDigitOpshortlenlongleninto(sqInt opIndex, unsigned int *pWordShort, sqInt short
 
 	/* LargeIntegersPlugin>>#cDigitReplace:from:to:with:startingAt: */
 static sqInt
-cDigitReplacefromtowithstartingAt(unsigned int *pTo, sqInt start, sqInt stop, unsigned int *pFrom, sqInt repStart)
+cDigitReplacefromtowithstartingAt(unsigned int *pTo, sqInt start, sqInt stop, unsigned int *pFrom, sqInt repStart, struct foo * self)
 {
 	sqInt i;
 
@@ -779,7 +779,7 @@ cDigitReplacefromtowithstartingAt(unsigned int *pTo, sqInt start, sqInt stop, un
 
 	/* LargeIntegersPlugin>>#cDigitRshift:from:len:to:len: */
 static sqInt
-cDigitRshiftfromlentolen(sqInt shiftCount, unsigned int *pFrom, sqInt lenFrom, unsigned int *pTo, sqInt lenTo)
+cDigitRshiftfromlentolen(sqInt shiftCount, unsigned int *pFrom, sqInt lenFrom, unsigned int *pTo, sqInt lenTo, struct foo * self)
 {
 	sqInt bitShift;
 	unsigned int carry;
@@ -823,7 +823,7 @@ cDigitRshiftfromlentolen(sqInt shiftCount, unsigned int *pFrom, sqInt lenFrom, u
 
 	/* LargeIntegersPlugin>>#cDigitSub:len:with:len:into: */
 static sqInt
-cDigitSublenwithleninto(unsigned int *pWordSmall, sqInt smallLen, unsigned int *pWordLarge, sqInt largeLen, unsigned int *pWordRes)
+cDigitSublenwithleninto(unsigned int *pWordSmall, sqInt smallLen, unsigned int *pWordLarge, sqInt largeLen, unsigned int *pWordRes, struct foo * self)
 {
 	sqInt i;
 	unsigned long long z;
@@ -850,7 +850,7 @@ cDigitSublenwithleninto(unsigned int *pWordSmall, sqInt smallLen, unsigned int *
 
 	/* LargeIntegersPlugin>>#cHighBit32: */
 static sqInt
-cHighBit32(unsigned int anUnsignedInt32)
+cHighBit32(unsigned int anUnsignedInt32, struct foo * self)
 {
 	sqInt bitNo;
 	unsigned int shifted;
@@ -885,7 +885,7 @@ cHighBit32(unsigned int anUnsignedInt32)
 
 	/* LargeIntegersPlugin>>#createLargeFromSmallInteger: */
 static sqInt
-createLargeFromSmallInteger(sqInt anOop)
+createLargeFromSmallInteger(sqInt anOop, struct foo * self)
 {
 	unsigned int aValue;
 	sqInt byteSize;
@@ -895,7 +895,7 @@ createLargeFromSmallInteger(sqInt anOop)
 	sqInt res;
 	sqInt val;
 
-	val = integerValueOf(anOop, interpreterProxy->interpreterState);
+	val = integerValueOf(anOop, self);
 	/* begin byteSizeOfCSI: */
 	if (val >= 0) {
 		if (val < 256) {
@@ -973,9 +973,9 @@ createLargeFromSmallInteger(sqInt anOop)
 #  endif /* BytesPerOop == 4 */
 	l2:	/* end byteSizeOfCSI: */;
 	res = instantiateClassindexableSize((val < 0
-		? classLargeNegativeInteger(interpreterProxy->interpreterState)
-		: classLargePositiveInteger(interpreterProxy->interpreterState)), byteSize, interpreterProxy->interpreterState);
-	pDigit = ((unsigned int *) (firstIndexableField(res, interpreterProxy->interpreterState)));
+		? classLargeNegativeInteger(self)
+		: classLargePositiveInteger(self)), byteSize, self);
+	pDigit = ((unsigned int *) (firstIndexableField(res, self)));
 	digitSize = (byteSize + 3) / 4;
 	for (ix = 1; ix <= digitSize; ix += 1) {
 		/* begin cDigitOf:at:put: */
@@ -992,7 +992,7 @@ createLargeFromSmallInteger(sqInt anOop)
 
 	/* LargeIntegersPlugin>>#digitAddLarge:with: */
 static sqInt
-digitAddLargewith(sqInt firstInteger, sqInt secondInteger)
+digitAddLargewith(sqInt firstInteger, sqInt secondInteger, struct foo * self)
 {
 	unsigned long long accum;
 	unsigned int *cPointer;
@@ -1014,9 +1014,9 @@ digitAddLargewith(sqInt firstInteger, sqInt secondInteger)
 	sqInt shortInt;
 	sqInt sum;
 
-	firstDigitLen = ((slotSizeOf(firstInteger, interpreterProxy->interpreterState)) + 3) / 4;
-	secondDigitLen = ((slotSizeOf(secondInteger, interpreterProxy->interpreterState)) + 3) / 4;
-	neg = isLargeNegativeIntegerObject(firstInteger, interpreterProxy->interpreterState);
+	firstDigitLen = ((slotSizeOf(firstInteger, self)) + 3) / 4;
+	secondDigitLen = ((slotSizeOf(secondInteger, self)) + 3) / 4;
+	neg = isLargeNegativeIntegerObject(firstInteger, self);
 	if (firstDigitLen <= secondDigitLen) {
 		shortInt = firstInteger;
 		shortDigitLen = firstDigitLen;
@@ -1033,27 +1033,27 @@ digitAddLargewith(sqInt firstInteger, sqInt secondInteger)
 #if SPURVM
 	/* begin createLargeIntegerNeg:digitLength: */
 	sum = instantiateClassindexableSize((neg
-		? classLargeNegativeInteger(interpreterProxy->interpreterState)
-		: classLargePositiveInteger(interpreterProxy->interpreterState)), longDigitLen * 4, interpreterProxy->interpreterState);
+		? classLargeNegativeInteger(self)
+		: classLargePositiveInteger(self)), longDigitLen * 4, self);
 
 #else /* SPURVM */
-	pushRemappableOop(shortInt, interpreterProxy->interpreterState);
-	pushRemappableOop(longInt, interpreterProxy->interpreterState);
+	pushRemappableOop(shortInt, self);
+	pushRemappableOop(longInt, self);
 	/* begin createLargeIntegerNeg:digitLength: */
 	sum = instantiateClassindexableSize((neg
-		? classLargeNegativeInteger(interpreterProxy->interpreterState)
-		: classLargePositiveInteger(interpreterProxy->interpreterState)), longDigitLen * 4, interpreterProxy->interpreterState);
-	longInt = popRemappableOop(interpreterProxy->interpreterState);
-	shortInt = popRemappableOop(interpreterProxy->interpreterState)
+		? classLargeNegativeInteger(self)
+		: classLargePositiveInteger(self)), longDigitLen * 4, self);
+	longInt = popRemappableOop(self);
+	shortInt = popRemappableOop(self)
 #endif /* SPURVM */
 ;
 	if (!(sum)) {
-		return primitiveFailFor(PrimErrNoMemory, interpreterProxy->interpreterState);
+		return primitiveFailFor(PrimErrNoMemory, self);
 	}
 	/* begin cDigitAdd:len:with:len:into: */
-	pWordShort = ((unsigned int *) (firstIndexableField(shortInt, interpreterProxy->interpreterState)));
-	pWordLong = ((unsigned int *) (firstIndexableField(longInt, interpreterProxy->interpreterState)));
-	pWordRes = ((unsigned int *) (firstIndexableField(sum, interpreterProxy->interpreterState)));
+	pWordShort = ((unsigned int *) (firstIndexableField(shortInt, self)));
+	pWordLong = ((unsigned int *) (firstIndexableField(longInt, self)));
+	pWordRes = ((unsigned int *) (firstIndexableField(sum, self)));
 	accum = 0;
 	for (i1 = 0; i1 < shortDigitLen; i1 += 1) {
 		accum = ((accum >> 32) + (SQ_SWAP_4_BYTES_IF_BIGENDIAN((pWordShort[i1])))) + (SQ_SWAP_4_BYTES_IF_BIGENDIAN((pWordLong[i1])));
@@ -1071,24 +1071,24 @@ digitAddLargewith(sqInt firstInteger, sqInt secondInteger)
 #if SPURVM
 		/* begin createLargeIntegerNeg:byteLength: */
 		newSum = instantiateClassindexableSize((neg
-			? classLargeNegativeInteger(interpreterProxy->interpreterState)
-			: classLargePositiveInteger(interpreterProxy->interpreterState)), (longDigitLen * 4) + 1, interpreterProxy->interpreterState);
+			? classLargeNegativeInteger(self)
+			: classLargePositiveInteger(self)), (longDigitLen * 4) + 1, self);
 
 #else /* SPURVM */
-		pushRemappableOop(sum, interpreterProxy->interpreterState);
+		pushRemappableOop(sum, self);
 		/* begin createLargeIntegerNeg:byteLength: */
 		newSum = instantiateClassindexableSize((neg
-			? classLargeNegativeInteger(interpreterProxy->interpreterState)
-			: classLargePositiveInteger(interpreterProxy->interpreterState)), (longDigitLen * 4) + 1, interpreterProxy->interpreterState);
-		sum = popRemappableOop(interpreterProxy->interpreterState)
+			? classLargeNegativeInteger(self)
+			: classLargePositiveInteger(self)), (longDigitLen * 4) + 1, self);
+		sum = popRemappableOop(self)
 #endif /* SPURVM */
 ;
 		if (!(newSum)) {
-			return primitiveFailFor(PrimErrNoMemory, interpreterProxy->interpreterState);
+			return primitiveFailFor(PrimErrNoMemory, self);
 		}
 		/* begin cDigitCopyFrom:to:len: */
-		pFrom = ((unsigned int *) (firstIndexableField(sum, interpreterProxy->interpreterState)));
-		pTo = ((unsigned int *) (firstIndexableField(newSum, interpreterProxy->interpreterState)));
+		pFrom = ((unsigned int *) (firstIndexableField(sum, self)));
+		pTo = ((unsigned int *) (firstIndexableField(newSum, self)));
 		for (i = 0; i < longDigitLen; i += 1) {
 			pTo[i] = (pFrom[i]);
 		}
@@ -1096,13 +1096,13 @@ digitAddLargewith(sqInt firstInteger, sqInt secondInteger)
 		/* C index! */
 		sum = newSum;
 		/* begin cDigitOf:at:put: */
-		cPointer = ((unsigned int *) (firstIndexableField(sum, interpreterProxy->interpreterState)));
+		cPointer = ((unsigned int *) (firstIndexableField(sum, self)));
 		cPointer[longDigitLen] = (SQ_SWAP_4_BYTES_IF_BIGENDIAN(over));
 	}
 	else {
 		sum = (neg
-			? normalizeNegative(sum)
-			: normalizePositive(sum));
+			? normalizeNegative(sum, self)
+			: normalizePositive(sum, self));
 	}
 	return sum;
 }
@@ -1113,7 +1113,7 @@ digitAddLargewith(sqInt firstInteger, sqInt secondInteger)
 
 	/* LargeIntegersPlugin>>#digitBitLogic:with:opIndex: */
 static sqInt
-digitBitLogicwithopIndex(sqInt firstInteger, sqInt secondInteger, sqInt opIx)
+digitBitLogicwithopIndex(sqInt firstInteger, sqInt secondInteger, sqInt opIx, struct foo * self)
 {
 	sqInt firstLarge;
 	sqInt firstLen;
@@ -1130,52 +1130,52 @@ digitBitLogicwithopIndex(sqInt firstInteger, sqInt secondInteger, sqInt opIx)
 	sqInt shortLarge;
 	sqInt shortLen;
 
-	if (isIntegerObject(firstInteger, interpreterProxy->interpreterState)) {
-		if ((integerValueOf(firstInteger, interpreterProxy->interpreterState)) < 0) {
-			return primitiveFail(interpreterProxy->interpreterState);
+	if (isIntegerObject(firstInteger, self)) {
+		if ((integerValueOf(firstInteger, self)) < 0) {
+			return primitiveFail(self);
 		}
 		
 #if SPURVM
-		firstLarge = createLargeFromSmallInteger(firstInteger);
+		firstLarge = createLargeFromSmallInteger(firstInteger, self);
 
 #else /* SPURVM */
-		pushRemappableOop(secondInteger, interpreterProxy->interpreterState);
-		firstLarge = createLargeFromSmallInteger(firstInteger);
-		secondInteger = popRemappableOop(interpreterProxy->interpreterState)
+		pushRemappableOop(secondInteger, self);
+		firstLarge = createLargeFromSmallInteger(firstInteger, self);
+		secondInteger = popRemappableOop(self)
 #endif /* SPURVM */
 ;
 	}
 	else {
-		if (!(isLargePositiveIntegerObject(firstInteger, interpreterProxy->interpreterState))) {
-			return primitiveFail(interpreterProxy->interpreterState);
+		if (!(isLargePositiveIntegerObject(firstInteger, self))) {
+			return primitiveFail(self);
 		}
 		firstLarge = firstInteger;
 	}
-	if (isIntegerObject(secondInteger, interpreterProxy->interpreterState)) {
-		if ((integerValueOf(secondInteger, interpreterProxy->interpreterState)) < 0) {
-			return primitiveFail(interpreterProxy->interpreterState);
+	if (isIntegerObject(secondInteger, self)) {
+		if ((integerValueOf(secondInteger, self)) < 0) {
+			return primitiveFail(self);
 		}
 		
 #if SPURVM
-		secondLarge = createLargeFromSmallInteger(secondInteger);
+		secondLarge = createLargeFromSmallInteger(secondInteger, self);
 
 #else /* SPURVM */
-		pushRemappableOop(firstLarge, interpreterProxy->interpreterState);
-		secondLarge = createLargeFromSmallInteger(secondInteger);
-		firstLarge = popRemappableOop(interpreterProxy->interpreterState)
+		pushRemappableOop(firstLarge, self);
+		secondLarge = createLargeFromSmallInteger(secondInteger, self);
+		firstLarge = popRemappableOop(self)
 #endif /* SPURVM */
 ;
 	}
 	else {
-		if (!(isLargePositiveIntegerObject(secondInteger, interpreterProxy->interpreterState))) {
-			return primitiveFail(interpreterProxy->interpreterState);
+		if (!(isLargePositiveIntegerObject(secondInteger, self))) {
+			return primitiveFail(self);
 		}
 		secondLarge = secondInteger;
 	}
 	/* begin byteSizeOfLargeInt: */
-	firstLen = slotSizeOf(firstLarge, interpreterProxy->interpreterState);
+	firstLen = slotSizeOf(firstLarge, self);
 	/* begin byteSizeOfLargeInt: */
-	secondLen = slotSizeOf(secondLarge, interpreterProxy->interpreterState);
+	secondLen = slotSizeOf(secondLarge, self);
 	if (firstLen < secondLen) {
 		shortLen = firstLen;
 		shortLarge = firstLarge;
@@ -1190,23 +1190,23 @@ digitBitLogicwithopIndex(sqInt firstInteger, sqInt secondInteger, sqInt opIx)
 	}
 	
 #if SPURVM
-	result = instantiateClassindexableSize(classLargePositiveInteger(interpreterProxy->interpreterState), longLen, interpreterProxy->interpreterState);
+	result = instantiateClassindexableSize(classLargePositiveInteger(self), longLen, self);
 
 #else /* SPURVM */
-	pushRemappableOop(shortLarge, interpreterProxy->interpreterState);
-	pushRemappableOop(longLarge, interpreterProxy->interpreterState);
-	result = instantiateClassindexableSize(classLargePositiveInteger(interpreterProxy->interpreterState), longLen, interpreterProxy->interpreterState);
-	longLarge = popRemappableOop(interpreterProxy->interpreterState);
-	shortLarge = popRemappableOop(interpreterProxy->interpreterState)
+	pushRemappableOop(shortLarge, self);
+	pushRemappableOop(longLarge, self);
+	result = instantiateClassindexableSize(classLargePositiveInteger(self), longLen, self);
+	longLarge = popRemappableOop(self);
+	shortLarge = popRemappableOop(self)
 #endif /* SPURVM */
 ;
 	if (!(result)) {
-		return primitiveFailFor(PrimErrNoMemory, interpreterProxy->interpreterState);
+		return primitiveFailFor(PrimErrNoMemory, self);
 	}
 	/* begin cDigitOp:short:len:long:len:into: */
-	pWordShort = ((unsigned int *) (firstIndexableField(shortLarge, interpreterProxy->interpreterState)));
-	pWordLong = ((unsigned int *) (firstIndexableField(longLarge, interpreterProxy->interpreterState)));
-	pWordRes = ((unsigned int *) (firstIndexableField(result, interpreterProxy->interpreterState)));
+	pWordShort = ((unsigned int *) (firstIndexableField(shortLarge, self)));
+	pWordLong = ((unsigned int *) (firstIndexableField(longLarge, self)));
+	pWordRes = ((unsigned int *) (firstIndexableField(result, self)));
 	limit = ((shortLen + 3) / 4) - 1;
 	if (opIx == andOpIndex) {
 		for (i = 0; i <= limit; i += 1) {
@@ -1238,12 +1238,12 @@ digitBitLogicwithopIndex(sqInt firstInteger, sqInt secondInteger, sqInt opIx)
 		}
 		goto l3;
 	}
-	primitiveFail(interpreterProxy->interpreterState);
+	primitiveFail(self);
 	l3:	/* end cDigitOp:short:len:long:len:into: */;
-	if (failed(interpreterProxy->interpreterState)) {
+	if (failed(self)) {
 		return 0;
 	}
-	return normalizePositive(result);
+	return normalizePositive(result, self);
 }
 
 
@@ -1252,22 +1252,22 @@ digitBitLogicwithopIndex(sqInt firstInteger, sqInt secondInteger, sqInt opIx)
 
 	/* LargeIntegersPlugin>>#digitCompareLarge:with: */
 static sqInt
-digitCompareLargewith(sqInt firstInteger, sqInt secondInteger)
+digitCompareLargewith(sqInt firstInteger, sqInt secondInteger, struct foo * self)
 {
 	sqInt firstDigitLen;
 	sqInt secondDigitLen;
 
-	firstDigitLen = ((slotSizeOf(firstInteger, interpreterProxy->interpreterState)) + 3) / 4;
-	secondDigitLen = ((slotSizeOf(secondInteger, interpreterProxy->interpreterState)) + 3) / 4;
+	firstDigitLen = ((slotSizeOf(firstInteger, self)) + 3) / 4;
+	secondDigitLen = ((slotSizeOf(secondInteger, self)) + 3) / 4;
 	if (secondDigitLen != firstDigitLen) {
 		if (secondDigitLen > firstDigitLen) {
-			return integerObjectOf(-1, interpreterProxy->interpreterState);
+			return integerObjectOf(-1, self);
 		}
 		else {
-			return integerObjectOf(1, interpreterProxy->interpreterState);
+			return integerObjectOf(1, self);
 		}
 	}
-	return integerObjectOf((cDigitComparewithlen(((unsigned int *) (firstIndexableField(firstInteger, interpreterProxy->interpreterState))), ((unsigned int *) (firstIndexableField(secondInteger, interpreterProxy->interpreterState))), firstDigitLen)), interpreterProxy->interpreterState);
+	return integerObjectOf((cDigitComparewithlen(((unsigned int *) (firstIndexableField(firstInteger, self))), ((unsigned int *) (firstIndexableField(secondInteger, self))), firstDigitLen, self)), self);
 }
 
 
@@ -1276,7 +1276,7 @@ digitCompareLargewith(sqInt firstInteger, sqInt secondInteger)
 
 	/* LargeIntegersPlugin>>#digitDivLarge:with:negative: */
 static sqInt
-digitDivLargewithnegative(sqInt firstInteger, sqInt secondInteger, sqInt neg)
+digitDivLargewithnegative(sqInt firstInteger, sqInt secondInteger, sqInt neg, struct foo * self)
 {
 	unsigned long long a;
 	unsigned long long b;
@@ -1311,55 +1311,55 @@ digitDivLargewithnegative(sqInt firstInteger, sqInt secondInteger, sqInt neg)
 	sqInt secondDigitLen;
 	unsigned long long t;
 
-	firstDigitLen = ((slotSizeOf(firstInteger, interpreterProxy->interpreterState)) + 3) / 4;
-	secondDigitLen = ((slotSizeOf(secondInteger, interpreterProxy->interpreterState)) + 3) / 4;
+	firstDigitLen = ((slotSizeOf(firstInteger, self)) + 3) / 4;
+	secondDigitLen = ((slotSizeOf(secondInteger, self)) + 3) / 4;
 	quoDigitLen = (firstDigitLen - secondDigitLen) + 1;
 	if (quoDigitLen <= 0) {
 		
 #if SPURVM
-		result = instantiateClassindexableSize(classArray(interpreterProxy->interpreterState), 2, interpreterProxy->interpreterState);
+		result = instantiateClassindexableSize(classArray(self), 2, self);
 
 #else /* SPURVM */
-		pushRemappableOop(firstInteger, interpreterProxy->interpreterState);
-		result = instantiateClassindexableSize(classArray(interpreterProxy->interpreterState), 2, interpreterProxy->interpreterState);
-		firstInteger = popRemappableOop(interpreterProxy->interpreterState)
+		pushRemappableOop(firstInteger, self);
+		result = instantiateClassindexableSize(classArray(self), 2, self);
+		firstInteger = popRemappableOop(self)
 #endif /* SPURVM */
 ;
 		if (!(result == null)) {
-			stObjectatput(result, 1, integerObjectOf(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-			stObjectatput(result, 2, firstInteger, interpreterProxy->interpreterState);
+			stObjectatput(result, 1, integerObjectOf(0, self), self);
+			stObjectatput(result, 2, firstInteger, self);
 		}
 		return result;
 	}
-	d = 32 - (cHighBit32(cDigitOfat(((unsigned int *) (firstIndexableField(secondInteger, interpreterProxy->interpreterState))), secondDigitLen - 1)));
+	d = 32 - (cHighBit32(cDigitOfat(((unsigned int *) (firstIndexableField(secondInteger, self))), secondDigitLen - 1, self), self));
 	
 #if SPURVM
-	div = digitLshift(secondInteger, d);
+	div = digitLshift(secondInteger, d, self);
 	if (!(div == null)) {
-		div = largeIntgrowTo(div, ((((slotSizeOf(div, interpreterProxy->interpreterState)) + 3) / 4) + 1) * 4);
+		div = largeIntgrowTo(div, ((((slotSizeOf(div, self)) + 3) / 4) + 1) * 4, self);
 	}
 	if (!(div)) {
 		return div;
 	}
 
 #else /* SPURVM */
-	pushRemappableOop(firstInteger, interpreterProxy->interpreterState);
-	div = digitLshift(secondInteger, d);
+	pushRemappableOop(firstInteger, self);
+	div = digitLshift(secondInteger, d, self);
 	if (!(div == null)) {
-		div = largeIntgrowTo(div, ((((slotSizeOf(div, interpreterProxy->interpreterState)) + 3) / 4) + 1) * 4);
+		div = largeIntgrowTo(div, ((((slotSizeOf(div, self)) + 3) / 4) + 1) * 4, self);
 	}
 	if (!(div)) {
 		return div;
 	}
-	firstInteger = popRemappableOop(interpreterProxy->interpreterState)
+	firstInteger = popRemappableOop(self)
 #endif /* SPURVM */
 ;
 	
 #if SPURVM
-	rem = digitLshift(firstInteger, d);
+	rem = digitLshift(firstInteger, d, self);
 	if (!(rem == null)) {
-		if ((((slotSizeOf(rem, interpreterProxy->interpreterState)) + 3) / 4) == firstDigitLen) {
-			rem = largeIntgrowTo(rem, (firstDigitLen + 1) * 4);
+		if ((((slotSizeOf(rem, self)) + 3) / 4) == firstDigitLen) {
+			rem = largeIntgrowTo(rem, (firstDigitLen + 1) * 4, self);
 		}
 	}
 	if (!(rem)) {
@@ -1367,44 +1367,44 @@ digitDivLargewithnegative(sqInt firstInteger, sqInt secondInteger, sqInt neg)
 	}
 
 #else /* SPURVM */
-	pushRemappableOop(div, interpreterProxy->interpreterState);
-	rem = digitLshift(firstInteger, d);
+	pushRemappableOop(div, self);
+	rem = digitLshift(firstInteger, d, self);
 	if (!(rem == null)) {
-		if ((((slotSizeOf(rem, interpreterProxy->interpreterState)) + 3) / 4) == firstDigitLen) {
-			rem = largeIntgrowTo(rem, (firstDigitLen + 1) * 4);
+		if ((((slotSizeOf(rem, self)) + 3) / 4) == firstDigitLen) {
+			rem = largeIntgrowTo(rem, (firstDigitLen + 1) * 4, self);
 		}
 	}
 	if (!(rem)) {
 		return rem;
 	}
-	div = popRemappableOop(interpreterProxy->interpreterState)
+	div = popRemappableOop(self)
 #endif /* SPURVM */
 ;
 	
 #if SPURVM
 	/* begin createLargeIntegerNeg:digitLength: */
 	quo = instantiateClassindexableSize((neg
-		? classLargeNegativeInteger(interpreterProxy->interpreterState)
-		: classLargePositiveInteger(interpreterProxy->interpreterState)), quoDigitLen * 4, interpreterProxy->interpreterState);
+		? classLargeNegativeInteger(self)
+		: classLargePositiveInteger(self)), quoDigitLen * 4, self);
 
 #else /* SPURVM */
-	pushRemappableOop(div, interpreterProxy->interpreterState);
-	pushRemappableOop(rem, interpreterProxy->interpreterState);
+	pushRemappableOop(div, self);
+	pushRemappableOop(rem, self);
 	/* begin createLargeIntegerNeg:digitLength: */
 	quo = instantiateClassindexableSize((neg
-		? classLargeNegativeInteger(interpreterProxy->interpreterState)
-		: classLargePositiveInteger(interpreterProxy->interpreterState)), quoDigitLen * 4, interpreterProxy->interpreterState);
-	rem = popRemappableOop(interpreterProxy->interpreterState);
-	div = popRemappableOop(interpreterProxy->interpreterState)
+		? classLargeNegativeInteger(self)
+		: classLargePositiveInteger(self)), quoDigitLen * 4, self);
+	rem = popRemappableOop(self);
+	div = popRemappableOop(self)
 #endif /* SPURVM */
 ;
 	/* begin cDigitDiv:len:rem:len:quo:len: */
-	pDiv = ((unsigned int *) (firstIndexableField(div, interpreterProxy->interpreterState)));
-	divLen = ((slotSizeOf(div, interpreterProxy->interpreterState)) + 3) / 4;
-	pRem = ((unsigned int *) (firstIndexableField(rem, interpreterProxy->interpreterState)));
-	remLen = ((slotSizeOf(rem, interpreterProxy->interpreterState)) + 3) / 4;
-	pQuo = ((unsigned int *) (firstIndexableField(quo, interpreterProxy->interpreterState)));
-	quoLen = ((slotSizeOf(quo, interpreterProxy->interpreterState)) + 3) / 4;
+	pDiv = ((unsigned int *) (firstIndexableField(div, self)));
+	divLen = ((slotSizeOf(div, self)) + 3) / 4;
+	pRem = ((unsigned int *) (firstIndexableField(rem, self)));
+	remLen = ((slotSizeOf(rem, self)) + 3) / 4;
+	pQuo = ((unsigned int *) (firstIndexableField(quo, self)));
+	quoLen = ((slotSizeOf(quo, self)) + 3) / 4;
 
 	/* Last actual byte of data (ST ix) */
 	dl = divLen - 1;
@@ -1507,36 +1507,36 @@ digitDivLargewithnegative(sqInt firstInteger, sqInt secondInteger, sqInt neg)
 	}
 	
 #if SPURVM
-	rem = digitRshiftlookfirst(rem, d, (((slotSizeOf(div, interpreterProxy->interpreterState)) + 3) / 4) - 1);
+	rem = digitRshiftlookfirst(rem, d, (((slotSizeOf(div, self)) + 3) / 4) - 1, self);
 
 #else /* SPURVM */
-	pushRemappableOop(quo, interpreterProxy->interpreterState);
-	rem = digitRshiftlookfirst(rem, d, (((slotSizeOf(div, interpreterProxy->interpreterState)) + 3) / 4) - 1);
-	quo = popRemappableOop(interpreterProxy->interpreterState)
+	pushRemappableOop(quo, self);
+	rem = digitRshiftlookfirst(rem, d, (((slotSizeOf(div, self)) + 3) / 4) - 1, self);
+	quo = popRemappableOop(self)
 #endif /* SPURVM */
 ;
 	
 #if SPURVM
-	result = instantiateClassindexableSize(classArray(interpreterProxy->interpreterState), 2, interpreterProxy->interpreterState);
+	result = instantiateClassindexableSize(classArray(self), 2, self);
 
 #else /* SPURVM */
-	pushRemappableOop(quo, interpreterProxy->interpreterState);
-	pushRemappableOop(rem, interpreterProxy->interpreterState);
-	result = instantiateClassindexableSize(classArray(interpreterProxy->interpreterState), 2, interpreterProxy->interpreterState);
-	rem = popRemappableOop(interpreterProxy->interpreterState);
-	quo = popRemappableOop(interpreterProxy->interpreterState)
+	pushRemappableOop(quo, self);
+	pushRemappableOop(rem, self);
+	result = instantiateClassindexableSize(classArray(self), 2, self);
+	rem = popRemappableOop(self);
+	quo = popRemappableOop(self)
 #endif /* SPURVM */
 ;
 	if (!(result == null)) {
-		stObjectatput(result, 1, quo, interpreterProxy->interpreterState);
-		stObjectatput(result, 2, rem, interpreterProxy->interpreterState);
+		stObjectatput(result, 1, quo, self);
+		stObjectatput(result, 2, rem, self);
 	}
 	return result;
 }
 
 	/* LargeIntegersPlugin>>#digitMontgomery:times:modulo:mInvModB: */
 static sqInt
-digitMontgomerytimesmodulomInvModB(sqInt firstLarge, sqInt secondLarge, sqInt thirdLarge, unsigned int mInv)
+digitMontgomerytimesmodulomInvModB(sqInt firstLarge, sqInt secondLarge, sqInt thirdLarge, unsigned int mInv, struct foo * self)
 {
 	unsigned long long accum;
 	unsigned long long accum2;
@@ -1557,35 +1557,35 @@ digitMontgomerytimesmodulomInvModB(sqInt firstLarge, sqInt secondLarge, sqInt th
 	sqInt thirdLen;
 	unsigned long long u;
 
-	firstLen = ((slotSizeOf(firstLarge, interpreterProxy->interpreterState)) + 3) / 4;
-	secondLen = ((slotSizeOf(secondLarge, interpreterProxy->interpreterState)) + 3) / 4;
-	thirdLen = ((slotSizeOf(thirdLarge, interpreterProxy->interpreterState)) + 3) / 4;
+	firstLen = ((slotSizeOf(firstLarge, self)) + 3) / 4;
+	secondLen = ((slotSizeOf(secondLarge, self)) + 3) / 4;
+	thirdLen = ((slotSizeOf(thirdLarge, self)) + 3) / 4;
 	if (!((firstLen <= thirdLen)
 		 && (secondLen <= thirdLen))) {
-		return primitiveFail(interpreterProxy->interpreterState);
+		return primitiveFail(self);
 	}
 	
 #if SPURVM
-	prod = instantiateClassindexableSize(classLargePositiveInteger(interpreterProxy->interpreterState), thirdLen * 4, interpreterProxy->interpreterState);
+	prod = instantiateClassindexableSize(classLargePositiveInteger(self), thirdLen * 4, self);
 
 #else /* SPURVM */
-	pushRemappableOop(firstLarge, interpreterProxy->interpreterState);
-	pushRemappableOop(secondLarge, interpreterProxy->interpreterState);
-	pushRemappableOop(thirdLarge, interpreterProxy->interpreterState);
-	prod = instantiateClassindexableSize(classLargePositiveInteger(interpreterProxy->interpreterState), thirdLen * 4, interpreterProxy->interpreterState);
-	thirdLarge = popRemappableOop(interpreterProxy->interpreterState);
-	secondLarge = popRemappableOop(interpreterProxy->interpreterState);
-	firstLarge = popRemappableOop(interpreterProxy->interpreterState)
+	pushRemappableOop(firstLarge, self);
+	pushRemappableOop(secondLarge, self);
+	pushRemappableOop(thirdLarge, self);
+	prod = instantiateClassindexableSize(classLargePositiveInteger(self), thirdLen * 4, self);
+	thirdLarge = popRemappableOop(self);
+	secondLarge = popRemappableOop(self);
+	firstLarge = popRemappableOop(self)
 #endif /* SPURVM */
 ;
 	if (!(prod)) {
-		return primitiveFailFor(PrimErrNoMemory, interpreterProxy->interpreterState);
+		return primitiveFailFor(PrimErrNoMemory, self);
 	}
 	/* begin cDigitMontgomery:len:times:len:modulo:len:mInvModB:into: */
-	pFirst = ((unsigned int *) (firstIndexableField(firstLarge, interpreterProxy->interpreterState)));
-	pSecond = ((unsigned int *) (firstIndexableField(secondLarge, interpreterProxy->interpreterState)));
-	pThird = ((unsigned int *) (firstIndexableField(thirdLarge, interpreterProxy->interpreterState)));
-	pRes = ((unsigned int *) (firstIndexableField(prod, interpreterProxy->interpreterState)));
+	pFirst = ((unsigned int *) (firstIndexableField(firstLarge, self)));
+	pSecond = ((unsigned int *) (firstIndexableField(secondLarge, self)));
+	pThird = ((unsigned int *) (firstIndexableField(thirdLarge, self)));
+	pRes = ((unsigned int *) (firstIndexableField(prod, self)));
 	limit1 = firstLen - 1;
 	limit2 = secondLen - 1;
 	limit3 = thirdLen - 1;
@@ -1631,7 +1631,7 @@ digitMontgomerytimesmodulomInvModB(sqInt firstLarge, sqInt secondLarge, sqInt th
 		lastDigit = accum >> 32;
 	}
 	if (!((lastDigit == 0)
-		 && ((cDigitComparewithlen(pThird, pRes, thirdLen)) == 1))) {
+		 && ((cDigitComparewithlen(pThird, pRes, thirdLen, self)) == 1))) {
 
 		/* self cDigitSub: pThird len: thirdLen with: pRes len: thirdLen into: pRes */
 		accum = 0;
@@ -1641,7 +1641,7 @@ digitMontgomerytimesmodulomInvModB(sqInt firstLarge, sqInt secondLarge, sqInt th
 			accum = 0 - (accum >> 0x3F);
 		}
 	}
-	return normalizePositive(prod);
+	return normalizePositive(prod, self);
 }
 
 
@@ -1649,7 +1649,7 @@ digitMontgomerytimesmodulomInvModB(sqInt firstLarge, sqInt secondLarge, sqInt th
 
 	/* LargeIntegersPlugin>>#digitMultiplyLarge:with:negative: */
 static sqInt
-digitMultiplyLargewithnegative(sqInt firstInteger, sqInt secondInteger, sqInt neg)
+digitMultiplyLargewithnegative(sqInt firstInteger, sqInt secondInteger, sqInt neg, struct foo * self)
 {
 	unsigned long long ab;
 	unsigned int carry;
@@ -1671,9 +1671,9 @@ digitMultiplyLargewithnegative(sqInt firstInteger, sqInt secondInteger, sqInt ne
 	sqInt shortLen;
 
 	/* begin byteSizeOfLargeInt: */
-	firstLen = slotSizeOf(firstInteger, interpreterProxy->interpreterState);
+	firstLen = slotSizeOf(firstInteger, self);
 	/* begin byteSizeOfLargeInt: */
-	secondLen = slotSizeOf(secondInteger, interpreterProxy->interpreterState);
+	secondLen = slotSizeOf(secondInteger, self);
 	if (firstLen <= secondLen) {
 		shortInt = firstInteger;
 		shortLen = firstLen;
@@ -1690,27 +1690,27 @@ digitMultiplyLargewithnegative(sqInt firstInteger, sqInt secondInteger, sqInt ne
 #if SPURVM
 	/* begin createLargeIntegerNeg:byteLength: */
 	prod = instantiateClassindexableSize((neg
-		? classLargeNegativeInteger(interpreterProxy->interpreterState)
-		: classLargePositiveInteger(interpreterProxy->interpreterState)), longLen + shortLen, interpreterProxy->interpreterState);
+		? classLargeNegativeInteger(self)
+		: classLargePositiveInteger(self)), longLen + shortLen, self);
 
 #else /* SPURVM */
-	pushRemappableOop(shortInt, interpreterProxy->interpreterState);
-	pushRemappableOop(longInt, interpreterProxy->interpreterState);
+	pushRemappableOop(shortInt, self);
+	pushRemappableOop(longInt, self);
 	/* begin createLargeIntegerNeg:byteLength: */
 	prod = instantiateClassindexableSize((neg
-		? classLargeNegativeInteger(interpreterProxy->interpreterState)
-		: classLargePositiveInteger(interpreterProxy->interpreterState)), longLen + shortLen, interpreterProxy->interpreterState);
-	longInt = popRemappableOop(interpreterProxy->interpreterState);
-	shortInt = popRemappableOop(interpreterProxy->interpreterState)
+		? classLargeNegativeInteger(self)
+		: classLargePositiveInteger(self)), longLen + shortLen, self);
+	longInt = popRemappableOop(self);
+	shortInt = popRemappableOop(self)
 #endif /* SPURVM */
 ;
 	if (!(prod)) {
-		return primitiveFailFor(PrimErrNoMemory, interpreterProxy->interpreterState);
+		return primitiveFailFor(PrimErrNoMemory, self);
 	}
 	/* begin cDigitMultiply:len:with:len:into:len: */
-	pWordShort = ((unsigned int *) (firstIndexableField(shortInt, interpreterProxy->interpreterState)));
-	pWordLong = ((unsigned int *) (firstIndexableField(longInt, interpreterProxy->interpreterState)));
-	pWordRes = ((unsigned int *) (firstIndexableField(prod, interpreterProxy->interpreterState)));
+	pWordShort = ((unsigned int *) (firstIndexableField(shortInt, self)));
+	pWordLong = ((unsigned int *) (firstIndexableField(longInt, self)));
+	pWordRes = ((unsigned int *) (firstIndexableField(prod, self)));
 	if ((((shortLen + 3) / 4) == 1)
 	 && ((pWordShort[0]) == 0)) {
 		goto l4;
@@ -1742,8 +1742,8 @@ digitMultiplyLargewithnegative(sqInt firstInteger, sqInt secondInteger, sqInt ne
 	}
 	l4:	/* end cDigitMultiply:len:with:len:into:len: */;
 	return (neg
-		? normalizeNegative(prod)
-		: normalizePositive(prod));
+		? normalizeNegative(prod, self)
+		: normalizePositive(prod, self));
 }
 
 
@@ -1752,7 +1752,7 @@ digitMultiplyLargewithnegative(sqInt firstInteger, sqInt secondInteger, sqInt ne
 
 	/* LargeIntegersPlugin>>#digitOfCSI:at: */
 static sqInt
-digitOfCSIat(sqInt csi, sqInt ix)
+digitOfCSIat(sqInt csi, sqInt ix, struct foo * self)
 {
 	return ((usqInt) ((csi < 0
 		? 0 - csi
@@ -1764,16 +1764,16 @@ digitOfCSIat(sqInt csi, sqInt ix)
 
 	/* LargeIntegersPlugin>>#digitOfLargeInt:at: */
 static sqInt
-digitOfLargeIntat(sqInt aBytesOop, sqInt ix)
+digitOfLargeIntat(sqInt aBytesOop, sqInt ix, struct foo * self)
 {
 	unsigned int *cPointer;
 
-	if (ix > (((slotSizeOf(aBytesOop, interpreterProxy->interpreterState)) + 3) / 4)) {
+	if (ix > (((slotSizeOf(aBytesOop, self)) + 3) / 4)) {
 		return 0;
 	}
 	else {
 		/* begin cDigitOf:at: */
-		cPointer = ((unsigned int *) (firstIndexableField(aBytesOop, interpreterProxy->interpreterState)));
+		cPointer = ((unsigned int *) (firstIndexableField(aBytesOop, self)));
 		return SQ_SWAP_4_BYTES_IF_BIGENDIAN((cPointer[ix - 1]));
 	}
 }
@@ -1784,7 +1784,7 @@ digitOfLargeIntat(sqInt aBytesOop, sqInt ix)
 
 	/* LargeIntegersPlugin>>#digitSizeOfCSI: */
 static sqInt
-digitSizeOfCSI(sqInt csi)
+digitSizeOfCSI(sqInt csi, struct foo * self)
 {
 	return ((MaxSmallInteger) <= 0x3FFFFFFF
 		? 1
@@ -1800,9 +1800,9 @@ digitSizeOfCSI(sqInt csi)
 
 	/* LargeIntegersPlugin>>#digitSizeOfLargeInt: */
 static sqInt
-digitSizeOfLargeInt(sqInt anOop)
+digitSizeOfLargeInt(sqInt anOop, struct foo * self)
 {
-	return ((slotSizeOf(anOop, interpreterProxy->interpreterState)) + 3) / 4;
+	return ((slotSizeOf(anOop, self)) + 3) / 4;
 }
 
 
@@ -1810,7 +1810,7 @@ digitSizeOfLargeInt(sqInt anOop)
 
 	/* LargeIntegersPlugin>>#digitSubLarge:with: */
 static sqInt
-digitSubLargewith(sqInt firstInteger, sqInt secondInteger)
+digitSubLargewith(sqInt firstInteger, sqInt secondInteger, struct foo * self)
 {
 	sqInt firstDigitLen;
 	sqInt firstNeg;
@@ -1828,21 +1828,21 @@ digitSubLargewith(sqInt firstInteger, sqInt secondInteger)
 	sqInt smallerDigitLen;
 	unsigned long long z;
 
-	firstNeg = isLargeNegativeIntegerObject(firstInteger, interpreterProxy->interpreterState);
+	firstNeg = isLargeNegativeIntegerObject(firstInteger, self);
 	/* begin digitSizeOfLargeInt: */
-	firstDigitLen = ((slotSizeOf(firstInteger, interpreterProxy->interpreterState)) + 3) / 4;
+	firstDigitLen = ((slotSizeOf(firstInteger, self)) + 3) / 4;
 	/* begin digitSizeOfLargeInt: */
-	secondDigitLen = ((slotSizeOf(secondInteger, interpreterProxy->interpreterState)) + 3) / 4;
+	secondDigitLen = ((slotSizeOf(secondInteger, self)) + 3) / 4;
 	if (firstDigitLen == secondDigitLen) {
 		while ((firstDigitLen > 1)
-		 && ((cDigitOfat(((unsigned int *) (firstIndexableField(firstInteger, interpreterProxy->interpreterState))), firstDigitLen - 1)) == (cDigitOfat(((unsigned int *) (firstIndexableField(secondInteger, interpreterProxy->interpreterState))), firstDigitLen - 1)))) {
+		 && ((cDigitOfat(((unsigned int *) (firstIndexableField(firstInteger, self))), firstDigitLen - 1, self)) == (cDigitOfat(((unsigned int *) (firstIndexableField(secondInteger, self))), firstDigitLen - 1, self)))) {
 			firstDigitLen -= 1;
 		}
 		secondDigitLen = firstDigitLen;
 	}
 	if ((firstDigitLen < secondDigitLen)
 	 || ((firstDigitLen == secondDigitLen)
-	 && ((cDigitOfat(((unsigned int *) (firstIndexableField(firstInteger, interpreterProxy->interpreterState))), firstDigitLen - 1)) < (cDigitOfat(((unsigned int *) (firstIndexableField(secondInteger, interpreterProxy->interpreterState))), firstDigitLen - 1))))) {
+	 && ((cDigitOfat(((unsigned int *) (firstIndexableField(firstInteger, self))), firstDigitLen - 1, self)) < (cDigitOfat(((unsigned int *) (firstIndexableField(secondInteger, self))), firstDigitLen - 1, self))))) {
 		larger = secondInteger;
 		largeDigitLen = secondDigitLen;
 		smaller = firstInteger;
@@ -1861,27 +1861,27 @@ digitSubLargewith(sqInt firstInteger, sqInt secondInteger)
 #if SPURVM
 	/* begin createLargeIntegerNeg:digitLength: */
 	res = instantiateClassindexableSize((neg
-		? classLargeNegativeInteger(interpreterProxy->interpreterState)
-		: classLargePositiveInteger(interpreterProxy->interpreterState)), resDigitLen * 4, interpreterProxy->interpreterState);
+		? classLargeNegativeInteger(self)
+		: classLargePositiveInteger(self)), resDigitLen * 4, self);
 
 #else /* SPURVM */
-	pushRemappableOop(smaller, interpreterProxy->interpreterState);
-	pushRemappableOop(larger, interpreterProxy->interpreterState);
+	pushRemappableOop(smaller, self);
+	pushRemappableOop(larger, self);
 	/* begin createLargeIntegerNeg:digitLength: */
 	res = instantiateClassindexableSize((neg
-		? classLargeNegativeInteger(interpreterProxy->interpreterState)
-		: classLargePositiveInteger(interpreterProxy->interpreterState)), resDigitLen * 4, interpreterProxy->interpreterState);
-	larger = popRemappableOop(interpreterProxy->interpreterState);
-	smaller = popRemappableOop(interpreterProxy->interpreterState)
+		? classLargeNegativeInteger(self)
+		: classLargePositiveInteger(self)), resDigitLen * 4, self);
+	larger = popRemappableOop(self);
+	smaller = popRemappableOop(self)
 #endif /* SPURVM */
 ;
 	if (!(res)) {
-		return primitiveFailFor(PrimErrNoMemory, interpreterProxy->interpreterState);
+		return primitiveFailFor(PrimErrNoMemory, self);
 	}
 	/* begin cDigitSub:len:with:len:into: */
-	pWordSmall = ((unsigned int *) (firstIndexableField(smaller, interpreterProxy->interpreterState)));
-	pWordLarge = ((unsigned int *) (firstIndexableField(larger, interpreterProxy->interpreterState)));
-	pWordRes = ((unsigned int *) (firstIndexableField(res, interpreterProxy->interpreterState)));
+	pWordSmall = ((unsigned int *) (firstIndexableField(smaller, self)));
+	pWordLarge = ((unsigned int *) (firstIndexableField(larger, self)));
+	pWordRes = ((unsigned int *) (firstIndexableField(res, self)));
 	z = 0;
 	for (i = 0; i < smallerDigitLen; i += 1) {
 		z = (z + (SQ_SWAP_4_BYTES_IF_BIGENDIAN((pWordLarge[i])))) - (SQ_SWAP_4_BYTES_IF_BIGENDIAN((pWordSmall[i])));
@@ -1896,8 +1896,8 @@ digitSubLargewith(sqInt firstInteger, sqInt secondInteger)
 		z = 0 - (z >> 0x3F);
 	}
 	return (neg
-		? normalizeNegative(res)
-		: normalizePositive(res));
+		? normalizeNegative(res, self)
+		: normalizePositive(res, self));
 }
 
 
@@ -1908,7 +1908,7 @@ digitSubLargewith(sqInt firstInteger, sqInt secondInteger)
 
 	/* LargeIntegersPlugin>>#digit:Lshift: */
 static sqInt
-digitLshift(sqInt anOop, sqInt shiftCount)
+digitLshift(sqInt anOop, sqInt shiftCount, struct foo * self)
 {
 	sqInt bitShift;
 	unsigned int carry;
@@ -1927,29 +1927,29 @@ digitLshift(sqInt anOop, sqInt shiftCount)
 	sqInt rshift;
 
 	/* begin digitSizeOfLargeInt: */
-	oldDigitLen = ((slotSizeOf(anOop, interpreterProxy->interpreterState)) + 3) / 4;
-	if (((highBit = cDigitHighBitlen(((unsigned int *) (firstIndexableField(anOop, interpreterProxy->interpreterState))), oldDigitLen))) == 0) {
-		return instantiateClassindexableSize(fetchClassOf(anOop, interpreterProxy->interpreterState), 1, interpreterProxy->interpreterState);
+	oldDigitLen = ((slotSizeOf(anOop, self)) + 3) / 4;
+	if (((highBit = cDigitHighBitlen(((unsigned int *) (firstIndexableField(anOop, self))), oldDigitLen, self))) == 0) {
+		return instantiateClassindexableSize(fetchClassOf(anOop, self), 1, self);
 	}
 	newByteLen = ((highBit + shiftCount) + 7) / 8;
 	
 #if SPURVM
-	newOop = instantiateClassindexableSize(fetchClassOf(anOop, interpreterProxy->interpreterState), newByteLen, interpreterProxy->interpreterState);
+	newOop = instantiateClassindexableSize(fetchClassOf(anOop, self), newByteLen, self);
 
 #else /* SPURVM */
-	pushRemappableOop(anOop, interpreterProxy->interpreterState);
-	newOop = instantiateClassindexableSize(fetchClassOf(anOop, interpreterProxy->interpreterState), newByteLen, interpreterProxy->interpreterState);
-	anOop = popRemappableOop(interpreterProxy->interpreterState)
+	pushRemappableOop(anOop, self);
+	newOop = instantiateClassindexableSize(fetchClassOf(anOop, self), newByteLen, self);
+	anOop = popRemappableOop(self)
 #endif /* SPURVM */
 ;
 	if (!(newOop)) {
-		primitiveFailFor(PrimErrNoMemory, interpreterProxy->interpreterState);
+		primitiveFailFor(PrimErrNoMemory, self);
 		return null;
 	}
 	newDigitLen = (newByteLen + 3) / 4;
 	/* begin cDigitLshift:from:len:to:len: */
-	pFrom = ((unsigned int *) (firstIndexableField(anOop, interpreterProxy->interpreterState)));
-	pTo = ((unsigned int *) (firstIndexableField(newOop, interpreterProxy->interpreterState)));
+	pFrom = ((unsigned int *) (firstIndexableField(anOop, self)));
+	pTo = ((unsigned int *) (firstIndexableField(newOop, self)));
 	digitShift = shiftCount / 32;
 	bitShift = shiftCount % 32;
 
@@ -1993,7 +1993,7 @@ digitLshift(sqInt anOop, sqInt shiftCount)
 
 	/* LargeIntegersPlugin>>#digit:Rshift:lookfirst: */
 static sqInt
-digitRshiftlookfirst(sqInt anOop, sqInt shiftCount, sqInt a)
+digitRshiftlookfirst(sqInt anOop, sqInt shiftCount, sqInt a, struct foo * self)
 {
 	sqInt bitShift;
 	unsigned int carry;
@@ -2017,41 +2017,41 @@ digitRshiftlookfirst(sqInt anOop, sqInt shiftCount, sqInt a)
 	sqInt start;
 
 	/* begin cDigitHighBit:len: */
-	pUint32 = ((unsigned int *) (firstIndexableField(anOop, interpreterProxy->interpreterState)));
+	pUint32 = ((unsigned int *) (firstIndexableField(anOop, self)));
 	realLength = a;
 	do {
 		if (realLength == 0) {
 			oldBitLen = 0;
 			goto l5;
 		}
-	} while(((lastDigit = cDigitOfat(pUint32, (realLength -= 1)))) == 0);
-	oldBitLen = (cHighBit32(lastDigit)) + (32 * realLength);
+	} while(((lastDigit = cDigitOfat(pUint32, (realLength -= 1), self))) == 0);
+	oldBitLen = (cHighBit32(lastDigit, self)) + (32 * realLength);
 	l5:	/* end cDigitHighBit:len: */;
 	oldDigitLen = (oldBitLen + 0x1F) / 32;
 	newBitLen = oldBitLen - shiftCount;
 	if (newBitLen <= 0) {
 
 		/* All bits lost */
-		return instantiateClassindexableSize(fetchClassOf(anOop, interpreterProxy->interpreterState), 0, interpreterProxy->interpreterState);
+		return instantiateClassindexableSize(fetchClassOf(anOop, self), 0, self);
 	}
 	newByteLen = (newBitLen + 7) / 8;
 	newDigitLen = (newByteLen + 3) / 4;
 	
 #if SPURVM
-	newOop = instantiateClassindexableSize(fetchClassOf(anOop, interpreterProxy->interpreterState), newByteLen, interpreterProxy->interpreterState);
+	newOop = instantiateClassindexableSize(fetchClassOf(anOop, self), newByteLen, self);
 
 #else /* SPURVM */
-	pushRemappableOop(anOop, interpreterProxy->interpreterState);
-	newOop = instantiateClassindexableSize(fetchClassOf(anOop, interpreterProxy->interpreterState), newByteLen, interpreterProxy->interpreterState);
-	anOop = popRemappableOop(interpreterProxy->interpreterState)
+	pushRemappableOop(anOop, self);
+	newOop = instantiateClassindexableSize(fetchClassOf(anOop, self), newByteLen, self);
+	anOop = popRemappableOop(self)
 #endif /* SPURVM */
 ;
 	if (!(newOop)) {
-		return primitiveFailFor(PrimErrNoMemory, interpreterProxy->interpreterState);
+		return primitiveFailFor(PrimErrNoMemory, self);
 	}
 	/* begin cDigitRshift:from:len:to:len: */
-	pFrom = ((unsigned int *) (firstIndexableField(anOop, interpreterProxy->interpreterState)));
-	pTo = ((unsigned int *) (firstIndexableField(newOop, interpreterProxy->interpreterState)));
+	pFrom = ((unsigned int *) (firstIndexableField(anOop, self)));
+	pTo = ((unsigned int *) (firstIndexableField(newOop, self)));
 	digitShift = shiftCount / 32;
 	bitShift = shiftCount % 32;
 	if (bitShift == 0) {
@@ -2098,7 +2098,7 @@ getModuleName(void)
 
 	/* LargeIntegersPlugin>>#highBitOfLargeInt: */
 static sqInt
-highBitOfLargeInt(sqInt anOop)
+highBitOfLargeInt(sqInt anOop, struct foo * self)
 {
 	unsigned int lastDigit;
 	sqInt len;
@@ -2106,15 +2106,15 @@ highBitOfLargeInt(sqInt anOop)
 	sqInt realLength;
 
 	/* begin cDigitHighBit:len: */
-	pUint32 = ((unsigned int *) (firstIndexableField(anOop, interpreterProxy->interpreterState)));
-	len = ((slotSizeOf(anOop, interpreterProxy->interpreterState)) + 3) / 4;
+	pUint32 = ((unsigned int *) (firstIndexableField(anOop, self)));
+	len = ((slotSizeOf(anOop, self)) + 3) / 4;
 	realLength = len;
 	do {
 		if (realLength == 0) {
 			return 0;
 		}
-	} while(((lastDigit = cDigitOfat(pUint32, (realLength -= 1)))) == 0);
-	return (cHighBit32(lastDigit)) + (32 * realLength);
+	} while(((lastDigit = cDigitOfat(pUint32, (realLength -= 1), self))) == 0);
+	return (cHighBit32(lastDigit, self)) + (32 * realLength);
 }
 
 
@@ -2122,16 +2122,16 @@ highBitOfLargeInt(sqInt anOop)
 
 	/* LargeIntegersPlugin>>#isNormalized: */
 static sqInt
-isNormalized(sqInt aLargeInteger)
+isNormalized(sqInt aLargeInteger, struct foo * self)
 {
 	sqInt len;
 
 	/* begin byteSizeOfLargeInt: */
-	len = slotSizeOf(aLargeInteger, interpreterProxy->interpreterState);
+	len = slotSizeOf(aLargeInteger, self);
 	if (len == 0) {
 		return 0;
 	}
-	if ((unsafeByteOfLargeIntat(aLargeInteger, len)) == 0) {
+	if ((unsafeByteOfLargeIntat(aLargeInteger, len, self)) == 0) {
 		return 0;
 	}
 	return 1;
@@ -2145,7 +2145,7 @@ isNormalized(sqInt aLargeInteger)
 
 	/* LargeIntegersPlugin>>#largeInt:growTo: */
 static sqInt
-largeIntgrowTo(sqInt aBytesObject, sqInt newByteLen)
+largeIntgrowTo(sqInt aBytesObject, sqInt newByteLen, struct foo * self)
 {
 	sqInt copyLen;
 	sqInt i;
@@ -2157,31 +2157,31 @@ largeIntgrowTo(sqInt aBytesObject, sqInt newByteLen)
 
 	
 #if SPURVM
-	newBytes = instantiateClassindexableSize(fetchClassOf(aBytesObject, interpreterProxy->interpreterState), newByteLen, interpreterProxy->interpreterState);
+	newBytes = instantiateClassindexableSize(fetchClassOf(aBytesObject, self), newByteLen, self);
 	if (!(newBytes)) {
-		primitiveFailFor(PrimErrNoMemory, interpreterProxy->interpreterState);
+		primitiveFailFor(PrimErrNoMemory, self);
 		return null;
 	}
 
 #else /* SPURVM */
-	pushRemappableOop(aBytesObject, interpreterProxy->interpreterState);
-	newBytes = instantiateClassindexableSize(fetchClassOf(aBytesObject, interpreterProxy->interpreterState), newByteLen, interpreterProxy->interpreterState);
+	pushRemappableOop(aBytesObject, self);
+	newBytes = instantiateClassindexableSize(fetchClassOf(aBytesObject, self), newByteLen, self);
 	if (!(newBytes)) {
-		primitiveFailFor(PrimErrNoMemory, interpreterProxy->interpreterState);
+		primitiveFailFor(PrimErrNoMemory, self);
 		return null;
 	}
-	aBytesObject = popRemappableOop(interpreterProxy->interpreterState)
+	aBytesObject = popRemappableOop(self)
 #endif /* SPURVM */
 ;
 	newDigitLen = (newByteLen + 3) / 4;
 	/* begin digitSizeOfLargeInt: */
-	oldDigitLen = ((slotSizeOf(aBytesObject, interpreterProxy->interpreterState)) + 3) / 4;
+	oldDigitLen = ((slotSizeOf(aBytesObject, self)) + 3) / 4;
 	copyLen = (oldDigitLen < newDigitLen
 		? oldDigitLen
 		: newDigitLen);
 	/* begin cDigitCopyFrom:to:len: */
-	pFrom = ((unsigned int *) (firstIndexableField(aBytesObject, interpreterProxy->interpreterState)));
-	pTo = ((unsigned int *) (firstIndexableField(newBytes, interpreterProxy->interpreterState)));
+	pFrom = ((unsigned int *) (firstIndexableField(aBytesObject, self)));
+	pTo = ((unsigned int *) (firstIndexableField(newBytes, self)));
 	for (i = 0; i < copyLen; i += 1) {
 		pTo[i] = (pFrom[i]);
 	}
@@ -2190,7 +2190,7 @@ largeIntgrowTo(sqInt aBytesObject, sqInt newByteLen)
 
 	/* InterpreterPlugin>>#msg: */
 static sqInt
-msg(char *s)
+msg(char *s, struct foo * self)
 {
 	fprintf(stderr, "\n%s: %s", moduleName, s);
 	return 0;
@@ -2202,7 +2202,7 @@ msg(char *s)
 
 	/* LargeIntegersPlugin>>#normalizeNegative: */
 static sqInt
-normalizeNegative(sqInt aLargeNegativeInteger)
+normalizeNegative(sqInt aLargeNegativeInteger, struct foo * self)
 {
 	sqInt byteLen;
 	unsigned int *cPointer;
@@ -2214,16 +2214,16 @@ normalizeNegative(sqInt aLargeNegativeInteger)
 	usqInt val2;
 
 	/* begin digitSizeOfLargeInt: */
-	digitLen = ((slotSizeOf(aLargeNegativeInteger, interpreterProxy->interpreterState)) + 3) / 4;
+	digitLen = ((slotSizeOf(aLargeNegativeInteger, self)) + 3) / 4;
 	while ((digitLen != 0)
-	 && ((cDigitOfat(((unsigned int *) (firstIndexableField(aLargeNegativeInteger, interpreterProxy->interpreterState))), digitLen - 1)) == 0)) {
+	 && ((cDigitOfat(((unsigned int *) (firstIndexableField(aLargeNegativeInteger, self))), digitLen - 1, self)) == 0)) {
 		digitLen -= 1;
 	}
 	if (digitLen == 0) {
-		return integerObjectOf(0, interpreterProxy->interpreterState);
+		return integerObjectOf(0, self);
 	}
 	/* begin cDigitOf:at: */
-	cPointer = ((unsigned int *) (firstIndexableField(aLargeNegativeInteger, interpreterProxy->interpreterState)));
+	cPointer = ((unsigned int *) (firstIndexableField(aLargeNegativeInteger, self)));
 	val = SQ_SWAP_4_BYTES_IF_BIGENDIAN((cPointer[digitLen - 1]));
 
 	/* SmallInteger minVal digitLength */
@@ -2234,10 +2234,10 @@ normalizeNegative(sqInt aLargeNegativeInteger)
 		minVal = 0 - (MinSmallInteger);
 		val2 = val;
 		if (digitLen > 1) {
-			val2 = (val2 << 32) + (cDigitOfat(((unsigned int *) (firstIndexableField(aLargeNegativeInteger, interpreterProxy->interpreterState))), 1 - 1));
+			val2 = (val2 << 32) + (cDigitOfat(((unsigned int *) (firstIndexableField(aLargeNegativeInteger, self))), 1 - 1, self));
 		}
 		if (val2 <= minVal) {
-			return integerObjectOf((0 - val2), interpreterProxy->interpreterState);
+			return integerObjectOf((0 - val2), self);
 		}
 	}
 	byteLen = digitLen * 4;
@@ -2251,9 +2251,9 @@ normalizeNegative(sqInt aLargeNegativeInteger)
 		byteLen -= 1;
 	}
 	/* begin byteSizeOfLargeInt: */
-	oldByteLen = slotSizeOf(aLargeNegativeInteger, interpreterProxy->interpreterState);
+	oldByteLen = slotSizeOf(aLargeNegativeInteger, self);
 	if (byteLen < oldByteLen) {
-		return largeIntgrowTo(aLargeNegativeInteger, byteLen);
+		return largeIntgrowTo(aLargeNegativeInteger, byteLen, self);
 	}
 	else {
 		return aLargeNegativeInteger;
@@ -2266,7 +2266,7 @@ normalizeNegative(sqInt aLargeNegativeInteger)
 
 	/* LargeIntegersPlugin>>#normalizePositive: */
 static sqInt
-normalizePositive(sqInt aLargePositiveInteger)
+normalizePositive(sqInt aLargePositiveInteger, struct foo * self)
 {
 	sqInt byteLen;
 	unsigned int *cPointer;
@@ -2278,16 +2278,16 @@ normalizePositive(sqInt aLargePositiveInteger)
 	usqInt val2;
 
 	/* begin digitSizeOfLargeInt: */
-	digitLen = ((slotSizeOf(aLargePositiveInteger, interpreterProxy->interpreterState)) + 3) / 4;
+	digitLen = ((slotSizeOf(aLargePositiveInteger, self)) + 3) / 4;
 	while ((digitLen != 0)
-	 && ((cDigitOfat(((unsigned int *) (firstIndexableField(aLargePositiveInteger, interpreterProxy->interpreterState))), digitLen - 1)) == 0)) {
+	 && ((cDigitOfat(((unsigned int *) (firstIndexableField(aLargePositiveInteger, self))), digitLen - 1, self)) == 0)) {
 		digitLen -= 1;
 	}
 	if (digitLen == 0) {
-		return integerObjectOf(0, interpreterProxy->interpreterState);
+		return integerObjectOf(0, self);
 	}
 	/* begin cDigitOf:at: */
-	cPointer = ((unsigned int *) (firstIndexableField(aLargePositiveInteger, interpreterProxy->interpreterState)));
+	cPointer = ((unsigned int *) (firstIndexableField(aLargePositiveInteger, self)));
 	val = SQ_SWAP_4_BYTES_IF_BIGENDIAN((cPointer[digitLen - 1]));
 
 	/* SmallInteger maxVal digitLength */
@@ -2301,10 +2301,10 @@ normalizePositive(sqInt aLargePositiveInteger)
 
 			/* Note: asUnsignedLongLong is not necessary because this branch is for 64 bits only.
 			   but we want to avoid a C Compiler warning on 32 bits */
-			val2 = ((((unsigned long long)val2)) << 32) + (cDigitOfat(((unsigned int *) (firstIndexableField(aLargePositiveInteger, interpreterProxy->interpreterState))), 1 - 1));
+			val2 = ((((unsigned long long)val2)) << 32) + (cDigitOfat(((unsigned int *) (firstIndexableField(aLargePositiveInteger, self))), 1 - 1, self));
 		}
 		if (val2 <= maxVal) {
-			return integerObjectOf(val2, interpreterProxy->interpreterState);
+			return integerObjectOf(val2, self);
 		}
 	}
 	byteLen = digitLen * 4;
@@ -2318,9 +2318,9 @@ normalizePositive(sqInt aLargePositiveInteger)
 		byteLen -= 1;
 	}
 	/* begin byteSizeOfLargeInt: */
-	oldByteLen = slotSizeOf(aLargePositiveInteger, interpreterProxy->interpreterState);
+	oldByteLen = slotSizeOf(aLargePositiveInteger, self);
 	if (byteLen < oldByteLen) {
-		return largeIntgrowTo(aLargePositiveInteger, byteLen);
+		return largeIntgrowTo(aLargePositiveInteger, byteLen, self);
 	}
 	else {
 		return aLargePositiveInteger;
@@ -2332,20 +2332,20 @@ normalizePositive(sqInt aLargePositiveInteger)
 
 	/* LargeIntegersPlugin>>#normalize: */
 static sqInt
-normalize(sqInt aLargeInteger)
+normalize(sqInt aLargeInteger, struct foo * self)
 {
 	/* missing DebugCode */;
-	if (isLargePositiveIntegerObject(aLargeInteger, interpreterProxy->interpreterState)) {
-		return normalizePositive(aLargeInteger);
+	if (isLargePositiveIntegerObject(aLargeInteger, self)) {
+		return normalizePositive(aLargeInteger, self);
 	}
 	else {
-		return normalizeNegative(aLargeInteger);
+		return normalizeNegative(aLargeInteger, self);
 	}
 }
 
 	/* LargeIntegersPlugin>>#primAnyBitFrom:to: */
 EXPORT(sqInt)
-primAnyBitFromTo(void)
+primAnyBitFromTo(struct foo * self)
 {
 	sqInt from;
 	sqInt integer;
@@ -2353,31 +2353,31 @@ primAnyBitFromTo(void)
 	sqInt to;
 	sqInt _return_value;
 
-	if (!((isIntegerObject(stackValue(1, interpreterProxy->interpreterState), interpreterProxy->interpreterState))
-		 && (isIntegerObject(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState)))) {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	if (!((isIntegerObject(stackValue(1, self), self))
+		 && (isIntegerObject(stackValue(0, self), self)))) {
+		primitiveFailFor(PrimErrBadArgument, self);
 		return null;
 	}
-	from = stackIntegerValue(1, interpreterProxy->interpreterState);
-	to = stackIntegerValue(0, interpreterProxy->interpreterState);
+	from = stackIntegerValue(1, self);
+	to = stackIntegerValue(0, self);
 	/* missing DebugCode */;
-	success(isKindOfInteger(stackValue(2, interpreterProxy->interpreterState), interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	integer = stackValue(2, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	success(isKindOfInteger(stackValue(2, self), self), self);
+	integer = stackValue(2, self);
+	if (failed(self)) {
 		return null;
 	}
-	if (isIntegerObject(integer, interpreterProxy->interpreterState)) {
+	if (isIntegerObject(integer, self)) {
 
 		/* convert it to a not normalized LargeInteger */
-		large = createLargeFromSmallInteger(integer);
+		large = createLargeFromSmallInteger(integer, self);
 	}
 	else {
 		large = integer;
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		_return_value = (((anyBitOfLargeIntfromto(large, from, to))) ? trueObject(interpreterProxy->interpreterState) : falseObject(interpreterProxy->interpreterState));
-		if (!(failed(interpreterProxy->interpreterState))) {
-			popthenPush(3, _return_value, interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		_return_value = (((anyBitOfLargeIntfromto(large, from, to, self))) ? trueObject(self) : falseObject(self));
+		if (!(failed(self))) {
+			popthenPush(3, _return_value, self);
 		}
 	}
 	return null;
@@ -2385,7 +2385,7 @@ primAnyBitFromTo(void)
 
 	/* LargeIntegersPlugin>>#primDigitAdd: */
 EXPORT(sqInt)
-primDigitAdd(void)
+primDigitAdd(struct foo * self)
 {
 	unsigned long long accum;
 	unsigned int *cPointer;
@@ -2412,56 +2412,56 @@ primDigitAdd(void)
 	sqInt sum;
 	sqInt _return_value;
 
-	if (!(isKindOfInteger(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState))) {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	if (!(isKindOfInteger(stackValue(0, self), self))) {
+		primitiveFailFor(PrimErrBadArgument, self);
 		return null;
 	}
-	secondInteger = stackValue(0, interpreterProxy->interpreterState);
+	secondInteger = stackValue(0, self);
 	/* missing DebugCode */;
-	success(isKindOfInteger(stackValue(1, interpreterProxy->interpreterState), interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	firstInteger = stackValue(1, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	success(isKindOfInteger(stackValue(1, self), self), self);
+	firstInteger = stackValue(1, self);
+	if (failed(self)) {
 		return null;
 	}
-	if (isIntegerObject(firstInteger, interpreterProxy->interpreterState)) {
+	if (isIntegerObject(firstInteger, self)) {
 
 		/* convert it to a not normalized LargeInteger */
 		
 #if SPURVM
-		firstLarge = createLargeFromSmallInteger(firstInteger);
+		firstLarge = createLargeFromSmallInteger(firstInteger, self);
 
 #else /* SPURVM */
-		pushRemappableOop(secondInteger, interpreterProxy->interpreterState);
-		firstLarge = createLargeFromSmallInteger(firstInteger);
-		secondInteger = popRemappableOop(interpreterProxy->interpreterState)
+		pushRemappableOop(secondInteger, self);
+		firstLarge = createLargeFromSmallInteger(firstInteger, self);
+		secondInteger = popRemappableOop(self)
 #endif /* SPURVM */
 ;
 	}
 	else {
 		firstLarge = firstInteger;
 	}
-	if (isIntegerObject(secondInteger, interpreterProxy->interpreterState)) {
+	if (isIntegerObject(secondInteger, self)) {
 
 		/* convert it to a not normalized LargeInteger */
 		
 #if SPURVM
-		secondLarge = createLargeFromSmallInteger(secondInteger);
+		secondLarge = createLargeFromSmallInteger(secondInteger, self);
 
 #else /* SPURVM */
-		pushRemappableOop(firstLarge, interpreterProxy->interpreterState);
-		secondLarge = createLargeFromSmallInteger(secondInteger);
-		firstLarge = popRemappableOop(interpreterProxy->interpreterState)
+		pushRemappableOop(firstLarge, self);
+		secondLarge = createLargeFromSmallInteger(secondInteger, self);
+		firstLarge = popRemappableOop(self)
 #endif /* SPURVM */
 ;
 	}
 	else {
 		secondLarge = secondInteger;
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
+	if (!(failed(self))) {
 		/* begin digitAddLarge:with: */
-		firstDigitLen = ((slotSizeOf(firstLarge, interpreterProxy->interpreterState)) + 3) / 4;
-		secondDigitLen = ((slotSizeOf(secondLarge, interpreterProxy->interpreterState)) + 3) / 4;
-		neg = isLargeNegativeIntegerObject(firstLarge, interpreterProxy->interpreterState);
+		firstDigitLen = ((slotSizeOf(firstLarge, self)) + 3) / 4;
+		secondDigitLen = ((slotSizeOf(secondLarge, self)) + 3) / 4;
+		neg = isLargeNegativeIntegerObject(firstLarge, self);
 		if (firstDigitLen <= secondDigitLen) {
 			shortInt = firstLarge;
 			shortDigitLen = firstDigitLen;
@@ -2478,28 +2478,28 @@ primDigitAdd(void)
 #if SPURVM
 		/* begin createLargeIntegerNeg:digitLength: */
 		sum = instantiateClassindexableSize((neg
-			? classLargeNegativeInteger(interpreterProxy->interpreterState)
-			: classLargePositiveInteger(interpreterProxy->interpreterState)), longDigitLen * 4, interpreterProxy->interpreterState);
+			? classLargeNegativeInteger(self)
+			: classLargePositiveInteger(self)), longDigitLen * 4, self);
 
 #else /* SPURVM */
-		pushRemappableOop(shortInt, interpreterProxy->interpreterState);
-		pushRemappableOop(longInt, interpreterProxy->interpreterState);
+		pushRemappableOop(shortInt, self);
+		pushRemappableOop(longInt, self);
 		/* begin createLargeIntegerNeg:digitLength: */
 		sum = instantiateClassindexableSize((neg
-			? classLargeNegativeInteger(interpreterProxy->interpreterState)
-			: classLargePositiveInteger(interpreterProxy->interpreterState)), longDigitLen * 4, interpreterProxy->interpreterState);
-		longInt = popRemappableOop(interpreterProxy->interpreterState);
-		shortInt = popRemappableOop(interpreterProxy->interpreterState)
+			? classLargeNegativeInteger(self)
+			: classLargePositiveInteger(self)), longDigitLen * 4, self);
+		longInt = popRemappableOop(self);
+		shortInt = popRemappableOop(self)
 #endif /* SPURVM */
 ;
 		if (!(sum)) {
-			_return_value = primitiveFailFor(PrimErrNoMemory, interpreterProxy->interpreterState);
+			_return_value = primitiveFailFor(PrimErrNoMemory, self);
 			goto l6;
 		}
 		/* begin cDigitAdd:len:with:len:into: */
-		pWordShort = ((unsigned int *) (firstIndexableField(shortInt, interpreterProxy->interpreterState)));
-		pWordLong = ((unsigned int *) (firstIndexableField(longInt, interpreterProxy->interpreterState)));
-		pWordRes = ((unsigned int *) (firstIndexableField(sum, interpreterProxy->interpreterState)));
+		pWordShort = ((unsigned int *) (firstIndexableField(shortInt, self)));
+		pWordLong = ((unsigned int *) (firstIndexableField(longInt, self)));
+		pWordRes = ((unsigned int *) (firstIndexableField(sum, self)));
 		accum = 0;
 		for (i1 = 0; i1 < shortDigitLen; i1 += 1) {
 			accum = ((accum >> 32) + (SQ_SWAP_4_BYTES_IF_BIGENDIAN((pWordShort[i1])))) + (SQ_SWAP_4_BYTES_IF_BIGENDIAN((pWordLong[i1])));
@@ -2517,25 +2517,25 @@ primDigitAdd(void)
 #if SPURVM
 			/* begin createLargeIntegerNeg:byteLength: */
 			newSum = instantiateClassindexableSize((neg
-				? classLargeNegativeInteger(interpreterProxy->interpreterState)
-				: classLargePositiveInteger(interpreterProxy->interpreterState)), (longDigitLen * 4) + 1, interpreterProxy->interpreterState);
+				? classLargeNegativeInteger(self)
+				: classLargePositiveInteger(self)), (longDigitLen * 4) + 1, self);
 
 #else /* SPURVM */
-			pushRemappableOop(sum, interpreterProxy->interpreterState);
+			pushRemappableOop(sum, self);
 			/* begin createLargeIntegerNeg:byteLength: */
 			newSum = instantiateClassindexableSize((neg
-				? classLargeNegativeInteger(interpreterProxy->interpreterState)
-				: classLargePositiveInteger(interpreterProxy->interpreterState)), (longDigitLen * 4) + 1, interpreterProxy->interpreterState);
-			sum = popRemappableOop(interpreterProxy->interpreterState)
+				? classLargeNegativeInteger(self)
+				: classLargePositiveInteger(self)), (longDigitLen * 4) + 1, self);
+			sum = popRemappableOop(self)
 #endif /* SPURVM */
 ;
 			if (!(newSum)) {
-				_return_value = primitiveFailFor(PrimErrNoMemory, interpreterProxy->interpreterState);
+				_return_value = primitiveFailFor(PrimErrNoMemory, self);
 				goto l6;
 			}
 			/* begin cDigitCopyFrom:to:len: */
-			pFrom = ((unsigned int *) (firstIndexableField(sum, interpreterProxy->interpreterState)));
-			pTo = ((unsigned int *) (firstIndexableField(newSum, interpreterProxy->interpreterState)));
+			pFrom = ((unsigned int *) (firstIndexableField(sum, self)));
+			pTo = ((unsigned int *) (firstIndexableField(newSum, self)));
 			for (i = 0; i < longDigitLen; i += 1) {
 				pTo[i] = (pFrom[i]);
 			}
@@ -2543,18 +2543,18 @@ primDigitAdd(void)
 			/* C index! */
 			sum = newSum;
 			/* begin cDigitOf:at:put: */
-			cPointer = ((unsigned int *) (firstIndexableField(sum, interpreterProxy->interpreterState)));
+			cPointer = ((unsigned int *) (firstIndexableField(sum, self)));
 			cPointer[longDigitLen] = (SQ_SWAP_4_BYTES_IF_BIGENDIAN(over));
 		}
 		else {
 			sum = (neg
-				? normalizeNegative(sum)
-				: normalizePositive(sum));
+				? normalizeNegative(sum, self)
+				: normalizePositive(sum, self));
 		}
 		_return_value = sum;
 	l6:	/* end digitAddLarge:with: */;
-		if (!(failed(interpreterProxy->interpreterState))) {
-			popthenPush(2, _return_value, interpreterProxy->interpreterState);
+		if (!(failed(self))) {
+			popthenPush(2, _return_value, self);
 		}
 	}
 	return null;
@@ -2566,27 +2566,27 @@ primDigitAdd(void)
 
 	/* LargeIntegersPlugin>>#primDigitBitAnd: */
 EXPORT(sqInt)
-primDigitBitAnd(void)
+primDigitBitAnd(struct foo * self)
 {
 	sqInt firstInteger;
 	sqInt secondInteger;
 	sqInt _return_value;
 
-	if (!(isKindOfInteger(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState))) {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	if (!(isKindOfInteger(stackValue(0, self), self))) {
+		primitiveFailFor(PrimErrBadArgument, self);
 		return null;
 	}
-	secondInteger = stackValue(0, interpreterProxy->interpreterState);
+	secondInteger = stackValue(0, self);
 	/* missing DebugCode */;
-	success(isKindOfInteger(stackValue(1, interpreterProxy->interpreterState), interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	firstInteger = stackValue(1, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	success(isKindOfInteger(stackValue(1, self), self), self);
+	firstInteger = stackValue(1, self);
+	if (failed(self)) {
 		return null;
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		_return_value = digitBitLogicwithopIndex(firstInteger, secondInteger, andOpIndex);
-		if (!(failed(interpreterProxy->interpreterState))) {
-			popthenPush(2, _return_value, interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		_return_value = digitBitLogicwithopIndex(firstInteger, secondInteger, andOpIndex, self);
+		if (!(failed(self))) {
+			popthenPush(2, _return_value, self);
 		}
 	}
 	return null;
@@ -2598,27 +2598,27 @@ primDigitBitAnd(void)
 
 	/* LargeIntegersPlugin>>#primDigitBitOr: */
 EXPORT(sqInt)
-primDigitBitOr(void)
+primDigitBitOr(struct foo * self)
 {
 	sqInt firstInteger;
 	sqInt secondInteger;
 	sqInt _return_value;
 
-	if (!(isKindOfInteger(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState))) {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	if (!(isKindOfInteger(stackValue(0, self), self))) {
+		primitiveFailFor(PrimErrBadArgument, self);
 		return null;
 	}
-	secondInteger = stackValue(0, interpreterProxy->interpreterState);
+	secondInteger = stackValue(0, self);
 	/* missing DebugCode */;
-	success(isKindOfInteger(stackValue(1, interpreterProxy->interpreterState), interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	firstInteger = stackValue(1, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	success(isKindOfInteger(stackValue(1, self), self), self);
+	firstInteger = stackValue(1, self);
+	if (failed(self)) {
 		return null;
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		_return_value = digitBitLogicwithopIndex(firstInteger, secondInteger, orOpIndex);
-		if (!(failed(interpreterProxy->interpreterState))) {
-			popthenPush(2, _return_value, interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		_return_value = digitBitLogicwithopIndex(firstInteger, secondInteger, orOpIndex, self);
+		if (!(failed(self))) {
+			popthenPush(2, _return_value, self);
 		}
 	}
 	return null;
@@ -2626,7 +2626,7 @@ primDigitBitOr(void)
 
 	/* LargeIntegersPlugin>>#primDigitBitShiftMagnitude: */
 EXPORT(sqInt)
-primDigitBitShiftMagnitude(void)
+primDigitBitShiftMagnitude(struct foo * self)
 {
 	sqInt aLarge;
 	sqInt aLargeInteger;
@@ -2635,49 +2635,49 @@ primDigitBitShiftMagnitude(void)
 	sqInt shiftCount;
 	sqInt _return_value;
 
-	if (!(isIntegerObject(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState))) {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	if (!(isIntegerObject(stackValue(0, self), self))) {
+		primitiveFailFor(PrimErrBadArgument, self);
 		return null;
 	}
-	shiftCount = stackIntegerValue(0, interpreterProxy->interpreterState);
+	shiftCount = stackIntegerValue(0, self);
 	/* missing DebugCode */;
-	success(isKindOfInteger(stackValue(1, interpreterProxy->interpreterState), interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	anInteger = stackValue(1, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	success(isKindOfInteger(stackValue(1, self), self), self);
+	anInteger = stackValue(1, self);
+	if (failed(self)) {
 		return null;
 	}
-	if (isIntegerObject(anInteger, interpreterProxy->interpreterState)) {
+	if (isIntegerObject(anInteger, self)) {
 
 		/* convert it to a not normalized LargeInteger */
-		aLarge = createLargeFromSmallInteger(anInteger);
+		aLarge = createLargeFromSmallInteger(anInteger, self);
 	}
 	else {
 		aLarge = anInteger;
 	}
 	if (shiftCount >= 0) {
-		_return_value = digitLshift(aLarge, shiftCount);
-		if (!(failed(interpreterProxy->interpreterState))) {
-			popthenPush(2, _return_value, interpreterProxy->interpreterState);
+		_return_value = digitLshift(aLarge, shiftCount, self);
+		if (!(failed(self))) {
+			popthenPush(2, _return_value, self);
 		}
 		return null;
 	}
 	else {
 		rShift = 0 - shiftCount;
-		if (!(failed(interpreterProxy->interpreterState))) {
+		if (!(failed(self))) {
 			/* begin normalize: */
-			aLargeInteger = digitRshiftlookfirst(aLarge, rShift, ((slotSizeOf(aLarge, interpreterProxy->interpreterState)) + 3) / 4);
+			aLargeInteger = digitRshiftlookfirst(aLarge, rShift, ((slotSizeOf(aLarge, self)) + 3) / 4, self);
 			/* missing DebugCode */;
-			if (isLargePositiveIntegerObject(aLargeInteger, interpreterProxy->interpreterState)) {
-				_return_value = normalizePositive(aLargeInteger);
+			if (isLargePositiveIntegerObject(aLargeInteger, self)) {
+				_return_value = normalizePositive(aLargeInteger, self);
 				goto l1;
 			}
 			else {
-				_return_value = normalizeNegative(aLargeInteger);
+				_return_value = normalizeNegative(aLargeInteger, self);
 				goto l1;
 			}
 	l1:	/* end normalize: */;
-			if (!(failed(interpreterProxy->interpreterState))) {
-				popthenPush(2, _return_value, interpreterProxy->interpreterState);
+			if (!(failed(self))) {
+				popthenPush(2, _return_value, self);
 			}
 		}
 		return null;
@@ -2690,27 +2690,27 @@ primDigitBitShiftMagnitude(void)
 
 	/* LargeIntegersPlugin>>#primDigitBitXor: */
 EXPORT(sqInt)
-primDigitBitXor(void)
+primDigitBitXor(struct foo * self)
 {
 	sqInt firstInteger;
 	sqInt secondInteger;
 	sqInt _return_value;
 
-	if (!(isKindOfInteger(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState))) {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	if (!(isKindOfInteger(stackValue(0, self), self))) {
+		primitiveFailFor(PrimErrBadArgument, self);
 		return null;
 	}
-	secondInteger = stackValue(0, interpreterProxy->interpreterState);
+	secondInteger = stackValue(0, self);
 	/* missing DebugCode */;
-	success(isKindOfInteger(stackValue(1, interpreterProxy->interpreterState), interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	firstInteger = stackValue(1, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	success(isKindOfInteger(stackValue(1, self), self), self);
+	firstInteger = stackValue(1, self);
+	if (failed(self)) {
 		return null;
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		_return_value = digitBitLogicwithopIndex(firstInteger, secondInteger, xorOpIndex);
-		if (!(failed(interpreterProxy->interpreterState))) {
-			popthenPush(2, _return_value, interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		_return_value = digitBitLogicwithopIndex(firstInteger, secondInteger, xorOpIndex, self);
+		if (!(failed(self))) {
+			popthenPush(2, _return_value, self);
 		}
 	}
 	return null;
@@ -2722,7 +2722,7 @@ primDigitBitXor(void)
 
 	/* LargeIntegersPlugin>>#primDigitCompare: */
 EXPORT(sqInt)
-primDigitCompare(void)
+primDigitCompare(struct foo * self)
 {
 	sqInt firstDigitLen;
 	sqInt firstInteger;
@@ -2732,76 +2732,76 @@ primDigitCompare(void)
 	sqInt secondVal;
 	sqInt _return_value;
 
-	if (!(isKindOfInteger(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState))) {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	if (!(isKindOfInteger(stackValue(0, self), self))) {
+		primitiveFailFor(PrimErrBadArgument, self);
 		return null;
 	}
-	secondInteger = stackValue(0, interpreterProxy->interpreterState);
+	secondInteger = stackValue(0, self);
 	/* missing DebugCode */;
-	success(isKindOfInteger(stackValue(1, interpreterProxy->interpreterState), interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	firstInteger = stackValue(1, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	success(isKindOfInteger(stackValue(1, self), self), self);
+	firstInteger = stackValue(1, self);
+	if (failed(self)) {
 		return null;
 	}
-	if (isIntegerObject(firstInteger, interpreterProxy->interpreterState)) {
-		if (isIntegerObject(secondInteger, interpreterProxy->interpreterState)) {
-			firstVal = integerValueOf(firstInteger, interpreterProxy->interpreterState);
+	if (isIntegerObject(firstInteger, self)) {
+		if (isIntegerObject(secondInteger, self)) {
+			firstVal = integerValueOf(firstInteger, self);
 
 			/* Compute their magnitudes.  Since SmallIntegers are tagged they have
 			   fewer bits than an integer on the platform; therefore in computing their
 			   magnitude they cannot overflow. */
-			secondVal = integerValueOf(secondInteger, interpreterProxy->interpreterState);
+			secondVal = integerValueOf(secondInteger, self);
 			if (firstVal < 0) {
 				firstVal = 0 - firstVal;
 			}
 			if (secondVal < 0) {
 				secondVal = 0 - secondVal;
 			}
-			if (!(failed(interpreterProxy->interpreterState))) {
+			if (!(failed(self))) {
 				_return_value = (firstVal == secondVal
-					? integerObjectOf(0, interpreterProxy->interpreterState)
+					? integerObjectOf(0, self)
 					: (firstVal < secondVal
-							? integerObjectOf(-1, interpreterProxy->interpreterState)
-							: integerObjectOf(1, interpreterProxy->interpreterState)));
-				if (!(failed(interpreterProxy->interpreterState))) {
-					popthenPush(2, _return_value, interpreterProxy->interpreterState);
+							? integerObjectOf(-1, self)
+							: integerObjectOf(1, self)));
+				if (!(failed(self))) {
+					popthenPush(2, _return_value, self);
 				}
 			}
 			return null;
 		}
-		if (!(failed(interpreterProxy->interpreterState))) {
-			_return_value = integerObjectOf(-1, interpreterProxy->interpreterState);
-			if (!(failed(interpreterProxy->interpreterState))) {
-				popthenPush(2, _return_value, interpreterProxy->interpreterState);
+		if (!(failed(self))) {
+			_return_value = integerObjectOf(-1, self);
+			if (!(failed(self))) {
+				popthenPush(2, _return_value, self);
 			}
 		}
 		return null;
 	}
-	if (isIntegerObject(secondInteger, interpreterProxy->interpreterState)) {
-		_return_value = integerObjectOf(1, interpreterProxy->interpreterState);
-		if (!(failed(interpreterProxy->interpreterState))) {
-			popthenPush(2, _return_value, interpreterProxy->interpreterState);
+	if (isIntegerObject(secondInteger, self)) {
+		_return_value = integerObjectOf(1, self);
+		if (!(failed(self))) {
+			popthenPush(2, _return_value, self);
 		}
 		return null;
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
+	if (!(failed(self))) {
 		/* begin digitCompareLarge:with: */
-		firstDigitLen = ((slotSizeOf(firstInteger, interpreterProxy->interpreterState)) + 3) / 4;
-		secondDigitLen = ((slotSizeOf(secondInteger, interpreterProxy->interpreterState)) + 3) / 4;
+		firstDigitLen = ((slotSizeOf(firstInteger, self)) + 3) / 4;
+		secondDigitLen = ((slotSizeOf(secondInteger, self)) + 3) / 4;
 		if (secondDigitLen != firstDigitLen) {
 			if (secondDigitLen > firstDigitLen) {
-				_return_value = integerObjectOf(-1, interpreterProxy->interpreterState);
+				_return_value = integerObjectOf(-1, self);
 				goto l1;
 			}
 			else {
-				_return_value = integerObjectOf(1, interpreterProxy->interpreterState);
+				_return_value = integerObjectOf(1, self);
 				goto l1;
 			}
 		}
-		_return_value = integerObjectOf((cDigitComparewithlen(((unsigned int *) (firstIndexableField(firstInteger, interpreterProxy->interpreterState))), ((unsigned int *) (firstIndexableField(secondInteger, interpreterProxy->interpreterState))), firstDigitLen)), interpreterProxy->interpreterState);
+		_return_value = integerObjectOf((cDigitComparewithlen(((unsigned int *) (firstIndexableField(firstInteger, self))), ((unsigned int *) (firstIndexableField(secondInteger, self))), firstDigitLen, self)), self);
 	l1:	/* end digitCompareLarge:with: */;
-		if (!(failed(interpreterProxy->interpreterState))) {
-			popthenPush(2, _return_value, interpreterProxy->interpreterState);
+		if (!(failed(self))) {
+			popthenPush(2, _return_value, self);
 		}
 	}
 	return null;
@@ -2814,7 +2814,7 @@ primDigitCompare(void)
 
 	/* LargeIntegersPlugin>>#primDigitDiv:negative: */
 EXPORT(sqInt)
-primDigitDivNegative(void)
+primDigitDivNegative(struct foo * self)
 {
 	unsigned long long a;
 	unsigned long long b;
@@ -2855,100 +2855,100 @@ primDigitDivNegative(void)
 	unsigned long long t;
 	sqInt _return_value;
 
-	if (!((isKindOfInteger(stackValue(1, interpreterProxy->interpreterState), interpreterProxy->interpreterState))
-		 && (isBooleanObject(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState)))) {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	if (!((isKindOfInteger(stackValue(1, self), self))
+		 && (isBooleanObject(stackValue(0, self), self)))) {
+		primitiveFailFor(PrimErrBadArgument, self);
 		return null;
 	}
-	secondInteger = stackValue(1, interpreterProxy->interpreterState);
-	neg = booleanValueOf(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	secondInteger = stackValue(1, self);
+	neg = booleanValueOf(stackValue(0, self), self);
 	/* missing DebugCode */;
-	success(isKindOfInteger(stackValue(2, interpreterProxy->interpreterState), interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	firstInteger = stackValue(2, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	success(isKindOfInteger(stackValue(2, self), self), self);
+	firstInteger = stackValue(2, self);
+	if (failed(self)) {
 		return null;
 	}
-	if (isIntegerObject(firstInteger, interpreterProxy->interpreterState)) {
+	if (isIntegerObject(firstInteger, self)) {
 
 		/* convert to LargeInteger */
 		
 #if SPURVM
-		firstAsLargeInteger = createLargeFromSmallInteger(firstInteger);
+		firstAsLargeInteger = createLargeFromSmallInteger(firstInteger, self);
 
 #else /* SPURVM */
-		pushRemappableOop(secondInteger, interpreterProxy->interpreterState);
-		firstAsLargeInteger = createLargeFromSmallInteger(firstInteger);
-		secondInteger = popRemappableOop(interpreterProxy->interpreterState)
+		pushRemappableOop(secondInteger, self);
+		firstAsLargeInteger = createLargeFromSmallInteger(firstInteger, self);
+		secondInteger = popRemappableOop(self)
 #endif /* SPURVM */
 ;
 	}
 	else {
 
 		/* Avoid crashes in case of getting unnormalized args. */
-		if (!(isNormalized(firstInteger))) {
+		if (!(isNormalized(firstInteger, self))) {
 			/* missing DebugCode */;
-			primitiveFail(interpreterProxy->interpreterState);
+			primitiveFail(self);
 			return null;
 		}
 		firstAsLargeInteger = firstInteger;
 	}
-	if (isIntegerObject(secondInteger, interpreterProxy->interpreterState)) {
+	if (isIntegerObject(secondInteger, self)) {
 
 		/* check for zerodivide and convert to LargeInteger */
-		if ((integerValueOf(secondInteger, interpreterProxy->interpreterState)) == 0) {
-			primitiveFail(interpreterProxy->interpreterState);
+		if ((integerValueOf(secondInteger, self)) == 0) {
+			primitiveFail(self);
 			return null;
 		}
 		
 #if SPURVM
-		secondAsLargeInteger = createLargeFromSmallInteger(secondInteger);
+		secondAsLargeInteger = createLargeFromSmallInteger(secondInteger, self);
 
 #else /* SPURVM */
-		pushRemappableOop(firstAsLargeInteger, interpreterProxy->interpreterState);
-		secondAsLargeInteger = createLargeFromSmallInteger(secondInteger);
-		firstAsLargeInteger = popRemappableOop(interpreterProxy->interpreterState)
+		pushRemappableOop(firstAsLargeInteger, self);
+		secondAsLargeInteger = createLargeFromSmallInteger(secondInteger, self);
+		firstAsLargeInteger = popRemappableOop(self)
 #endif /* SPURVM */
 ;
 	}
 	else {
 
 		/* Avoid crashes in case of getting unnormalized args. */
-		if (!(isNormalized(secondInteger))) {
+		if (!(isNormalized(secondInteger, self))) {
 			/* missing DebugCode */;
-			primitiveFail(interpreterProxy->interpreterState);
+			primitiveFail(self);
 			return null;
 		}
 		secondAsLargeInteger = secondInteger;
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
+	if (!(failed(self))) {
 		/* begin digitDivLarge:with:negative: */
-		firstDigitLen = ((slotSizeOf(firstAsLargeInteger, interpreterProxy->interpreterState)) + 3) / 4;
-		secondDigitLen = ((slotSizeOf(secondAsLargeInteger, interpreterProxy->interpreterState)) + 3) / 4;
+		firstDigitLen = ((slotSizeOf(firstAsLargeInteger, self)) + 3) / 4;
+		secondDigitLen = ((slotSizeOf(secondAsLargeInteger, self)) + 3) / 4;
 		quoDigitLen = (firstDigitLen - secondDigitLen) + 1;
 		if (quoDigitLen <= 0) {
 			
 #if SPURVM
-			result = instantiateClassindexableSize(classArray(interpreterProxy->interpreterState), 2, interpreterProxy->interpreterState);
+			result = instantiateClassindexableSize(classArray(self), 2, self);
 
 #else /* SPURVM */
-			pushRemappableOop(firstAsLargeInteger, interpreterProxy->interpreterState);
-			result = instantiateClassindexableSize(classArray(interpreterProxy->interpreterState), 2, interpreterProxy->interpreterState);
-			firstAsLargeInteger = popRemappableOop(interpreterProxy->interpreterState)
+			pushRemappableOop(firstAsLargeInteger, self);
+			result = instantiateClassindexableSize(classArray(self), 2, self);
+			firstAsLargeInteger = popRemappableOop(self)
 #endif /* SPURVM */
 ;
 			if (!(result == null)) {
-				stObjectatput(result, 1, integerObjectOf(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-				stObjectatput(result, 2, firstAsLargeInteger, interpreterProxy->interpreterState);
+				stObjectatput(result, 1, integerObjectOf(0, self), self);
+				stObjectatput(result, 2, firstAsLargeInteger, self);
 			}
 			_return_value = result;
 			goto l3;
 		}
-		d = 32 - (cHighBit32(cDigitOfat(((unsigned int *) (firstIndexableField(secondAsLargeInteger, interpreterProxy->interpreterState))), secondDigitLen - 1)));
+		d = 32 - (cHighBit32(cDigitOfat(((unsigned int *) (firstIndexableField(secondAsLargeInteger, self))), secondDigitLen - 1, self), self));
 		
 #if SPURVM
-		div = digitLshift(secondAsLargeInteger, d);
+		div = digitLshift(secondAsLargeInteger, d, self);
 		if (!(div == null)) {
-			div = largeIntgrowTo(div, ((((slotSizeOf(div, interpreterProxy->interpreterState)) + 3) / 4) + 1) * 4);
+			div = largeIntgrowTo(div, ((((slotSizeOf(div, self)) + 3) / 4) + 1) * 4, self);
 		}
 		if (!(div)) {
 			_return_value = div;
@@ -2956,24 +2956,24 @@ primDigitDivNegative(void)
 		}
 
 #else /* SPURVM */
-		pushRemappableOop(firstAsLargeInteger, interpreterProxy->interpreterState);
-		div = digitLshift(secondAsLargeInteger, d);
+		pushRemappableOop(firstAsLargeInteger, self);
+		div = digitLshift(secondAsLargeInteger, d, self);
 		if (!(div == null)) {
-			div = largeIntgrowTo(div, ((((slotSizeOf(div, interpreterProxy->interpreterState)) + 3) / 4) + 1) * 4);
+			div = largeIntgrowTo(div, ((((slotSizeOf(div, self)) + 3) / 4) + 1) * 4, self);
 		}
 		if (!(div)) {
 			_return_value = div;
 			goto l3;
 		}
-		firstAsLargeInteger = popRemappableOop(interpreterProxy->interpreterState)
+		firstAsLargeInteger = popRemappableOop(self)
 #endif /* SPURVM */
 ;
 		
 #if SPURVM
-		rem = digitLshift(firstAsLargeInteger, d);
+		rem = digitLshift(firstAsLargeInteger, d, self);
 		if (!(rem == null)) {
-			if ((((slotSizeOf(rem, interpreterProxy->interpreterState)) + 3) / 4) == firstDigitLen) {
-				rem = largeIntgrowTo(rem, (firstDigitLen + 1) * 4);
+			if ((((slotSizeOf(rem, self)) + 3) / 4) == firstDigitLen) {
+				rem = largeIntgrowTo(rem, (firstDigitLen + 1) * 4, self);
 			}
 		}
 		if (!(rem)) {
@@ -2982,45 +2982,45 @@ primDigitDivNegative(void)
 		}
 
 #else /* SPURVM */
-		pushRemappableOop(div, interpreterProxy->interpreterState);
-		rem = digitLshift(firstAsLargeInteger, d);
+		pushRemappableOop(div, self);
+		rem = digitLshift(firstAsLargeInteger, d, self);
 		if (!(rem == null)) {
-			if ((((slotSizeOf(rem, interpreterProxy->interpreterState)) + 3) / 4) == firstDigitLen) {
-				rem = largeIntgrowTo(rem, (firstDigitLen + 1) * 4);
+			if ((((slotSizeOf(rem, self)) + 3) / 4) == firstDigitLen) {
+				rem = largeIntgrowTo(rem, (firstDigitLen + 1) * 4, self);
 			}
 		}
 		if (!(rem)) {
 			_return_value = rem;
 			goto l3;
 		}
-		div = popRemappableOop(interpreterProxy->interpreterState)
+		div = popRemappableOop(self)
 #endif /* SPURVM */
 ;
 		
 #if SPURVM
 		/* begin createLargeIntegerNeg:digitLength: */
 		quo = instantiateClassindexableSize((neg
-			? classLargeNegativeInteger(interpreterProxy->interpreterState)
-			: classLargePositiveInteger(interpreterProxy->interpreterState)), quoDigitLen * 4, interpreterProxy->interpreterState);
+			? classLargeNegativeInteger(self)
+			: classLargePositiveInteger(self)), quoDigitLen * 4, self);
 
 #else /* SPURVM */
-		pushRemappableOop(div, interpreterProxy->interpreterState);
-		pushRemappableOop(rem, interpreterProxy->interpreterState);
+		pushRemappableOop(div, self);
+		pushRemappableOop(rem, self);
 		/* begin createLargeIntegerNeg:digitLength: */
 		quo = instantiateClassindexableSize((neg
-			? classLargeNegativeInteger(interpreterProxy->interpreterState)
-			: classLargePositiveInteger(interpreterProxy->interpreterState)), quoDigitLen * 4, interpreterProxy->interpreterState);
-		rem = popRemappableOop(interpreterProxy->interpreterState);
-		div = popRemappableOop(interpreterProxy->interpreterState)
+			? classLargeNegativeInteger(self)
+			: classLargePositiveInteger(self)), quoDigitLen * 4, self);
+		rem = popRemappableOop(self);
+		div = popRemappableOop(self)
 #endif /* SPURVM */
 ;
 		/* begin cDigitDiv:len:rem:len:quo:len: */
-		pDiv = ((unsigned int *) (firstIndexableField(div, interpreterProxy->interpreterState)));
-		divLen = ((slotSizeOf(div, interpreterProxy->interpreterState)) + 3) / 4;
-		pRem = ((unsigned int *) (firstIndexableField(rem, interpreterProxy->interpreterState)));
-		remLen = ((slotSizeOf(rem, interpreterProxy->interpreterState)) + 3) / 4;
-		pQuo = ((unsigned int *) (firstIndexableField(quo, interpreterProxy->interpreterState)));
-		quoLen = ((slotSizeOf(quo, interpreterProxy->interpreterState)) + 3) / 4;
+		pDiv = ((unsigned int *) (firstIndexableField(div, self)));
+		divLen = ((slotSizeOf(div, self)) + 3) / 4;
+		pRem = ((unsigned int *) (firstIndexableField(rem, self)));
+		remLen = ((slotSizeOf(rem, self)) + 3) / 4;
+		pQuo = ((unsigned int *) (firstIndexableField(quo, self)));
+		quoLen = ((slotSizeOf(quo, self)) + 3) / 4;
 
 		/* Last actual byte of data (ST ix) */
 		dl = divLen - 1;
@@ -3123,34 +3123,34 @@ primDigitDivNegative(void)
 		}
 		
 #if SPURVM
-		rem = digitRshiftlookfirst(rem, d, (((slotSizeOf(div, interpreterProxy->interpreterState)) + 3) / 4) - 1);
+		rem = digitRshiftlookfirst(rem, d, (((slotSizeOf(div, self)) + 3) / 4) - 1, self);
 
 #else /* SPURVM */
-		pushRemappableOop(quo, interpreterProxy->interpreterState);
-		rem = digitRshiftlookfirst(rem, d, (((slotSizeOf(div, interpreterProxy->interpreterState)) + 3) / 4) - 1);
-		quo = popRemappableOop(interpreterProxy->interpreterState)
+		pushRemappableOop(quo, self);
+		rem = digitRshiftlookfirst(rem, d, (((slotSizeOf(div, self)) + 3) / 4) - 1, self);
+		quo = popRemappableOop(self)
 #endif /* SPURVM */
 ;
 		
 #if SPURVM
-		result = instantiateClassindexableSize(classArray(interpreterProxy->interpreterState), 2, interpreterProxy->interpreterState);
+		result = instantiateClassindexableSize(classArray(self), 2, self);
 
 #else /* SPURVM */
-		pushRemappableOop(quo, interpreterProxy->interpreterState);
-		pushRemappableOop(rem, interpreterProxy->interpreterState);
-		result = instantiateClassindexableSize(classArray(interpreterProxy->interpreterState), 2, interpreterProxy->interpreterState);
-		rem = popRemappableOop(interpreterProxy->interpreterState);
-		quo = popRemappableOop(interpreterProxy->interpreterState)
+		pushRemappableOop(quo, self);
+		pushRemappableOop(rem, self);
+		result = instantiateClassindexableSize(classArray(self), 2, self);
+		rem = popRemappableOop(self);
+		quo = popRemappableOop(self)
 #endif /* SPURVM */
 ;
 		if (!(result == null)) {
-			stObjectatput(result, 1, quo, interpreterProxy->interpreterState);
-			stObjectatput(result, 2, rem, interpreterProxy->interpreterState);
+			stObjectatput(result, 1, quo, self);
+			stObjectatput(result, 2, rem, self);
 		}
 		_return_value = result;
 	l3:	/* end digitDivLarge:with:negative: */;
-		if (!(failed(interpreterProxy->interpreterState))) {
-			popthenPush(3, _return_value, interpreterProxy->interpreterState);
+		if (!(failed(self))) {
+			popthenPush(3, _return_value, self);
 		}
 	}
 	return null;
@@ -3158,7 +3158,7 @@ primDigitDivNegative(void)
 
 	/* LargeIntegersPlugin>>#primDigitMultiply:negative: */
 EXPORT(sqInt)
-primDigitMultiplyNegative(void)
+primDigitMultiplyNegative(struct foo * self)
 {
 	unsigned long long ab;
 	unsigned int carry;
@@ -3185,58 +3185,58 @@ primDigitMultiplyNegative(void)
 	sqInt shortLen;
 	sqInt _return_value;
 
-	if (!((isKindOfInteger(stackValue(1, interpreterProxy->interpreterState), interpreterProxy->interpreterState))
-		 && (isBooleanObject(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState)))) {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	if (!((isKindOfInteger(stackValue(1, self), self))
+		 && (isBooleanObject(stackValue(0, self), self)))) {
+		primitiveFailFor(PrimErrBadArgument, self);
 		return null;
 	}
-	secondInteger = stackValue(1, interpreterProxy->interpreterState);
-	neg = booleanValueOf(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	secondInteger = stackValue(1, self);
+	neg = booleanValueOf(stackValue(0, self), self);
 	/* missing DebugCode */;
-	success(isKindOfInteger(stackValue(2, interpreterProxy->interpreterState), interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	firstInteger = stackValue(2, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	success(isKindOfInteger(stackValue(2, self), self), self);
+	firstInteger = stackValue(2, self);
+	if (failed(self)) {
 		return null;
 	}
-	if (isIntegerObject(firstInteger, interpreterProxy->interpreterState)) {
+	if (isIntegerObject(firstInteger, self)) {
 
 		/* convert it to a not normalized LargeInteger */
 		
 #if SPURVM
-		firstLarge = createLargeFromSmallInteger(firstInteger);
+		firstLarge = createLargeFromSmallInteger(firstInteger, self);
 
 #else /* SPURVM */
-		pushRemappableOop(secondInteger, interpreterProxy->interpreterState);
-		firstLarge = createLargeFromSmallInteger(firstInteger);
-		secondInteger = popRemappableOop(interpreterProxy->interpreterState)
+		pushRemappableOop(secondInteger, self);
+		firstLarge = createLargeFromSmallInteger(firstInteger, self);
+		secondInteger = popRemappableOop(self)
 #endif /* SPURVM */
 ;
 	}
 	else {
 		firstLarge = firstInteger;
 	}
-	if (isIntegerObject(secondInteger, interpreterProxy->interpreterState)) {
+	if (isIntegerObject(secondInteger, self)) {
 
 		/* convert it to a not normalized LargeInteger */
 		
 #if SPURVM
-		secondLarge = createLargeFromSmallInteger(secondInteger);
+		secondLarge = createLargeFromSmallInteger(secondInteger, self);
 
 #else /* SPURVM */
-		pushRemappableOop(firstLarge, interpreterProxy->interpreterState);
-		secondLarge = createLargeFromSmallInteger(secondInteger);
-		firstLarge = popRemappableOop(interpreterProxy->interpreterState)
+		pushRemappableOop(firstLarge, self);
+		secondLarge = createLargeFromSmallInteger(secondInteger, self);
+		firstLarge = popRemappableOop(self)
 #endif /* SPURVM */
 ;
 	}
 	else {
 		secondLarge = secondInteger;
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
+	if (!(failed(self))) {
 		/* begin digitMultiplyLarge:with:negative: */
-		firstLen = slotSizeOf(firstLarge, interpreterProxy->interpreterState);
+		firstLen = slotSizeOf(firstLarge, self);
 		/* begin byteSizeOfLargeInt: */
-		secondLen = slotSizeOf(secondLarge, interpreterProxy->interpreterState);
+		secondLen = slotSizeOf(secondLarge, self);
 		if (firstLen <= secondLen) {
 			shortInt = firstLarge;
 			shortLen = firstLen;
@@ -3253,28 +3253,28 @@ primDigitMultiplyNegative(void)
 #if SPURVM
 		/* begin createLargeIntegerNeg:byteLength: */
 		prod = instantiateClassindexableSize((neg
-			? classLargeNegativeInteger(interpreterProxy->interpreterState)
-			: classLargePositiveInteger(interpreterProxy->interpreterState)), longLen + shortLen, interpreterProxy->interpreterState);
+			? classLargeNegativeInteger(self)
+			: classLargePositiveInteger(self)), longLen + shortLen, self);
 
 #else /* SPURVM */
-		pushRemappableOop(shortInt, interpreterProxy->interpreterState);
-		pushRemappableOop(longInt, interpreterProxy->interpreterState);
+		pushRemappableOop(shortInt, self);
+		pushRemappableOop(longInt, self);
 		/* begin createLargeIntegerNeg:byteLength: */
 		prod = instantiateClassindexableSize((neg
-			? classLargeNegativeInteger(interpreterProxy->interpreterState)
-			: classLargePositiveInteger(interpreterProxy->interpreterState)), longLen + shortLen, interpreterProxy->interpreterState);
-		longInt = popRemappableOop(interpreterProxy->interpreterState);
-		shortInt = popRemappableOop(interpreterProxy->interpreterState)
+			? classLargeNegativeInteger(self)
+			: classLargePositiveInteger(self)), longLen + shortLen, self);
+		longInt = popRemappableOop(self);
+		shortInt = popRemappableOop(self)
 #endif /* SPURVM */
 ;
 		if (!(prod)) {
-			_return_value = primitiveFailFor(PrimErrNoMemory, interpreterProxy->interpreterState);
+			_return_value = primitiveFailFor(PrimErrNoMemory, self);
 			goto l5;
 		}
 		/* begin cDigitMultiply:len:with:len:into:len: */
-		pWordShort = ((unsigned int *) (firstIndexableField(shortInt, interpreterProxy->interpreterState)));
-		pWordLong = ((unsigned int *) (firstIndexableField(longInt, interpreterProxy->interpreterState)));
-		pWordRes = ((unsigned int *) (firstIndexableField(prod, interpreterProxy->interpreterState)));
+		pWordShort = ((unsigned int *) (firstIndexableField(shortInt, self)));
+		pWordLong = ((unsigned int *) (firstIndexableField(longInt, self)));
+		pWordRes = ((unsigned int *) (firstIndexableField(prod, self)));
 		if ((((shortLen + 3) / 4) == 1)
 		 && ((pWordShort[0]) == 0)) {
 			goto l4;
@@ -3306,11 +3306,11 @@ primDigitMultiplyNegative(void)
 		}
 	l4:	/* end cDigitMultiply:len:with:len:into:len: */;
 		_return_value = (neg
-			? normalizeNegative(prod)
-			: normalizePositive(prod));
+			? normalizeNegative(prod, self)
+			: normalizePositive(prod, self));
 	l5:	/* end digitMultiplyLarge:with:negative: */;
-		if (!(failed(interpreterProxy->interpreterState))) {
-			popthenPush(3, _return_value, interpreterProxy->interpreterState);
+		if (!(failed(self))) {
+			popthenPush(3, _return_value, self);
 		}
 	}
 	return null;
@@ -3318,7 +3318,7 @@ primDigitMultiplyNegative(void)
 
 	/* LargeIntegersPlugin>>#primDigitSubtract: */
 EXPORT(sqInt)
-primDigitSubtract(void)
+primDigitSubtract(struct foo * self)
 {
 	sqInt firstDigitLen;
 	sqInt firstInteger;
@@ -3341,68 +3341,68 @@ primDigitSubtract(void)
 	unsigned long long z;
 	sqInt _return_value;
 
-	if (!(isKindOfInteger(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState))) {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	if (!(isKindOfInteger(stackValue(0, self), self))) {
+		primitiveFailFor(PrimErrBadArgument, self);
 		return null;
 	}
-	secondInteger = stackValue(0, interpreterProxy->interpreterState);
+	secondInteger = stackValue(0, self);
 	/* missing DebugCode */;
-	success(isKindOfInteger(stackValue(1, interpreterProxy->interpreterState), interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	firstInteger = stackValue(1, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	success(isKindOfInteger(stackValue(1, self), self), self);
+	firstInteger = stackValue(1, self);
+	if (failed(self)) {
 		return null;
 	}
-	if (isIntegerObject(firstInteger, interpreterProxy->interpreterState)) {
+	if (isIntegerObject(firstInteger, self)) {
 
 		/* convert it to a not normalized LargeInteger */
 		
 #if SPURVM
-		firstLarge = createLargeFromSmallInteger(firstInteger);
+		firstLarge = createLargeFromSmallInteger(firstInteger, self);
 
 #else /* SPURVM */
-		pushRemappableOop(secondInteger, interpreterProxy->interpreterState);
-		firstLarge = createLargeFromSmallInteger(firstInteger);
-		secondInteger = popRemappableOop(interpreterProxy->interpreterState)
+		pushRemappableOop(secondInteger, self);
+		firstLarge = createLargeFromSmallInteger(firstInteger, self);
+		secondInteger = popRemappableOop(self)
 #endif /* SPURVM */
 ;
 	}
 	else {
 		firstLarge = firstInteger;
 	}
-	if (isIntegerObject(secondInteger, interpreterProxy->interpreterState)) {
+	if (isIntegerObject(secondInteger, self)) {
 
 		/* convert it to a not normalized LargeInteger */
 		
 #if SPURVM
-		secondLarge = createLargeFromSmallInteger(secondInteger);
+		secondLarge = createLargeFromSmallInteger(secondInteger, self);
 
 #else /* SPURVM */
-		pushRemappableOop(firstLarge, interpreterProxy->interpreterState);
-		secondLarge = createLargeFromSmallInteger(secondInteger);
-		firstLarge = popRemappableOop(interpreterProxy->interpreterState)
+		pushRemappableOop(firstLarge, self);
+		secondLarge = createLargeFromSmallInteger(secondInteger, self);
+		firstLarge = popRemappableOop(self)
 #endif /* SPURVM */
 ;
 	}
 	else {
 		secondLarge = secondInteger;
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
+	if (!(failed(self))) {
 		/* begin digitSubLarge:with: */
-		firstNeg = isLargeNegativeIntegerObject(firstLarge, interpreterProxy->interpreterState);
+		firstNeg = isLargeNegativeIntegerObject(firstLarge, self);
 		/* begin digitSizeOfLargeInt: */
-		firstDigitLen = ((slotSizeOf(firstLarge, interpreterProxy->interpreterState)) + 3) / 4;
+		firstDigitLen = ((slotSizeOf(firstLarge, self)) + 3) / 4;
 		/* begin digitSizeOfLargeInt: */
-		secondDigitLen = ((slotSizeOf(secondLarge, interpreterProxy->interpreterState)) + 3) / 4;
+		secondDigitLen = ((slotSizeOf(secondLarge, self)) + 3) / 4;
 		if (firstDigitLen == secondDigitLen) {
 			while ((firstDigitLen > 1)
-			 && ((cDigitOfat(((unsigned int *) (firstIndexableField(firstLarge, interpreterProxy->interpreterState))), firstDigitLen - 1)) == (cDigitOfat(((unsigned int *) (firstIndexableField(secondLarge, interpreterProxy->interpreterState))), firstDigitLen - 1)))) {
+			 && ((cDigitOfat(((unsigned int *) (firstIndexableField(firstLarge, self))), firstDigitLen - 1, self)) == (cDigitOfat(((unsigned int *) (firstIndexableField(secondLarge, self))), firstDigitLen - 1, self)))) {
 				firstDigitLen -= 1;
 			}
 			secondDigitLen = firstDigitLen;
 		}
 		if ((firstDigitLen < secondDigitLen)
 		 || ((firstDigitLen == secondDigitLen)
-		 && ((cDigitOfat(((unsigned int *) (firstIndexableField(firstLarge, interpreterProxy->interpreterState))), firstDigitLen - 1)) < (cDigitOfat(((unsigned int *) (firstIndexableField(secondLarge, interpreterProxy->interpreterState))), firstDigitLen - 1))))) {
+		 && ((cDigitOfat(((unsigned int *) (firstIndexableField(firstLarge, self))), firstDigitLen - 1, self)) < (cDigitOfat(((unsigned int *) (firstIndexableField(secondLarge, self))), firstDigitLen - 1, self))))) {
 			larger = secondLarge;
 			largeDigitLen = secondDigitLen;
 			smaller = firstLarge;
@@ -3421,28 +3421,28 @@ primDigitSubtract(void)
 #if SPURVM
 		/* begin createLargeIntegerNeg:digitLength: */
 		res = instantiateClassindexableSize((neg
-			? classLargeNegativeInteger(interpreterProxy->interpreterState)
-			: classLargePositiveInteger(interpreterProxy->interpreterState)), resDigitLen * 4, interpreterProxy->interpreterState);
+			? classLargeNegativeInteger(self)
+			: classLargePositiveInteger(self)), resDigitLen * 4, self);
 
 #else /* SPURVM */
-		pushRemappableOop(smaller, interpreterProxy->interpreterState);
-		pushRemappableOop(larger, interpreterProxy->interpreterState);
+		pushRemappableOop(smaller, self);
+		pushRemappableOop(larger, self);
 		/* begin createLargeIntegerNeg:digitLength: */
 		res = instantiateClassindexableSize((neg
-			? classLargeNegativeInteger(interpreterProxy->interpreterState)
-			: classLargePositiveInteger(interpreterProxy->interpreterState)), resDigitLen * 4, interpreterProxy->interpreterState);
-		larger = popRemappableOop(interpreterProxy->interpreterState);
-		smaller = popRemappableOop(interpreterProxy->interpreterState)
+			? classLargeNegativeInteger(self)
+			: classLargePositiveInteger(self)), resDigitLen * 4, self);
+		larger = popRemappableOop(self);
+		smaller = popRemappableOop(self)
 #endif /* SPURVM */
 ;
 		if (!(res)) {
-			_return_value = primitiveFailFor(PrimErrNoMemory, interpreterProxy->interpreterState);
+			_return_value = primitiveFailFor(PrimErrNoMemory, self);
 			goto l7;
 		}
 		/* begin cDigitSub:len:with:len:into: */
-		pWordSmall = ((unsigned int *) (firstIndexableField(smaller, interpreterProxy->interpreterState)));
-		pWordLarge = ((unsigned int *) (firstIndexableField(larger, interpreterProxy->interpreterState)));
-		pWordRes = ((unsigned int *) (firstIndexableField(res, interpreterProxy->interpreterState)));
+		pWordSmall = ((unsigned int *) (firstIndexableField(smaller, self)));
+		pWordLarge = ((unsigned int *) (firstIndexableField(larger, self)));
+		pWordRes = ((unsigned int *) (firstIndexableField(res, self)));
 		z = 0;
 		for (i = 0; i < smallerDigitLen; i += 1) {
 			z = (z + (SQ_SWAP_4_BYTES_IF_BIGENDIAN((pWordLarge[i])))) - (SQ_SWAP_4_BYTES_IF_BIGENDIAN((pWordSmall[i])));
@@ -3457,11 +3457,11 @@ primDigitSubtract(void)
 			z = 0 - (z >> 0x3F);
 		}
 		_return_value = (neg
-			? normalizeNegative(res)
-			: normalizePositive(res));
+			? normalizeNegative(res, self)
+			: normalizePositive(res, self));
 	l7:	/* end digitSubLarge:with: */;
-		if (!(failed(interpreterProxy->interpreterState))) {
-			popthenPush(2, _return_value, interpreterProxy->interpreterState);
+		if (!(failed(self))) {
+			popthenPush(2, _return_value, self);
 		}
 	}
 	return null;
@@ -3472,32 +3472,32 @@ primDigitSubtract(void)
 
 	/* LargeIntegersPlugin>>#primGetModuleName */
 EXPORT(sqInt)
-primGetModuleName(void)
+primGetModuleName(struct foo * self)
 {
 	sqInt strLen;
 	sqInt strOop;
 
 	/* missing DebugCode */;
 	strLen = strlen(getModuleName());
-	strOop = instantiateClassindexableSize(classString(interpreterProxy->interpreterState), strLen, interpreterProxy->interpreterState);
-	strncpy(firstIndexableField(strOop, interpreterProxy->interpreterState), getModuleName(), strLen);
-	if (!(failed(interpreterProxy->interpreterState))) {
-		popthenPush(1, strOop, interpreterProxy->interpreterState);
+	strOop = instantiateClassindexableSize(classString(self), strLen, self);
+	strncpy(firstIndexableField(strOop, self), getModuleName(), strLen);
+	if (!(failed(self))) {
+		popthenPush(1, strOop, self);
 	}
 	return null;
 }
 
 	/* LargeIntegersPlugin>>#primMontgomeryDigitLength */
 EXPORT(sqInt)
-primMontgomeryDigitLength(void)
+primMontgomeryDigitLength(struct foo * self)
 {
 	sqInt _return_value;
 
 	/* missing DebugCode */;
-	if (!(failed(interpreterProxy->interpreterState))) {
-		_return_value = integerObjectOf(32, interpreterProxy->interpreterState);
-		if (!(failed(interpreterProxy->interpreterState))) {
-			popthenPush(1, _return_value, interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		_return_value = integerObjectOf(32, self);
+		if (!(failed(self))) {
+			popthenPush(1, _return_value, self);
 		}
 	}
 	return null;
@@ -3505,7 +3505,7 @@ primMontgomeryDigitLength(void)
 
 	/* LargeIntegersPlugin>>#primMontgomeryTimes:modulo:mInvModB: */
 EXPORT(sqInt)
-primMontgomeryTimesModulo(void)
+primMontgomeryTimesModulo(struct foo * self)
 {
 	unsigned long long accum;
 	unsigned long long accum2;
@@ -3535,112 +3535,112 @@ primMontgomeryTimesModulo(void)
 	unsigned long long u;
 	sqInt _return_value;
 
-	if (!((isKindOfInteger(stackValue(2, interpreterProxy->interpreterState), interpreterProxy->interpreterState))
-		 && ((isKindOfInteger(stackValue(1, interpreterProxy->interpreterState), interpreterProxy->interpreterState))
-		 && (isKindOfInteger(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState))))) {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	if (!((isKindOfInteger(stackValue(2, self), self))
+		 && ((isKindOfInteger(stackValue(1, self), self))
+		 && (isKindOfInteger(stackValue(0, self), self))))) {
+		primitiveFailFor(PrimErrBadArgument, self);
 		return null;
 	}
-	secondOperandInteger = stackValue(2, interpreterProxy->interpreterState);
-	thirdModuloInteger = stackValue(1, interpreterProxy->interpreterState);
-	mInverseInteger = stackValue(0, interpreterProxy->interpreterState);
+	secondOperandInteger = stackValue(2, self);
+	thirdModuloInteger = stackValue(1, self);
+	mInverseInteger = stackValue(0, self);
 	/* missing DebugCode */;
-	success(isKindOfInteger(stackValue(3, interpreterProxy->interpreterState), interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	firstInteger = stackValue(3, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	success(isKindOfInteger(stackValue(3, self), self), self);
+	firstInteger = stackValue(3, self);
+	if (failed(self)) {
 		return null;
 	}
-	mInv = positive32BitValueOf(mInverseInteger, interpreterProxy->interpreterState);
-	if (isIntegerObject(firstInteger, interpreterProxy->interpreterState)) {
+	mInv = positive32BitValueOf(mInverseInteger, self);
+	if (isIntegerObject(firstInteger, self)) {
 
 		/* convert it to a not normalized LargeInteger */
 		
 #if SPURVM
-		firstLarge = createLargeFromSmallInteger(firstInteger);
+		firstLarge = createLargeFromSmallInteger(firstInteger, self);
 
 #else /* SPURVM */
-		pushRemappableOop(secondOperandInteger, interpreterProxy->interpreterState);
-		pushRemappableOop(thirdModuloInteger, interpreterProxy->interpreterState);
-		firstLarge = createLargeFromSmallInteger(firstInteger);
-		thirdModuloInteger = popRemappableOop(interpreterProxy->interpreterState);
-		secondOperandInteger = popRemappableOop(interpreterProxy->interpreterState)
+		pushRemappableOop(secondOperandInteger, self);
+		pushRemappableOop(thirdModuloInteger, self);
+		firstLarge = createLargeFromSmallInteger(firstInteger, self);
+		thirdModuloInteger = popRemappableOop(self);
+		secondOperandInteger = popRemappableOop(self)
 #endif /* SPURVM */
 ;
 	}
 	else {
 		firstLarge = firstInteger;
 	}
-	if (isIntegerObject(secondOperandInteger, interpreterProxy->interpreterState)) {
+	if (isIntegerObject(secondOperandInteger, self)) {
 
 		/* convert it to a not normalized LargeInteger */
 		
 #if SPURVM
-		secondLarge = createLargeFromSmallInteger(secondOperandInteger);
+		secondLarge = createLargeFromSmallInteger(secondOperandInteger, self);
 
 #else /* SPURVM */
-		pushRemappableOop(firstLarge, interpreterProxy->interpreterState);
-		pushRemappableOop(thirdModuloInteger, interpreterProxy->interpreterState);
-		secondLarge = createLargeFromSmallInteger(secondOperandInteger);
-		thirdModuloInteger = popRemappableOop(interpreterProxy->interpreterState);
-		firstLarge = popRemappableOop(interpreterProxy->interpreterState)
+		pushRemappableOop(firstLarge, self);
+		pushRemappableOop(thirdModuloInteger, self);
+		secondLarge = createLargeFromSmallInteger(secondOperandInteger, self);
+		thirdModuloInteger = popRemappableOop(self);
+		firstLarge = popRemappableOop(self)
 #endif /* SPURVM */
 ;
 	}
 	else {
 		secondLarge = secondOperandInteger;
 	}
-	if (isIntegerObject(thirdModuloInteger, interpreterProxy->interpreterState)) {
+	if (isIntegerObject(thirdModuloInteger, self)) {
 
 		/* convert it to a not normalized LargeInteger */
 		
 #if SPURVM
-		thirdLarge = createLargeFromSmallInteger(thirdModuloInteger);
+		thirdLarge = createLargeFromSmallInteger(thirdModuloInteger, self);
 
 #else /* SPURVM */
-		pushRemappableOop(firstLarge, interpreterProxy->interpreterState);
-		pushRemappableOop(secondLarge, interpreterProxy->interpreterState);
-		thirdLarge = createLargeFromSmallInteger(thirdModuloInteger);
-		secondLarge = popRemappableOop(interpreterProxy->interpreterState);
-		firstLarge = popRemappableOop(interpreterProxy->interpreterState)
+		pushRemappableOop(firstLarge, self);
+		pushRemappableOop(secondLarge, self);
+		thirdLarge = createLargeFromSmallInteger(thirdModuloInteger, self);
+		secondLarge = popRemappableOop(self);
+		firstLarge = popRemappableOop(self)
 #endif /* SPURVM */
 ;
 	}
 	else {
 		thirdLarge = thirdModuloInteger;
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
+	if (!(failed(self))) {
 		/* begin digitMontgomery:times:modulo:mInvModB: */
-		firstLen = ((slotSizeOf(firstLarge, interpreterProxy->interpreterState)) + 3) / 4;
-		secondLen = ((slotSizeOf(secondLarge, interpreterProxy->interpreterState)) + 3) / 4;
-		thirdLen = ((slotSizeOf(thirdLarge, interpreterProxy->interpreterState)) + 3) / 4;
+		firstLen = ((slotSizeOf(firstLarge, self)) + 3) / 4;
+		secondLen = ((slotSizeOf(secondLarge, self)) + 3) / 4;
+		thirdLen = ((slotSizeOf(thirdLarge, self)) + 3) / 4;
 		if (!((firstLen <= thirdLen)
 			 && (secondLen <= thirdLen))) {
-			_return_value = primitiveFail(interpreterProxy->interpreterState);
+			_return_value = primitiveFail(self);
 			goto l2;
 		}
 		
 #if SPURVM
-		prod = instantiateClassindexableSize(classLargePositiveInteger(interpreterProxy->interpreterState), thirdLen * 4, interpreterProxy->interpreterState);
+		prod = instantiateClassindexableSize(classLargePositiveInteger(self), thirdLen * 4, self);
 
 #else /* SPURVM */
-		pushRemappableOop(firstLarge, interpreterProxy->interpreterState);
-		pushRemappableOop(secondLarge, interpreterProxy->interpreterState);
-		pushRemappableOop(thirdLarge, interpreterProxy->interpreterState);
-		prod = instantiateClassindexableSize(classLargePositiveInteger(interpreterProxy->interpreterState), thirdLen * 4, interpreterProxy->interpreterState);
-		thirdLarge = popRemappableOop(interpreterProxy->interpreterState);
-		secondLarge = popRemappableOop(interpreterProxy->interpreterState);
-		firstLarge = popRemappableOop(interpreterProxy->interpreterState)
+		pushRemappableOop(firstLarge, self);
+		pushRemappableOop(secondLarge, self);
+		pushRemappableOop(thirdLarge, self);
+		prod = instantiateClassindexableSize(classLargePositiveInteger(self), thirdLen * 4, self);
+		thirdLarge = popRemappableOop(self);
+		secondLarge = popRemappableOop(self);
+		firstLarge = popRemappableOop(self)
 #endif /* SPURVM */
 ;
 		if (!(prod)) {
-			_return_value = primitiveFailFor(PrimErrNoMemory, interpreterProxy->interpreterState);
+			_return_value = primitiveFailFor(PrimErrNoMemory, self);
 			goto l2;
 		}
 		/* begin cDigitMontgomery:len:times:len:modulo:len:mInvModB:into: */
-		pFirst = ((unsigned int *) (firstIndexableField(firstLarge, interpreterProxy->interpreterState)));
-		pSecond = ((unsigned int *) (firstIndexableField(secondLarge, interpreterProxy->interpreterState)));
-		pThird = ((unsigned int *) (firstIndexableField(thirdLarge, interpreterProxy->interpreterState)));
-		pRes = ((unsigned int *) (firstIndexableField(prod, interpreterProxy->interpreterState)));
+		pFirst = ((unsigned int *) (firstIndexableField(firstLarge, self)));
+		pSecond = ((unsigned int *) (firstIndexableField(secondLarge, self)));
+		pThird = ((unsigned int *) (firstIndexableField(thirdLarge, self)));
+		pRes = ((unsigned int *) (firstIndexableField(prod, self)));
 		limit1 = firstLen - 1;
 		limit2 = secondLen - 1;
 		limit3 = thirdLen - 1;
@@ -3686,7 +3686,7 @@ primMontgomeryTimesModulo(void)
 			lastDigit = accum >> 32;
 		}
 		if (!((lastDigit == 0)
-			 && ((cDigitComparewithlen(pThird, pRes, thirdLen)) == 1))) {
+			 && ((cDigitComparewithlen(pThird, pRes, thirdLen, self)) == 1))) {
 
 			/* self cDigitSub: pThird len: thirdLen with: pRes len: thirdLen into: pRes */
 			accum = 0;
@@ -3696,10 +3696,10 @@ primMontgomeryTimesModulo(void)
 				accum = 0 - (accum >> 0x3F);
 			}
 		}
-		_return_value = normalizePositive(prod);
+		_return_value = normalizePositive(prod, self);
 	l2:	/* end digitMontgomery:times:modulo:mInvModB: */;
-		if (!(failed(interpreterProxy->interpreterState))) {
-			popthenPush(4, _return_value, interpreterProxy->interpreterState);
+		if (!(failed(self))) {
+			popthenPush(4, _return_value, self);
 		}
 	}
 	return null;
@@ -3707,21 +3707,21 @@ primMontgomeryTimesModulo(void)
 
 	/* LargeIntegersPlugin>>#primNormalizeNegative */
 EXPORT(sqInt)
-primNormalizeNegative(void)
+primNormalizeNegative(struct foo * self)
 {
 	sqInt rcvr;
 	sqInt _return_value;
 
 	/* missing DebugCode */;
-	success(isLargeNegativeIntegerObject(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	rcvr = stackValue(0, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	success(isLargeNegativeIntegerObject(stackValue(0, self), self), self);
+	rcvr = stackValue(0, self);
+	if (failed(self)) {
 		return null;
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		_return_value = normalizeNegative(rcvr);
-		if (!(failed(interpreterProxy->interpreterState))) {
-			popthenPush(1, _return_value, interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		_return_value = normalizeNegative(rcvr, self);
+		if (!(failed(self))) {
+			popthenPush(1, _return_value, self);
 		}
 	}
 	return null;
@@ -3729,21 +3729,21 @@ primNormalizeNegative(void)
 
 	/* LargeIntegersPlugin>>#primNormalizePositive */
 EXPORT(sqInt)
-primNormalizePositive(void)
+primNormalizePositive(struct foo * self)
 {
 	sqInt rcvr;
 	sqInt _return_value;
 
 	/* missing DebugCode */;
-	success(isLargePositiveIntegerObject(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	rcvr = stackValue(0, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	success(isLargePositiveIntegerObject(stackValue(0, self), self), self);
+	rcvr = stackValue(0, self);
+	if (failed(self)) {
 		return null;
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		_return_value = normalizePositive(rcvr);
-		if (!(failed(interpreterProxy->interpreterState))) {
-			popthenPush(1, _return_value, interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		_return_value = normalizePositive(rcvr, self);
+		if (!(failed(self))) {
+			popthenPush(1, _return_value, self);
 		}
 	}
 	return null;
@@ -3803,7 +3803,7 @@ setInterpreter(struct VirtualMachine *anInterpreter)
 
 	/* SmartSyntaxInterpreterPlugin>>#sqAssert: */
 static sqInt
-sqAssert(sqInt aBool)
+sqAssert(sqInt aBool, struct foo * self)
 {
 	/* missing DebugCode */;
 	return aBool;
@@ -3814,9 +3814,9 @@ sqAssert(sqInt aBool)
 
 	/* LargeIntegersPlugin>>#unsafeByteOfLargeInt:at: */
 static unsigned char
-unsafeByteOfLargeIntat(sqInt bytesObj, sqInt ix)
+unsafeByteOfLargeIntat(sqInt bytesObj, sqInt ix, struct foo * self)
 {
-	return (((unsigned char *) (firstIndexableField(bytesObj, interpreterProxy->interpreterState))))[ix - 1];
+	return (((unsigned char *) (firstIndexableField(bytesObj, self))))[ix - 1];
 }
 
 

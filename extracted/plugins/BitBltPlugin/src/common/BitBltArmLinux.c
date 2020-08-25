@@ -35,7 +35,7 @@
 
 #include "BitBltArm.h"
 
-arm_cpu_features_t detectCpuFeatures(void)
+arm_cpu_features_t detectCpuFeatures(void)
 {
     arm_cpu_features_t features = 0;
     Elf32_auxv_t aux;

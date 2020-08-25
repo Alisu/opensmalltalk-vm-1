@@ -36,22 +36,22 @@ static char __buildInfo[] = "LocalePlugin VMMaker.oscog-eem.2495 uuid: fcbf4c90-
 
 /*** Function Prototypes ***/
 EXPORT(const char*) getModuleName(void);
-EXPORT(sqInt) initialiseModule(void);
-EXPORT(sqInt) primitiveCountry(void);
-EXPORT(sqInt) primitiveCurrencyNotation(void);
-EXPORT(sqInt) primitiveCurrencySymbol(void);
-EXPORT(sqInt) primitiveDaylightSavings(void);
-EXPORT(sqInt) primitiveDecimalSymbol(void);
-EXPORT(sqInt) primitiveDigitGroupingSymbol(void);
-EXPORT(sqInt) primitiveLanguage(void);
-EXPORT(sqInt) primitiveLongDateFormat(void);
-EXPORT(sqInt) primitiveMeasurementMetric(void);
-EXPORT(sqInt) primitiveShortDateFormat(void);
-EXPORT(sqInt) primitiveTimeFormat(void);
-EXPORT(sqInt) primitiveTimezoneOffset(void);
-EXPORT(sqInt) primitiveVMOffsetToUTC(void);
+EXPORT(sqInt) initialiseModule(struct foo * self);
+EXPORT(sqInt) primitiveCountry(struct foo * self);
+EXPORT(sqInt) primitiveCurrencyNotation(struct foo * self);
+EXPORT(sqInt) primitiveCurrencySymbol(struct foo * self);
+EXPORT(sqInt) primitiveDaylightSavings(struct foo * self);
+EXPORT(sqInt) primitiveDecimalSymbol(struct foo * self);
+EXPORT(sqInt) primitiveDigitGroupingSymbol(struct foo * self);
+EXPORT(sqInt) primitiveLanguage(struct foo * self);
+EXPORT(sqInt) primitiveLongDateFormat(struct foo * self);
+EXPORT(sqInt) primitiveMeasurementMetric(struct foo * self);
+EXPORT(sqInt) primitiveShortDateFormat(struct foo * self);
+EXPORT(sqInt) primitiveTimeFormat(struct foo * self);
+EXPORT(sqInt) primitiveTimezoneOffset(struct foo * self);
+EXPORT(sqInt) primitiveVMOffsetToUTC(struct foo * self);
 EXPORT(sqInt) setInterpreter(struct VirtualMachine *anInterpreter);
-static sqInt sqAssert(sqInt aBool);
+static sqInt sqAssert(sqInt aBool, struct foo * self);
 
 
 /*** Variables ***/
@@ -101,7 +101,7 @@ getModuleName(void)
 
 	/* LocalePlugin>>#initialiseModule */
 EXPORT(sqInt)
-initialiseModule(void)
+initialiseModule(struct foo * self)
 {
 	return sqLocInitialize();
 }
@@ -114,14 +114,14 @@ initialiseModule(void)
 
 	/* LocalePlugin>>#primitiveCountry */
 EXPORT(sqInt)
-primitiveCountry(void)
+primitiveCountry(struct foo * self)
 {
 	sqInt oop;
 
-	oop = instantiateClassindexableSize(classString(interpreterProxy->interpreterState), 3, interpreterProxy->interpreterState);
-	sqLocGetCountryInto(firstIndexableField(oop, interpreterProxy->interpreterState));
-	if (!(failed(interpreterProxy->interpreterState))) {
-		popthenPush(1, oop, interpreterProxy->interpreterState);
+	oop = instantiateClassindexableSize(classString(self), 3, self);
+	sqLocGetCountryInto(firstIndexableField(oop, self));
+	if (!(failed(self))) {
+		popthenPush(1, oop, self);
 	}
 	return null;
 }
@@ -133,13 +133,13 @@ primitiveCountry(void)
 
 	/* LocalePlugin>>#primitiveCurrencyNotation */
 EXPORT(sqInt)
-primitiveCurrencyNotation(void)
+primitiveCurrencyNotation(struct foo * self)
 {
 	sqInt _return_value;
 
-	_return_value = (((sqLocCurrencyNotation())) ? trueObject(interpreterProxy->interpreterState) : falseObject(interpreterProxy->interpreterState));
-	if (!(failed(interpreterProxy->interpreterState))) {
-		popthenPush(1, _return_value, interpreterProxy->interpreterState);
+	_return_value = (((sqLocCurrencyNotation())) ? trueObject(self) : falseObject(self));
+	if (!(failed(self))) {
+		popthenPush(1, _return_value, self);
 	}
 	return null;
 }
@@ -152,16 +152,16 @@ primitiveCurrencyNotation(void)
 
 	/* LocalePlugin>>#primitiveCurrencySymbol */
 EXPORT(sqInt)
-primitiveCurrencySymbol(void)
+primitiveCurrencySymbol(struct foo * self)
 {
 	sqInt length;
 	sqInt oop;
 
 	length = sqLocCurrencySymbolSize();
-	oop = instantiateClassindexableSize(classString(interpreterProxy->interpreterState), length, interpreterProxy->interpreterState);
-	sqLocGetCurrencySymbolInto(firstIndexableField(oop, interpreterProxy->interpreterState));
-	if (!(failed(interpreterProxy->interpreterState))) {
-		popthenPush(1, oop, interpreterProxy->interpreterState);
+	oop = instantiateClassindexableSize(classString(self), length, self);
+	sqLocGetCurrencySymbolInto(firstIndexableField(oop, self));
+	if (!(failed(self))) {
+		popthenPush(1, oop, self);
 	}
 	return null;
 }
@@ -171,13 +171,13 @@ primitiveCurrencySymbol(void)
 
 	/* LocalePlugin>>#primitiveDaylightSavings */
 EXPORT(sqInt)
-primitiveDaylightSavings(void)
+primitiveDaylightSavings(struct foo * self)
 {
 	sqInt _return_value;
 
-	_return_value = (((sqLocDaylightSavings())) ? trueObject(interpreterProxy->interpreterState) : falseObject(interpreterProxy->interpreterState));
-	if (!(failed(interpreterProxy->interpreterState))) {
-		popthenPush(1, _return_value, interpreterProxy->interpreterState);
+	_return_value = (((sqLocDaylightSavings())) ? trueObject(self) : falseObject(self));
+	if (!(failed(self))) {
+		popthenPush(1, _return_value, self);
 	}
 	return null;
 }
@@ -189,14 +189,14 @@ primitiveDaylightSavings(void)
 
 	/* LocalePlugin>>#primitiveDecimalSymbol */
 EXPORT(sqInt)
-primitiveDecimalSymbol(void)
+primitiveDecimalSymbol(struct foo * self)
 {
 	sqInt oop;
 
-	oop = instantiateClassindexableSize(classString(interpreterProxy->interpreterState), 1, interpreterProxy->interpreterState);
-	sqLocGetDecimalSymbolInto(firstIndexableField(oop, interpreterProxy->interpreterState));
-	if (!(failed(interpreterProxy->interpreterState))) {
-		popthenPush(1, oop, interpreterProxy->interpreterState);
+	oop = instantiateClassindexableSize(classString(self), 1, self);
+	sqLocGetDecimalSymbolInto(firstIndexableField(oop, self));
+	if (!(failed(self))) {
+		popthenPush(1, oop, self);
 	}
 	return null;
 }
@@ -208,14 +208,14 @@ primitiveDecimalSymbol(void)
 
 	/* LocalePlugin>>#primitiveDigitGroupingSymbol */
 EXPORT(sqInt)
-primitiveDigitGroupingSymbol(void)
+primitiveDigitGroupingSymbol(struct foo * self)
 {
 	sqInt oop;
 
-	oop = instantiateClassindexableSize(classString(interpreterProxy->interpreterState), 1, interpreterProxy->interpreterState);
-	sqLocGetDigitGroupingSymbolInto(firstIndexableField(oop, interpreterProxy->interpreterState));
-	if (!(failed(interpreterProxy->interpreterState))) {
-		popthenPush(1, oop, interpreterProxy->interpreterState);
+	oop = instantiateClassindexableSize(classString(self), 1, self);
+	sqLocGetDigitGroupingSymbolInto(firstIndexableField(oop, self));
+	if (!(failed(self))) {
+		popthenPush(1, oop, self);
 	}
 	return null;
 }
@@ -228,14 +228,14 @@ primitiveDigitGroupingSymbol(void)
 
 	/* LocalePlugin>>#primitiveLanguage */
 EXPORT(sqInt)
-primitiveLanguage(void)
+primitiveLanguage(struct foo * self)
 {
 	sqInt oop;
 
-	oop = instantiateClassindexableSize(classString(interpreterProxy->interpreterState), 3, interpreterProxy->interpreterState);
-	sqLocGetLanguageInto(firstIndexableField(oop, interpreterProxy->interpreterState));
-	if (!(failed(interpreterProxy->interpreterState))) {
-		popthenPush(1, oop, interpreterProxy->interpreterState);
+	oop = instantiateClassindexableSize(classString(self), 3, self);
+	sqLocGetLanguageInto(firstIndexableField(oop, self));
+	if (!(failed(self))) {
+		popthenPush(1, oop, self);
 	}
 	return null;
 }
@@ -252,16 +252,16 @@ primitiveLanguage(void)
 
 	/* LocalePlugin>>#primitiveLongDateFormat */
 EXPORT(sqInt)
-primitiveLongDateFormat(void)
+primitiveLongDateFormat(struct foo * self)
 {
 	sqInt length;
 	sqInt oop;
 
 	length = sqLocLongDateFormatSize();
-	oop = instantiateClassindexableSize(classString(interpreterProxy->interpreterState), length, interpreterProxy->interpreterState);
-	sqLocGetLongDateFormatInto(firstIndexableField(oop, interpreterProxy->interpreterState));
-	if (!(failed(interpreterProxy->interpreterState))) {
-		popthenPush(1, oop, interpreterProxy->interpreterState);
+	oop = instantiateClassindexableSize(classString(self), length, self);
+	sqLocGetLongDateFormatInto(firstIndexableField(oop, self));
+	if (!(failed(self))) {
+		popthenPush(1, oop, self);
 	}
 	return null;
 }
@@ -273,13 +273,13 @@ primitiveLongDateFormat(void)
 
 	/* LocalePlugin>>#primitiveMeasurementMetric */
 EXPORT(sqInt)
-primitiveMeasurementMetric(void)
+primitiveMeasurementMetric(struct foo * self)
 {
 	sqInt _return_value;
 
-	_return_value = (((sqLocMeasurementMetric())) ? trueObject(interpreterProxy->interpreterState) : falseObject(interpreterProxy->interpreterState));
-	if (!(failed(interpreterProxy->interpreterState))) {
-		popthenPush(1, _return_value, interpreterProxy->interpreterState);
+	_return_value = (((sqLocMeasurementMetric())) ? trueObject(self) : falseObject(self));
+	if (!(failed(self))) {
+		popthenPush(1, _return_value, self);
 	}
 	return null;
 }
@@ -296,16 +296,16 @@ primitiveMeasurementMetric(void)
 
 	/* LocalePlugin>>#primitiveShortDateFormat */
 EXPORT(sqInt)
-primitiveShortDateFormat(void)
+primitiveShortDateFormat(struct foo * self)
 {
 	sqInt length;
 	sqInt oop;
 
 	length = sqLocShortDateFormatSize();
-	oop = instantiateClassindexableSize(classString(interpreterProxy->interpreterState), length, interpreterProxy->interpreterState);
-	sqLocGetShortDateFormatInto(firstIndexableField(oop, interpreterProxy->interpreterState));
-	if (!(failed(interpreterProxy->interpreterState))) {
-		popthenPush(1, oop, interpreterProxy->interpreterState);
+	oop = instantiateClassindexableSize(classString(self), length, self);
+	sqLocGetShortDateFormatInto(firstIndexableField(oop, self));
+	if (!(failed(self))) {
+		popthenPush(1, oop, self);
 	}
 	return null;
 }
@@ -319,16 +319,16 @@ primitiveShortDateFormat(void)
 
 	/* LocalePlugin>>#primitiveTimeFormat */
 EXPORT(sqInt)
-primitiveTimeFormat(void)
+primitiveTimeFormat(struct foo * self)
 {
 	sqInt length;
 	sqInt oop;
 
 	length = sqLocTimeFormatSize();
-	oop = instantiateClassindexableSize(classString(interpreterProxy->interpreterState), length, interpreterProxy->interpreterState);
-	sqLocGetTimeFormatInto(firstIndexableField(oop, interpreterProxy->interpreterState));
-	if (!(failed(interpreterProxy->interpreterState))) {
-		popthenPush(1, oop, interpreterProxy->interpreterState);
+	oop = instantiateClassindexableSize(classString(self), length, self);
+	sqLocGetTimeFormatInto(firstIndexableField(oop, self));
+	if (!(failed(self))) {
+		popthenPush(1, oop, self);
 	}
 	return null;
 }
@@ -338,9 +338,9 @@ primitiveTimeFormat(void)
 
 	/* LocalePlugin>>#primitiveTimezoneOffset */
 EXPORT(sqInt)
-primitiveTimezoneOffset(void)
+primitiveTimezoneOffset(struct foo * self)
 {
-	popthenPush(1, integerObjectOf((sqLocGetTimezoneOffset()), interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	popthenPush(1, integerObjectOf((sqLocGetTimezoneOffset()), self), self);
 	return null;
 }
 
@@ -349,9 +349,9 @@ primitiveTimezoneOffset(void)
 
 	/* LocalePlugin>>#primitiveVMOffsetToUTC */
 EXPORT(sqInt)
-primitiveVMOffsetToUTC(void)
+primitiveVMOffsetToUTC(struct foo * self)
 {
-	popthenPush(1, integerObjectOf((sqLocGetVMOffsetToUTC()), interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	popthenPush(1, integerObjectOf((sqLocGetVMOffsetToUTC()), self), self);
 	return null;
 }
 
@@ -385,7 +385,7 @@ setInterpreter(struct VirtualMachine *anInterpreter)
 
 	/* SmartSyntaxInterpreterPlugin>>#sqAssert: */
 static sqInt
-sqAssert(sqInt aBool)
+sqAssert(sqInt aBool, struct foo * self)
 {
 	/* missing DebugCode */;
 	return aBool;

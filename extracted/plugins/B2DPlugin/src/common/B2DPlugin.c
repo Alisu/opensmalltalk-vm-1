@@ -248,482 +248,482 @@ static char __buildInfo[] = "BalloonEnginePlugin VMMaker.oscog-eem.2480 uuid: bb
 
 
 /*** Function Prototypes ***/
-static sqInt aaColorMaskGet(void);
-static sqInt aaColorMaskPut(sqInt value);
-static sqInt aaColorShiftGet(void);
-static sqInt aaColorShiftPut(sqInt value);
-static sqInt aaFirstPixelFromto(sqInt leftX, sqInt rightX);
-static sqInt aaHalfPixelGet(void);
-static sqInt aaHalfPixelPut(sqInt value);
-static sqInt aaLastPixelFromto(sqInt leftX, sqInt rightX);
-static sqInt aaLevelGet(void);
-static sqInt aaLevelPut(sqInt value);
-static sqInt aaScanMaskGet(void);
-static sqInt aaScanMaskPut(sqInt value);
-static sqInt aaShiftGet(void);
-static sqInt aaShiftPut(sqInt value);
-static sqInt absoluteSquared8Dot24(sqInt value);
-static sqInt accurateLengthOfwith(sqInt deltaX, sqInt deltaY);
-static sqInt addEdgeToGET(sqInt edge);
-static sqInt adjustAALevel(void);
-static sqInt adjustWideBezierLeftwidthoffsetendX(sqInt bezier, sqInt lineWidth, sqInt lineOffset, sqInt endX);
-static sqInt adjustWideBezierRightwidthoffsetendX(sqInt bezier, sqInt lineWidth, sqInt lineOffset, sqInt endX);
-static sqInt adjustWideLineafterSteppingFromto(sqInt line, sqInt lastX, sqInt nextX);
-static sqInt aetStartGet(void);
-static sqInt aetStartPut(sqInt value);
-static sqInt aetUsedGet(void);
-static sqInt aetUsedPut(sqInt value);
-static sqInt allocateAETEntry(sqInt nSlots);
-static sqInt allocateBezier(void);
-static sqInt allocateBezierStackEntry(void);
-static sqInt allocateBitmapFillcolormap(sqInt cmSize, int *cmBits);
-static sqInt allocateGETEntry(sqInt nSlots);
-static sqInt allocateGradientFillrampWidthisRadial(int *ramp, sqInt rampWidth, sqInt isRadial);
-static sqInt allocateLine(void);
-static sqInt allocateObjEntry(sqInt nSlots);
-static sqInt allocateStackEntry(sqInt nSlots);
-static sqInt allocateStackFillEntry(void);
-static sqInt allocateWideBezier(void);
-static sqInt allocateWideLine(void);
-static sqInt areEdgeFillsValid(sqInt edge);
-static sqInt assureValuebetweenand(sqInt val1, sqInt val2, sqInt val3);
-static sqInt bezierEndXOf(sqInt bezier);
-static sqInt bezierEndXOfput(sqInt bezier, sqInt value);
-static sqInt bezierEndYOf(sqInt bezier);
-static sqInt bezierEndYOfput(sqInt bezier, sqInt value);
-static sqInt bezierFinalXOf(sqInt bezier);
-static sqInt bezierFinalXOfput(sqInt bezier, sqInt value);
-static int * bezierUpdateDataOf(sqInt bezier);
-static sqInt bezierViaXOf(sqInt bezier);
-static sqInt bezierViaXOfput(sqInt bezier, sqInt value);
-static sqInt bezierViaYOf(sqInt bezier);
-static sqInt bezierViaYOfput(sqInt bezier, sqInt value);
-static sqInt bitmapCmSizeOf(sqInt bmFill);
-static sqInt bitmapCmSizeOfput(sqInt bmFill, sqInt value);
-static sqInt bitmapDepthOf(sqInt bmFill);
-static sqInt bitmapDepthOfput(sqInt bmFill, sqInt value);
-static sqInt bitmapHeightOf(sqInt bmFill);
-static sqInt bitmapHeightOfput(sqInt bmFill, sqInt value);
-static sqInt bitmapRasterOf(sqInt bmFill);
-static sqInt bitmapRasterOfput(sqInt bmFill, sqInt value);
-static sqInt bitmapSizeOf(sqInt bmFill);
-static sqInt bitmapSizeOfput(sqInt bmFill, sqInt value);
-static sqInt bitmapTileFlagOf(sqInt bmFill);
-static sqInt bitmapTileFlagOfput(sqInt bmFill, sqInt value);
-static sqInt bitmapValuebitsatXy(sqInt bmFill, sqInt bits, sqInt xp, sqInt yp);
-static sqInt bitmapWidthOf(sqInt bmFill);
-static sqInt bitmapWidthOfput(sqInt bmFill, sqInt value);
-static sqInt bzEndX(sqInt index);
-static sqInt bzEndXput(sqInt index, sqInt value);
-static sqInt bzEndY(sqInt index);
-static sqInt bzEndYput(sqInt index, sqInt value);
-static sqInt bzStartX(sqInt index);
-static sqInt bzStartXput(sqInt index, sqInt value);
-static sqInt bzStartY(sqInt index);
-static sqInt bzStartYput(sqInt index, sqInt value);
-static sqInt bzViaX(sqInt index);
-static sqInt bzViaXput(sqInt index, sqInt value);
-static sqInt bzViaY(sqInt index);
-static sqInt bzViaYput(sqInt index, sqInt value);
-static sqInt checkCompressedFillIndexListmaxsegments(sqInt fillList, sqInt maxIndex, sqInt nSegs);
-static sqInt checkCompressedFills(sqInt indexList);
-static sqInt checkCompressedLineWidthssegments(sqInt lineWidthList, sqInt nSegments);
-static sqInt checkCompressedPointssegments(sqInt points, sqInt nSegments);
-static sqInt checkCompressedShapesegmentsleftFillsrightFillslineWidthslineFillsfillIndexList(sqInt points, sqInt nSegments, sqInt leftFills, sqInt rightFills, sqInt lineWidths, sqInt lineFills, sqInt fillIndexList);
-static sqInt checkedAddBezierToGET(sqInt bezier);
-static sqInt checkedAddEdgeToGET(sqInt edge);
-static sqInt checkedAddLineToGET(sqInt line);
-static double * circleCosTable(void);
-static double * circleSinTable(void);
-static sqInt clampValuemax(sqInt value, sqInt maxValue);
-static sqInt clearSpanBuffer(void);
-static sqInt clearSpanBufferGet(void);
-static sqInt clearSpanBufferPut(sqInt value);
-static sqInt clipMaxXGet(void);
-static sqInt clipMaxXPut(sqInt value);
-static sqInt clipMaxYGet(void);
-static sqInt clipMaxYPut(sqInt value);
-static sqInt clipMinXGet(void);
-static sqInt clipMinXPut(sqInt value);
-static sqInt clipMinYGet(void);
-static sqInt clipMinYPut(sqInt value);
-static int * colormapOf(sqInt bmFill);
-static float * colorTransform(void);
-static sqInt computeBezierSplitAtHalf(sqInt index);
-static sqInt computeBeziersplitAt(sqInt index, double param);
-static sqInt computeFinalWideBezierValueswidth(sqInt bezier, sqInt lineWidth);
-static sqInt computeSqrt(sqInt length2);
+static sqInt aaColorMaskGet(struct foo * self);
+static sqInt aaColorMaskPut(sqInt value, struct foo * self);
+static sqInt aaColorShiftGet(struct foo * self);
+static sqInt aaColorShiftPut(sqInt value, struct foo * self);
+static sqInt aaFirstPixelFromto(sqInt leftX, sqInt rightX, struct foo * self);
+static sqInt aaHalfPixelGet(struct foo * self);
+static sqInt aaHalfPixelPut(sqInt value, struct foo * self);
+static sqInt aaLastPixelFromto(sqInt leftX, sqInt rightX, struct foo * self);
+static sqInt aaLevelGet(struct foo * self);
+static sqInt aaLevelPut(sqInt value, struct foo * self);
+static sqInt aaScanMaskGet(struct foo * self);
+static sqInt aaScanMaskPut(sqInt value, struct foo * self);
+static sqInt aaShiftGet(struct foo * self);
+static sqInt aaShiftPut(sqInt value, struct foo * self);
+static sqInt absoluteSquared8Dot24(sqInt value, struct foo * self);
+static sqInt accurateLengthOfwith(sqInt deltaX, sqInt deltaY, struct foo * self);
+static sqInt addEdgeToGET(sqInt edge, struct foo * self);
+static sqInt adjustAALevel(struct foo * self);
+static sqInt adjustWideBezierLeftwidthoffsetendX(sqInt bezier, sqInt lineWidth, sqInt lineOffset, sqInt endX, struct foo * self);
+static sqInt adjustWideBezierRightwidthoffsetendX(sqInt bezier, sqInt lineWidth, sqInt lineOffset, sqInt endX, struct foo * self);
+static sqInt adjustWideLineafterSteppingFromto(sqInt line, sqInt lastX, sqInt nextX, struct foo * self);
+static sqInt aetStartGet(struct foo * self);
+static sqInt aetStartPut(sqInt value, struct foo * self);
+static sqInt aetUsedGet(struct foo * self);
+static sqInt aetUsedPut(sqInt value, struct foo * self);
+static sqInt allocateAETEntry(sqInt nSlots, struct foo * self);
+static sqInt allocateBezier(struct foo * self);
+static sqInt allocateBezierStackEntry(struct foo * self);
+static sqInt allocateBitmapFillcolormap(sqInt cmSize, int *cmBits, struct foo * self);
+static sqInt allocateGETEntry(sqInt nSlots, struct foo * self);
+static sqInt allocateGradientFillrampWidthisRadial(int *ramp, sqInt rampWidth, sqInt isRadial, struct foo * self);
+static sqInt allocateLine(struct foo * self);
+static sqInt allocateObjEntry(sqInt nSlots, struct foo * self);
+static sqInt allocateStackEntry(sqInt nSlots, struct foo * self);
+static sqInt allocateStackFillEntry(struct foo * self);
+static sqInt allocateWideBezier(struct foo * self);
+static sqInt allocateWideLine(struct foo * self);
+static sqInt areEdgeFillsValid(sqInt edge, struct foo * self);
+static sqInt assureValuebetweenand(sqInt val1, sqInt val2, sqInt val3, struct foo * self);
+static sqInt bezierEndXOf(sqInt bezier, struct foo * self);
+static sqInt bezierEndXOfput(sqInt bezier, sqInt value, struct foo * self);
+static sqInt bezierEndYOf(sqInt bezier, struct foo * self);
+static sqInt bezierEndYOfput(sqInt bezier, sqInt value, struct foo * self);
+static sqInt bezierFinalXOf(sqInt bezier, struct foo * self);
+static sqInt bezierFinalXOfput(sqInt bezier, sqInt value, struct foo * self);
+static int * bezierUpdateDataOf(sqInt bezier, struct foo * self);
+static sqInt bezierViaXOf(sqInt bezier, struct foo * self);
+static sqInt bezierViaXOfput(sqInt bezier, sqInt value, struct foo * self);
+static sqInt bezierViaYOf(sqInt bezier, struct foo * self);
+static sqInt bezierViaYOfput(sqInt bezier, sqInt value, struct foo * self);
+static sqInt bitmapCmSizeOf(sqInt bmFill, struct foo * self);
+static sqInt bitmapCmSizeOfput(sqInt bmFill, sqInt value, struct foo * self);
+static sqInt bitmapDepthOf(sqInt bmFill, struct foo * self);
+static sqInt bitmapDepthOfput(sqInt bmFill, sqInt value, struct foo * self);
+static sqInt bitmapHeightOf(sqInt bmFill, struct foo * self);
+static sqInt bitmapHeightOfput(sqInt bmFill, sqInt value, struct foo * self);
+static sqInt bitmapRasterOf(sqInt bmFill, struct foo * self);
+static sqInt bitmapRasterOfput(sqInt bmFill, sqInt value, struct foo * self);
+static sqInt bitmapSizeOf(sqInt bmFill, struct foo * self);
+static sqInt bitmapSizeOfput(sqInt bmFill, sqInt value, struct foo * self);
+static sqInt bitmapTileFlagOf(sqInt bmFill, struct foo * self);
+static sqInt bitmapTileFlagOfput(sqInt bmFill, sqInt value, struct foo * self);
+static sqInt bitmapValuebitsatXy(sqInt bmFill, sqInt bits, sqInt xp, sqInt yp, struct foo * self);
+static sqInt bitmapWidthOf(sqInt bmFill, struct foo * self);
+static sqInt bitmapWidthOfput(sqInt bmFill, sqInt value, struct foo * self);
+static sqInt bzEndX(sqInt index, struct foo * self);
+static sqInt bzEndXput(sqInt index, sqInt value, struct foo * self);
+static sqInt bzEndY(sqInt index, struct foo * self);
+static sqInt bzEndYput(sqInt index, sqInt value, struct foo * self);
+static sqInt bzStartX(sqInt index, struct foo * self);
+static sqInt bzStartXput(sqInt index, sqInt value, struct foo * self);
+static sqInt bzStartY(sqInt index, struct foo * self);
+static sqInt bzStartYput(sqInt index, sqInt value, struct foo * self);
+static sqInt bzViaX(sqInt index, struct foo * self);
+static sqInt bzViaXput(sqInt index, sqInt value, struct foo * self);
+static sqInt bzViaY(sqInt index, struct foo * self);
+static sqInt bzViaYput(sqInt index, sqInt value, struct foo * self);
+static sqInt checkCompressedFillIndexListmaxsegments(sqInt fillList, sqInt maxIndex, sqInt nSegs, struct foo * self);
+static sqInt checkCompressedFills(sqInt indexList, struct foo * self);
+static sqInt checkCompressedLineWidthssegments(sqInt lineWidthList, sqInt nSegments, struct foo * self);
+static sqInt checkCompressedPointssegments(sqInt points, sqInt nSegments, struct foo * self);
+static sqInt checkCompressedShapesegmentsleftFillsrightFillslineWidthslineFillsfillIndexList(sqInt points, sqInt nSegments, sqInt leftFills, sqInt rightFills, sqInt lineWidths, sqInt lineFills, sqInt fillIndexList, struct foo * self);
+static sqInt checkedAddBezierToGET(sqInt bezier, struct foo * self);
+static sqInt checkedAddEdgeToGET(sqInt edge, struct foo * self);
+static sqInt checkedAddLineToGET(sqInt line, struct foo * self);
+static double * circleCosTable(struct foo * self);
+static double * circleSinTable(struct foo * self);
+static sqInt clampValuemax(sqInt value, sqInt maxValue, struct foo * self);
+static sqInt clearSpanBuffer(struct foo * self);
+static sqInt clearSpanBufferGet(struct foo * self);
+static sqInt clearSpanBufferPut(sqInt value, struct foo * self);
+static sqInt clipMaxXGet(struct foo * self);
+static sqInt clipMaxXPut(sqInt value, struct foo * self);
+static sqInt clipMaxYGet(struct foo * self);
+static sqInt clipMaxYPut(sqInt value, struct foo * self);
+static sqInt clipMinXGet(struct foo * self);
+static sqInt clipMinXPut(sqInt value, struct foo * self);
+static sqInt clipMinYGet(struct foo * self);
+static sqInt clipMinYPut(sqInt value, struct foo * self);
+static int * colormapOf(sqInt bmFill, struct foo * self);
+static float * colorTransform(struct foo * self);
+static sqInt computeBezierSplitAtHalf(sqInt index, struct foo * self);
+static sqInt computeBeziersplitAt(sqInt index, double param, struct foo * self);
+static sqInt computeFinalWideBezierValueswidth(sqInt bezier, sqInt lineWidth, struct foo * self);
+static sqInt computeSqrt(sqInt length2, struct foo * self);
 static sqInt copyBitsFromtoat(sqInt x0, sqInt x1, sqInt yValue, struct foo * self);
-static sqInt createGlobalEdgeTable(void);
-static sqInt currentYGet(void);
-static sqInt currentYPut(sqInt value);
-static sqInt currentZGet(void);
-static sqInt currentZPut(sqInt value);
-static sqInt destOffsetXGet(void);
-static sqInt destOffsetXPut(sqInt value);
-static sqInt destOffsetYGet(void);
-static sqInt destOffsetYPut(sqInt value);
-static sqInt displaySpanBufferAt(sqInt y);
-static sqInt drawWideEdgefrom(sqInt edge, sqInt leftX);
-static sqInt edgeFillsInvalidate(sqInt edge);
-static sqInt edgeFillsValidate(sqInt edge);
-static sqInt edgeLeftFillOf(sqInt edge);
-static sqInt edgeLeftFillOfput(sqInt edge, sqInt value);
-static sqInt edgeNumLinesOf(sqInt edge);
-static sqInt edgeNumLinesOfput(sqInt edge, sqInt value);
-static sqInt edgeRightFillOf(sqInt edge);
-static sqInt edgeRightFillOfput(sqInt edge, sqInt value);
-static float * edgeTransform(void);
-static sqInt edgeTypeOf(sqInt edge);
-static sqInt edgeXValueOf(sqInt edge);
-static sqInt edgeXValueOfput(sqInt edge, sqInt value);
-static sqInt edgeYValueOf(sqInt edge);
-static sqInt edgeYValueOfput(sqInt edge, sqInt value);
-static sqInt edgeZValueOf(sqInt edge);
-static sqInt edgeZValueOfput(sqInt edge, sqInt value);
-static sqInt errorWrongIndex(void);
-static sqInt estimatedLengthOfwith(sqInt deltaX, sqInt deltaY);
-static sqInt fillAllFromto(sqInt leftX, sqInt rightX);
-static sqInt fillBitmapSpan(void);
-static sqInt fillBitmapSpanAAfromtoat(sqInt bmFill, sqInt leftX, sqInt rightX, sqInt yValue);
-static sqInt fillBitmapSpanfromto(int *bits, sqInt leftX, sqInt rightX);
-static sqInt fillBitmapSpanfromtoat(sqInt bmFill, sqInt leftX, sqInt rightX, sqInt yValue);
-static sqInt fillColorSpanAAx0x1(sqInt pixelValue32, sqInt leftX, sqInt rightX);
-static sqInt fillColorSpanfromto(sqInt pixelValue32, sqInt leftX, sqInt rightX);
-static sqInt fillDirectionXOf(sqInt fill);
-static sqInt fillDirectionXOfput(sqInt fill, sqInt value);
-static sqInt fillDirectionYOf(sqInt fill);
-static sqInt fillDirectionYOfput(sqInt fill, sqInt value);
-static sqInt fillLinearGradient(void);
-static sqInt fillLinearGradientAArampdsdsXfromto(sqInt fill, int *ramp, sqInt deltaS, sqInt dsX, sqInt leftX, sqInt rightX);
-static sqInt fillLinearGradientfromtoat(sqInt fill, sqInt leftX, sqInt rightX, sqInt yValue);
-static sqInt fillMaxXGet(void);
-static sqInt fillMaxXPut(sqInt value);
-static sqInt fillMaxYGet(void);
-static sqInt fillMaxYPut(sqInt value);
-static sqInt fillMinXGet(void);
-static sqInt fillMinXPut(sqInt value);
-static sqInt fillMinYGet(void);
-static sqInt fillMinYPut(sqInt value);
-static sqInt fillNormalXOf(sqInt fill);
-static sqInt fillNormalXOfput(sqInt fill, sqInt value);
-static sqInt fillNormalYOf(sqInt fill);
-static sqInt fillNormalYOfput(sqInt fill, sqInt value);
-static sqInt fillOffsetXGet(void);
-static sqInt fillOffsetXPut(sqInt value);
-static sqInt fillOffsetYGet(void);
-static sqInt fillOffsetYPut(sqInt value);
-static sqInt fillOriginXOf(sqInt fill);
-static sqInt fillOriginXOfput(sqInt fill, sqInt value);
-static sqInt fillOriginYOf(sqInt fill);
-static sqInt fillOriginYOfput(sqInt fill, sqInt value);
-static sqInt fillRadialDecreasingAArampdeltaSTdsXdtXfromto(sqInt fill, int *ramp, int *deltaST, sqInt dsX, sqInt dtX, sqInt leftX, sqInt rightX);
-static sqInt fillRadialDecreasingrampdeltaSTdsXdtXfromto(sqInt fill, sqInt ramp, sqInt deltaST, sqInt dsX, sqInt dtX, sqInt leftX, sqInt rightX);
-static sqInt fillRadialGradient(void);
-static sqInt fillRadialGradientfromtoat(sqInt fill, sqInt leftX, sqInt rightX, sqInt yValue);
-static sqInt fillRadialIncreasingAArampdeltaSTdsXdtXfromto(sqInt fill, int *ramp, int *deltaST, sqInt dsX, sqInt dtX, sqInt leftX, sqInt rightX);
-static sqInt fillRadialIncreasingrampdeltaSTdsXdtXfromto(sqInt fill, sqInt ramp, sqInt deltaST, sqInt dsX, sqInt dtX, sqInt leftX, sqInt rightX);
-static sqInt fillSortsbefore(sqInt fillEntry1, sqInt fillEntry2);
-static sqInt fillSpanfromto(unsigned int fill, sqInt leftX, sqInt rightX);
-static sqInt fillTypeOf(sqInt fill);
-static sqInt findNextAETEdgeFrom(sqInt leftEdge);
-static sqInt findNextExternalEntryFromGET(void);
-static sqInt findNextExternalFillFromAET(void);
-static sqInt findNextExternalUpdateFromAET(void);
-static sqInt findStackFilldepth(sqInt fillIndex, sqInt depth);
-static sqInt finishedProcessing(void);
-static sqInt firstPointListGet(void);
-static sqInt firstPointListPut(sqInt value);
-static sqInt freeStackFillEntry(void);
+static sqInt createGlobalEdgeTable(struct foo * self);
+static sqInt currentYGet(struct foo * self);
+static sqInt currentYPut(sqInt value, struct foo * self);
+static sqInt currentZGet(struct foo * self);
+static sqInt currentZPut(sqInt value, struct foo * self);
+static sqInt destOffsetXGet(struct foo * self);
+static sqInt destOffsetXPut(sqInt value, struct foo * self);
+static sqInt destOffsetYGet(struct foo * self);
+static sqInt destOffsetYPut(sqInt value, struct foo * self);
+static sqInt displaySpanBufferAt(sqInt y, struct foo * self);
+static sqInt drawWideEdgefrom(sqInt edge, sqInt leftX, struct foo * self);
+static sqInt edgeFillsInvalidate(sqInt edge, struct foo * self);
+static sqInt edgeFillsValidate(sqInt edge, struct foo * self);
+static sqInt edgeLeftFillOf(sqInt edge, struct foo * self);
+static sqInt edgeLeftFillOfput(sqInt edge, sqInt value, struct foo * self);
+static sqInt edgeNumLinesOf(sqInt edge, struct foo * self);
+static sqInt edgeNumLinesOfput(sqInt edge, sqInt value, struct foo * self);
+static sqInt edgeRightFillOf(sqInt edge, struct foo * self);
+static sqInt edgeRightFillOfput(sqInt edge, sqInt value, struct foo * self);
+static float * edgeTransform(struct foo * self);
+static sqInt edgeTypeOf(sqInt edge, struct foo * self);
+static sqInt edgeXValueOf(sqInt edge, struct foo * self);
+static sqInt edgeXValueOfput(sqInt edge, sqInt value, struct foo * self);
+static sqInt edgeYValueOf(sqInt edge, struct foo * self);
+static sqInt edgeYValueOfput(sqInt edge, sqInt value, struct foo * self);
+static sqInt edgeZValueOf(sqInt edge, struct foo * self);
+static sqInt edgeZValueOfput(sqInt edge, sqInt value, struct foo * self);
+static sqInt errorWrongIndex(struct foo * self);
+static sqInt estimatedLengthOfwith(sqInt deltaX, sqInt deltaY, struct foo * self);
+static sqInt fillAllFromto(sqInt leftX, sqInt rightX, struct foo * self);
+static sqInt fillBitmapSpan(struct foo * self);
+static sqInt fillBitmapSpanAAfromtoat(sqInt bmFill, sqInt leftX, sqInt rightX, sqInt yValue, struct foo * self);
+static sqInt fillBitmapSpanfromto(int *bits, sqInt leftX, sqInt rightX, struct foo * self);
+static sqInt fillBitmapSpanfromtoat(sqInt bmFill, sqInt leftX, sqInt rightX, sqInt yValue, struct foo * self);
+static sqInt fillColorSpanAAx0x1(sqInt pixelValue32, sqInt leftX, sqInt rightX, struct foo * self);
+static sqInt fillColorSpanfromto(sqInt pixelValue32, sqInt leftX, sqInt rightX, struct foo * self);
+static sqInt fillDirectionXOf(sqInt fill, struct foo * self);
+static sqInt fillDirectionXOfput(sqInt fill, sqInt value, struct foo * self);
+static sqInt fillDirectionYOf(sqInt fill, struct foo * self);
+static sqInt fillDirectionYOfput(sqInt fill, sqInt value, struct foo * self);
+static sqInt fillLinearGradient(struct foo * self);
+static sqInt fillLinearGradientAArampdsdsXfromto(sqInt fill, int *ramp, sqInt deltaS, sqInt dsX, sqInt leftX, sqInt rightX, struct foo * self);
+static sqInt fillLinearGradientfromtoat(sqInt fill, sqInt leftX, sqInt rightX, sqInt yValue, struct foo * self);
+static sqInt fillMaxXGet(struct foo * self);
+static sqInt fillMaxXPut(sqInt value, struct foo * self);
+static sqInt fillMaxYGet(struct foo * self);
+static sqInt fillMaxYPut(sqInt value, struct foo * self);
+static sqInt fillMinXGet(struct foo * self);
+static sqInt fillMinXPut(sqInt value, struct foo * self);
+static sqInt fillMinYGet(struct foo * self);
+static sqInt fillMinYPut(sqInt value, struct foo * self);
+static sqInt fillNormalXOf(sqInt fill, struct foo * self);
+static sqInt fillNormalXOfput(sqInt fill, sqInt value, struct foo * self);
+static sqInt fillNormalYOf(sqInt fill, struct foo * self);
+static sqInt fillNormalYOfput(sqInt fill, sqInt value, struct foo * self);
+static sqInt fillOffsetXGet(struct foo * self);
+static sqInt fillOffsetXPut(sqInt value, struct foo * self);
+static sqInt fillOffsetYGet(struct foo * self);
+static sqInt fillOffsetYPut(sqInt value, struct foo * self);
+static sqInt fillOriginXOf(sqInt fill, struct foo * self);
+static sqInt fillOriginXOfput(sqInt fill, sqInt value, struct foo * self);
+static sqInt fillOriginYOf(sqInt fill, struct foo * self);
+static sqInt fillOriginYOfput(sqInt fill, sqInt value, struct foo * self);
+static sqInt fillRadialDecreasingAArampdeltaSTdsXdtXfromto(sqInt fill, int *ramp, int *deltaST, sqInt dsX, sqInt dtX, sqInt leftX, sqInt rightX, struct foo * self);
+static sqInt fillRadialDecreasingrampdeltaSTdsXdtXfromto(sqInt fill, sqInt ramp, sqInt deltaST, sqInt dsX, sqInt dtX, sqInt leftX, sqInt rightX, struct foo * self);
+static sqInt fillRadialGradient(struct foo * self);
+static sqInt fillRadialGradientfromtoat(sqInt fill, sqInt leftX, sqInt rightX, sqInt yValue, struct foo * self);
+static sqInt fillRadialIncreasingAArampdeltaSTdsXdtXfromto(sqInt fill, int *ramp, int *deltaST, sqInt dsX, sqInt dtX, sqInt leftX, sqInt rightX, struct foo * self);
+static sqInt fillRadialIncreasingrampdeltaSTdsXdtXfromto(sqInt fill, sqInt ramp, sqInt deltaST, sqInt dsX, sqInt dtX, sqInt leftX, sqInt rightX, struct foo * self);
+static sqInt fillSortsbefore(sqInt fillEntry1, sqInt fillEntry2, struct foo * self);
+static sqInt fillSpanfromto(unsigned int fill, sqInt leftX, sqInt rightX, struct foo * self);
+static sqInt fillTypeOf(sqInt fill, struct foo * self);
+static sqInt findNextAETEdgeFrom(sqInt leftEdge, struct foo * self);
+static sqInt findNextExternalEntryFromGET(struct foo * self);
+static sqInt findNextExternalFillFromAET(struct foo * self);
+static sqInt findNextExternalUpdateFromAET(struct foo * self);
+static sqInt findStackFilldepth(sqInt fillIndex, sqInt depth, struct foo * self);
+static sqInt finishedProcessing(struct foo * self);
+static sqInt firstPointListGet(struct foo * self);
+static sqInt firstPointListPut(sqInt value, struct foo * self);
+static sqInt freeStackFillEntry(struct foo * self);
 EXPORT(const char*) getModuleName(void);
-static sqInt getSortsbefore(sqInt edge1, sqInt edge2);
-static sqInt getStartGet(void);
-static sqInt getStartPut(sqInt value);
-static sqInt getUsedGet(void);
-static sqInt getUsedPut(sqInt value);
-static sqInt gradientRampLengthOf(sqInt fill);
-static sqInt gradientRampLengthOfput(sqInt fill, sqInt value);
-static int * gradientRampOf(sqInt fill);
-static sqInt hasColorTransform(void);
-static sqInt hasColorTransformGet(void);
-static sqInt hasColorTransformPut(sqInt value);
-static sqInt hasEdgeTransform(void);
-static sqInt hasEdgeTransformGet(void);
-static sqInt hasEdgeTransformPut(sqInt value);
-static sqInt hideFilldepth(sqInt fillIndex, sqInt depth);
-static sqInt incrementPointby(int *point, sqInt delta);
-static sqInt incrementStatby(sqInt statIndex, sqInt value);
-static sqInt indexForInsertingIntoAET(sqInt edge);
-static sqInt initColorTransform(void);
-static sqInt initEdgeTransform(void);
-EXPORT(sqInt) initialiseModule(void);
-static sqInt initializeGETProcessing(void);
-static sqInt insertEdgeIntoAET(sqInt edge);
-static sqInt insertToAETbeforeIndex(sqInt edge, sqInt index);
-static sqInt isBezier(sqInt bezier);
-static sqInt isEdge(sqInt edge);
-static sqInt isFillColor(sqInt fill);
-static sqInt isFillOkay(sqInt fill);
-static sqInt isFill(sqInt fill);
-static sqInt isLine(sqInt line);
-static sqInt isObject(sqInt obj);
-static sqInt isRealFill(sqInt fill);
-static sqInt isStackEntry(sqInt entry);
-static sqInt isStackIndex(sqInt index);
-static sqInt isWideBezier(sqInt bezier);
-static sqInt isWideLine(sqInt line);
-static sqInt isWide(sqInt object);
-static sqInt lastExportedEdgeGet(void);
-static sqInt lastExportedEdgePut(sqInt value);
-static sqInt lastExportedFillGet(void);
-static sqInt lastExportedFillPut(sqInt value);
-static sqInt lastExportedLeftXGet(void);
-static sqInt lastExportedLeftXPut(sqInt value);
-static sqInt lastExportedRightXGet(void);
-static sqInt lastExportedRightXPut(sqInt value);
-static sqInt lineEndXOf(sqInt line);
-static sqInt lineEndXOfput(sqInt line, sqInt value);
-static sqInt lineEndYOf(sqInt line);
-static sqInt lineEndYOfput(sqInt line, sqInt value);
-static sqInt lineErrorAdjDownOf(sqInt line);
-static sqInt lineErrorAdjDownOfput(sqInt line, sqInt value);
-static sqInt lineErrorAdjUpOf(sqInt line);
-static sqInt lineErrorAdjUpOfput(sqInt line, sqInt value);
-static sqInt lineErrorOf(sqInt line);
-static sqInt lineErrorOfput(sqInt line, sqInt value);
-static sqInt lineXDirectionOf(sqInt line);
-static sqInt lineXDirectionOfput(sqInt line, sqInt value);
-static sqInt lineXIncrementOf(sqInt line);
-static sqInt lineXIncrementOfput(sqInt line, sqInt value);
-static sqInt lineYDirectionOf(sqInt line);
-static sqInt lineYDirectionOfput(sqInt line, sqInt value);
-static sqInt loadAndSubdivideBezierFromviatoisWide(int *point1, int *point2, int *point3, sqInt wideFlag);
-static sqInt loadArrayPolygonnPointsfilllineWidthlineFill(sqInt points, sqInt nPoints, sqInt fillIndex, sqInt lineWidth, sqInt lineFill);
-static sqInt loadArrayShapenSegmentsfilllineWidthlineFill(sqInt points, sqInt nSegments, sqInt fillIndex, sqInt lineWidth, sqInt lineFill);
-static sqInt loadArrayTransformFromintolength(sqInt transformOop, float *destPtr, sqInt n);
-static sqInt loadBeziersegmentleftFillrightFilloffset(sqInt bezier, sqInt index, sqInt leftFillIndex, sqInt rightFillIndex, sqInt yOffset);
+static sqInt getSortsbefore(sqInt edge1, sqInt edge2, struct foo * self);
+static sqInt getStartGet(struct foo * self);
+static sqInt getStartPut(sqInt value, struct foo * self);
+static sqInt getUsedGet(struct foo * self);
+static sqInt getUsedPut(sqInt value, struct foo * self);
+static sqInt gradientRampLengthOf(sqInt fill, struct foo * self);
+static sqInt gradientRampLengthOfput(sqInt fill, sqInt value, struct foo * self);
+static int * gradientRampOf(sqInt fill, struct foo * self);
+static sqInt hasColorTransform(struct foo * self);
+static sqInt hasColorTransformGet(struct foo * self);
+static sqInt hasColorTransformPut(sqInt value, struct foo * self);
+static sqInt hasEdgeTransform(struct foo * self);
+static sqInt hasEdgeTransformGet(struct foo * self);
+static sqInt hasEdgeTransformPut(sqInt value, struct foo * self);
+static sqInt hideFilldepth(sqInt fillIndex, sqInt depth, struct foo * self);
+static sqInt incrementPointby(int *point, sqInt delta, struct foo * self);
+static sqInt incrementStatby(sqInt statIndex, sqInt value, struct foo * self);
+static sqInt indexForInsertingIntoAET(sqInt edge, struct foo * self);
+static sqInt initColorTransform(struct foo * self);
+static sqInt initEdgeTransform(struct foo * self);
+EXPORT(sqInt) initialiseModule(struct foo * self);
+static sqInt initializeGETProcessing(struct foo * self);
+static sqInt insertEdgeIntoAET(sqInt edge, struct foo * self);
+static sqInt insertToAETbeforeIndex(sqInt edge, sqInt index, struct foo * self);
+static sqInt isBezier(sqInt bezier, struct foo * self);
+static sqInt isEdge(sqInt edge, struct foo * self);
+static sqInt isFillColor(sqInt fill, struct foo * self);
+static sqInt isFillOkay(sqInt fill, struct foo * self);
+static sqInt isFill(sqInt fill, struct foo * self);
+static sqInt isLine(sqInt line, struct foo * self);
+static sqInt isObject(sqInt obj, struct foo * self);
+static sqInt isRealFill(sqInt fill, struct foo * self);
+static sqInt isStackEntry(sqInt entry, struct foo * self);
+static sqInt isStackIndex(sqInt index, struct foo * self);
+static sqInt isWideBezier(sqInt bezier, struct foo * self);
+static sqInt isWideLine(sqInt line, struct foo * self);
+static sqInt isWide(sqInt object, struct foo * self);
+static sqInt lastExportedEdgeGet(struct foo * self);
+static sqInt lastExportedEdgePut(sqInt value, struct foo * self);
+static sqInt lastExportedFillGet(struct foo * self);
+static sqInt lastExportedFillPut(sqInt value, struct foo * self);
+static sqInt lastExportedLeftXGet(struct foo * self);
+static sqInt lastExportedLeftXPut(sqInt value, struct foo * self);
+static sqInt lastExportedRightXGet(struct foo * self);
+static sqInt lastExportedRightXPut(sqInt value, struct foo * self);
+static sqInt lineEndXOf(sqInt line, struct foo * self);
+static sqInt lineEndXOfput(sqInt line, sqInt value, struct foo * self);
+static sqInt lineEndYOf(sqInt line, struct foo * self);
+static sqInt lineEndYOfput(sqInt line, sqInt value, struct foo * self);
+static sqInt lineErrorAdjDownOf(sqInt line, struct foo * self);
+static sqInt lineErrorAdjDownOfput(sqInt line, sqInt value, struct foo * self);
+static sqInt lineErrorAdjUpOf(sqInt line, struct foo * self);
+static sqInt lineErrorAdjUpOfput(sqInt line, sqInt value, struct foo * self);
+static sqInt lineErrorOf(sqInt line, struct foo * self);
+static sqInt lineErrorOfput(sqInt line, sqInt value, struct foo * self);
+static sqInt lineXDirectionOf(sqInt line, struct foo * self);
+static sqInt lineXDirectionOfput(sqInt line, sqInt value, struct foo * self);
+static sqInt lineXIncrementOf(sqInt line, struct foo * self);
+static sqInt lineXIncrementOfput(sqInt line, sqInt value, struct foo * self);
+static sqInt lineYDirectionOf(sqInt line, struct foo * self);
+static sqInt lineYDirectionOfput(sqInt line, sqInt value, struct foo * self);
+static sqInt loadAndSubdivideBezierFromviatoisWide(int *point1, int *point2, int *point3, sqInt wideFlag, struct foo * self);
+static sqInt loadArrayPolygonnPointsfilllineWidthlineFill(sqInt points, sqInt nPoints, sqInt fillIndex, sqInt lineWidth, sqInt lineFill, struct foo * self);
+static sqInt loadArrayShapenSegmentsfilllineWidthlineFill(sqInt points, sqInt nSegments, sqInt fillIndex, sqInt lineWidth, sqInt lineFill, struct foo * self);
+static sqInt loadArrayTransformFromintolength(sqInt transformOop, float *destPtr, sqInt n, struct foo * self);
+static sqInt loadBeziersegmentleftFillrightFilloffset(sqInt bezier, sqInt index, sqInt leftFillIndex, sqInt rightFillIndex, sqInt yOffset, struct foo * self);
 static sqInt loadBitBltFrom(sqInt bbObj, struct foo * self);
-static sqInt loadBitmapFillcolormaptilefromalongnormalxIndex(sqInt formOop, sqInt cmOop, sqInt tileFlag, int *point1, int *point2, int *point3, sqInt xIndex);
-static int * loadBitsFrom(sqInt bmFill);
-static sqInt loadColorTransformFrom(sqInt transformOop);
-static sqInt loadCompressedSegmentfromshortleftFillrightFilllineWidthlineColor(sqInt segmentIndex, sqInt points, sqInt pointsShort, sqInt leftFill, sqInt rightFill, sqInt lineWidth, sqInt lineFill);
-static sqInt loadCompressedShapesegmentsleftFillsrightFillslineWidthslineFillsfillIndexListpointShort(int *points, sqInt nSegments, int *leftFills, int *rightFills, int *lineWidths, int *lineFills, int *fillIndexList, sqInt pointsShort);
-static sqInt loadEdgeStateFrom(sqInt edgeOop);
-static sqInt loadEdgeTransformFrom(sqInt transformOop);
-static sqInt loadFillOrientationfromalongnormalwidthheight(sqInt fill, int *point1, int *point2, int *point3, sqInt fillWidth, sqInt fillHeight);
-static sqInt loadFormsFrom(sqInt arrayOop);
-static sqInt loadGradientFillfromalongnormalisRadial(sqInt rampOop, int *point1, int *point2, int *point3, sqInt isRadial);
-static sqInt loadLinefromtooffsetleftFillrightFill(sqInt line, int *point1, int *point2, sqInt yOffset, sqInt leftFill, sqInt rightFill);
-static sqInt loadOvalSegmentwhcxcy(sqInt seg, sqInt w, sqInt h, sqInt cx, sqInt cy);
-static sqInt loadOvallineFillleftFillrightFill(sqInt lineWidth, sqInt lineFill, sqInt leftFill, sqInt rightFill);
-static sqInt loadPointIntAtfrom(sqInt index, sqInt intArray);
-static short loadPointShortAtfrom(sqInt index, sqInt shortArray);
-static sqInt loadPointfrom(int *pointArray, sqInt pointOop);
-static sqInt loadPolygonnPointsfilllineWidthlineFillpointsShort(int *points, sqInt nPoints, sqInt fillIndex, sqInt lineWidth, sqInt lineFill, sqInt isShort);
-static sqInt loadRectanglelineFillleftFillrightFill(sqInt lineWidth, sqInt lineFill, sqInt leftFill, sqInt rightFill);
-static sqInt loadRenderingState(void);
-static sqInt loadShapenSegmentsfilllineWidthlineFillpointsShort(int *points, sqInt nSegments, sqInt fillIndex, sqInt lineWidth, sqInt lineFill, sqInt pointsShort);
-static sqInt loadSpanBufferFrom(sqInt spanOop);
-static sqInt loadTransformFromintolength(sqInt transformOop, float *destPtr, sqInt n);
-static sqInt loadWideBezierlineFillleftFillrightFilln(sqInt lineWidth, sqInt lineFill, sqInt leftFill, sqInt rightFill, sqInt nSegments);
-static sqInt loadWideLinefromtolineFillleftFillrightFill(sqInt lineWidth, int *p1, int *p2, sqInt lineFill, sqInt leftFill, sqInt rightFill);
-static sqInt loadWordTransformFromintolength(sqInt transformOop, float *destPtr, sqInt n);
-static sqInt loadWorkBufferFrom(sqInt wbOop);
-static sqInt magicNumberGet(void);
-static sqInt magicNumberPut(sqInt value);
-static sqInt makeRectFromPoints(void);
-static sqInt makeUnsignedFrom(sqInt someIntegerValue);
+static sqInt loadBitmapFillcolormaptilefromalongnormalxIndex(sqInt formOop, sqInt cmOop, sqInt tileFlag, int *point1, int *point2, int *point3, sqInt xIndex, struct foo * self);
+static int * loadBitsFrom(sqInt bmFill, struct foo * self);
+static sqInt loadColorTransformFrom(sqInt transformOop, struct foo * self);
+static sqInt loadCompressedSegmentfromshortleftFillrightFilllineWidthlineColor(sqInt segmentIndex, sqInt points, sqInt pointsShort, sqInt leftFill, sqInt rightFill, sqInt lineWidth, sqInt lineFill, struct foo * self);
+static sqInt loadCompressedShapesegmentsleftFillsrightFillslineWidthslineFillsfillIndexListpointShort(int *points, sqInt nSegments, int *leftFills, int *rightFills, int *lineWidths, int *lineFills, int *fillIndexList, sqInt pointsShort, struct foo * self);
+static sqInt loadEdgeStateFrom(sqInt edgeOop, struct foo * self);
+static sqInt loadEdgeTransformFrom(sqInt transformOop, struct foo * self);
+static sqInt loadFillOrientationfromalongnormalwidthheight(sqInt fill, int *point1, int *point2, int *point3, sqInt fillWidth, sqInt fillHeight, struct foo * self);
+static sqInt loadFormsFrom(sqInt arrayOop, struct foo * self);
+static sqInt loadGradientFillfromalongnormalisRadial(sqInt rampOop, int *point1, int *point2, int *point3, sqInt isRadial, struct foo * self);
+static sqInt loadLinefromtooffsetleftFillrightFill(sqInt line, int *point1, int *point2, sqInt yOffset, sqInt leftFill, sqInt rightFill, struct foo * self);
+static sqInt loadOvalSegmentwhcxcy(sqInt seg, sqInt w, sqInt h, sqInt cx, sqInt cy, struct foo * self);
+static sqInt loadOvallineFillleftFillrightFill(sqInt lineWidth, sqInt lineFill, sqInt leftFill, sqInt rightFill, struct foo * self);
+static sqInt loadPointIntAtfrom(sqInt index, sqInt intArray, struct foo * self);
+static short loadPointShortAtfrom(sqInt index, sqInt shortArray, struct foo * self);
+static sqInt loadPointfrom(int *pointArray, sqInt pointOop, struct foo * self);
+static sqInt loadPolygonnPointsfilllineWidthlineFillpointsShort(int *points, sqInt nPoints, sqInt fillIndex, sqInt lineWidth, sqInt lineFill, sqInt isShort, struct foo * self);
+static sqInt loadRectanglelineFillleftFillrightFill(sqInt lineWidth, sqInt lineFill, sqInt leftFill, sqInt rightFill, struct foo * self);
+static sqInt loadRenderingState(struct foo * self);
+static sqInt loadShapenSegmentsfilllineWidthlineFillpointsShort(int *points, sqInt nSegments, sqInt fillIndex, sqInt lineWidth, sqInt lineFill, sqInt pointsShort, struct foo * self);
+static sqInt loadSpanBufferFrom(sqInt spanOop, struct foo * self);
+static sqInt loadTransformFromintolength(sqInt transformOop, float *destPtr, sqInt n, struct foo * self);
+static sqInt loadWideBezierlineFillleftFillrightFilln(sqInt lineWidth, sqInt lineFill, sqInt leftFill, sqInt rightFill, sqInt nSegments, struct foo * self);
+static sqInt loadWideLinefromtolineFillleftFillrightFill(sqInt lineWidth, int *p1, int *p2, sqInt lineFill, sqInt leftFill, sqInt rightFill, struct foo * self);
+static sqInt loadWordTransformFromintolength(sqInt transformOop, float *destPtr, sqInt n, struct foo * self);
+static sqInt loadWorkBufferFrom(sqInt wbOop, struct foo * self);
+static sqInt magicNumberGet(struct foo * self);
+static sqInt magicNumberPut(sqInt value, struct foo * self);
+static sqInt makeRectFromPoints(struct foo * self);
+static sqInt makeUnsignedFrom(sqInt someIntegerValue, struct foo * self);
 EXPORT(sqInt) moduleUnloaded(char *aModuleName, struct foo * self);
-static sqInt moveAETEntryFromedgex(sqInt index, sqInt edge, sqInt xValue);
-static sqInt needAvailableSpace(sqInt nSlots);
-static sqInt needsFlush(void);
-static sqInt needsFlushGet(void);
-static sqInt needsFlushPut(sqInt value);
-static sqInt objectHeaderOf(sqInt obj);
-static sqInt objectIndexOf(sqInt obj);
-static sqInt objectIndexOfput(sqInt obj, sqInt value);
-static sqInt objectLengthOf(sqInt obj);
-static sqInt objectLengthOfput(sqInt obj, sqInt value);
-static sqInt objectTypeOf(sqInt obj);
-static sqInt objectTypeOfput(sqInt obj, sqInt value);
-static sqInt objStartGet(void);
-static sqInt objStartPut(sqInt value);
-static sqInt objUsedGet(void);
-static sqInt objUsedPut(sqInt value);
-static sqInt objat(sqInt object, sqInt index);
-static sqInt objatput(sqInt object, sqInt index, sqInt value);
-static sqInt offsetFromWidth(sqInt lineWidth);
-static int * point1Get(void);
-static int * point2Get(void);
-static int * point3Get(void);
-static int * point4Get(void);
-static sqInt postDisplayAction(void);
-EXPORT(sqInt) primitiveAbortProcessing(void);
-EXPORT(sqInt) primitiveAddActiveEdgeEntry(void);
-EXPORT(sqInt) primitiveAddBezier(void);
-EXPORT(sqInt) primitiveAddBezierShape(void);
-EXPORT(sqInt) primitiveAddBitmapFill(void);
-EXPORT(sqInt) primitiveAddCompressedShape(void);
-EXPORT(sqInt) primitiveAddGradientFill(void);
-EXPORT(sqInt) primitiveAddLine(void);
-EXPORT(sqInt) primitiveAddOval(void);
-EXPORT(sqInt) primitiveAddPolygon(void);
-EXPORT(sqInt) primitiveAddRect(void);
-EXPORT(sqInt) primitiveChangedActiveEdgeEntry(void);
-EXPORT(sqInt) primitiveCopyBuffer(void);
-EXPORT(sqInt) primitiveDisplaySpanBuffer(void);
-EXPORT(sqInt) primitiveDoProfileStats(void);
-EXPORT(sqInt) primitiveFinishedProcessing(void);
-EXPORT(sqInt) primitiveGetAALevel(void);
-EXPORT(sqInt) primitiveGetBezierStats(void);
-EXPORT(sqInt) primitiveGetClipRect(void);
-EXPORT(sqInt) primitiveGetCounts(void);
-EXPORT(sqInt) primitiveGetDepth(void);
-EXPORT(sqInt) primitiveGetFailureReason(void);
-EXPORT(sqInt) primitiveGetOffset(void);
-EXPORT(sqInt) primitiveGetTimes(void);
-EXPORT(sqInt) primitiveInitializeBuffer(void);
-EXPORT(sqInt) primitiveInitializeProcessing(void);
-EXPORT(sqInt) primitiveMergeFillFrom(void);
-EXPORT(sqInt) primitiveNeedsFlush(void);
-EXPORT(sqInt) primitiveNeedsFlushPut(void);
-EXPORT(sqInt) primitiveNextActiveEdgeEntry(void);
-EXPORT(sqInt) primitiveNextFillEntry(void);
-EXPORT(sqInt) primitiveNextGlobalEdgeEntry(void);
-EXPORT(sqInt) primitiveRegisterExternalEdge(void);
-EXPORT(sqInt) primitiveRegisterExternalFill(void);
-EXPORT(sqInt) primitiveRenderImage(void);
-EXPORT(sqInt) primitiveRenderScanline(void);
-EXPORT(sqInt) primitiveSetAALevel(void);
-EXPORT(sqInt) primitiveSetBitBltPlugin(void);
-EXPORT(sqInt) primitiveSetClipRect(void);
-EXPORT(sqInt) primitiveSetColorTransform(void);
-EXPORT(sqInt) primitiveSetDepth(void);
-EXPORT(sqInt) primitiveSetEdgeTransform(void);
-EXPORT(sqInt) primitiveSetOffset(void);
-static sqInt proceedRenderingImage(void);
-static sqInt proceedRenderingScanline(void);
-static sqInt quickLoadEngineFrom(sqInt engineOop);
-static sqInt quickLoadEngineFromrequiredState(sqInt oop, sqInt requiredState);
-static sqInt quickLoadEngineFromrequiredStateor(sqInt oop, sqInt requiredState, sqInt alternativeState);
-static sqInt quickRemoveInvalidFillsAt(sqInt leftX);
-static sqInt quickSortGlobalEdgeTablefromto(int *array, sqInt i, sqInt j);
-static sqInt removeFirstAETEntry(void);
-static sqInt repeatValuemax(sqInt delta, sqInt maxValue);
-static sqInt resetGraphicsEngineStats(void);
-static sqInt resortFirstAETEntry(void);
-static sqInt returnWideBezierFill(void);
-static sqInt returnWideBezierWidth(void);
-static sqInt returnWideLineFill(void);
-static sqInt returnWideLineWidth(void);
-static int * rShiftTable(void);
-static sqInt setAALevel(sqInt level);
+static sqInt moveAETEntryFromedgex(sqInt index, sqInt edge, sqInt xValue, struct foo * self);
+static sqInt needAvailableSpace(sqInt nSlots, struct foo * self);
+static sqInt needsFlush(struct foo * self);
+static sqInt needsFlushGet(struct foo * self);
+static sqInt needsFlushPut(sqInt value, struct foo * self);
+static sqInt objectHeaderOf(sqInt obj, struct foo * self);
+static sqInt objectIndexOf(sqInt obj, struct foo * self);
+static sqInt objectIndexOfput(sqInt obj, sqInt value, struct foo * self);
+static sqInt objectLengthOf(sqInt obj, struct foo * self);
+static sqInt objectLengthOfput(sqInt obj, sqInt value, struct foo * self);
+static sqInt objectTypeOf(sqInt obj, struct foo * self);
+static sqInt objectTypeOfput(sqInt obj, sqInt value, struct foo * self);
+static sqInt objStartGet(struct foo * self);
+static sqInt objStartPut(sqInt value, struct foo * self);
+static sqInt objUsedGet(struct foo * self);
+static sqInt objUsedPut(sqInt value, struct foo * self);
+static sqInt objat(sqInt object, sqInt index, struct foo * self);
+static sqInt objatput(sqInt object, sqInt index, sqInt value, struct foo * self);
+static sqInt offsetFromWidth(sqInt lineWidth, struct foo * self);
+static int * point1Get(struct foo * self);
+static int * point2Get(struct foo * self);
+static int * point3Get(struct foo * self);
+static int * point4Get(struct foo * self);
+static sqInt postDisplayAction(struct foo * self);
+EXPORT(sqInt) primitiveAbortProcessing(struct foo * self);
+EXPORT(sqInt) primitiveAddActiveEdgeEntry(struct foo * self);
+EXPORT(sqInt) primitiveAddBezier(struct foo * self);
+EXPORT(sqInt) primitiveAddBezierShape(struct foo * self);
+EXPORT(sqInt) primitiveAddBitmapFill(struct foo * self);
+EXPORT(sqInt) primitiveAddCompressedShape(struct foo * self);
+EXPORT(sqInt) primitiveAddGradientFill(struct foo * self);
+EXPORT(sqInt) primitiveAddLine(struct foo * self);
+EXPORT(sqInt) primitiveAddOval(struct foo * self);
+EXPORT(sqInt) primitiveAddPolygon(struct foo * self);
+EXPORT(sqInt) primitiveAddRect(struct foo * self);
+EXPORT(sqInt) primitiveChangedActiveEdgeEntry(struct foo * self);
+EXPORT(sqInt) primitiveCopyBuffer(struct foo * self);
+EXPORT(sqInt) primitiveDisplaySpanBuffer(struct foo * self);
+EXPORT(sqInt) primitiveDoProfileStats(struct foo * self);
+EXPORT(sqInt) primitiveFinishedProcessing(struct foo * self);
+EXPORT(sqInt) primitiveGetAALevel(struct foo * self);
+EXPORT(sqInt) primitiveGetBezierStats(struct foo * self);
+EXPORT(sqInt) primitiveGetClipRect(struct foo * self);
+EXPORT(sqInt) primitiveGetCounts(struct foo * self);
+EXPORT(sqInt) primitiveGetDepth(struct foo * self);
+EXPORT(sqInt) primitiveGetFailureReason(struct foo * self);
+EXPORT(sqInt) primitiveGetOffset(struct foo * self);
+EXPORT(sqInt) primitiveGetTimes(struct foo * self);
+EXPORT(sqInt) primitiveInitializeBuffer(struct foo * self);
+EXPORT(sqInt) primitiveInitializeProcessing(struct foo * self);
+EXPORT(sqInt) primitiveMergeFillFrom(struct foo * self);
+EXPORT(sqInt) primitiveNeedsFlush(struct foo * self);
+EXPORT(sqInt) primitiveNeedsFlushPut(struct foo * self);
+EXPORT(sqInt) primitiveNextActiveEdgeEntry(struct foo * self);
+EXPORT(sqInt) primitiveNextFillEntry(struct foo * self);
+EXPORT(sqInt) primitiveNextGlobalEdgeEntry(struct foo * self);
+EXPORT(sqInt) primitiveRegisterExternalEdge(struct foo * self);
+EXPORT(sqInt) primitiveRegisterExternalFill(struct foo * self);
+EXPORT(sqInt) primitiveRenderImage(struct foo * self);
+EXPORT(sqInt) primitiveRenderScanline(struct foo * self);
+EXPORT(sqInt) primitiveSetAALevel(struct foo * self);
+EXPORT(sqInt) primitiveSetBitBltPlugin(struct foo * self);
+EXPORT(sqInt) primitiveSetClipRect(struct foo * self);
+EXPORT(sqInt) primitiveSetColorTransform(struct foo * self);
+EXPORT(sqInt) primitiveSetDepth(struct foo * self);
+EXPORT(sqInt) primitiveSetEdgeTransform(struct foo * self);
+EXPORT(sqInt) primitiveSetOffset(struct foo * self);
+static sqInt proceedRenderingImage(struct foo * self);
+static sqInt proceedRenderingScanline(struct foo * self);
+static sqInt quickLoadEngineFrom(sqInt engineOop, struct foo * self);
+static sqInt quickLoadEngineFromrequiredState(sqInt oop, sqInt requiredState, struct foo * self);
+static sqInt quickLoadEngineFromrequiredStateor(sqInt oop, sqInt requiredState, sqInt alternativeState, struct foo * self);
+static sqInt quickRemoveInvalidFillsAt(sqInt leftX, struct foo * self);
+static sqInt quickSortGlobalEdgeTablefromto(int *array, sqInt i, sqInt j, struct foo * self);
+static sqInt removeFirstAETEntry(struct foo * self);
+static sqInt repeatValuemax(sqInt delta, sqInt maxValue, struct foo * self);
+static sqInt resetGraphicsEngineStats(struct foo * self);
+static sqInt resortFirstAETEntry(struct foo * self);
+static sqInt returnWideBezierFill(struct foo * self);
+static sqInt returnWideBezierWidth(struct foo * self);
+static sqInt returnWideLineFill(struct foo * self);
+static sqInt returnWideLineWidth(struct foo * self);
+static int * rShiftTable(struct foo * self);
+static sqInt setAALevel(sqInt level, struct foo * self);
 EXPORT(sqInt) setInterpreter(struct VirtualMachine *anInterpreter);
-static sqInt shortRunLengthAtfrom(sqInt i, sqInt runArray);
-static sqInt shortRunValueAtfrom(sqInt i, sqInt runArray);
-static sqInt showFilldepthrightX(sqInt fillIndex, sqInt depth, sqInt rightX);
-static int * smallSqrtTable(void);
-static sqInt sortGlobalEdgeTable(void);
-static sqInt spanEndAAGet(void);
-static sqInt spanEndAAPut(sqInt value);
-static sqInt spanEndGet(void);
-static sqInt spanEndPut(sqInt value);
-static sqInt spanSizeGet(void);
-static sqInt spanSizePut(sqInt value);
-static sqInt spanStartGet(void);
-static sqInt spanStartPut(sqInt value);
-static sqInt squaredLengthOfwith(sqInt deltaX, sqInt deltaY);
-static sqInt stackFillDepth(sqInt index);
-static sqInt stackFillDepthput(sqInt index, sqInt value);
-static sqInt stackFillEntryLength(void);
-static sqInt stackFillRightX(sqInt index);
-static sqInt stackFillRightXput(sqInt index, sqInt value);
-static sqInt stackFillSize(void);
-static sqInt stackFillValue(sqInt index);
-static sqInt stackFillValueput(sqInt index, sqInt value);
-static sqInt stateGet(void);
-static sqInt statePut(sqInt value);
-static sqInt stepToFirstBezier(void);
-static sqInt stepToFirstBezierInat(sqInt bezier, sqInt yValue);
-static sqInt stepToFirstLine(void);
-static sqInt stepToFirstLineInat(sqInt line, sqInt yValue);
-static sqInt stepToFirstWideBezier(void);
-static sqInt stepToFirstWideBezierInat(sqInt bezier, sqInt yValue);
-static sqInt stepToFirstWideLine(void);
-static sqInt stepToFirstWideLineInat(sqInt line, sqInt yValue);
-static sqInt stepToNextBezier(void);
-static sqInt stepToNextBezierForwardat(int *updateData, sqInt yValue);
-static sqInt stepToNextBezierInat(sqInt bezier, sqInt yValue);
-static sqInt stepToNextLine(void);
-static sqInt stepToNextLineInat(sqInt line, sqInt yValue);
-static sqInt stepToNextWideBezier(void);
-static sqInt stepToNextWideBezierInat(sqInt bezier, sqInt yValue);
-static sqInt stepToNextWideLine(void);
-static sqInt stepToNextWideLineInat(sqInt line, sqInt yValue);
-static sqInt stopBecauseOf(sqInt stopReason);
-static sqInt stopReasonGet(void);
-static sqInt stopReasonPut(sqInt value);
-static sqInt storeEdgeStateFrominto(sqInt edge, sqInt edgeOop);
-static sqInt storeEngineStateInto(sqInt oop);
-static sqInt storeFillStateInto(sqInt fillOop);
-static sqInt storeRenderingState(void);
-static sqInt storeStopStateIntoEdgefill(sqInt edgeOop, sqInt fillOop);
-static sqInt subdivideBezierFrom(sqInt index);
-static sqInt subdivideBezier(sqInt index);
-static sqInt subdivideToBeMonotonInX(sqInt index);
-static sqInt subdivideToBeMonotonInY(sqInt index);
-static sqInt subdivideToBeMonotoninX(sqInt base, sqInt doTestX);
-static sqInt toggleFillsOf(sqInt edge);
-static sqInt toggleFilldepthrightX(sqInt fillIndex, sqInt depth, sqInt rightX);
-static sqInt toggleWideFillOf(sqInt edge);
-static sqInt topDepth(void);
-static sqInt topFill(void);
-static sqInt topFillDepth(void);
-static sqInt topFillDepthPut(sqInt value);
-static sqInt topFillRightX(void);
-static sqInt topFillRightXPut(sqInt value);
-static sqInt topFillValue(void);
-static sqInt topFillValuePut(sqInt value);
-static sqInt topRightX(void);
-static sqInt transformColor(sqInt fillIndex);
-static sqInt transformPoints(sqInt n);
-static sqInt transformPointXyinto(double xValue, double yValue, int *dstPoint);
-static sqInt transformPoint(int *point);
-static sqInt transformPointinto(sqInt srcPoint, sqInt dstPoint);
-static sqInt transformWidth(sqInt w);
-static sqInt uncheckedTransformColor(sqInt fillIndex);
-static sqInt wbSizeGet(void);
-static sqInt wbSizePut(sqInt value);
-static sqInt wbStackClear(void);
-static sqInt wbStackPop(sqInt nItems);
-static sqInt wbStackPush(sqInt nItems);
-static sqInt wbStackSize(void);
-static sqInt wbStackValue(sqInt index);
-static sqInt wbStackValueput(sqInt index, sqInt value);
-static sqInt wbTopGet(void);
-static sqInt wbTopPut(sqInt value);
-static sqInt wideBezierEntryOf(sqInt line);
-static sqInt wideBezierEntryOfput(sqInt line, sqInt value);
-static sqInt wideBezierExitOf(sqInt line);
-static sqInt wideBezierExitOfput(sqInt line, sqInt value);
-static sqInt wideBezierExtentOf(sqInt bezier);
-static sqInt wideBezierExtentOfput(sqInt bezier, sqInt value);
-static sqInt wideBezierFillOf(sqInt bezier);
-static sqInt wideBezierFillOfput(sqInt bezier, sqInt value);
-static int * wideBezierUpdateDataOf(sqInt bezier);
-static sqInt wideBezierWidthOf(sqInt line);
-static sqInt wideBezierWidthOfput(sqInt line, sqInt value);
-static sqInt wideLineEntryOf(sqInt line);
-static sqInt wideLineEntryOfput(sqInt line, sqInt value);
-static sqInt wideLineExitOf(sqInt line);
-static sqInt wideLineExitOfput(sqInt line, sqInt value);
-static sqInt wideLineExtentOf(sqInt line);
-static sqInt wideLineExtentOfput(sqInt line, sqInt value);
-static sqInt wideLineFillOf(sqInt line);
-static sqInt wideLineFillOfput(sqInt line, sqInt value);
-static sqInt wideLineWidthOf(sqInt line);
-static sqInt wideLineWidthOfput(sqInt line, sqInt value);
-static sqInt workBufferPut(sqInt wbOop);
+static sqInt shortRunLengthAtfrom(sqInt i, sqInt runArray, struct foo * self);
+static sqInt shortRunValueAtfrom(sqInt i, sqInt runArray, struct foo * self);
+static sqInt showFilldepthrightX(sqInt fillIndex, sqInt depth, sqInt rightX, struct foo * self);
+static int * smallSqrtTable(struct foo * self);
+static sqInt sortGlobalEdgeTable(struct foo * self);
+static sqInt spanEndAAGet(struct foo * self);
+static sqInt spanEndAAPut(sqInt value, struct foo * self);
+static sqInt spanEndGet(struct foo * self);
+static sqInt spanEndPut(sqInt value, struct foo * self);
+static sqInt spanSizeGet(struct foo * self);
+static sqInt spanSizePut(sqInt value, struct foo * self);
+static sqInt spanStartGet(struct foo * self);
+static sqInt spanStartPut(sqInt value, struct foo * self);
+static sqInt squaredLengthOfwith(sqInt deltaX, sqInt deltaY, struct foo * self);
+static sqInt stackFillDepth(sqInt index, struct foo * self);
+static sqInt stackFillDepthput(sqInt index, sqInt value, struct foo * self);
+static sqInt stackFillEntryLength(struct foo * self);
+static sqInt stackFillRightX(sqInt index, struct foo * self);
+static sqInt stackFillRightXput(sqInt index, sqInt value, struct foo * self);
+static sqInt stackFillSize(struct foo * self);
+static sqInt stackFillValue(sqInt index, struct foo * self);
+static sqInt stackFillValueput(sqInt index, sqInt value, struct foo * self);
+static sqInt stateGet(struct foo * self);
+static sqInt statePut(sqInt value, struct foo * self);
+static sqInt stepToFirstBezier(struct foo * self);
+static sqInt stepToFirstBezierInat(sqInt bezier, sqInt yValue, struct foo * self);
+static sqInt stepToFirstLine(struct foo * self);
+static sqInt stepToFirstLineInat(sqInt line, sqInt yValue, struct foo * self);
+static sqInt stepToFirstWideBezier(struct foo * self);
+static sqInt stepToFirstWideBezierInat(sqInt bezier, sqInt yValue, struct foo * self);
+static sqInt stepToFirstWideLine(struct foo * self);
+static sqInt stepToFirstWideLineInat(sqInt line, sqInt yValue, struct foo * self);
+static sqInt stepToNextBezier(struct foo * self);
+static sqInt stepToNextBezierForwardat(int *updateData, sqInt yValue, struct foo * self);
+static sqInt stepToNextBezierInat(sqInt bezier, sqInt yValue, struct foo * self);
+static sqInt stepToNextLine(struct foo * self);
+static sqInt stepToNextLineInat(sqInt line, sqInt yValue, struct foo * self);
+static sqInt stepToNextWideBezier(struct foo * self);
+static sqInt stepToNextWideBezierInat(sqInt bezier, sqInt yValue, struct foo * self);
+static sqInt stepToNextWideLine(struct foo * self);
+static sqInt stepToNextWideLineInat(sqInt line, sqInt yValue, struct foo * self);
+static sqInt stopBecauseOf(sqInt stopReason, struct foo * self);
+static sqInt stopReasonGet(struct foo * self);
+static sqInt stopReasonPut(sqInt value, struct foo * self);
+static sqInt storeEdgeStateFrominto(sqInt edge, sqInt edgeOop, struct foo * self);
+static sqInt storeEngineStateInto(sqInt oop, struct foo * self);
+static sqInt storeFillStateInto(sqInt fillOop, struct foo * self);
+static sqInt storeRenderingState(struct foo * self);
+static sqInt storeStopStateIntoEdgefill(sqInt edgeOop, sqInt fillOop, struct foo * self);
+static sqInt subdivideBezierFrom(sqInt index, struct foo * self);
+static sqInt subdivideBezier(sqInt index, struct foo * self);
+static sqInt subdivideToBeMonotonInX(sqInt index, struct foo * self);
+static sqInt subdivideToBeMonotonInY(sqInt index, struct foo * self);
+static sqInt subdivideToBeMonotoninX(sqInt base, sqInt doTestX, struct foo * self);
+static sqInt toggleFillsOf(sqInt edge, struct foo * self);
+static sqInt toggleFilldepthrightX(sqInt fillIndex, sqInt depth, sqInt rightX, struct foo * self);
+static sqInt toggleWideFillOf(sqInt edge, struct foo * self);
+static sqInt topDepth(struct foo * self);
+static sqInt topFill(struct foo * self);
+static sqInt topFillDepth(struct foo * self);
+static sqInt topFillDepthPut(sqInt value, struct foo * self);
+static sqInt topFillRightX(struct foo * self);
+static sqInt topFillRightXPut(sqInt value, struct foo * self);
+static sqInt topFillValue(struct foo * self);
+static sqInt topFillValuePut(sqInt value, struct foo * self);
+static sqInt topRightX(struct foo * self);
+static sqInt transformColor(sqInt fillIndex, struct foo * self);
+static sqInt transformPoints(sqInt n, struct foo * self);
+static sqInt transformPointXyinto(double xValue, double yValue, int *dstPoint, struct foo * self);
+static sqInt transformPoint(int *point, struct foo * self);
+static sqInt transformPointinto(sqInt srcPoint, sqInt dstPoint, struct foo * self);
+static sqInt transformWidth(sqInt w, struct foo * self);
+static sqInt uncheckedTransformColor(sqInt fillIndex, struct foo * self);
+static sqInt wbSizeGet(struct foo * self);
+static sqInt wbSizePut(sqInt value, struct foo * self);
+static sqInt wbStackClear(struct foo * self);
+static sqInt wbStackPop(sqInt nItems, struct foo * self);
+static sqInt wbStackPush(sqInt nItems, struct foo * self);
+static sqInt wbStackSize(struct foo * self);
+static sqInt wbStackValue(sqInt index, struct foo * self);
+static sqInt wbStackValueput(sqInt index, sqInt value, struct foo * self);
+static sqInt wbTopGet(struct foo * self);
+static sqInt wbTopPut(sqInt value, struct foo * self);
+static sqInt wideBezierEntryOf(sqInt line, struct foo * self);
+static sqInt wideBezierEntryOfput(sqInt line, sqInt value, struct foo * self);
+static sqInt wideBezierExitOf(sqInt line, struct foo * self);
+static sqInt wideBezierExitOfput(sqInt line, sqInt value, struct foo * self);
+static sqInt wideBezierExtentOf(sqInt bezier, struct foo * self);
+static sqInt wideBezierExtentOfput(sqInt bezier, sqInt value, struct foo * self);
+static sqInt wideBezierFillOf(sqInt bezier, struct foo * self);
+static sqInt wideBezierFillOfput(sqInt bezier, sqInt value, struct foo * self);
+static int * wideBezierUpdateDataOf(sqInt bezier, struct foo * self);
+static sqInt wideBezierWidthOf(sqInt line, struct foo * self);
+static sqInt wideBezierWidthOfput(sqInt line, sqInt value, struct foo * self);
+static sqInt wideLineEntryOf(sqInt line, struct foo * self);
+static sqInt wideLineEntryOfput(sqInt line, sqInt value, struct foo * self);
+static sqInt wideLineExitOf(sqInt line, struct foo * self);
+static sqInt wideLineExitOfput(sqInt line, sqInt value, struct foo * self);
+static sqInt wideLineExtentOf(sqInt line, struct foo * self);
+static sqInt wideLineExtentOfput(sqInt line, sqInt value, struct foo * self);
+static sqInt wideLineFillOf(sqInt line, struct foo * self);
+static sqInt wideLineFillOfput(sqInt line, sqInt value, struct foo * self);
+static sqInt wideLineWidthOf(sqInt line, struct foo * self);
+static sqInt wideLineWidthOfput(sqInt line, sqInt value, struct foo * self);
+static sqInt workBufferPut(sqInt wbOop, struct foo * self);
 
 
 /*** Variables ***/
@@ -751,7 +751,7 @@ static sqInt (*fetchPointerofObject)(sqInt index, sqInt oop, struct foo * self);
 static void * (*firstIndexableField)(sqInt oop, struct foo * self);
 static double (*floatValueOf)(sqInt oop, struct foo * self);
 static sqInt (*integerValueOf)(sqInt oop, struct foo * self);
-static void * (*ioLoadFunctionFrom)(char *functionName, char *moduleName);
+static void * (*ioLoadFunctionFrom)(char *functionName, char *moduleName, struct foo * self);
 static sqInt (*ioMicroMSecs)(void);
 static sqInt (*isArray)(sqInt oop, struct foo * self);
 static sqInt (*isBytes)(sqInt oop, struct foo * self);
@@ -792,7 +792,7 @@ extern sqInt fetchPointerofObject(sqInt index, sqInt oop, struct foo * self);
 extern void * firstIndexableField(sqInt oop, struct foo * self);
 extern double floatValueOf(sqInt oop, struct foo * self);
 extern sqInt integerValueOf(sqInt oop, struct foo * self);
-extern void * ioLoadFunctionFrom(char *functionName, char *moduleName);
+extern void * ioLoadFunctionFrom(char *functionName, char *moduleName, struct foo * self);
 extern sqInt ioMicroMSecs(void);
 extern sqInt isArray(sqInt oop, struct foo * self);
 extern sqInt isBytes(sqInt oop, struct foo * self);
@@ -847,29 +847,25 @@ static int* workBuffer;
 
 
 	/* BalloonEngineBase>>#aaColorMaskGet */
-static sqInt
-aaColorMaskGet(void)
+static sqIntaaColorMaskGet(struct foo * self)
 {
 	return workBuffer[GWAAColorMask];
 }
 
 	/* BalloonEngineBase>>#aaColorMaskPut: */
-static sqInt
-aaColorMaskPut(sqInt value)
+static sqIntaaColorMaskPut(sqInt value, struct foo * self)
 {
 	return workBuffer[GWAAColorMask] = value;
 }
 
 	/* BalloonEngineBase>>#aaColorShiftGet */
-static sqInt
-aaColorShiftGet(void)
+static sqIntaaColorShiftGet(struct foo * self)
 {
 	return workBuffer[GWAAColorShift];
 }
 
 	/* BalloonEngineBase>>#aaColorShiftPut: */
-static sqInt
-aaColorShiftPut(sqInt value)
+static sqIntaaColorShiftPut(sqInt value, struct foo * self)
 {
 	return workBuffer[GWAAColorShift] = value;
 }
@@ -878,8 +874,7 @@ aaColorShiftPut(sqInt value)
 /*	Common function to compute the first full pixel for AA drawing */
 
 	/* BalloonEngineBase>>#aaFirstPixelFrom:to: */
-static sqInt
-aaFirstPixelFromto(sqInt leftX, sqInt rightX)
+static sqIntaaFirstPixelFromto(sqInt leftX, sqInt rightX, struct foo * self)
 {
     sqInt firstPixel;
 
@@ -893,15 +888,13 @@ aaFirstPixelFromto(sqInt leftX, sqInt rightX)
 }
 
 	/* BalloonEngineBase>>#aaHalfPixelGet */
-static sqInt
-aaHalfPixelGet(void)
+static sqIntaaHalfPixelGet(struct foo * self)
 {
 	return workBuffer[GWAAHalfPixel];
 }
 
 	/* BalloonEngineBase>>#aaHalfPixelPut: */
-static sqInt
-aaHalfPixelPut(sqInt value)
+static sqIntaaHalfPixelPut(sqInt value, struct foo * self)
 {
 	return workBuffer[GWAAHalfPixel] = value;
 }
@@ -910,50 +903,43 @@ aaHalfPixelPut(sqInt value)
 /*	Common function to compute the last full pixel for AA drawing */
 
 	/* BalloonEngineBase>>#aaLastPixelFrom:to: */
-static sqInt
-aaLastPixelFromto(sqInt leftX, sqInt rightX)
+static sqIntaaLastPixelFromto(sqInt leftX, sqInt rightX, struct foo * self)
 {
 	return (rightX - 1) & ((unsigned int)~((workBuffer[GWAALevel]) - 1));
 }
 
 	/* BalloonEngineBase>>#aaLevelGet */
-static sqInt
-aaLevelGet(void)
+static sqIntaaLevelGet(struct foo * self)
 {
 	return workBuffer[GWAALevel];
 }
 
 	/* BalloonEngineBase>>#aaLevelPut: */
-static sqInt
-aaLevelPut(sqInt value)
+static sqIntaaLevelPut(sqInt value, struct foo * self)
 {
 	return workBuffer[GWAALevel] = value;
 }
 
 	/* BalloonEngineBase>>#aaScanMaskGet */
-static sqInt
-aaScanMaskGet(void)
+static sqIntaaScanMaskGet(struct foo * self)
 {
 	return workBuffer[GWAAScanMask];
 }
 
 	/* BalloonEngineBase>>#aaScanMaskPut: */
-static sqInt
-aaScanMaskPut(sqInt value)
+static sqIntaaScanMaskPut(sqInt value, struct foo * self)
 {
 	return workBuffer[GWAAScanMask] = value;
 }
 
 	/* BalloonEngineBase>>#aaShiftGet */
-static sqInt
-aaShiftGet(void)
+static sqIntaaShiftGet(struct foo * self)
 {
 	return workBuffer[GWAAShift];
 }
 
 	/* BalloonEngineBase>>#aaShiftPut: */
-static sqInt
-aaShiftPut(sqInt value)
+static sqIntaaShiftPut(sqInt value, struct foo * self)
 {
 	return workBuffer[GWAAShift] = value;
 }
@@ -963,8 +949,7 @@ aaShiftPut(sqInt value)
 	e.g., compute (value * value) bitShift: -24 */
 
 	/* BalloonEnginePlugin>>#absoluteSquared8Dot24: */
-static sqInt
-absoluteSquared8Dot24(sqInt value)
+static sqIntabsoluteSquared8Dot24(sqInt value, struct foo * self)
 {
     unsigned int word1;
     unsigned int word2;
@@ -978,8 +963,7 @@ absoluteSquared8Dot24(sqInt value)
 /*	Return the accurate length of the vector described by deltaX and deltaY */
 
 	/* BalloonEngineBase>>#accurateLengthOf:with: */
-static sqInt
-accurateLengthOfwith(sqInt deltaX, sqInt deltaY)
+static sqIntaccurateLengthOfwith(sqInt deltaX, sqInt deltaY, struct foo * self)
 {
     sqInt length2;
 
@@ -1002,7 +986,7 @@ accurateLengthOfwith(sqInt deltaX, sqInt deltaY)
 	length2 = (deltaX * deltaX) + (deltaY * deltaY);
 	/* begin computeSqrt: */
 	if (length2 < 32) {
-		return (smallSqrtTable())[length2];
+		return (smallSqrtTable(self))[length2];
 	}
 	else {
 		return ((sqInt)((sqrt(((double) length2 ))) + 0.5));
@@ -1010,10 +994,9 @@ accurateLengthOfwith(sqInt deltaX, sqInt deltaY)
 }
 
 	/* BalloonEngineBase>>#addEdgeToGET: */
-static sqInt
-addEdgeToGET(sqInt edge)
+static sqIntaddEdgeToGET(sqInt edge, struct foo * self)
 {
-	if (!(allocateGETEntry(1))) {
+	if (!(allocateGETEntry(1, self))) {
 		return 0;
 	}
 	getBuffer[workBuffer[GWGETUsed]] = edge;
@@ -1032,8 +1015,7 @@ addEdgeToGET(sqInt edge)
  */
 
 	/* BalloonEngineBase>>#adjustAALevel */
-static sqInt
-adjustAALevel(void)
+static sqIntadjustAALevel(struct foo * self)
 {
     unsigned int adjustMask;
     sqInt adjustShift;
@@ -1057,8 +1039,7 @@ adjustAALevel(void)
 /*	Adjust the wide bezier curve (dx < 0) to start/end at the right point */
 
 	/* BalloonEnginePlugin>>#adjustWideBezierLeft:width:offset:endX: */
-static sqInt
-adjustWideBezierLeftwidthoffsetendX(sqInt bezier, sqInt lineWidth, sqInt lineOffset, sqInt endX)
+static sqIntadjustWideBezierLeftwidthoffsetendX(sqInt bezier, sqInt lineWidth, sqInt lineOffset, sqInt endX, struct foo * self)
 {
     int lastX;
     int lastY;
@@ -1077,8 +1058,7 @@ adjustWideBezierLeftwidthoffsetendX(sqInt bezier, sqInt lineWidth, sqInt lineOff
 /*	Adjust the wide bezier curve (dx >= 0) to start/end at the right point */
 
 	/* BalloonEnginePlugin>>#adjustWideBezierRight:width:offset:endX: */
-static sqInt
-adjustWideBezierRightwidthoffsetendX(sqInt bezier, sqInt lineWidth, sqInt lineOffset, sqInt endX)
+static sqIntadjustWideBezierRightwidthoffsetendX(sqInt bezier, sqInt lineWidth, sqInt lineOffset, sqInt endX, struct foo * self)
 {
     int lastX;
     int lastY;
@@ -1101,8 +1081,7 @@ adjustWideBezierRightwidthoffsetendX(sqInt bezier, sqInt lineWidth, sqInt lineOf
 	to simulate a rectangular brush */
 
 	/* BalloonEnginePlugin>>#adjustWideLine:afterSteppingFrom:to: */
-static sqInt
-adjustWideLineafterSteppingFromto(sqInt line, sqInt lastX, sqInt nextX)
+static sqIntadjustWideLineafterSteppingFromto(sqInt line, sqInt lastX, sqInt nextX, struct foo * self)
 {
     sqInt baseWidth;
     sqInt deltaX;
@@ -1171,29 +1150,25 @@ adjustWideLineafterSteppingFromto(sqInt line, sqInt lastX, sqInt nextX)
 }
 
 	/* BalloonEngineBase>>#aetStartGet */
-static sqInt
-aetStartGet(void)
+static sqIntaetStartGet(struct foo * self)
 {
 	return workBuffer[GWAETStart];
 }
 
 	/* BalloonEngineBase>>#aetStartPut: */
-static sqInt
-aetStartPut(sqInt value)
+static sqIntaetStartPut(sqInt value, struct foo * self)
 {
 	return workBuffer[GWAETStart] = value;
 }
 
 	/* BalloonEngineBase>>#aetUsedGet */
-static sqInt
-aetUsedGet(void)
+static sqIntaetUsedGet(struct foo * self)
 {
 	return workBuffer[GWAETUsed];
 }
 
 	/* BalloonEngineBase>>#aetUsedPut: */
-static sqInt
-aetUsedPut(sqInt value)
+static sqIntaetUsedPut(sqInt value, struct foo * self)
 {
 	return workBuffer[GWAETUsed] = value;
 }
@@ -1202,8 +1177,7 @@ aetUsedPut(sqInt value)
 /*	Allocate n slots in the active edge table */
 
 	/* BalloonEngineBase>>#allocateAETEntry: */
-static sqInt
-allocateAETEntry(sqInt nSlots)
+static sqIntallocateAETEntry(sqInt nSlots, struct foo * self)
 {
 	/* begin needAvailableSpace: */
 	if (((((GWHeaderSize + objUsed) + (workBuffer[GWGETUsed])) + (workBuffer[GWAETUsed])) + nSlots) > (workBuffer[GWBufferTop])) {
@@ -1216,12 +1190,11 @@ allocateAETEntry(sqInt nSlots)
 }
 
 	/* BalloonEnginePlugin>>#allocateBezier */
-static sqInt
-allocateBezier(void)
+static sqIntallocateBezier(struct foo * self)
 {
     sqInt bezier;
 
-	if (!(allocateObjEntry(GBBaseSize))) {
+	if (!(allocateObjEntry(GBBaseSize, self))) {
 		return 0;
 	}
 	bezier = objUsed;
@@ -1236,11 +1209,10 @@ allocateBezier(void)
 }
 
 	/* BalloonEnginePlugin>>#allocateBezierStackEntry */
-static sqInt
-allocateBezierStackEntry(void)
+static sqIntallocateBezierStackEntry(struct foo * self)
 {
 	/* begin wbStackPush: */
-	if (!(needAvailableSpace(6))) {
+	if (!(needAvailableSpace(6, self))) {
 		goto l2;
 	}
 	/* begin wbTopPut: */
@@ -1250,8 +1222,7 @@ allocateBezierStackEntry(void)
 }
 
 	/* BalloonEnginePlugin>>#allocateBitmapFill:colormap: */
-static sqInt
-allocateBitmapFillcolormap(sqInt cmSize, int *cmBits)
+static sqIntallocateBitmapFillcolormap(sqInt cmSize, int *cmBits, struct foo * self)
 {
     int *cm;
     sqInt fill;
@@ -1259,7 +1230,7 @@ allocateBitmapFillcolormap(sqInt cmSize, int *cmBits)
     sqInt i;
 
 	fillSize = GBMBaseSize + cmSize;
-	if (!(allocateObjEntry(fillSize))) {
+	if (!(allocateObjEntry(fillSize, self))) {
 		return 0;
 	}
 	fill = objUsed;
@@ -1273,7 +1244,7 @@ allocateBitmapFillcolormap(sqInt cmSize, int *cmBits)
 	cm = (objBuffer + fill) + GBColormapOffset;
 	if ((workBuffer[GWHasColorTransform]) != 0) {
 		for (i = 0; i < cmSize; i += 1) {
-			cm[i] = (transformColor(cmBits[i]));
+			cm[i] = (transformColor(cmBits[i], self));
 		}
 	}
 	else {
@@ -1290,8 +1261,7 @@ allocateBitmapFillcolormap(sqInt cmSize, int *cmBits)
 /*	Allocate n slots in the global edge table */
 
 	/* BalloonEngineBase>>#allocateGETEntry: */
-static sqInt
-allocateGETEntry(sqInt nSlots)
+static sqIntallocateGETEntry(sqInt nSlots, struct foo * self)
 {
     sqInt dstIndex;
     sqInt i;
@@ -1299,7 +1269,7 @@ allocateGETEntry(sqInt nSlots)
 
 
 	/* First allocate nSlots in the AET */
-	if (!(needAvailableSpace(nSlots))) {
+	if (!(needAvailableSpace(nSlots, self))) {
 		return 0;
 	}
 	if (!((workBuffer[GWAETUsed]) == 0)) {
@@ -1317,8 +1287,7 @@ allocateGETEntry(sqInt nSlots)
 }
 
 	/* BalloonEnginePlugin>>#allocateGradientFill:rampWidth:isRadial: */
-static sqInt
-allocateGradientFillrampWidthisRadial(int *ramp, sqInt rampWidth, sqInt isRadial)
+static sqIntallocateGradientFillrampWidthisRadial(int *ramp, sqInt rampWidth, sqInt isRadial, struct foo * self)
 {
     sqInt fill;
     sqInt fillSize;
@@ -1326,7 +1295,7 @@ allocateGradientFillrampWidthisRadial(int *ramp, sqInt rampWidth, sqInt isRadial
     int *rampPtr;
 
 	fillSize = GGBaseSize + rampWidth;
-	if (!(allocateObjEntry(fillSize))) {
+	if (!(allocateObjEntry(fillSize, self))) {
 		return 0;
 	}
 	fill = objUsed;
@@ -1346,7 +1315,7 @@ allocateGradientFillrampWidthisRadial(int *ramp, sqInt rampWidth, sqInt isRadial
 	rampPtr = (objBuffer + fill) + GFRampOffset;
 	if ((workBuffer[GWHasColorTransform]) != 0) {
 		for (i = 0; i < rampWidth; i += 1) {
-			rampPtr[i] = (transformColor(ramp[i]));
+			rampPtr[i] = (transformColor(ramp[i], self));
 		}
 	}
 	else {
@@ -1360,12 +1329,11 @@ allocateGradientFillrampWidthisRadial(int *ramp, sqInt rampWidth, sqInt isRadial
 }
 
 	/* BalloonEnginePlugin>>#allocateLine */
-static sqInt
-allocateLine(void)
+static sqIntallocateLine(struct foo * self)
 {
     sqInt line;
 
-	if (!(allocateObjEntry(GLBaseSize))) {
+	if (!(allocateObjEntry(GLBaseSize, self))) {
 		return 0;
 	}
 	line = objUsed;
@@ -1383,8 +1351,7 @@ allocateLine(void)
 /*	Allocate n slots in the object buffer */
 
 	/* BalloonEngineBase>>#allocateObjEntry: */
-static sqInt
-allocateObjEntry(sqInt nSlots)
+static sqIntallocateObjEntry(sqInt nSlots, struct foo * self)
 {
     sqInt dstIndex;
     sqInt i;
@@ -1392,7 +1359,7 @@ allocateObjEntry(sqInt nSlots)
 
 
 	/* First allocate nSlots in the GET */
-	if (!(allocateGETEntry(nSlots))) {
+	if (!(allocateGETEntry(nSlots, self))) {
 		return 0;
 	}
 	if (!((workBuffer[GWGETUsed]) == 0)) {
@@ -1412,8 +1379,7 @@ allocateObjEntry(sqInt nSlots)
 /*	AET and Stack allocation are symmetric */
 
 	/* BalloonEngineBase>>#allocateStackEntry: */
-static sqInt
-allocateStackEntry(sqInt nSlots)
+static sqIntallocateStackEntry(sqInt nSlots, struct foo * self)
 {
 	/* begin needAvailableSpace: */
 	if (((((GWHeaderSize + objUsed) + (workBuffer[GWGETUsed])) + (workBuffer[GWAETUsed])) + nSlots) > (workBuffer[GWBufferTop])) {
@@ -1426,11 +1392,10 @@ allocateStackEntry(sqInt nSlots)
 }
 
 	/* BalloonEngineBase>>#allocateStackFillEntry */
-static sqInt
-allocateStackFillEntry(void)
+static sqIntallocateStackFillEntry(struct foo * self)
 {
 	/* begin wbStackPush: */
-	if (!(needAvailableSpace(3 /* stackFillEntryLength */))) {
+	if (!(needAvailableSpace(3 /* stackFillEntryLength */, self))) {
 		return 0;
 	}
 	/* begin wbTopPut: */
@@ -1439,12 +1404,11 @@ allocateStackFillEntry(void)
 }
 
 	/* BalloonEnginePlugin>>#allocateWideBezier */
-static sqInt
-allocateWideBezier(void)
+static sqIntallocateWideBezier(struct foo * self)
 {
     sqInt bezier;
 
-	if (!(allocateObjEntry(GBWideSize))) {
+	if (!(allocateObjEntry(GBWideSize, self))) {
 		return 0;
 	}
 	bezier = objUsed;
@@ -1459,12 +1423,11 @@ allocateWideBezier(void)
 }
 
 	/* BalloonEnginePlugin>>#allocateWideLine */
-static sqInt
-allocateWideLine(void)
+static sqIntallocateWideLine(struct foo * self)
 {
     sqInt line;
 
-	if (!(allocateObjEntry(GLWideSize))) {
+	if (!(allocateObjEntry(GLWideSize, self))) {
 		return 0;
 	}
 	line = objUsed;
@@ -1479,8 +1442,7 @@ allocateWideLine(void)
 }
 
 	/* BalloonEngineBase>>#areEdgeFillsValid: */
-static sqInt
-areEdgeFillsValid(sqInt edge)
+static sqIntareEdgeFillsValid(sqInt edge, struct foo * self)
 {
 	return ((objBuffer[edge + GEObjectType]) & GEEdgeFillsInvalid) == 0;
 }
@@ -1489,8 +1451,7 @@ areEdgeFillsValid(sqInt edge)
 /*	Make sure that val1 is between val2 and val3. */
 
 	/* BalloonEnginePlugin>>#assureValue:between:and: */
-static sqInt
-assureValuebetweenand(sqInt val1, sqInt val2, sqInt val3)
+static sqIntassureValuebetweenand(sqInt val1, sqInt val2, sqInt val3, struct foo * self)
 {
 	if (val2 > val3) {
 		if (val1 > val2) {
@@ -1512,169 +1473,145 @@ assureValuebetweenand(sqInt val1, sqInt val2, sqInt val3)
 }
 
 	/* BalloonEnginePlugin>>#bezierEndXOf: */
-static sqInt
-bezierEndXOf(sqInt bezier)
+static sqIntbezierEndXOf(sqInt bezier, struct foo * self)
 {
 	return objBuffer[bezier + GBEndX];
 }
 
 	/* BalloonEnginePlugin>>#bezierEndXOf:put: */
-static sqInt
-bezierEndXOfput(sqInt bezier, sqInt value)
+static sqIntbezierEndXOfput(sqInt bezier, sqInt value, struct foo * self)
 {
 	return objBuffer[bezier + GBEndX] = value;
 }
 
 	/* BalloonEnginePlugin>>#bezierEndYOf: */
-static sqInt
-bezierEndYOf(sqInt bezier)
+static sqIntbezierEndYOf(sqInt bezier, struct foo * self)
 {
 	return objBuffer[bezier + GBEndY];
 }
 
 	/* BalloonEnginePlugin>>#bezierEndYOf:put: */
-static sqInt
-bezierEndYOfput(sqInt bezier, sqInt value)
+static sqIntbezierEndYOfput(sqInt bezier, sqInt value, struct foo * self)
 {
 	return objBuffer[bezier + GBEndY] = value;
 }
 
 	/* BalloonEnginePlugin>>#bezierFinalXOf: */
-static sqInt
-bezierFinalXOf(sqInt bezier)
+static sqIntbezierFinalXOf(sqInt bezier, struct foo * self)
 {
 	return objBuffer[bezier + GBFinalX];
 }
 
 	/* BalloonEnginePlugin>>#bezierFinalXOf:put: */
-static sqInt
-bezierFinalXOfput(sqInt bezier, sqInt value)
+static sqIntbezierFinalXOfput(sqInt bezier, sqInt value, struct foo * self)
 {
 	return objBuffer[bezier + GBFinalX] = value;
 }
 
 	/* BalloonEnginePlugin>>#bezierUpdateDataOf: */
-static int *
-bezierUpdateDataOf(sqInt bezier)
+static int *bezierUpdateDataOf(sqInt bezier, struct foo * self)
 {
 	return (objBuffer + bezier) + GBUpdateData;
 }
 
 	/* BalloonEnginePlugin>>#bezierViaXOf: */
-static sqInt
-bezierViaXOf(sqInt bezier)
+static sqIntbezierViaXOf(sqInt bezier, struct foo * self)
 {
 	return objBuffer[bezier + GBViaX];
 }
 
 	/* BalloonEnginePlugin>>#bezierViaXOf:put: */
-static sqInt
-bezierViaXOfput(sqInt bezier, sqInt value)
+static sqIntbezierViaXOfput(sqInt bezier, sqInt value, struct foo * self)
 {
 	return objBuffer[bezier + GBViaX] = value;
 }
 
 	/* BalloonEnginePlugin>>#bezierViaYOf: */
-static sqInt
-bezierViaYOf(sqInt bezier)
+static sqIntbezierViaYOf(sqInt bezier, struct foo * self)
 {
 	return objBuffer[bezier + GBViaY];
 }
 
 	/* BalloonEnginePlugin>>#bezierViaYOf:put: */
-static sqInt
-bezierViaYOfput(sqInt bezier, sqInt value)
+static sqIntbezierViaYOfput(sqInt bezier, sqInt value, struct foo * self)
 {
 	return objBuffer[bezier + GBViaY] = value;
 }
 
 	/* BalloonEnginePlugin>>#bitmapCmSizeOf: */
-static sqInt
-bitmapCmSizeOf(sqInt bmFill)
+static sqIntbitmapCmSizeOf(sqInt bmFill, struct foo * self)
 {
 	return objBuffer[bmFill + GBColormapSize];
 }
 
 	/* BalloonEnginePlugin>>#bitmapCmSizeOf:put: */
-static sqInt
-bitmapCmSizeOfput(sqInt bmFill, sqInt value)
+static sqIntbitmapCmSizeOfput(sqInt bmFill, sqInt value, struct foo * self)
 {
 	return objBuffer[bmFill + GBColormapSize] = value;
 }
 
 	/* BalloonEnginePlugin>>#bitmapDepthOf: */
-static sqInt
-bitmapDepthOf(sqInt bmFill)
+static sqIntbitmapDepthOf(sqInt bmFill, struct foo * self)
 {
 	return objBuffer[bmFill + GBBitmapDepth];
 }
 
 	/* BalloonEnginePlugin>>#bitmapDepthOf:put: */
-static sqInt
-bitmapDepthOfput(sqInt bmFill, sqInt value)
+static sqIntbitmapDepthOfput(sqInt bmFill, sqInt value, struct foo * self)
 {
 	return objBuffer[bmFill + GBBitmapDepth] = value;
 }
 
 	/* BalloonEnginePlugin>>#bitmapHeightOf: */
-static sqInt
-bitmapHeightOf(sqInt bmFill)
+static sqIntbitmapHeightOf(sqInt bmFill, struct foo * self)
 {
 	return objBuffer[bmFill + GBBitmapHeight];
 }
 
 	/* BalloonEnginePlugin>>#bitmapHeightOf:put: */
-static sqInt
-bitmapHeightOfput(sqInt bmFill, sqInt value)
+static sqIntbitmapHeightOfput(sqInt bmFill, sqInt value, struct foo * self)
 {
 	return objBuffer[bmFill + GBBitmapHeight] = value;
 }
 
 	/* BalloonEnginePlugin>>#bitmapRasterOf: */
-static sqInt
-bitmapRasterOf(sqInt bmFill)
+static sqIntbitmapRasterOf(sqInt bmFill, struct foo * self)
 {
 	return objBuffer[bmFill + GBBitmapRaster];
 }
 
 	/* BalloonEnginePlugin>>#bitmapRasterOf:put: */
-static sqInt
-bitmapRasterOfput(sqInt bmFill, sqInt value)
+static sqIntbitmapRasterOfput(sqInt bmFill, sqInt value, struct foo * self)
 {
 	return objBuffer[bmFill + GBBitmapRaster] = value;
 }
 
 	/* BalloonEnginePlugin>>#bitmapSizeOf: */
-static sqInt
-bitmapSizeOf(sqInt bmFill)
+static sqIntbitmapSizeOf(sqInt bmFill, struct foo * self)
 {
 	return objBuffer[bmFill + GBBitmapSize];
 }
 
 	/* BalloonEnginePlugin>>#bitmapSizeOf:put: */
-static sqInt
-bitmapSizeOfput(sqInt bmFill, sqInt value)
+static sqIntbitmapSizeOfput(sqInt bmFill, sqInt value, struct foo * self)
 {
 	return objBuffer[bmFill + GBBitmapSize] = value;
 }
 
 	/* BalloonEnginePlugin>>#bitmapTileFlagOf: */
-static sqInt
-bitmapTileFlagOf(sqInt bmFill)
+static sqIntbitmapTileFlagOf(sqInt bmFill, struct foo * self)
 {
 	return objBuffer[bmFill + GBTileFlag];
 }
 
 	/* BalloonEnginePlugin>>#bitmapTileFlagOf:put: */
-static sqInt
-bitmapTileFlagOfput(sqInt bmFill, sqInt value)
+static sqIntbitmapTileFlagOfput(sqInt bmFill, sqInt value, struct foo * self)
 {
 	return objBuffer[bmFill + GBTileFlag] = value;
 }
 
 	/* BalloonEnginePlugin>>#bitmapValue:bits:atX:y: */
-static sqInt
-bitmapValuebitsatXy(sqInt bmFill, sqInt bits, sqInt xp, sqInt yp)
+static sqIntbitmapValuebitsatXy(sqInt bmFill, sqInt bits, sqInt xp, sqInt yp, struct foo * self)
 {
     sqInt a;
     sqInt b;
@@ -1696,9 +1633,9 @@ bitmapValuebitsatXy(sqInt bmFill, sqInt bits, sqInt xp, sqInt yp)
 		 && ((value & 0xFF000000U) == 0)) {
 			value = value | 0xFF000000U;
 		}
-		return uncheckedTransformColor(value);
+		return uncheckedTransformColor(value, self);
 	}
-	rShift = (rShiftTable())[bmDepth];
+	rShift = (rShiftTable(self))[bmDepth];
 
 	/* cMask - mask out the pixel from the word */
 	value = (((int*) bits))[(bmRaster * yp) + (((usqInt) xp) >> rShift)];
@@ -1732,26 +1669,23 @@ bitmapValuebitsatXy(sqInt bmFill, sqInt bits, sqInt xp, sqInt yp)
 			value = ((objBuffer + bmFill) + GBColormapOffset)[value];
 		}
 	}
-	return uncheckedTransformColor(value);
+	return uncheckedTransformColor(value, self);
 }
 
 	/* BalloonEnginePlugin>>#bitmapWidthOf: */
-static sqInt
-bitmapWidthOf(sqInt bmFill)
+static sqIntbitmapWidthOf(sqInt bmFill, struct foo * self)
 {
 	return objBuffer[bmFill + GBBitmapWidth];
 }
 
 	/* BalloonEnginePlugin>>#bitmapWidthOf:put: */
-static sqInt
-bitmapWidthOfput(sqInt bmFill, sqInt value)
+static sqIntbitmapWidthOfput(sqInt bmFill, sqInt value, struct foo * self)
 {
 	return objBuffer[bmFill + GBBitmapWidth] = value;
 }
 
 	/* BalloonEnginePlugin>>#bzEndX: */
-static sqInt
-bzEndX(sqInt index)
+static sqIntbzEndX(sqInt index, struct foo * self)
 {
     sqInt index1;
 
@@ -1761,8 +1695,7 @@ bzEndX(sqInt index)
 }
 
 	/* BalloonEnginePlugin>>#bzEndX:put: */
-static sqInt
-bzEndXput(sqInt index, sqInt value)
+static sqIntbzEndXput(sqInt index, sqInt value, struct foo * self)
 {
     sqInt index1;
 
@@ -1772,8 +1705,7 @@ bzEndXput(sqInt index, sqInt value)
 }
 
 	/* BalloonEnginePlugin>>#bzEndY: */
-static sqInt
-bzEndY(sqInt index)
+static sqIntbzEndY(sqInt index, struct foo * self)
 {
     sqInt index1;
 
@@ -1783,8 +1715,7 @@ bzEndY(sqInt index)
 }
 
 	/* BalloonEnginePlugin>>#bzEndY:put: */
-static sqInt
-bzEndYput(sqInt index, sqInt value)
+static sqIntbzEndYput(sqInt index, sqInt value, struct foo * self)
 {
     sqInt index1;
 
@@ -1794,8 +1725,7 @@ bzEndYput(sqInt index, sqInt value)
 }
 
 	/* BalloonEnginePlugin>>#bzStartX: */
-static sqInt
-bzStartX(sqInt index)
+static sqIntbzStartX(sqInt index, struct foo * self)
 {
     sqInt index1;
 
@@ -1805,8 +1735,7 @@ bzStartX(sqInt index)
 }
 
 	/* BalloonEnginePlugin>>#bzStartX:put: */
-static sqInt
-bzStartXput(sqInt index, sqInt value)
+static sqIntbzStartXput(sqInt index, sqInt value, struct foo * self)
 {
     sqInt index1;
 
@@ -1816,8 +1745,7 @@ bzStartXput(sqInt index, sqInt value)
 }
 
 	/* BalloonEnginePlugin>>#bzStartY: */
-static sqInt
-bzStartY(sqInt index)
+static sqIntbzStartY(sqInt index, struct foo * self)
 {
     sqInt index1;
 
@@ -1827,8 +1755,7 @@ bzStartY(sqInt index)
 }
 
 	/* BalloonEnginePlugin>>#bzStartY:put: */
-static sqInt
-bzStartYput(sqInt index, sqInt value)
+static sqIntbzStartYput(sqInt index, sqInt value, struct foo * self)
 {
     sqInt index1;
 
@@ -1838,8 +1765,7 @@ bzStartYput(sqInt index, sqInt value)
 }
 
 	/* BalloonEnginePlugin>>#bzViaX: */
-static sqInt
-bzViaX(sqInt index)
+static sqIntbzViaX(sqInt index, struct foo * self)
 {
     sqInt index1;
 
@@ -1849,8 +1775,7 @@ bzViaX(sqInt index)
 }
 
 	/* BalloonEnginePlugin>>#bzViaX:put: */
-static sqInt
-bzViaXput(sqInt index, sqInt value)
+static sqIntbzViaXput(sqInt index, sqInt value, struct foo * self)
 {
     sqInt index1;
 
@@ -1860,8 +1785,7 @@ bzViaXput(sqInt index, sqInt value)
 }
 
 	/* BalloonEnginePlugin>>#bzViaY: */
-static sqInt
-bzViaY(sqInt index)
+static sqIntbzViaY(sqInt index, struct foo * self)
 {
     sqInt index1;
 
@@ -1871,8 +1795,7 @@ bzViaY(sqInt index)
 }
 
 	/* BalloonEnginePlugin>>#bzViaY:put: */
-static sqInt
-bzViaYput(sqInt index, sqInt value)
+static sqIntbzViaYput(sqInt index, sqInt value, struct foo * self)
 {
     sqInt index1;
 
@@ -1885,8 +1808,7 @@ bzViaYput(sqInt index, sqInt value)
 /*	Check the fill indexes in the run-length encoded fillList */
 
 	/* BalloonEnginePlugin>>#checkCompressedFillIndexList:max:segments: */
-static sqInt
-checkCompressedFillIndexListmaxsegments(sqInt fillList, sqInt maxIndex, sqInt nSegs)
+static sqIntcheckCompressedFillIndexListmaxsegments(sqInt fillList, sqInt maxIndex, sqInt nSegs, struct foo * self)
 {
     int *fillPtr;
     sqInt i;
@@ -1895,8 +1817,8 @@ checkCompressedFillIndexListmaxsegments(sqInt fillList, sqInt maxIndex, sqInt nS
     sqInt runLength;
     sqInt runValue;
 
-	length = slotSizeOf(fillList, interpreterProxy->interpreterState);
-	fillPtr = firstIndexableField(fillList, interpreterProxy->interpreterState);
+	length = slotSizeOf(fillList, self);
+	fillPtr = firstIndexableField(fillList, self);
 	nFills = 0;
 	for (i = 0; i < length; i += 1) {
 		runLength = ((usqInt) ((((int *) fillPtr))[i]) >> 16);
@@ -1914,8 +1836,7 @@ checkCompressedFillIndexListmaxsegments(sqInt fillList, sqInt maxIndex, sqInt nS
 /*	Check if the indexList (containing fill handles) is okay. */
 
 	/* BalloonEnginePlugin>>#checkCompressedFills: */
-static sqInt
-checkCompressedFills(sqInt indexList)
+static sqIntcheckCompressedFills(sqInt indexList, struct foo * self)
 {
     int fillIndex;
     int *fillPtr;
@@ -1924,16 +1845,16 @@ checkCompressedFills(sqInt indexList)
 
 
 	/* First check if the oops have the right format */
-	if (!(isWords(indexList, interpreterProxy->interpreterState))) {
+	if (!(isWords(indexList, self))) {
 		return 0;
 	}
-	length = slotSizeOf(indexList, interpreterProxy->interpreterState);
-	fillPtr = firstIndexableField(indexList, interpreterProxy->interpreterState);
+	length = slotSizeOf(indexList, self);
+	fillPtr = firstIndexableField(indexList, self);
 	for (i = 0; i < length; i += 1) {
 
 		/* Make sure the fill is okay */
 		fillIndex = fillPtr[i];
-		if (!(isFillOkay(fillIndex))) {
+		if (!(isFillOkay(fillIndex, self))) {
 			return 0;
 		}
 	}
@@ -1944,8 +1865,7 @@ checkCompressedFills(sqInt indexList)
 /*	Check the run-length encoded lineWidthList matches nSegments */
 
 	/* BalloonEnginePlugin>>#checkCompressedLineWidths:segments: */
-static sqInt
-checkCompressedLineWidthssegments(sqInt lineWidthList, sqInt nSegments)
+static sqIntcheckCompressedLineWidthssegments(sqInt lineWidthList, sqInt nSegments, struct foo * self)
 {
     sqInt i;
     sqInt length;
@@ -1953,8 +1873,8 @@ checkCompressedLineWidthssegments(sqInt lineWidthList, sqInt nSegments)
     int *ptr;
     sqInt runLength;
 
-	length = slotSizeOf(lineWidthList, interpreterProxy->interpreterState);
-	ptr = firstIndexableField(lineWidthList, interpreterProxy->interpreterState);
+	length = slotSizeOf(lineWidthList, self);
+	ptr = firstIndexableField(lineWidthList, self);
 	nItems = 0;
 	for (i = 0; i < length; i += 1) {
 		runLength = ((usqInt) ((((int *) ptr))[i]) >> 16);
@@ -1967,12 +1887,11 @@ checkCompressedLineWidthssegments(sqInt lineWidthList, sqInt nSegments)
 /*	Check if the given point array can be handled by the engine. */
 
 	/* BalloonEnginePlugin>>#checkCompressedPoints:segments: */
-static sqInt
-checkCompressedPointssegments(sqInt points, sqInt nSegments)
+static sqIntcheckCompressedPointssegments(sqInt points, sqInt nSegments, struct foo * self)
 {
     sqInt pSize;
 
-	if (!(isWords(points, interpreterProxy->interpreterState))) {
+	if (!(isWords(points, self))) {
 		return 0;
 	}
 
@@ -1980,7 +1899,7 @@ checkCompressedPointssegments(sqInt points, sqInt nSegments)
 	   Also, we currently handle only quadratic segments (e.g., 3 points each) and thus either
 	   pSize = nSegments * 3,		for ShortPointArrays or,
 	   pSize = nSegments * 6,		for PointArrays */
-	pSize = slotSizeOf(points, interpreterProxy->interpreterState);
+	pSize = slotSizeOf(points, self);
 	if (!((pSize == (nSegments * 3))
 		 || (pSize == (nSegments * 6)))) {
 		return 0;
@@ -1993,28 +1912,27 @@ checkCompressedPointssegments(sqInt points, sqInt nSegments)
 	Since there are a number of requirements this is an extra method. */
 
 	/* BalloonEnginePlugin>>#checkCompressedShape:segments:leftFills:rightFills:lineWidths:lineFills:fillIndexList: */
-static sqInt
-checkCompressedShapesegmentsleftFillsrightFillslineWidthslineFillsfillIndexList(sqInt points, sqInt nSegments, sqInt leftFills, sqInt rightFills, sqInt lineWidths, sqInt lineFills, sqInt fillIndexList)
+static sqIntcheckCompressedShapesegmentsleftFillsrightFillslineWidthslineFillsfillIndexList(sqInt points, sqInt nSegments, sqInt leftFills, sqInt rightFills, sqInt lineWidths, sqInt lineFills, sqInt fillIndexList, struct foo * self)
 {
     sqInt maxFillIndex;
 
-	if (!(checkCompressedPointssegments(points, nSegments))) {
+	if (!(checkCompressedPointssegments(points, nSegments, self))) {
 		return 0;
 	}
-	if (!(checkCompressedFills(fillIndexList))) {
+	if (!(checkCompressedFills(fillIndexList, self))) {
 		return 0;
 	}
-	maxFillIndex = slotSizeOf(fillIndexList, interpreterProxy->interpreterState);
-	if (!(checkCompressedFillIndexListmaxsegments(leftFills, maxFillIndex, nSegments))) {
+	maxFillIndex = slotSizeOf(fillIndexList, self);
+	if (!(checkCompressedFillIndexListmaxsegments(leftFills, maxFillIndex, nSegments, self))) {
 		return 0;
 	}
-	if (!(checkCompressedFillIndexListmaxsegments(rightFills, maxFillIndex, nSegments))) {
+	if (!(checkCompressedFillIndexListmaxsegments(rightFills, maxFillIndex, nSegments, self))) {
 		return 0;
 	}
-	if (!(checkCompressedFillIndexListmaxsegments(lineFills, maxFillIndex, nSegments))) {
+	if (!(checkCompressedFillIndexListmaxsegments(lineFills, maxFillIndex, nSegments, self))) {
 		return 0;
 	}
-	if (!(checkCompressedLineWidthssegments(lineWidths, nSegments))) {
+	if (!(checkCompressedLineWidthssegments(lineWidths, nSegments, self))) {
 		return 0;
 	}
 	return 1;
@@ -2026,8 +1944,7 @@ checkCompressedShapesegmentsleftFillsrightFillslineWidthslineFillsfillIndexList(
  */
 
 	/* BalloonEnginePlugin>>#checkedAddBezierToGET: */
-static sqInt
-checkedAddBezierToGET(sqInt bezier)
+static sqIntcheckedAddBezierToGET(sqInt bezier, struct foo * self)
 {
     sqInt lineWidth;
 
@@ -2045,7 +1962,7 @@ checkedAddBezierToGET(sqInt bezier)
 	 && (((objBuffer[bezier + GBEndX]) - lineWidth) >= (workBuffer[GWFillMaxX]))) {
 		return 0;
 	}
-	addEdgeToGET(bezier);
+	addEdgeToGET(bezier, self);
 	return 0;
 }
 
@@ -2054,8 +1971,7 @@ checkedAddBezierToGET(sqInt bezier)
 	For known edge types, check if the edge intersects the visible region */
 
 	/* BalloonEnginePlugin>>#checkedAddEdgeToGET: */
-static sqInt
-checkedAddEdgeToGET(sqInt edge)
+static sqIntcheckedAddEdgeToGET(sqInt edge, struct foo * self)
 {
     sqInt lineWidth;
     sqInt lineWidth1;
@@ -2076,7 +1992,7 @@ checkedAddEdgeToGET(sqInt edge)
 		 && (((objBuffer[edge + GLEndX]) - lineWidth1) >= (workBuffer[GWFillMaxX]))) {
 			return 0;
 		}
-		addEdgeToGET(edge);
+		addEdgeToGET(edge, self);
 		return null;
 	}
 	if ((((objBuffer[edge + GEObjectType]) & GEPrimitiveTypeMask) & GEPrimitiveWideMask) == GEPrimitiveBezier) {
@@ -2095,10 +2011,10 @@ checkedAddEdgeToGET(sqInt edge)
 		 && (((objBuffer[edge + GBEndX]) - lineWidth) >= (workBuffer[GWFillMaxX]))) {
 			return 0;
 		}
-		addEdgeToGET(edge);
+		addEdgeToGET(edge, self);
 		return null;
 	}
-	addEdgeToGET(edge);
+	addEdgeToGET(edge, self);
 	return 0;
 }
 
@@ -2106,8 +2022,7 @@ checkedAddEdgeToGET(sqInt edge)
 /*	Add the line to the global edge table if it intersects the clipping region */
 
 	/* BalloonEnginePlugin>>#checkedAddLineToGET: */
-static sqInt
-checkedAddLineToGET(sqInt line)
+static sqIntcheckedAddLineToGET(sqInt line, struct foo * self)
 {
     sqInt lineWidth;
 
@@ -2125,13 +2040,12 @@ checkedAddLineToGET(sqInt line)
 	 && (((objBuffer[line + GLEndX]) - lineWidth) >= (workBuffer[GWFillMaxX]))) {
 		return 0;
 	}
-	addEdgeToGET(line);
+	addEdgeToGET(line, self);
 	return 0;
 }
 
 	/* BalloonEnginePlugin>>#circleCosTable */
-static double *
-circleCosTable(void)
+static double *circleCosTable(struct foo * self)
 {
     static double theTable[33] =
 		{1.0, 0.98078528040323, 0.923879532511287, 0.831469612302545,
@@ -2148,8 +2062,7 @@ circleCosTable(void)
 }
 
 	/* BalloonEnginePlugin>>#circleSinTable */
-static double *
-circleSinTable(void)
+static double *circleSinTable(struct foo * self)
 {
     static double theTable[33] =
 		{0.0, 0.1950903220161282, 0.3826834323650897, 0.555570233019602,
@@ -2166,8 +2079,7 @@ circleSinTable(void)
 }
 
 	/* BalloonEnginePlugin>>#clampValue:max: */
-static sqInt
-clampValuemax(sqInt value, sqInt maxValue)
+static sqIntclampValuemax(sqInt value, sqInt maxValue, struct foo * self)
 {
 	if (value < 0) {
 		return 0;
@@ -2189,8 +2101,7 @@ clampValuemax(sqInt value, sqInt maxValue)
  */
 
 	/* BalloonEngineBase>>#clearSpanBuffer */
-static sqInt
-clearSpanBuffer(void)
+static sqIntclearSpanBuffer(struct foo * self)
 {
     sqInt x0;
     sqInt x1;
@@ -2214,85 +2125,73 @@ clearSpanBuffer(void)
 }
 
 	/* BalloonEngineBase>>#clearSpanBufferGet */
-static sqInt
-clearSpanBufferGet(void)
+static sqIntclearSpanBufferGet(struct foo * self)
 {
 	return workBuffer[GWClearSpanBuffer];
 }
 
 	/* BalloonEngineBase>>#clearSpanBufferPut: */
-static sqInt
-clearSpanBufferPut(sqInt value)
+static sqIntclearSpanBufferPut(sqInt value, struct foo * self)
 {
 	return workBuffer[GWClearSpanBuffer] = value;
 }
 
 	/* BalloonEngineBase>>#clipMaxXGet */
-static sqInt
-clipMaxXGet(void)
+static sqIntclipMaxXGet(struct foo * self)
 {
 	return workBuffer[GWClipMaxX];
 }
 
 	/* BalloonEngineBase>>#clipMaxXPut: */
-static sqInt
-clipMaxXPut(sqInt value)
+static sqIntclipMaxXPut(sqInt value, struct foo * self)
 {
 	return workBuffer[GWClipMaxX] = value;
 }
 
 	/* BalloonEngineBase>>#clipMaxYGet */
-static sqInt
-clipMaxYGet(void)
+static sqIntclipMaxYGet(struct foo * self)
 {
 	return workBuffer[GWClipMaxY];
 }
 
 	/* BalloonEngineBase>>#clipMaxYPut: */
-static sqInt
-clipMaxYPut(sqInt value)
+static sqIntclipMaxYPut(sqInt value, struct foo * self)
 {
 	return workBuffer[GWClipMaxY] = value;
 }
 
 	/* BalloonEngineBase>>#clipMinXGet */
-static sqInt
-clipMinXGet(void)
+static sqIntclipMinXGet(struct foo * self)
 {
 	return workBuffer[GWClipMinX];
 }
 
 	/* BalloonEngineBase>>#clipMinXPut: */
-static sqInt
-clipMinXPut(sqInt value)
+static sqIntclipMinXPut(sqInt value, struct foo * self)
 {
 	return workBuffer[GWClipMinX] = value;
 }
 
 	/* BalloonEngineBase>>#clipMinYGet */
-static sqInt
-clipMinYGet(void)
+static sqIntclipMinYGet(struct foo * self)
 {
 	return workBuffer[GWClipMinY];
 }
 
 	/* BalloonEngineBase>>#clipMinYPut: */
-static sqInt
-clipMinYPut(sqInt value)
+static sqIntclipMinYPut(sqInt value, struct foo * self)
 {
 	return workBuffer[GWClipMinY] = value;
 }
 
 	/* BalloonEnginePlugin>>#colormapOf: */
-static int *
-colormapOf(sqInt bmFill)
+static int *colormapOf(sqInt bmFill, struct foo * self)
 {
 	return (objBuffer + bmFill) + GBColormapOffset;
 }
 
 	/* BalloonEngineBase>>#colorTransform */
-static float *
-colorTransform(void)
+static float *colorTransform(struct foo * self)
 {
 	return ((float *) (workBuffer + GWColorTransform));
 }
@@ -2301,8 +2200,7 @@ colorTransform(void)
 /*	Split the bezier curve at 0.5. */
 
 	/* BalloonEnginePlugin>>#computeBezierSplitAtHalf: */
-static sqInt
-computeBezierSplitAtHalf(sqInt index)
+static sqIntcomputeBezierSplitAtHalf(sqInt index, struct foo * self)
 {
     sqInt endX;
     sqInt endY;
@@ -2331,7 +2229,7 @@ computeBezierSplitAtHalf(sqInt index)
     sqInt viaY;
 
 	/* begin allocateBezierStackEntry */
-	if (!(needAvailableSpace(6))) {
+	if (!(needAvailableSpace(6, self))) {
 		goto l14;
 	}
 	/* begin wbTopPut: */
@@ -2401,8 +2299,7 @@ computeBezierSplitAtHalf(sqInt index)
 	to be *really* between the start and end value. */
 
 	/* BalloonEnginePlugin>>#computeBezier:splitAt: */
-static sqInt
-computeBeziersplitAt(sqInt index, double param)
+static sqIntcomputeBeziersplitAt(sqInt index, double param, struct foo * self)
 {
     sqInt endX;
     sqInt endY;
@@ -2497,7 +2394,7 @@ computeBeziersplitAt(sqInt index, double param)
 	rightViaY = rightViaY;
 	l2:	/* end assureValue:between:and: */;
 	/* begin allocateBezierStackEntry */
-	if (!(needAvailableSpace(6))) {
+	if (!(needAvailableSpace(6, self))) {
 		goto l16;
 	}
 	/* begin wbTopPut: */
@@ -2545,8 +2442,7 @@ computeBeziersplitAt(sqInt index, double param)
 	and compute the actual position/width of the line */
 
 	/* BalloonEnginePlugin>>#computeFinalWideBezierValues:width: */
-static sqInt
-computeFinalWideBezierValueswidth(sqInt bezier, sqInt lineWidth)
+static sqIntcomputeFinalWideBezierValueswidth(sqInt bezier, sqInt lineWidth, struct foo * self)
 {
     int leftX;
     int rightX;
@@ -2573,11 +2469,10 @@ computeFinalWideBezierValueswidth(sqInt bezier, sqInt lineWidth)
 }
 
 	/* BalloonEngineBase>>#computeSqrt: */
-static sqInt
-computeSqrt(sqInt length2)
+static sqIntcomputeSqrt(sqInt length2, struct foo * self)
 {
 	if (length2 < 32) {
-		return (smallSqrtTable())[length2];
+		return (smallSqrtTable(self))[length2];
 	}
 	else {
 		return ((sqInt)((sqrt(((double) length2 ))) + 0.5));
@@ -2585,13 +2480,12 @@ computeSqrt(sqInt length2)
 }
 
 	/* BalloonEngineBase>>#copyBitsFrom:to:at: */
-static sqInt
-copyBitsFromtoat(sqInt x0, sqInt x1, sqInt yValue, struct foo * self)
+static sqIntcopyBitsFromtoat(sqInt x0, sqInt x1, sqInt yValue, struct foo * self)
 {
 	if (copyBitsFn == 0) {
 
 		/* We need copyBits here so try to load it implicitly */
-		if (!(initialiseModule())) {
+		if (!(initialiseModule(self))) {
 			return 0;
 		}
 	}
@@ -2602,8 +2496,7 @@ copyBitsFromtoat(sqInt x0, sqInt x1, sqInt yValue, struct foo * self)
 /*	Create the global edge table */
 
 	/* BalloonEngineBase>>#createGlobalEdgeTable */
-static sqInt
-createGlobalEdgeTable(void)
+static sqIntcreateGlobalEdgeTable(struct foo * self)
 {
     sqInt end;
     sqInt lineWidth;
@@ -2615,7 +2508,7 @@ createGlobalEdgeTable(void)
 	while (object < end) {
 
 		/* Note: addEdgeToGET: may fail on insufficient space but that's not a problem here */
-		if (isEdge(object)) {
+		if (isEdge(object, self)) {
 
 			/* Check if the edge starts below fillMaxY. */
 			if (!((objBuffer[object + GEYValue]) >= (workBuffer[GWFillMaxY]))) {
@@ -2636,7 +2529,7 @@ createGlobalEdgeTable(void)
 					 && (((objBuffer[object + GLEndX]) - lineWidth1) >= (workBuffer[GWFillMaxX]))) {
 						goto l3;
 					}
-					addEdgeToGET(object);
+					addEdgeToGET(object, self);
 					goto l3;
 				}
 				if ((((objBuffer[object + GEObjectType]) & GEPrimitiveTypeMask) & GEPrimitiveWideMask) == GEPrimitiveBezier) {
@@ -2655,10 +2548,10 @@ createGlobalEdgeTable(void)
 					 && (((objBuffer[object + GBEndX]) - lineWidth) >= (workBuffer[GWFillMaxX]))) {
 						goto l3;
 					}
-					addEdgeToGET(object);
+					addEdgeToGET(object, self);
 					goto l3;
 				}
-				addEdgeToGET(object);
+				addEdgeToGET(object, self);
 	l3:	/* end checkedAddEdgeToGET: */;
 			}
 		}
@@ -2668,57 +2561,49 @@ createGlobalEdgeTable(void)
 }
 
 	/* BalloonEngineBase>>#currentYGet */
-static sqInt
-currentYGet(void)
+static sqIntcurrentYGet(struct foo * self)
 {
 	return workBuffer[GWCurrentY];
 }
 
 	/* BalloonEngineBase>>#currentYPut: */
-static sqInt
-currentYPut(sqInt value)
+static sqIntcurrentYPut(sqInt value, struct foo * self)
 {
 	return workBuffer[GWCurrentY] = value;
 }
 
 	/* BalloonEngineBase>>#currentZGet */
-static sqInt
-currentZGet(void)
+static sqIntcurrentZGet(struct foo * self)
 {
 	return workBuffer[GWCurrentZ];
 }
 
 	/* BalloonEngineBase>>#currentZPut: */
-static sqInt
-currentZPut(sqInt value)
+static sqIntcurrentZPut(sqInt value, struct foo * self)
 {
 	return workBuffer[GWCurrentZ] = value;
 }
 
 	/* BalloonEngineBase>>#destOffsetXGet */
-static sqInt
-destOffsetXGet(void)
+static sqIntdestOffsetXGet(struct foo * self)
 {
 	return workBuffer[GWDestOffsetX];
 }
 
 	/* BalloonEngineBase>>#destOffsetXPut: */
-static sqInt
-destOffsetXPut(sqInt value)
+static sqIntdestOffsetXPut(sqInt value, struct foo * self)
 {
 	return workBuffer[GWDestOffsetX] = value;
 }
 
 	/* BalloonEngineBase>>#destOffsetYGet */
-static sqInt
-destOffsetYGet(void)
+static sqIntdestOffsetYGet(struct foo * self)
 {
 	return workBuffer[GWDestOffsetY];
 }
 
 	/* BalloonEngineBase>>#destOffsetYPut: */
-static sqInt
-destOffsetYPut(sqInt value)
+static sqIntdestOffsetYPut(sqInt value, struct foo * self)
 {
 	return workBuffer[GWDestOffsetY] = value;
 }
@@ -2727,8 +2612,7 @@ destOffsetYPut(sqInt value)
 /*	Display the span buffer at the current scan line. */
 
 	/* BalloonEngineBase>>#displaySpanBufferAt: */
-static sqInt
-displaySpanBufferAt(sqInt y)
+static sqIntdisplaySpanBufferAt(sqInt y, struct foo * self)
 {
     sqInt targetX0;
     sqInt targetX1;
@@ -2753,7 +2637,7 @@ displaySpanBufferAt(sqInt y)
 	 || (targetX0 >= (workBuffer[GWClipMaxX]))))) {
 		return 0;
 	}
-	copyBitsFromtoat(targetX0, targetX1, targetY, interpreterProxy->interpreterState);
+	copyBitsFromtoat(targetX0, targetX1, targetY, self);
 	return 0;
 }
 
@@ -2762,8 +2646,7 @@ displaySpanBufferAt(sqInt y)
 	Return the end value of the drawing operation. */
 
 	/* BalloonEngineBase>>#drawWideEdge:from: */
-static sqInt
-drawWideEdgefrom(sqInt edge, sqInt leftX)
+static sqIntdrawWideEdgefrom(sqInt edge, sqInt leftX, struct foo * self)
 {
     sqInt fill;
     sqInt lineWidth;
@@ -2777,26 +2660,26 @@ drawWideEdgefrom(sqInt edge, sqInt leftX)
 	switch (type) {
 	case 0:
 	case 1:
-		errorWrongIndex();
+		errorWrongIndex(self);
 		break;
 	case 2:
-		dispatchReturnValue = wideLineWidthOf(dispatchedValue);
+		dispatchReturnValue = wideLineWidthOf(dispatchedValue, self);
 		break;
 	case 3:
-		dispatchReturnValue = wideBezierWidthOf(dispatchedValue);
+		dispatchReturnValue = wideBezierWidthOf(dispatchedValue, self);
 		break;
 	}
 	lineWidth = dispatchReturnValue;
 	switch (type) {
 	case 0:
 	case 1:
-		errorWrongIndex();
+		errorWrongIndex(self);
 		break;
 	case 2:
-		dispatchReturnValue = wideLineFillOf(dispatchedValue);
+		dispatchReturnValue = wideLineFillOf(dispatchedValue, self);
 		break;
 	case 3:
-		dispatchReturnValue = wideBezierFillOf(dispatchedValue);
+		dispatchReturnValue = wideBezierFillOf(dispatchedValue, self);
 		break;
 	}
 	fill = dispatchReturnValue;
@@ -2804,13 +2687,12 @@ drawWideEdgefrom(sqInt edge, sqInt leftX)
 		return leftX;
 	}
 	rightX = leftX + lineWidth;
-	fillSpanfromto(fill, leftX, rightX);
+	fillSpanfromto(fill, leftX, rightX, self);
 	return rightX;
 }
 
 	/* BalloonEngineBase>>#edgeFillsInvalidate: */
-static sqInt
-edgeFillsInvalidate(sqInt edge)
+static sqIntedgeFillsInvalidate(sqInt edge, struct foo * self)
 {
     sqInt value;
 
@@ -2820,8 +2702,7 @@ edgeFillsInvalidate(sqInt edge)
 }
 
 	/* BalloonEngineBase>>#edgeFillsValidate: */
-static sqInt
-edgeFillsValidate(sqInt edge)
+static sqIntedgeFillsValidate(sqInt edge, struct foo * self)
 {
     sqInt value;
 
@@ -2831,50 +2712,43 @@ edgeFillsValidate(sqInt edge)
 }
 
 	/* BalloonEngineBase>>#edgeLeftFillOf: */
-static sqInt
-edgeLeftFillOf(sqInt edge)
+static sqIntedgeLeftFillOf(sqInt edge, struct foo * self)
 {
 	return objBuffer[edge + GEFillIndexLeft];
 }
 
 	/* BalloonEngineBase>>#edgeLeftFillOf:put: */
-static sqInt
-edgeLeftFillOfput(sqInt edge, sqInt value)
+static sqIntedgeLeftFillOfput(sqInt edge, sqInt value, struct foo * self)
 {
 	return objBuffer[edge + GEFillIndexLeft] = value;
 }
 
 	/* BalloonEngineBase>>#edgeNumLinesOf: */
-static sqInt
-edgeNumLinesOf(sqInt edge)
+static sqIntedgeNumLinesOf(sqInt edge, struct foo * self)
 {
 	return objBuffer[edge + GENumLines];
 }
 
 	/* BalloonEngineBase>>#edgeNumLinesOf:put: */
-static sqInt
-edgeNumLinesOfput(sqInt edge, sqInt value)
+static sqIntedgeNumLinesOfput(sqInt edge, sqInt value, struct foo * self)
 {
 	return objBuffer[edge + GENumLines] = value;
 }
 
 	/* BalloonEngineBase>>#edgeRightFillOf: */
-static sqInt
-edgeRightFillOf(sqInt edge)
+static sqIntedgeRightFillOf(sqInt edge, struct foo * self)
 {
 	return objBuffer[edge + GEFillIndexRight];
 }
 
 	/* BalloonEngineBase>>#edgeRightFillOf:put: */
-static sqInt
-edgeRightFillOfput(sqInt edge, sqInt value)
+static sqIntedgeRightFillOfput(sqInt edge, sqInt value, struct foo * self)
 {
 	return objBuffer[edge + GEFillIndexRight] = value;
 }
 
 	/* BalloonEngineBase>>#edgeTransform */
-static float *
-edgeTransform(void)
+static float *edgeTransform(struct foo * self)
 {
 	return ((float *) (workBuffer + GWEdgeTransform));
 }
@@ -2883,50 +2757,43 @@ edgeTransform(void)
 /*	Return the edge type (e.g., witout the wide edge flag) */
 
 	/* BalloonEngineBase>>#edgeTypeOf: */
-static sqInt
-edgeTypeOf(sqInt edge)
+static sqIntedgeTypeOf(sqInt edge, struct foo * self)
 {
 	return ((usqInt) ((objBuffer[edge + GEObjectType]) & GEPrimitiveTypeMask)) >> 1;
 }
 
 	/* BalloonEngineBase>>#edgeXValueOf: */
-static sqInt
-edgeXValueOf(sqInt edge)
+static sqIntedgeXValueOf(sqInt edge, struct foo * self)
 {
 	return objBuffer[edge + GEXValue];
 }
 
 	/* BalloonEngineBase>>#edgeXValueOf:put: */
-static sqInt
-edgeXValueOfput(sqInt edge, sqInt value)
+static sqIntedgeXValueOfput(sqInt edge, sqInt value, struct foo * self)
 {
 	return objBuffer[edge + GEXValue] = value;
 }
 
 	/* BalloonEngineBase>>#edgeYValueOf: */
-static sqInt
-edgeYValueOf(sqInt edge)
+static sqIntedgeYValueOf(sqInt edge, struct foo * self)
 {
 	return objBuffer[edge + GEYValue];
 }
 
 	/* BalloonEngineBase>>#edgeYValueOf:put: */
-static sqInt
-edgeYValueOfput(sqInt edge, sqInt value)
+static sqIntedgeYValueOfput(sqInt edge, sqInt value, struct foo * self)
 {
 	return objBuffer[edge + GEYValue] = value;
 }
 
 	/* BalloonEngineBase>>#edgeZValueOf: */
-static sqInt
-edgeZValueOf(sqInt edge)
+static sqIntedgeZValueOf(sqInt edge, struct foo * self)
 {
 	return objBuffer[edge + GEZValue];
 }
 
 	/* BalloonEngineBase>>#edgeZValueOf:put: */
-static sqInt
-edgeZValueOfput(sqInt edge, sqInt value)
+static sqIntedgeZValueOfput(sqInt edge, sqInt value, struct foo * self)
 {
 	return objBuffer[edge + GEZValue] = value;
 }
@@ -2936,8 +2803,7 @@ edgeZValueOfput(sqInt edge, sqInt value)
 	(since we have no entry point for #error in the VM proxy) */
 
 	/* BalloonEngineBase>>#errorWrongIndex */
-static sqInt
-errorWrongIndex(void)
+static sqInterrorWrongIndex(struct foo * self)
 {
 	return 0;
 }
@@ -2949,8 +2815,7 @@ errorWrongIndex(void)
 	use #accurateLengthOf:width: */
 
 	/* BalloonEngineBase>>#estimatedLengthOf:with: */
-static sqInt
-estimatedLengthOfwith(sqInt deltaX, sqInt deltaY)
+static sqIntestimatedLengthOfwith(sqInt deltaX, sqInt deltaY, struct foo * self)
 {
     sqInt absDx;
     sqInt absDy;
@@ -2979,8 +2844,7 @@ estimatedLengthOfwith(sqInt deltaX, sqInt deltaY)
 /*	Fill the span buffer from leftX to rightX with the given fill. */
 
 	/* BalloonEngineBase>>#fillAllFrom:to: */
-static sqInt
-fillAllFromto(sqInt leftX, sqInt rightX)
+static sqIntfillAllFromto(sqInt leftX, sqInt rightX, struct foo * self)
 {
     sqInt fill;
     sqInt index;
@@ -3033,7 +2897,7 @@ fillAllFromto(sqInt leftX, sqInt rightX)
 	l3:	/* end topFill */;
 		fill = someIntegerValue;
 		if (!(fill == 0)) {
-			if (fillSpanfromto(fill, startX, stopX)) {
+			if (fillSpanfromto(fill, startX, stopX, self)) {
 				return 1;
 			}
 		}
@@ -3041,8 +2905,8 @@ fillAllFromto(sqInt leftX, sqInt rightX)
 		if (((workBuffer[GWSize]) - (workBuffer[GWBufferTop])) == 0) {
 			goto l8;
 		}
-		while ((topRightX()) <= stopX) {
-			hideFilldepth(topFill(), topDepth());
+		while ((topRightX(self)) <= stopX) {
+			hideFilldepth(topFill(self), topDepth(self), self);
 			if (((workBuffer[GWSize]) - (workBuffer[GWBufferTop])) == 0) {
 				goto l8;
 			}
@@ -3076,21 +2940,19 @@ fillAllFromto(sqInt leftX, sqInt rightX)
 	l7:	/* end topFill */;
 	fill = someIntegerValue1;
 	if (!(fill == 0)) {
-		return fillSpanfromto(fill, startX, rightX);
+		return fillSpanfromto(fill, startX, rightX, self);
 	}
 	return 0;
 }
 
 	/* BalloonEnginePlugin>>#fillBitmapSpan */
-static sqInt
-fillBitmapSpan(void)
+static sqIntfillBitmapSpan(struct foo * self)
 {
-	return fillBitmapSpanfromtoat(workBuffer[GWLastExportedFill], workBuffer[GWLastExportedLeftX], workBuffer[GWLastExportedRightX], workBuffer[GWCurrentY]);
+	return fillBitmapSpanfromtoat(workBuffer[GWLastExportedFill], workBuffer[GWLastExportedLeftX], workBuffer[GWLastExportedRightX], workBuffer[GWCurrentY], self);
 }
 
 	/* BalloonEnginePlugin>>#fillBitmapSpanAA:from:to:at: */
-static sqInt
-fillBitmapSpanAAfromtoat(sqInt bmFill, sqInt leftX, sqInt rightX, sqInt yValue)
+static sqIntfillBitmapSpanAAfromtoat(sqInt bmFill, sqInt leftX, sqInt rightX, sqInt yValue, struct foo * self)
 {
     sqInt a;
     sqInt a1;
@@ -3148,7 +3010,7 @@ fillBitmapSpanAAfromtoat(sqInt bmFill, sqInt leftX, sqInt rightX, sqInt yValue)
     sqInt xp;
     sqInt yp;
 
-	bits = loadBitsFrom(bmFill);
+	bits = loadBitsFrom(bmFill, self);
 	if (bits == null) {
 		return null;
 	}
@@ -3258,10 +3120,10 @@ fillBitmapSpanAAfromtoat(sqInt bmFill, sqInt leftX, sqInt rightX, sqInt yValue)
 				 && ((value & 0xFF000000U) == 0)) {
 					value = value | 0xFF000000U;
 				}
-				fillValue = uncheckedTransformColor(value);
+				fillValue = uncheckedTransformColor(value, self);
 				goto l23;
 			}
-			rShift = (rShiftTable())[bmDepth];
+			rShift = (rShiftTable(self))[bmDepth];
 
 			/* cMask - mask out the pixel from the word */
 			value = (((int*) bits))[(bmRaster * yp) + (((usqInt) xp) >> rShift)];
@@ -3295,7 +3157,7 @@ fillBitmapSpanAAfromtoat(sqInt bmFill, sqInt leftX, sqInt rightX, sqInt yValue)
 					value = ((objBuffer + bmFill) + GBColormapOffset)[value];
 				}
 			}
-			fillValue = uncheckedTransformColor(value);
+			fillValue = uncheckedTransformColor(value, self);
 	l23:	/* end bitmapValue:bits:atX:y: */;
 			fillValue = ((usqInt) (fillValue & cMask)) >> cShift;
 			idx = ((usqInt) x) >> baseShift;
@@ -3379,10 +3241,10 @@ fillBitmapSpanAAfromtoat(sqInt bmFill, sqInt leftX, sqInt rightX, sqInt yValue)
 				 && ((value1 & 0xFF000000U) == 0)) {
 					value1 = value1 | 0xFF000000U;
 				}
-				fillValue = uncheckedTransformColor(value1);
+				fillValue = uncheckedTransformColor(value1, self);
 				goto l29;
 			}
-			rShift1 = (rShiftTable())[bmDepth1];
+			rShift1 = (rShiftTable(self))[bmDepth1];
 
 			/* cMask - mask out the pixel from the word */
 			value1 = (((int*) bits))[(bmRaster1 * yp) + (((usqInt) xp) >> rShift1)];
@@ -3416,7 +3278,7 @@ fillBitmapSpanAAfromtoat(sqInt bmFill, sqInt leftX, sqInt rightX, sqInt yValue)
 					value1 = ((objBuffer + bmFill) + GBColormapOffset)[value1];
 				}
 			}
-			fillValue = uncheckedTransformColor(value1);
+			fillValue = uncheckedTransformColor(value1, self);
 	l29:	/* end bitmapValue:bits:atX:y: */;
 			fillValue = ((usqInt) (fillValue & cMask)) >> cShift;
 			idx = ((usqInt) x) >> baseShift;
@@ -3501,10 +3363,10 @@ fillBitmapSpanAAfromtoat(sqInt bmFill, sqInt leftX, sqInt rightX, sqInt yValue)
 				 && ((value2 & 0xFF000000U) == 0)) {
 					value2 = value2 | 0xFF000000U;
 				}
-				fillValue = uncheckedTransformColor(value2);
+				fillValue = uncheckedTransformColor(value2, self);
 				goto l35;
 			}
-			rShift2 = (rShiftTable())[bmDepth2];
+			rShift2 = (rShiftTable(self))[bmDepth2];
 
 			/* cMask - mask out the pixel from the word */
 			value2 = (((int*) bits))[(bmRaster2 * yp) + (((usqInt) xp) >> rShift2)];
@@ -3538,7 +3400,7 @@ fillBitmapSpanAAfromtoat(sqInt bmFill, sqInt leftX, sqInt rightX, sqInt yValue)
 					value2 = ((objBuffer + bmFill) + GBColormapOffset)[value2];
 				}
 			}
-			fillValue = uncheckedTransformColor(value2);
+			fillValue = uncheckedTransformColor(value2, self);
 	l35:	/* end bitmapValue:bits:atX:y: */;
 			fillValue = ((usqInt) (fillValue & cMask)) >> cShift;
 			idx = ((usqInt) x) >> baseShift;
@@ -3560,8 +3422,7 @@ fillBitmapSpanAAfromtoat(sqInt bmFill, sqInt leftX, sqInt rightX, sqInt yValue)
  */
 
 	/* BalloonEngineBase>>#fillBitmapSpan:from:to: */
-static sqInt
-fillBitmapSpanfromto(int *bits, sqInt leftX, sqInt rightX)
+static sqIntfillBitmapSpanfromto(int *bits, sqInt leftX, sqInt rightX, struct foo * self)
 {
     sqInt baseShift;
     sqInt bitX;
@@ -3613,8 +3474,7 @@ fillBitmapSpanfromto(int *bits, sqInt leftX, sqInt rightX)
 }
 
 	/* BalloonEnginePlugin>>#fillBitmapSpan:from:to:at: */
-static sqInt
-fillBitmapSpanfromtoat(sqInt bmFill, sqInt leftX, sqInt rightX, sqInt yValue)
+static sqIntfillBitmapSpanfromtoat(sqInt bmFill, sqInt leftX, sqInt rightX, sqInt yValue, struct foo * self)
 {
     sqInt a;
     sqInt b;
@@ -3644,9 +3504,9 @@ fillBitmapSpanfromtoat(sqInt bmFill, sqInt leftX, sqInt rightX, sqInt yValue)
     sqInt yp;
 
 	if (!((workBuffer[GWAALevel]) == 1)) {
-		return fillBitmapSpanAAfromtoat(bmFill, leftX, rightX, yValue);
+		return fillBitmapSpanAAfromtoat(bmFill, leftX, rightX, yValue, self);
 	}
-	bits = loadBitsFrom(bmFill);
+	bits = loadBitsFrom(bmFill, self);
 	if (bits == null) {
 		return null;
 	}
@@ -3736,10 +3596,10 @@ fillBitmapSpanfromtoat(sqInt bmFill, sqInt leftX, sqInt rightX, sqInt yValue)
 				 && ((value & 0xFF000000U) == 0)) {
 					value = value | 0xFF000000U;
 				}
-				fillValue = uncheckedTransformColor(value);
+				fillValue = uncheckedTransformColor(value, self);
 				goto l10;
 			}
-			rShift = (rShiftTable())[bmDepth];
+			rShift = (rShiftTable(self))[bmDepth];
 
 			/* cMask - mask out the pixel from the word */
 			value = (((int*) bits))[(bmRaster * yp) + (((usqInt) xp) >> rShift)];
@@ -3773,7 +3633,7 @@ fillBitmapSpanfromtoat(sqInt bmFill, sqInt leftX, sqInt rightX, sqInt yValue)
 					value = ((objBuffer + bmFill) + GBColormapOffset)[value];
 				}
 			}
-			fillValue = uncheckedTransformColor(value);
+			fillValue = uncheckedTransformColor(value, self);
 	l10:	/* end bitmapValue:bits:atX:y: */;
 			spanBuffer[x] = fillValue;
 		}
@@ -3792,8 +3652,7 @@ fillBitmapSpanfromtoat(sqInt bmFill, sqInt leftX, sqInt rightX, sqInt yValue)
 	c) copy all pixels that fall in the last full pixel */
 
 	/* BalloonEngineBase>>#fillColorSpanAA:x0:x1: */
-static sqInt
-fillColorSpanAAx0x1(sqInt pixelValue32, sqInt leftX, sqInt rightX)
+static sqIntfillColorSpanAAx0x1(sqInt pixelValue32, sqInt leftX, sqInt rightX, struct foo * self)
 {
     sqInt aaLevel;
     sqInt baseShift;
@@ -3862,8 +3721,7 @@ fillColorSpanAAx0x1(sqInt pixelValue32, sqInt leftX, sqInt rightX)
  */
 
 	/* BalloonEngineBase>>#fillColorSpan:from:to: */
-static sqInt
-fillColorSpanfromto(sqInt pixelValue32, sqInt leftX, sqInt rightX)
+static sqIntfillColorSpanfromto(sqInt pixelValue32, sqInt leftX, sqInt rightX, struct foo * self)
 {
     sqInt x0;
     sqInt x1;
@@ -3871,7 +3729,7 @@ fillColorSpanfromto(sqInt pixelValue32, sqInt leftX, sqInt rightX)
 
 	/* Use a unrolled version for anti-aliased fills... */
 	if (!((workBuffer[GWAALevel]) == 1)) {
-		return fillColorSpanAAx0x1(pixelValue32, leftX, rightX);
+		return fillColorSpanAAx0x1(pixelValue32, leftX, rightX, self);
 	}
 	x0 = leftX;
 
@@ -3892,46 +3750,40 @@ fillColorSpanfromto(sqInt pixelValue32, sqInt leftX, sqInt rightX)
 }
 
 	/* BalloonEnginePlugin>>#fillDirectionXOf: */
-static sqInt
-fillDirectionXOf(sqInt fill)
+static sqIntfillDirectionXOf(sqInt fill, struct foo * self)
 {
 	return objBuffer[fill + GFDirectionX];
 }
 
 	/* BalloonEnginePlugin>>#fillDirectionXOf:put: */
-static sqInt
-fillDirectionXOfput(sqInt fill, sqInt value)
+static sqIntfillDirectionXOfput(sqInt fill, sqInt value, struct foo * self)
 {
 	return objBuffer[fill + GFDirectionX] = value;
 }
 
 	/* BalloonEnginePlugin>>#fillDirectionYOf: */
-static sqInt
-fillDirectionYOf(sqInt fill)
+static sqIntfillDirectionYOf(sqInt fill, struct foo * self)
 {
 	return objBuffer[fill + GFDirectionY];
 }
 
 	/* BalloonEnginePlugin>>#fillDirectionYOf:put: */
-static sqInt
-fillDirectionYOfput(sqInt fill, sqInt value)
+static sqIntfillDirectionYOfput(sqInt fill, sqInt value, struct foo * self)
 {
 	return objBuffer[fill + GFDirectionY] = value;
 }
 
 	/* BalloonEnginePlugin>>#fillLinearGradient */
-static sqInt
-fillLinearGradient(void)
+static sqIntfillLinearGradient(struct foo * self)
 {
-	return fillLinearGradientfromtoat(workBuffer[GWLastExportedFill], workBuffer[GWLastExportedLeftX], workBuffer[GWLastExportedRightX], workBuffer[GWCurrentY]);
+	return fillLinearGradientfromtoat(workBuffer[GWLastExportedFill], workBuffer[GWLastExportedLeftX], workBuffer[GWLastExportedRightX], workBuffer[GWCurrentY], self);
 }
 
 
 /*	This is the AA version of linear gradient filling. */
 
 	/* BalloonEnginePlugin>>#fillLinearGradientAA:ramp:ds:dsX:from:to: */
-static sqInt
-fillLinearGradientAArampdsdsXfromto(sqInt fill, int *ramp, sqInt deltaS, sqInt dsX, sqInt leftX, sqInt rightX)
+static sqIntfillLinearGradientAArampdsdsXfromto(sqInt fill, int *ramp, sqInt deltaS, sqInt dsX, sqInt leftX, sqInt rightX, struct foo * self)
 {
     sqInt aaLevel;
     sqInt baseShift;
@@ -4035,8 +3887,7 @@ fillLinearGradientAArampdsdsXfromto(sqInt fill, int *ramp, sqInt deltaS, sqInt d
 /*	Draw a linear gradient fill. */
 
 	/* BalloonEnginePlugin>>#fillLinearGradient:from:to:at: */
-static sqInt
-fillLinearGradientfromtoat(sqInt fill, sqInt leftX, sqInt rightX, sqInt yValue)
+static sqIntfillLinearGradientfromtoat(sqInt fill, sqInt leftX, sqInt rightX, sqInt yValue, struct foo * self)
 {
     sqInt ds;
     sqInt dsX;
@@ -4080,7 +3931,7 @@ fillLinearGradientfromtoat(sqInt fill, sqInt leftX, sqInt rightX, sqInt yValue)
 		/* begin fillColorSpan:from:to: */
 		pixelValue32 = ramp[rampIndex];
 		if (!((workBuffer[GWAALevel]) == 1)) {
-			fillColorSpanAAx0x1(pixelValue32, x0, x);
+			fillColorSpanAAx0x1(pixelValue32, x0, x, self);
 			goto l1;
 		}
 		x01 = x0;
@@ -4112,7 +3963,7 @@ fillLinearGradientfromtoat(sqInt fill, sqInt leftX, sqInt rightX, sqInt yValue)
 		}
 	}
 	else {
-		x = fillLinearGradientAArampdsdsXfromto(fill, ramp, ds, dsX, x, rightX);
+		x = fillLinearGradientAArampdsdsXfromto(fill, ramp, ds, dsX, x, rightX, self);
 	}
 	if (x < x1) {
 		if (rampIndex < 0) {
@@ -4124,7 +3975,7 @@ fillLinearGradientfromtoat(sqInt fill, sqInt leftX, sqInt rightX, sqInt yValue)
 		/* begin fillColorSpan:from:to: */
 		pixelValue321 = ramp[rampIndex];
 		if (!((workBuffer[GWAALevel]) == 1)) {
-			fillColorSpanAAx0x1(pixelValue321, x, x1);
+			fillColorSpanAAx0x1(pixelValue321, x, x1, self);
 			goto l2;
 		}
 		x02 = x;
@@ -4148,141 +3999,121 @@ fillLinearGradientfromtoat(sqInt fill, sqInt leftX, sqInt rightX, sqInt yValue)
 }
 
 	/* BalloonEngineBase>>#fillMaxXGet */
-static sqInt
-fillMaxXGet(void)
+static sqIntfillMaxXGet(struct foo * self)
 {
 	return workBuffer[GWFillMaxX];
 }
 
 	/* BalloonEngineBase>>#fillMaxXPut: */
-static sqInt
-fillMaxXPut(sqInt value)
+static sqIntfillMaxXPut(sqInt value, struct foo * self)
 {
 	return workBuffer[GWFillMaxX] = value;
 }
 
 	/* BalloonEngineBase>>#fillMaxYGet */
-static sqInt
-fillMaxYGet(void)
+static sqIntfillMaxYGet(struct foo * self)
 {
 	return workBuffer[GWFillMaxY];
 }
 
 	/* BalloonEngineBase>>#fillMaxYPut: */
-static sqInt
-fillMaxYPut(sqInt value)
+static sqIntfillMaxYPut(sqInt value, struct foo * self)
 {
 	return workBuffer[GWFillMaxY] = value;
 }
 
 	/* BalloonEngineBase>>#fillMinXGet */
-static sqInt
-fillMinXGet(void)
+static sqIntfillMinXGet(struct foo * self)
 {
 	return workBuffer[GWFillMinX];
 }
 
 	/* BalloonEngineBase>>#fillMinXPut: */
-static sqInt
-fillMinXPut(sqInt value)
+static sqIntfillMinXPut(sqInt value, struct foo * self)
 {
 	return workBuffer[GWFillMinX] = value;
 }
 
 	/* BalloonEngineBase>>#fillMinYGet */
-static sqInt
-fillMinYGet(void)
+static sqIntfillMinYGet(struct foo * self)
 {
 	return workBuffer[GWFillMinY];
 }
 
 	/* BalloonEngineBase>>#fillMinYPut: */
-static sqInt
-fillMinYPut(sqInt value)
+static sqIntfillMinYPut(sqInt value, struct foo * self)
 {
 	return workBuffer[GWFillMinY] = value;
 }
 
 	/* BalloonEnginePlugin>>#fillNormalXOf: */
-static sqInt
-fillNormalXOf(sqInt fill)
+static sqIntfillNormalXOf(sqInt fill, struct foo * self)
 {
 	return objBuffer[fill + GFNormalX];
 }
 
 	/* BalloonEnginePlugin>>#fillNormalXOf:put: */
-static sqInt
-fillNormalXOfput(sqInt fill, sqInt value)
+static sqIntfillNormalXOfput(sqInt fill, sqInt value, struct foo * self)
 {
 	return objBuffer[fill + GFNormalX] = value;
 }
 
 	/* BalloonEnginePlugin>>#fillNormalYOf: */
-static sqInt
-fillNormalYOf(sqInt fill)
+static sqIntfillNormalYOf(sqInt fill, struct foo * self)
 {
 	return objBuffer[fill + GFNormalY];
 }
 
 	/* BalloonEnginePlugin>>#fillNormalYOf:put: */
-static sqInt
-fillNormalYOfput(sqInt fill, sqInt value)
+static sqIntfillNormalYOfput(sqInt fill, sqInt value, struct foo * self)
 {
 	return objBuffer[fill + GFNormalY] = value;
 }
 
 	/* BalloonEngineBase>>#fillOffsetXGet */
-static sqInt
-fillOffsetXGet(void)
+static sqIntfillOffsetXGet(struct foo * self)
 {
 	return workBuffer[GWFillOffsetX];
 }
 
 	/* BalloonEngineBase>>#fillOffsetXPut: */
-static sqInt
-fillOffsetXPut(sqInt value)
+static sqIntfillOffsetXPut(sqInt value, struct foo * self)
 {
 	return workBuffer[GWFillOffsetX] = value;
 }
 
 	/* BalloonEngineBase>>#fillOffsetYGet */
-static sqInt
-fillOffsetYGet(void)
+static sqIntfillOffsetYGet(struct foo * self)
 {
 	return workBuffer[GWFillOffsetY];
 }
 
 	/* BalloonEngineBase>>#fillOffsetYPut: */
-static sqInt
-fillOffsetYPut(sqInt value)
+static sqIntfillOffsetYPut(sqInt value, struct foo * self)
 {
 	return workBuffer[GWFillOffsetY] = value;
 }
 
 	/* BalloonEnginePlugin>>#fillOriginXOf: */
-static sqInt
-fillOriginXOf(sqInt fill)
+static sqIntfillOriginXOf(sqInt fill, struct foo * self)
 {
 	return objBuffer[fill + GFOriginX];
 }
 
 	/* BalloonEnginePlugin>>#fillOriginXOf:put: */
-static sqInt
-fillOriginXOfput(sqInt fill, sqInt value)
+static sqIntfillOriginXOfput(sqInt fill, sqInt value, struct foo * self)
 {
 	return objBuffer[fill + GFOriginX] = value;
 }
 
 	/* BalloonEnginePlugin>>#fillOriginYOf: */
-static sqInt
-fillOriginYOf(sqInt fill)
+static sqIntfillOriginYOf(sqInt fill, struct foo * self)
 {
 	return objBuffer[fill + GFOriginY];
 }
 
 	/* BalloonEnginePlugin>>#fillOriginYOf:put: */
-static sqInt
-fillOriginYOfput(sqInt fill, sqInt value)
+static sqIntfillOriginYOfput(sqInt fill, sqInt value, struct foo * self)
 {
 	return objBuffer[fill + GFOriginY] = value;
 }
@@ -4291,8 +4122,7 @@ fillOriginYOfput(sqInt fill, sqInt value)
 /*	Part 2a) Compute the decreasing part of the ramp */
 
 	/* BalloonEnginePlugin>>#fillRadialDecreasingAA:ramp:deltaST:dsX:dtX:from:to: */
-static sqInt
-fillRadialDecreasingAArampdeltaSTdsXdtXfromto(sqInt fill, int *ramp, int *deltaST, sqInt dsX, sqInt dtX, sqInt leftX, sqInt rightX)
+static sqIntfillRadialDecreasingAArampdeltaSTdsXdtXfromto(sqInt fill, int *ramp, int *deltaST, sqInt dsX, sqInt dtX, sqInt leftX, sqInt rightX, struct foo * self)
 {
     sqInt aaLevel;
     sqInt baseShift;
@@ -4317,7 +4147,7 @@ fillRadialDecreasingAArampdeltaSTdsXdtXfromto(sqInt fill, int *ramp, int *deltaS
 	aaLevel = workBuffer[GWAALevel];
 	/* begin aaShiftGet */
 	baseShift = workBuffer[GWAAShift];
-	rampIndex = accurateLengthOfwith(ds / 65536, dt / 65536);
+	rampIndex = accurateLengthOfwith(ds / 65536, dt / 65536, self);
 	length2 = (rampIndex - 1) * (rampIndex - 1);
 	x = leftX;
 	/* begin fillOriginXOf: */
@@ -4427,8 +4257,7 @@ fillRadialDecreasingAArampdeltaSTdsXdtXfromto(sqInt fill, int *ramp, int *deltaS
 /*	Part 2a) Compute the decreasing part of the ramp */
 
 	/* BalloonEnginePlugin>>#fillRadialDecreasing:ramp:deltaST:dsX:dtX:from:to: */
-static sqInt
-fillRadialDecreasingrampdeltaSTdsXdtXfromto(sqInt fill, sqInt ramp, sqInt deltaST, sqInt dsX, sqInt dtX, sqInt leftX, sqInt rightX)
+static sqIntfillRadialDecreasingrampdeltaSTdsXdtXfromto(sqInt fill, sqInt ramp, sqInt deltaST, sqInt dsX, sqInt dtX, sqInt leftX, sqInt rightX, struct foo * self)
 {
     int ds;
     int dt;
@@ -4441,7 +4270,7 @@ fillRadialDecreasingrampdeltaSTdsXdtXfromto(sqInt fill, sqInt ramp, sqInt deltaS
 
 	ds = (((int*) deltaST))[0];
 	dt = (((int*) deltaST))[1];
-	rampIndex = accurateLengthOfwith(ds / 65536, dt / 65536);
+	rampIndex = accurateLengthOfwith(ds / 65536, dt / 65536, self);
 	rampValue = (((int *) ramp))[rampIndex];
 	length2 = (rampIndex - 1) * (rampIndex - 1);
 	x = leftX;
@@ -4473,18 +4302,16 @@ fillRadialDecreasingrampdeltaSTdsXdtXfromto(sqInt fill, sqInt ramp, sqInt deltaS
 }
 
 	/* BalloonEnginePlugin>>#fillRadialGradient */
-static sqInt
-fillRadialGradient(void)
+static sqIntfillRadialGradient(struct foo * self)
 {
-	return fillRadialGradientfromtoat(workBuffer[GWLastExportedFill], workBuffer[GWLastExportedLeftX], workBuffer[GWLastExportedRightX], workBuffer[GWCurrentY]);
+	return fillRadialGradientfromtoat(workBuffer[GWLastExportedFill], workBuffer[GWLastExportedLeftX], workBuffer[GWLastExportedRightX], workBuffer[GWCurrentY], self);
 }
 
 
 /*	Draw a radial gradient fill. */
 
 	/* BalloonEnginePlugin>>#fillRadialGradient:from:to:at: */
-static sqInt
-fillRadialGradientfromtoat(sqInt fill, sqInt leftX, sqInt rightX, sqInt yValue)
+static sqIntfillRadialGradientfromtoat(sqInt fill, sqInt leftX, sqInt rightX, sqInt yValue, struct foo * self)
 {
     int *deltaST;
     sqInt deltaX;
@@ -4552,7 +4379,7 @@ fillRadialGradientfromtoat(sqInt fill, sqInt leftX, sqInt rightX, sqInt yValue)
 		/* begin fillColorSpan:from:to: */
 		pixelValue32 = ramp[rampSize - 1];
 		if (!((workBuffer[GWAALevel]) == 1)) {
-			fillColorSpanAAx0x1(pixelValue32, leftX, x);
+			fillColorSpanAAx0x1(pixelValue32, leftX, x, self);
 			goto l1;
 		}
 		x0 = leftX;
@@ -4582,7 +4409,7 @@ fillRadialGradientfromtoat(sqInt fill, sqInt leftX, sqInt rightX, sqInt yValue)
 			/* begin fillRadialDecreasing:ramp:deltaST:dsX:dtX:from:to: */
 			ds1 = (((int*) deltaST))[0];
 			dt1 = (((int*) deltaST))[1];
-			rampIndex = accurateLengthOfwith(ds1 / 65536, dt1 / 65536);
+			rampIndex = accurateLengthOfwith(ds1 / 65536, dt1 / 65536, self);
 			rampValue = (((int *) ramp))[rampIndex];
 			length21 = (rampIndex - 1) * (rampIndex - 1);
 			x2 = x;
@@ -4613,7 +4440,7 @@ fillRadialGradientfromtoat(sqInt fill, sqInt leftX, sqInt rightX, sqInt yValue)
 			x = x2;
 		}
 		else {
-			x = fillRadialDecreasingAArampdeltaSTdsXdtXfromto(fill, ramp, deltaST, dsX, dtX, x, x1);
+			x = fillRadialDecreasingAArampdeltaSTdsXdtXfromto(fill, ramp, deltaST, dsX, dtX, x, x1, self);
 		}
 	}
 	if (x < x1) {
@@ -4623,7 +4450,7 @@ fillRadialGradientfromtoat(sqInt fill, sqInt leftX, sqInt rightX, sqInt yValue)
 			/* begin fillRadialIncreasing:ramp:deltaST:dsX:dtX:from:to: */
 			ds2 = (((int*) deltaST))[0];
 			dt2 = (((int*) deltaST))[1];
-			rampIndex1 = accurateLengthOfwith(ds2 / 65536, dt2 / 65536);
+			rampIndex1 = accurateLengthOfwith(ds2 / 65536, dt2 / 65536, self);
 			rampValue1 = (((int *) ramp))[rampIndex1];
 			/* begin obj:at: */
 			rampSize1 = objBuffer[fill + GFRampLength];
@@ -4657,14 +4484,14 @@ fillRadialGradientfromtoat(sqInt fill, sqInt leftX, sqInt rightX, sqInt yValue)
 			x = x3;
 		}
 		else {
-			x = fillRadialIncreasingAArampdeltaSTdsXdtXfromto(fill, ramp, deltaST, dsX, dtX, x, x1);
+			x = fillRadialIncreasingAArampdeltaSTdsXdtXfromto(fill, ramp, deltaST, dsX, dtX, x, x1, self);
 		}
 	}
 	if (x < rightX) {
 		/* begin fillColorSpan:from:to: */
 		pixelValue321 = ramp[rampSize - 1];
 		if (!((workBuffer[GWAALevel]) == 1)) {
-			fillColorSpanAAx0x1(pixelValue321, x, rightX);
+			fillColorSpanAAx0x1(pixelValue321, x, rightX, self);
 			goto l2;
 		}
 		x01 = x;
@@ -4691,8 +4518,7 @@ fillRadialGradientfromtoat(sqInt fill, sqInt leftX, sqInt rightX, sqInt yValue)
 /*	Part 2b) Compute the increasing part of the ramp */
 
 	/* BalloonEnginePlugin>>#fillRadialIncreasingAA:ramp:deltaST:dsX:dtX:from:to: */
-static sqInt
-fillRadialIncreasingAArampdeltaSTdsXdtXfromto(sqInt fill, int *ramp, int *deltaST, sqInt dsX, sqInt dtX, sqInt leftX, sqInt rightX)
+static sqIntfillRadialIncreasingAArampdeltaSTdsXdtXfromto(sqInt fill, int *ramp, int *deltaST, sqInt dsX, sqInt dtX, sqInt leftX, sqInt rightX, struct foo * self)
 {
     sqInt aaLevel;
     sqInt baseShift;
@@ -4718,7 +4544,7 @@ fillRadialIncreasingAArampdeltaSTdsXdtXfromto(sqInt fill, int *ramp, int *deltaS
 	aaLevel = workBuffer[GWAALevel];
 	/* begin aaShiftGet */
 	baseShift = workBuffer[GWAAShift];
-	rampIndex = accurateLengthOfwith(ds / 65536, dt / 65536);
+	rampIndex = accurateLengthOfwith(ds / 65536, dt / 65536, self);
 	/* begin obj:at: */
 	rampSize = objBuffer[fill + GFRampLength];
 
@@ -4835,8 +4661,7 @@ fillRadialIncreasingAArampdeltaSTdsXdtXfromto(sqInt fill, int *ramp, int *deltaS
 /*	Part 2b) Compute the increasing part of the ramp */
 
 	/* BalloonEnginePlugin>>#fillRadialIncreasing:ramp:deltaST:dsX:dtX:from:to: */
-static sqInt
-fillRadialIncreasingrampdeltaSTdsXdtXfromto(sqInt fill, sqInt ramp, sqInt deltaST, sqInt dsX, sqInt dtX, sqInt leftX, sqInt rightX)
+static sqIntfillRadialIncreasingrampdeltaSTdsXdtXfromto(sqInt fill, sqInt ramp, sqInt deltaST, sqInt dsX, sqInt dtX, sqInt leftX, sqInt rightX, struct foo * self)
 {
     int ds;
     int dt;
@@ -4851,7 +4676,7 @@ fillRadialIncreasingrampdeltaSTdsXdtXfromto(sqInt fill, sqInt ramp, sqInt deltaS
 
 	ds = (((int*) deltaST))[0];
 	dt = (((int*) deltaST))[1];
-	rampIndex = accurateLengthOfwith(ds / 65536, dt / 65536);
+	rampIndex = accurateLengthOfwith(ds / 65536, dt / 65536, self);
 	rampValue = (((int *) ramp))[rampIndex];
 	/* begin obj:at: */
 	rampSize = objBuffer[fill + GFRampLength];
@@ -4889,8 +4714,7 @@ fillRadialIncreasingrampdeltaSTdsXdtXfromto(sqInt fill, sqInt ramp, sqInt deltaS
 /*	Return true if fillEntry1 should be drawn before fillEntry2 */
 
 	/* BalloonEngineBase>>#fillSorts:before: */
-static sqInt
-fillSortsbefore(sqInt fillEntry1, sqInt fillEntry2)
+static sqIntfillSortsbefore(sqInt fillEntry1, sqInt fillEntry2, struct foo * self)
 {
     sqInt diff;
 
@@ -4909,8 +4733,7 @@ fillSortsbefore(sqInt fillEntry1, sqInt fillEntry2)
 	be handled by some Smalltalk code. */
 
 	/* BalloonEngineBase>>#fillSpan:from:to: */
-static sqInt
-fillSpanfromto(unsigned int fill, sqInt leftX, sqInt rightX)
+static sqIntfillSpanfromto(unsigned int fill, sqInt leftX, sqInt rightX, struct foo * self)
 {
     sqInt type;
     sqInt x0;
@@ -4956,7 +4779,7 @@ fillSpanfromto(unsigned int fill, sqInt leftX, sqInt rightX)
 	if ((fill & 0xFF000000U) != 0) {
 		/* begin fillColorSpan:from:to: */
 		if (!((workBuffer[GWAALevel]) == 1)) {
-			fillColorSpanAAx0x1(fill, x0, x1);
+			fillColorSpanAAx0x1(fill, x0, x1, self);
 			goto l3;
 		}
 		x01 = x0;
@@ -4989,17 +4812,17 @@ fillSpanfromto(unsigned int fill, sqInt leftX, sqInt rightX)
 		switch (type) {
 		case 0:
 		case 1:
-			errorWrongIndex();
+			errorWrongIndex(self);
 			break;
 		case 2:
-			fillLinearGradientfromtoat(workBuffer[GWLastExportedFill], workBuffer[GWLastExportedLeftX], workBuffer[GWLastExportedRightX], workBuffer[GWCurrentY]);
+			fillLinearGradientfromtoat(workBuffer[GWLastExportedFill], workBuffer[GWLastExportedLeftX], workBuffer[GWLastExportedRightX], workBuffer[GWCurrentY], self);
 			break;
 		case 3:
-			fillRadialGradientfromtoat(workBuffer[GWLastExportedFill], workBuffer[GWLastExportedLeftX], workBuffer[GWLastExportedRightX], workBuffer[GWCurrentY]);
+			fillRadialGradientfromtoat(workBuffer[GWLastExportedFill], workBuffer[GWLastExportedLeftX], workBuffer[GWLastExportedRightX], workBuffer[GWCurrentY], self);
 			break;
 		case 4:
 		case 5:
-			fillBitmapSpanfromtoat(workBuffer[GWLastExportedFill], workBuffer[GWLastExportedLeftX], workBuffer[GWLastExportedRightX], workBuffer[GWCurrentY]);
+			fillBitmapSpanfromtoat(workBuffer[GWLastExportedFill], workBuffer[GWLastExportedLeftX], workBuffer[GWLastExportedRightX], workBuffer[GWCurrentY], self);
 			break;
 		}
 	}
@@ -5007,15 +4830,13 @@ fillSpanfromto(unsigned int fill, sqInt leftX, sqInt rightX)
 }
 
 	/* BalloonEngineBase>>#fillTypeOf: */
-static sqInt
-fillTypeOf(sqInt fill)
+static sqIntfillTypeOf(sqInt fill, struct foo * self)
 {
 	return ((usqInt) (((objBuffer[fill + GEObjectType]) & GEPrimitiveTypeMask) & GEPrimitiveFillMask)) >> 8;
 }
 
 	/* BalloonEngineBase>>#findNextAETEdgeFrom: */
-static sqInt
-findNextAETEdgeFrom(sqInt leftEdge)
+static sqIntfindNextAETEdgeFrom(sqInt leftEdge, struct foo * self)
 {
     sqInt depth;
     int rightEdge;
@@ -5043,8 +4864,7 @@ findNextAETEdgeFrom(sqInt leftEdge)
  */
 
 	/* BalloonEngineBase>>#findNextExternalEntryFromGET */
-static sqInt
-findNextExternalEntryFromGET(void)
+static sqIntfindNextExternalEntryFromGET(struct foo * self)
 {
     int edge;
     sqInt type;
@@ -5061,7 +4881,7 @@ findNextExternalEntryFromGET(void)
 		if ((type & GEPrimitiveWideMask) == GEPrimitiveEdge) {
 			return 1;
 		}
-		if (!(needAvailableSpace(1))) {
+		if (!(needAvailableSpace(1, self))) {
 			return 0;
 		}
 		switch (type) {
@@ -5069,22 +4889,22 @@ findNextExternalEntryFromGET(void)
 		case 1:
 		case 2:
 		case 3:
-			errorWrongIndex();
+			errorWrongIndex(self);
 			break;
 		case 4:
-			stepToFirstLineInat(getBuffer[workBuffer[GWGETStart]], workBuffer[GWCurrentY]);
+			stepToFirstLineInat(getBuffer[workBuffer[GWGETStart]], workBuffer[GWCurrentY], self);
 			break;
 		case 5:
-			stepToFirstWideLineInat(getBuffer[workBuffer[GWGETStart]], workBuffer[GWCurrentY]);
+			stepToFirstWideLineInat(getBuffer[workBuffer[GWGETStart]], workBuffer[GWCurrentY], self);
 			break;
 		case 6:
-			stepToFirstBezierInat(getBuffer[workBuffer[GWGETStart]], workBuffer[GWCurrentY]);
+			stepToFirstBezierInat(getBuffer[workBuffer[GWGETStart]], workBuffer[GWCurrentY], self);
 			break;
 		case 7:
-			stepToFirstWideBezierInat(getBuffer[workBuffer[GWGETStart]], workBuffer[GWCurrentY]);
+			stepToFirstWideBezierInat(getBuffer[workBuffer[GWGETStart]], workBuffer[GWCurrentY], self);
 			break;
 		}
-		insertEdgeIntoAET(edge);
+		insertEdgeIntoAET(edge, self);
 		/* begin getStartPut: */
 		workBuffer[GWGETStart] = ((workBuffer[GWGETStart]) + 1);
 	}
@@ -5103,8 +4923,7 @@ findNextExternalEntryFromGET(void)
  */
 
 	/* BalloonEngineBase>>#findNextExternalFillFromAET */
-static sqInt
-findNextExternalFillFromAET(void)
+static sqIntfindNextExternalFillFromAET(struct foo * self)
 {
     sqInt fill;
     sqInt fill1;
@@ -5148,18 +4967,18 @@ findNextExternalFillFromAET(void)
 		if (((workBuffer[GWSize]) - (workBuffer[GWBufferTop])) == 0) {
 			goto l12;
 		}
-		while ((topRightX()) <= leftX) {
-			hideFilldepth(topFill(), topDepth());
+		while ((topRightX(self)) <= leftX) {
+			hideFilldepth(topFill(self), topDepth(self), self);
 			if (((workBuffer[GWSize]) - (workBuffer[GWBufferTop])) == 0) {
 				goto l12;
 			}
 		}
 	l12:	/* end quickRemoveInvalidFillsAt: */;
 		if ((((objBuffer[leftEdge + GEObjectType]) & GEPrimitiveTypeMask) & GEPrimitiveWide) != 0) {
-			toggleWideFillOf(leftEdge);
+			toggleWideFillOf(leftEdge, self);
 		}
 		if (((objBuffer[leftEdge + GEObjectType]) & GEEdgeFillsInvalid) == 0) {
-			toggleFillsOf(leftEdge);
+			toggleFillsOf(leftEdge, self);
 			if (engineStopped) {
 				return 0;
 			}
@@ -5214,7 +5033,7 @@ findNextExternalFillFromAET(void)
 	l3:	/* end topFill */;
 					fill = someIntegerValue;
 					if (!(fill == 0)) {
-						if (fillSpanfromto(fill, startX, stopX)) {
+						if (fillSpanfromto(fill, startX, stopX, self)) {
 							goto l11;
 						}
 					}
@@ -5222,8 +5041,8 @@ findNextExternalFillFromAET(void)
 					if (((workBuffer[GWSize]) - (workBuffer[GWBufferTop])) == 0) {
 						goto l8;
 					}
-					while ((topRightX()) <= stopX) {
-						hideFilldepth(topFill(), topDepth());
+					while ((topRightX(self)) <= stopX) {
+						hideFilldepth(topFill(self), topDepth(self), self);
 						if (((workBuffer[GWSize]) - (workBuffer[GWBufferTop])) == 0) {
 							goto l8;
 						}
@@ -5257,7 +5076,7 @@ findNextExternalFillFromAET(void)
 	l7:	/* end topFill */;
 				fill = someIntegerValue1;
 				if (!(fill == 0)) {
-					fillSpanfromto(fill, startX, rightX);
+					fillSpanfromto(fill, startX, rightX, self);
 					goto l11;
 				}
 	l11:	/* end fillAllFrom:to: */;
@@ -5305,7 +5124,7 @@ findNextExternalFillFromAET(void)
 	l15:	/* end topFill */;
 			fill1 = someIntegerValue2;
 			if (!(fill1 == 0)) {
-				if (fillSpanfromto(fill1, startX1, stopX1)) {
+				if (fillSpanfromto(fill1, startX1, stopX1, self)) {
 					goto l21;
 				}
 			}
@@ -5313,8 +5132,8 @@ findNextExternalFillFromAET(void)
 			if (((workBuffer[GWSize]) - (workBuffer[GWBufferTop])) == 0) {
 				goto l17;
 			}
-			while ((topRightX()) <= stopX1) {
-				hideFilldepth(topFill(), topDepth());
+			while ((topRightX(self)) <= stopX1) {
+				hideFilldepth(topFill(self), topDepth(self), self);
 				if (((workBuffer[GWSize]) - (workBuffer[GWBufferTop])) == 0) {
 					goto l17;
 				}
@@ -5348,7 +5167,7 @@ findNextExternalFillFromAET(void)
 	l13:	/* end topFill */;
 		fill1 = someIntegerValue11;
 		if (!(fill1 == 0)) {
-			fillSpanfromto(fill1, startX1, workBuffer[GWFillMaxX]);
+			fillSpanfromto(fill1, startX1, workBuffer[GWFillMaxX], self);
 			goto l21;
 		}
 	l21:	/* end fillAllFrom:to: */;
@@ -5364,8 +5183,7 @@ findNextExternalFillFromAET(void)
  */
 
 	/* BalloonEngineBase>>#findNextExternalUpdateFromAET */
-static sqInt
-findNextExternalUpdateFromAET(void)
+static sqIntfindNextExternalUpdateFromAET(struct foo * self)
 {
     sqInt count;
     int edge;
@@ -5378,7 +5196,7 @@ findNextExternalUpdateFromAET(void)
 		if (count == 0) {
 
 			/* Edge at end -- remove it */
-			removeFirstAETEntry();
+			removeFirstAETEntry(self);
 		}
 		else {
 
@@ -5394,22 +5212,22 @@ findNextExternalUpdateFromAET(void)
 			case 1:
 			case 2:
 			case 3:
-				errorWrongIndex();
+				errorWrongIndex(self);
 				break;
 			case 4:
-				stepToNextLineInat(aetBuffer[workBuffer[GWAETStart]], workBuffer[GWCurrentY]);
+				stepToNextLineInat(aetBuffer[workBuffer[GWAETStart]], workBuffer[GWCurrentY], self);
 				break;
 			case 5:
-				stepToNextWideLineInat(aetBuffer[workBuffer[GWAETStart]], workBuffer[GWCurrentY]);
+				stepToNextWideLineInat(aetBuffer[workBuffer[GWAETStart]], workBuffer[GWCurrentY], self);
 				break;
 			case 6:
-				stepToNextBezierInat(aetBuffer[workBuffer[GWAETStart]], workBuffer[GWCurrentY]);
+				stepToNextBezierInat(aetBuffer[workBuffer[GWAETStart]], workBuffer[GWCurrentY], self);
 				break;
 			case 7:
-				stepToNextWideBezier();
+				stepToNextWideBezier(self);
 				break;
 			}
-			resortFirstAETEntry();
+			resortFirstAETEntry(self);
 			/* begin aetStartPut: */
 			value = (workBuffer[GWAETStart]) + 1;
 			workBuffer[GWAETStart] = value;
@@ -5419,8 +5237,7 @@ findNextExternalUpdateFromAET(void)
 }
 
 	/* BalloonEngineBase>>#findStackFill:depth: */
-static sqInt
-findStackFilldepth(sqInt fillIndex, sqInt depth)
+static sqIntfindStackFilldepth(sqInt fillIndex, sqInt depth, struct foo * self)
 {
     sqInt index;
 
@@ -5442,29 +5259,25 @@ findStackFilldepth(sqInt fillIndex, sqInt depth)
 /*	Return true if processing is finished */
 
 	/* BalloonEngineBase>>#finishedProcessing */
-static sqInt
-finishedProcessing(void)
+static sqIntfinishedProcessing(struct foo * self)
 {
 	return (workBuffer[GWState]) == GEStateCompleted;
 }
 
 	/* BalloonEngineBase>>#firstPointListGet */
-static sqInt
-firstPointListGet(void)
+static sqIntfirstPointListGet(struct foo * self)
 {
 	return workBuffer[GWPointListFirst];
 }
 
 	/* BalloonEngineBase>>#firstPointListPut: */
-static sqInt
-firstPointListPut(sqInt value)
+static sqIntfirstPointListPut(sqInt value, struct foo * self)
 {
 	return workBuffer[GWPointListFirst] = value;
 }
 
 	/* BalloonEngineBase>>#freeStackFillEntry */
-static sqInt
-freeStackFillEntry(void)
+static sqIntfreeStackFillEntry(struct foo * self)
 {
 	/* begin wbStackPop: */
 	workBuffer[GWBufferTop] = ((workBuffer[GWBufferTop]) + 3 /* stackFillEntryLength */);
@@ -5488,8 +5301,7 @@ getModuleName(void)
 /*	Return true if the edge at index i should sort before the edge at index j. */
 
 	/* BalloonEngineBase>>#getSorts:before: */
-static sqInt
-getSortsbefore(sqInt edge1, sqInt edge2)
+static sqIntgetSortsbefore(sqInt edge1, sqInt edge2, struct foo * self)
 {
     sqInt diff;
 
@@ -5505,92 +5317,79 @@ getSortsbefore(sqInt edge1, sqInt edge2)
 }
 
 	/* BalloonEngineBase>>#getStartGet */
-static sqInt
-getStartGet(void)
+static sqIntgetStartGet(struct foo * self)
 {
 	return workBuffer[GWGETStart];
 }
 
 	/* BalloonEngineBase>>#getStartPut: */
-static sqInt
-getStartPut(sqInt value)
+static sqIntgetStartPut(sqInt value, struct foo * self)
 {
 	return workBuffer[GWGETStart] = value;
 }
 
 	/* BalloonEngineBase>>#getUsedGet */
-static sqInt
-getUsedGet(void)
+static sqIntgetUsedGet(struct foo * self)
 {
 	return workBuffer[GWGETUsed];
 }
 
 	/* BalloonEngineBase>>#getUsedPut: */
-static sqInt
-getUsedPut(sqInt value)
+static sqIntgetUsedPut(sqInt value, struct foo * self)
 {
 	return workBuffer[GWGETUsed] = value;
 }
 
 	/* BalloonEnginePlugin>>#gradientRampLengthOf: */
-static sqInt
-gradientRampLengthOf(sqInt fill)
+static sqIntgradientRampLengthOf(sqInt fill, struct foo * self)
 {
 	return objBuffer[fill + GFRampLength];
 }
 
 	/* BalloonEnginePlugin>>#gradientRampLengthOf:put: */
-static sqInt
-gradientRampLengthOfput(sqInt fill, sqInt value)
+static sqIntgradientRampLengthOfput(sqInt fill, sqInt value, struct foo * self)
 {
 	return objBuffer[fill + GFRampLength] = value;
 }
 
 	/* BalloonEnginePlugin>>#gradientRampOf: */
-static int *
-gradientRampOf(sqInt fill)
+static int *gradientRampOf(sqInt fill, struct foo * self)
 {
 	return (objBuffer + fill) + GFRampOffset;
 }
 
 	/* BalloonEngineBase>>#hasColorTransform */
-static sqInt
-hasColorTransform(void)
+static sqInthasColorTransform(struct foo * self)
 {
 	return (workBuffer[GWHasColorTransform]) != 0;
 }
 
 	/* BalloonEngineBase>>#hasColorTransformGet */
-static sqInt
-hasColorTransformGet(void)
+static sqInthasColorTransformGet(struct foo * self)
 {
 	return workBuffer[GWHasColorTransform];
 }
 
 	/* BalloonEngineBase>>#hasColorTransformPut: */
-static sqInt
-hasColorTransformPut(sqInt value)
+static sqInthasColorTransformPut(sqInt value, struct foo * self)
 {
 	return workBuffer[GWHasColorTransform] = value;
 }
 
 	/* BalloonEngineBase>>#hasEdgeTransform */
-static sqInt
-hasEdgeTransform(void)
+static sqInthasEdgeTransform(struct foo * self)
 {
 	return (workBuffer[GWHasEdgeTransform]) != 0;
 }
 
 	/* BalloonEngineBase>>#hasEdgeTransformGet */
-static sqInt
-hasEdgeTransformGet(void)
+static sqInthasEdgeTransformGet(struct foo * self)
 {
 	return workBuffer[GWHasEdgeTransform];
 }
 
 	/* BalloonEngineBase>>#hasEdgeTransformPut: */
-static sqInt
-hasEdgeTransformPut(sqInt value)
+static sqInthasEdgeTransformPut(sqInt value, struct foo * self)
 {
 	return workBuffer[GWHasEdgeTransform] = value;
 }
@@ -5599,8 +5398,7 @@ hasEdgeTransformPut(sqInt value)
 /*	Make the fill style with the given index invisible */
 
 	/* BalloonEngineBase>>#hideFill:depth: */
-static sqInt
-hideFilldepth(sqInt fillIndex, sqInt depth)
+static sqInthideFilldepth(sqInt fillIndex, sqInt depth, struct foo * self)
 {
     sqInt index;
     sqInt index1;
@@ -5614,7 +5412,7 @@ hideFilldepth(sqInt fillIndex, sqInt depth)
     sqInt value1;
     sqInt value2;
 
-	index = findStackFilldepth(fillIndex, depth);
+	index = findStackFilldepth(fillIndex, depth, self);
 	if (index == -1) {
 		return 0;
 	}
@@ -5637,7 +5435,7 @@ hideFilldepth(sqInt fillIndex, sqInt depth)
 	newTopIndex = 0;
 	index = 3 /* stackFillEntryLength */;
 	while (index < ((workBuffer[GWSize]) - (workBuffer[GWBufferTop]))) {
-		if (fillSortsbefore(index, newTopIndex)) {
+		if (fillSortsbefore(index, newTopIndex, self)) {
 			newTopIndex = index;
 		}
 		index += 3 /* stackFillEntryLength */;
@@ -5673,8 +5471,7 @@ hideFilldepth(sqInt fillIndex, sqInt depth)
 }
 
 	/* BalloonEngineBase>>#incrementPoint:by: */
-static sqInt
-incrementPointby(int *point, sqInt delta)
+static sqIntincrementPointby(int *point, sqInt delta, struct foo * self)
 {
 	point[0] = ((point[0]) + delta);
 	point[1] = ((point[1]) + delta);
@@ -5682,8 +5479,7 @@ incrementPointby(int *point, sqInt delta)
 }
 
 	/* BalloonEngineBase>>#incrementStat:by: */
-static sqInt
-incrementStatby(sqInt statIndex, sqInt value)
+static sqIntincrementStatby(sqInt statIndex, sqInt value, struct foo * self)
 {
 	return workBuffer[statIndex] = ((workBuffer[statIndex]) + value);
 }
@@ -5692,8 +5488,7 @@ incrementStatby(sqInt statIndex, sqInt value)
 /*	Find insertion point for the given edge in the AET */
 
 	/* BalloonEngineBase>>#indexForInsertingIntoAET: */
-static sqInt
-indexForInsertingIntoAET(sqInt edge)
+static sqIntindexForInsertingIntoAET(sqInt edge, struct foo * self)
 {
     sqInt index;
     sqInt initialX;
@@ -5707,15 +5502,14 @@ indexForInsertingIntoAET(sqInt edge)
 	}
 	while ((index < (workBuffer[GWAETUsed]))
 	 && (((objBuffer[(aetBuffer[index]) + GEXValue]) == initialX)
-	 && (getSortsbefore(aetBuffer[index], edge)))) {
+	 && (getSortsbefore(aetBuffer[index], edge, self)))) {
 		index += 1;
 	}
 	return index;
 }
 
 	/* BalloonEngineBase>>#initColorTransform */
-static sqInt
-initColorTransform(void)
+static sqIntinitColorTransform(struct foo * self)
 {
     float *transform;
 
@@ -5735,8 +5529,7 @@ initColorTransform(void)
 }
 
 	/* BalloonEngineBase>>#initEdgeTransform */
-static sqInt
-initEdgeTransform(void)
+static sqIntinitEdgeTransform(struct foo * self)
 {
     float *transform;
 
@@ -5754,11 +5547,10 @@ initEdgeTransform(void)
 }
 
 	/* BalloonEngineBase>>#initialiseModule */
-EXPORT(sqInt)
-initialiseModule(void)
+EXPORT(sqInt)initialiseModule(struct foo * self)
 {
-	loadBBFn = ioLoadFunctionFrom("loadBitBltFrom", bbPluginName);
-	copyBitsFn = ioLoadFunctionFrom("copyBitsFromtoat", bbPluginName);
+	loadBBFn = ioLoadFunctionFrom("loadBitBltFrom", bbPluginName, self);
+	copyBitsFn = ioLoadFunctionFrom("copyBitsFromtoat", bbPluginName, self);
 	return (loadBBFn != 0)
 	 && (copyBitsFn != 0);
 }
@@ -5770,8 +5562,7 @@ initialiseModule(void)
 /*	Make sure aaLevel is initialized */
 
 	/* BalloonEngineBase>>#initializeGETProcessing */
-static sqInt
-initializeGETProcessing(void)
+static sqIntinitializeGETProcessing(struct foo * self)
 {
     sqInt value;
     sqInt value1;
@@ -5782,7 +5573,7 @@ initializeGETProcessing(void)
     sqInt value6;
     sqInt value7;
 
-	setAALevel(workBuffer[GWAALevel]);
+	setAALevel(workBuffer[GWAALevel], self);
 	if ((workBuffer[GWClipMinX]) < 0) {
 		/* begin clipMinXPut: */
 		workBuffer[GWClipMinX] = 0;
@@ -5812,7 +5603,7 @@ initializeGETProcessing(void)
 
 	/* Create the global edge table */
 	aetBuffer = objBuffer + objUsed;
-	createGlobalEdgeTable();
+	createGlobalEdgeTable(self);
 	if (engineStopped) {
 		return null;
 	}
@@ -5825,7 +5616,7 @@ initializeGETProcessing(void)
 		return 0;
 	}
 	/* begin sortGlobalEdgeTable */
-	quickSortGlobalEdgeTablefromto(getBuffer, 0, (workBuffer[GWGETUsed]) - 1);
+	quickSortGlobalEdgeTablefromto(getBuffer, 0, (workBuffer[GWGETUsed]) - 1, self);
 	/* begin currentYPut: */
 	value7 = objBuffer[(getBuffer[0]) + GEYValue];
 	workBuffer[GWCurrentY] = value7;
@@ -5837,7 +5628,7 @@ initializeGETProcessing(void)
 	workBuffer[GWSpanStart] = 0;
 	/* begin spanEndPut: */
 	workBuffer[GWSpanEnd] = ((((sqInt)((usqInt)((workBuffer[GWSpanSize])) << (workBuffer[GWAAShift])))) - 1);
-	clearSpanBuffer();
+	clearSpanBuffer(self);
 	return 0;
 }
 
@@ -5850,8 +5641,7 @@ initializeGETProcessing(void)
  */
 
 	/* BalloonEngineBase>>#insertEdgeIntoAET: */
-static sqInt
-insertEdgeIntoAET(sqInt edge)
+static sqIntinsertEdgeIntoAET(sqInt edge, struct foo * self)
 {
     sqInt index;
 
@@ -5862,8 +5652,8 @@ insertEdgeIntoAET(sqInt edge)
 	}
 
 	/* And insert edge */
-	index = indexForInsertingIntoAET(edge);
-	insertToAETbeforeIndex(edge, index);
+	index = indexForInsertingIntoAET(edge, self);
+	insertToAETbeforeIndex(edge, index, self);
 	return 0;
 }
 
@@ -5871,15 +5661,14 @@ insertEdgeIntoAET(sqInt edge)
 /*	Insert the given edge into the AET. */
 
 	/* BalloonEngineBase>>#insertToAET:beforeIndex: */
-static sqInt
-insertToAETbeforeIndex(sqInt edge, sqInt index)
+static sqIntinsertToAETbeforeIndex(sqInt edge, sqInt index, struct foo * self)
 {
     sqInt i;
     sqInt value;
 
 
 	/* Make sure we have space in the AET */
-	if (!(needAvailableSpace(1))) {
+	if (!(needAvailableSpace(1, self))) {
 		return null;
 	}
 	i = (workBuffer[GWAETUsed]) - 1;
@@ -5895,15 +5684,13 @@ insertToAETbeforeIndex(sqInt edge, sqInt index)
 }
 
 	/* BalloonEnginePlugin>>#isBezier: */
-static sqInt
-isBezier(sqInt bezier)
+static sqIntisBezier(sqInt bezier, struct foo * self)
 {
 	return (((objBuffer[bezier + GEObjectType]) & GEPrimitiveTypeMask) & GEPrimitiveWideMask) == GEPrimitiveBezier;
 }
 
 	/* BalloonEngineBase>>#isEdge: */
-static sqInt
-isEdge(sqInt edge)
+static sqIntisEdge(sqInt edge, struct foo * self)
 {
     sqInt type;
 
@@ -5915,15 +5702,13 @@ isEdge(sqInt edge)
 }
 
 	/* BalloonEngineBase>>#isFillColor: */
-static sqInt
-isFillColor(sqInt fill)
+static sqIntisFillColor(sqInt fill, struct foo * self)
 {
 	return (fill & 0xFF000000U) != 0;
 }
 
 	/* BalloonEnginePlugin>>#isFillOkay: */
-static sqInt
-isFillOkay(sqInt fill)
+static sqIntisFillOkay(sqInt fill, struct foo * self)
 {
 	return (fill == 0)
 	 || (((fill & 0xFF000000U) != 0)
@@ -5934,238 +5719,205 @@ isFillOkay(sqInt fill)
 }
 
 	/* BalloonEngineBase>>#isFill: */
-static sqInt
-isFill(sqInt fill)
+static sqIntisFill(sqInt fill, struct foo * self)
 {
 	return ((fill & 0xFF000000U) != 0)
 	 || ((((objBuffer[fill + GEObjectType]) & GEPrimitiveTypeMask) & GEPrimitiveFillMask) != 0);
 }
 
 	/* BalloonEnginePlugin>>#isLine: */
-static sqInt
-isLine(sqInt line)
+static sqIntisLine(sqInt line, struct foo * self)
 {
 	return (((objBuffer[line + GEObjectType]) & GEPrimitiveTypeMask) & GEPrimitiveWideMask) == GEPrimitiveLine;
 }
 
 	/* BalloonEngineBase>>#isObject: */
-static sqInt
-isObject(sqInt obj)
+static sqIntisObject(sqInt obj, struct foo * self)
 {
 	return (obj >= 0)
 	 && (obj < objUsed);
 }
 
 	/* BalloonEngineBase>>#isRealFill: */
-static sqInt
-isRealFill(sqInt fill)
+static sqIntisRealFill(sqInt fill, struct foo * self)
 {
 	return (((objBuffer[fill + GEObjectType]) & GEPrimitiveTypeMask) & GEPrimitiveFillMask) != 0;
 }
 
 	/* BalloonEngineBase>>#isStackEntry: */
-static sqInt
-isStackEntry(sqInt entry)
+static sqIntisStackEntry(sqInt entry, struct foo * self)
 {
 	return (entry >= (workBuffer[GWBufferTop]))
 	 && (entry < (workBuffer[GWSize]));
 }
 
 	/* BalloonEngineBase>>#isStackIndex: */
-static sqInt
-isStackIndex(sqInt index)
+static sqIntisStackIndex(sqInt index, struct foo * self)
 {
 	return (index >= 0)
 	 && (index < ((workBuffer[GWSize]) - (workBuffer[GWBufferTop])));
 }
 
 	/* BalloonEnginePlugin>>#isWideBezier: */
-static sqInt
-isWideBezier(sqInt bezier)
+static sqIntisWideBezier(sqInt bezier, struct foo * self)
 {
 	return ((((objBuffer[bezier + GEObjectType]) & GEPrimitiveTypeMask) & GEPrimitiveWideMask) == GEPrimitiveBezier)
 	 && ((((objBuffer[bezier + GEObjectType]) & GEPrimitiveTypeMask) & GEPrimitiveWide) != 0);
 }
 
 	/* BalloonEnginePlugin>>#isWideLine: */
-static sqInt
-isWideLine(sqInt line)
+static sqIntisWideLine(sqInt line, struct foo * self)
 {
 	return ((((objBuffer[line + GEObjectType]) & GEPrimitiveTypeMask) & GEPrimitiveWideMask) == GEPrimitiveLine)
 	 && ((((objBuffer[line + GEObjectType]) & GEPrimitiveTypeMask) & GEPrimitiveWide) != 0);
 }
 
 	/* BalloonEngineBase>>#isWide: */
-static sqInt
-isWide(sqInt object)
+static sqIntisWide(sqInt object, struct foo * self)
 {
 	return (((objBuffer[object + GEObjectType]) & GEPrimitiveTypeMask) & GEPrimitiveWide) != 0;
 }
 
 	/* BalloonEngineBase>>#lastExportedEdgeGet */
-static sqInt
-lastExportedEdgeGet(void)
+static sqIntlastExportedEdgeGet(struct foo * self)
 {
 	return workBuffer[GWLastExportedEdge];
 }
 
 	/* BalloonEngineBase>>#lastExportedEdgePut: */
-static sqInt
-lastExportedEdgePut(sqInt value)
+static sqIntlastExportedEdgePut(sqInt value, struct foo * self)
 {
 	return workBuffer[GWLastExportedEdge] = value;
 }
 
 	/* BalloonEngineBase>>#lastExportedFillGet */
-static sqInt
-lastExportedFillGet(void)
+static sqIntlastExportedFillGet(struct foo * self)
 {
 	return workBuffer[GWLastExportedFill];
 }
 
 	/* BalloonEngineBase>>#lastExportedFillPut: */
-static sqInt
-lastExportedFillPut(sqInt value)
+static sqIntlastExportedFillPut(sqInt value, struct foo * self)
 {
 	return workBuffer[GWLastExportedFill] = value;
 }
 
 	/* BalloonEngineBase>>#lastExportedLeftXGet */
-static sqInt
-lastExportedLeftXGet(void)
+static sqIntlastExportedLeftXGet(struct foo * self)
 {
 	return workBuffer[GWLastExportedLeftX];
 }
 
 	/* BalloonEngineBase>>#lastExportedLeftXPut: */
-static sqInt
-lastExportedLeftXPut(sqInt value)
+static sqIntlastExportedLeftXPut(sqInt value, struct foo * self)
 {
 	return workBuffer[GWLastExportedLeftX] = value;
 }
 
 	/* BalloonEngineBase>>#lastExportedRightXGet */
-static sqInt
-lastExportedRightXGet(void)
+static sqIntlastExportedRightXGet(struct foo * self)
 {
 	return workBuffer[GWLastExportedRightX];
 }
 
 	/* BalloonEngineBase>>#lastExportedRightXPut: */
-static sqInt
-lastExportedRightXPut(sqInt value)
+static sqIntlastExportedRightXPut(sqInt value, struct foo * self)
 {
 	return workBuffer[GWLastExportedRightX] = value;
 }
 
 	/* BalloonEnginePlugin>>#lineEndXOf: */
-static sqInt
-lineEndXOf(sqInt line)
+static sqIntlineEndXOf(sqInt line, struct foo * self)
 {
 	return objBuffer[line + GLEndX];
 }
 
 	/* BalloonEnginePlugin>>#lineEndXOf:put: */
-static sqInt
-lineEndXOfput(sqInt line, sqInt value)
+static sqIntlineEndXOfput(sqInt line, sqInt value, struct foo * self)
 {
 	return objBuffer[line + GLEndX] = value;
 }
 
 	/* BalloonEnginePlugin>>#lineEndYOf: */
-static sqInt
-lineEndYOf(sqInt line)
+static sqIntlineEndYOf(sqInt line, struct foo * self)
 {
 	return objBuffer[line + GLEndY];
 }
 
 	/* BalloonEnginePlugin>>#lineEndYOf:put: */
-static sqInt
-lineEndYOfput(sqInt line, sqInt value)
+static sqIntlineEndYOfput(sqInt line, sqInt value, struct foo * self)
 {
 	return objBuffer[line + GLEndY] = value;
 }
 
 	/* BalloonEnginePlugin>>#lineErrorAdjDownOf: */
-static sqInt
-lineErrorAdjDownOf(sqInt line)
+static sqIntlineErrorAdjDownOf(sqInt line, struct foo * self)
 {
 	return objBuffer[line + GLErrorAdjDown];
 }
 
 	/* BalloonEnginePlugin>>#lineErrorAdjDownOf:put: */
-static sqInt
-lineErrorAdjDownOfput(sqInt line, sqInt value)
+static sqIntlineErrorAdjDownOfput(sqInt line, sqInt value, struct foo * self)
 {
 	return objBuffer[line + GLErrorAdjDown] = value;
 }
 
 	/* BalloonEnginePlugin>>#lineErrorAdjUpOf: */
-static sqInt
-lineErrorAdjUpOf(sqInt line)
+static sqIntlineErrorAdjUpOf(sqInt line, struct foo * self)
 {
 	return objBuffer[line + GLErrorAdjUp];
 }
 
 	/* BalloonEnginePlugin>>#lineErrorAdjUpOf:put: */
-static sqInt
-lineErrorAdjUpOfput(sqInt line, sqInt value)
+static sqIntlineErrorAdjUpOfput(sqInt line, sqInt value, struct foo * self)
 {
 	return objBuffer[line + GLErrorAdjUp] = value;
 }
 
 	/* BalloonEnginePlugin>>#lineErrorOf: */
-static sqInt
-lineErrorOf(sqInt line)
+static sqIntlineErrorOf(sqInt line, struct foo * self)
 {
 	return objBuffer[line + GLError];
 }
 
 	/* BalloonEnginePlugin>>#lineErrorOf:put: */
-static sqInt
-lineErrorOfput(sqInt line, sqInt value)
+static sqIntlineErrorOfput(sqInt line, sqInt value, struct foo * self)
 {
 	return objBuffer[line + GLError] = value;
 }
 
 	/* BalloonEnginePlugin>>#lineXDirectionOf: */
-static sqInt
-lineXDirectionOf(sqInt line)
+static sqIntlineXDirectionOf(sqInt line, struct foo * self)
 {
 	return objBuffer[line + GLXDirection];
 }
 
 	/* BalloonEnginePlugin>>#lineXDirectionOf:put: */
-static sqInt
-lineXDirectionOfput(sqInt line, sqInt value)
+static sqIntlineXDirectionOfput(sqInt line, sqInt value, struct foo * self)
 {
 	return objBuffer[line + GLXDirection] = value;
 }
 
 	/* BalloonEnginePlugin>>#lineXIncrementOf: */
-static sqInt
-lineXIncrementOf(sqInt line)
+static sqIntlineXIncrementOf(sqInt line, struct foo * self)
 {
 	return objBuffer[line + GLXIncrement];
 }
 
 	/* BalloonEnginePlugin>>#lineXIncrementOf:put: */
-static sqInt
-lineXIncrementOfput(sqInt line, sqInt value)
+static sqIntlineXIncrementOfput(sqInt line, sqInt value, struct foo * self)
 {
 	return objBuffer[line + GLXIncrement] = value;
 }
 
 	/* BalloonEnginePlugin>>#lineYDirectionOf: */
-static sqInt
-lineYDirectionOf(sqInt line)
+static sqIntlineYDirectionOf(sqInt line, struct foo * self)
 {
 	return objBuffer[line + GLYDirection];
 }
 
 	/* BalloonEnginePlugin>>#lineYDirectionOf:put: */
-static sqInt
-lineYDirectionOfput(sqInt line, sqInt value)
+static sqIntlineYDirectionOfput(sqInt line, sqInt value, struct foo * self)
 {
 	return objBuffer[line + GLYDirection] = value;
 }
@@ -6175,8 +5927,7 @@ lineYDirectionOfput(sqInt line, sqInt value)
 	If wideFlag is set then make sure the curve is monoton in X. */
 
 	/* BalloonEnginePlugin>>#loadAndSubdivideBezierFrom:via:to:isWide: */
-static sqInt
-loadAndSubdivideBezierFromviatoisWide(int *point1, int *point2, int *point3, sqInt wideFlag)
+static sqIntloadAndSubdivideBezierFromviatoisWide(int *point1, int *point2, int *point3, sqInt wideFlag, struct foo * self)
 {
     sqInt bz1;
     sqInt bz2;
@@ -6191,7 +5942,7 @@ loadAndSubdivideBezierFromviatoisWide(int *point1, int *point2, int *point3, sqI
     sqInt index8;
 
 	/* begin allocateBezierStackEntry */
-	if (!(needAvailableSpace(6))) {
+	if (!(needAvailableSpace(6, self))) {
 		goto l8;
 	}
 	/* begin wbTopPut: */
@@ -6219,9 +5970,9 @@ loadAndSubdivideBezierFromviatoisWide(int *point1, int *point2, int *point3, sqI
 	/* begin wbStackValue:put: */
 	index8 = (((workBuffer[GWSize]) - (workBuffer[GWBufferTop])) - bz1) + 5;
 	workBuffer[(workBuffer[GWBufferTop]) + index8] = (point3[1]);
-	index2 = (bz2 = subdivideToBeMonotoninX(bz1, wideFlag));
+	index2 = (bz2 = subdivideToBeMonotoninX(bz1, wideFlag, self));
 	for (index = bz1; index <= bz2; index += 6) {
-		index1 = subdivideBezierFrom(index);
+		index1 = subdivideBezierFrom(index, self);
 		if (index1 > index2) {
 			index2 = index1;
 		}
@@ -6233,8 +5984,7 @@ loadAndSubdivideBezierFromviatoisWide(int *point1, int *point2, int *point3, sqI
 }
 
 	/* BalloonEnginePlugin>>#loadArrayPolygon:nPoints:fill:lineWidth:lineFill: */
-static sqInt
-loadArrayPolygonnPointsfilllineWidthlineFill(sqInt points, sqInt nPoints, sqInt fillIndex, sqInt lineWidth, sqInt lineFill)
+static sqIntloadArrayPolygonnPointsfilllineWidthlineFill(sqInt points, sqInt nPoints, sqInt fillIndex, sqInt lineWidth, sqInt lineFill, struct foo * self)
 {
     sqInt i;
     int *point;
@@ -6266,15 +6016,15 @@ loadArrayPolygonnPointsfilllineWidthlineFill(sqInt points, sqInt nPoints, sqInt 
     double yValue2;
     double yValue3;
 
-	loadPointfrom(((int *) (workBuffer + GWPoint1)), fetchPointerofObject(0, points, interpreterProxy->interpreterState));
-	if (failed(interpreterProxy->interpreterState)) {
+	loadPointfrom(((int *) (workBuffer + GWPoint1)), fetchPointerofObject(0, points, self), self);
+	if (failed(self)) {
 		return null;
 	}
 	x0 = (((int *) (workBuffer + GWPoint1)))[0];
 	y0 = (((int *) (workBuffer + GWPoint1)))[1];
 	for (i = 1; i < nPoints; i += 1) {
-		loadPointfrom(((int *) (workBuffer + GWPoint1)), fetchPointerofObject(i, points, interpreterProxy->interpreterState));
-		if (failed(interpreterProxy->interpreterState)) {
+		loadPointfrom(((int *) (workBuffer + GWPoint1)), fetchPointerofObject(i, points, self), self);
+		if (failed(self)) {
 			return null;
 		}
 		x1 = (((int *) (workBuffer + GWPoint1)))[0];
@@ -6376,7 +6126,7 @@ loadArrayPolygonnPointsfilllineWidthlineFill(sqInt points, sqInt nPoints, sqInt 
 				point3[1] = (((point3[1]) + (workBuffer[GWDestOffsetY])) * (workBuffer[GWAALevel]));
 			}
 		}
-		loadWideLinefromtolineFillleftFillrightFill(lineWidth, ((int *) (workBuffer + GWPoint1)), ((int *) (workBuffer + GWPoint2)), lineFill, fillIndex, 0);
+		loadWideLinefromtolineFillleftFillrightFill(lineWidth, ((int *) (workBuffer + GWPoint1)), ((int *) (workBuffer + GWPoint2)), lineFill, fillIndex, 0, self);
 		if (engineStopped) {
 			return null;
 		}
@@ -6387,8 +6137,7 @@ loadArrayPolygonnPointsfilllineWidthlineFill(sqInt points, sqInt nPoints, sqInt 
 }
 
 	/* BalloonEnginePlugin>>#loadArrayShape:nSegments:fill:lineWidth:lineFill: */
-static sqInt
-loadArrayShapenSegmentsfilllineWidthlineFill(sqInt points, sqInt nSegments, sqInt fillIndex, sqInt lineWidth, sqInt lineFill)
+static sqIntloadArrayShapenSegmentsfilllineWidthlineFill(sqInt points, sqInt nSegments, sqInt fillIndex, sqInt lineWidth, sqInt lineFill, struct foo * self)
 {
     sqInt i;
     int *point;
@@ -6425,13 +6174,13 @@ loadArrayShapenSegmentsfilllineWidthlineFill(sqInt points, sqInt nSegments, sqIn
     double yValue3;
 
 	for (i = 0; i < nSegments; i += 1) {
-		pointOop = fetchPointerofObject(i * 3, points, interpreterProxy->interpreterState);
-		loadPointfrom(((int *) (workBuffer + GWPoint1)), pointOop);
-		pointOop = fetchPointerofObject((i * 3) + 1, points, interpreterProxy->interpreterState);
-		loadPointfrom(((int *) (workBuffer + GWPoint2)), pointOop);
-		pointOop = fetchPointerofObject((i * 3) + 2, points, interpreterProxy->interpreterState);
-		loadPointfrom(((int *) (workBuffer + GWPoint3)), pointOop);
-		if (failed(interpreterProxy->interpreterState)) {
+		pointOop = fetchPointerofObject(i * 3, points, self);
+		loadPointfrom(((int *) (workBuffer + GWPoint1)), pointOop, self);
+		pointOop = fetchPointerofObject((i * 3) + 1, points, self);
+		loadPointfrom(((int *) (workBuffer + GWPoint2)), pointOop, self);
+		pointOop = fetchPointerofObject((i * 3) + 2, points, self);
+		loadPointfrom(((int *) (workBuffer + GWPoint3)), pointOop, self);
+		if (failed(self)) {
 			return null;
 		}
 		/* begin transformPoints: */
@@ -6539,17 +6288,17 @@ loadArrayShapenSegmentsfilllineWidthlineFill(sqInt points, sqInt nSegments, sqIn
 		 && (x1 == y1))
 		 || ((x1 == x2)
 		 && (y1 == y2))) {
-			loadWideLinefromtolineFillleftFillrightFill(lineWidth, ((int *) (workBuffer + GWPoint1)), ((int *) (workBuffer + GWPoint3)), lineFill, fillIndex, 0);
+			loadWideLinefromtolineFillleftFillrightFill(lineWidth, ((int *) (workBuffer + GWPoint1)), ((int *) (workBuffer + GWPoint3)), lineFill, fillIndex, 0, self);
 		}
 		else {
 
 			/* Need bezier */
 			segs = loadAndSubdivideBezierFromviatoisWide(((int *) (workBuffer + GWPoint1)), ((int *) (workBuffer + GWPoint2)), ((int *) (workBuffer + GWPoint3)), (lineWidth != 0)
-			 && (lineFill != 0));
+			 && (lineFill != 0), self);
 			if (engineStopped) {
 				return null;
 			}
-			loadWideBezierlineFillleftFillrightFilln(lineWidth, lineFill, fillIndex, 0, segs);
+			loadWideBezierlineFillleftFillrightFilln(lineWidth, lineFill, fillIndex, 0, segs, self);
 		}
 		if (engineStopped) {
 			return null;
@@ -6562,23 +6311,22 @@ loadArrayShapenSegmentsfilllineWidthlineFill(sqInt points, sqInt nSegments, sqIn
 /*	Load a transformation from the given array. */
 
 	/* BalloonEngineBase>>#loadArrayTransformFrom:into:length: */
-static sqInt
-loadArrayTransformFromintolength(sqInt transformOop, float *destPtr, sqInt n)
+static sqIntloadArrayTransformFromintolength(sqInt transformOop, float *destPtr, sqInt n, struct foo * self)
 {
     sqInt i;
     sqInt value;
 
 	for (i = 0; i < n; i += 1) {
-		value = fetchPointerofObject(i, transformOop, interpreterProxy->interpreterState);
-		if (!((isIntegerObject(value, interpreterProxy->interpreterState))
-			 || (isFloatObject(value, interpreterProxy->interpreterState)))) {
-			return primitiveFail(interpreterProxy->interpreterState);
+		value = fetchPointerofObject(i, transformOop, self);
+		if (!((isIntegerObject(value, self))
+			 || (isFloatObject(value, self)))) {
+			return primitiveFail(self);
 		}
-		if (isIntegerObject(value, interpreterProxy->interpreterState)) {
-			destPtr[i] = (((float) (((double) (integerValueOf(value, interpreterProxy->interpreterState)) ))));
+		if (isIntegerObject(value, self)) {
+			destPtr[i] = (((float) (((double) (integerValueOf(value, self)) ))));
 		}
 		else {
-			destPtr[i] = (((float) (floatValueOf(value, interpreterProxy->interpreterState))));
+			destPtr[i] = (((float) (floatValueOf(value, self))));
 		}
 	}
 	return 0;
@@ -6588,8 +6336,7 @@ loadArrayTransformFromintolength(sqInt transformOop, float *destPtr, sqInt n)
 /*	Initialize the bezier segment stored on the stack */
 
 	/* BalloonEnginePlugin>>#loadBezier:segment:leftFill:rightFill:offset: */
-static sqInt
-loadBeziersegmentleftFillrightFilloffset(sqInt bezier, sqInt index, sqInt leftFillIndex, sqInt rightFillIndex, sqInt yOffset)
+static sqIntloadBeziersegmentleftFillrightFilloffset(sqInt bezier, sqInt index, sqInt leftFillIndex, sqInt rightFillIndex, sqInt yOffset, struct foo * self)
 {
     sqInt index1;
     sqInt index2;
@@ -6670,13 +6417,12 @@ loadBeziersegmentleftFillrightFilloffset(sqInt bezier, sqInt index, sqInt leftFi
 }
 
 	/* BalloonEngineBase>>#loadBitBltFrom: */
-static sqInt
-loadBitBltFrom(sqInt bbObj, struct foo * self)
+static sqIntloadBitBltFrom(sqInt bbObj, struct foo * self)
 {
 	if (loadBBFn == 0) {
 
 		/* We need copyBits here so try to load it implicitly */
-		if (!(initialiseModule())) {
+		if (!(initialiseModule(self))) {
 			return 0;
 		}
 	}
@@ -6687,8 +6433,7 @@ loadBitBltFrom(sqInt bbObj, struct foo * self)
 /*	Load the bitmap fill. */
 
 	/* BalloonEnginePlugin>>#loadBitmapFill:colormap:tile:from:along:normal:xIndex: */
-static sqInt
-loadBitmapFillcolormaptilefromalongnormalxIndex(sqInt formOop, sqInt cmOop, sqInt tileFlag, int *point1, int *point2, int *point3, sqInt xIndex)
+static sqIntloadBitmapFillcolormaptilefromalongnormalxIndex(sqInt formOop, sqInt cmOop, sqInt tileFlag, int *point1, int *point2, int *point3, sqInt xIndex, struct foo * self)
 {
     sqInt bmBits;
     sqInt bmBitsSize;
@@ -6705,53 +6450,53 @@ loadBitmapFillcolormaptilefromalongnormalxIndex(sqInt formOop, sqInt cmOop, sqIn
     sqInt i;
     sqInt ppw;
 
-	if (cmOop == (nilObject(interpreterProxy->interpreterState))) {
+	if (cmOop == (nilObject(self))) {
 		cmSize = 0;
 		cmBits = null;
 	}
 	else {
-		if (!((fetchClassOf(cmOop, interpreterProxy->interpreterState)) == (classBitmap(interpreterProxy->interpreterState)))) {
-			return primitiveFail(interpreterProxy->interpreterState);
+		if (!((fetchClassOf(cmOop, self)) == (classBitmap(self)))) {
+			return primitiveFail(self);
 		}
-		cmSize = slotSizeOf(cmOop, interpreterProxy->interpreterState);
-		cmBits = firstIndexableField(cmOop, interpreterProxy->interpreterState);
+		cmSize = slotSizeOf(cmOop, self);
+		cmBits = firstIndexableField(cmOop, self);
 	}
-	if (!(isPointers(formOop, interpreterProxy->interpreterState))) {
-		return primitiveFail(interpreterProxy->interpreterState);
+	if (!(isPointers(formOop, self))) {
+		return primitiveFail(self);
 	}
-	if ((slotSizeOf(formOop, interpreterProxy->interpreterState)) < 5) {
-		return primitiveFail(interpreterProxy->interpreterState);
+	if ((slotSizeOf(formOop, self)) < 5) {
+		return primitiveFail(self);
 	}
-	bmBits = fetchPointerofObject(0, formOop, interpreterProxy->interpreterState);
-	if (!((fetchClassOf(bmBits, interpreterProxy->interpreterState)) == (classBitmap(interpreterProxy->interpreterState)))) {
-		return primitiveFail(interpreterProxy->interpreterState);
+	bmBits = fetchPointerofObject(0, formOop, self);
+	if (!((fetchClassOf(bmBits, self)) == (classBitmap(self)))) {
+		return primitiveFail(self);
 	}
-	bmBitsSize = slotSizeOf(bmBits, interpreterProxy->interpreterState);
-	bmWidth = fetchIntegerofObject(1, formOop, interpreterProxy->interpreterState);
-	bmHeight = fetchIntegerofObject(2, formOop, interpreterProxy->interpreterState);
-	bmDepth = fetchIntegerofObject(3, formOop, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	bmBitsSize = slotSizeOf(bmBits, self);
+	bmWidth = fetchIntegerofObject(1, formOop, self);
+	bmHeight = fetchIntegerofObject(2, formOop, self);
+	bmDepth = fetchIntegerofObject(3, formOop, self);
+	if (failed(self)) {
 		return null;
 	}
 	if (!((bmWidth >= 0)
 		 && (bmHeight >= 0))) {
-		return primitiveFail(interpreterProxy->interpreterState);
+		return primitiveFail(self);
 	}
 	if (!((((((bmDepth == 32) || (bmDepth == 8)) || (bmDepth == 16)) || (bmDepth == 1)) || (bmDepth == 2)) || (bmDepth == 4))) {
-		return primitiveFail(interpreterProxy->interpreterState);
+		return primitiveFail(self);
 	}
 	if (!((cmSize == 0)
 		 || (cmSize == (1U << bmDepth)))) {
-		return primitiveFail(interpreterProxy->interpreterState);
+		return primitiveFail(self);
 	}
 	ppw = 32 / bmDepth;
 	bmRaster = (bmWidth + (ppw - 1)) / ppw;
 	if (!(bmBitsSize == (bmRaster * bmHeight))) {
-		return primitiveFail(interpreterProxy->interpreterState);
+		return primitiveFail(self);
 	}
 	/* begin allocateBitmapFill:colormap: */
 	fillSize = GBMBaseSize + cmSize;
-	if (!(allocateObjEntry(fillSize))) {
+	if (!(allocateObjEntry(fillSize, self))) {
 		bmFill = 0;
 		goto l11;
 	}
@@ -6766,7 +6511,7 @@ loadBitmapFillcolormaptilefromalongnormalxIndex(sqInt formOop, sqInt cmOop, sqIn
 	cm = (objBuffer + fill) + GBColormapOffset;
 	if ((workBuffer[GWHasColorTransform]) != 0) {
 		for (i = 0; i < cmSize; i += 1) {
-			cm[i] = (transformColor(cmBits[i]));
+			cm[i] = (transformColor(cmBits[i], self));
 		}
 	}
 	else {
@@ -6795,7 +6540,7 @@ loadBitmapFillcolormaptilefromalongnormalxIndex(sqInt formOop, sqInt cmOop, sqIn
 	objBuffer[bmFill + GBTileFlag] = tileFlag;
 	/* begin obj:at:put: */
 	objBuffer[bmFill + GEObjectIndex] = xIndex;
-	loadFillOrientationfromalongnormalwidthheight(bmFill, point1, point2, point3, bmWidth, bmHeight);
+	loadFillOrientationfromalongnormalwidthheight(bmFill, point1, point2, point3, bmWidth, bmHeight, self);
 	return bmFill;
 }
 
@@ -6803,8 +6548,7 @@ loadBitmapFillcolormaptilefromalongnormalxIndex(sqInt formOop, sqInt cmOop, sqIn
 /*	Note: Assumes that the contents of formArray has been checked before */
 
 	/* BalloonEnginePlugin>>#loadBitsFrom: */
-static int *
-loadBitsFrom(sqInt bmFill)
+static int *loadBitsFrom(sqInt bmFill, struct foo * self)
 {
     sqInt bitsLen;
     sqInt bitsOop;
@@ -6813,16 +6557,16 @@ loadBitsFrom(sqInt bmFill)
 
 	/* begin obj:at: */
 	xIndex = objBuffer[bmFill + GEObjectIndex];
-	if (xIndex > (slotSizeOf(formArray, interpreterProxy->interpreterState))) {
+	if (xIndex > (slotSizeOf(formArray, self))) {
 		return null;
 	}
-	formOop = fetchPointerofObject(xIndex, formArray, interpreterProxy->interpreterState);
-	bitsOop = fetchPointerofObject(0, formOop, interpreterProxy->interpreterState);
-	bitsLen = slotSizeOf(bitsOop, interpreterProxy->interpreterState);
+	formOop = fetchPointerofObject(xIndex, formArray, self);
+	bitsOop = fetchPointerofObject(0, formOop, self);
+	bitsLen = slotSizeOf(bitsOop, self);
 	if (!(bitsLen == (objBuffer[bmFill + GBBitmapSize]))) {
 		return null;
 	}
-	return firstIndexableField(bitsOop, interpreterProxy->interpreterState);
+	return firstIndexableField(bitsOop, self);
 }
 
 
@@ -6830,8 +6574,7 @@ loadBitsFrom(sqInt bmFill)
 	Return true if the matrix is not nil, false otherwise */
 
 	/* BalloonEngineBase>>#loadColorTransformFrom: */
-static sqInt
-loadColorTransformFrom(sqInt transformOop)
+static sqIntloadColorTransformFrom(sqInt transformOop, struct foo * self)
 {
     sqInt okay;
     float *transform;
@@ -6840,7 +6583,7 @@ loadColorTransformFrom(sqInt transformOop)
 	transform = ((float *) (workBuffer + GWColorTransform));
 	/* begin hasColorTransformPut: */
 	workBuffer[GWHasColorTransform] = 0;
-	okay = loadTransformFromintolength(transformOop, transform, 8);
+	okay = loadTransformFromintolength(transformOop, transform, 8, self);
 	if (!okay) {
 		return 0;
 	}
@@ -6857,8 +6600,7 @@ loadColorTransformFrom(sqInt transformOop)
 /*	Load the compressed segment identified by segment index */
 
 	/* BalloonEnginePlugin>>#loadCompressedSegment:from:short:leftFill:rightFill:lineWidth:lineColor: */
-static sqInt
-loadCompressedSegmentfromshortleftFillrightFilllineWidthlineColor(sqInt segmentIndex, sqInt points, sqInt pointsShort, sqInt leftFill, sqInt rightFill, sqInt lineWidth, sqInt lineFill)
+static sqIntloadCompressedSegmentfromshortleftFillrightFilllineWidthlineColor(sqInt segmentIndex, sqInt points, sqInt pointsShort, sqInt leftFill, sqInt rightFill, sqInt lineWidth, sqInt lineFill, struct foo * self)
 {
     sqInt index;
     int *point;
@@ -7058,7 +6800,7 @@ loadCompressedSegmentfromshortleftFillrightFilllineWidthlineColor(sqInt segmentI
 				point3[1] = (((point3[1]) + (workBuffer[GWDestOffsetY])) * (workBuffer[GWAALevel]));
 			}
 		}
-		return loadWideLinefromtolineFillleftFillrightFill(lineWidth, ((int *) (workBuffer + GWPoint1)), ((int *) (workBuffer + GWPoint2)), lineFill, leftFill, rightFill);
+		return loadWideLinefromtolineFillleftFillrightFill(lineWidth, ((int *) (workBuffer + GWPoint1)), ((int *) (workBuffer + GWPoint2)), lineFill, leftFill, rightFill, self);
 	}
 	(((int *) (workBuffer + GWPoint1)))[0] = x0;
 	(((int *) (workBuffer + GWPoint1)))[1] = y0;
@@ -7160,11 +6902,11 @@ loadCompressedSegmentfromshortleftFillrightFilllineWidthlineColor(sqInt segmentI
 		}
 	}
 	segs = loadAndSubdivideBezierFromviatoisWide(((int *) (workBuffer + GWPoint1)), ((int *) (workBuffer + GWPoint2)), ((int *) (workBuffer + GWPoint3)), (lineWidth != 0)
-	 && (lineFill != 0));
+	 && (lineFill != 0), self);
 	if (engineStopped) {
 		return null;
 	}
-	loadWideBezierlineFillleftFillrightFilln(lineWidth, lineFill, leftFill, rightFill, segs);
+	loadWideBezierlineFillleftFillrightFilln(lineWidth, lineFill, leftFill, rightFill, segs, self);
 	return 0;
 }
 
@@ -7174,8 +6916,7 @@ loadCompressedSegmentfromshortleftFillrightFilllineWidthlineColor(sqInt segmentI
 	 */
 
 	/* BalloonEnginePlugin>>#loadCompressedShape:segments:leftFills:rightFills:lineWidths:lineFills:fillIndexList:pointShort: */
-static sqInt
-loadCompressedShapesegmentsleftFillsrightFillslineWidthslineFillsfillIndexListpointShort(int *points, sqInt nSegments, int *leftFills, int *rightFills, int *lineWidths, int *lineFills, int *fillIndexList, sqInt pointsShort)
+static sqIntloadCompressedShapesegmentsleftFillsrightFillslineWidthslineFillsfillIndexListpointShort(int *points, sqInt nSegments, int *leftFills, int *rightFills, int *lineWidths, int *lineFills, int *fillIndexList, sqInt pointsShort, struct foo * self)
 {
     sqInt i;
     sqInt index;
@@ -7262,7 +7003,7 @@ loadCompressedShapesegmentsleftFillsrightFillslineWidthslineFillsfillIndexListpo
 			leftValue = ((((int *) leftFills))[leftRun]) & 0xFFFF;
 			if (!(leftValue == 0)) {
 				leftValue = fillIndexList[leftValue - 1];
-				leftValue = transformColor(leftValue);
+				leftValue = transformColor(leftValue, self);
 				if (engineStopped) {
 					return null;
 				}
@@ -7274,7 +7015,7 @@ loadCompressedShapesegmentsleftFillsrightFillslineWidthslineFillsfillIndexListpo
 			rightValue = ((((int *) rightFills))[rightRun]) & 0xFFFF;
 			if (!(rightValue == 0)) {
 				rightValue = fillIndexList[rightValue - 1];
-				rightValue = transformColor(rightValue);
+				rightValue = transformColor(rightValue, self);
 			}
 		}
 		if (((widthLength -= 1)) <= 0) {
@@ -7282,7 +7023,7 @@ loadCompressedShapesegmentsleftFillsrightFillslineWidthslineFillsfillIndexListpo
 			widthLength = ((usqInt) ((((int *) lineWidths))[widthRun]) >> 16);
 			widthValue = ((((int *) lineWidths))[widthRun]) & 0xFFFF;
 			if (!(widthValue == 0)) {
-				widthValue = transformWidth(widthValue);
+				widthValue = transformWidth(widthValue, self);
 			}
 		}
 		if (((lineFillLength -= 1)) <= 0) {
@@ -7433,7 +7174,7 @@ loadCompressedShapesegmentsleftFillsrightFillslineWidthslineFillsfillIndexListpo
 					point3[1] = (((point3[1]) + (workBuffer[GWDestOffsetY])) * (workBuffer[GWAALevel]));
 				}
 			}
-			loadWideLinefromtolineFillleftFillrightFill(widthValue, ((int *) (workBuffer + GWPoint1)), ((int *) (workBuffer + GWPoint2)), lineFillValue, leftValue, rightValue);
+			loadWideLinefromtolineFillleftFillrightFill(widthValue, ((int *) (workBuffer + GWPoint1)), ((int *) (workBuffer + GWPoint2)), lineFillValue, leftValue, rightValue, self);
 			goto l15;
 		}
 		(((int *) (workBuffer + GWPoint1)))[0] = x0;
@@ -7536,11 +7277,11 @@ loadCompressedShapesegmentsleftFillsrightFillslineWidthslineFillsfillIndexListpo
 			}
 		}
 		segs = loadAndSubdivideBezierFromviatoisWide(((int *) (workBuffer + GWPoint1)), ((int *) (workBuffer + GWPoint2)), ((int *) (workBuffer + GWPoint3)), (widthValue != 0)
-		 && (lineFillValue != 0));
+		 && (lineFillValue != 0), self);
 		if (engineStopped) {
 			goto l15;
 		}
-		loadWideBezierlineFillleftFillrightFilln(widthValue, lineFillValue, leftValue, rightValue, segs);
+		loadWideBezierlineFillleftFillrightFilln(widthValue, lineFillValue, leftValue, rightValue, segs, self);
 	l15:	/* end loadCompressedSegment:from:short:leftFill:rightFill:lineWidth:lineColor: */;
 		if (engineStopped) {
 			return null;
@@ -7550,8 +7291,7 @@ loadCompressedShapesegmentsleftFillsrightFillslineWidthslineFillsfillIndexListpo
 }
 
 	/* BalloonEngineBase>>#loadEdgeStateFrom: */
-static sqInt
-loadEdgeStateFrom(sqInt edgeOop)
+static sqIntloadEdgeStateFrom(sqInt edgeOop, struct foo * self)
 {
     sqInt edge;
     sqInt value;
@@ -7561,20 +7301,20 @@ loadEdgeStateFrom(sqInt edgeOop)
 
 	/* begin lastExportedEdgeGet */
 	edge = workBuffer[GWLastExportedEdge];
-	if ((slotSizeOf(edgeOop, interpreterProxy->interpreterState)) < ETBalloonEdgeDataSize) {
+	if ((slotSizeOf(edgeOop, self)) < ETBalloonEdgeDataSize) {
 		return null;
 	}
 	/* begin edgeXValueOf:put: */
-	value = fetchIntegerofObject(ETXValueIndex, edgeOop, interpreterProxy->interpreterState);
+	value = fetchIntegerofObject(ETXValueIndex, edgeOop, self);
 	objBuffer[edge + GEXValue] = value;
 	/* begin edgeYValueOf:put: */
-	value1 = fetchIntegerofObject(ETYValueIndex, edgeOop, interpreterProxy->interpreterState);
+	value1 = fetchIntegerofObject(ETYValueIndex, edgeOop, self);
 	objBuffer[edge + GEYValue] = value1;
 	/* begin edgeZValueOf:put: */
-	value2 = fetchIntegerofObject(ETZValueIndex, edgeOop, interpreterProxy->interpreterState);
+	value2 = fetchIntegerofObject(ETZValueIndex, edgeOop, self);
 	objBuffer[edge + GEZValue] = value2;
 	/* begin edgeNumLinesOf:put: */
-	value3 = fetchIntegerofObject(ETLinesIndex, edgeOop, interpreterProxy->interpreterState);
+	value3 = fetchIntegerofObject(ETLinesIndex, edgeOop, self);
 	objBuffer[edge + GENumLines] = value3;
 	return edge;
 }
@@ -7584,8 +7324,7 @@ loadEdgeStateFrom(sqInt edgeOop)
 	Return true if the matrix is not nil, false otherwise */
 
 	/* BalloonEngineBase>>#loadEdgeTransformFrom: */
-static sqInt
-loadEdgeTransformFrom(sqInt transformOop)
+static sqIntloadEdgeTransformFrom(sqInt transformOop, struct foo * self)
 {
     sqInt okay;
     float *transform;
@@ -7594,8 +7333,8 @@ loadEdgeTransformFrom(sqInt transformOop)
 	workBuffer[GWHasEdgeTransform] = 0;
 	/* begin edgeTransform */
 	transform = ((float *) (workBuffer + GWEdgeTransform));
-	okay = loadTransformFromintolength(transformOop, transform, 6);
-	if (failed(interpreterProxy->interpreterState)) {
+	okay = loadTransformFromintolength(transformOop, transform, 6, self);
+	if (failed(self)) {
 		return null;
 	}
 	if (!okay) {
@@ -7612,8 +7351,7 @@ loadEdgeTransformFrom(sqInt transformOop)
 /*	Transform the points */
 
 	/* BalloonEnginePlugin>>#loadFillOrientation:from:along:normal:width:height: */
-static sqInt
-loadFillOrientationfromalongnormalwidthheight(sqInt fill, int *point1, int *point2, int *point3, sqInt fillWidth, sqInt fillHeight)
+static sqIntloadFillOrientationfromalongnormalwidthheight(sqInt fill, int *point1, int *point2, int *point3, sqInt fillWidth, sqInt fillHeight, struct foo * self)
 {
     int dirX;
     int dirY;
@@ -7748,8 +7486,7 @@ loadFillOrientationfromalongnormalwidthheight(sqInt fill, int *point1, int *poin
 /*	Check all the forms from arrayOop. */
 
 	/* BalloonEngineBase>>#loadFormsFrom: */
-static sqInt
-loadFormsFrom(sqInt arrayOop)
+static sqIntloadFormsFrom(sqInt arrayOop, struct foo * self)
 {
     sqInt bmBits;
     sqInt bmBitsSize;
@@ -7762,27 +7499,27 @@ loadFormsFrom(sqInt arrayOop)
     sqInt iLimiT;
     sqInt ppw;
 
-	if (!(isArray(arrayOop, interpreterProxy->interpreterState))) {
+	if (!(isArray(arrayOop, self))) {
 		return 0;
 	}
 	formArray = arrayOop;
-	for (i = 0, iLimiT = ((slotSizeOf(formArray, interpreterProxy->interpreterState)) - 1); i <= iLimiT; i += 1) {
-		formOop = fetchPointerofObject(i, formArray, interpreterProxy->interpreterState);
-		if (!(isPointers(formOop, interpreterProxy->interpreterState))) {
+	for (i = 0, iLimiT = ((slotSizeOf(formArray, self)) - 1); i <= iLimiT; i += 1) {
+		formOop = fetchPointerofObject(i, formArray, self);
+		if (!(isPointers(formOop, self))) {
 			return 0;
 		}
-		if ((slotSizeOf(formOop, interpreterProxy->interpreterState)) < 5) {
+		if ((slotSizeOf(formOop, self)) < 5) {
 			return 0;
 		}
-		bmBits = fetchPointerofObject(0, formOop, interpreterProxy->interpreterState);
-		if (!((fetchClassOf(bmBits, interpreterProxy->interpreterState)) == (classBitmap(interpreterProxy->interpreterState)))) {
+		bmBits = fetchPointerofObject(0, formOop, self);
+		if (!((fetchClassOf(bmBits, self)) == (classBitmap(self)))) {
 			return 0;
 		}
-		bmBitsSize = slotSizeOf(bmBits, interpreterProxy->interpreterState);
-		bmWidth = fetchIntegerofObject(1, formOop, interpreterProxy->interpreterState);
-		bmHeight = fetchIntegerofObject(2, formOop, interpreterProxy->interpreterState);
-		bmDepth = fetchIntegerofObject(3, formOop, interpreterProxy->interpreterState);
-		if (failed(interpreterProxy->interpreterState)) {
+		bmBitsSize = slotSizeOf(bmBits, self);
+		bmWidth = fetchIntegerofObject(1, formOop, self);
+		bmHeight = fetchIntegerofObject(2, formOop, self);
+		bmDepth = fetchIntegerofObject(3, formOop, self);
+		if (failed(self)) {
 			return 0;
 		}
 		if (!((bmWidth >= 0)
@@ -7802,8 +7539,7 @@ loadFormsFrom(sqInt arrayOop)
 /*	Load the gradient fill as defined by the color ramp. */
 
 	/* BalloonEnginePlugin>>#loadGradientFill:from:along:normal:isRadial: */
-static sqInt
-loadGradientFillfromalongnormalisRadial(sqInt rampOop, int *point1, int *point2, int *point3, sqInt isRadial)
+static sqIntloadGradientFillfromalongnormalisRadial(sqInt rampOop, int *point1, int *point2, int *point3, sqInt isRadial, struct foo * self)
 {
     sqInt fill;
     sqInt fill1;
@@ -7813,14 +7549,14 @@ loadGradientFillfromalongnormalisRadial(sqInt rampOop, int *point1, int *point2,
     int *rampPtr;
     sqInt rampWidth;
 
-	if (!((fetchClassOf(rampOop, interpreterProxy->interpreterState)) == (classBitmap(interpreterProxy->interpreterState)))) {
-		return primitiveFail(interpreterProxy->interpreterState);
+	if (!((fetchClassOf(rampOop, self)) == (classBitmap(self)))) {
+		return primitiveFail(self);
 	}
-	rampWidth = slotSizeOf(rampOop, interpreterProxy->interpreterState);
+	rampWidth = slotSizeOf(rampOop, self);
 	/* begin allocateGradientFill:rampWidth:isRadial: */
-	ramp = ((int *) (firstIndexableField(rampOop, interpreterProxy->interpreterState)));
+	ramp = ((int *) (firstIndexableField(rampOop, self)));
 	fillSize = GGBaseSize + rampWidth;
-	if (!(allocateObjEntry(fillSize))) {
+	if (!(allocateObjEntry(fillSize, self))) {
 		fill = 0;
 		goto l6;
 	}
@@ -7841,7 +7577,7 @@ loadGradientFillfromalongnormalisRadial(sqInt rampOop, int *point1, int *point2,
 	rampPtr = (objBuffer + fill1) + GFRampOffset;
 	if ((workBuffer[GWHasColorTransform]) != 0) {
 		for (i = 0; i < rampWidth; i += 1) {
-			rampPtr[i] = (transformColor(ramp[i]));
+			rampPtr[i] = (transformColor(ramp[i], self));
 		}
 	}
 	else {
@@ -7856,7 +7592,7 @@ loadGradientFillfromalongnormalisRadial(sqInt rampOop, int *point1, int *point2,
 	if (engineStopped) {
 		return null;
 	}
-	loadFillOrientationfromalongnormalwidthheight(fill, point1, point2, point3, rampWidth, rampWidth);
+	loadFillOrientationfromalongnormalwidthheight(fill, point1, point2, point3, rampWidth, rampWidth, self);
 	return fill;
 }
 
@@ -7864,8 +7600,7 @@ loadGradientFillfromalongnormalisRadial(sqInt rampOop, int *point1, int *point2,
 /*	Load the line defined by point1 and point2. */
 
 	/* BalloonEnginePlugin>>#loadLine:from:to:offset:leftFill:rightFill: */
-static sqInt
-loadLinefromtooffsetleftFillrightFill(sqInt line, int *point1, int *point2, sqInt yOffset, sqInt leftFill, sqInt rightFill)
+static sqIntloadLinefromtooffsetleftFillrightFill(sqInt line, int *point1, int *point2, sqInt yOffset, sqInt leftFill, sqInt rightFill, struct foo * self)
 {
     int *p1;
     int *p2;
@@ -7903,8 +7638,7 @@ loadLinefromtooffsetleftFillrightFill(sqInt line, int *point1, int *point2, sqIn
 }
 
 	/* BalloonEnginePlugin>>#loadOvalSegment:w:h:cx:cy: */
-static sqInt
-loadOvalSegmentwhcxcy(sqInt seg, sqInt w, sqInt h, sqInt cx, sqInt cy)
+static sqIntloadOvalSegmentwhcxcy(sqInt seg, sqInt w, sqInt h, sqInt cx, sqInt cy, struct foo * self)
 {
     sqInt x0;
     sqInt x1;
@@ -7915,19 +7649,19 @@ loadOvalSegmentwhcxcy(sqInt seg, sqInt w, sqInt h, sqInt cx, sqInt cy)
 
 
 	/* Load start point of segment */
-	x0 = ((sqInt)((((circleCosTable())[(seg * 2)]) * (((double) w ))) + cx));
-	y0 = ((sqInt)((((circleSinTable())[(seg * 2)]) * (((double) h ))) + cy));
+	x0 = ((sqInt)((((circleCosTable(self))[(seg * 2)]) * (((double) w ))) + cx));
+	y0 = ((sqInt)((((circleSinTable(self))[(seg * 2)]) * (((double) h ))) + cy));
 	(((int *) (workBuffer + GWPoint1)))[0] = x0;
 	(((int *) (workBuffer + GWPoint1)))[1] = y0;
-	x2 = ((sqInt)((((circleCosTable())[(seg * 2) + 2]) * (((double) w ))) + cx));
-	y2 = ((sqInt)((((circleSinTable())[(seg * 2) + 2]) * (((double) h ))) + cy));
+	x2 = ((sqInt)((((circleCosTable(self))[(seg * 2) + 2]) * (((double) w ))) + cx));
+	y2 = ((sqInt)((((circleSinTable(self))[(seg * 2) + 2]) * (((double) h ))) + cy));
 	(((int *) (workBuffer + GWPoint3)))[0] = x2;
 	(((int *) (workBuffer + GWPoint3)))[1] = y2;
-	x1 = ((sqInt)((((circleCosTable())[(seg * 2) + 1]) * (((double) w ))) + cx));
+	x1 = ((sqInt)((((circleCosTable(self))[(seg * 2) + 1]) * (((double) w ))) + cx));
 
 	/* NOTE: The intermediate point is the point ON the curve
 	   and not yet the control point (which is OFF the curve) */
-	y1 = ((sqInt)((((circleSinTable())[(seg * 2) + 1]) * (((double) h ))) + cy));
+	y1 = ((sqInt)((((circleSinTable(self))[(seg * 2) + 1]) * (((double) h ))) + cy));
 	x1 = (x1 * 2) - ((x0 + x2) / 2);
 	y1 = (y1 * 2) - ((y0 + y2) / 2);
 	(((int *) (workBuffer + GWPoint2)))[0] = x1;
@@ -7939,8 +7673,7 @@ loadOvalSegmentwhcxcy(sqInt seg, sqInt w, sqInt h, sqInt cx, sqInt cy)
 /*	Load a rectangular oval currently defined by point1/point2 */
 
 	/* BalloonEnginePlugin>>#loadOval:lineFill:leftFill:rightFill: */
-static sqInt
-loadOvallineFillleftFillrightFill(sqInt lineWidth, sqInt lineFill, sqInt leftFill, sqInt rightFill)
+static sqIntloadOvallineFillleftFillrightFill(sqInt lineWidth, sqInt lineFill, sqInt leftFill, sqInt rightFill, struct foo * self)
 {
     int cx;
     int cy;
@@ -7978,7 +7711,7 @@ loadOvallineFillleftFillrightFill(sqInt lineWidth, sqInt lineFill, sqInt leftFil
 	cx = (((((int *) (workBuffer + GWPoint2)))[0]) + ((((int *) (workBuffer + GWPoint1)))[0])) / 2;
 	cy = (((((int *) (workBuffer + GWPoint2)))[1]) + ((((int *) (workBuffer + GWPoint1)))[1])) / 2;
 	for (i = 0; i <= 15; i += 1) {
-		loadOvalSegmentwhcxcy(i, w, h, cx, cy);
+		loadOvalSegmentwhcxcy(i, w, h, cx, cy, self);
 		/* begin transformPoints: */
 		if (3 > 0) {
 			/* begin transformPoint: */
@@ -8073,11 +7806,11 @@ loadOvallineFillleftFillrightFill(sqInt lineWidth, sqInt lineFill, sqInt leftFil
 			}
 		}
 		nSegments = loadAndSubdivideBezierFromviatoisWide(((int *) (workBuffer + GWPoint1)), ((int *) (workBuffer + GWPoint2)), ((int *) (workBuffer + GWPoint3)), (lineWidth != 0)
-		 && (lineFill != 0));
+		 && (lineFill != 0), self);
 		if (engineStopped) {
 			return null;
 		}
-		loadWideBezierlineFillleftFillrightFilln(lineWidth, lineFill, leftFill, rightFill, nSegments);
+		loadWideBezierlineFillleftFillrightFilln(lineWidth, lineFill, leftFill, rightFill, nSegments, self);
 		if (engineStopped) {
 			return null;
 		}
@@ -8089,8 +7822,7 @@ loadOvallineFillleftFillrightFill(sqInt lineWidth, sqInt lineFill, sqInt leftFil
 /*	Load the int value from the given index in intArray */
 
 	/* BalloonEnginePlugin>>#loadPointIntAt:from: */
-static sqInt
-loadPointIntAtfrom(sqInt index, sqInt intArray)
+static sqIntloadPointIntAtfrom(sqInt index, sqInt intArray, struct foo * self)
 {
 	return (((int *) intArray))[index];
 }
@@ -8099,8 +7831,7 @@ loadPointIntAtfrom(sqInt index, sqInt intArray)
 /*	Load the short value from the given index in shortArray */
 
 	/* BalloonEnginePlugin>>#loadPointShortAt:from: */
-static short
-loadPointShortAtfrom(sqInt index, sqInt shortArray)
+static shortloadPointShortAtfrom(sqInt index, sqInt shortArray, struct foo * self)
 {
 	return (((short *) shortArray))[index];
 }
@@ -8109,42 +7840,40 @@ loadPointShortAtfrom(sqInt index, sqInt shortArray)
 /*	Load the contents of pointOop into pointArray */
 
 	/* BalloonEngineBase>>#loadPoint:from: */
-static sqInt
-loadPointfrom(int *pointArray, sqInt pointOop)
+static sqIntloadPointfrom(int *pointArray, sqInt pointOop, struct foo * self)
 {
     sqInt value;
 
-	if (!((fetchClassOf(pointOop, interpreterProxy->interpreterState)) == (classPoint(interpreterProxy->interpreterState)))) {
-		return primitiveFail(interpreterProxy->interpreterState);
+	if (!((fetchClassOf(pointOop, self)) == (classPoint(self)))) {
+		return primitiveFail(self);
 	}
-	value = fetchPointerofObject(0, pointOop, interpreterProxy->interpreterState);
-	if (!((isIntegerObject(value, interpreterProxy->interpreterState))
-		 || (isFloatObject(value, interpreterProxy->interpreterState)))) {
-		return primitiveFail(interpreterProxy->interpreterState);
+	value = fetchPointerofObject(0, pointOop, self);
+	if (!((isIntegerObject(value, self))
+		 || (isFloatObject(value, self)))) {
+		return primitiveFail(self);
 	}
-	if (isIntegerObject(value, interpreterProxy->interpreterState)) {
-		pointArray[0] = (integerValueOf(value, interpreterProxy->interpreterState));
-	}
-	else {
-		pointArray[0] = (((sqInt)(floatValueOf(value, interpreterProxy->interpreterState))));
-	}
-	value = fetchPointerofObject(1, pointOop, interpreterProxy->interpreterState);
-	if (!((isIntegerObject(value, interpreterProxy->interpreterState))
-		 || (isFloatObject(value, interpreterProxy->interpreterState)))) {
-		return primitiveFail(interpreterProxy->interpreterState);
-	}
-	if (isIntegerObject(value, interpreterProxy->interpreterState)) {
-		pointArray[1] = (integerValueOf(value, interpreterProxy->interpreterState));
+	if (isIntegerObject(value, self)) {
+		pointArray[0] = (integerValueOf(value, self));
 	}
 	else {
-		pointArray[1] = (((sqInt)(floatValueOf(value, interpreterProxy->interpreterState))));
+		pointArray[0] = (((sqInt)(floatValueOf(value, self))));
+	}
+	value = fetchPointerofObject(1, pointOop, self);
+	if (!((isIntegerObject(value, self))
+		 || (isFloatObject(value, self)))) {
+		return primitiveFail(self);
+	}
+	if (isIntegerObject(value, self)) {
+		pointArray[1] = (integerValueOf(value, self));
+	}
+	else {
+		pointArray[1] = (((sqInt)(floatValueOf(value, self))));
 	}
 	return 0;
 }
 
 	/* BalloonEnginePlugin>>#loadPolygon:nPoints:fill:lineWidth:lineFill:pointsShort: */
-static sqInt
-loadPolygonnPointsfilllineWidthlineFillpointsShort(int *points, sqInt nPoints, sqInt fillIndex, sqInt lineWidth, sqInt lineFill, sqInt isShort)
+static sqIntloadPolygonnPointsfilllineWidthlineFillpointsShort(int *points, sqInt nPoints, sqInt fillIndex, sqInt lineWidth, sqInt lineFill, sqInt isShort, struct foo * self)
 {
     sqInt i;
     int *point;
@@ -8298,7 +8027,7 @@ loadPolygonnPointsfilllineWidthlineFillpointsShort(int *points, sqInt nPoints, s
 				point3[1] = (((point3[1]) + (workBuffer[GWDestOffsetY])) * (workBuffer[GWAALevel]));
 			}
 		}
-		loadWideLinefromtolineFillleftFillrightFill(lineWidth, ((int *) (workBuffer + GWPoint1)), ((int *) (workBuffer + GWPoint2)), lineFill, fillIndex, 0);
+		loadWideLinefromtolineFillleftFillrightFill(lineWidth, ((int *) (workBuffer + GWPoint1)), ((int *) (workBuffer + GWPoint2)), lineFill, fillIndex, 0, self);
 		if (engineStopped) {
 			return null;
 		}
@@ -8312,13 +8041,12 @@ loadPolygonnPointsfilllineWidthlineFillpointsShort(int *points, sqInt nPoints, s
 /*	Load a rectangle currently defined by point1-point4 */
 
 	/* BalloonEnginePlugin>>#loadRectangle:lineFill:leftFill:rightFill: */
-static sqInt
-loadRectanglelineFillleftFillrightFill(sqInt lineWidth, sqInt lineFill, sqInt leftFill, sqInt rightFill)
+static sqIntloadRectanglelineFillleftFillrightFill(sqInt lineWidth, sqInt lineFill, sqInt leftFill, sqInt rightFill, struct foo * self)
 {
-	loadWideLinefromtolineFillleftFillrightFill(lineWidth, ((int *) (workBuffer + GWPoint1)), ((int *) (workBuffer + GWPoint2)), lineFill, leftFill, rightFill);
-	loadWideLinefromtolineFillleftFillrightFill(lineWidth, ((int *) (workBuffer + GWPoint2)), ((int *) (workBuffer + GWPoint3)), lineFill, leftFill, rightFill);
-	loadWideLinefromtolineFillleftFillrightFill(lineWidth, ((int *) (workBuffer + GWPoint3)), ((int *) (workBuffer + GWPoint4)), lineFill, leftFill, rightFill);
-	loadWideLinefromtolineFillleftFillrightFill(lineWidth, ((int *) (workBuffer + GWPoint4)), ((int *) (workBuffer + GWPoint1)), lineFill, leftFill, rightFill);
+	loadWideLinefromtolineFillleftFillrightFill(lineWidth, ((int *) (workBuffer + GWPoint1)), ((int *) (workBuffer + GWPoint2)), lineFill, leftFill, rightFill, self);
+	loadWideLinefromtolineFillleftFillrightFill(lineWidth, ((int *) (workBuffer + GWPoint2)), ((int *) (workBuffer + GWPoint3)), lineFill, leftFill, rightFill, self);
+	loadWideLinefromtolineFillleftFillrightFill(lineWidth, ((int *) (workBuffer + GWPoint3)), ((int *) (workBuffer + GWPoint4)), lineFill, leftFill, rightFill, self);
+	loadWideLinefromtolineFillleftFillrightFill(lineWidth, ((int *) (workBuffer + GWPoint4)), ((int *) (workBuffer + GWPoint1)), lineFill, leftFill, rightFill, self);
 	return 0;
 }
 
@@ -8327,38 +8055,37 @@ loadRectanglelineFillleftFillrightFill(sqInt lineWidth, sqInt lineFill, sqInt le
 	Answer 0 on success or a non-zero failure code on failure. */
 
 	/* BalloonEngineBase>>#loadRenderingState */
-static sqInt
-loadRenderingState(void)
+static sqIntloadRenderingState(struct foo * self)
 {
     sqInt edgeOop;
     sqInt failCode;
     sqInt fillOop;
     sqInt state;
 
-	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 2)) {
+	if (!((methodArgumentCount(self)) == 2)) {
 		return PrimErrBadNumArgs;
 	}
-	if (((failCode = quickLoadEngineFrom(stackValue(2, interpreterProxy->interpreterState)))) != 0) {
+	if (((failCode = quickLoadEngineFrom(stackValue(2, self), self))) != 0) {
 		return failCode;
 	}
-	fillOop = stackObjectValue(0, interpreterProxy->interpreterState);
-	edgeOop = stackObjectValue(1, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	fillOop = stackObjectValue(0, self);
+	edgeOop = stackObjectValue(1, self);
+	if (failed(self)) {
 		return PrimErrBadArgument;
 	}
-	if (!(((failCode = loadSpanBufferFrom(fetchPointerofObject(BESpanIndex, engine, interpreterProxy->interpreterState)))) == 0)) {
+	if (!(((failCode = loadSpanBufferFrom(fetchPointerofObject(BESpanIndex, engine, self), self))) == 0)) {
 		return failCode;
 	}
-	if (!(loadBitBltFrom(fetchPointerofObject(BEBitBltIndex, engine, interpreterProxy->interpreterState), interpreterProxy->interpreterState))) {
+	if (!(loadBitBltFrom(fetchPointerofObject(BEBitBltIndex, engine, self), self))) {
 		return GEFBitBltLoadFailed;
 	}
-	if (!(loadFormsFrom(fetchPointerofObject(BEFormsIndex, engine, interpreterProxy->interpreterState)))) {
+	if (!(loadFormsFrom(fetchPointerofObject(BEFormsIndex, engine, self), self))) {
 		return GEFFormLoadFailed;
 	}
-	if ((slotSizeOf(edgeOop, interpreterProxy->interpreterState)) < ETBalloonEdgeDataSize) {
+	if ((slotSizeOf(edgeOop, self)) < ETBalloonEdgeDataSize) {
 		return GEFEdgeDataTooSmall;
 	}
-	if ((slotSizeOf(fillOop, interpreterProxy->interpreterState)) < FTBalloonFillDataSize) {
+	if ((slotSizeOf(fillOop, self)) < FTBalloonFillDataSize) {
 		return GEFFillDataTooSmall;
 	}
 	state = workBuffer[GWState];
@@ -8371,8 +8098,7 @@ loadRenderingState(void)
 }
 
 	/* BalloonEnginePlugin>>#loadShape:nSegments:fill:lineWidth:lineFill:pointsShort: */
-static sqInt
-loadShapenSegmentsfilllineWidthlineFillpointsShort(int *points, sqInt nSegments, sqInt fillIndex, sqInt lineWidth, sqInt lineFill, sqInt pointsShort)
+static sqIntloadShapenSegmentsfilllineWidthlineFillpointsShort(int *points, sqInt nSegments, sqInt fillIndex, sqInt lineWidth, sqInt lineFill, sqInt pointsShort, struct foo * self)
 {
     sqInt i;
     sqInt index;
@@ -8573,7 +8299,7 @@ loadShapenSegmentsfilllineWidthlineFillpointsShort(int *points, sqInt nSegments,
 					point3[1] = (((point3[1]) + (workBuffer[GWDestOffsetY])) * (workBuffer[GWAALevel]));
 				}
 			}
-			loadWideLinefromtolineFillleftFillrightFill(lineWidth, ((int *) (workBuffer + GWPoint1)), ((int *) (workBuffer + GWPoint2)), lineFill, fillIndex, 0);
+			loadWideLinefromtolineFillleftFillrightFill(lineWidth, ((int *) (workBuffer + GWPoint1)), ((int *) (workBuffer + GWPoint2)), lineFill, fillIndex, 0, self);
 			goto l15;
 		}
 		(((int *) (workBuffer + GWPoint1)))[0] = x0;
@@ -8676,11 +8402,11 @@ loadShapenSegmentsfilllineWidthlineFillpointsShort(int *points, sqInt nSegments,
 			}
 		}
 		segs = loadAndSubdivideBezierFromviatoisWide(((int *) (workBuffer + GWPoint1)), ((int *) (workBuffer + GWPoint2)), ((int *) (workBuffer + GWPoint3)), (lineWidth != 0)
-		 && (lineFill != 0));
+		 && (lineFill != 0), self);
 		if (engineStopped) {
 			goto l15;
 		}
-		loadWideBezierlineFillleftFillrightFilln(lineWidth, lineFill, fillIndex, 0, segs);
+		loadWideBezierlineFillleftFillrightFilln(lineWidth, lineFill, fillIndex, 0, segs, self);
 	l15:	/* end loadCompressedSegment:from:short:leftFill:rightFill:lineWidth:lineColor: */;
 		if (engineStopped) {
 			return null;
@@ -8694,19 +8420,18 @@ loadShapenSegmentsfilllineWidthlineFillpointsShort(int *points, sqInt nSegments,
 	Answer 0 on success or a non-zero failure code on failure. */
 
 	/* BalloonEngineBase>>#loadSpanBufferFrom: */
-static sqInt
-loadSpanBufferFrom(sqInt spanOop)
+static sqIntloadSpanBufferFrom(sqInt spanOop, struct foo * self)
 {
     sqInt value;
 
-	if (!((fetchClassOf(spanOop, interpreterProxy->interpreterState)) == (classBitmap(interpreterProxy->interpreterState)))) {
+	if (!((fetchClassOf(spanOop, self)) == (classBitmap(self)))) {
 		return GEFClassMismatch;
 	}
 
 	/* Leave last entry unused to avoid complications */
-	spanBuffer = firstIndexableField(spanOop, interpreterProxy->interpreterState);
+	spanBuffer = firstIndexableField(spanOop, self);
 	/* begin spanSizePut: */
-	value = (slotSizeOf(spanOop, interpreterProxy->interpreterState)) - 1;
+	value = (slotSizeOf(spanOop, self)) - 1;
 	workBuffer[GWSpanSize] = value;
 	return 0;
 }
@@ -8717,23 +8442,22 @@ loadSpanBufferFrom(sqInt spanOop)
 	an array or a FloatArray of length n. */
 
 	/* BalloonEngineBase>>#loadTransformFrom:into:length: */
-static sqInt
-loadTransformFromintolength(sqInt transformOop, float *destPtr, sqInt n)
+static sqIntloadTransformFromintolength(sqInt transformOop, float *destPtr, sqInt n, struct foo * self)
 {
-	if (transformOop == (nilObject(interpreterProxy->interpreterState))) {
+	if (transformOop == (nilObject(self))) {
 		return 0;
 	}
-	if (isImmediate(transformOop, interpreterProxy->interpreterState)) {
-		return primitiveFail(interpreterProxy->interpreterState);
+	if (isImmediate(transformOop, self)) {
+		return primitiveFail(self);
 	}
-	if (!((slotSizeOf(transformOop, interpreterProxy->interpreterState)) == n)) {
-		return primitiveFail(interpreterProxy->interpreterState);
+	if (!((slotSizeOf(transformOop, self)) == n)) {
+		return primitiveFail(self);
 	}
-	if (isWords(transformOop, interpreterProxy->interpreterState)) {
-		loadWordTransformFromintolength(transformOop, destPtr, n);
+	if (isWords(transformOop, self)) {
+		loadWordTransformFromintolength(transformOop, destPtr, n, self);
 	}
 	else {
-		loadArrayTransformFromintolength(transformOop, destPtr, n);
+		loadArrayTransformFromintolength(transformOop, destPtr, n, self);
 	}
 	return 1;
 }
@@ -8744,8 +8468,7 @@ loadTransformFromintolength(sqInt transformOop, float *destPtr, sqInt n)
  */
 
 	/* BalloonEnginePlugin>>#loadWideBezier:lineFill:leftFill:rightFill:n: */
-static sqInt
-loadWideBezierlineFillleftFillrightFilln(sqInt lineWidth, sqInt lineFill, sqInt leftFill, sqInt rightFill, sqInt nSegments)
+static sqIntloadWideBezierlineFillleftFillrightFilln(sqInt lineWidth, sqInt lineFill, sqInt leftFill, sqInt rightFill, sqInt nSegments, struct foo * self)
 {
     sqInt bezier;
     sqInt bezier1;
@@ -8767,7 +8490,7 @@ loadWideBezierlineFillleftFillrightFilln(sqInt lineWidth, sqInt lineFill, sqInt 
 	while (index > 0) {
 		if (wide) {
 			/* begin allocateWideBezier */
-			if (!(allocateObjEntry(GBWideSize))) {
+			if (!(allocateObjEntry(GBWideSize, self))) {
 				bezier = 0;
 				goto l4;
 			}
@@ -8784,7 +8507,7 @@ loadWideBezierlineFillleftFillrightFilln(sqInt lineWidth, sqInt lineFill, sqInt 
 		}
 		else {
 			/* begin allocateBezier */
-			if (!(allocateObjEntry(GBBaseSize))) {
+			if (!(allocateObjEntry(GBBaseSize, self))) {
 				bezier = 0;
 				goto l8;
 			}
@@ -8802,7 +8525,7 @@ loadWideBezierlineFillleftFillrightFilln(sqInt lineWidth, sqInt lineFill, sqInt 
 		if (engineStopped) {
 			return 0;
 		}
-		loadBeziersegmentleftFillrightFilloffset(bezier, index, leftFill, rightFill, offset);
+		loadBeziersegmentleftFillrightFilloffset(bezier, index, leftFill, rightFill, offset, self);
 		if (wide) {
 			/* begin obj:at:put: */
 			objBuffer[bezier + GBWideFill] = lineFill;
@@ -8822,8 +8545,7 @@ loadWideBezierlineFillleftFillrightFilln(sqInt lineWidth, sqInt lineFill, sqInt 
 /*	Load a (possibly wide) line defined by the points p1 and p2 */
 
 	/* BalloonEnginePlugin>>#loadWideLine:from:to:lineFill:leftFill:rightFill: */
-static sqInt
-loadWideLinefromtolineFillleftFillrightFill(sqInt lineWidth, int *p1, int *p2, sqInt lineFill, sqInt leftFill, sqInt rightFill)
+static sqIntloadWideLinefromtolineFillleftFillrightFill(sqInt lineWidth, int *p1, int *p2, sqInt lineFill, sqInt leftFill, sqInt rightFill, struct foo * self)
 {
     sqInt line;
     sqInt line1;
@@ -8837,7 +8559,7 @@ loadWideLinefromtolineFillleftFillrightFill(sqInt lineWidth, int *p1, int *p2, s
 	if ((lineWidth == 0)
 	 || (lineFill == 0)) {
 		/* begin allocateLine */
-		if (!(allocateObjEntry(GLBaseSize))) {
+		if (!(allocateObjEntry(GLBaseSize, self))) {
 			line = 0;
 			goto l12;
 		}
@@ -8855,7 +8577,7 @@ loadWideLinefromtolineFillleftFillrightFill(sqInt lineWidth, int *p1, int *p2, s
 	}
 	else {
 		/* begin allocateWideLine */
-		if (!(allocateObjEntry(GLWideSize))) {
+		if (!(allocateObjEntry(GLWideSize, self))) {
 			line = 0;
 			goto l16;
 		}
@@ -8917,13 +8639,12 @@ loadWideLinefromtolineFillleftFillrightFill(sqInt lineWidth, int *p1, int *p2, s
 /*	Load a float array transformation from the given oop */
 
 	/* BalloonEngineBase>>#loadWordTransformFrom:into:length: */
-static sqInt
-loadWordTransformFromintolength(sqInt transformOop, float *destPtr, sqInt n)
+static sqIntloadWordTransformFromintolength(sqInt transformOop, float *destPtr, sqInt n, struct foo * self)
 {
     sqInt i;
     float *srcPtr;
 
-	srcPtr = ((float *) (firstIndexableField(transformOop, interpreterProxy->interpreterState)));
+	srcPtr = ((float *) (firstIndexableField(transformOop, self)));
 	for (i = 0; i < n; i += 1) {
 		destPtr[i] = (srcPtr[i]);
 	}
@@ -8934,24 +8655,23 @@ loadWordTransformFromintolength(sqInt transformOop, float *destPtr, sqInt n)
 /*	Load the working buffer from the given oop */
 
 	/* BalloonEngineBase>>#loadWorkBufferFrom: */
-static sqInt
-loadWorkBufferFrom(sqInt wbOop)
+static sqIntloadWorkBufferFrom(sqInt wbOop, struct foo * self)
 {
-	if (isImmediate(wbOop, interpreterProxy->interpreterState)) {
+	if (isImmediate(wbOop, self)) {
 		return GEFWorkBufferIsInteger;
 	}
-	if (!(isWords(wbOop, interpreterProxy->interpreterState))) {
+	if (!(isWords(wbOop, self))) {
 		return GEFWorkBufferIsPointers;
 	}
-	if ((slotSizeOf(wbOop, interpreterProxy->interpreterState)) < GWMinimalSize) {
+	if ((slotSizeOf(wbOop, self)) < GWMinimalSize) {
 		return GEFWorkBufferTooSmall;
 	}
 	/* begin workBufferPut: */
-	workBuffer = firstIndexableField(wbOop, interpreterProxy->interpreterState);
+	workBuffer = firstIndexableField(wbOop, self);
 	if (!((workBuffer[GWMagicIndex]) == GWMagicNumber)) {
 		return GEFWorkBufferBadMagic;
 	}
-	if (!((workBuffer[GWSize]) == (slotSizeOf(wbOop, interpreterProxy->interpreterState)))) {
+	if (!((workBuffer[GWSize]) == (slotSizeOf(wbOop, self)))) {
 		return GEFWorkBufferWrongSize;
 	}
 	if (!((workBuffer[GWObjStart]) == GWHeaderSize)) {
@@ -8969,22 +8689,19 @@ loadWorkBufferFrom(sqInt wbOop)
 }
 
 	/* BalloonEngineBase>>#magicNumberGet */
-static sqInt
-magicNumberGet(void)
+static sqIntmagicNumberGet(struct foo * self)
 {
 	return workBuffer[GWMagicIndex];
 }
 
 	/* BalloonEngineBase>>#magicNumberPut: */
-static sqInt
-magicNumberPut(sqInt value)
+static sqIntmagicNumberPut(sqInt value, struct foo * self)
 {
 	return workBuffer[GWMagicIndex] = value;
 }
 
 	/* BalloonEnginePlugin>>#makeRectFromPoints */
-static sqInt
-makeRectFromPoints(void)
+static sqIntmakeRectFromPoints(struct foo * self)
 {
 	(((int *) (workBuffer + GWPoint2)))[0] = ((((int *) (workBuffer + GWPoint3)))[0]);
 	(((int *) (workBuffer + GWPoint2)))[1] = ((((int *) (workBuffer + GWPoint1)))[1]);
@@ -8994,8 +8711,7 @@ makeRectFromPoints(void)
 }
 
 	/* BalloonEngineBase>>#makeUnsignedFrom: */
-static sqInt
-makeUnsignedFrom(sqInt someIntegerValue)
+static sqIntmakeUnsignedFrom(sqInt someIntegerValue, struct foo * self)
 {
 	return someIntegerValue;
 }
@@ -9005,8 +8721,7 @@ makeUnsignedFrom(sqInt someIntegerValue)
 	Make sure we have no dangling references. */
 
 	/* BalloonEngineBase>>#moduleUnloaded: */
-EXPORT(sqInt)
-moduleUnloaded(char *aModuleName, struct foo * self)
+EXPORT(sqInt)moduleUnloaded(char *aModuleName, struct foo * self)
 {
 	if ((strcmp(aModuleName, bbPluginName)) == 0) {
 
@@ -9022,8 +8737,7 @@ moduleUnloaded(char *aModuleName, struct foo * self)
 	Move it to the left until the position is okay. */
 
 	/* BalloonEngineBase>>#moveAETEntryFrom:edge:x: */
-static sqInt
-moveAETEntryFromedgex(sqInt index, sqInt edge, sqInt xValue)
+static sqIntmoveAETEntryFromedgex(sqInt index, sqInt edge, sqInt xValue, struct foo * self)
 {
     sqInt newIndex;
 
@@ -9041,8 +8755,7 @@ moveAETEntryFromedgex(sqInt index, sqInt edge, sqInt xValue)
 /*	Check if we have n slots available */
 
 	/* BalloonEngineBase>>#needAvailableSpace: */
-static sqInt
-needAvailableSpace(sqInt nSlots)
+static sqIntneedAvailableSpace(sqInt nSlots, struct foo * self)
 {
 	if (((((GWHeaderSize + objUsed) + (workBuffer[GWGETUsed])) + (workBuffer[GWAETUsed])) + nSlots) > (workBuffer[GWBufferTop])) {
 		/* begin stopBecauseOf: */
@@ -9054,29 +8767,25 @@ needAvailableSpace(sqInt nSlots)
 }
 
 	/* BalloonEngineBase>>#needsFlush */
-static sqInt
-needsFlush(void)
+static sqIntneedsFlush(struct foo * self)
 {
 	return (workBuffer[GWNeedsFlush]) != 0;
 }
 
 	/* BalloonEngineBase>>#needsFlushGet */
-static sqInt
-needsFlushGet(void)
+static sqIntneedsFlushGet(struct foo * self)
 {
 	return workBuffer[GWNeedsFlush];
 }
 
 	/* BalloonEngineBase>>#needsFlushPut: */
-static sqInt
-needsFlushPut(sqInt value)
+static sqIntneedsFlushPut(sqInt value, struct foo * self)
 {
 	return workBuffer[GWNeedsFlush] = value;
 }
 
 	/* BalloonEngineBase>>#objectHeaderOf: */
-static sqInt
-objectHeaderOf(sqInt obj)
+static sqIntobjectHeaderOf(sqInt obj, struct foo * self)
 {
     sqInt someIntegerValue;
 
@@ -9086,85 +8795,73 @@ objectHeaderOf(sqInt obj)
 }
 
 	/* BalloonEngineBase>>#objectIndexOf: */
-static sqInt
-objectIndexOf(sqInt obj)
+static sqIntobjectIndexOf(sqInt obj, struct foo * self)
 {
 	return objBuffer[obj + GEObjectIndex];
 }
 
 	/* BalloonEngineBase>>#objectIndexOf:put: */
-static sqInt
-objectIndexOfput(sqInt obj, sqInt value)
+static sqIntobjectIndexOfput(sqInt obj, sqInt value, struct foo * self)
 {
 	return objBuffer[obj + GEObjectIndex] = value;
 }
 
 	/* BalloonEngineBase>>#objectLengthOf: */
-static sqInt
-objectLengthOf(sqInt obj)
+static sqIntobjectLengthOf(sqInt obj, struct foo * self)
 {
 	return objBuffer[obj + GEObjectLength];
 }
 
 	/* BalloonEngineBase>>#objectLengthOf:put: */
-static sqInt
-objectLengthOfput(sqInt obj, sqInt value)
+static sqIntobjectLengthOfput(sqInt obj, sqInt value, struct foo * self)
 {
 	return objBuffer[obj + GEObjectLength] = value;
 }
 
 	/* BalloonEngineBase>>#objectTypeOf: */
-static sqInt
-objectTypeOf(sqInt obj)
+static sqIntobjectTypeOf(sqInt obj, struct foo * self)
 {
 	return (objBuffer[obj + GEObjectType]) & GEPrimitiveTypeMask;
 }
 
 	/* BalloonEngineBase>>#objectTypeOf:put: */
-static sqInt
-objectTypeOfput(sqInt obj, sqInt value)
+static sqIntobjectTypeOfput(sqInt obj, sqInt value, struct foo * self)
 {
 	return objBuffer[obj + GEObjectType] = value;
 }
 
 	/* BalloonEngineBase>>#objStartGet */
-static sqInt
-objStartGet(void)
+static sqIntobjStartGet(struct foo * self)
 {
 	return workBuffer[GWObjStart];
 }
 
 	/* BalloonEngineBase>>#objStartPut: */
-static sqInt
-objStartPut(sqInt value)
+static sqIntobjStartPut(sqInt value, struct foo * self)
 {
 	return workBuffer[GWObjStart] = value;
 }
 
 	/* BalloonEngineBase>>#objUsedGet */
-static sqInt
-objUsedGet(void)
+static sqIntobjUsedGet(struct foo * self)
 {
 	return workBuffer[GWObjUsed];
 }
 
 	/* BalloonEngineBase>>#objUsedPut: */
-static sqInt
-objUsedPut(sqInt value)
+static sqIntobjUsedPut(sqInt value, struct foo * self)
 {
 	return workBuffer[GWObjUsed] = value;
 }
 
 	/* BalloonEngineBase>>#obj:at: */
-static sqInt
-objat(sqInt object, sqInt index)
+static sqIntobjat(sqInt object, sqInt index, struct foo * self)
 {
 	return objBuffer[object + index];
 }
 
 	/* BalloonEngineBase>>#obj:at:put: */
-static sqInt
-objatput(sqInt object, sqInt index, sqInt value)
+static sqIntobjatput(sqInt object, sqInt index, sqInt value, struct foo * self)
 {
 	return objBuffer[object + index] = value;
 }
@@ -9174,36 +8871,31 @@ objatput(sqInt object, sqInt index, sqInt value)
 	and can easily find all the places where we deal with one-pixel offsets. */
 
 	/* BalloonEnginePlugin>>#offsetFromWidth: */
-static sqInt
-offsetFromWidth(sqInt lineWidth)
+static sqIntoffsetFromWidth(sqInt lineWidth, struct foo * self)
 {
 	return lineWidth / 2;
 }
 
 	/* BalloonEngineBase>>#point1Get */
-static int *
-point1Get(void)
+static int *point1Get(struct foo * self)
 {
 	return ((int *) (workBuffer + GWPoint1));
 }
 
 	/* BalloonEngineBase>>#point2Get */
-static int *
-point2Get(void)
+static int *point2Get(struct foo * self)
 {
 	return ((int *) (workBuffer + GWPoint2));
 }
 
 	/* BalloonEngineBase>>#point3Get */
-static int *
-point3Get(void)
+static int *point3Get(struct foo * self)
 {
 	return ((int *) (workBuffer + GWPoint3));
 }
 
 	/* BalloonEngineBase>>#point4Get */
-static int *
-point4Get(void)
+static int *point4Get(struct foo * self)
 {
 	return ((int *) (workBuffer + GWPoint4));
 }
@@ -9218,8 +8910,7 @@ point4Get(void)
 /*	Check if there is any more work to do. */
 
 	/* BalloonEngineBase>>#postDisplayAction */
-static sqInt
-postDisplayAction(void)
+static sqIntpostDisplayAction(struct foo * self)
 {
 	if (((workBuffer[GWGETStart]) >= (workBuffer[GWGETUsed]))
 	 && ((workBuffer[GWAETUsed]) == 0)) {
@@ -9236,16 +8927,15 @@ postDisplayAction(void)
 }
 
 	/* BalloonEngineBase>>#primitiveAbortProcessing */
-EXPORT(sqInt)
-primitiveAbortProcessing(void)
+EXPORT(sqInt)primitiveAbortProcessing(struct foo * self)
 {
     sqInt failureCode;
 
-	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 0)) {
-		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
+	if (!((methodArgumentCount(self)) == 0)) {
+		return primitiveFailFor(PrimErrBadNumArgs, self);
 	}
-	if (!(((failureCode = quickLoadEngineFrom(stackValue(0, interpreterProxy->interpreterState)))) == 0)) {
-		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
+	if (!(((failureCode = quickLoadEngineFrom(stackValue(0, self), self))) == 0)) {
+		return primitiveFailFor(failureCode, self);
 	}
 	workBuffer[GWState] = GEStateCompleted;
 	/* begin storeEngineStateInto: */
@@ -9257,8 +8947,7 @@ primitiveAbortProcessing(void)
 /*	Note: No need to load either bitBlt or spanBuffer */
 
 	/* BalloonEngineBase>>#primitiveAddActiveEdgeEntry */
-EXPORT(sqInt)
-primitiveAddActiveEdgeEntry(void)
+EXPORT(sqInt)primitiveAddActiveEdgeEntry(struct foo * self)
 {
     sqInt edge;
     sqInt edgeOop;
@@ -9268,33 +8957,33 @@ primitiveAddActiveEdgeEntry(void)
 	if (doProfileStats) {
 		geProfileTime = ioMicroMSecs();
 	}
-	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 1)) {
-		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
+	if (!((methodArgumentCount(self)) == 1)) {
+		return primitiveFailFor(PrimErrBadNumArgs, self);
 	}
-	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(1, interpreterProxy->interpreterState), GEStateWaitingForEdge))) == 0)) {
-		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
+	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(1, self), GEStateWaitingForEdge, self))) == 0)) {
+		return primitiveFailFor(failureCode, self);
 	}
-	edgeOop = stackObjectValue(0, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	edgeOop = stackObjectValue(0, self);
+	if (failed(self)) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	edge = loadEdgeStateFrom(edgeOop);
+	edge = loadEdgeStateFrom(edgeOop, self);
 	if (edge == null) {
-		return primitiveFailFor(GEFEdgeDataTooSmall, interpreterProxy->interpreterState);
+		return primitiveFailFor(GEFEdgeDataTooSmall, self);
 	}
-	if (!(needAvailableSpace(1))) {
-		return primitiveFailFor(GEFWorkTooBig, interpreterProxy->interpreterState);
+	if (!(needAvailableSpace(1, self))) {
+		return primitiveFailFor(GEFWorkTooBig, self);
 	}
 	if ((objBuffer[edge + GENumLines]) > 0) {
-		insertEdgeIntoAET(edge);
+		insertEdgeIntoAET(edge, self);
 	}
 	if (engineStopped) {
-		return primitiveFailFor(GEFEngineStopped, interpreterProxy->interpreterState);
+		return primitiveFailFor(GEFEngineStopped, self);
 	}
 	workBuffer[GWState] = GEStateAddingFromGET;
 	/* begin storeEngineStateInto: */
 	workBuffer[GWObjUsed] = objUsed;
-	pop(1, interpreterProxy->interpreterState);
+	pop(1, self);
 	if (doProfileStats) {
 		/* begin incrementStat:by: */
 		workBuffer[GWCountAddAETEntry] = ((workBuffer[GWCountAddAETEntry]) + 1);
@@ -9306,8 +8995,7 @@ primitiveAddActiveEdgeEntry(void)
 }
 
 	/* BalloonEnginePlugin>>#primitiveAddBezier */
-EXPORT(sqInt)
-primitiveAddBezier(void)
+EXPORT(sqInt)primitiveAddBezier(struct foo * self)
 {
     sqInt endOop;
     sqInt failureCode;
@@ -9343,32 +9031,32 @@ primitiveAddBezier(void)
 
 
 	/* Fail if we have the wrong number of arguments */
-	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 5)) {
-		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
+	if (!((methodArgumentCount(self)) == 5)) {
+		return primitiveFailFor(PrimErrBadNumArgs, self);
 	}
-	rightFill = positive32BitValueOf(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	leftFill = positive32BitValueOf(stackValue(1, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	viaOop = stackObjectValue(2, interpreterProxy->interpreterState);
-	endOop = stackObjectValue(3, interpreterProxy->interpreterState);
-	startOop = stackObjectValue(4, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	rightFill = positive32BitValueOf(stackValue(0, self), self);
+	leftFill = positive32BitValueOf(stackValue(1, self), self);
+	viaOop = stackObjectValue(2, self);
+	endOop = stackObjectValue(3, self);
+	startOop = stackObjectValue(4, self);
+	if (failed(self)) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(5, interpreterProxy->interpreterState), GEStateUnlocked))) == 0)) {
-		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
+	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(5, self), GEStateUnlocked, self))) == 0)) {
+		return primitiveFailFor(failureCode, self);
 	}
-	if (!((isFillOkay(leftFill))
-		 && (isFillOkay(rightFill)))) {
-		return primitiveFailFor(GEFWrongFill, interpreterProxy->interpreterState);
+	if (!((isFillOkay(leftFill, self))
+		 && (isFillOkay(rightFill, self)))) {
+		return primitiveFailFor(GEFWrongFill, self);
 	}
 	if ((leftFill == rightFill) && 0) {
-		return pop(6, interpreterProxy->interpreterState);
+		return pop(6, self);
 	}
-	loadPointfrom(((int *) (workBuffer + GWPoint1)), startOop);
-	loadPointfrom(((int *) (workBuffer + GWPoint2)), viaOop);
-	loadPointfrom(((int *) (workBuffer + GWPoint3)), endOop);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	loadPointfrom(((int *) (workBuffer + GWPoint1)), startOop, self);
+	loadPointfrom(((int *) (workBuffer + GWPoint2)), viaOop, self);
+	loadPointfrom(((int *) (workBuffer + GWPoint3)), endOop, self);
+	if (failed(self)) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
 	/* begin transformPoints: */
 	if (3 > 0) {
@@ -9463,7 +9151,7 @@ primitiveAddBezier(void)
 			point3[1] = (((point3[1]) + (workBuffer[GWDestOffsetY])) * (workBuffer[GWAALevel]));
 		}
 	}
-	nSegments = loadAndSubdivideBezierFromviatoisWide(((int *) (workBuffer + GWPoint1)), ((int *) (workBuffer + GWPoint2)), ((int *) (workBuffer + GWPoint3)), 0);
+	nSegments = loadAndSubdivideBezierFromviatoisWide(((int *) (workBuffer + GWPoint1)), ((int *) (workBuffer + GWPoint2)), ((int *) (workBuffer + GWPoint3)), 0, self);
 	/* begin needAvailableSpace: */
 	if (((((GWHeaderSize + objUsed) + (workBuffer[GWGETUsed])) + (workBuffer[GWAETUsed])) + (nSegments * GBBaseSize)) > (workBuffer[GWBufferTop])) {
 		/* begin stopBecauseOf: */
@@ -9473,31 +9161,30 @@ primitiveAddBezier(void)
 	}
 	l1:	/* end needAvailableSpace: */;
 	if (!engineStopped) {
-		leftFill = transformColor(leftFill);
-		rightFill = transformColor(rightFill);
+		leftFill = transformColor(leftFill, self);
+		rightFill = transformColor(rightFill, self);
 	}
 	if (!engineStopped) {
-		loadWideBezierlineFillleftFillrightFilln(0, 0, leftFill, rightFill, nSegments);
+		loadWideBezierlineFillleftFillrightFilln(0, 0, leftFill, rightFill, nSegments, self);
 	}
 	if (engineStopped) {
 
 		/* Make sure the stack is okay */
 		/* begin wbStackClear */
 		workBuffer[GWBufferTop] = (workBuffer[GWSize]);
-		return primitiveFailFor(GEFEngineStopped, interpreterProxy->interpreterState);
+		return primitiveFailFor(GEFEngineStopped, self);
 	}
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(GEFEntityLoadFailed, interpreterProxy->interpreterState);
+	if (failed(self)) {
+		return primitiveFailFor(GEFEntityLoadFailed, self);
 	}
 	/* begin storeEngineStateInto: */
 	workBuffer[GWObjUsed] = objUsed;
-	pop(5, interpreterProxy->interpreterState);
+	pop(5, self);
 	return 0;
 }
 
 	/* BalloonEnginePlugin>>#primitiveAddBezierShape */
-EXPORT(sqInt)
-primitiveAddBezierShape(void)
+EXPORT(sqInt)primitiveAddBezierShape(struct foo * self)
 {
     sqInt failureCode;
     sqInt fillIndex;
@@ -9511,38 +9198,38 @@ primitiveAddBezierShape(void)
 
 
 	/* Fail if we have the wrong number of arguments */
-	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 5)) {
-		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
+	if (!((methodArgumentCount(self)) == 5)) {
+		return primitiveFailFor(PrimErrBadNumArgs, self);
 	}
-	lineFill = positive32BitValueOf(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	lineWidth = stackIntegerValue(1, interpreterProxy->interpreterState);
-	fillIndex = positive32BitValueOf(stackValue(2, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	nSegments = stackIntegerValue(3, interpreterProxy->interpreterState);
-	points = stackObjectValue(4, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	lineFill = positive32BitValueOf(stackValue(0, self), self);
+	lineWidth = stackIntegerValue(1, self);
+	fillIndex = positive32BitValueOf(stackValue(2, self), self);
+	nSegments = stackIntegerValue(3, self);
+	points = stackObjectValue(4, self);
+	if (failed(self)) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(5, interpreterProxy->interpreterState), GEStateUnlocked))) == 0)) {
-		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
+	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(5, self), GEStateUnlocked, self))) == 0)) {
+		return primitiveFailFor(failureCode, self);
 	}
-	length = slotSizeOf(points, interpreterProxy->interpreterState);
-	if (isWords(points, interpreterProxy->interpreterState)) {
+	length = slotSizeOf(points, self);
+	if (isWords(points, self)) {
 
 		/* Either PointArray or ShortPointArray */
 		pointsIsArray = 0;
 		if (!((length == (nSegments * 3))
 			 || (length == (nSegments * 6)))) {
-			return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+			return primitiveFailFor(PrimErrBadArgument, self);
 		}
 	}
 	else {
 
 		/* Must be Array of points */
-		if (!(isArray(points, interpreterProxy->interpreterState))) {
-			return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+		if (!(isArray(points, self))) {
+			return primitiveFailFor(PrimErrBadArgument, self);
 		}
 		if (!(length == (nSegments * 3))) {
-			return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+			return primitiveFailFor(PrimErrBadArgument, self);
 		}
 		pointsIsArray = 1;
 	}
@@ -9553,52 +9240,51 @@ primitiveAddBezierShape(void)
 	else {
 		segSize = GLWideSize;
 	}
-	if (!(needAvailableSpace(segSize * nSegments))) {
-		return primitiveFailFor(GEFWorkTooBig, interpreterProxy->interpreterState);
+	if (!(needAvailableSpace(segSize * nSegments, self))) {
+		return primitiveFailFor(GEFWorkTooBig, self);
 	}
-	if (!((isFillOkay(lineFill))
-		 && (isFillOkay(fillIndex)))) {
-		return primitiveFailFor(GEFWrongFill, interpreterProxy->interpreterState);
+	if (!((isFillOkay(lineFill, self))
+		 && (isFillOkay(fillIndex, self)))) {
+		return primitiveFailFor(GEFWrongFill, self);
 	}
-	lineFill = transformColor(lineFill);
-	fillIndex = transformColor(fillIndex);
+	lineFill = transformColor(lineFill, self);
+	fillIndex = transformColor(fillIndex, self);
 	if (engineStopped) {
-		return primitiveFailFor(GEFEngineStopped, interpreterProxy->interpreterState);
+		return primitiveFailFor(GEFEngineStopped, self);
 	}
 	if (((lineFill == 0)
 	 || (lineWidth == 0))
 	 && (fillIndex == 0)) {
-		return pop(5, interpreterProxy->interpreterState);
+		return pop(5, self);
 	}
 	if (!(lineWidth == 0)) {
-		lineWidth = transformWidth(lineWidth);
+		lineWidth = transformWidth(lineWidth, self);
 		if (lineWidth < 1) {
 			lineWidth = 1;
 		}
 	}
 	if (pointsIsArray) {
-		loadArrayShapenSegmentsfilllineWidthlineFill(points, nSegments, fillIndex, lineWidth, lineFill);
+		loadArrayShapenSegmentsfilllineWidthlineFill(points, nSegments, fillIndex, lineWidth, lineFill, self);
 	}
 	else {
-		loadShapenSegmentsfilllineWidthlineFillpointsShort(firstIndexableField(points, interpreterProxy->interpreterState), nSegments, fillIndex, lineWidth, lineFill, (nSegments * 3) == length);
+		loadShapenSegmentsfilllineWidthlineFillpointsShort(firstIndexableField(points, self), nSegments, fillIndex, lineWidth, lineFill, (nSegments * 3) == length, self);
 	}
 	if (engineStopped) {
-		return primitiveFailFor(GEFEngineStopped, interpreterProxy->interpreterState);
+		return primitiveFailFor(GEFEngineStopped, self);
 	}
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(GEFEntityLoadFailed, interpreterProxy->interpreterState);
+	if (failed(self)) {
+		return primitiveFailFor(GEFEntityLoadFailed, self);
 	}
 	/* begin needsFlushPut: */
 	workBuffer[GWNeedsFlush] = 1;
 	/* begin storeEngineStateInto: */
 	workBuffer[GWObjUsed] = objUsed;
-	pop(5, interpreterProxy->interpreterState);
+	pop(5, self);
 	return 0;
 }
 
 	/* BalloonEnginePlugin>>#primitiveAddBitmapFill */
-EXPORT(sqInt)
-primitiveAddBitmapFill(void)
+EXPORT(sqInt)primitiveAddBitmapFill(struct foo * self)
 {
     sqInt bmBits;
     sqInt bmBitsSize;
@@ -9627,91 +9313,91 @@ primitiveAddBitmapFill(void)
 
 
 	/* Fail if we have the wrong number of arguments */
-	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 7)) {
-		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
+	if (!((methodArgumentCount(self)) == 7)) {
+		return primitiveFailFor(PrimErrBadNumArgs, self);
 	}
-	xIndex = stackIntegerValue(0, interpreterProxy->interpreterState);
+	xIndex = stackIntegerValue(0, self);
 	if (xIndex <= 0) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	nrmOop = stackObjectValue(1, interpreterProxy->interpreterState);
-	dirOop = stackObjectValue(2, interpreterProxy->interpreterState);
-	originOop = stackObjectValue(3, interpreterProxy->interpreterState);
-	tileFlag = booleanValueOf(stackValue(4, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	cmOop = stackObjectValue(5, interpreterProxy->interpreterState);
-	formOop = stackObjectValue(6, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	nrmOop = stackObjectValue(1, self);
+	dirOop = stackObjectValue(2, self);
+	originOop = stackObjectValue(3, self);
+	tileFlag = booleanValueOf(stackValue(4, self), self);
+	cmOop = stackObjectValue(5, self);
+	formOop = stackObjectValue(6, self);
+	if (failed(self)) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(7, interpreterProxy->interpreterState), GEStateUnlocked))) == 0)) {
-		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
+	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(7, self), GEStateUnlocked, self))) == 0)) {
+		return primitiveFailFor(failureCode, self);
 	}
-	loadPointfrom(((int *) (workBuffer + GWPoint1)), originOop);
-	loadPointfrom(((int *) (workBuffer + GWPoint2)), dirOop);
-	loadPointfrom(((int *) (workBuffer + GWPoint3)), nrmOop);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(GEFBadPoint, interpreterProxy->interpreterState);
+	loadPointfrom(((int *) (workBuffer + GWPoint1)), originOop, self);
+	loadPointfrom(((int *) (workBuffer + GWPoint2)), dirOop, self);
+	loadPointfrom(((int *) (workBuffer + GWPoint3)), nrmOop, self);
+	if (failed(self)) {
+		return primitiveFailFor(GEFBadPoint, self);
 	}
 	/* begin loadBitmapFill:colormap:tile:from:along:normal:xIndex: */
 	tileFlag1 = (tileFlag
 		? 1
 		: 0);
-	if (cmOop == (nilObject(interpreterProxy->interpreterState))) {
+	if (cmOop == (nilObject(self))) {
 		cmSize = 0;
 		cmBits = null;
 	}
 	else {
-		if (!((fetchClassOf(cmOop, interpreterProxy->interpreterState)) == (classBitmap(interpreterProxy->interpreterState)))) {
-			fill = primitiveFail(interpreterProxy->interpreterState);
+		if (!((fetchClassOf(cmOop, self)) == (classBitmap(self)))) {
+			fill = primitiveFail(self);
 			goto l14;
 		}
-		cmSize = slotSizeOf(cmOop, interpreterProxy->interpreterState);
-		cmBits = firstIndexableField(cmOop, interpreterProxy->interpreterState);
+		cmSize = slotSizeOf(cmOop, self);
+		cmBits = firstIndexableField(cmOop, self);
 	}
-	if (!(isPointers(formOop, interpreterProxy->interpreterState))) {
-		fill = primitiveFail(interpreterProxy->interpreterState);
+	if (!(isPointers(formOop, self))) {
+		fill = primitiveFail(self);
 		goto l14;
 	}
-	if ((slotSizeOf(formOop, interpreterProxy->interpreterState)) < 5) {
-		fill = primitiveFail(interpreterProxy->interpreterState);
+	if ((slotSizeOf(formOop, self)) < 5) {
+		fill = primitiveFail(self);
 		goto l14;
 	}
-	bmBits = fetchPointerofObject(0, formOop, interpreterProxy->interpreterState);
-	if (!((fetchClassOf(bmBits, interpreterProxy->interpreterState)) == (classBitmap(interpreterProxy->interpreterState)))) {
-		fill = primitiveFail(interpreterProxy->interpreterState);
+	bmBits = fetchPointerofObject(0, formOop, self);
+	if (!((fetchClassOf(bmBits, self)) == (classBitmap(self)))) {
+		fill = primitiveFail(self);
 		goto l14;
 	}
-	bmBitsSize = slotSizeOf(bmBits, interpreterProxy->interpreterState);
-	bmWidth = fetchIntegerofObject(1, formOop, interpreterProxy->interpreterState);
-	bmHeight = fetchIntegerofObject(2, formOop, interpreterProxy->interpreterState);
-	bmDepth = fetchIntegerofObject(3, formOop, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	bmBitsSize = slotSizeOf(bmBits, self);
+	bmWidth = fetchIntegerofObject(1, formOop, self);
+	bmHeight = fetchIntegerofObject(2, formOop, self);
+	bmDepth = fetchIntegerofObject(3, formOop, self);
+	if (failed(self)) {
 		fill = null;
 		goto l14;
 	}
 	if (!((bmWidth >= 0)
 		 && (bmHeight >= 0))) {
-		fill = primitiveFail(interpreterProxy->interpreterState);
+		fill = primitiveFail(self);
 		goto l14;
 	}
 	if (!((((((bmDepth == 32) || (bmDepth == 8)) || (bmDepth == 16)) || (bmDepth == 1)) || (bmDepth == 2)) || (bmDepth == 4))) {
-		fill = primitiveFail(interpreterProxy->interpreterState);
+		fill = primitiveFail(self);
 		goto l14;
 	}
 	if (!((cmSize == 0)
 		 || (cmSize == (1U << bmDepth)))) {
-		fill = primitiveFail(interpreterProxy->interpreterState);
+		fill = primitiveFail(self);
 		goto l14;
 	}
 	ppw = 32 / bmDepth;
 	bmRaster = (bmWidth + (ppw - 1)) / ppw;
 	if (!(bmBitsSize == (bmRaster * bmHeight))) {
-		fill = primitiveFail(interpreterProxy->interpreterState);
+		fill = primitiveFail(self);
 		goto l14;
 	}
 	/* begin allocateBitmapFill:colormap: */
 	fillSize = GBMBaseSize + cmSize;
-	if (!(allocateObjEntry(fillSize))) {
+	if (!(allocateObjEntry(fillSize, self))) {
 		bmFill = 0;
 		goto l11;
 	}
@@ -9726,7 +9412,7 @@ primitiveAddBitmapFill(void)
 	cm = (objBuffer + fill1) + GBColormapOffset;
 	if ((workBuffer[GWHasColorTransform]) != 0) {
 		for (i = 0; i < cmSize; i += 1) {
-			cm[i] = (transformColor(cmBits[i]));
+			cm[i] = (transformColor(cmBits[i], self));
 		}
 	}
 	else {
@@ -9756,26 +9442,25 @@ primitiveAddBitmapFill(void)
 	objBuffer[bmFill + GBTileFlag] = tileFlag1;
 	/* begin obj:at:put: */
 	objBuffer[bmFill + GEObjectIndex] = (xIndex - 1);
-	loadFillOrientationfromalongnormalwidthheight(bmFill, ((int *) (workBuffer + GWPoint1)), ((int *) (workBuffer + GWPoint2)), ((int *) (workBuffer + GWPoint3)), bmWidth, bmHeight);
+	loadFillOrientationfromalongnormalwidthheight(bmFill, ((int *) (workBuffer + GWPoint1)), ((int *) (workBuffer + GWPoint2)), ((int *) (workBuffer + GWPoint3)), bmWidth, bmHeight, self);
 	fill = bmFill;
 	l14:	/* end loadBitmapFill:colormap:tile:from:along:normal:xIndex: */;
 	if (engineStopped) {
 
 		/* Make sure the stack is okay */
-		return primitiveFailFor(GEFEngineStopped, interpreterProxy->interpreterState);
+		return primitiveFailFor(GEFEngineStopped, self);
 	}
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(GEFEntityLoadFailed, interpreterProxy->interpreterState);
+	if (failed(self)) {
+		return primitiveFailFor(GEFEntityLoadFailed, self);
 	}
 	/* begin storeEngineStateInto: */
 	workBuffer[GWObjUsed] = objUsed;
-	popthenPush(8, positive32BitIntegerFor(fill, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	popthenPush(8, positive32BitIntegerFor(fill, self), self);
 	return 0;
 }
 
 	/* BalloonEnginePlugin>>#primitiveAddCompressedShape */
-EXPORT(sqInt)
-primitiveAddCompressedShape(void)
+EXPORT(sqInt)primitiveAddCompressedShape(struct foo * self)
 {
     sqInt failureCode;
     sqInt fillIndexList;
@@ -9789,49 +9474,48 @@ primitiveAddCompressedShape(void)
 
 
 	/* Fail if we have the wrong number of arguments */
-	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 7)) {
-		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
+	if (!((methodArgumentCount(self)) == 7)) {
+		return primitiveFailFor(PrimErrBadNumArgs, self);
 	}
-	fillIndexList = stackObjectValue(0, interpreterProxy->interpreterState);
-	lineFills = stackObjectValue(1, interpreterProxy->interpreterState);
-	lineWidths = stackObjectValue(2, interpreterProxy->interpreterState);
-	rightFills = stackObjectValue(3, interpreterProxy->interpreterState);
-	leftFills = stackObjectValue(4, interpreterProxy->interpreterState);
-	nSegments = stackIntegerValue(5, interpreterProxy->interpreterState);
-	points = stackObjectValue(6, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	fillIndexList = stackObjectValue(0, self);
+	lineFills = stackObjectValue(1, self);
+	lineWidths = stackObjectValue(2, self);
+	rightFills = stackObjectValue(3, self);
+	leftFills = stackObjectValue(4, self);
+	nSegments = stackIntegerValue(5, self);
+	points = stackObjectValue(6, self);
+	if (failed(self)) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(7, interpreterProxy->interpreterState), GEStateUnlocked))) == 0)) {
-		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
+	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(7, self), GEStateUnlocked, self))) == 0)) {
+		return primitiveFailFor(failureCode, self);
 	}
-	if (!(checkCompressedShapesegmentsleftFillsrightFillslineWidthslineFillsfillIndexList(points, nSegments, leftFills, rightFills, lineWidths, lineFills, fillIndexList))) {
-		return primitiveFailFor(GEFEntityCheckFailed, interpreterProxy->interpreterState);
+	if (!(checkCompressedShapesegmentsleftFillsrightFillslineWidthslineFillsfillIndexList(points, nSegments, leftFills, rightFills, lineWidths, lineFills, fillIndexList, self))) {
+		return primitiveFailFor(GEFEntityCheckFailed, self);
 	}
-	if (!(needAvailableSpace((((GBBaseSize < GLBaseSize) ? GLBaseSize : GBBaseSize)) * nSegments))) {
-		return primitiveFailFor(GEFWorkTooBig, interpreterProxy->interpreterState);
+	if (!(needAvailableSpace((((GBBaseSize < GLBaseSize) ? GLBaseSize : GBBaseSize)) * nSegments, self))) {
+		return primitiveFailFor(GEFWorkTooBig, self);
 	}
 
 	/* Then actually load the compressed shape */
-	pointsShort = (slotSizeOf(points, interpreterProxy->interpreterState)) == (nSegments * 3);
-	loadCompressedShapesegmentsleftFillsrightFillslineWidthslineFillsfillIndexListpointShort(firstIndexableField(points, interpreterProxy->interpreterState), nSegments, firstIndexableField(leftFills, interpreterProxy->interpreterState), firstIndexableField(rightFills, interpreterProxy->interpreterState), firstIndexableField(lineWidths, interpreterProxy->interpreterState), firstIndexableField(lineFills, interpreterProxy->interpreterState), firstIndexableField(fillIndexList, interpreterProxy->interpreterState), pointsShort);
+	pointsShort = (slotSizeOf(points, self)) == (nSegments * 3);
+	loadCompressedShapesegmentsleftFillsrightFillslineWidthslineFillsfillIndexListpointShort(firstIndexableField(points, self), nSegments, firstIndexableField(leftFills, self), firstIndexableField(rightFills, self), firstIndexableField(lineWidths, self), firstIndexableField(lineFills, self), firstIndexableField(fillIndexList, self), pointsShort, self);
 	if (engineStopped) {
-		return primitiveFailFor(GEFEngineStopped, interpreterProxy->interpreterState);
+		return primitiveFailFor(GEFEngineStopped, self);
 	}
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(GEFEntityLoadFailed, interpreterProxy->interpreterState);
+	if (failed(self)) {
+		return primitiveFailFor(GEFEntityLoadFailed, self);
 	}
 	/* begin needsFlushPut: */
 	workBuffer[GWNeedsFlush] = 1;
 	/* begin storeEngineStateInto: */
 	workBuffer[GWObjUsed] = objUsed;
-	pop(7, interpreterProxy->interpreterState);
+	pop(7, self);
 	return 0;
 }
 
 	/* BalloonEnginePlugin>>#primitiveAddGradientFill */
-EXPORT(sqInt)
-primitiveAddGradientFill(void)
+EXPORT(sqInt)primitiveAddGradientFill(struct foo * self)
 {
     sqInt dirOop;
     sqInt failureCode;
@@ -9843,44 +9527,43 @@ primitiveAddGradientFill(void)
 
 
 	/* Fail if we have the wrong number of arguments */
-	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 5)) {
-		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
+	if (!((methodArgumentCount(self)) == 5)) {
+		return primitiveFailFor(PrimErrBadNumArgs, self);
 	}
-	isRadial = booleanValueOf(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	nrmOop = stackValue(1, interpreterProxy->interpreterState);
-	dirOop = stackValue(2, interpreterProxy->interpreterState);
-	originOop = stackValue(3, interpreterProxy->interpreterState);
-	rampOop = stackValue(4, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	isRadial = booleanValueOf(stackValue(0, self), self);
+	nrmOop = stackValue(1, self);
+	dirOop = stackValue(2, self);
+	originOop = stackValue(3, self);
+	rampOop = stackValue(4, self);
+	if (failed(self)) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(5, interpreterProxy->interpreterState), GEStateUnlocked))) == 0)) {
-		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
+	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(5, self), GEStateUnlocked, self))) == 0)) {
+		return primitiveFailFor(failureCode, self);
 	}
-	loadPointfrom(((int *) (workBuffer + GWPoint1)), originOop);
-	loadPointfrom(((int *) (workBuffer + GWPoint2)), dirOop);
-	loadPointfrom(((int *) (workBuffer + GWPoint3)), nrmOop);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(GEFBadPoint, interpreterProxy->interpreterState);
+	loadPointfrom(((int *) (workBuffer + GWPoint1)), originOop, self);
+	loadPointfrom(((int *) (workBuffer + GWPoint2)), dirOop, self);
+	loadPointfrom(((int *) (workBuffer + GWPoint3)), nrmOop, self);
+	if (failed(self)) {
+		return primitiveFailFor(GEFBadPoint, self);
 	}
-	fill = loadGradientFillfromalongnormalisRadial(rampOop, ((int *) (workBuffer + GWPoint1)), ((int *) (workBuffer + GWPoint2)), ((int *) (workBuffer + GWPoint3)), isRadial);
+	fill = loadGradientFillfromalongnormalisRadial(rampOop, ((int *) (workBuffer + GWPoint1)), ((int *) (workBuffer + GWPoint2)), ((int *) (workBuffer + GWPoint3)), isRadial, self);
 	if (engineStopped) {
 
 		/* Make sure the stack is okay */
-		return primitiveFailFor(GEFEngineStopped, interpreterProxy->interpreterState);
+		return primitiveFailFor(GEFEngineStopped, self);
 	}
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(GEFEntityLoadFailed, interpreterProxy->interpreterState);
+	if (failed(self)) {
+		return primitiveFailFor(GEFEntityLoadFailed, self);
 	}
 	/* begin storeEngineStateInto: */
 	workBuffer[GWObjUsed] = objUsed;
-	popthenPush(6, positive32BitIntegerFor(fill, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	popthenPush(6, positive32BitIntegerFor(fill, self), self);
 	return 0;
 }
 
 	/* BalloonEnginePlugin>>#primitiveAddLine */
-EXPORT(sqInt)
-primitiveAddLine(void)
+EXPORT(sqInt)primitiveAddLine(struct foo * self)
 {
     sqInt endOop;
     sqInt failureCode;
@@ -9914,27 +9597,27 @@ primitiveAddLine(void)
 
 
 	/* Fail if we have the wrong number of arguments */
-	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 4)) {
-		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
+	if (!((methodArgumentCount(self)) == 4)) {
+		return primitiveFailFor(PrimErrBadNumArgs, self);
 	}
-	rightFill = positive32BitValueOf(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	leftFill = positive32BitValueOf(stackValue(1, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	endOop = stackObjectValue(2, interpreterProxy->interpreterState);
-	startOop = stackObjectValue(3, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	rightFill = positive32BitValueOf(stackValue(0, self), self);
+	leftFill = positive32BitValueOf(stackValue(1, self), self);
+	endOop = stackObjectValue(2, self);
+	startOop = stackObjectValue(3, self);
+	if (failed(self)) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(4, interpreterProxy->interpreterState), GEStateUnlocked))) == 0)) {
-		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
+	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(4, self), GEStateUnlocked, self))) == 0)) {
+		return primitiveFailFor(failureCode, self);
 	}
-	if (!((isFillOkay(leftFill))
-		 && (isFillOkay(rightFill)))) {
-		return primitiveFailFor(GEFWrongFill, interpreterProxy->interpreterState);
+	if (!((isFillOkay(leftFill, self))
+		 && (isFillOkay(rightFill, self)))) {
+		return primitiveFailFor(GEFWrongFill, self);
 	}
-	loadPointfrom(((int *) (workBuffer + GWPoint1)), startOop);
-	loadPointfrom(((int *) (workBuffer + GWPoint2)), endOop);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(GEFBadPoint, interpreterProxy->interpreterState);
+	loadPointfrom(((int *) (workBuffer + GWPoint1)), startOop, self);
+	loadPointfrom(((int *) (workBuffer + GWPoint2)), endOop, self);
+	if (failed(self)) {
+		return primitiveFailFor(GEFBadPoint, self);
 	}
 	/* begin transformPoints: */
 	if (2 > 0) {
@@ -10029,27 +9712,26 @@ primitiveAddLine(void)
 			point3[1] = (((point3[1]) + (workBuffer[GWDestOffsetY])) * (workBuffer[GWAALevel]));
 		}
 	}
-	leftFill = transformColor(leftFill);
-	rightFill = transformColor(rightFill);
+	leftFill = transformColor(leftFill, self);
+	rightFill = transformColor(rightFill, self);
 	if (engineStopped) {
-		return primitiveFailFor(GEFEngineStopped, interpreterProxy->interpreterState);
+		return primitiveFailFor(GEFEngineStopped, self);
 	}
-	loadWideLinefromtolineFillleftFillrightFill(0, ((int *) (workBuffer + GWPoint1)), ((int *) (workBuffer + GWPoint2)), 0, leftFill, rightFill);
+	loadWideLinefromtolineFillleftFillrightFill(0, ((int *) (workBuffer + GWPoint1)), ((int *) (workBuffer + GWPoint2)), 0, leftFill, rightFill, self);
 	if (engineStopped) {
-		return primitiveFailFor(GEFEngineStopped, interpreterProxy->interpreterState);
+		return primitiveFailFor(GEFEngineStopped, self);
 	}
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(GEFEntityLoadFailed, interpreterProxy->interpreterState);
+	if (failed(self)) {
+		return primitiveFailFor(GEFEntityLoadFailed, self);
 	}
 	/* begin storeEngineStateInto: */
 	workBuffer[GWObjUsed] = objUsed;
-	pop(4, interpreterProxy->interpreterState);
+	pop(4, self);
 	return 0;
 }
 
 	/* BalloonEnginePlugin>>#primitiveAddOval */
-EXPORT(sqInt)
-primitiveAddOval(void)
+EXPORT(sqInt)primitiveAddOval(struct foo * self)
 {
     sqInt borderIndex;
     sqInt borderWidth;
@@ -10060,69 +9742,68 @@ primitiveAddOval(void)
 
 
 	/* Fail if we have the wrong number of arguments */
-	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 5)) {
-		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
+	if (!((methodArgumentCount(self)) == 5)) {
+		return primitiveFailFor(PrimErrBadNumArgs, self);
 	}
-	borderIndex = positive32BitValueOf(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	borderWidth = stackIntegerValue(1, interpreterProxy->interpreterState);
-	fillIndex = positive32BitValueOf(stackValue(2, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	endOop = stackObjectValue(3, interpreterProxy->interpreterState);
-	startOop = stackObjectValue(4, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	borderIndex = positive32BitValueOf(stackValue(0, self), self);
+	borderWidth = stackIntegerValue(1, self);
+	fillIndex = positive32BitValueOf(stackValue(2, self), self);
+	endOop = stackObjectValue(3, self);
+	startOop = stackObjectValue(4, self);
+	if (failed(self)) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(5, interpreterProxy->interpreterState), GEStateUnlocked))) == 0)) {
-		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
+	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(5, self), GEStateUnlocked, self))) == 0)) {
+		return primitiveFailFor(failureCode, self);
 	}
-	if (!((isFillOkay(borderIndex))
-		 && (isFillOkay(fillIndex)))) {
-		return primitiveFailFor(GEFWrongFill, interpreterProxy->interpreterState);
+	if (!((isFillOkay(borderIndex, self))
+		 && (isFillOkay(fillIndex, self)))) {
+		return primitiveFailFor(GEFWrongFill, self);
 	}
-	fillIndex = transformColor(fillIndex);
-	borderIndex = transformColor(borderIndex);
+	fillIndex = transformColor(fillIndex, self);
+	borderIndex = transformColor(borderIndex, self);
 	if (engineStopped) {
-		return primitiveFailFor(GEFEngineStopped, interpreterProxy->interpreterState);
+		return primitiveFailFor(GEFEngineStopped, self);
 	}
 	if ((fillIndex == 0)
 	 && ((borderIndex == 0)
 	 || (borderWidth <= 0))) {
-		return pop(5, interpreterProxy->interpreterState);
+		return pop(5, self);
 	}
-	if (!(needAvailableSpace(16 * GBBaseSize))) {
-		return primitiveFailFor(GEFWorkTooBig, interpreterProxy->interpreterState);
+	if (!(needAvailableSpace(16 * GBBaseSize, self))) {
+		return primitiveFailFor(GEFWorkTooBig, self);
 	}
 	if ((borderWidth > 0)
 	 && (borderIndex != 0)) {
-		borderWidth = transformWidth(borderWidth);
+		borderWidth = transformWidth(borderWidth, self);
 	}
 	else {
 		borderWidth = 0;
 	}
-	loadPointfrom(((int *) (workBuffer + GWPoint1)), startOop);
-	loadPointfrom(((int *) (workBuffer + GWPoint2)), endOop);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(GEFBadPoint, interpreterProxy->interpreterState);
+	loadPointfrom(((int *) (workBuffer + GWPoint1)), startOop, self);
+	loadPointfrom(((int *) (workBuffer + GWPoint2)), endOop, self);
+	if (failed(self)) {
+		return primitiveFailFor(GEFBadPoint, self);
 	}
-	loadOvallineFillleftFillrightFill(borderWidth, borderIndex, 0, fillIndex);
+	loadOvallineFillleftFillrightFill(borderWidth, borderIndex, 0, fillIndex, self);
 	if (engineStopped) {
 		/* begin wbStackClear */
 		workBuffer[GWBufferTop] = (workBuffer[GWSize]);
-		return primitiveFailFor(GEFEngineStopped, interpreterProxy->interpreterState);
+		return primitiveFailFor(GEFEngineStopped, self);
 	}
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(GEFEntityLoadFailed, interpreterProxy->interpreterState);
+	if (failed(self)) {
+		return primitiveFailFor(GEFEntityLoadFailed, self);
 	}
 	/* begin needsFlushPut: */
 	workBuffer[GWNeedsFlush] = 1;
 	/* begin storeEngineStateInto: */
 	workBuffer[GWObjUsed] = objUsed;
-	pop(5, interpreterProxy->interpreterState);
+	pop(5, self);
 	return 0;
 }
 
 	/* BalloonEnginePlugin>>#primitiveAddPolygon */
-EXPORT(sqInt)
-primitiveAddPolygon(void)
+EXPORT(sqInt)primitiveAddPolygon(struct foo * self)
 {
     sqInt failureCode;
     sqInt fillIndex;
@@ -10195,38 +9876,38 @@ primitiveAddPolygon(void)
 
 
 	/* Fail if we have the wrong number of arguments */
-	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 5)) {
-		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
+	if (!((methodArgumentCount(self)) == 5)) {
+		return primitiveFailFor(PrimErrBadNumArgs, self);
 	}
-	lineFill = positive32BitValueOf(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	lineWidth = stackIntegerValue(1, interpreterProxy->interpreterState);
-	fillIndex = positive32BitValueOf(stackValue(2, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	nPoints = stackIntegerValue(3, interpreterProxy->interpreterState);
-	points = stackObjectValue(4, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	lineFill = positive32BitValueOf(stackValue(0, self), self);
+	lineWidth = stackIntegerValue(1, self);
+	fillIndex = positive32BitValueOf(stackValue(2, self), self);
+	nPoints = stackIntegerValue(3, self);
+	points = stackObjectValue(4, self);
+	if (failed(self)) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(5, interpreterProxy->interpreterState), GEStateUnlocked))) == 0)) {
-		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
+	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(5, self), GEStateUnlocked, self))) == 0)) {
+		return primitiveFailFor(failureCode, self);
 	}
-	length = slotSizeOf(points, interpreterProxy->interpreterState);
-	if (isWords(points, interpreterProxy->interpreterState)) {
+	length = slotSizeOf(points, self);
+	if (isWords(points, self)) {
 
 		/* Either PointArray or ShortPointArray */
 		pointsIsArray = 0;
 		if (!((length == nPoints)
 			 || ((nPoints * 2) == length))) {
-			return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+			return primitiveFailFor(PrimErrBadArgument, self);
 		}
 	}
 	else {
 
 		/* Must be Array of points */
-		if (!(isArray(points, interpreterProxy->interpreterState))) {
-			return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+		if (!(isArray(points, self))) {
+			return primitiveFailFor(PrimErrBadArgument, self);
 		}
 		if (!(length == nPoints)) {
-			return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+			return primitiveFailFor(PrimErrBadArgument, self);
 		}
 		pointsIsArray = 1;
 	}
@@ -10237,37 +9918,37 @@ primitiveAddPolygon(void)
 	else {
 		segSize = GLWideSize;
 	}
-	if (!(needAvailableSpace(segSize * nPoints))) {
-		return primitiveFail(interpreterProxy->interpreterState);
+	if (!(needAvailableSpace(segSize * nPoints, self))) {
+		return primitiveFail(self);
 	}
-	if (!((isFillOkay(lineFill))
-		 && (isFillOkay(fillIndex)))) {
-		return primitiveFailFor(GEFWrongFill, interpreterProxy->interpreterState);
+	if (!((isFillOkay(lineFill, self))
+		 && (isFillOkay(fillIndex, self)))) {
+		return primitiveFailFor(GEFWrongFill, self);
 	}
-	lineFill = transformColor(lineFill);
-	fillIndex = transformColor(fillIndex);
+	lineFill = transformColor(lineFill, self);
+	fillIndex = transformColor(fillIndex, self);
 	if (engineStopped) {
-		return primitiveFailFor(GEFEngineStopped, interpreterProxy->interpreterState);
+		return primitiveFailFor(GEFEngineStopped, self);
 	}
 	if (((lineFill == 0)
 	 || (lineWidth == 0))
 	 && (fillIndex == 0)) {
-		return pop(5, interpreterProxy->interpreterState);
+		return pop(5, self);
 	}
 	if (!(lineWidth == 0)) {
-		lineWidth = transformWidth(lineWidth);
+		lineWidth = transformWidth(lineWidth, self);
 	}
 	if (pointsIsArray) {
 		/* begin loadArrayPolygon:nPoints:fill:lineWidth:lineFill: */
-		loadPointfrom(((int *) (workBuffer + GWPoint1)), fetchPointerofObject(0, points, interpreterProxy->interpreterState));
-		if (failed(interpreterProxy->interpreterState)) {
+		loadPointfrom(((int *) (workBuffer + GWPoint1)), fetchPointerofObject(0, points, self), self);
+		if (failed(self)) {
 			goto l7;
 		}
 		x0 = (((int *) (workBuffer + GWPoint1)))[0];
 		y0 = (((int *) (workBuffer + GWPoint1)))[1];
 		for (i = 1; i < nPoints; i += 1) {
-			loadPointfrom(((int *) (workBuffer + GWPoint1)), fetchPointerofObject(i, points, interpreterProxy->interpreterState));
-			if (failed(interpreterProxy->interpreterState)) {
+			loadPointfrom(((int *) (workBuffer + GWPoint1)), fetchPointerofObject(i, points, self), self);
+			if (failed(self)) {
 				goto l7;
 			}
 			x1 = (((int *) (workBuffer + GWPoint1)))[0];
@@ -10369,7 +10050,7 @@ primitiveAddPolygon(void)
 					point3[1] = (((point3[1]) + (workBuffer[GWDestOffsetY])) * (workBuffer[GWAALevel]));
 				}
 			}
-			loadWideLinefromtolineFillleftFillrightFill(lineWidth, ((int *) (workBuffer + GWPoint1)), ((int *) (workBuffer + GWPoint2)), lineFill, fillIndex, 0);
+			loadWideLinefromtolineFillleftFillrightFill(lineWidth, ((int *) (workBuffer + GWPoint1)), ((int *) (workBuffer + GWPoint2)), lineFill, fillIndex, 0, self);
 			if (engineStopped) {
 				goto l7;
 			}
@@ -10380,7 +10061,7 @@ primitiveAddPolygon(void)
 	}
 	else {
 		/* begin loadPolygon:nPoints:fill:lineWidth:lineFill:pointsShort: */
-		points1 = ((int *) (firstIndexableField(points, interpreterProxy->interpreterState)));
+		points1 = ((int *) (firstIndexableField(points, self)));
 		if (nPoints == length) {
 			/* begin loadPointShortAt:from: */
 			x01 = (((short *) points1))[0];
@@ -10503,7 +10184,7 @@ primitiveAddPolygon(void)
 					point31[1] = (((point31[1]) + (workBuffer[GWDestOffsetY])) * (workBuffer[GWAALevel]));
 				}
 			}
-			loadWideLinefromtolineFillleftFillrightFill(lineWidth, ((int *) (workBuffer + GWPoint1)), ((int *) (workBuffer + GWPoint2)), lineFill, fillIndex, 0);
+			loadWideLinefromtolineFillleftFillrightFill(lineWidth, ((int *) (workBuffer + GWPoint1)), ((int *) (workBuffer + GWPoint2)), lineFill, fillIndex, 0, self);
 			if (engineStopped) {
 				goto l20;
 			}
@@ -10513,22 +10194,21 @@ primitiveAddPolygon(void)
 	l20:	/* end loadPolygon:nPoints:fill:lineWidth:lineFill:pointsShort: */;
 	}
 	if (engineStopped) {
-		return primitiveFailFor(GEFEngineStopped, interpreterProxy->interpreterState);
+		return primitiveFailFor(GEFEngineStopped, self);
 	}
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(GEFEntityLoadFailed, interpreterProxy->interpreterState);
+	if (failed(self)) {
+		return primitiveFailFor(GEFEntityLoadFailed, self);
 	}
 	/* begin needsFlushPut: */
 	workBuffer[GWNeedsFlush] = 1;
 	/* begin storeEngineStateInto: */
 	workBuffer[GWObjUsed] = objUsed;
-	pop(5, interpreterProxy->interpreterState);
+	pop(5, self);
 	return 0;
 }
 
 	/* BalloonEnginePlugin>>#primitiveAddRect */
-EXPORT(sqInt)
-primitiveAddRect(void)
+EXPORT(sqInt)primitiveAddRect(struct foo * self)
 {
     sqInt borderIndex;
     sqInt borderWidth;
@@ -10563,48 +10243,48 @@ primitiveAddRect(void)
 
 
 	/* Fail if we have the wrong number of arguments */
-	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 5)) {
-		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
+	if (!((methodArgumentCount(self)) == 5)) {
+		return primitiveFailFor(PrimErrBadNumArgs, self);
 	}
-	borderIndex = positive32BitValueOf(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	borderWidth = stackIntegerValue(1, interpreterProxy->interpreterState);
-	fillIndex = positive32BitValueOf(stackValue(2, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	endOop = stackObjectValue(3, interpreterProxy->interpreterState);
-	startOop = stackObjectValue(4, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	borderIndex = positive32BitValueOf(stackValue(0, self), self);
+	borderWidth = stackIntegerValue(1, self);
+	fillIndex = positive32BitValueOf(stackValue(2, self), self);
+	endOop = stackObjectValue(3, self);
+	startOop = stackObjectValue(4, self);
+	if (failed(self)) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(5, interpreterProxy->interpreterState), GEStateUnlocked))) == 0)) {
-		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
+	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(5, self), GEStateUnlocked, self))) == 0)) {
+		return primitiveFailFor(failureCode, self);
 	}
-	if (!((isFillOkay(borderIndex))
-		 && (isFillOkay(fillIndex)))) {
-		return primitiveFailFor(GEFWrongFill, interpreterProxy->interpreterState);
+	if (!((isFillOkay(borderIndex, self))
+		 && (isFillOkay(fillIndex, self)))) {
+		return primitiveFailFor(GEFWrongFill, self);
 	}
-	borderIndex = transformColor(borderIndex);
-	fillIndex = transformColor(fillIndex);
+	borderIndex = transformColor(borderIndex, self);
+	fillIndex = transformColor(fillIndex, self);
 	if (engineStopped) {
-		return primitiveFailFor(GEFEngineStopped, interpreterProxy->interpreterState);
+		return primitiveFailFor(GEFEngineStopped, self);
 	}
 	if ((fillIndex == 0)
 	 && ((borderIndex == 0)
 	 || (borderWidth == 0))) {
-		return pop(5, interpreterProxy->interpreterState);
+		return pop(5, self);
 	}
-	if (!(needAvailableSpace(4 * GLBaseSize))) {
-		return primitiveFailFor(GEFWorkTooBig, interpreterProxy->interpreterState);
+	if (!(needAvailableSpace(4 * GLBaseSize, self))) {
+		return primitiveFailFor(GEFWorkTooBig, self);
 	}
 	if ((borderWidth > 0)
 	 && (borderIndex != 0)) {
-		borderWidth = transformWidth(borderWidth);
+		borderWidth = transformWidth(borderWidth, self);
 	}
 	else {
 		borderWidth = 0;
 	}
-	loadPointfrom(((int *) (workBuffer + GWPoint1)), startOop);
-	loadPointfrom(((int *) (workBuffer + GWPoint3)), endOop);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(GEFBadPoint, interpreterProxy->interpreterState);
+	loadPointfrom(((int *) (workBuffer + GWPoint1)), startOop, self);
+	loadPointfrom(((int *) (workBuffer + GWPoint3)), endOop, self);
+	if (failed(self)) {
+		return primitiveFailFor(GEFBadPoint, self);
 	}
 	(((int *) (workBuffer + GWPoint2)))[0] = ((((int *) (workBuffer + GWPoint3)))[0]);
 	(((int *) (workBuffer + GWPoint2)))[1] = ((((int *) (workBuffer + GWPoint1)))[1]);
@@ -10704,18 +10384,18 @@ primitiveAddRect(void)
 		}
 	}
 	/* begin loadRectangle:lineFill:leftFill:rightFill: */
-	loadWideLinefromtolineFillleftFillrightFill(borderWidth, ((int *) (workBuffer + GWPoint1)), ((int *) (workBuffer + GWPoint2)), borderIndex, 0, fillIndex);
-	loadWideLinefromtolineFillleftFillrightFill(borderWidth, ((int *) (workBuffer + GWPoint2)), ((int *) (workBuffer + GWPoint3)), borderIndex, 0, fillIndex);
-	loadWideLinefromtolineFillleftFillrightFill(borderWidth, ((int *) (workBuffer + GWPoint3)), ((int *) (workBuffer + GWPoint4)), borderIndex, 0, fillIndex);
-	loadWideLinefromtolineFillleftFillrightFill(borderWidth, ((int *) (workBuffer + GWPoint4)), ((int *) (workBuffer + GWPoint1)), borderIndex, 0, fillIndex);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(GEFEntityLoadFailed, interpreterProxy->interpreterState);
+	loadWideLinefromtolineFillleftFillrightFill(borderWidth, ((int *) (workBuffer + GWPoint1)), ((int *) (workBuffer + GWPoint2)), borderIndex, 0, fillIndex, self);
+	loadWideLinefromtolineFillleftFillrightFill(borderWidth, ((int *) (workBuffer + GWPoint2)), ((int *) (workBuffer + GWPoint3)), borderIndex, 0, fillIndex, self);
+	loadWideLinefromtolineFillleftFillrightFill(borderWidth, ((int *) (workBuffer + GWPoint3)), ((int *) (workBuffer + GWPoint4)), borderIndex, 0, fillIndex, self);
+	loadWideLinefromtolineFillleftFillrightFill(borderWidth, ((int *) (workBuffer + GWPoint4)), ((int *) (workBuffer + GWPoint1)), borderIndex, 0, fillIndex, self);
+	if (failed(self)) {
+		return primitiveFailFor(GEFEntityLoadFailed, self);
 	}
 	/* begin needsFlushPut: */
 	workBuffer[GWNeedsFlush] = 1;
 	/* begin storeEngineStateInto: */
 	workBuffer[GWObjUsed] = objUsed;
-	pop(5, interpreterProxy->interpreterState);
+	pop(5, self);
 	return 0;
 }
 
@@ -10723,8 +10403,7 @@ primitiveAddRect(void)
 /*	Note: No need to load either bitBlt or spanBuffer */
 
 	/* BalloonEngineBase>>#primitiveChangedActiveEdgeEntry */
-EXPORT(sqInt)
-primitiveChangedActiveEdgeEntry(void)
+EXPORT(sqInt)primitiveChangedActiveEdgeEntry(struct foo * self)
 {
     sqInt edge;
     sqInt edgeOop;
@@ -10735,25 +10414,25 @@ primitiveChangedActiveEdgeEntry(void)
 	if (doProfileStats) {
 		geProfileTime = ioMicroMSecs();
 	}
-	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 1)) {
-		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
+	if (!((methodArgumentCount(self)) == 1)) {
+		return primitiveFailFor(PrimErrBadNumArgs, self);
 	}
-	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(1, interpreterProxy->interpreterState), GEStateWaitingChange))) == 0)) {
-		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
+	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(1, self), GEStateWaitingChange, self))) == 0)) {
+		return primitiveFailFor(failureCode, self);
 	}
-	edgeOop = stackObjectValue(0, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	edgeOop = stackObjectValue(0, self);
+	if (failed(self)) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	edge = loadEdgeStateFrom(edgeOop);
+	edge = loadEdgeStateFrom(edgeOop, self);
 	if (edge == null) {
-		return primitiveFailFor(GEFEdgeDataTooSmall, interpreterProxy->interpreterState);
+		return primitiveFailFor(GEFEdgeDataTooSmall, self);
 	}
 	if ((objBuffer[edge + GENumLines]) == 0) {
-		removeFirstAETEntry();
+		removeFirstAETEntry(self);
 	}
 	else {
-		resortFirstAETEntry();
+		resortFirstAETEntry(self);
 		/* begin aetStartPut: */
 		value = (workBuffer[GWAETStart]) + 1;
 		workBuffer[GWAETStart] = value;
@@ -10761,7 +10440,7 @@ primitiveChangedActiveEdgeEntry(void)
 	workBuffer[GWState] = GEStateUpdateEdges;
 	/* begin storeEngineStateInto: */
 	workBuffer[GWObjUsed] = objUsed;
-	pop(1, interpreterProxy->interpreterState);
+	pop(1, self);
 	if (doProfileStats) {
 		/* begin incrementStat:by: */
 		workBuffer[GWCountChangeAETEntry] = ((workBuffer[GWCountChangeAETEntry]) + 1);
@@ -10773,8 +10452,7 @@ primitiveChangedActiveEdgeEntry(void)
 }
 
 	/* BalloonEngineBase>>#primitiveCopyBuffer */
-EXPORT(sqInt)
-primitiveCopyBuffer(void)
+EXPORT(sqInt)primitiveCopyBuffer(struct foo * self)
 {
     sqInt buf1;
     sqInt buf2;
@@ -10784,25 +10462,25 @@ primitiveCopyBuffer(void)
     sqInt i;
     int *src;
 
-	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 2)) {
-		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
+	if (!((methodArgumentCount(self)) == 2)) {
+		return primitiveFailFor(PrimErrBadNumArgs, self);
 	}
-	buf2 = stackValue(0, interpreterProxy->interpreterState);
+	buf2 = stackValue(0, self);
 
 	/* Make sure the old buffer is properly initialized */
-	buf1 = stackValue(1, interpreterProxy->interpreterState);
-	if (!(((failCode = loadWorkBufferFrom(buf1))) == 0)) {
-		return primitiveFailFor(failCode, interpreterProxy->interpreterState);
+	buf1 = stackValue(1, self);
+	if (!(((failCode = loadWorkBufferFrom(buf1, self))) == 0)) {
+		return primitiveFailFor(failCode, self);
 	}
-	if (!((fetchClassOf(buf1, interpreterProxy->interpreterState)) == (fetchClassOf(buf2, interpreterProxy->interpreterState)))) {
-		return primitiveFailFor(GEFClassMismatch, interpreterProxy->interpreterState);
+	if (!((fetchClassOf(buf1, self)) == (fetchClassOf(buf2, self)))) {
+		return primitiveFailFor(GEFClassMismatch, self);
 	}
-	diff = (slotSizeOf(buf2, interpreterProxy->interpreterState)) - (slotSizeOf(buf1, interpreterProxy->interpreterState));
+	diff = (slotSizeOf(buf2, self)) - (slotSizeOf(buf1, self));
 	if (diff < 0) {
-		return primitiveFailFor(GEFSizeMismatch, interpreterProxy->interpreterState);
+		return primitiveFailFor(GEFSizeMismatch, self);
 	}
 	src = workBuffer;
-	dst = firstIndexableField(buf2, interpreterProxy->interpreterState);
+	dst = firstIndexableField(buf2, self);
 	for (i = 0; i < (workBuffer[GWBufferTop]); i += 1) {
 		dst[i] = (src[i]);
 	}
@@ -10813,10 +10491,10 @@ primitiveCopyBuffer(void)
 	for (i = 0; i < ((workBuffer[GWSize]) - (workBuffer[GWBufferTop])); i += 1) {
 		dst[i] = (src[i]);
 	}
-	if (!(((failCode = loadWorkBufferFrom(buf2))) == 0)) {
-		return primitiveFailFor(failCode, interpreterProxy->interpreterState);
+	if (!(((failCode = loadWorkBufferFrom(buf2, self))) == 0)) {
+		return primitiveFailFor(failCode, self);
 	}
-	pop(2, interpreterProxy->interpreterState);
+	pop(2, self);
 	return 0;
 }
 
@@ -10824,8 +10502,7 @@ primitiveCopyBuffer(void)
 /*	Note: Must load bitBlt and spanBuffer */
 
 	/* BalloonEngineBase>>#primitiveDisplaySpanBuffer */
-EXPORT(sqInt)
-primitiveDisplaySpanBuffer(void)
+EXPORT(sqInt)primitiveDisplaySpanBuffer(struct foo * self)
 {
     sqInt failureCode;
     sqInt value;
@@ -10834,21 +10511,21 @@ primitiveDisplaySpanBuffer(void)
 	if (doProfileStats) {
 		geProfileTime = ioMicroMSecs();
 	}
-	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 0)) {
-		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
+	if (!((methodArgumentCount(self)) == 0)) {
+		return primitiveFailFor(PrimErrBadNumArgs, self);
 	}
-	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(0, interpreterProxy->interpreterState), GEStateBlitBuffer))) == 0)) {
-		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
+	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(0, self), GEStateBlitBuffer, self))) == 0)) {
+		return primitiveFailFor(failureCode, self);
 	}
-	if (!(((failureCode = loadSpanBufferFrom(fetchPointerofObject(BESpanIndex, engine, interpreterProxy->interpreterState)))) == 0)) {
-		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
+	if (!(((failureCode = loadSpanBufferFrom(fetchPointerofObject(BESpanIndex, engine, self), self))) == 0)) {
+		return primitiveFailFor(failureCode, self);
 	}
-	if (!(loadBitBltFrom(fetchPointerofObject(BEBitBltIndex, engine, interpreterProxy->interpreterState), interpreterProxy->interpreterState))) {
-		return primitiveFailFor(GEFBitBltLoadFailed, interpreterProxy->interpreterState);
+	if (!(loadBitBltFrom(fetchPointerofObject(BEBitBltIndex, engine, self), self))) {
+		return primitiveFailFor(GEFBitBltLoadFailed, self);
 	}
 	if (((workBuffer[GWCurrentY]) & (workBuffer[GWAAScanMask])) == (workBuffer[GWAAScanMask])) {
-		displaySpanBufferAt(workBuffer[GWCurrentY]);
-		postDisplayAction();
+		displaySpanBufferAt(workBuffer[GWCurrentY], self);
+		postDisplayAction(self);
 	}
 	if (!((workBuffer[GWState]) == GEStateCompleted)) {
 		/* begin aetStartPut: */
@@ -10874,26 +10551,24 @@ primitiveDisplaySpanBuffer(void)
 /*	Turn on/off profiling. Return the old value of the flag. */
 
 	/* BalloonEngineBase>>#primitiveDoProfileStats */
-EXPORT(sqInt)
-primitiveDoProfileStats(void)
+EXPORT(sqInt)primitiveDoProfileStats(struct foo * self)
 {
     sqInt newValue;
     int oldValue;
 
 	oldValue = doProfileStats;
-	newValue = stackObjectValue(0, interpreterProxy->interpreterState);
-	newValue = booleanValueOf(newValue, interpreterProxy->interpreterState);
-	if (!(failed(interpreterProxy->interpreterState))) {
+	newValue = stackObjectValue(0, self);
+	newValue = booleanValueOf(newValue, self);
+	if (!(failed(self))) {
 		doProfileStats = newValue;
-		pop(2, interpreterProxy->interpreterState);
-		pushBool(oldValue, interpreterProxy->interpreterState);
+		pop(2, self);
+		pushBool(oldValue, self);
 	}
 	return 0;
 }
 
 	/* BalloonEngineBase>>#primitiveFinishedProcessing */
-EXPORT(sqInt)
-primitiveFinishedProcessing(void)
+EXPORT(sqInt)primitiveFinishedProcessing(struct foo * self)
 {
     sqInt failureCode;
     sqInt finished;
@@ -10902,18 +10577,18 @@ primitiveFinishedProcessing(void)
 	if (doProfileStats) {
 		geProfileTime = ioMicroMSecs();
 	}
-	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 0)) {
-		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
+	if (!((methodArgumentCount(self)) == 0)) {
+		return primitiveFailFor(PrimErrBadNumArgs, self);
 	}
-	if (!(((failureCode = quickLoadEngineFrom(stackValue(0, interpreterProxy->interpreterState)))) == 0)) {
-		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
+	if (!(((failureCode = quickLoadEngineFrom(stackValue(0, self), self))) == 0)) {
+		return primitiveFailFor(failureCode, self);
 	}
 	/* begin finishedProcessing */
 	finished = (workBuffer[GWState]) == GEStateCompleted;
 	/* begin storeEngineStateInto: */
 	workBuffer[GWObjUsed] = objUsed;
-	pop(1, interpreterProxy->interpreterState);
-	pushBool(finished, interpreterProxy->interpreterState);
+	pop(1, self);
+	pushBool(finished, self);
 	if (doProfileStats) {
 		/* begin incrementStat:by: */
 		workBuffer[GWCountFinishTest] = ((workBuffer[GWCountFinishTest]) + 1);
@@ -10925,102 +10600,98 @@ primitiveFinishedProcessing(void)
 }
 
 	/* BalloonEngineBase>>#primitiveGetAALevel */
-EXPORT(sqInt)
-primitiveGetAALevel(void)
+EXPORT(sqInt)primitiveGetAALevel(struct foo * self)
 {
     sqInt failureCode;
 
-	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 0)) {
-		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
+	if (!((methodArgumentCount(self)) == 0)) {
+		return primitiveFailFor(PrimErrBadNumArgs, self);
 	}
-	if (!(((failureCode = quickLoadEngineFrom(stackValue(0, interpreterProxy->interpreterState)))) == 0)) {
-		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
+	if (!(((failureCode = quickLoadEngineFrom(stackValue(0, self), self))) == 0)) {
+		return primitiveFailFor(failureCode, self);
 	}
-	pop(1, interpreterProxy->interpreterState);
-	pushInteger(workBuffer[GWAALevel], interpreterProxy->interpreterState);
+	pop(1, self);
+	pushInteger(workBuffer[GWAALevel], self);
 	return 0;
 }
 
 	/* BalloonEnginePlugin>>#primitiveGetBezierStats */
-EXPORT(sqInt)
-primitiveGetBezierStats(void)
+EXPORT(sqInt)primitiveGetBezierStats(struct foo * self)
 {
     sqInt failureCode;
     sqInt statOop;
     int *stats;
 
-	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 1)) {
-		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
+	if (!((methodArgumentCount(self)) == 1)) {
+		return primitiveFailFor(PrimErrBadNumArgs, self);
 	}
-	if (!(((failureCode = quickLoadEngineFrom(stackValue(1, interpreterProxy->interpreterState)))) == 0)) {
-		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
+	if (!(((failureCode = quickLoadEngineFrom(stackValue(1, self), self))) == 0)) {
+		return primitiveFailFor(failureCode, self);
 	}
-	statOop = stackObjectValue(0, interpreterProxy->interpreterState);
-	if (!((!(failed(interpreterProxy->interpreterState)))
-		 && ((isWords(statOop, interpreterProxy->interpreterState))
-		 && ((slotSizeOf(statOop, interpreterProxy->interpreterState)) >= 4)))) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	statOop = stackObjectValue(0, self);
+	if (!((!(failed(self)))
+		 && ((isWords(statOop, self))
+		 && ((slotSizeOf(statOop, self)) >= 4)))) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	stats = firstIndexableField(statOop, interpreterProxy->interpreterState);
+	stats = firstIndexableField(statOop, self);
 	stats[0] = ((stats[0]) + (workBuffer[GWBezierMonotonSubdivisions]));
 	stats[1] = ((stats[1]) + (workBuffer[GWBezierHeightSubdivisions]));
 	stats[2] = ((stats[2]) + (workBuffer[GWBezierOverflowSubdivisions]));
 	stats[3] = ((stats[3]) + (workBuffer[GWBezierLineConversions]));
-	pop(1, interpreterProxy->interpreterState);
+	pop(1, self);
 	return 0;
 }
 
 	/* BalloonEngineBase>>#primitiveGetClipRect */
-EXPORT(sqInt)
-primitiveGetClipRect(void)
+EXPORT(sqInt)primitiveGetClipRect(struct foo * self)
 {
     sqInt failureCode;
     sqInt pointOop;
     sqInt rectOop;
 
-	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 1)) {
-		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
+	if (!((methodArgumentCount(self)) == 1)) {
+		return primitiveFailFor(PrimErrBadNumArgs, self);
 	}
-	if (!(((failureCode = quickLoadEngineFrom(stackValue(1, interpreterProxy->interpreterState)))) == 0)) {
-		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
+	if (!(((failureCode = quickLoadEngineFrom(stackValue(1, self), self))) == 0)) {
+		return primitiveFailFor(failureCode, self);
 	}
-	rectOop = stackObjectValue(0, interpreterProxy->interpreterState);
-	if (!((!(failed(interpreterProxy->interpreterState)))
-		 && ((isPointers(rectOop, interpreterProxy->interpreterState))
-		 && ((slotSizeOf(rectOop, interpreterProxy->interpreterState)) >= 2)))) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	rectOop = stackObjectValue(0, self);
+	if (!((!(failed(self)))
+		 && ((isPointers(rectOop, self))
+		 && ((slotSizeOf(rectOop, self)) >= 2)))) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	pushRemappableOop(rectOop, interpreterProxy->interpreterState);
-	pointOop = makePointwithxValueyValue(workBuffer[GWClipMinX], workBuffer[GWClipMinY], interpreterProxy->interpreterState);
-	storePointerofObjectwithValue(0, topRemappableOop(interpreterProxy->interpreterState), pointOop, interpreterProxy->interpreterState);
-	pointOop = makePointwithxValueyValue(workBuffer[GWClipMaxX], workBuffer[GWClipMaxY], interpreterProxy->interpreterState);
-	rectOop = popRemappableOop(interpreterProxy->interpreterState);
-	storePointerofObjectwithValue(1, rectOop, pointOop, interpreterProxy->interpreterState);
-	popthenPush(2, rectOop, interpreterProxy->interpreterState);
+	pushRemappableOop(rectOop, self);
+	pointOop = makePointwithxValueyValue(workBuffer[GWClipMinX], workBuffer[GWClipMinY], self);
+	storePointerofObjectwithValue(0, topRemappableOop(self), pointOop, self);
+	pointOop = makePointwithxValueyValue(workBuffer[GWClipMaxX], workBuffer[GWClipMaxY], self);
+	rectOop = popRemappableOop(self);
+	storePointerofObjectwithValue(1, rectOop, pointOop, self);
+	popthenPush(2, rectOop, self);
 	return 0;
 }
 
 	/* BalloonEngineBase>>#primitiveGetCounts */
-EXPORT(sqInt)
-primitiveGetCounts(void)
+EXPORT(sqInt)primitiveGetCounts(struct foo * self)
 {
     sqInt failureCode;
     sqInt statOop;
     int *stats;
 
-	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 1)) {
-		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
+	if (!((methodArgumentCount(self)) == 1)) {
+		return primitiveFailFor(PrimErrBadNumArgs, self);
 	}
-	if (!(((failureCode = quickLoadEngineFrom(stackValue(1, interpreterProxy->interpreterState)))) == 0)) {
-		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
+	if (!(((failureCode = quickLoadEngineFrom(stackValue(1, self), self))) == 0)) {
+		return primitiveFailFor(failureCode, self);
 	}
-	statOop = stackObjectValue(0, interpreterProxy->interpreterState);
-	if (!((!(failed(interpreterProxy->interpreterState)))
-		 && ((isWords(statOop, interpreterProxy->interpreterState))
-		 && ((slotSizeOf(statOop, interpreterProxy->interpreterState)) >= 9)))) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	statOop = stackObjectValue(0, self);
+	if (!((!(failed(self)))
+		 && ((isWords(statOop, self))
+		 && ((slotSizeOf(statOop, self)) >= 9)))) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	stats = firstIndexableField(statOop, interpreterProxy->interpreterState);
+	stats = firstIndexableField(statOop, self);
 	stats[0] = ((stats[0]) + (workBuffer[GWCountInitializing]));
 	stats[1] = ((stats[1]) + (workBuffer[GWCountFinishTest]));
 	stats[2] = ((stats[2]) + (workBuffer[GWCountNextGETEntry]));
@@ -11030,24 +10701,23 @@ primitiveGetCounts(void)
 	stats[6] = ((stats[6]) + (workBuffer[GWCountDisplaySpan]));
 	stats[7] = ((stats[7]) + (workBuffer[GWCountNextAETEntry]));
 	stats[8] = ((stats[8]) + (workBuffer[GWCountChangeAETEntry]));
-	pop(1, interpreterProxy->interpreterState);
+	pop(1, self);
 	return 0;
 }
 
 	/* BalloonEngineBase>>#primitiveGetDepth */
-EXPORT(sqInt)
-primitiveGetDepth(void)
+EXPORT(sqInt)primitiveGetDepth(struct foo * self)
 {
     sqInt failureCode;
 
-	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 0)) {
-		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
+	if (!((methodArgumentCount(self)) == 0)) {
+		return primitiveFailFor(PrimErrBadNumArgs, self);
 	}
-	if (!(((failureCode = quickLoadEngineFrom(stackValue(0, interpreterProxy->interpreterState)))) == 0)) {
-		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
+	if (!(((failureCode = quickLoadEngineFrom(stackValue(0, self), self))) == 0)) {
+		return primitiveFailFor(failureCode, self);
 	}
-	pop(1, interpreterProxy->interpreterState);
-	pushInteger(workBuffer[GWCurrentZ], interpreterProxy->interpreterState);
+	pop(1, self);
+	pushInteger(workBuffer[GWCurrentZ], self);
 	return 0;
 }
 
@@ -11055,73 +10725,70 @@ primitiveGetDepth(void)
 /*	Return the reason why the last operation failed. */
 
 	/* BalloonEngineBase>>#primitiveGetFailureReason */
-EXPORT(sqInt)
-primitiveGetFailureReason(void)
+EXPORT(sqInt)primitiveGetFailureReason(struct foo * self)
 {
     sqInt failCode;
 
-	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 0)) {
-		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
+	if (!((methodArgumentCount(self)) == 0)) {
+		return primitiveFailFor(PrimErrBadNumArgs, self);
 	}
 
 	/* Note -- don't call loadEngineFrom here because this will override the stopReason with Zero */
-	engine = stackValue(0, interpreterProxy->interpreterState);
-	if (isImmediate(engine, interpreterProxy->interpreterState)) {
-		return primitiveFailFor(GEFEngineIsInteger, interpreterProxy->interpreterState);
+	engine = stackValue(0, self);
+	if (isImmediate(engine, self)) {
+		return primitiveFailFor(GEFEngineIsInteger, self);
 	}
-	if (!(isPointers(engine, interpreterProxy->interpreterState))) {
-		return primitiveFailFor(GEFEngineIsWords, interpreterProxy->interpreterState);
+	if (!(isPointers(engine, self))) {
+		return primitiveFailFor(GEFEngineIsWords, self);
 	}
-	if ((slotSizeOf(engine, interpreterProxy->interpreterState)) < BEBalloonEngineSize) {
-		return primitiveFailFor(GEFEngineTooSmall, interpreterProxy->interpreterState);
+	if ((slotSizeOf(engine, self)) < BEBalloonEngineSize) {
+		return primitiveFailFor(GEFEngineTooSmall, self);
 	}
-	if (!(((failCode = loadWorkBufferFrom(fetchPointerofObject(BEWorkBufferIndex, engine, interpreterProxy->interpreterState)))) == 0)) {
-		return primitiveFailFor(failCode, interpreterProxy->interpreterState);
+	if (!(((failCode = loadWorkBufferFrom(fetchPointerofObject(BEWorkBufferIndex, engine, self), self))) == 0)) {
+		return primitiveFailFor(failCode, self);
 	}
-	pop(1, interpreterProxy->interpreterState);
-	pushInteger(workBuffer[GWStopReason], interpreterProxy->interpreterState);
+	pop(1, self);
+	pushInteger(workBuffer[GWStopReason], self);
 	return 0;
 }
 
 	/* BalloonEngineBase>>#primitiveGetOffset */
-EXPORT(sqInt)
-primitiveGetOffset(void)
+EXPORT(sqInt)primitiveGetOffset(struct foo * self)
 {
     sqInt failureCode;
     sqInt pointOop;
 
-	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 0)) {
-		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
+	if (!((methodArgumentCount(self)) == 0)) {
+		return primitiveFailFor(PrimErrBadNumArgs, self);
 	}
-	if (!(((failureCode = quickLoadEngineFrom(stackValue(0, interpreterProxy->interpreterState)))) == 0)) {
-		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
+	if (!(((failureCode = quickLoadEngineFrom(stackValue(0, self), self))) == 0)) {
+		return primitiveFailFor(failureCode, self);
 	}
-	pointOop = makePointwithxValueyValue(workBuffer[GWDestOffsetX], workBuffer[GWDestOffsetY], interpreterProxy->interpreterState);
-	popthenPush(1, pointOop, interpreterProxy->interpreterState);
+	pointOop = makePointwithxValueyValue(workBuffer[GWDestOffsetX], workBuffer[GWDestOffsetY], self);
+	popthenPush(1, pointOop, self);
 	return 0;
 }
 
 	/* BalloonEngineBase>>#primitiveGetTimes */
-EXPORT(sqInt)
-primitiveGetTimes(void)
+EXPORT(sqInt)primitiveGetTimes(struct foo * self)
 {
     sqInt failureCode;
     sqInt statOop;
     int *stats;
 
-	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 1)) {
-		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
+	if (!((methodArgumentCount(self)) == 1)) {
+		return primitiveFailFor(PrimErrBadNumArgs, self);
 	}
-	if (!(((failureCode = quickLoadEngineFrom(stackValue(1, interpreterProxy->interpreterState)))) == 0)) {
-		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
+	if (!(((failureCode = quickLoadEngineFrom(stackValue(1, self), self))) == 0)) {
+		return primitiveFailFor(failureCode, self);
 	}
-	statOop = stackObjectValue(0, interpreterProxy->interpreterState);
-	if (!((!(failed(interpreterProxy->interpreterState)))
-		 && ((isWords(statOop, interpreterProxy->interpreterState))
-		 && ((slotSizeOf(statOop, interpreterProxy->interpreterState)) >= 9)))) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	statOop = stackObjectValue(0, self);
+	if (!((!(failed(self)))
+		 && ((isWords(statOop, self))
+		 && ((slotSizeOf(statOop, self)) >= 9)))) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	stats = firstIndexableField(statOop, interpreterProxy->interpreterState);
+	stats = firstIndexableField(statOop, self);
 	stats[0] = ((stats[0]) + (workBuffer[GWTimeInitializing]));
 	stats[1] = ((stats[1]) + (workBuffer[GWTimeFinishTest]));
 	stats[2] = ((stats[2]) + (workBuffer[GWTimeNextGETEntry]));
@@ -11131,24 +10798,23 @@ primitiveGetTimes(void)
 	stats[6] = ((stats[6]) + (workBuffer[GWTimeDisplaySpan]));
 	stats[7] = ((stats[7]) + (workBuffer[GWTimeNextAETEntry]));
 	stats[8] = ((stats[8]) + (workBuffer[GWTimeChangeAETEntry]));
-	pop(1, interpreterProxy->interpreterState);
+	pop(1, self);
 	return 0;
 }
 
 	/* BalloonEngineBase>>#primitiveInitializeBuffer */
-EXPORT(sqInt)
-primitiveInitializeBuffer(void)
+EXPORT(sqInt)primitiveInitializeBuffer(struct foo * self)
 {
     sqInt size;
     sqInt wbOop;
 
-	if (!(((methodArgumentCount(interpreterProxy->interpreterState)) == 1)
-		 && ((isWords((wbOop = stackValue(0, interpreterProxy->interpreterState)), interpreterProxy->interpreterState))
-		 && (((size = slotSizeOf(wbOop, interpreterProxy->interpreterState))) >= GWMinimalSize)))) {
-		return primitiveFail(interpreterProxy->interpreterState);
+	if (!(((methodArgumentCount(self)) == 1)
+		 && ((isWords((wbOop = stackValue(0, self)), self))
+		 && (((size = slotSizeOf(wbOop, self))) >= GWMinimalSize)))) {
+		return primitiveFail(self);
 	}
 	/* begin workBufferPut: */
-	workBuffer = firstIndexableField(wbOop, interpreterProxy->interpreterState);
+	workBuffer = firstIndexableField(wbOop, self);
 	objBuffer = workBuffer + GWHeaderSize;
 	/* begin magicNumberPut: */
 	workBuffer[GWMagicIndex] = GWMagicNumber;
@@ -11186,10 +10852,10 @@ primitiveInitializeBuffer(void)
 	workBuffer[GWClipMaxY] = 0;
 	/* begin currentZPut: */
 	workBuffer[GWCurrentZ] = 0;
-	resetGraphicsEngineStats();
-	initEdgeTransform();
-	initColorTransform();
-	popthenPush(2, wbOop, interpreterProxy->interpreterState);
+	resetGraphicsEngineStats(self);
+	initEdgeTransform(self);
+	initColorTransform(self);
+	popthenPush(2, wbOop, self);
 	return 0;
 }
 
@@ -11197,8 +10863,7 @@ primitiveInitializeBuffer(void)
 /*	Note: No need to load bitBlt but must load spanBuffer */
 
 	/* BalloonEngineBase>>#primitiveInitializeProcessing */
-EXPORT(sqInt)
-primitiveInitializeProcessing(void)
+EXPORT(sqInt)primitiveInitializeProcessing(struct foo * self)
 {
     sqInt failureCode;
     sqInt value;
@@ -11206,21 +10871,21 @@ primitiveInitializeProcessing(void)
 	if (doProfileStats) {
 		geProfileTime = ioMicroMSecs();
 	}
-	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 0)) {
-		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
+	if (!((methodArgumentCount(self)) == 0)) {
+		return primitiveFailFor(PrimErrBadNumArgs, self);
 	}
-	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(0, interpreterProxy->interpreterState), GEStateUnlocked))) == 0)) {
-		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
+	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(0, self), GEStateUnlocked, self))) == 0)) {
+		return primitiveFailFor(failureCode, self);
 	}
-	if (!(((failureCode = loadSpanBufferFrom(fetchPointerofObject(BESpanIndex, engine, interpreterProxy->interpreterState)))) == 0)) {
-		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
+	if (!(((failureCode = loadSpanBufferFrom(fetchPointerofObject(BESpanIndex, engine, self), self))) == 0)) {
+		return primitiveFailFor(failureCode, self);
 	}
-	initializeGETProcessing();
+	initializeGETProcessing(self);
 	if (engineStopped) {
-		return primitiveFailFor(GEFEngineStopped, interpreterProxy->interpreterState);
+		return primitiveFailFor(GEFEngineStopped, self);
 	}
 	workBuffer[GWState] = GEStateAddingFromGET;
-	if (!(failed(interpreterProxy->interpreterState))) {
+	if (!(failed(self))) {
 		/* begin storeEngineStateInto: */
 		workBuffer[GWObjUsed] = objUsed;
 	}
@@ -11238,8 +10903,7 @@ primitiveInitializeProcessing(void)
 /*	Note: No need to load bitBlt but must load spanBuffer */
 
 	/* BalloonEngineBase>>#primitiveMergeFillFrom */
-EXPORT(sqInt)
-primitiveMergeFillFrom(void)
+EXPORT(sqInt)primitiveMergeFillFrom(struct foo * self)
 {
     sqInt bitsOop;
     sqInt failureCode;
@@ -11250,49 +10914,49 @@ primitiveMergeFillFrom(void)
 	if (doProfileStats) {
 		geProfileTime = ioMicroMSecs();
 	}
-	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 2)) {
-		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
+	if (!((methodArgumentCount(self)) == 2)) {
+		return primitiveFailFor(PrimErrBadNumArgs, self);
 	}
-	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(2, interpreterProxy->interpreterState), GEStateWaitingForFill))) == 0)) {
-		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
+	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(2, self), GEStateWaitingForFill, self))) == 0)) {
+		return primitiveFailFor(failureCode, self);
 	}
-	if (!(((failureCode = loadSpanBufferFrom(fetchPointerofObject(BESpanIndex, engine, interpreterProxy->interpreterState)))) == 0)) {
-		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
+	if (!(((failureCode = loadSpanBufferFrom(fetchPointerofObject(BESpanIndex, engine, self), self))) == 0)) {
+		return primitiveFailFor(failureCode, self);
 	}
-	fillOop = stackObjectValue(0, interpreterProxy->interpreterState);
+	fillOop = stackObjectValue(0, self);
 
 	/* Check bitmap */
-	bitsOop = stackObjectValue(1, interpreterProxy->interpreterState);
-	if (!((!(failed(interpreterProxy->interpreterState)))
-		 && ((fetchClassOf(bitsOop, interpreterProxy->interpreterState)) == (classBitmap(interpreterProxy->interpreterState))))) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	bitsOop = stackObjectValue(1, self);
+	if (!((!(failed(self)))
+		 && ((fetchClassOf(bitsOop, self)) == (classBitmap(self))))) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	if ((slotSizeOf(fillOop, interpreterProxy->interpreterState)) < FTBalloonFillDataSize) {
-		return primitiveFailFor(GEFFillDataTooSmall, interpreterProxy->interpreterState);
+	if ((slotSizeOf(fillOop, self)) < FTBalloonFillDataSize) {
+		return primitiveFailFor(GEFFillDataTooSmall, self);
 	}
-	value = fetchIntegerofObject(FTIndexIndex, fillOop, interpreterProxy->interpreterState);
+	value = fetchIntegerofObject(FTIndexIndex, fillOop, self);
 	if (!((objBuffer[(workBuffer[GWLastExportedFill]) + GEObjectIndex]) == value)) {
-		return primitiveFailFor(GEFWrongFill, interpreterProxy->interpreterState);
+		return primitiveFailFor(GEFWrongFill, self);
 	}
-	value = fetchIntegerofObject(FTMinXIndex, fillOop, interpreterProxy->interpreterState);
+	value = fetchIntegerofObject(FTMinXIndex, fillOop, self);
 	if (!((workBuffer[GWLastExportedLeftX]) == value)) {
-		return primitiveFailFor(GEFWrongFill, interpreterProxy->interpreterState);
+		return primitiveFailFor(GEFWrongFill, self);
 	}
-	value = fetchIntegerofObject(FTMaxXIndex, fillOop, interpreterProxy->interpreterState);
+	value = fetchIntegerofObject(FTMaxXIndex, fillOop, self);
 	if (!((workBuffer[GWLastExportedRightX]) == value)) {
-		return primitiveFailFor(GEFWrongFill, interpreterProxy->interpreterState);
+		return primitiveFailFor(GEFWrongFill, self);
 	}
-	if ((slotSizeOf(bitsOop, interpreterProxy->interpreterState)) < ((workBuffer[GWLastExportedRightX]) - (workBuffer[GWLastExportedLeftX]))) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	if ((slotSizeOf(bitsOop, self)) < ((workBuffer[GWLastExportedRightX]) - (workBuffer[GWLastExportedLeftX]))) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	if (failed(interpreterProxy->interpreterState)) {
+	if (failed(self)) {
 		return null;
 	}
-	fillBitmapSpanfromto(firstIndexableField(bitsOop, interpreterProxy->interpreterState), workBuffer[GWLastExportedLeftX], workBuffer[GWLastExportedRightX]);
+	fillBitmapSpanfromto(firstIndexableField(bitsOop, self), workBuffer[GWLastExportedLeftX], workBuffer[GWLastExportedRightX], self);
 	workBuffer[GWState] = GEStateScanningAET;
 	/* begin storeEngineStateInto: */
 	workBuffer[GWObjUsed] = objUsed;
-	pop(2, interpreterProxy->interpreterState);
+	pop(2, self);
 	if (doProfileStats) {
 		/* begin incrementStat:by: */
 		workBuffer[GWCountMergeFill] = ((workBuffer[GWCountMergeFill]) + 1);
@@ -11304,43 +10968,41 @@ primitiveMergeFillFrom(void)
 }
 
 	/* BalloonEngineBase>>#primitiveNeedsFlush */
-EXPORT(sqInt)
-primitiveNeedsFlush(void)
+EXPORT(sqInt)primitiveNeedsFlush(struct foo * self)
 {
     sqInt failureCode;
     sqInt needFlush;
 
-	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 0)) {
-		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
+	if (!((methodArgumentCount(self)) == 0)) {
+		return primitiveFailFor(PrimErrBadNumArgs, self);
 	}
-	if (!(((failureCode = quickLoadEngineFrom(stackValue(0, interpreterProxy->interpreterState)))) == 0)) {
-		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
+	if (!(((failureCode = quickLoadEngineFrom(stackValue(0, self), self))) == 0)) {
+		return primitiveFailFor(failureCode, self);
 	}
 	/* begin needsFlush */
 	needFlush = (workBuffer[GWNeedsFlush]) != 0;
 	/* begin storeEngineStateInto: */
 	workBuffer[GWObjUsed] = objUsed;
-	pop(1, interpreterProxy->interpreterState);
-	pushBool(needFlush, interpreterProxy->interpreterState);
+	pop(1, self);
+	pushBool(needFlush, self);
 	return 0;
 }
 
 	/* BalloonEngineBase>>#primitiveNeedsFlushPut */
-EXPORT(sqInt)
-primitiveNeedsFlushPut(void)
+EXPORT(sqInt)primitiveNeedsFlushPut(struct foo * self)
 {
     sqInt failureCode;
     sqInt needFlush;
 
-	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 1)) {
-		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
+	if (!((methodArgumentCount(self)) == 1)) {
+		return primitiveFailFor(PrimErrBadNumArgs, self);
 	}
-	if (!(((failureCode = quickLoadEngineFrom(stackValue(1, interpreterProxy->interpreterState)))) == 0)) {
-		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
+	if (!(((failureCode = quickLoadEngineFrom(stackValue(1, self), self))) == 0)) {
+		return primitiveFailFor(failureCode, self);
 	}
-	needFlush = booleanValueOf(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	needFlush = booleanValueOf(stackValue(0, self), self);
+	if (failed(self)) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
 	if (needFlush == 1) {
 		/* begin needsFlushPut: */
@@ -11352,7 +11014,7 @@ primitiveNeedsFlushPut(void)
 	}
 	/* begin storeEngineStateInto: */
 	workBuffer[GWObjUsed] = objUsed;
-	pop(1, interpreterProxy->interpreterState);
+	pop(1, self);
 	return 0;
 }
 
@@ -11360,8 +11022,7 @@ primitiveNeedsFlushPut(void)
 /*	Note: No need to load either bitBlt or spanBuffer */
 
 	/* BalloonEngineBase>>#primitiveNextActiveEdgeEntry */
-EXPORT(sqInt)
-primitiveNextActiveEdgeEntry(void)
+EXPORT(sqInt)primitiveNextActiveEdgeEntry(struct foo * self)
 {
     int edge;
     sqInt edgeOop;
@@ -11372,35 +11033,35 @@ primitiveNextActiveEdgeEntry(void)
 	if (doProfileStats) {
 		geProfileTime = ioMicroMSecs();
 	}
-	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 1)) {
-		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
+	if (!((methodArgumentCount(self)) == 1)) {
+		return primitiveFailFor(PrimErrBadNumArgs, self);
 	}
-	if (!(((failureCode = quickLoadEngineFromrequiredStateor(stackValue(1, interpreterProxy->interpreterState), GEStateUpdateEdges, GEStateCompleted))) == 0)) {
-		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
+	if (!(((failureCode = quickLoadEngineFromrequiredStateor(stackValue(1, self), GEStateUpdateEdges, GEStateCompleted, self))) == 0)) {
+		return primitiveFailFor(failureCode, self);
 	}
-	edgeOop = stackObjectValue(0, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	edgeOop = stackObjectValue(0, self);
+	if (failed(self)) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
 	hasEdge = 0;
 	if (!((workBuffer[GWState]) == GEStateCompleted)) {
-		hasEdge = findNextExternalUpdateFromAET();
+		hasEdge = findNextExternalUpdateFromAET(self);
 		if (hasEdge) {
 			edge = aetBuffer[workBuffer[GWAETStart]];
-			storeEdgeStateFrominto(edge, edgeOop);
+			storeEdgeStateFrominto(edge, edgeOop, self);
 			workBuffer[GWState] = GEStateWaitingChange;
 		}
 		else {
 			workBuffer[GWState] = GEStateAddingFromGET;
 		}
 	}
-	if (failed(interpreterProxy->interpreterState)) {
+	if (failed(self)) {
 		return null;
 	}
 	/* begin storeEngineStateInto: */
 	workBuffer[GWObjUsed] = objUsed;
-	pop(2, interpreterProxy->interpreterState);
-	pushBool(!hasEdge, interpreterProxy->interpreterState);
+	pop(2, self);
+	pushBool(!hasEdge, self);
 	if (doProfileStats) {
 		/* begin incrementStat:by: */
 		workBuffer[GWCountNextAETEntry] = ((workBuffer[GWCountNextAETEntry]) + 1);
@@ -11415,8 +11076,7 @@ primitiveNextActiveEdgeEntry(void)
 /*	Note: No need to load bitBlt but must load spanBuffer */
 
 	/* BalloonEngineBase>>#primitiveNextFillEntry */
-EXPORT(sqInt)
-primitiveNextFillEntry(void)
+EXPORT(sqInt)primitiveNextFillEntry(struct foo * self)
 {
     sqInt failureCode;
     sqInt fillOop;
@@ -11426,35 +11086,35 @@ primitiveNextFillEntry(void)
 	if (doProfileStats) {
 		geProfileTime = ioMicroMSecs();
 	}
-	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 1)) {
-		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
+	if (!((methodArgumentCount(self)) == 1)) {
+		return primitiveFailFor(PrimErrBadNumArgs, self);
 	}
-	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(1, interpreterProxy->interpreterState), GEStateScanningAET))) == 0)) {
-		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
+	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(1, self), GEStateScanningAET, self))) == 0)) {
+		return primitiveFailFor(failureCode, self);
 	}
-	if (!(((failureCode = loadSpanBufferFrom(fetchPointerofObject(BESpanIndex, engine, interpreterProxy->interpreterState)))) == 0)) {
-		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
+	if (!(((failureCode = loadSpanBufferFrom(fetchPointerofObject(BESpanIndex, engine, self), self))) == 0)) {
+		return primitiveFailFor(failureCode, self);
 	}
-	if (!(loadFormsFrom(fetchPointerofObject(BEFormsIndex, engine, interpreterProxy->interpreterState)))) {
-		return primitiveFailFor(GEFFormLoadFailed, interpreterProxy->interpreterState);
+	if (!(loadFormsFrom(fetchPointerofObject(BEFormsIndex, engine, self), self))) {
+		return primitiveFailFor(GEFFormLoadFailed, self);
 	}
 	if (!((workBuffer[GWClearSpanBuffer]) == 0)) {
 		if (((workBuffer[GWCurrentY]) & (workBuffer[GWAAScanMask])) == 0) {
-			clearSpanBuffer();
+			clearSpanBuffer(self);
 		}
 		/* begin clearSpanBufferPut: */
 		workBuffer[GWClearSpanBuffer] = 0;
 	}
-	fillOop = stackObjectValue(0, interpreterProxy->interpreterState);
-	hasFill = findNextExternalFillFromAET();
+	fillOop = stackObjectValue(0, self);
+	hasFill = findNextExternalFillFromAET(self);
 	if (engineStopped) {
-		return primitiveFailFor(GEFEngineStopped, interpreterProxy->interpreterState);
+		return primitiveFailFor(GEFEngineStopped, self);
 	}
 	if (hasFill) {
-		storeFillStateInto(fillOop);
+		storeFillStateInto(fillOop, self);
 	}
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(GEFWrongFill, interpreterProxy->interpreterState);
+	if (failed(self)) {
+		return primitiveFailFor(GEFWrongFill, self);
 	}
 	if (hasFill) {
 		workBuffer[GWState] = GEStateWaitingForFill;
@@ -11467,8 +11127,8 @@ primitiveNextFillEntry(void)
 	}
 	/* begin storeEngineStateInto: */
 	workBuffer[GWObjUsed] = objUsed;
-	pop(2, interpreterProxy->interpreterState);
-	pushBool(!hasFill, interpreterProxy->interpreterState);
+	pop(2, self);
+	pushBool(!hasFill, self);
 	if (doProfileStats) {
 		/* begin incrementStat:by: */
 		workBuffer[GWCountNextFillEntry] = ((workBuffer[GWCountNextFillEntry]) + 1);
@@ -11483,8 +11143,7 @@ primitiveNextFillEntry(void)
 /*	Note: No need to load either bitBlt or spanBuffer */
 
 	/* BalloonEngineBase>>#primitiveNextGlobalEdgeEntry */
-EXPORT(sqInt)
-primitiveNextGlobalEdgeEntry(void)
+EXPORT(sqInt)primitiveNextGlobalEdgeEntry(struct foo * self)
 {
     int edge;
     sqInt edgeOop;
@@ -11496,23 +11155,23 @@ primitiveNextGlobalEdgeEntry(void)
 	if (doProfileStats) {
 		geProfileTime = ioMicroMSecs();
 	}
-	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 1)) {
-		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
+	if (!((methodArgumentCount(self)) == 1)) {
+		return primitiveFailFor(PrimErrBadNumArgs, self);
 	}
-	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(1, interpreterProxy->interpreterState), GEStateAddingFromGET))) == 0)) {
-		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
+	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(1, self), GEStateAddingFromGET, self))) == 0)) {
+		return primitiveFailFor(failureCode, self);
 	}
-	edgeOop = stackObjectValue(0, interpreterProxy->interpreterState);
-	hasEdge = findNextExternalEntryFromGET();
+	edgeOop = stackObjectValue(0, self);
+	hasEdge = findNextExternalEntryFromGET(self);
 	if (hasEdge) {
 		edge = getBuffer[workBuffer[GWGETStart]];
-		storeEdgeStateFrominto(edge, edgeOop);
+		storeEdgeStateFrominto(edge, edgeOop, self);
 		/* begin getStartPut: */
 		value = (workBuffer[GWGETStart]) + 1;
 		workBuffer[GWGETStart] = value;
 	}
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(GEFWrongEdge, interpreterProxy->interpreterState);
+	if (failed(self)) {
+		return primitiveFailFor(GEFWrongEdge, self);
 	}
 	if (hasEdge) {
 		workBuffer[GWState] = GEStateWaitingForEdge;
@@ -11530,8 +11189,8 @@ primitiveNextGlobalEdgeEntry(void)
 	}
 	/* begin storeEngineStateInto: */
 	workBuffer[GWObjUsed] = objUsed;
-	pop(2, interpreterProxy->interpreterState);
-	pushBool(!hasEdge, interpreterProxy->interpreterState);
+	pop(2, self);
+	pushBool(!hasEdge, self);
 	if (doProfileStats) {
 		/* begin incrementStat:by: */
 		workBuffer[GWCountNextGETEntry] = ((workBuffer[GWCountNextGETEntry]) + 1);
@@ -11543,8 +11202,7 @@ primitiveNextGlobalEdgeEntry(void)
 }
 
 	/* BalloonEngineBase>>#primitiveRegisterExternalEdge */
-EXPORT(sqInt)
-primitiveRegisterExternalEdge(void)
+EXPORT(sqInt)primitiveRegisterExternalEdge(struct foo * self)
 {
     sqInt edge;
     sqInt failureCode;
@@ -11557,27 +11215,27 @@ primitiveRegisterExternalEdge(void)
     sqInt value;
     sqInt value1;
 
-	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 6)) {
-		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
+	if (!((methodArgumentCount(self)) == 6)) {
+		return primitiveFailFor(PrimErrBadNumArgs, self);
 	}
-	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(6, interpreterProxy->interpreterState), GEStateUnlocked))) == 0)) {
-		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
+	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(6, self), GEStateUnlocked, self))) == 0)) {
+		return primitiveFailFor(failureCode, self);
 	}
-	rightFillIndex = positive32BitValueOf(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	leftFillIndex = positive32BitValueOf(stackValue(1, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	initialZ = stackIntegerValue(2, interpreterProxy->interpreterState);
-	initialY = stackIntegerValue(3, interpreterProxy->interpreterState);
-	initialX = stackIntegerValue(4, interpreterProxy->interpreterState);
-	index = stackIntegerValue(5, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	rightFillIndex = positive32BitValueOf(stackValue(0, self), self);
+	leftFillIndex = positive32BitValueOf(stackValue(1, self), self);
+	initialZ = stackIntegerValue(2, self);
+	initialY = stackIntegerValue(3, self);
+	initialX = stackIntegerValue(4, self);
+	index = stackIntegerValue(5, self);
+	if (failed(self)) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	if (!(allocateObjEntry(GEBaseEdgeSize))) {
-		return primitiveFailFor(GEFWorkTooBig, interpreterProxy->interpreterState);
+	if (!(allocateObjEntry(GEBaseEdgeSize, self))) {
+		return primitiveFailFor(GEFWorkTooBig, self);
 	}
-	if (!((isFillOkay(leftFillIndex))
-		 && (isFillOkay(rightFillIndex)))) {
-		return primitiveFailFor(GEFWrongFill, interpreterProxy->interpreterState);
+	if (!((isFillOkay(leftFillIndex, self))
+		 && (isFillOkay(rightFillIndex, self)))) {
+		return primitiveFailFor(GEFWrongFill, self);
 	}
 	edge = objUsed;
 
@@ -11596,44 +11254,43 @@ primitiveRegisterExternalEdge(void)
 	/* begin edgeZValueOf:put: */
 	objBuffer[edge + GEZValue] = initialZ;
 	/* begin edgeLeftFillOf:put: */
-	value = transformColor(leftFillIndex);
+	value = transformColor(leftFillIndex, self);
 	objBuffer[edge + GEFillIndexLeft] = value;
 	/* begin edgeRightFillOf:put: */
-	value1 = transformColor(rightFillIndex);
+	value1 = transformColor(rightFillIndex, self);
 	objBuffer[edge + GEFillIndexRight] = value1;
 	if (engineStopped) {
-		return primitiveFailFor(GEFEngineStopped, interpreterProxy->interpreterState);
+		return primitiveFailFor(GEFEngineStopped, self);
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
+	if (!(failed(self))) {
 		/* begin storeEngineStateInto: */
 		workBuffer[GWObjUsed] = objUsed;
-		pop(6, interpreterProxy->interpreterState);
+		pop(6, self);
 	}
 	return 0;
 }
 
 	/* BalloonEngineBase>>#primitiveRegisterExternalFill */
-EXPORT(sqInt)
-primitiveRegisterExternalFill(void)
+EXPORT(sqInt)primitiveRegisterExternalFill(struct foo * self)
 {
     sqInt failureCode;
     sqInt fill;
     sqInt index;
 
-	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 1)) {
-		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
+	if (!((methodArgumentCount(self)) == 1)) {
+		return primitiveFailFor(PrimErrBadNumArgs, self);
 	}
-	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(1, interpreterProxy->interpreterState), GEStateUnlocked))) == 0)) {
-		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
+	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(1, self), GEStateUnlocked, self))) == 0)) {
+		return primitiveFailFor(failureCode, self);
 	}
-	index = stackIntegerValue(0, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	index = stackIntegerValue(0, self);
+	if (failed(self)) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
 	fill = 0;
 	while (fill == 0) {
-		if (!(allocateObjEntry(GEBaseEdgeSize))) {
-			return primitiveFailFor(GEFWorkTooBig, interpreterProxy->interpreterState);
+		if (!(allocateObjEntry(GEBaseEdgeSize, self))) {
+			return primitiveFailFor(GEFWorkTooBig, self);
 		}
 		fill = objUsed;
 
@@ -11646,11 +11303,11 @@ primitiveRegisterExternalFill(void)
 		/* begin objectIndexOf:put: */
 		objBuffer[fill + GEObjectIndex] = index;
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
+	if (!(failed(self))) {
 		/* begin storeEngineStateInto: */
 		workBuffer[GWObjUsed] = objUsed;
-		pop(2, interpreterProxy->interpreterState);
-		pushInteger(fill, interpreterProxy->interpreterState);
+		pop(2, self);
+		pushInteger(fill, self);
 	}
 	return 0;
 }
@@ -11659,20 +11316,19 @@ primitiveRegisterExternalFill(void)
 /*	Start/Proceed rendering the entire image */
 
 	/* BalloonEngineBase>>#primitiveRenderImage */
-EXPORT(sqInt)
-primitiveRenderImage(void)
+EXPORT(sqInt)primitiveRenderImage(struct foo * self)
 {
     sqInt failCode;
 
-	if (!(((failCode = loadRenderingState())) == 0)) {
-		return primitiveFailFor(failCode, interpreterProxy->interpreterState);
+	if (!(((failCode = loadRenderingState(self))) == 0)) {
+		return primitiveFailFor(failCode, self);
 	}
-	proceedRenderingScanline();
+	proceedRenderingScanline(self);
 	if (engineStopped) {
-		return storeRenderingState();
+		return storeRenderingState(self);
 	}
-	proceedRenderingImage();
-	storeRenderingState();
+	proceedRenderingImage(self);
+	storeRenderingState(self);
 	return 0;
 }
 
@@ -11680,40 +11336,38 @@ primitiveRenderImage(void)
 /*	Start rendering the entire image */
 
 	/* BalloonEngineBase>>#primitiveRenderScanline */
-EXPORT(sqInt)
-primitiveRenderScanline(void)
+EXPORT(sqInt)primitiveRenderScanline(struct foo * self)
 {
     sqInt failCode;
 
-	if (!(((failCode = loadRenderingState())) == 0)) {
-		return primitiveFailFor(failCode, interpreterProxy->interpreterState);
+	if (!(((failCode = loadRenderingState(self))) == 0)) {
+		return primitiveFailFor(failCode, self);
 	}
-	proceedRenderingScanline();
-	storeRenderingState();
+	proceedRenderingScanline(self);
+	storeRenderingState(self);
 	return 0;
 }
 
 	/* BalloonEngineBase>>#primitiveSetAALevel */
-EXPORT(sqInt)
-primitiveSetAALevel(void)
+EXPORT(sqInt)primitiveSetAALevel(struct foo * self)
 {
     sqInt failureCode;
     sqInt level;
 
-	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 1)) {
-		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
+	if (!((methodArgumentCount(self)) == 1)) {
+		return primitiveFailFor(PrimErrBadNumArgs, self);
 	}
-	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(1, interpreterProxy->interpreterState), GEStateUnlocked))) == 0)) {
-		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
+	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(1, self), GEStateUnlocked, self))) == 0)) {
+		return primitiveFailFor(failureCode, self);
 	}
-	level = stackIntegerValue(0, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	level = stackIntegerValue(0, self);
+	if (failed(self)) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	setAALevel(level);
+	setAALevel(level, self);
 	/* begin storeEngineStateInto: */
 	workBuffer[GWObjUsed] = objUsed;
-	pop(1, interpreterProxy->interpreterState);
+	pop(1, self);
 	return 0;
 }
 
@@ -11721,8 +11375,7 @@ primitiveSetAALevel(void)
 /*	Primitive. Set the BitBlt plugin to use. */
 
 	/* BalloonEngineBase>>#primitiveSetBitBltPlugin */
-EXPORT(sqInt)
-primitiveSetBitBltPlugin(void)
+EXPORT(sqInt)primitiveSetBitBltPlugin(struct foo * self)
 {
     sqInt i;
     sqInt length;
@@ -11732,15 +11385,15 @@ primitiveSetBitBltPlugin(void)
 
 
 	/* Must be string to work */
-	pluginName = stackValue(0, interpreterProxy->interpreterState);
-	if (!(isBytes(pluginName, interpreterProxy->interpreterState))) {
-		return primitiveFail(interpreterProxy->interpreterState);
+	pluginName = stackValue(0, self);
+	if (!(isBytes(pluginName, self))) {
+		return primitiveFail(self);
 	}
-	length = byteSizeOf(pluginName, interpreterProxy->interpreterState);
+	length = byteSizeOf(pluginName, self);
 	if (length >= 256) {
-		return primitiveFail(interpreterProxy->interpreterState);
+		return primitiveFail(self);
 	}
-	ptr = firstIndexableField(pluginName, interpreterProxy->interpreterState);
+	ptr = firstIndexableField(pluginName, self);
 	needReload = 0;
 	for (i = 0; i < length; i += 1) {
 
@@ -11755,17 +11408,16 @@ primitiveSetBitBltPlugin(void)
 		needReload = 1;
 	}
 	if (needReload) {
-		if (!(initialiseModule())) {
-			return primitiveFail(interpreterProxy->interpreterState);
+		if (!(initialiseModule(self))) {
+			return primitiveFail(self);
 		}
 	}
-	pop(1, interpreterProxy->interpreterState);
+	pop(1, self);
 	return 0;
 }
 
 	/* BalloonEngineBase>>#primitiveSetClipRect */
-EXPORT(sqInt)
-primitiveSetClipRect(void)
+EXPORT(sqInt)primitiveSetClipRect(struct foo * self)
 {
     sqInt failureCode;
     sqInt rectOop;
@@ -11774,22 +11426,22 @@ primitiveSetClipRect(void)
     sqInt value2;
     sqInt value3;
 
-	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 1)) {
-		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
+	if (!((methodArgumentCount(self)) == 1)) {
+		return primitiveFailFor(PrimErrBadNumArgs, self);
 	}
-	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(1, interpreterProxy->interpreterState), GEStateUnlocked))) == 0)) {
-		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
+	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(1, self), GEStateUnlocked, self))) == 0)) {
+		return primitiveFailFor(failureCode, self);
 	}
-	rectOop = stackObjectValue(0, interpreterProxy->interpreterState);
-	if (!((!(failed(interpreterProxy->interpreterState)))
-		 && ((isPointers(rectOop, interpreterProxy->interpreterState))
-		 && ((slotSizeOf(rectOop, interpreterProxy->interpreterState)) >= 2)))) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	rectOop = stackObjectValue(0, self);
+	if (!((!(failed(self)))
+		 && ((isPointers(rectOop, self))
+		 && ((slotSizeOf(rectOop, self)) >= 2)))) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	loadPointfrom(((int *) (workBuffer + GWPoint1)), fetchPointerofObject(0, rectOop, interpreterProxy->interpreterState));
-	loadPointfrom(((int *) (workBuffer + GWPoint2)), fetchPointerofObject(1, rectOop, interpreterProxy->interpreterState));
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	loadPointfrom(((int *) (workBuffer + GWPoint1)), fetchPointerofObject(0, rectOop, self), self);
+	loadPointfrom(((int *) (workBuffer + GWPoint2)), fetchPointerofObject(1, rectOop, self), self);
+	if (failed(self)) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
 	/* begin clipMinXPut: */
 	value = (((int *) (workBuffer + GWPoint1)))[0];
@@ -11805,34 +11457,33 @@ primitiveSetClipRect(void)
 	workBuffer[GWClipMaxY] = value3;
 	/* begin storeEngineStateInto: */
 	workBuffer[GWObjUsed] = objUsed;
-	pop(1, interpreterProxy->interpreterState);
+	pop(1, self);
 	return 0;
 }
 
 	/* BalloonEngineBase>>#primitiveSetColorTransform */
-EXPORT(sqInt)
-primitiveSetColorTransform(void)
+EXPORT(sqInt)primitiveSetColorTransform(struct foo * self)
 {
     sqInt failureCode;
     sqInt okay;
     float *transform;
     sqInt transformOop;
 
-	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 1)) {
-		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
+	if (!((methodArgumentCount(self)) == 1)) {
+		return primitiveFailFor(PrimErrBadNumArgs, self);
 	}
-	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(1, interpreterProxy->interpreterState), GEStateUnlocked))) == 0)) {
-		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
+	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(1, self), GEStateUnlocked, self))) == 0)) {
+		return primitiveFailFor(failureCode, self);
 	}
-	transformOop = stackObjectValue(0, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	transformOop = stackObjectValue(0, self);
+	if (failed(self)) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
 	/* begin loadColorTransformFrom: */
 	transform = ((float *) (workBuffer + GWColorTransform));
 	/* begin hasColorTransformPut: */
 	workBuffer[GWHasColorTransform] = 0;
-	okay = loadTransformFromintolength(transformOop, transform, 8);
+	okay = loadTransformFromintolength(transformOop, transform, 8, self);
 	if (!okay) {
 		goto l4;
 	}
@@ -11843,89 +11494,86 @@ primitiveSetColorTransform(void)
 	transform[5] = ((transform[5]) * (256.0f));
 	transform[7] = ((transform[7]) * (256.0f));
 	l4:	/* end loadColorTransformFrom: */;
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(GEFEntityLoadFailed, interpreterProxy->interpreterState);
+	if (failed(self)) {
+		return primitiveFailFor(GEFEntityLoadFailed, self);
 	}
 	/* begin storeEngineStateInto: */
 	workBuffer[GWObjUsed] = objUsed;
-	pop(1, interpreterProxy->interpreterState);
+	pop(1, self);
 	return 0;
 }
 
 	/* BalloonEngineBase>>#primitiveSetDepth */
-EXPORT(sqInt)
-primitiveSetDepth(void)
+EXPORT(sqInt)primitiveSetDepth(struct foo * self)
 {
     sqInt depth;
     sqInt failureCode;
 
-	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 1)) {
-		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
+	if (!((methodArgumentCount(self)) == 1)) {
+		return primitiveFailFor(PrimErrBadNumArgs, self);
 	}
-	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(1, interpreterProxy->interpreterState), GEStateUnlocked))) == 0)) {
-		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
+	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(1, self), GEStateUnlocked, self))) == 0)) {
+		return primitiveFailFor(failureCode, self);
 	}
-	depth = stackIntegerValue(0, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	depth = stackIntegerValue(0, self);
+	if (failed(self)) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
 	/* begin currentZPut: */
 	workBuffer[GWCurrentZ] = depth;
 	/* begin storeEngineStateInto: */
 	workBuffer[GWObjUsed] = objUsed;
-	pop(1, interpreterProxy->interpreterState);
+	pop(1, self);
 	return 0;
 }
 
 	/* BalloonEngineBase>>#primitiveSetEdgeTransform */
-EXPORT(sqInt)
-primitiveSetEdgeTransform(void)
+EXPORT(sqInt)primitiveSetEdgeTransform(struct foo * self)
 {
     sqInt failureCode;
     sqInt transformOop;
 
-	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 1)) {
-		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
+	if (!((methodArgumentCount(self)) == 1)) {
+		return primitiveFailFor(PrimErrBadNumArgs, self);
 	}
-	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(1, interpreterProxy->interpreterState), GEStateUnlocked))) == 0)) {
-		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
+	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(1, self), GEStateUnlocked, self))) == 0)) {
+		return primitiveFailFor(failureCode, self);
 	}
-	transformOop = stackObjectValue(0, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	transformOop = stackObjectValue(0, self);
+	if (failed(self)) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	loadEdgeTransformFrom(transformOop);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	loadEdgeTransformFrom(transformOop, self);
+	if (failed(self)) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
 	/* begin storeEngineStateInto: */
 	workBuffer[GWObjUsed] = objUsed;
-	pop(1, interpreterProxy->interpreterState);
+	pop(1, self);
 	return 0;
 }
 
 	/* BalloonEngineBase>>#primitiveSetOffset */
-EXPORT(sqInt)
-primitiveSetOffset(void)
+EXPORT(sqInt)primitiveSetOffset(struct foo * self)
 {
     sqInt failureCode;
     sqInt pointOop;
     sqInt value;
     sqInt value1;
 
-	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 1)) {
-		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
+	if (!((methodArgumentCount(self)) == 1)) {
+		return primitiveFailFor(PrimErrBadNumArgs, self);
 	}
-	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(1, interpreterProxy->interpreterState), GEStateUnlocked))) == 0)) {
-		return primitiveFailFor(failureCode, interpreterProxy->interpreterState);
+	if (!(((failureCode = quickLoadEngineFromrequiredState(stackValue(1, self), GEStateUnlocked, self))) == 0)) {
+		return primitiveFailFor(failureCode, self);
 	}
-	pointOop = stackValue(0, interpreterProxy->interpreterState);
-	if (!((fetchClassOf(pointOop, interpreterProxy->interpreterState)) == (classPoint(interpreterProxy->interpreterState)))) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	pointOop = stackValue(0, self);
+	if (!((fetchClassOf(pointOop, self)) == (classPoint(self)))) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	loadPointfrom(((int *) (workBuffer + GWPoint1)), pointOop);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	loadPointfrom(((int *) (workBuffer + GWPoint1)), pointOop, self);
+	if (failed(self)) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
 	/* begin destOffsetXPut: */
 	value = (((int *) (workBuffer + GWPoint1)))[0];
@@ -11935,7 +11583,7 @@ primitiveSetOffset(void)
 	workBuffer[GWDestOffsetY] = value1;
 	/* begin storeEngineStateInto: */
 	workBuffer[GWObjUsed] = objUsed;
-	pop(1, interpreterProxy->interpreterState);
+	pop(1, self);
 	return 0;
 }
 
@@ -11943,8 +11591,7 @@ primitiveSetOffset(void)
 /*	This is the main rendering entry */
 
 	/* BalloonEngineBase>>#proceedRenderingImage */
-static sqInt
-proceedRenderingImage(void)
+static sqIntproceedRenderingImage(struct foo * self)
 {
     sqInt external;
     sqInt value;
@@ -11957,7 +11604,7 @@ proceedRenderingImage(void)
 		if (doProfileStats) {
 			geProfileTime = ioMicroMSecs();
 		}
-		external = findNextExternalEntryFromGET();
+		external = findNextExternalEntryFromGET(self);
 		if (doProfileStats) {
 			/* begin incrementStat:by: */
 			workBuffer[GWCountNextGETEntry] = ((workBuffer[GWCountNextGETEntry]) + 1);
@@ -11986,11 +11633,11 @@ proceedRenderingImage(void)
 		}
 		if (((workBuffer[GWClearSpanBuffer]) != 0)
 		 && (((workBuffer[GWCurrentY]) & (workBuffer[GWAAScanMask])) == 0)) {
-			clearSpanBuffer();
+			clearSpanBuffer(self);
 		}
 		/* begin clearSpanBufferPut: */
 		workBuffer[GWClearSpanBuffer] = 0;
-		external = findNextExternalFillFromAET();
+		external = findNextExternalFillFromAET(self);
 		if (doProfileStats) {
 			/* begin incrementStat:by: */
 			workBuffer[GWCountNextFillEntry] = ((workBuffer[GWCountNextFillEntry]) + 1);
@@ -12015,8 +11662,8 @@ proceedRenderingImage(void)
 			geProfileTime = ioMicroMSecs();
 		}
 		if (((workBuffer[GWCurrentY]) & (workBuffer[GWAAScanMask])) == (workBuffer[GWAAScanMask])) {
-			displaySpanBufferAt(workBuffer[GWCurrentY]);
-			postDisplayAction();
+			displaySpanBufferAt(workBuffer[GWCurrentY], self);
+			postDisplayAction(self);
 		}
 		if (doProfileStats) {
 			/* begin incrementStat:by: */
@@ -12039,7 +11686,7 @@ proceedRenderingImage(void)
 		if (doProfileStats) {
 			geProfileTime = ioMicroMSecs();
 		}
-		external = findNextExternalUpdateFromAET();
+		external = findNextExternalUpdateFromAET(self);
 		if (doProfileStats) {
 			/* begin incrementStat:by: */
 			workBuffer[GWCountNextAETEntry] = ((workBuffer[GWCountNextAETEntry]) + 1);
@@ -12069,8 +11716,7 @@ proceedRenderingImage(void)
 /*	This is the main rendering entry */
 
 	/* BalloonEngineBase>>#proceedRenderingScanline */
-static sqInt
-proceedRenderingScanline(void)
+static sqIntproceedRenderingScanline(struct foo * self)
 {
     sqInt external;
     sqInt state;
@@ -12082,7 +11728,7 @@ proceedRenderingScanline(void)
 
 	state = workBuffer[GWState];
 	if (state == GEStateUnlocked) {
-		initializeGETProcessing();
+		initializeGETProcessing(self);
 		if (engineStopped) {
 			return 0;
 		}
@@ -12092,7 +11738,7 @@ proceedRenderingScanline(void)
 		if (doProfileStats) {
 			geProfileTime = ioMicroMSecs();
 		}
-		external = findNextExternalEntryFromGET();
+		external = findNextExternalEntryFromGET(self);
 		if (doProfileStats) {
 			/* begin incrementStat:by: */
 			workBuffer[GWCountNextGETEntry] = ((workBuffer[GWCountNextGETEntry]) + 1);
@@ -12124,11 +11770,11 @@ proceedRenderingScanline(void)
 		}
 		if (((workBuffer[GWClearSpanBuffer]) != 0)
 		 && (((workBuffer[GWCurrentY]) & (workBuffer[GWAAScanMask])) == 0)) {
-			clearSpanBuffer();
+			clearSpanBuffer(self);
 		}
 		/* begin clearSpanBufferPut: */
 		workBuffer[GWClearSpanBuffer] = 0;
-		external = findNextExternalFillFromAET();
+		external = findNextExternalFillFromAET(self);
 		if (doProfileStats) {
 			/* begin incrementStat:by: */
 			workBuffer[GWCountNextFillEntry] = ((workBuffer[GWCountNextFillEntry]) + 1);
@@ -12156,8 +11802,8 @@ proceedRenderingScanline(void)
 			geProfileTime = ioMicroMSecs();
 		}
 		if (((workBuffer[GWCurrentY]) & (workBuffer[GWAAScanMask])) == (workBuffer[GWAAScanMask])) {
-			displaySpanBufferAt(workBuffer[GWCurrentY]);
-			postDisplayAction();
+			displaySpanBufferAt(workBuffer[GWCurrentY], self);
+			postDisplayAction(self);
 		}
 		if (doProfileStats) {
 			/* begin incrementStat:by: */
@@ -12183,7 +11829,7 @@ proceedRenderingScanline(void)
 		if (doProfileStats) {
 			geProfileTime = ioMicroMSecs();
 		}
-		external = findNextExternalUpdateFromAET();
+		external = findNextExternalUpdateFromAET(self);
 		if (doProfileStats) {
 			/* begin incrementStat:by: */
 			workBuffer[GWCountNextAETEntry] = ((workBuffer[GWCountNextAETEntry]) + 1);
@@ -12211,25 +11857,24 @@ proceedRenderingScanline(void)
 	buffer. Answer 0 on success or non-zero a failure code on failure */
 
 	/* BalloonEngineBase>>#quickLoadEngineFrom: */
-static sqInt
-quickLoadEngineFrom(sqInt engineOop)
+static sqIntquickLoadEngineFrom(sqInt engineOop, struct foo * self)
 {
     sqInt failCode;
 
-	if (failed(interpreterProxy->interpreterState)) {
+	if (failed(self)) {
 		return GEFAlreadyFailed;
 	}
-	if (isImmediate(engineOop, interpreterProxy->interpreterState)) {
+	if (isImmediate(engineOop, self)) {
 		return GEFEngineIsInteger;
 	}
-	if (!(isPointers(engineOop, interpreterProxy->interpreterState))) {
+	if (!(isPointers(engineOop, self))) {
 		return GEFEngineIsWords;
 	}
-	if ((slotSizeOf(engineOop, interpreterProxy->interpreterState)) < BEBalloonEngineSize) {
+	if ((slotSizeOf(engineOop, self)) < BEBalloonEngineSize) {
 		return GEFEngineTooSmall;
 	}
 	engine = engineOop;
-	if (!(((failCode = loadWorkBufferFrom(fetchPointerofObject(BEWorkBufferIndex, engineOop, interpreterProxy->interpreterState)))) == 0)) {
+	if (!(((failCode = loadWorkBufferFrom(fetchPointerofObject(BEWorkBufferIndex, engineOop, self), self))) == 0)) {
 		return failCode;
 	}
 	workBuffer[GWStopReason] = 0;
@@ -12240,12 +11885,11 @@ quickLoadEngineFrom(sqInt engineOop)
 }
 
 	/* BalloonEngineBase>>#quickLoadEngineFrom:requiredState: */
-static sqInt
-quickLoadEngineFromrequiredState(sqInt oop, sqInt requiredState)
+static sqIntquickLoadEngineFromrequiredState(sqInt oop, sqInt requiredState, struct foo * self)
 {
     sqInt failureCode;
 
-	if (!(((failureCode = quickLoadEngineFrom(oop))) == 0)) {
+	if (!(((failureCode = quickLoadEngineFrom(oop, self))) == 0)) {
 		return failureCode;
 	}
 	if ((workBuffer[GWState]) == requiredState) {
@@ -12256,12 +11900,11 @@ quickLoadEngineFromrequiredState(sqInt oop, sqInt requiredState)
 }
 
 	/* BalloonEngineBase>>#quickLoadEngineFrom:requiredState:or: */
-static sqInt
-quickLoadEngineFromrequiredStateor(sqInt oop, sqInt requiredState, sqInt alternativeState)
+static sqIntquickLoadEngineFromrequiredStateor(sqInt oop, sqInt requiredState, sqInt alternativeState, struct foo * self)
 {
     sqInt failureCode;
 
-	if (!(((failureCode = quickLoadEngineFrom(oop))) == 0)) {
+	if (!(((failureCode = quickLoadEngineFrom(oop, self))) == 0)) {
 		return failureCode;
 	}
 	if ((workBuffer[GWState]) == requiredState) {
@@ -12278,14 +11921,13 @@ quickLoadEngineFromrequiredStateor(sqInt oop, sqInt requiredState, sqInt alterna
 /*	Remove any top fills if they have become invalid. */
 
 	/* BalloonEngineBase>>#quickRemoveInvalidFillsAt: */
-static sqInt
-quickRemoveInvalidFillsAt(sqInt leftX)
+static sqIntquickRemoveInvalidFillsAt(sqInt leftX, struct foo * self)
 {
 	if (((workBuffer[GWSize]) - (workBuffer[GWBufferTop])) == 0) {
 		return null;
 	}
-	while ((topRightX()) <= leftX) {
-		hideFilldepth(topFill(), topDepth());
+	while ((topRightX(self)) <= leftX) {
+		hideFilldepth(topFill(self), topDepth(self), self);
 		if (((workBuffer[GWSize]) - (workBuffer[GWBufferTop])) == 0) {
 			return null;
 		}
@@ -12299,8 +11941,7 @@ quickRemoveInvalidFillsAt(sqInt leftX)
 /*	Note: The original loop has been heavily re-written for C translation */
 
 	/* BalloonEngineBase>>#quickSortGlobalEdgeTable:from:to: */
-static sqInt
-quickSortGlobalEdgeTablefromto(int *array, sqInt i, sqInt j)
+static sqIntquickSortGlobalEdgeTablefromto(int *array, sqInt i, sqInt j, struct foo * self)
 {
     sqInt again;
     sqInt before;
@@ -12323,7 +11964,7 @@ quickSortGlobalEdgeTablefromto(int *array, sqInt i, sqInt j)
 	dj = array[j];
 
 	/* i.e., should di precede dj? */
-	before = getSortsbefore(di, dj);
+	before = getSortsbefore(di, dj, self);
 	if (!before) {
 		tmp = array[i];
 		array[i] = (array[j]);
@@ -12343,11 +11984,11 @@ quickSortGlobalEdgeTablefromto(int *array, sqInt i, sqInt j)
 	dij = array[ij];
 
 	/* i.e. should di precede dij? */
-	before = getSortsbefore(di, dij);
+	before = getSortsbefore(di, dij, self);
 	if (before) {
 
 		/* i.e., should dij precede dj? */
-		before = getSortsbefore(dij, dj);
+		before = getSortsbefore(dij, dj, self);
 		if (!before) {
 
 			/* i.e., should dij precede dj? */
@@ -12376,7 +12017,7 @@ quickSortGlobalEdgeTablefromto(int *array, sqInt i, sqInt j)
 		while (before) {
 			if (k <= ((l -= 1))) {
 				tmp = array[l];
-				before = getSortsbefore(dij, tmp);
+				before = getSortsbefore(dij, tmp, self);
 			}
 			else {
 				before = 0;
@@ -12386,7 +12027,7 @@ quickSortGlobalEdgeTablefromto(int *array, sqInt i, sqInt j)
 		while (before) {
 			if (((k += 1)) <= l) {
 				tmp = array[k];
-				before = getSortsbefore(tmp, dij);
+				before = getSortsbefore(tmp, dij, self);
 			}
 			else {
 				before = 0;
@@ -12399,14 +12040,13 @@ quickSortGlobalEdgeTablefromto(int *array, sqInt i, sqInt j)
 			array[l] = tmp;
 		}
 	}
-	quickSortGlobalEdgeTablefromto(array, i, l);
-	quickSortGlobalEdgeTablefromto(array, k, j);
+	quickSortGlobalEdgeTablefromto(array, i, l, self);
+	quickSortGlobalEdgeTablefromto(array, k, j, self);
 	return 0;
 }
 
 	/* BalloonEngineBase>>#removeFirstAETEntry */
-static sqInt
-removeFirstAETEntry(void)
+static sqIntremoveFirstAETEntry(struct foo * self)
 {
     sqInt index;
     sqInt value;
@@ -12424,8 +12064,7 @@ removeFirstAETEntry(void)
 }
 
 	/* BalloonEnginePlugin>>#repeatValue:max: */
-static sqInt
-repeatValuemax(sqInt delta, sqInt maxValue)
+static sqIntrepeatValuemax(sqInt delta, sqInt maxValue, struct foo * self)
 {
     sqInt newDelta;
 
@@ -12440,8 +12079,7 @@ repeatValuemax(sqInt delta, sqInt maxValue)
 }
 
 	/* BalloonEngineBase>>#resetGraphicsEngineStats */
-static sqInt
-resetGraphicsEngineStats(void)
+static sqIntresetGraphicsEngineStats(struct foo * self)
 {
 	workBuffer[GWTimeInitializing] = 0;
 	workBuffer[GWTimeFinishTest] = 0;
@@ -12469,8 +12107,7 @@ resetGraphicsEngineStats(void)
 }
 
 	/* BalloonEngineBase>>#resortFirstAETEntry */
-static sqInt
-resortFirstAETEntry(void)
+static sqIntresortFirstAETEntry(struct foo * self)
 {
     int edge;
     int leftEdge;
@@ -12486,20 +12123,18 @@ resortFirstAETEntry(void)
 	if ((objBuffer[leftEdge + GEXValue]) <= xValue) {
 		return null;
 	}
-	moveAETEntryFromedgex(workBuffer[GWAETStart], edge, xValue);
+	moveAETEntryFromedgex(workBuffer[GWAETStart], edge, xValue, self);
 	return 0;
 }
 
 	/* BalloonEnginePlugin>>#returnWideBezierFill */
-static sqInt
-returnWideBezierFill(void)
+static sqIntreturnWideBezierFill(struct foo * self)
 {
 	return (dispatchReturnValue = objBuffer[dispatchedValue + GBWideFill]);
 }
 
 	/* BalloonEnginePlugin>>#returnWideBezierWidth */
-static sqInt
-returnWideBezierWidth(void)
+static sqIntreturnWideBezierWidth(struct foo * self)
 {
 	return (dispatchReturnValue = objBuffer[dispatchedValue + GBWideWidth]);
 }
@@ -12508,8 +12143,7 @@ returnWideBezierWidth(void)
 /*	Return the fill of the (wide) line - this method is called from a case. */
 
 	/* BalloonEnginePlugin>>#returnWideLineFill */
-static sqInt
-returnWideLineFill(void)
+static sqIntreturnWideLineFill(struct foo * self)
 {
 	return (dispatchReturnValue = objBuffer[dispatchedValue + GLWideFill]);
 }
@@ -12518,15 +12152,13 @@ returnWideLineFill(void)
 /*	Return the width of the (wide) line - this method is called from a case. */
 
 	/* BalloonEnginePlugin>>#returnWideLineWidth */
-static sqInt
-returnWideLineWidth(void)
+static sqIntreturnWideLineWidth(struct foo * self)
 {
 	return (dispatchReturnValue = objBuffer[dispatchedValue + GLWideWidth]);
 }
 
 	/* BalloonEnginePlugin>>#rShiftTable */
-static int *
-rShiftTable(void)
+static int *rShiftTable(struct foo * self)
 {
     static int theTable[17] =
 		{0, 5, 4, 0, 3, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 1};
@@ -12542,8 +12174,7 @@ rShiftTable(void)
 	 */
 
 	/* BalloonEngineBase>>#setAALevel: */
-static sqInt
-setAALevel(sqInt level)
+static sqIntsetAALevel(sqInt level, struct foo * self)
 {
     sqInt aaLevel;
     sqInt value;
@@ -12664,8 +12295,7 @@ setInterpreter(struct VirtualMachine *anInterpreter)
 /*	Return the run-length value from the given ShortRunArray. */
 
 	/* BalloonEnginePlugin>>#shortRunLengthAt:from: */
-static sqInt
-shortRunLengthAtfrom(sqInt i, sqInt runArray)
+static sqIntshortRunLengthAtfrom(sqInt i, sqInt runArray, struct foo * self)
 {
 	return ((usqInt) ((((int *) runArray))[i]) >> 16);
 }
@@ -12676,15 +12306,13 @@ shortRunLengthAtfrom(sqInt i, sqInt runArray)
 	we deal basically only with unsigned values. */
 
 	/* BalloonEnginePlugin>>#shortRunValueAt:from: */
-static sqInt
-shortRunValueAtfrom(sqInt i, sqInt runArray)
+static sqIntshortRunValueAtfrom(sqInt i, sqInt runArray, struct foo * self)
 {
 	return ((((int *) runArray))[i]) & 0xFFFF;
 }
 
 	/* BalloonEngineBase>>#showFill:depth:rightX: */
-static sqInt
-showFilldepthrightX(sqInt fillIndex, sqInt depth, sqInt rightX)
+static sqIntshowFilldepthrightX(sqInt fillIndex, sqInt depth, sqInt rightX, struct foo * self)
 {
     sqInt index;
     sqInt index1;
@@ -12693,7 +12321,7 @@ showFilldepthrightX(sqInt fillIndex, sqInt depth, sqInt rightX)
     sqInt value1;
     sqInt value2;
 
-	if (!(wbStackPush(3 /* stackFillEntryLength */))) {
+	if (!(wbStackPush(3 /* stackFillEntryLength */, self))) {
 		return null;
 	}
 	/* begin wbStackValue:put: */
@@ -12705,7 +12333,7 @@ showFilldepthrightX(sqInt fillIndex, sqInt depth, sqInt rightX)
 	if (((workBuffer[GWSize]) - (workBuffer[GWBufferTop])) == 3 /* stackFillEntryLength */) {
 		return null;
 	}
-	if (fillSortsbefore(0, ((workBuffer[GWSize]) - (workBuffer[GWBufferTop])) - 3 /* stackFillEntryLength */)) {
+	if (fillSortsbefore(0, ((workBuffer[GWSize]) - (workBuffer[GWBufferTop])) - 3 /* stackFillEntryLength */, self)) {
 
 		/* New top fill */
 		/* begin stackFillValue:put: */
@@ -12731,8 +12359,7 @@ showFilldepthrightX(sqInt fillIndex, sqInt depth, sqInt rightX)
 }
 
 	/* BalloonEngineBase>>#smallSqrtTable */
-static int *
-smallSqrtTable(void)
+static int *smallSqrtTable(struct foo * self)
 {
     static int theTable[32] = 
 	{0, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6};
@@ -12744,142 +12371,122 @@ smallSqrtTable(void)
 /*	Sort the entire global edge table */
 
 	/* BalloonEngineBase>>#sortGlobalEdgeTable */
-static sqInt
-sortGlobalEdgeTable(void)
+static sqIntsortGlobalEdgeTable(struct foo * self)
 {
-	quickSortGlobalEdgeTablefromto(getBuffer, 0, (workBuffer[GWGETUsed]) - 1);
+	quickSortGlobalEdgeTablefromto(getBuffer, 0, (workBuffer[GWGETUsed]) - 1, self);
 	return 0;
 }
 
 	/* BalloonEngineBase>>#spanEndAAGet */
-static sqInt
-spanEndAAGet(void)
+static sqIntspanEndAAGet(struct foo * self)
 {
 	return workBuffer[GWSpanEndAA];
 }
 
 	/* BalloonEngineBase>>#spanEndAAPut: */
-static sqInt
-spanEndAAPut(sqInt value)
+static sqIntspanEndAAPut(sqInt value, struct foo * self)
 {
 	return workBuffer[GWSpanEndAA] = value;
 }
 
 	/* BalloonEngineBase>>#spanEndGet */
-static sqInt
-spanEndGet(void)
+static sqIntspanEndGet(struct foo * self)
 {
 	return workBuffer[GWSpanEnd];
 }
 
 	/* BalloonEngineBase>>#spanEndPut: */
-static sqInt
-spanEndPut(sqInt value)
+static sqIntspanEndPut(sqInt value, struct foo * self)
 {
 	return workBuffer[GWSpanEnd] = value;
 }
 
 	/* BalloonEngineBase>>#spanSizeGet */
-static sqInt
-spanSizeGet(void)
+static sqIntspanSizeGet(struct foo * self)
 {
 	return workBuffer[GWSpanSize];
 }
 
 	/* BalloonEngineBase>>#spanSizePut: */
-static sqInt
-spanSizePut(sqInt value)
+static sqIntspanSizePut(sqInt value, struct foo * self)
 {
 	return workBuffer[GWSpanSize] = value;
 }
 
 	/* BalloonEngineBase>>#spanStartGet */
-static sqInt
-spanStartGet(void)
+static sqIntspanStartGet(struct foo * self)
 {
 	return workBuffer[GWSpanStart];
 }
 
 	/* BalloonEngineBase>>#spanStartPut: */
-static sqInt
-spanStartPut(sqInt value)
+static sqIntspanStartPut(sqInt value, struct foo * self)
 {
 	return workBuffer[GWSpanStart] = value;
 }
 
 	/* BalloonEngineBase>>#squaredLengthOf:with: */
-static sqInt
-squaredLengthOfwith(sqInt deltaX, sqInt deltaY)
+static sqIntsquaredLengthOfwith(sqInt deltaX, sqInt deltaY, struct foo * self)
 {
 	return (deltaX * deltaX) + (deltaY * deltaY);
 }
 
 	/* BalloonEngineBase>>#stackFillDepth: */
-static sqInt
-stackFillDepth(sqInt index)
+static sqIntstackFillDepth(sqInt index, struct foo * self)
 {
 	return workBuffer[(workBuffer[GWBufferTop]) + (index + 1)];
 }
 
 	/* BalloonEngineBase>>#stackFillDepth:put: */
-static sqInt
-stackFillDepthput(sqInt index, sqInt value)
+static sqIntstackFillDepthput(sqInt index, sqInt value, struct foo * self)
 {
 	return workBuffer[(workBuffer[GWBufferTop]) + (index + 1)] = value;
 }
 
 	/* BalloonEngineBase>>#stackFillEntryLength */
-static sqInt
-stackFillEntryLength(void)
+static sqIntstackFillEntryLength(struct foo * self)
 {
 	return 3;
 }
 
 	/* BalloonEngineBase>>#stackFillRightX: */
-static sqInt
-stackFillRightX(sqInt index)
+static sqIntstackFillRightX(sqInt index, struct foo * self)
 {
 	return workBuffer[(workBuffer[GWBufferTop]) + (index + 2)];
 }
 
 	/* BalloonEngineBase>>#stackFillRightX:put: */
-static sqInt
-stackFillRightXput(sqInt index, sqInt value)
+static sqIntstackFillRightXput(sqInt index, sqInt value, struct foo * self)
 {
 	return workBuffer[(workBuffer[GWBufferTop]) + (index + 2)] = value;
 }
 
 	/* BalloonEngineBase>>#stackFillSize */
-static sqInt
-stackFillSize(void)
+static sqIntstackFillSize(struct foo * self)
 {
 	return (workBuffer[GWSize]) - (workBuffer[GWBufferTop]);
 }
 
 	/* BalloonEngineBase>>#stackFillValue: */
-static sqInt
-stackFillValue(sqInt index)
+static sqIntstackFillValue(sqInt index, struct foo * self)
 {
 	return workBuffer[(workBuffer[GWBufferTop]) + index];
 }
 
 	/* BalloonEngineBase>>#stackFillValue:put: */
-static sqInt
-stackFillValueput(sqInt index, sqInt value)
+static sqIntstackFillValueput(sqInt index, sqInt value, struct foo * self)
 {
 	return workBuffer[(workBuffer[GWBufferTop]) + index] = value;
 }
 
 	/* BalloonEngineBase>>#stateGet */
-static sqInt
-stateGet(void)
+static sqIntstateGet(struct foo * self)
 {
 	return workBuffer[GWState];
 }
 
 	/* BalloonEngineBase>>#statePut: */
-static sqInt
-statePut(sqInt value)
+static sqIntstatePut(sqInt value, struct foo * self)
 {
 	return workBuffer[GWState] = value;
 }
@@ -12890,10 +12497,9 @@ statePut(sqInt value)
  */
 
 	/* BalloonEnginePlugin>>#stepToFirstBezier */
-static sqInt
-stepToFirstBezier(void)
+static sqIntstepToFirstBezier(struct foo * self)
 {
-	return stepToFirstBezierInat(getBuffer[workBuffer[GWGETStart]], workBuffer[GWCurrentY]);
+	return stepToFirstBezierInat(getBuffer[workBuffer[GWGETStart]], workBuffer[GWCurrentY], self);
 }
 
 
@@ -12905,8 +12511,7 @@ stepToFirstBezier(void)
 	compensate for this - but I'm not really sure. */
 
 	/* BalloonEnginePlugin>>#stepToFirstBezierIn:at: */
-static sqInt
-stepToFirstBezierInat(sqInt bezier, sqInt yValue)
+static sqIntstepToFirstBezierInat(sqInt bezier, sqInt yValue, struct foo * self)
 {
     sqInt deltaY;
     sqInt endX;
@@ -13029,18 +12634,16 @@ stepToFirstBezierInat(sqInt bezier, sqInt yValue)
  */
 
 	/* BalloonEnginePlugin>>#stepToFirstLine */
-static sqInt
-stepToFirstLine(void)
+static sqIntstepToFirstLine(struct foo * self)
 {
-	return stepToFirstLineInat(getBuffer[workBuffer[GWGETStart]], workBuffer[GWCurrentY]);
+	return stepToFirstLineInat(getBuffer[workBuffer[GWGETStart]], workBuffer[GWCurrentY], self);
 }
 
 
 /*	Initialize the line at yValue */
 
 	/* BalloonEnginePlugin>>#stepToFirstLineIn:at: */
-static sqInt
-stepToFirstLineInat(sqInt line, sqInt yValue)
+static sqIntstepToFirstLineInat(sqInt line, sqInt yValue, struct foo * self)
 {
     sqInt deltaX;
     sqInt deltaY;
@@ -13136,18 +12739,16 @@ stepToFirstLineInat(sqInt line, sqInt yValue)
  */
 
 	/* BalloonEnginePlugin>>#stepToFirstWideBezier */
-static sqInt
-stepToFirstWideBezier(void)
+static sqIntstepToFirstWideBezier(struct foo * self)
 {
-	return stepToFirstWideBezierInat(getBuffer[workBuffer[GWGETStart]], workBuffer[GWCurrentY]);
+	return stepToFirstWideBezierInat(getBuffer[workBuffer[GWGETStart]], workBuffer[GWCurrentY], self);
 }
 
 
 /*	Initialize the bezier at yValue */
 
 	/* BalloonEnginePlugin>>#stepToFirstWideBezierIn:at: */
-static sqInt
-stepToFirstWideBezierInat(sqInt bezier, sqInt yValue)
+static sqIntstepToFirstWideBezierInat(sqInt bezier, sqInt yValue, struct foo * self)
 {
     sqInt endX;
     sqInt i;
@@ -13172,7 +12773,7 @@ stepToFirstWideBezierInat(sqInt bezier, sqInt yValue)
 	endX = objBuffer[bezier + GBEndX];
 	/* begin edgeYValueOf: */
 	startY = objBuffer[bezier + GEYValue];
-	stepToFirstBezierInat(bezier, startY);
+	stepToFirstBezierInat(bezier, startY, self);
 	/* begin edgeNumLinesOf: */
 	nLines = objBuffer[bezier + GENumLines];
 	for (i = 0; i <= 5; i += 1) {
@@ -13189,10 +12790,10 @@ stepToFirstWideBezierInat(sqInt bezier, sqInt yValue)
 		xDir = -1;
 	}
 	if (xDir < 0) {
-		adjustWideBezierLeftwidthoffsetendX(bezier, lineWidth, lineOffset, endX);
+		adjustWideBezierLeftwidthoffsetendX(bezier, lineWidth, lineOffset, endX, self);
 	}
 	else {
-		adjustWideBezierRightwidthoffsetendX(bezier, lineWidth, lineOffset, endX);
+		adjustWideBezierRightwidthoffsetendX(bezier, lineWidth, lineOffset, endX, self);
 	}
 	if (nLines == 0) {
 		((objBuffer + bezier) + GBUpdateData)[GBUpdateX] = ((objBuffer[bezier + GBFinalX]) * 256);
@@ -13220,12 +12821,12 @@ stepToFirstWideBezierInat(sqInt bezier, sqInt yValue)
 		value2 = ((objBuffer[bezier + GEObjectType]) & GEPrimitiveTypeMask) | GEEdgeFillsInvalid;
 		objBuffer[bezier + GEObjectType] = value2;
 	}
-	computeFinalWideBezierValueswidth(bezier, lineWidth);
+	computeFinalWideBezierValueswidth(bezier, lineWidth, self);
 	if (!(startY == yValue)) {
 
 		/* Note: Must single step here so that entry/exit works */
 		for (i = startY; i < yValue; i += 1) {
-			stepToNextWideBezierInat(bezier, i);
+			stepToNextWideBezierInat(bezier, i, self);
 		}
 		/* begin edgeNumLinesOf:put: */
 		value = (objBuffer[bezier + GENumLines]) - (yValue - startY);
@@ -13240,18 +12841,16 @@ stepToFirstWideBezierInat(sqInt bezier, sqInt yValue)
  */
 
 	/* BalloonEnginePlugin>>#stepToFirstWideLine */
-static sqInt
-stepToFirstWideLine(void)
+static sqIntstepToFirstWideLine(struct foo * self)
 {
-	return stepToFirstWideLineInat(getBuffer[workBuffer[GWGETStart]], workBuffer[GWCurrentY]);
+	return stepToFirstWideLineInat(getBuffer[workBuffer[GWGETStart]], workBuffer[GWCurrentY], self);
 }
 
 
 /*	Initialize the wide line at yValue. */
 
 	/* BalloonEnginePlugin>>#stepToFirstWideLineIn:at: */
-static sqInt
-stepToFirstWideLineInat(sqInt line, sqInt yValue)
+static sqIntstepToFirstWideLineInat(sqInt line, sqInt yValue, struct foo * self)
 {
     sqInt err;
     sqInt i;
@@ -13287,7 +12886,7 @@ stepToFirstWideLineInat(sqInt line, sqInt yValue)
 	startX = objBuffer[line + GEXValue];
 	/* begin edgeYValueOf: */
 	startY = objBuffer[line + GEYValue];
-	stepToFirstLineInat(line, startY);
+	stepToFirstLineInat(line, startY, self);
 	/* begin edgeNumLinesOf: */
 	nLines = objBuffer[line + GENumLines];
 	/* begin lineXDirectionOf: */
@@ -13370,7 +12969,7 @@ stepToFirstWideLineInat(sqInt line, sqInt yValue)
 			 || ((yExit1 + lineOffset1) >= 0)) {
 
 				/* Yes, need an update */
-				adjustWideLineafterSteppingFromto(line, lastX, nextX);
+				adjustWideLineafterSteppingFromto(line, lastX, nextX, self);
 			}
 		}
 		/* begin edgeNumLinesOf:put: */
@@ -13384,8 +12983,7 @@ stepToFirstWideLineInat(sqInt line, sqInt yValue)
 /*	Process the current entry in the AET by stepping to the next scan line */
 
 	/* BalloonEnginePlugin>>#stepToNextBezier */
-static sqInt
-stepToNextBezier(void)
+static sqIntstepToNextBezier(struct foo * self)
 {
     int fwDx;
     int fwDy;
@@ -13430,8 +13028,7 @@ stepToNextBezier(void)
 	not declaring updateData as 'int*' but casting it on every use. */
 
 	/* BalloonEnginePlugin>>#stepToNextBezierForward:at: */
-static sqInt
-stepToNextBezierForwardat(int *updateData, sqInt yValue)
+static sqIntstepToNextBezierForwardat(int *updateData, sqInt yValue, struct foo * self)
 {
     int fwDx;
     int fwDy;
@@ -13467,8 +13064,7 @@ stepToNextBezierForwardat(int *updateData, sqInt yValue)
 /*	Incrementally step to the next scan line in the given bezier */
 
 	/* BalloonEnginePlugin>>#stepToNextBezierIn:at: */
-static sqInt
-stepToNextBezierInat(sqInt bezier, sqInt yValue)
+static sqIntstepToNextBezierInat(sqInt bezier, sqInt yValue, struct foo * self)
 {
     int fwDx;
     int fwDy;
@@ -13511,8 +13107,7 @@ stepToNextBezierInat(sqInt bezier, sqInt yValue)
 /*	Process the current entry in the AET by stepping to the next scan line */
 
 	/* BalloonEnginePlugin>>#stepToNextLine */
-static sqInt
-stepToNextLine(void)
+static sqIntstepToNextLine(struct foo * self)
 {
     sqInt err;
     sqInt line;
@@ -13539,8 +13134,7 @@ stepToNextLine(void)
 /*	Incrementally step to the next scan line in the given line */
 
 	/* BalloonEnginePlugin>>#stepToNextLineIn:at: */
-static sqInt
-stepToNextLineInat(sqInt line, sqInt yValue)
+static sqIntstepToNextLineInat(sqInt line, sqInt yValue, struct foo * self)
 {
     sqInt err;
     sqInt x;
@@ -13564,10 +13158,9 @@ stepToNextLineInat(sqInt line, sqInt yValue)
  */
 
 	/* BalloonEnginePlugin>>#stepToNextWideBezier */
-static sqInt
-stepToNextWideBezier(void)
+static sqIntstepToNextWideBezier(struct foo * self)
 {
-	stepToNextWideBezierInat(aetBuffer[workBuffer[GWAETStart]], workBuffer[GWCurrentY]);
+	stepToNextWideBezierInat(aetBuffer[workBuffer[GWAETStart]], workBuffer[GWCurrentY], self);
 	return 0;
 }
 
@@ -13575,8 +13168,7 @@ stepToNextWideBezier(void)
 /*	Incrementally step to the next scan line in the given wide bezier */
 
 	/* BalloonEnginePlugin>>#stepToNextWideBezierIn:at: */
-static sqInt
-stepToNextWideBezierInat(sqInt bezier, sqInt yValue)
+static sqIntstepToNextWideBezierInat(sqInt bezier, sqInt yValue, struct foo * self)
 {
     int fwDx;
     int fwDx1;
@@ -13674,7 +13266,7 @@ stepToNextWideBezierInat(sqInt bezier, sqInt yValue)
 	updateData1[GBUpdateDX] = fwDx1;
 	updateData1[GBUpdateDY] = fwDy1;
 	((signed)lastX1 >> 8);
-	computeFinalWideBezierValueswidth(bezier, lineWidth);
+	computeFinalWideBezierValueswidth(bezier, lineWidth, self);
 	return 0;
 }
 
@@ -13682,8 +13274,7 @@ stepToNextWideBezierInat(sqInt bezier, sqInt yValue)
 /*	Process the current entry in the AET by stepping to the next scan line */
 
 	/* BalloonEnginePlugin>>#stepToNextWideLine */
-static sqInt
-stepToNextWideLine(void)
+static sqIntstepToNextWideLine(struct foo * self)
 {
     sqInt err;
     sqInt lastX;
@@ -13740,7 +13331,7 @@ stepToNextWideLine(void)
 	 || ((yExit + lineOffset) >= 0)) {
 
 		/* Yes, need an update */
-		adjustWideLineafterSteppingFromto(line, lastX, nextX);
+		adjustWideLineafterSteppingFromto(line, lastX, nextX, self);
 	}
 	return null;
 }
@@ -13749,8 +13340,7 @@ stepToNextWideLine(void)
 /*	Incrementally step to the next scan line in the given wide line */
 
 	/* BalloonEnginePlugin>>#stepToNextWideLineIn:at: */
-static sqInt
-stepToNextWideLineInat(sqInt line, sqInt yValue)
+static sqIntstepToNextWideLineInat(sqInt line, sqInt yValue, struct foo * self)
 {
     sqInt err;
     sqInt lastX;
@@ -13804,14 +13394,13 @@ stepToNextWideLineInat(sqInt line, sqInt yValue)
 	 || ((yExit + lineOffset) >= 0)) {
 
 		/* Yes, need an update */
-		adjustWideLineafterSteppingFromto(line, lastX, nextX);
+		adjustWideLineafterSteppingFromto(line, lastX, nextX, self);
 	}
 	return 0;
 }
 
 	/* BalloonEngineBase>>#stopBecauseOf: */
-static sqInt
-stopBecauseOf(sqInt stopReason)
+static sqIntstopBecauseOf(sqInt stopReason, struct foo * self)
 {
 	workBuffer[GWStopReason] = stopReason;
 	engineStopped = 1;
@@ -13819,39 +13408,35 @@ stopBecauseOf(sqInt stopReason)
 }
 
 	/* BalloonEngineBase>>#stopReasonGet */
-static sqInt
-stopReasonGet(void)
+static sqIntstopReasonGet(struct foo * self)
 {
 	return workBuffer[GWStopReason];
 }
 
 	/* BalloonEngineBase>>#stopReasonPut: */
-static sqInt
-stopReasonPut(sqInt value)
+static sqIntstopReasonPut(sqInt value, struct foo * self)
 {
 	return workBuffer[GWStopReason] = value;
 }
 
 	/* BalloonEngineBase>>#storeEdgeStateFrom:into: */
-static sqInt
-storeEdgeStateFrominto(sqInt edge, sqInt edgeOop)
+static sqIntstoreEdgeStateFrominto(sqInt edge, sqInt edgeOop, struct foo * self)
 {
-	if ((slotSizeOf(edgeOop, interpreterProxy->interpreterState)) < ETBalloonEdgeDataSize) {
-		return primitiveFail(interpreterProxy->interpreterState);
+	if ((slotSizeOf(edgeOop, self)) < ETBalloonEdgeDataSize) {
+		return primitiveFail(self);
 	}
-	storeIntegerofObjectwithValue(ETIndexIndex, edgeOop, objBuffer[edge + GEObjectIndex], interpreterProxy->interpreterState);
-	storeIntegerofObjectwithValue(ETXValueIndex, edgeOop, objBuffer[edge + GEXValue], interpreterProxy->interpreterState);
-	storeIntegerofObjectwithValue(ETYValueIndex, edgeOop, workBuffer[GWCurrentY], interpreterProxy->interpreterState);
-	storeIntegerofObjectwithValue(ETZValueIndex, edgeOop, objBuffer[edge + GEZValue], interpreterProxy->interpreterState);
-	storeIntegerofObjectwithValue(ETLinesIndex, edgeOop, objBuffer[edge + GENumLines], interpreterProxy->interpreterState);
+	storeIntegerofObjectwithValue(ETIndexIndex, edgeOop, objBuffer[edge + GEObjectIndex], self);
+	storeIntegerofObjectwithValue(ETXValueIndex, edgeOop, objBuffer[edge + GEXValue], self);
+	storeIntegerofObjectwithValue(ETYValueIndex, edgeOop, workBuffer[GWCurrentY], self);
+	storeIntegerofObjectwithValue(ETZValueIndex, edgeOop, objBuffer[edge + GEZValue], self);
+	storeIntegerofObjectwithValue(ETLinesIndex, edgeOop, objBuffer[edge + GENumLines], self);
 	/* begin lastExportedEdgePut: */
 	workBuffer[GWLastExportedEdge] = edge;
 	return 0;
 }
 
 	/* BalloonEngineBase>>#storeEngineStateInto: */
-static sqInt
-storeEngineStateInto(sqInt oop)
+static sqIntstoreEngineStateInto(sqInt oop, struct foo * self)
 {
 	/* begin objUsedPut: */
 	workBuffer[GWObjUsed] = objUsed;
@@ -13859,8 +13444,7 @@ storeEngineStateInto(sqInt oop)
 }
 
 	/* BalloonEngineBase>>#storeFillStateInto: */
-static sqInt
-storeFillStateInto(sqInt fillOop)
+static sqIntstoreFillStateInto(sqInt fillOop, struct foo * self)
 {
     sqInt fillIndex;
     sqInt leftX;
@@ -13872,19 +13456,18 @@ storeFillStateInto(sqInt fillOop)
 	leftX = workBuffer[GWLastExportedLeftX];
 	/* begin lastExportedRightXGet */
 	rightX = workBuffer[GWLastExportedRightX];
-	if ((slotSizeOf(fillOop, interpreterProxy->interpreterState)) < FTBalloonFillDataSize) {
-		return primitiveFail(interpreterProxy->interpreterState);
+	if ((slotSizeOf(fillOop, self)) < FTBalloonFillDataSize) {
+		return primitiveFail(self);
 	}
-	storeIntegerofObjectwithValue(FTIndexIndex, fillOop, objBuffer[fillIndex + GEObjectIndex], interpreterProxy->interpreterState);
-	storeIntegerofObjectwithValue(FTMinXIndex, fillOop, leftX, interpreterProxy->interpreterState);
-	storeIntegerofObjectwithValue(FTMaxXIndex, fillOop, rightX, interpreterProxy->interpreterState);
-	storeIntegerofObjectwithValue(FTYValueIndex, fillOop, workBuffer[GWCurrentY], interpreterProxy->interpreterState);
+	storeIntegerofObjectwithValue(FTIndexIndex, fillOop, objBuffer[fillIndex + GEObjectIndex], self);
+	storeIntegerofObjectwithValue(FTMinXIndex, fillOop, leftX, self);
+	storeIntegerofObjectwithValue(FTMaxXIndex, fillOop, rightX, self);
+	storeIntegerofObjectwithValue(FTYValueIndex, fillOop, workBuffer[GWCurrentY], self);
 	return 0;
 }
 
 	/* BalloonEngineBase>>#storeRenderingState */
-static sqInt
-storeRenderingState(void)
+static sqIntstoreRenderingState(struct foo * self)
 {
     int edge;
     sqInt edgeOop;
@@ -13892,42 +13475,41 @@ storeRenderingState(void)
     sqInt reason;
     sqInt value;
 
-	if (failed(interpreterProxy->interpreterState)) {
+	if (failed(self)) {
 		return null;
 	}
 	if (engineStopped) {
 
 		/* Check the stop reason and store the required information */
 		/* begin storeStopStateIntoEdge:fill: */
-		edgeOop = stackObjectValue(1, interpreterProxy->interpreterState);
-		fillOop = stackObjectValue(0, interpreterProxy->interpreterState);
+		edgeOop = stackObjectValue(1, self);
+		fillOop = stackObjectValue(0, self);
 		/* begin stopReasonGet */
 		reason = workBuffer[GWStopReason];
 		if (reason == GErrorGETEntry) {
 			edge = getBuffer[workBuffer[GWGETStart]];
-			storeEdgeStateFrominto(edge, edgeOop);
+			storeEdgeStateFrominto(edge, edgeOop, self);
 			/* begin getStartPut: */
 			value = (workBuffer[GWGETStart]) + 1;
 			workBuffer[GWGETStart] = value;
 		}
 		if (reason == GErrorFillEntry) {
-			storeFillStateInto(fillOop);
+			storeFillStateInto(fillOop, self);
 		}
 		if (reason == GErrorAETEntry) {
 			edge = aetBuffer[workBuffer[GWAETStart]];
-			storeEdgeStateFrominto(edge, edgeOop);
+			storeEdgeStateFrominto(edge, edgeOop, self);
 		}
 	}
 	/* begin storeEngineStateInto: */
 	workBuffer[GWObjUsed] = objUsed;
-	pop(3, interpreterProxy->interpreterState);
-	pushInteger(workBuffer[GWStopReason], interpreterProxy->interpreterState);
+	pop(3, self);
+	pushInteger(workBuffer[GWStopReason], self);
 	return 0;
 }
 
 	/* BalloonEngineBase>>#storeStopStateIntoEdge:fill: */
-static sqInt
-storeStopStateIntoEdgefill(sqInt edgeOop, sqInt fillOop)
+static sqIntstoreStopStateIntoEdgefill(sqInt edgeOop, sqInt fillOop, struct foo * self)
 {
     int edge;
     sqInt reason;
@@ -13937,17 +13519,17 @@ storeStopStateIntoEdgefill(sqInt edgeOop, sqInt fillOop)
 	reason = workBuffer[GWStopReason];
 	if (reason == GErrorGETEntry) {
 		edge = getBuffer[workBuffer[GWGETStart]];
-		storeEdgeStateFrominto(edge, edgeOop);
+		storeEdgeStateFrominto(edge, edgeOop, self);
 		/* begin getStartPut: */
 		value = (workBuffer[GWGETStart]) + 1;
 		workBuffer[GWGETStart] = value;
 	}
 	if (reason == GErrorFillEntry) {
-		storeFillStateInto(fillOop);
+		storeFillStateInto(fillOop, self);
 	}
 	if (reason == GErrorAETEntry) {
 		edge = aetBuffer[workBuffer[GWAETStart]];
-		storeEdgeStateFrominto(edge, edgeOop);
+		storeEdgeStateFrominto(edge, edgeOop, self);
 	}
 	return 0;
 }
@@ -13956,20 +13538,19 @@ storeStopStateIntoEdgefill(sqInt edgeOop, sqInt fillOop)
 /*	Recursively subdivide the curve on the bezier stack. */
 
 	/* BalloonEnginePlugin>>#subdivideBezierFrom: */
-static sqInt
-subdivideBezierFrom(sqInt index)
+static sqIntsubdivideBezierFrom(sqInt index, struct foo * self)
 {
     sqInt index1;
     sqInt index2;
     sqInt otherIndex;
 
-	otherIndex = subdivideBezier(index);
+	otherIndex = subdivideBezier(index, self);
 	if (!(otherIndex == index)) {
-		index1 = subdivideBezierFrom(index);
+		index1 = subdivideBezierFrom(index, self);
 		if (engineStopped) {
 			return 0;
 		}
-		index2 = subdivideBezierFrom(otherIndex);
+		index2 = subdivideBezierFrom(otherIndex, self);
 		if (engineStopped) {
 			return 0;
 		}
@@ -13987,8 +13568,7 @@ subdivideBezierFrom(sqInt index)
 /*	Subdivide the given bezier curve if necessary */
 
 	/* BalloonEnginePlugin>>#subdivideBezier: */
-static sqInt
-subdivideBezier(sqInt index)
+static sqIntsubdivideBezier(sqInt index, struct foo * self)
 {
     sqInt deltaX;
     sqInt deltaY;
@@ -14017,7 +13597,7 @@ subdivideBezier(sqInt index)
 	if (deltaY > 0xFF) {
 		/* begin incrementStat:by: */
 		workBuffer[GWBezierHeightSubdivisions] = ((workBuffer[GWBezierHeightSubdivisions]) + 1);
-		return computeBezierSplitAtHalf(index);
+		return computeBezierSplitAtHalf(index, self);
 	}
 	/* begin wbStackValue: */
 	index3 = (((workBuffer[GWSize]) - (workBuffer[GWBufferTop])) - index);
@@ -14032,7 +13612,7 @@ subdivideBezier(sqInt index)
 	if ((deltaY * 32) < deltaX) {
 		/* begin incrementStat:by: */
 		workBuffer[GWBezierOverflowSubdivisions] = ((workBuffer[GWBezierOverflowSubdivisions]) + 1);
-		return computeBezierSplitAtHalf(index);
+		return computeBezierSplitAtHalf(index, self);
 	}
 	return index;
 }
@@ -14041,8 +13621,7 @@ subdivideBezier(sqInt index)
 /*	Check if the given bezier curve is monoton in X. If not, subdivide it */
 
 	/* BalloonEnginePlugin>>#subdivideToBeMonotonInX: */
-static sqInt
-subdivideToBeMonotonInX(sqInt index)
+static sqIntsubdivideToBeMonotonInX(sqInt index, struct foo * self)
 {
     sqInt denom;
     sqInt dx1;
@@ -14079,15 +13658,14 @@ subdivideToBeMonotonInX(sqInt index)
 	if (denom < 0) {
 		denom = 0 - denom;
 	}
-	return computeBeziersplitAt(index, (((double) num )) / (((double) denom )));
+	return computeBeziersplitAt(index, (((double) num )) / (((double) denom )), self);
 }
 
 
 /*	Check if the given bezier curve is monoton in Y. If not, subdivide it */
 
 	/* BalloonEnginePlugin>>#subdivideToBeMonotonInY: */
-static sqInt
-subdivideToBeMonotonInY(sqInt index)
+static sqIntsubdivideToBeMonotonInY(sqInt index, struct foo * self)
 {
     sqInt denom;
     sqInt dy1;
@@ -14124,7 +13702,7 @@ subdivideToBeMonotonInY(sqInt index)
 	if (denom < 0) {
 		denom = 0 - denom;
 	}
-	return computeBeziersplitAt(index, (((double) num )) / (((double) denom )));
+	return computeBeziersplitAt(index, (((double) num )) / (((double) denom )), self);
 }
 
 
@@ -14132,23 +13710,22 @@ subdivideToBeMonotonInY(sqInt index)
 	If not, subdivide it */
 
 	/* BalloonEnginePlugin>>#subdivideToBeMonoton:inX: */
-static sqInt
-subdivideToBeMonotoninX(sqInt base, sqInt doTestX)
+static sqIntsubdivideToBeMonotoninX(sqInt base, sqInt doTestX, struct foo * self)
 {
     sqInt base2;
     sqInt index1;
     sqInt index2;
 
-	base2 = (index1 = (index2 = subdivideToBeMonotonInY(base)));
+	base2 = (index1 = (index2 = subdivideToBeMonotonInY(base, self)));
 	if (doTestX) {
-		index1 = subdivideToBeMonotonInX(base);
+		index1 = subdivideToBeMonotonInX(base, self);
 	}
 	if (index1 > index2) {
 		index2 = index1;
 	}
 	if ((base != base2)
 	 && (doTestX)) {
-		index1 = subdivideToBeMonotonInX(base2);
+		index1 = subdivideToBeMonotonInX(base2, self);
 	}
 	if (index1 > index2) {
 		index2 = index1;
@@ -14157,32 +13734,31 @@ subdivideToBeMonotoninX(sqInt base, sqInt doTestX)
 }
 
 	/* BalloonEngineBase>>#toggleFillsOf: */
-static sqInt
-toggleFillsOf(sqInt edge)
+static sqInttoggleFillsOf(sqInt edge, struct foo * self)
 {
     sqInt depth;
     sqInt fillIndex;
 
-	if (!(needAvailableSpace(3 /* stackFillEntryLength */ * 2))) {
+	if (!(needAvailableSpace(3 /* stackFillEntryLength */ * 2, self))) {
 		return null;
 	}
 	depth = ((sqInt)((usqInt)((objBuffer[edge + GEZValue])) << 1));
 	/* begin edgeLeftFillOf: */
 	fillIndex = objBuffer[edge + GEFillIndexLeft];
 	if (!(fillIndex == 0)) {
-		toggleFilldepthrightX(fillIndex, depth, 999999999);
+		toggleFilldepthrightX(fillIndex, depth, 999999999, self);
 	}
 	/* begin edgeRightFillOf: */
 	fillIndex = objBuffer[edge + GEFillIndexRight];
 	if (!(fillIndex == 0)) {
-		toggleFilldepthrightX(fillIndex, depth, 999999999);
+		toggleFilldepthrightX(fillIndex, depth, 999999999, self);
 	}
 	/* begin quickRemoveInvalidFillsAt: */
 	if (((workBuffer[GWSize]) - (workBuffer[GWBufferTop])) == 0) {
 		goto l3;
 	}
-	while ((topRightX()) <= (objBuffer[edge + GEXValue])) {
-		hideFilldepth(topFill(), topDepth());
+	while ((topRightX(self)) <= (objBuffer[edge + GEXValue])) {
+		hideFilldepth(topFill(self), topDepth(self), self);
 		if (((workBuffer[GWSize]) - (workBuffer[GWBufferTop])) == 0) {
 			goto l3;
 		}
@@ -14195,8 +13771,7 @@ toggleFillsOf(sqInt edge)
 /*	Make the fill style with the given index either visible or invisible */
 
 	/* BalloonEngineBase>>#toggleFill:depth:rightX: */
-static sqInt
-toggleFilldepthrightX(sqInt fillIndex, sqInt depth, sqInt rightX)
+static sqInttoggleFilldepthrightX(sqInt fillIndex, sqInt depth, sqInt rightX, struct foo * self)
 {
     sqInt hidden;
     sqInt index;
@@ -14204,7 +13779,7 @@ toggleFilldepthrightX(sqInt fillIndex, sqInt depth, sqInt rightX)
     sqInt index2;
 
 	if (((workBuffer[GWSize]) - (workBuffer[GWBufferTop])) == 0) {
-		if (wbStackPush(3 /* stackFillEntryLength */)) {
+		if (wbStackPush(3 /* stackFillEntryLength */, self)) {
 			/* begin stackFillValue:put: */
 			index = ((workBuffer[GWSize]) - (workBuffer[GWBufferTop])) - 3 /* stackFillEntryLength */;
 			workBuffer[(workBuffer[GWBufferTop]) + index] = fillIndex;
@@ -14217,17 +13792,16 @@ toggleFilldepthrightX(sqInt fillIndex, sqInt depth, sqInt rightX)
 		}
 	}
 	else {
-		hidden = hideFilldepth(fillIndex, depth);
+		hidden = hideFilldepth(fillIndex, depth, self);
 		if (!hidden) {
-			showFilldepthrightX(fillIndex, depth, rightX);
+			showFilldepthrightX(fillIndex, depth, rightX, self);
 		}
 	}
 	return 0;
 }
 
 	/* BalloonEngineBase>>#toggleWideFillOf: */
-static sqInt
-toggleWideFillOf(sqInt edge)
+static sqInttoggleWideFillOf(sqInt edge, struct foo * self)
 {
     sqInt depth;
     sqInt fill;
@@ -14241,7 +13815,7 @@ toggleWideFillOf(sqInt edge)
 	switch (type) {
 	case 0:
 	case 1:
-		errorWrongIndex();
+		errorWrongIndex(self);
 		break;
 	case 2:
 		dispatchReturnValue = objBuffer[dispatchedValue + GLWideWidth];
@@ -14254,7 +13828,7 @@ toggleWideFillOf(sqInt edge)
 	switch (type) {
 	case 0:
 	case 1:
-		errorWrongIndex();
+		errorWrongIndex(self);
 		break;
 	case 2:
 		dispatchReturnValue = objBuffer[dispatchedValue + GLWideFill];
@@ -14267,16 +13841,16 @@ toggleWideFillOf(sqInt edge)
 	if (fill == 0) {
 		return null;
 	}
-	if (!(needAvailableSpace(3 /* stackFillEntryLength */))) {
+	if (!(needAvailableSpace(3 /* stackFillEntryLength */, self))) {
 		return null;
 	}
 
 	/* So lines sort before interior fills */
 	depth = (((sqInt)((usqInt)((objBuffer[edge + GEZValue])) << 1))) + 1;
 	rightX = (objBuffer[edge + GEXValue]) + lineWidth;
-	index = findStackFilldepth(fill, depth);
+	index = findStackFilldepth(fill, depth, self);
 	if (index == -1) {
-		showFilldepthrightX(fill, depth, rightX);
+		showFilldepthrightX(fill, depth, rightX, self);
 	}
 	else {
 		if ((workBuffer[(workBuffer[GWBufferTop]) + (index + 2)]) < rightX) {
@@ -14287,8 +13861,8 @@ toggleWideFillOf(sqInt edge)
 	if (((workBuffer[GWSize]) - (workBuffer[GWBufferTop])) == 0) {
 		goto l1;
 	}
-	while ((topRightX()) <= (objBuffer[edge + GEXValue])) {
-		hideFilldepth(topFill(), topDepth());
+	while ((topRightX(self)) <= (objBuffer[edge + GEXValue])) {
+		hideFilldepth(topFill(self), topDepth(self), self);
 		if (((workBuffer[GWSize]) - (workBuffer[GWBufferTop])) == 0) {
 			goto l1;
 		}
@@ -14298,8 +13872,7 @@ toggleWideFillOf(sqInt edge)
 }
 
 	/* BalloonEngineBase>>#topDepth */
-static sqInt
-topDepth(void)
+static sqInttopDepth(struct foo * self)
 {
     sqInt index;
 
@@ -14314,8 +13887,7 @@ topDepth(void)
 }
 
 	/* BalloonEngineBase>>#topFill */
-static sqInt
-topFill(void)
+static sqInttopFill(struct foo * self)
 {
     sqInt index;
 
@@ -14330,8 +13902,7 @@ topFill(void)
 }
 
 	/* BalloonEngineBase>>#topFillDepth */
-static sqInt
-topFillDepth(void)
+static sqInttopFillDepth(struct foo * self)
 {
     sqInt index;
 
@@ -14341,8 +13912,7 @@ topFillDepth(void)
 }
 
 	/* BalloonEngineBase>>#topFillDepthPut: */
-static sqInt
-topFillDepthPut(sqInt value)
+static sqInttopFillDepthPut(sqInt value, struct foo * self)
 {
     sqInt index;
 
@@ -14352,8 +13922,7 @@ topFillDepthPut(sqInt value)
 }
 
 	/* BalloonEngineBase>>#topFillRightX */
-static sqInt
-topFillRightX(void)
+static sqInttopFillRightX(struct foo * self)
 {
     sqInt index;
 
@@ -14363,8 +13932,7 @@ topFillRightX(void)
 }
 
 	/* BalloonEngineBase>>#topFillRightXPut: */
-static sqInt
-topFillRightXPut(sqInt value)
+static sqInttopFillRightXPut(sqInt value, struct foo * self)
 {
     sqInt index;
 
@@ -14374,8 +13942,7 @@ topFillRightXPut(sqInt value)
 }
 
 	/* BalloonEngineBase>>#topFillValue */
-static sqInt
-topFillValue(void)
+static sqInttopFillValue(struct foo * self)
 {
     sqInt index;
 
@@ -14385,8 +13952,7 @@ topFillValue(void)
 }
 
 	/* BalloonEngineBase>>#topFillValuePut: */
-static sqInt
-topFillValuePut(sqInt value)
+static sqInttopFillValuePut(sqInt value, struct foo * self)
 {
     sqInt index;
 
@@ -14396,8 +13962,7 @@ topFillValuePut(sqInt value)
 }
 
 	/* BalloonEngineBase>>#topRightX */
-static sqInt
-topRightX(void)
+static sqInttopRightX(struct foo * self)
 {
     sqInt index;
 
@@ -14412,8 +13977,7 @@ topRightX(void)
 }
 
 	/* BalloonEngineBase>>#transformColor: */
-static sqInt
-transformColor(sqInt fillIndex)
+static sqInttransformColor(sqInt fillIndex, struct foo * self)
 {
     sqInt a;
     double alphaScale;
@@ -14464,8 +14028,7 @@ transformColor(sqInt fillIndex)
 	If haveMatrix is true then the matrix contains the actual transformation. */
 
 	/* BalloonEngineBase>>#transformPoints: */
-static sqInt
-transformPoints(sqInt n)
+static sqInttransformPoints(sqInt n, struct foo * self)
 {
     int *point;
     int *point1;
@@ -14593,8 +14156,7 @@ transformPoints(sqInt n)
 	the declarations and adding argument coercions at the appropriate points) */
 
 	/* BalloonEngineBase>>#transformPointX:y:into: */
-static sqInt
-transformPointXyinto(double xValue, double yValue, int *dstPoint)
+static sqInttransformPointXyinto(double xValue, double yValue, int *dstPoint, struct foo * self)
 {
     float *transform;
     sqInt x;
@@ -14615,8 +14177,7 @@ transformPointXyinto(double xValue, double yValue, int *dstPoint)
  */
 
 	/* BalloonEngineBase>>#transformPoint: */
-static sqInt
-transformPoint(int *point)
+static sqInttransformPoint(int *point, struct foo * self)
 {
     float *transform;
     sqInt x;
@@ -14654,8 +14215,7 @@ transformPoint(int *point)
  */
 
 	/* BalloonEngineBase>>#transformPoint:into: */
-static sqInt
-transformPointinto(sqInt srcPoint, sqInt dstPoint)
+static sqInttransformPointinto(sqInt srcPoint, sqInt dstPoint, struct foo * self)
 {
     float *transform;
     sqInt x;
@@ -14679,8 +14239,7 @@ transformPointinto(sqInt srcPoint, sqInt dstPoint)
 /*	Transform the given width */
 
 	/* BalloonEngineBase>>#transformWidth: */
-static sqInt
-transformWidth(sqInt w)
+static sqInttransformWidth(sqInt w, struct foo * self)
 {
     double deltaX;
     double deltaY;
@@ -14831,8 +14390,7 @@ transformWidth(sqInt w)
 }
 
 	/* BalloonEngineBase>>#uncheckedTransformColor: */
-static sqInt
-uncheckedTransformColor(sqInt fillIndex)
+static sqIntuncheckedTransformColor(sqInt fillIndex, struct foo * self)
 {
     sqInt a;
     sqInt b;
@@ -14868,22 +14426,19 @@ uncheckedTransformColor(sqInt fillIndex)
 }
 
 	/* BalloonEngineBase>>#wbSizeGet */
-static sqInt
-wbSizeGet(void)
+static sqIntwbSizeGet(struct foo * self)
 {
 	return workBuffer[GWSize];
 }
 
 	/* BalloonEngineBase>>#wbSizePut: */
-static sqInt
-wbSizePut(sqInt value)
+static sqIntwbSizePut(sqInt value, struct foo * self)
 {
 	return workBuffer[GWSize] = value;
 }
 
 	/* BalloonEngineBase>>#wbStackClear */
-static sqInt
-wbStackClear(void)
+static sqIntwbStackClear(struct foo * self)
 {
 	/* begin wbTopPut: */
 	workBuffer[GWBufferTop] = (workBuffer[GWSize]);
@@ -14891,8 +14446,7 @@ wbStackClear(void)
 }
 
 	/* BalloonEngineBase>>#wbStackPop: */
-static sqInt
-wbStackPop(sqInt nItems)
+static sqIntwbStackPop(sqInt nItems, struct foo * self)
 {
 	/* begin wbTopPut: */
 	workBuffer[GWBufferTop] = ((workBuffer[GWBufferTop]) + nItems);
@@ -14900,10 +14454,9 @@ wbStackPop(sqInt nItems)
 }
 
 	/* BalloonEngineBase>>#wbStackPush: */
-static sqInt
-wbStackPush(sqInt nItems)
+static sqIntwbStackPush(sqInt nItems, struct foo * self)
 {
-	if (!(needAvailableSpace(nItems))) {
+	if (!(needAvailableSpace(nItems, self))) {
 		return 0;
 	}
 	/* begin wbTopPut: */
@@ -14912,212 +14465,185 @@ wbStackPush(sqInt nItems)
 }
 
 	/* BalloonEngineBase>>#wbStackSize */
-static sqInt
-wbStackSize(void)
+static sqIntwbStackSize(struct foo * self)
 {
 	return (workBuffer[GWSize]) - (workBuffer[GWBufferTop]);
 }
 
 	/* BalloonEngineBase>>#wbStackValue: */
-static sqInt
-wbStackValue(sqInt index)
+static sqIntwbStackValue(sqInt index, struct foo * self)
 {
 	return workBuffer[(workBuffer[GWBufferTop]) + index];
 }
 
 	/* BalloonEngineBase>>#wbStackValue:put: */
-static sqInt
-wbStackValueput(sqInt index, sqInt value)
+static sqIntwbStackValueput(sqInt index, sqInt value, struct foo * self)
 {
 	return workBuffer[(workBuffer[GWBufferTop]) + index] = value;
 }
 
 	/* BalloonEngineBase>>#wbTopGet */
-static sqInt
-wbTopGet(void)
+static sqIntwbTopGet(struct foo * self)
 {
 	return workBuffer[GWBufferTop];
 }
 
 	/* BalloonEngineBase>>#wbTopPut: */
-static sqInt
-wbTopPut(sqInt value)
+static sqIntwbTopPut(sqInt value, struct foo * self)
 {
 	return workBuffer[GWBufferTop] = value;
 }
 
 	/* BalloonEnginePlugin>>#wideBezierEntryOf: */
-static sqInt
-wideBezierEntryOf(sqInt line)
+static sqIntwideBezierEntryOf(sqInt line, struct foo * self)
 {
 	/* begin obj:at: */
 	return objBuffer[line + GBWideEntry];
 }
 
 	/* BalloonEnginePlugin>>#wideBezierEntryOf:put: */
-static sqInt
-wideBezierEntryOfput(sqInt line, sqInt value)
+static sqIntwideBezierEntryOfput(sqInt line, sqInt value, struct foo * self)
 {
 	/* begin obj:at:put: */
 	return objBuffer[line + GBWideEntry] = value;
 }
 
 	/* BalloonEnginePlugin>>#wideBezierExitOf: */
-static sqInt
-wideBezierExitOf(sqInt line)
+static sqIntwideBezierExitOf(sqInt line, struct foo * self)
 {
 	/* begin obj:at: */
 	return objBuffer[line + GBWideExit];
 }
 
 	/* BalloonEnginePlugin>>#wideBezierExitOf:put: */
-static sqInt
-wideBezierExitOfput(sqInt line, sqInt value)
+static sqIntwideBezierExitOfput(sqInt line, sqInt value, struct foo * self)
 {
 	/* begin obj:at:put: */
 	return objBuffer[line + GBWideExit] = value;
 }
 
 	/* BalloonEnginePlugin>>#wideBezierExtentOf: */
-static sqInt
-wideBezierExtentOf(sqInt bezier)
+static sqIntwideBezierExtentOf(sqInt bezier, struct foo * self)
 {
 	/* begin obj:at: */
 	return objBuffer[bezier + GBWideExtent];
 }
 
 	/* BalloonEnginePlugin>>#wideBezierExtentOf:put: */
-static sqInt
-wideBezierExtentOfput(sqInt bezier, sqInt value)
+static sqIntwideBezierExtentOfput(sqInt bezier, sqInt value, struct foo * self)
 {
 	/* begin obj:at:put: */
 	return objBuffer[bezier + GBWideExtent] = value;
 }
 
 	/* BalloonEnginePlugin>>#wideBezierFillOf: */
-static sqInt
-wideBezierFillOf(sqInt bezier)
+static sqIntwideBezierFillOf(sqInt bezier, struct foo * self)
 {
 	/* begin obj:at: */
 	return objBuffer[bezier + GBWideFill];
 }
 
 	/* BalloonEnginePlugin>>#wideBezierFillOf:put: */
-static sqInt
-wideBezierFillOfput(sqInt bezier, sqInt value)
+static sqIntwideBezierFillOfput(sqInt bezier, sqInt value, struct foo * self)
 {
 	/* begin obj:at:put: */
 	return objBuffer[bezier + GBWideFill] = value;
 }
 
 	/* BalloonEnginePlugin>>#wideBezierUpdateDataOf: */
-static int *
-wideBezierUpdateDataOf(sqInt bezier)
+static int *wideBezierUpdateDataOf(sqInt bezier, struct foo * self)
 {
 	return (objBuffer + bezier) + GBWideUpdateData;
 }
 
 	/* BalloonEnginePlugin>>#wideBezierWidthOf: */
-static sqInt
-wideBezierWidthOf(sqInt line)
+static sqIntwideBezierWidthOf(sqInt line, struct foo * self)
 {
 	/* begin obj:at: */
 	return objBuffer[line + GBWideWidth];
 }
 
 	/* BalloonEnginePlugin>>#wideBezierWidthOf:put: */
-static sqInt
-wideBezierWidthOfput(sqInt line, sqInt value)
+static sqIntwideBezierWidthOfput(sqInt line, sqInt value, struct foo * self)
 {
 	/* begin obj:at:put: */
 	return objBuffer[line + GBWideWidth] = value;
 }
 
 	/* BalloonEnginePlugin>>#wideLineEntryOf: */
-static sqInt
-wideLineEntryOf(sqInt line)
+static sqIntwideLineEntryOf(sqInt line, struct foo * self)
 {
 	/* begin obj:at: */
 	return objBuffer[line + GLWideEntry];
 }
 
 	/* BalloonEnginePlugin>>#wideLineEntryOf:put: */
-static sqInt
-wideLineEntryOfput(sqInt line, sqInt value)
+static sqIntwideLineEntryOfput(sqInt line, sqInt value, struct foo * self)
 {
 	/* begin obj:at:put: */
 	return objBuffer[line + GLWideEntry] = value;
 }
 
 	/* BalloonEnginePlugin>>#wideLineExitOf: */
-static sqInt
-wideLineExitOf(sqInt line)
+static sqIntwideLineExitOf(sqInt line, struct foo * self)
 {
 	/* begin obj:at: */
 	return objBuffer[line + GLWideExit];
 }
 
 	/* BalloonEnginePlugin>>#wideLineExitOf:put: */
-static sqInt
-wideLineExitOfput(sqInt line, sqInt value)
+static sqIntwideLineExitOfput(sqInt line, sqInt value, struct foo * self)
 {
 	/* begin obj:at:put: */
 	return objBuffer[line + GLWideExit] = value;
 }
 
 	/* BalloonEnginePlugin>>#wideLineExtentOf: */
-static sqInt
-wideLineExtentOf(sqInt line)
+static sqIntwideLineExtentOf(sqInt line, struct foo * self)
 {
 	/* begin obj:at: */
 	return objBuffer[line + GLWideExtent];
 }
 
 	/* BalloonEnginePlugin>>#wideLineExtentOf:put: */
-static sqInt
-wideLineExtentOfput(sqInt line, sqInt value)
+static sqIntwideLineExtentOfput(sqInt line, sqInt value, struct foo * self)
 {
 	/* begin obj:at:put: */
 	return objBuffer[line + GLWideExtent] = value;
 }
 
 	/* BalloonEnginePlugin>>#wideLineFillOf: */
-static sqInt
-wideLineFillOf(sqInt line)
+static sqIntwideLineFillOf(sqInt line, struct foo * self)
 {
 	/* begin obj:at: */
 	return objBuffer[line + GLWideFill];
 }
 
 	/* BalloonEnginePlugin>>#wideLineFillOf:put: */
-static sqInt
-wideLineFillOfput(sqInt line, sqInt value)
+static sqIntwideLineFillOfput(sqInt line, sqInt value, struct foo * self)
 {
 	/* begin obj:at:put: */
 	return objBuffer[line + GLWideFill] = value;
 }
 
 	/* BalloonEnginePlugin>>#wideLineWidthOf: */
-static sqInt
-wideLineWidthOf(sqInt line)
+static sqIntwideLineWidthOf(sqInt line, struct foo * self)
 {
 	/* begin obj:at: */
 	return objBuffer[line + GLWideWidth];
 }
 
 	/* BalloonEnginePlugin>>#wideLineWidthOf:put: */
-static sqInt
-wideLineWidthOfput(sqInt line, sqInt value)
+static sqIntwideLineWidthOfput(sqInt line, sqInt value, struct foo * self)
 {
 	/* begin obj:at:put: */
 	return objBuffer[line + GLWideWidth] = value;
 }
 
 	/* BalloonEngineBase>>#workBufferPut: */
-static sqInt
-workBufferPut(sqInt wbOop)
+static sqIntworkBufferPut(sqInt wbOop, struct foo * self)
 {
-	workBuffer = firstIndexableField(wbOop, interpreterProxy->interpreterState);
+	workBuffer = firstIndexableField(wbOop, self);
 	return 0;
 }
 

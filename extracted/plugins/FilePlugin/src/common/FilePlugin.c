@@ -56,52 +56,52 @@ static char __buildInfo[] = "FilePlugin VMMaker.oscog-eem.2498 uuid: f4233232-2c
 
 
 /*** Function Prototypes ***/
-static sqInt connectToFdwrite(int fd, sqInt writeFlag);
-static sqInt connectToFilewrite(void *cfile, sqInt writeFlag);
-EXPORT(sqInt) fileOpenNamesizewritesecure(char *nameIndex, sqInt nameSize, sqInt writeFlag, sqInt secureFlag);
-EXPORT(sqInt) fileOpenNewNamesizesecure(char *nameIndex, sqInt nameSize, sqInt secureFlag);
-extern usqIntptr_t fileRecordSize(void);
-extern SQFile * fileValueOf(sqInt objectPointer);
+static sqInt connectToFdwrite(int fd, sqInt writeFlag, struct foo * self);
+static sqInt connectToFilewrite(void *cfile, sqInt writeFlag, struct foo * self);
+EXPORT(sqInt) fileOpenNamesizewritesecure(char *nameIndex, sqInt nameSize, sqInt writeFlag, sqInt secureFlag, struct foo * self);
+EXPORT(sqInt) fileOpenNewNamesizesecure(char *nameIndex, sqInt nameSize, sqInt secureFlag, struct foo * self);
+extern usqIntptr_t fileRecordSize(struct foo * self);
+extern SQFile * fileValueOf(sqInt objectPointer, struct foo * self);
 EXPORT(const char*) getModuleName(void);
-EXPORT(sqInt) initialiseModule(void);
-static sqInt makeDirEntryNamesizecreateDatemodDateisDirfileSize(char *entryName, sqInt entryNameSize, sqInt createDate, sqInt modifiedDate, sqInt dirFlag, squeakFileOffsetType fileSize);
+EXPORT(sqInt) initialiseModule(struct foo * self);
+static sqInt makeDirEntryNamesizecreateDatemodDateisDirfileSize(char *entryName, sqInt entryNameSize, sqInt createDate, sqInt modifiedDate, sqInt dirFlag, squeakFileOffsetType fileSize, struct foo * self);
 #if PharoVM
-static sqInt makeDirEntryNamesizecreateDatemodDateisDirfileSizeposixPermissionsisSymlink(char *entryName, sqInt entryNameSize, sqInt createDate, sqInt modifiedDate, sqInt dirFlag, squeakFileOffsetType fileSize, sqInt posixPermissions, sqInt symlinkFlag);
+static sqInt makeDirEntryNamesizecreateDatemodDateisDirfileSizeposixPermissionsisSymlink(char *entryName, sqInt entryNameSize, sqInt createDate, sqInt modifiedDate, sqInt dirFlag, squeakFileOffsetType fileSize, sqInt posixPermissions, sqInt symlinkFlag, struct foo * self);
 #endif /* PharoVM */
 EXPORT(sqInt) moduleUnloaded(char *aModuleName, struct foo * self);
-static void * pointerFrom(sqInt pointerByteArray);
-EXPORT(sqInt) primitiveConnectToFile(void);
-EXPORT(sqInt) primitiveConnectToFileDescriptor(void);
-EXPORT(sqInt) primitiveDirectoryCreate(void);
-EXPORT(sqInt) primitiveDirectoryDelete(void);
-EXPORT(sqInt) primitiveDirectoryDelimitor(void);
-EXPORT(sqInt) primitiveDirectoryEntry(void);
-EXPORT(sqInt) primitiveDirectoryGetMacTypeAndCreator(void);
-EXPORT(sqInt) primitiveDirectoryLookup(void);
-EXPORT(sqInt) primitiveDirectorySetMacTypeAndCreator(void);
-EXPORT(sqInt) primitiveDisableFileAccess(void);
-EXPORT(sqInt) primitiveFileAtEnd(void);
-EXPORT(sqInt) primitiveFileClose(void);
-EXPORT(sqInt) primitiveFileDelete(void);
-EXPORT(sqInt) primitiveFileDescriptorType(void);
-EXPORT(sqInt) primitiveFileFlush(void);
-EXPORT(sqInt) primitiveFileGetPosition(void);
-EXPORT(sqInt) primitiveFileOpen(void);
-EXPORT(sqInt) primitiveFileOpenNew(void);
-EXPORT(sqInt) primitiveFileRead(void);
-static sqInt primitiveFileReadWithoutPinning(void);
-static sqInt primitiveFileReadWithPinning(void);
-EXPORT(sqInt) primitiveFileRename(void);
-EXPORT(sqInt) primitiveFileSetPosition(void);
-EXPORT(sqInt) primitiveFileSize(void);
-EXPORT(sqInt) primitiveFileStdioHandles(void);
-EXPORT(sqInt) primitiveFileSync(void);
-EXPORT(sqInt) primitiveFileTruncate(void);
-EXPORT(sqInt) primitiveFileWrite(void);
-EXPORT(sqInt) primitiveHasFileAccess(void);
+static void * pointerFrom(sqInt pointerByteArray, struct foo * self);
+EXPORT(sqInt) primitiveConnectToFile(struct foo * self);
+EXPORT(sqInt) primitiveConnectToFileDescriptor(struct foo * self);
+EXPORT(sqInt) primitiveDirectoryCreate(struct foo * self);
+EXPORT(sqInt) primitiveDirectoryDelete(struct foo * self);
+EXPORT(sqInt) primitiveDirectoryDelimitor(struct foo * self);
+EXPORT(sqInt) primitiveDirectoryEntry(struct foo * self);
+EXPORT(sqInt) primitiveDirectoryGetMacTypeAndCreator(struct foo * self);
+EXPORT(sqInt) primitiveDirectoryLookup(struct foo * self);
+EXPORT(sqInt) primitiveDirectorySetMacTypeAndCreator(struct foo * self);
+EXPORT(sqInt) primitiveDisableFileAccess(struct foo * self);
+EXPORT(sqInt) primitiveFileAtEnd(struct foo * self);
+EXPORT(sqInt) primitiveFileClose(struct foo * self);
+EXPORT(sqInt) primitiveFileDelete(struct foo * self);
+EXPORT(sqInt) primitiveFileDescriptorType(struct foo * self);
+EXPORT(sqInt) primitiveFileFlush(struct foo * self);
+EXPORT(sqInt) primitiveFileGetPosition(struct foo * self);
+EXPORT(sqInt) primitiveFileOpen(struct foo * self);
+EXPORT(sqInt) primitiveFileOpenNew(struct foo * self);
+EXPORT(sqInt) primitiveFileRead(struct foo * self);
+static sqInt primitiveFileReadWithoutPinning(struct foo * self);
+static sqInt primitiveFileReadWithPinning(struct foo * self);
+EXPORT(sqInt) primitiveFileRename(struct foo * self);
+EXPORT(sqInt) primitiveFileSetPosition(struct foo * self);
+EXPORT(sqInt) primitiveFileSize(struct foo * self);
+EXPORT(sqInt) primitiveFileStdioHandles(struct foo * self);
+EXPORT(sqInt) primitiveFileSync(struct foo * self);
+EXPORT(sqInt) primitiveFileTruncate(struct foo * self);
+EXPORT(sqInt) primitiveFileWrite(struct foo * self);
+EXPORT(sqInt) primitiveHasFileAccess(struct foo * self);
 EXPORT(sqInt) setInterpreter(struct VirtualMachine *anInterpreter);
-EXPORT(sqInt) setMacFileTypeAndCreator(char *fileName, char *typeString, char *creatorString);
-EXPORT(sqInt) shutdownModule(void);
+EXPORT(sqInt) setMacFileTypeAndCreator(char *fileName, char *typeString, char *creatorString, struct foo * self);
+EXPORT(sqInt) shutdownModule(struct foo * self);
 
 
 /*** Variables ***/
@@ -175,7 +175,7 @@ extern sqInt fullGC(struct foo * self);
 extern sqInt instantiateClassindexableSize(sqInt classPointer, sqInt size, struct foo * self);
 extern sqInt integerObjectOf(sqInt value, struct foo * self);
 extern sqInt integerValueOf(sqInt oop, struct foo * self);
-extern void * ioLoadFunctionFrom(char *functionName, char *moduleName);
+extern void * ioLoadFunctionFrom(char *functionName, char *moduleName, struct foo * self);
 extern sqInt isKindOf(sqInt oop, char *aString, struct foo * self);
 extern sqInt isBytes(sqInt oop, struct foo * self);
 #if !defined(isIntegerObject)
@@ -241,23 +241,23 @@ static void * sHFAfn;
 
 	/* FilePlugin>>#connectToFd:write: */
 static sqInt
-connectToFdwrite(int fd, sqInt writeFlag)
+connectToFdwrite(int fd, sqInt writeFlag, struct foo * self)
 {
     SQFile *file;
     sqInt fileOop;
 
-	fileOop = instantiateClassindexableSize(classByteArray(interpreterProxy->interpreterState), sizeof(SQFile), interpreterProxy->interpreterState);
+	fileOop = instantiateClassindexableSize(classByteArray(self), sizeof(SQFile), self);
 	/* begin fileValueOf: */
-	if (!((isBytes(fileOop, interpreterProxy->interpreterState))
-		 && ((byteSizeOf(fileOop, interpreterProxy->interpreterState)) == (sizeof(SQFile))))) {
-		primitiveFail(interpreterProxy->interpreterState);
+	if (!((isBytes(fileOop, self))
+		 && ((byteSizeOf(fileOop, self)) == (sizeof(SQFile))))) {
+		primitiveFail(self);
 		file = null;
 		goto l1;
 	}
-	file = firstIndexableField(fileOop, interpreterProxy->interpreterState);
+	file = firstIndexableField(fileOop, self);
 	l1:	/* end fileValueOf: */;
-	if (!(failed(interpreterProxy->interpreterState))) {
-		sqConnectToFileDescriptor(file, fd, writeFlag);
+	if (!(failed(self))) {
+		sqConnectToFileDescriptor(file, fd, writeFlag, self);
 	}
 	return fileOop;
 }
@@ -268,23 +268,23 @@ connectToFdwrite(int fd, sqInt writeFlag)
 
 	/* FilePlugin>>#connectToFile:write: */
 static sqInt
-connectToFilewrite(void *cfile, sqInt writeFlag)
+connectToFilewrite(void *cfile, sqInt writeFlag, struct foo * self)
 {
     SQFile *file;
     sqInt fileOop;
 
-	fileOop = instantiateClassindexableSize(classByteArray(interpreterProxy->interpreterState), sizeof(SQFile), interpreterProxy->interpreterState);
+	fileOop = instantiateClassindexableSize(classByteArray(self), sizeof(SQFile), self);
 	/* begin fileValueOf: */
-	if (!((isBytes(fileOop, interpreterProxy->interpreterState))
-		 && ((byteSizeOf(fileOop, interpreterProxy->interpreterState)) == (sizeof(SQFile))))) {
-		primitiveFail(interpreterProxy->interpreterState);
+	if (!((isBytes(fileOop, self))
+		 && ((byteSizeOf(fileOop, self)) == (sizeof(SQFile))))) {
+		primitiveFail(self);
 		file = null;
 		goto l1;
 	}
-	file = firstIndexableField(fileOop, interpreterProxy->interpreterState);
+	file = firstIndexableField(fileOop, self);
 	l1:	/* end fileValueOf: */;
-	if (!(failed(interpreterProxy->interpreterState))) {
-		sqConnectToFile(file, cfile, writeFlag);
+	if (!(failed(self))) {
+		sqConnectToFile(file, cfile, writeFlag, self);
 	}
 	return fileOop;
 }
@@ -294,23 +294,23 @@ connectToFilewrite(void *cfile, sqInt writeFlag)
 
 	/* FilePlugin>>#fileOpenName:size:write:secure: */
 EXPORT(sqInt)
-fileOpenNamesizewritesecure(char *nameIndex, sqInt nameSize, sqInt writeFlag, sqInt secureFlag)
+fileOpenNamesizewritesecure(char *nameIndex, sqInt nameSize, sqInt writeFlag, sqInt secureFlag, struct foo * self)
 {
     SQFile *file;
     sqInt fileOop;
     sqInt okToOpen;
 
-	fileOop = instantiateClassindexableSize(classByteArray(interpreterProxy->interpreterState), sizeof(SQFile), interpreterProxy->interpreterState);
+	fileOop = instantiateClassindexableSize(classByteArray(self), sizeof(SQFile), self);
 	/* begin fileValueOf: */
-	if (!((isBytes(fileOop, interpreterProxy->interpreterState))
-		 && ((byteSizeOf(fileOop, interpreterProxy->interpreterState)) == (sizeof(SQFile))))) {
-		primitiveFail(interpreterProxy->interpreterState);
+	if (!((isBytes(fileOop, self))
+		 && ((byteSizeOf(fileOop, self)) == (sizeof(SQFile))))) {
+		primitiveFail(self);
 		file = null;
 		goto l1;
 	}
-	file = firstIndexableField(fileOop, interpreterProxy->interpreterState);
+	file = firstIndexableField(fileOop, self);
 	l1:	/* end fileValueOf: */;
-	if (!(failed(interpreterProxy->interpreterState))) {
+	if (!(failed(self))) {
 		if (secureFlag) {
 
 			/* If the security plugin can be loaded, use it to check for permission.
@@ -318,13 +318,13 @@ fileOpenNamesizewritesecure(char *nameIndex, sqInt nameSize, sqInt writeFlag, sq
 			if (sCOFfn != 0) {
 				okToOpen = ((sqInt (*) (char *, sqInt, sqInt)) sCOFfn)(nameIndex, nameSize, writeFlag);
 				if (!okToOpen) {
-					primitiveFail(interpreterProxy->interpreterState);
+					primitiveFail(self);
 				}
 			}
 		}
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		sqFileOpen(file, nameIndex, nameSize, writeFlag);
+	if (!(failed(self))) {
+		sqFileOpen(file, nameIndex, nameSize, writeFlag, self);
 	}
 	return fileOop;
 }
@@ -334,24 +334,24 @@ fileOpenNamesizewritesecure(char *nameIndex, sqInt nameSize, sqInt writeFlag, sq
 
 	/* FilePlugin>>#fileOpenNewName:size:secure: */
 EXPORT(sqInt)
-fileOpenNewNamesizesecure(char *nameIndex, sqInt nameSize, sqInt secureFlag)
+fileOpenNewNamesizesecure(char *nameIndex, sqInt nameSize, sqInt secureFlag, struct foo * self)
 {
     sqInt exists;
     SQFile *file;
     sqInt fileOop;
     sqInt okToOpen;
 
-	fileOop = instantiateClassindexableSize(classByteArray(interpreterProxy->interpreterState), sizeof(SQFile), interpreterProxy->interpreterState);
+	fileOop = instantiateClassindexableSize(classByteArray(self), sizeof(SQFile), self);
 	/* begin fileValueOf: */
-	if (!((isBytes(fileOop, interpreterProxy->interpreterState))
-		 && ((byteSizeOf(fileOop, interpreterProxy->interpreterState)) == (sizeof(SQFile))))) {
-		primitiveFail(interpreterProxy->interpreterState);
+	if (!((isBytes(fileOop, self))
+		 && ((byteSizeOf(fileOop, self)) == (sizeof(SQFile))))) {
+		primitiveFail(self);
 		file = null;
 		goto l1;
 	}
-	file = firstIndexableField(fileOop, interpreterProxy->interpreterState);
+	file = firstIndexableField(fileOop, self);
 	l1:	/* end fileValueOf: */;
-	if (!(failed(interpreterProxy->interpreterState))) {
+	if (!(failed(self))) {
 		if (secureFlag) {
 
 			/* If the security plugin can be loaded, use it to check for permission.
@@ -359,17 +359,17 @@ fileOpenNewNamesizesecure(char *nameIndex, sqInt nameSize, sqInt secureFlag)
 			if (sCOFfn != 0) {
 				okToOpen = ((sqInt (*) (char *, sqInt, sqInt)) sCOFfn)(nameIndex, nameSize, true);
 				if (!okToOpen) {
-					primitiveFail(interpreterProxy->interpreterState);
+					primitiveFail(self);
 				}
 			}
 		}
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
+	if (!(failed(self))) {
 		exists = 0;
-		sqFileOpenNew(file, nameIndex, nameSize, &exists);
-		if ((failed(interpreterProxy->interpreterState))
+		sqFileOpenNew(file, nameIndex, nameSize, &exists, self);
+		if ((failed(self))
 		 && (exists)) {
-			primitiveFailFor(PrimErrInappropriate, interpreterProxy->interpreterState);
+			primitiveFailFor(PrimErrInappropriate, self);
 		}
 	}
 	return fileOop;
@@ -380,7 +380,7 @@ fileOpenNewNamesizesecure(char *nameIndex, sqInt nameSize, sqInt secureFlag)
 
 	/* FilePlugin>>#fileRecordSize */
 usqIntptr_t
-fileRecordSize(void)
+fileRecordSize(struct foo * self)
 {
 	return sizeof(SQFile);
 }
@@ -392,14 +392,14 @@ fileRecordSize(void)
 
 	/* FilePlugin>>#fileValueOf: */
 SQFile *
-fileValueOf(sqInt objectPointer)
+fileValueOf(sqInt objectPointer, struct foo * self)
 {
-	if (!((isBytes(objectPointer, interpreterProxy->interpreterState))
-		 && ((byteSizeOf(objectPointer, interpreterProxy->interpreterState)) == (sizeof(SQFile))))) {
-		primitiveFail(interpreterProxy->interpreterState);
+	if (!((isBytes(objectPointer, self))
+		 && ((byteSizeOf(objectPointer, self)) == (sizeof(SQFile))))) {
+		primitiveFail(self);
 		return null;
 	}
-	return firstIndexableField(objectPointer, interpreterProxy->interpreterState);
+	return firstIndexableField(objectPointer, self);
 }
 
 
@@ -417,24 +417,24 @@ getModuleName(void)
 
 	/* FilePlugin>>#initialiseModule */
 EXPORT(sqInt)
-initialiseModule(void)
+initialiseModule(struct foo * self)
 {
-	sCCPfn = ioLoadFunctionFrom("secCanCreatePathOfSize", "SecurityPlugin", interpreterProxy->interpreterState);
-	sCDPfn = ioLoadFunctionFrom("secCanDeletePathOfSize", "SecurityPlugin", interpreterProxy->interpreterState);
-	sCGFTfn = ioLoadFunctionFrom("secCanGetFileTypeOfSize", "SecurityPlugin", interpreterProxy->interpreterState);
-	sCLPfn = ioLoadFunctionFrom("secCanListPathOfSize", "SecurityPlugin", interpreterProxy->interpreterState);
-	sCSFTfn = ioLoadFunctionFrom("secCanSetFileTypeOfSize", "SecurityPlugin", interpreterProxy->interpreterState);
-	sDFAfn = ioLoadFunctionFrom("secDisableFileAccess", "SecurityPlugin", interpreterProxy->interpreterState);
-	sCDFfn = ioLoadFunctionFrom("secCanDeleteFileOfSize", "SecurityPlugin", interpreterProxy->interpreterState);
-	sCOFfn = ioLoadFunctionFrom("secCanOpenFileOfSizeWritable", "SecurityPlugin", interpreterProxy->interpreterState);
-	sCRFfn = ioLoadFunctionFrom("secCanRenameFileOfSize", "SecurityPlugin", interpreterProxy->interpreterState);
-	sHFAfn = ioLoadFunctionFrom("secHasFileAccess", "SecurityPlugin", interpreterProxy->interpreterState);
-	return sqFileInit();
+	sCCPfn = ioLoadFunctionFrom("secCanCreatePathOfSize", "SecurityPlugin", self);
+	sCDPfn = ioLoadFunctionFrom("secCanDeletePathOfSize", "SecurityPlugin", self);
+	sCGFTfn = ioLoadFunctionFrom("secCanGetFileTypeOfSize", "SecurityPlugin", self);
+	sCLPfn = ioLoadFunctionFrom("secCanListPathOfSize", "SecurityPlugin", self);
+	sCSFTfn = ioLoadFunctionFrom("secCanSetFileTypeOfSize", "SecurityPlugin", self);
+	sDFAfn = ioLoadFunctionFrom("secDisableFileAccess", "SecurityPlugin", self);
+	sCDFfn = ioLoadFunctionFrom("secCanDeleteFileOfSize", "SecurityPlugin", self);
+	sCOFfn = ioLoadFunctionFrom("secCanOpenFileOfSizeWritable", "SecurityPlugin", self);
+	sCRFfn = ioLoadFunctionFrom("secCanRenameFileOfSize", "SecurityPlugin", self);
+	sHFAfn = ioLoadFunctionFrom("secHasFileAccess", "SecurityPlugin", self);
+	return sqFileInit(self);
 }
 
 	/* FilePlugin>>#makeDirEntryName:size:createDate:modDate:isDir:fileSize: */
 static sqInt
-makeDirEntryNamesizecreateDatemodDateisDirfileSize(char *entryName, sqInt entryNameSize, sqInt createDate, sqInt modifiedDate, sqInt dirFlag, squeakFileOffsetType fileSize)
+makeDirEntryNamesizecreateDatemodDateisDirfileSize(char *entryName, sqInt entryNameSize, sqInt createDate, sqInt modifiedDate, sqInt dirFlag, squeakFileOffsetType fileSize, struct foo * self)
 {
     sqInt createDateOop;
     sqInt fileSizeOop;
@@ -447,47 +447,47 @@ makeDirEntryNamesizecreateDatemodDateisDirfileSize(char *entryName, sqInt entryN
 
 	/* allocate storage for results, remapping newly allocated
 	   oops if required in case GC happens during allocation */
-	results = instantiateClassindexableSize(classArray(interpreterProxy->interpreterState), 5, interpreterProxy->interpreterState);
+	results = instantiateClassindexableSize(classArray(self), 5, self);
 	
 #if SPURVM
-	nameString = instantiateClassindexableSize(classString(interpreterProxy->interpreterState), entryNameSize, interpreterProxy->interpreterState);
-	createDateOop = positive32BitIntegerFor(createDate, interpreterProxy->interpreterState);
-	modDateOop = positive32BitIntegerFor(modifiedDate, interpreterProxy->interpreterState);
-	fileSizeOop = positive64BitIntegerFor(fileSize, interpreterProxy->interpreterState);
+	nameString = instantiateClassindexableSize(classString(self), entryNameSize, self);
+	createDateOop = positive32BitIntegerFor(createDate, self);
+	modDateOop = positive32BitIntegerFor(modifiedDate, self);
+	fileSizeOop = positive64BitIntegerFor(fileSize, self);
 
 #else /* SPURVM */
-	pushRemappableOop(results, interpreterProxy->interpreterState);
-	nameString = instantiateClassindexableSize(classString(interpreterProxy->interpreterState), entryNameSize, interpreterProxy->interpreterState);
-		pushRemappableOop(nameString, interpreterProxy->interpreterState);
-	createDateOop = positive32BitIntegerFor(createDate, interpreterProxy->interpreterState);
-		pushRemappableOop(createDateOop, interpreterProxy->interpreterState);
-	modDateOop = positive32BitIntegerFor(modifiedDate, interpreterProxy->interpreterState);
-		pushRemappableOop(modDateOop, interpreterProxy->interpreterState);
-	fileSizeOop = positive64BitIntegerFor(fileSize, interpreterProxy->interpreterState);
-	modDateOop = popRemappableOop(interpreterProxy->interpreterState);
-	createDateOop = popRemappableOop(interpreterProxy->interpreterState);
-	nameString = popRemappableOop(interpreterProxy->interpreterState);
-	results = popRemappableOop(interpreterProxy->interpreterState)
+	pushRemappableOop(results, self);
+	nameString = instantiateClassindexableSize(classString(self), entryNameSize, self);
+		pushRemappableOop(nameString, self);
+	createDateOop = positive32BitIntegerFor(createDate, self);
+		pushRemappableOop(createDateOop, self);
+	modDateOop = positive32BitIntegerFor(modifiedDate, self);
+		pushRemappableOop(modDateOop, self);
+	fileSizeOop = positive64BitIntegerFor(fileSize, self);
+	modDateOop = popRemappableOop(self);
+	createDateOop = popRemappableOop(self);
+	nameString = popRemappableOop(self);
+	results = popRemappableOop(self)
 #endif /* SPURVM */
 ;
-	stringPtr = firstIndexableField(nameString, interpreterProxy->interpreterState);
+	stringPtr = firstIndexableField(nameString, self);
 	for (i = 0; i < entryNameSize; i += 1) {
 		stringPtr[i] = (entryName[i]);
 	}
-	storePointerofObjectwithValue(0, results, nameString, interpreterProxy->interpreterState);
-	storePointerofObjectwithValue(1, results, createDateOop, interpreterProxy->interpreterState);
-	storePointerofObjectwithValue(2, results, modDateOop, interpreterProxy->interpreterState);
+	storePointerofObjectwithValue(0, results, nameString, self);
+	storePointerofObjectwithValue(1, results, createDateOop, self);
+	storePointerofObjectwithValue(2, results, modDateOop, self);
 	storePointerofObjectwithValue(3, results, (dirFlag
-		? trueObject(interpreterProxy->interpreterState)
-		: falseObject(interpreterProxy->interpreterState)), interpreterProxy->interpreterState);
-	storePointerofObjectwithValue(4, results, fileSizeOop, interpreterProxy->interpreterState);
+		? trueObject(self)
+		: falseObject(self)), self);
+	storePointerofObjectwithValue(4, results, fileSizeOop, self);
 	return results;
 }
 
 	/* FilePlugin>>#makeDirEntryName:size:createDate:modDate:isDir:fileSize:posixPermissions:isSymlink: */
 #if PharoVM
 static sqInt
-makeDirEntryNamesizecreateDatemodDateisDirfileSizeposixPermissionsisSymlink(char *entryName, sqInt entryNameSize, sqInt createDate, sqInt modifiedDate, sqInt dirFlag, squeakFileOffsetType fileSize, sqInt posixPermissions, sqInt symlinkFlag)
+makeDirEntryNamesizecreateDatemodDateisDirfileSizeposixPermissionsisSymlink(char *entryName, sqInt entryNameSize, sqInt createDate, sqInt modifiedDate, sqInt dirFlag, squeakFileOffsetType fileSize, sqInt posixPermissions, sqInt symlinkFlag, struct foo * self)
 {
     sqInt createDateOop;
     sqInt fileSizeOop;
@@ -501,48 +501,48 @@ makeDirEntryNamesizecreateDatemodDateisDirfileSizeposixPermissionsisSymlink(char
 
 	/* allocate storage for results, remapping newly allocated
 	   oops if required in case GC happens during allocation */
-	results = instantiateClassindexableSize(classArray(interpreterProxy->interpreterState), 7, interpreterProxy->interpreterState);
+	results = instantiateClassindexableSize(classArray(self), 7, self);
 	
 #if SPURVM
-	nameString = instantiateClassindexableSize(classString(interpreterProxy->interpreterState), entryNameSize, interpreterProxy->interpreterState);
-	createDateOop = positive32BitIntegerFor(createDate, interpreterProxy->interpreterState);
-	modDateOop = positive32BitIntegerFor(modifiedDate, interpreterProxy->interpreterState);
-	fileSizeOop = positive64BitIntegerFor(fileSize, interpreterProxy->interpreterState);
-	posixPermissionsOop = positive32BitIntegerFor(posixPermissions, interpreterProxy->interpreterState);
+	nameString = instantiateClassindexableSize(classString(self), entryNameSize, self);
+	createDateOop = positive32BitIntegerFor(createDate, self);
+	modDateOop = positive32BitIntegerFor(modifiedDate, self);
+	fileSizeOop = positive64BitIntegerFor(fileSize, self);
+	posixPermissionsOop = positive32BitIntegerFor(posixPermissions, self);
 
 #else /* SPURVM */
-	pushRemappableOop(results, interpreterProxy->interpreterState);
-	nameString = instantiateClassindexableSize(classString(interpreterProxy->interpreterState), entryNameSize, interpreterProxy->interpreterState);
-		pushRemappableOop(nameString, interpreterProxy->interpreterState);
-	createDateOop = positive32BitIntegerFor(createDate, interpreterProxy->interpreterState);
-		pushRemappableOop(createDateOop, interpreterProxy->interpreterState);
-	modDateOop = positive32BitIntegerFor(modifiedDate, interpreterProxy->interpreterState);
-		pushRemappableOop(modDateOop, interpreterProxy->interpreterState);
-	fileSizeOop = positive64BitIntegerFor(fileSize, interpreterProxy->interpreterState);
-		pushRemappableOop(fileSizeOop, interpreterProxy->interpreterState);
-	posixPermissionsOop = positive32BitIntegerFor(posixPermissions, interpreterProxy->interpreterState);
-	fileSizeOop = popRemappableOop(interpreterProxy->interpreterState);
-	modDateOop = popRemappableOop(interpreterProxy->interpreterState);
-	createDateOop = popRemappableOop(interpreterProxy->interpreterState);
-	nameString = popRemappableOop(interpreterProxy->interpreterState);
-	results = popRemappableOop(interpreterProxy->interpreterState)
+	pushRemappableOop(results, self);
+	nameString = instantiateClassindexableSize(classString(self), entryNameSize, self);
+		pushRemappableOop(nameString, self);
+	createDateOop = positive32BitIntegerFor(createDate, self);
+		pushRemappableOop(createDateOop, self);
+	modDateOop = positive32BitIntegerFor(modifiedDate, self);
+		pushRemappableOop(modDateOop, self);
+	fileSizeOop = positive64BitIntegerFor(fileSize, self);
+		pushRemappableOop(fileSizeOop, self);
+	posixPermissionsOop = positive32BitIntegerFor(posixPermissions, self);
+	fileSizeOop = popRemappableOop(self);
+	modDateOop = popRemappableOop(self);
+	createDateOop = popRemappableOop(self);
+	nameString = popRemappableOop(self);
+	results = popRemappableOop(self)
 #endif /* SPURVM */
 ;
-	stringPtr = firstIndexableField(nameString, interpreterProxy->interpreterState);
+	stringPtr = firstIndexableField(nameString, self);
 	for (i = 0; i < entryNameSize; i += 1) {
 		stringPtr[i] = (entryName[i]);
 	}
-	storePointerofObjectwithValue(0, results, nameString, interpreterProxy->interpreterState);
-	storePointerofObjectwithValue(1, results, createDateOop, interpreterProxy->interpreterState);
-	storePointerofObjectwithValue(2, results, modDateOop, interpreterProxy->interpreterState);
+	storePointerofObjectwithValue(0, results, nameString, self);
+	storePointerofObjectwithValue(1, results, createDateOop, self);
+	storePointerofObjectwithValue(2, results, modDateOop, self);
 	storePointerofObjectwithValue(3, results, (dirFlag
-		? trueObject(interpreterProxy->interpreterState)
-		: falseObject(interpreterProxy->interpreterState)), interpreterProxy->interpreterState);
-	storePointerofObjectwithValue(4, results, fileSizeOop, interpreterProxy->interpreterState);
-	storePointerofObjectwithValue(5, results, posixPermissionsOop, interpreterProxy->interpreterState);
+		? trueObject(self)
+		: falseObject(self)), self);
+	storePointerofObjectwithValue(4, results, fileSizeOop, self);
+	storePointerofObjectwithValue(5, results, posixPermissionsOop, self);
 	storePointerofObjectwithValue(6, results, (symlinkFlag
-		? trueObject(interpreterProxy->interpreterState)
-		: falseObject(interpreterProxy->interpreterState)), interpreterProxy->interpreterState);
+		? trueObject(self)
+		: falseObject(self)), self);
 	return results;
 }
 #endif /* PharoVM */
@@ -568,18 +568,18 @@ moduleUnloaded(char *aModuleName, struct foo * self)
 
 	/* FilePlugin>>#pointerFrom: */
 static void *
-pointerFrom(sqInt pointerByteArray)
+pointerFrom(sqInt pointerByteArray, struct foo * self)
 {
     union {void *address; unsigned char bytes[sizeof(void *)];} addressUnion;
     sqInt idx;
     unsigned char *ptr;
 
-	if (!((isKindOf(pointerByteArray, "ByteArray", interpreterProxy->interpreterState))
-		 && ((stSizeOf(pointerByteArray, interpreterProxy->interpreterState)) == (sizeof(void *))))) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	if (!((isKindOf(pointerByteArray, "ByteArray", self))
+		 && ((stSizeOf(pointerByteArray, self)) == (sizeof(void *))))) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	ptr = arrayValueOf(pointerByteArray, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	ptr = arrayValueOf(pointerByteArray, self);
+	if (failed(self)) {
 		return null;
 	}
 	idx = 0;
@@ -599,7 +599,7 @@ pointerFrom(sqInt pointerByteArray)
 
 	/* FilePlugin>>#primitiveConnectToFile */
 EXPORT(sqInt)
-primitiveConnectToFile(void)
+primitiveConnectToFile(struct foo * self)
 {
     void *cfile;
     sqInt cfileOop;
@@ -608,31 +608,31 @@ primitiveConnectToFile(void)
     sqInt filePointer;
     sqInt writeFlag;
 
-	writeFlag = booleanValueOf(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	cfileOop = stackValue(1, interpreterProxy->interpreterState);
-	cfile = pointerFrom(cfileOop);
-	if (failed(interpreterProxy->interpreterState)) {
+	writeFlag = booleanValueOf(stackValue(0, self), self);
+	cfileOop = stackValue(1, self);
+	cfile = pointerFrom(cfileOop, self);
+	if (failed(self)) {
 
 		/* Ensure that the appropriate failure code has been set */
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
 	/* begin connectToFile:write: */
-	fileOop = instantiateClassindexableSize(classByteArray(interpreterProxy->interpreterState), sizeof(SQFile), interpreterProxy->interpreterState);
+	fileOop = instantiateClassindexableSize(classByteArray(self), sizeof(SQFile), self);
 	/* begin fileValueOf: */
-	if (!((isBytes(fileOop, interpreterProxy->interpreterState))
-		 && ((byteSizeOf(fileOop, interpreterProxy->interpreterState)) == (sizeof(SQFile))))) {
-		primitiveFail(interpreterProxy->interpreterState);
+	if (!((isBytes(fileOop, self))
+		 && ((byteSizeOf(fileOop, self)) == (sizeof(SQFile))))) {
+		primitiveFail(self);
 		file = null;
 		goto l1;
 	}
-	file = firstIndexableField(fileOop, interpreterProxy->interpreterState);
+	file = firstIndexableField(fileOop, self);
 	l1:	/* end fileValueOf: */;
-	if (!(failed(interpreterProxy->interpreterState))) {
-		sqConnectToFile(file, cfile, writeFlag);
+	if (!(failed(self))) {
+		sqConnectToFile(file, cfile, writeFlag, self);
 	}
 	filePointer = fileOop;
-	if (!(failed(interpreterProxy->interpreterState))) {
-		methodReturnValue(filePointer, interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		methodReturnValue(filePointer, self);
 	}
 	return 0;
 }
@@ -646,7 +646,7 @@ primitiveConnectToFile(void)
 
 	/* FilePlugin>>#primitiveConnectToFileDescriptor */
 EXPORT(sqInt)
-primitiveConnectToFileDescriptor(void)
+primitiveConnectToFileDescriptor(struct foo * self)
 {
     int fd;
     sqInt fdPointer;
@@ -655,117 +655,117 @@ primitiveConnectToFileDescriptor(void)
     sqInt filePointer;
     sqInt writeFlag;
 
-	writeFlag = booleanValueOf(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	fdPointer = stackValue(1, interpreterProxy->interpreterState);
-	if (!(isIntegerObject(fdPointer, interpreterProxy->interpreterState))) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	writeFlag = booleanValueOf(stackValue(0, self), self);
+	fdPointer = stackValue(1, self);
+	if (!(isIntegerObject(fdPointer, self))) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	fd = integerValueOf(fdPointer, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	fd = integerValueOf(fdPointer, self);
+	if (failed(self)) {
 
 		/* Ensure that the appropriate failure code has been set */
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
 	/* begin connectToFd:write: */
-	fileOop = instantiateClassindexableSize(classByteArray(interpreterProxy->interpreterState), sizeof(SQFile), interpreterProxy->interpreterState);
+	fileOop = instantiateClassindexableSize(classByteArray(self), sizeof(SQFile), self);
 	/* begin fileValueOf: */
-	if (!((isBytes(fileOop, interpreterProxy->interpreterState))
-		 && ((byteSizeOf(fileOop, interpreterProxy->interpreterState)) == (sizeof(SQFile))))) {
-		primitiveFail(interpreterProxy->interpreterState);
+	if (!((isBytes(fileOop, self))
+		 && ((byteSizeOf(fileOop, self)) == (sizeof(SQFile))))) {
+		primitiveFail(self);
 		file = null;
 		goto l1;
 	}
-	file = firstIndexableField(fileOop, interpreterProxy->interpreterState);
+	file = firstIndexableField(fileOop, self);
 	l1:	/* end fileValueOf: */;
-	if (!(failed(interpreterProxy->interpreterState))) {
-		sqConnectToFileDescriptor(file, fd, writeFlag);
+	if (!(failed(self))) {
+		sqConnectToFileDescriptor(file, fd, writeFlag, self);
 	}
 	filePointer = fileOop;
-	if (!(failed(interpreterProxy->interpreterState))) {
-		methodReturnValue(filePointer, interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		methodReturnValue(filePointer, self);
 	}
 	return 0;
 }
 
 	/* FilePlugin>>#primitiveDirectoryCreate */
 EXPORT(sqInt)
-primitiveDirectoryCreate(void)
+primitiveDirectoryCreate(struct foo * self)
 {
     sqInt dirName;
     char *dirNameIndex;
     sqInt dirNameSize;
     sqInt okToCreate;
 
-	dirName = stackValue(0, interpreterProxy->interpreterState);
-	if (!(isBytes(dirName, interpreterProxy->interpreterState))) {
-		return primitiveFail(interpreterProxy->interpreterState);
+	dirName = stackValue(0, self);
+	if (!(isBytes(dirName, self))) {
+		return primitiveFail(self);
 	}
-	dirNameIndex = firstIndexableField(dirName, interpreterProxy->interpreterState);
+	dirNameIndex = firstIndexableField(dirName, self);
 
 	/* If the security plugin can be loaded, use it to check for permission.
 	   If not, assume it's ok */
-	dirNameSize = byteSizeOf(dirName, interpreterProxy->interpreterState);
+	dirNameSize = byteSizeOf(dirName, self);
 	if (sCCPfn != 0) {
 		okToCreate =  ((sqInt (*)(char *, sqInt))sCCPfn)(dirNameIndex, dirNameSize);
 		if (!okToCreate) {
-			return primitiveFail(interpreterProxy->interpreterState);
+			return primitiveFail(self);
 		}
 	}
 	if (!(dir_Create(dirNameIndex, dirNameSize))) {
-		return primitiveFail(interpreterProxy->interpreterState);
+		return primitiveFail(self);
 	}
-	pop(1, interpreterProxy->interpreterState);
+	pop(1, self);
 	return 0;
 }
 
 	/* FilePlugin>>#primitiveDirectoryDelete */
 EXPORT(sqInt)
-primitiveDirectoryDelete(void)
+primitiveDirectoryDelete(struct foo * self)
 {
     sqInt dirName;
     char *dirNameIndex;
     sqInt dirNameSize;
     sqInt okToDelete;
 
-	dirName = stackValue(0, interpreterProxy->interpreterState);
-	if (!(isBytes(dirName, interpreterProxy->interpreterState))) {
-		return primitiveFail(interpreterProxy->interpreterState);
+	dirName = stackValue(0, self);
+	if (!(isBytes(dirName, self))) {
+		return primitiveFail(self);
 	}
-	dirNameIndex = firstIndexableField(dirName, interpreterProxy->interpreterState);
+	dirNameIndex = firstIndexableField(dirName, self);
 
 	/* If the security plugin can be loaded, use it to check for permission.
 	   If not, assume it's ok */
-	dirNameSize = byteSizeOf(dirName, interpreterProxy->interpreterState);
+	dirNameSize = byteSizeOf(dirName, self);
 	if (sCDPfn != 0) {
 		okToDelete =  ((sqInt (*)(char *, sqInt))sCDPfn)(dirNameIndex, dirNameSize);
 		if (!okToDelete) {
-			return primitiveFail(interpreterProxy->interpreterState);
+			return primitiveFail(self);
 		}
 	}
 	if (!(dir_Delete(dirNameIndex, dirNameSize))) {
-		return primitiveFail(interpreterProxy->interpreterState);
+		return primitiveFail(self);
 	}
-	pop(1, interpreterProxy->interpreterState);
+	pop(1, self);
 	return 0;
 }
 
 	/* FilePlugin>>#primitiveDirectoryDelimitor */
 EXPORT(sqInt)
-primitiveDirectoryDelimitor(void)
+primitiveDirectoryDelimitor(struct foo * self)
 {
     sqInt ascii;
 
 	if ((interpreterProxy->minorVersion()) >= 13) {
-		popthenPush(1, characterObjectOf(dir_Delimitor(), interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+		popthenPush(1, characterObjectOf(dir_Delimitor(), self), self);
 	}
 	else {
 		ascii = dir_Delimitor();
 		if ((ascii >= 0)
 		 && (ascii <= 0xFF)) {
-			popthenPush(1, fetchPointerofObject(ascii, characterTable(interpreterProxy->interpreterState), interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+			popthenPush(1, fetchPointerofObject(ascii, characterTable(self), self), self);
 		}
 		else {
-			primitiveFail(interpreterProxy->interpreterState);
+			primitiveFail(self);
 		}
 	}
 	return 0;
@@ -780,7 +780,7 @@ primitiveDirectoryDelimitor(void)
 
 	/* FilePlugin>>#primitiveDirectoryEntry */
 EXPORT(sqInt)
-primitiveDirectoryEntry(void)
+primitiveDirectoryEntry(struct foo * self)
 {
     sqInt createDate;
     sqInt dirFlag;
@@ -807,47 +807,47 @@ primitiveDirectoryEntry(void)
 	posixPermissions = 0;
 	symlinkFlag = 0;
 	v = 0;
-	requestedName = stackValue(0, interpreterProxy->interpreterState);
-	pathName = stackValue(1, interpreterProxy->interpreterState);
-	if (!(isBytes(pathName, interpreterProxy->interpreterState))) {
-		return primitiveFail(interpreterProxy->interpreterState);
+	requestedName = stackValue(0, self);
+	pathName = stackValue(1, self);
+	if (!(isBytes(pathName, self))) {
+		return primitiveFail(self);
 	}
-	pathNameIndex = firstIndexableField(pathName, interpreterProxy->interpreterState);
-	pathNameSize = byteSizeOf(pathName, interpreterProxy->interpreterState);
-	reqNameIndex = firstIndexableField(requestedName, interpreterProxy->interpreterState);
-	reqNameSize = byteSizeOf(requestedName, interpreterProxy->interpreterState);
+	pathNameIndex = firstIndexableField(pathName, self);
+	pathNameSize = byteSizeOf(pathName, self);
+	reqNameIndex = firstIndexableField(requestedName, self);
+	reqNameSize = byteSizeOf(requestedName, self);
 	okToList = (sCLPfn != 0
 		? ((sqInt (*)(char *, sqInt))sCLPfn)(pathNameIndex, pathNameSize)
 		: 1);
 	status = (okToList
 		? dir_EntryLookup(pathNameIndex, pathNameSize, reqNameIndex, reqNameSize, entryName, (&entryNameSize), (&createDate), (&modifiedDate), (&dirFlag), (&fileSize), (&posixPermissions), (&symlinkFlag))
 		: DirNoMoreEntries);
-	if (failed(interpreterProxy->interpreterState)) {
+	if (failed(self)) {
 		return null;
 	}
 	if (status == DirNoMoreEntries) {
 
 		/* no entry; return nil */
 		/* pop pathName, index, rcvr */
-		popthenPush(3, nilObject(interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+		popthenPush(3, nilObject(self), self);
 		return null;
 	}
 	if (status == DirBadPath) {
-		return primitiveFail(interpreterProxy->interpreterState);
+		return primitiveFail(self);
 	}
 	popthenPush(3, 
 #  if PharoVM
-		makeDirEntryNamesizecreateDatemodDateisDirfileSizeposixPermissionsisSymlink(entryName, entryNameSize, createDate, modifiedDate, dirFlag, fileSize, posixPermissions, symlinkFlag)
+		makeDirEntryNamesizecreateDatemodDateisDirfileSizeposixPermissionsisSymlink(entryName, entryNameSize, createDate, modifiedDate, dirFlag, fileSize, posixPermissions, symlinkFlag, self)
 #  else /* PharoVM */
-		makeDirEntryNamesizecreateDatemodDateisDirfileSize(entryName, entryNameSize, createDate, modifiedDate, dirFlag, fileSize)
+		makeDirEntryNamesizecreateDatemodDateisDirfileSize(entryName, entryNameSize, createDate, modifiedDate, dirFlag, fileSize, self)
 #  endif /* PharoVM */
-		, interpreterProxy->interpreterState);
+		, self);
 	return 0;
 }
 
 	/* FilePlugin>>#primitiveDirectoryGetMacTypeAndCreator */
 EXPORT(sqInt)
-primitiveDirectoryGetMacTypeAndCreator(void)
+primitiveDirectoryGetMacTypeAndCreator(struct foo * self)
 {
     sqInt creatorString;
     char *creatorStringIndex;
@@ -858,43 +858,43 @@ primitiveDirectoryGetMacTypeAndCreator(void)
     sqInt typeString;
     char *typeStringIndex;
 
-	creatorString = stackValue(0, interpreterProxy->interpreterState);
-	typeString = stackValue(1, interpreterProxy->interpreterState);
-	fileName = stackValue(2, interpreterProxy->interpreterState);
-	if (!((isBytes(creatorString, interpreterProxy->interpreterState))
-		 && ((byteSizeOf(creatorString, interpreterProxy->interpreterState)) == 4))) {
-		return primitiveFail(interpreterProxy->interpreterState);
+	creatorString = stackValue(0, self);
+	typeString = stackValue(1, self);
+	fileName = stackValue(2, self);
+	if (!((isBytes(creatorString, self))
+		 && ((byteSizeOf(creatorString, self)) == 4))) {
+		return primitiveFail(self);
 	}
-	if (!((isBytes(typeString, interpreterProxy->interpreterState))
-		 && ((byteSizeOf(typeString, interpreterProxy->interpreterState)) == 4))) {
-		return primitiveFail(interpreterProxy->interpreterState);
+	if (!((isBytes(typeString, self))
+		 && ((byteSizeOf(typeString, self)) == 4))) {
+		return primitiveFail(self);
 	}
-	if (!(isBytes(fileName, interpreterProxy->interpreterState))) {
-		return primitiveFail(interpreterProxy->interpreterState);
+	if (!(isBytes(fileName, self))) {
+		return primitiveFail(self);
 	}
-	creatorStringIndex = firstIndexableField(creatorString, interpreterProxy->interpreterState);
-	typeStringIndex = firstIndexableField(typeString, interpreterProxy->interpreterState);
-	fileNameIndex = firstIndexableField(fileName, interpreterProxy->interpreterState);
+	creatorStringIndex = firstIndexableField(creatorString, self);
+	typeStringIndex = firstIndexableField(typeString, self);
+	fileNameIndex = firstIndexableField(fileName, self);
 
 	/* If the security plugin can be loaded, use it to check for permission.
 	   If not, assume it's ok */
-	fileNameSize = byteSizeOf(fileName, interpreterProxy->interpreterState);
+	fileNameSize = byteSizeOf(fileName, self);
 	if (sCGFTfn != 0) {
 		okToGet =  ((sqInt (*)(char *, sqInt))sCGFTfn)(fileNameIndex, fileNameSize);
 		if (!okToGet) {
-			return primitiveFail(interpreterProxy->interpreterState);
+			return primitiveFail(self);
 		}
 	}
 	if (!(dir_GetMacFileTypeAndCreator(fileNameIndex, fileNameSize, typeStringIndex, creatorStringIndex))) {
-		return primitiveFail(interpreterProxy->interpreterState);
+		return primitiveFail(self);
 	}
-	pop(3, interpreterProxy->interpreterState);
+	pop(3, self);
 	return 0;
 }
 
 	/* FilePlugin>>#primitiveDirectoryLookup */
 EXPORT(sqInt)
-primitiveDirectoryLookup(void)
+primitiveDirectoryLookup(struct foo * self)
 {
     sqInt createDate;
     sqInt dirFlag;
@@ -919,45 +919,45 @@ primitiveDirectoryLookup(void)
 	posixPermissions = 0;
 	symlinkFlag = 0;
 	v = 0;
-	index = stackIntegerValue(0, interpreterProxy->interpreterState);
-	pathName = stackValue(1, interpreterProxy->interpreterState);
-	if (!(isBytes(pathName, interpreterProxy->interpreterState))) {
-		return primitiveFail(interpreterProxy->interpreterState);
+	index = stackIntegerValue(0, self);
+	pathName = stackValue(1, self);
+	if (!(isBytes(pathName, self))) {
+		return primitiveFail(self);
 	}
-	pathNameIndex = firstIndexableField(pathName, interpreterProxy->interpreterState);
-	pathNameSize = byteSizeOf(pathName, interpreterProxy->interpreterState);
+	pathNameIndex = firstIndexableField(pathName, self);
+	pathNameSize = byteSizeOf(pathName, self);
 	okToList = (sCLPfn != 0
 		? ((sqInt (*)(char *, sqInt))sCLPfn)(pathNameIndex, pathNameSize)
 		: 1);
 	status = (okToList
 		? dir_Lookup(pathNameIndex, pathNameSize, index, entryName, (&entryNameSize), (&createDate), (&modifiedDate), (&dirFlag), (&fileSize), (&posixPermissions), (&symlinkFlag))
 		: DirNoMoreEntries);
-	if (failed(interpreterProxy->interpreterState)) {
+	if (failed(self)) {
 		return null;
 	}
 	if (status == DirNoMoreEntries) {
 
 		/* no more entries; return nil */
 		/* pop pathName, index, rcvr */
-		popthenPush(3, nilObject(interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+		popthenPush(3, nilObject(self), self);
 		return null;
 	}
 	if (status == DirBadPath) {
-		return primitiveFail(interpreterProxy->interpreterState);
+		return primitiveFail(self);
 	}
 	popthenPush(3, 
 #  if PharoVM
-		makeDirEntryNamesizecreateDatemodDateisDirfileSizeposixPermissionsisSymlink(entryName, entryNameSize, createDate, modifiedDate, dirFlag, fileSize, posixPermissions, symlinkFlag)
+		makeDirEntryNamesizecreateDatemodDateisDirfileSizeposixPermissionsisSymlink(entryName, entryNameSize, createDate, modifiedDate, dirFlag, fileSize, posixPermissions, symlinkFlag, self)
 #  else /* PharoVM */
-		makeDirEntryNamesizecreateDatemodDateisDirfileSize(entryName, entryNameSize, createDate, modifiedDate, dirFlag, fileSize)
+		makeDirEntryNamesizecreateDatemodDateisDirfileSize(entryName, entryNameSize, createDate, modifiedDate, dirFlag, fileSize, self)
 #  endif /* PharoVM */
-		, interpreterProxy->interpreterState);
+		, self);
 	return 0;
 }
 
 	/* FilePlugin>>#primitiveDirectorySetMacTypeAndCreator */
 EXPORT(sqInt)
-primitiveDirectorySetMacTypeAndCreator(void)
+primitiveDirectorySetMacTypeAndCreator(struct foo * self)
 {
     sqInt creatorString;
     char *creatorStringIndex;
@@ -968,33 +968,33 @@ primitiveDirectorySetMacTypeAndCreator(void)
     sqInt typeString;
     char *typeStringIndex;
 
-	creatorString = stackValue(0, interpreterProxy->interpreterState);
-	typeString = stackValue(1, interpreterProxy->interpreterState);
-	fileName = stackValue(2, interpreterProxy->interpreterState);
-	if (!((isBytes(creatorString, interpreterProxy->interpreterState))
-		 && ((isBytes(typeString, interpreterProxy->interpreterState))
-		 && ((isBytes(fileName, interpreterProxy->interpreterState))
-		 && (((byteSizeOf(creatorString, interpreterProxy->interpreterState)) == 4)
-		 && ((byteSizeOf(typeString, interpreterProxy->interpreterState)) == 4)))))) {
-		return primitiveFail(interpreterProxy->interpreterState);
+	creatorString = stackValue(0, self);
+	typeString = stackValue(1, self);
+	fileName = stackValue(2, self);
+	if (!((isBytes(creatorString, self))
+		 && ((isBytes(typeString, self))
+		 && ((isBytes(fileName, self))
+		 && (((byteSizeOf(creatorString, self)) == 4)
+		 && ((byteSizeOf(typeString, self)) == 4)))))) {
+		return primitiveFail(self);
 	}
-	creatorStringIndex = firstIndexableField(creatorString, interpreterProxy->interpreterState);
-	typeStringIndex = firstIndexableField(typeString, interpreterProxy->interpreterState);
-	fileNameIndex = firstIndexableField(fileName, interpreterProxy->interpreterState);
+	creatorStringIndex = firstIndexableField(creatorString, self);
+	typeStringIndex = firstIndexableField(typeString, self);
+	fileNameIndex = firstIndexableField(fileName, self);
 
 	/* If the security plugin can be loaded, use it to check for permission.
 	   If not, assume it's ok */
-	fileNameSize = byteSizeOf(fileName, interpreterProxy->interpreterState);
+	fileNameSize = byteSizeOf(fileName, self);
 	if (sCSFTfn != 0) {
 		okToSet = ((sqInt (*)(char *, sqInt))sCSFTfn)(fileNameIndex, fileNameSize);
 		if (!okToSet) {
-			return primitiveFail(interpreterProxy->interpreterState);
+			return primitiveFail(self);
 		}
 	}
 	if (!(dir_SetMacFileTypeAndCreator(fileNameIndex, fileNameSize, typeStringIndex, creatorStringIndex))) {
-		return primitiveFail(interpreterProxy->interpreterState);
+		return primitiveFail(self);
 	}
-	pop(3, interpreterProxy->interpreterState);
+	pop(3, self);
 	return 0;
 }
 
@@ -1004,7 +1004,7 @@ primitiveDirectorySetMacTypeAndCreator(void)
 
 	/* FilePlugin>>#primitiveDisableFileAccess */
 EXPORT(sqInt)
-primitiveDisableFileAccess(void)
+primitiveDisableFileAccess(struct foo * self)
 {
 	if (sDFAfn != 0) {
 		((sqInt (*)(void))sDFAfn)();
@@ -1014,7 +1014,7 @@ primitiveDisableFileAccess(void)
 
 	/* FilePlugin>>#primitiveFileAtEnd */
 EXPORT(sqInt)
-primitiveFileAtEnd(void)
+primitiveFileAtEnd(struct foo * self)
 {
     sqInt atEnd;
     SQFile *file;
@@ -1022,77 +1022,77 @@ primitiveFileAtEnd(void)
 
 	atEnd = 0;
 	/* begin fileValueOf: */
-	objectPointer = stackValue(0, interpreterProxy->interpreterState);
-	if (!((isBytes(objectPointer, interpreterProxy->interpreterState))
-		 && ((byteSizeOf(objectPointer, interpreterProxy->interpreterState)) == (sizeof(SQFile))))) {
-		primitiveFail(interpreterProxy->interpreterState);
+	objectPointer = stackValue(0, self);
+	if (!((isBytes(objectPointer, self))
+		 && ((byteSizeOf(objectPointer, self)) == (sizeof(SQFile))))) {
+		primitiveFail(self);
 		file = null;
 		goto l1;
 	}
-	file = firstIndexableField(objectPointer, interpreterProxy->interpreterState);
+	file = firstIndexableField(objectPointer, self);
 	l1:	/* end fileValueOf: */;
-	if (!(failed(interpreterProxy->interpreterState))) {
-		atEnd = sqFileAtEnd(file);
+	if (!(failed(self))) {
+		atEnd = sqFileAtEnd(file, self);
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		methodReturnBool(atEnd, interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		methodReturnBool(atEnd, self);
 	}
 	return 0;
 }
 
 	/* FilePlugin>>#primitiveFileClose */
 EXPORT(sqInt)
-primitiveFileClose(void)
+primitiveFileClose(struct foo * self)
 {
     SQFile *file;
     sqInt objectPointer;
 
 	/* begin fileValueOf: */
-	objectPointer = stackValue(0, interpreterProxy->interpreterState);
-	if (!((isBytes(objectPointer, interpreterProxy->interpreterState))
-		 && ((byteSizeOf(objectPointer, interpreterProxy->interpreterState)) == (sizeof(SQFile))))) {
-		primitiveFail(interpreterProxy->interpreterState);
+	objectPointer = stackValue(0, self);
+	if (!((isBytes(objectPointer, self))
+		 && ((byteSizeOf(objectPointer, self)) == (sizeof(SQFile))))) {
+		primitiveFail(self);
 		file = null;
 		goto l1;
 	}
-	file = firstIndexableField(objectPointer, interpreterProxy->interpreterState);
+	file = firstIndexableField(objectPointer, self);
 	l1:	/* end fileValueOf: */;
-	if (!(failed(interpreterProxy->interpreterState))) {
-		sqFileClose(file);
+	if (!(failed(self))) {
+		sqFileClose(file, self);
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		pop(1, interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		pop(1, self);
 	}
 	return 0;
 }
 
 	/* FilePlugin>>#primitiveFileDelete */
 EXPORT(sqInt)
-primitiveFileDelete(void)
+primitiveFileDelete(struct foo * self)
 {
     char *nameIndex;
     sqInt namePointer;
     sqInt nameSize;
     sqInt okToDelete;
 
-	namePointer = stackValue(0, interpreterProxy->interpreterState);
-	if (!(isBytes(namePointer, interpreterProxy->interpreterState))) {
-		return primitiveFail(interpreterProxy->interpreterState);
+	namePointer = stackValue(0, self);
+	if (!(isBytes(namePointer, self))) {
+		return primitiveFail(self);
 	}
-	nameIndex = firstIndexableField(namePointer, interpreterProxy->interpreterState);
+	nameIndex = firstIndexableField(namePointer, self);
 
 	/* If the security plugin can be loaded, use it to check for permission.
 	   If not, assume it's ok */
-	nameSize = byteSizeOf(namePointer, interpreterProxy->interpreterState);
+	nameSize = byteSizeOf(namePointer, self);
 	if (sCDFfn != 0) {
 		okToDelete =  ((sqInt (*)(char *, sqInt))sCDFfn)(nameIndex, nameSize);
 		if (!okToDelete) {
-			return primitiveFail(interpreterProxy->interpreterState);
+			return primitiveFail(self);
 		}
 	}
-	sqFileDeleteNameSize(nameIndex, nameSize);
-	if (!(failed(interpreterProxy->interpreterState))) {
-		pop(1, interpreterProxy->interpreterState);
+	sqFileDeleteNameSize(nameIndex, nameSize, self);
+	if (!(failed(self))) {
+		pop(1, self);
 	}
 	return 0;
 }
@@ -1109,83 +1109,83 @@ primitiveFileDelete(void)
 
 	/* FilePlugin>>#primitiveFileDescriptorType */
 EXPORT(sqInt)
-primitiveFileDescriptorType(void)
+primitiveFileDescriptorType(struct foo * self)
 {
     int fd;
     sqInt fdPointer;
     sqInt fileType;
 
-	fdPointer = stackValue(0, interpreterProxy->interpreterState);
-	if (!(isIntegerObject(fdPointer, interpreterProxy->interpreterState))) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	fdPointer = stackValue(0, self);
+	if (!(isIntegerObject(fdPointer, self))) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	fd = integerValueOf(fdPointer, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	fd = integerValueOf(fdPointer, self);
+	if (failed(self)) {
 
 		/* Ensure that the appropriate failure code has been set */
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	fileType = sqFileDescriptorType(fd);
-	methodReturnInteger(fileType, interpreterProxy->interpreterState);
+	fileType = sqFileDescriptorType(fd, self);
+	methodReturnInteger(fileType, self);
 	return 0;
 }
 
 	/* FilePlugin>>#primitiveFileFlush */
 EXPORT(sqInt)
-primitiveFileFlush(void)
+primitiveFileFlush(struct foo * self)
 {
     SQFile *file;
     sqInt objectPointer;
 
 	/* begin fileValueOf: */
-	objectPointer = stackValue(0, interpreterProxy->interpreterState);
-	if (!((isBytes(objectPointer, interpreterProxy->interpreterState))
-		 && ((byteSizeOf(objectPointer, interpreterProxy->interpreterState)) == (sizeof(SQFile))))) {
-		primitiveFail(interpreterProxy->interpreterState);
+	objectPointer = stackValue(0, self);
+	if (!((isBytes(objectPointer, self))
+		 && ((byteSizeOf(objectPointer, self)) == (sizeof(SQFile))))) {
+		primitiveFail(self);
 		file = null;
 		goto l1;
 	}
-	file = firstIndexableField(objectPointer, interpreterProxy->interpreterState);
+	file = firstIndexableField(objectPointer, self);
 	l1:	/* end fileValueOf: */;
-	if (!(failed(interpreterProxy->interpreterState))) {
-		sqFileFlush(file);
+	if (!(failed(self))) {
+		sqFileFlush(file, self);
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		pop(1, interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		pop(1, self);
 	}
 	return 0;
 }
 
 	/* FilePlugin>>#primitiveFileGetPosition */
 EXPORT(sqInt)
-primitiveFileGetPosition(void)
+primitiveFileGetPosition(struct foo * self)
 {
     SQFile *file;
     sqInt objectPointer;
     squeakFileOffsetType position;
 
 	/* begin fileValueOf: */
-	objectPointer = stackValue(0, interpreterProxy->interpreterState);
-	if (!((isBytes(objectPointer, interpreterProxy->interpreterState))
-		 && ((byteSizeOf(objectPointer, interpreterProxy->interpreterState)) == (sizeof(SQFile))))) {
-		primitiveFail(interpreterProxy->interpreterState);
+	objectPointer = stackValue(0, self);
+	if (!((isBytes(objectPointer, self))
+		 && ((byteSizeOf(objectPointer, self)) == (sizeof(SQFile))))) {
+		primitiveFail(self);
 		file = null;
 		goto l1;
 	}
-	file = firstIndexableField(objectPointer, interpreterProxy->interpreterState);
+	file = firstIndexableField(objectPointer, self);
 	l1:	/* end fileValueOf: */;
-	if (!(failed(interpreterProxy->interpreterState))) {
-		position = sqFileGetPosition(file);
+	if (!(failed(self))) {
+		position = sqFileGetPosition(file, self);
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		methodReturnValue(positive64BitIntegerFor(position, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		methodReturnValue(positive64BitIntegerFor(position, self), self);
 	}
 	return 0;
 }
 
 	/* FilePlugin>>#primitiveFileOpen */
 EXPORT(sqInt)
-primitiveFileOpen(void)
+primitiveFileOpen(struct foo * self)
 {
     sqInt filePointer;
     char *nameIndex;
@@ -1193,45 +1193,45 @@ primitiveFileOpen(void)
     sqInt nameSize;
     sqInt writeFlag;
 
-	writeFlag = booleanValueOf(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	namePointer = stackValue(1, interpreterProxy->interpreterState);
-	if (!(isBytes(namePointer, interpreterProxy->interpreterState))) {
-		return primitiveFail(interpreterProxy->interpreterState);
+	writeFlag = booleanValueOf(stackValue(0, self), self);
+	namePointer = stackValue(1, self);
+	if (!(isBytes(namePointer, self))) {
+		return primitiveFail(self);
 	}
-	nameIndex = firstIndexableField(namePointer, interpreterProxy->interpreterState);
-	nameSize = byteSizeOf(namePointer, interpreterProxy->interpreterState);
-	filePointer = fileOpenNamesizewritesecure(nameIndex, nameSize, writeFlag, 1);
-	if (!(failed(interpreterProxy->interpreterState))) {
-		methodReturnValue(filePointer, interpreterProxy->interpreterState);
+	nameIndex = firstIndexableField(namePointer, self);
+	nameSize = byteSizeOf(namePointer, self);
+	filePointer = fileOpenNamesizewritesecure(nameIndex, nameSize, writeFlag, 1, self);
+	if (!(failed(self))) {
+		methodReturnValue(filePointer, self);
 	}
 	return 0;
 }
 
 	/* FilePlugin>>#primitiveFileOpenNew */
 EXPORT(sqInt)
-primitiveFileOpenNew(void)
+primitiveFileOpenNew(struct foo * self)
 {
     sqInt filePointer;
     char *nameIndex;
     sqInt namePointer;
     sqInt nameSize;
 
-	namePointer = stackValue(0, interpreterProxy->interpreterState);
-	if (!(isBytes(namePointer, interpreterProxy->interpreterState))) {
-		return primitiveFail(interpreterProxy->interpreterState);
+	namePointer = stackValue(0, self);
+	if (!(isBytes(namePointer, self))) {
+		return primitiveFail(self);
 	}
-	nameIndex = firstIndexableField(namePointer, interpreterProxy->interpreterState);
-	nameSize = byteSizeOf(namePointer, interpreterProxy->interpreterState);
-	filePointer = fileOpenNewNamesizesecure(nameIndex, nameSize, 1);
-	if (!(failed(interpreterProxy->interpreterState))) {
-		methodReturnValue(filePointer, interpreterProxy->interpreterState);
+	nameIndex = firstIndexableField(namePointer, self);
+	nameSize = byteSizeOf(namePointer, self);
+	filePointer = fileOpenNewNamesizesecure(nameIndex, nameSize, 1, self);
+	if (!(failed(self))) {
+		methodReturnValue(filePointer, self);
 	}
 	return 0;
 }
 
 	/* FilePlugin>>#primitiveFileRead */
 EXPORT(sqInt)
-primitiveFileRead(void)
+primitiveFileRead(struct foo * self)
 {
     sqInt array;
     sqInt array1;
@@ -1253,76 +1253,76 @@ primitiveFileRead(void)
 	
 #  if SPURVM
 	/* begin primitiveFileReadWithPinning */
-	count = positiveMachineIntegerValueOf(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	startIndex = positiveMachineIntegerValueOf(stackValue(1, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	array = stackValue(2, interpreterProxy->interpreterState);
+	count = positiveMachineIntegerValueOf(stackValue(0, self), self);
+	startIndex = positiveMachineIntegerValueOf(stackValue(1, self), self);
+	array = stackValue(2, self);
 	/* begin fileValueOf: */
-	objectPointer = stackValue(3, interpreterProxy->interpreterState);
-	if (!((isBytes(objectPointer, interpreterProxy->interpreterState))
-		 && ((byteSizeOf(objectPointer, interpreterProxy->interpreterState)) == (sizeof(SQFile))))) {
-		primitiveFail(interpreterProxy->interpreterState);
+	objectPointer = stackValue(3, self);
+	if (!((isBytes(objectPointer, self))
+		 && ((byteSizeOf(objectPointer, self)) == (sizeof(SQFile))))) {
+		primitiveFail(self);
 		file = null;
 		goto l1;
 	}
-	file = firstIndexableField(objectPointer, interpreterProxy->interpreterState);
+	file = firstIndexableField(objectPointer, self);
 	l1:	/* end fileValueOf: */;
-	if ((failed(interpreterProxy->interpreterState))
-	 || (!(isWordsOrBytes(array, interpreterProxy->interpreterState)))) {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	if ((failed(self))
+	 || (!(isWordsOrBytes(array, self)))) {
+		primitiveFailFor(PrimErrBadArgument, self);
 		goto l2;
 	}
-	slotSize = slotSizeOf(array, interpreterProxy->interpreterState);
+	slotSize = slotSizeOf(array, self);
 	if (!((startIndex >= 1)
 		 && (((startIndex + count) - 1) <= slotSize))) {
-		primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
+		primitiveFailFor(PrimErrBadIndex, self);
 		goto l2;
 	}
 	elementSize = (slotSize == 0
 		? 1
-		: (byteSizeOf(array, interpreterProxy->interpreterState)) / slotSize);
-	bytesRead = sqFileReadIntoAt(file, count * elementSize, ((char *) (firstIndexableField(array, interpreterProxy->interpreterState))), (startIndex - 1) * elementSize);
-	if (!(failed(interpreterProxy->interpreterState))) {
-		methodReturnValue(integerObjectOf(bytesRead / elementSize, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+		: (byteSizeOf(array, self)) / slotSize);
+	bytesRead = sqFileReadIntoAt(file, count * elementSize, ((char *) (firstIndexableField(array, self))), (startIndex - 1) * elementSize, self);
+	if (!(failed(self))) {
+		methodReturnValue(integerObjectOf(bytesRead / elementSize, self), self);
 	}
 	l2:	/* end primitiveFileReadWithPinning */;
 #  else /* SPURVM */
 	/* begin primitiveFileReadWithoutPinning */
 	retryCount = 0;
-	count1 = positive32BitValueOf(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	startIndex1 = positive32BitValueOf(stackValue(1, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	count1 = positive32BitValueOf(stackValue(0, self), self);
+	startIndex1 = positive32BitValueOf(stackValue(1, self), self);
 	while (1) {
-		array1 = stackValue(2, interpreterProxy->interpreterState);
+		array1 = stackValue(2, self);
 		/* begin fileValueOf: */
-		objectPointer1 = stackValue(3, interpreterProxy->interpreterState);
-		if (!((isBytes(objectPointer1, interpreterProxy->interpreterState))
-			 && ((byteSizeOf(objectPointer1, interpreterProxy->interpreterState)) == (sizeof(SQFile))))) {
-			primitiveFail(interpreterProxy->interpreterState);
+		objectPointer1 = stackValue(3, self);
+		if (!((isBytes(objectPointer1, self))
+			 && ((byteSizeOf(objectPointer1, self)) == (sizeof(SQFile))))) {
+			primitiveFail(self);
 			file1 = null;
 			goto l3;
 		}
-		file1 = firstIndexableField(objectPointer1, interpreterProxy->interpreterState);
+		file1 = firstIndexableField(objectPointer1, self);
 	l3:	/* end fileValueOf: */;
-		if ((failed(interpreterProxy->interpreterState))
-		 || (!(isWordsOrBytes(array1, interpreterProxy->interpreterState)))) {
-			primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+		if ((failed(self))
+		 || (!(isWordsOrBytes(array1, self)))) {
+			primitiveFailFor(PrimErrBadArgument, self);
 			goto l4;
 		}
-		elementSize1 = (isWords(array1, interpreterProxy->interpreterState)
+		elementSize1 = (isWords(array1, self)
 			? 4
 			: 1);
 		if (!((startIndex1 >= 1)
-			 && (((startIndex1 + count1) - 1) <= (slotSizeOf(array1, interpreterProxy->interpreterState))))) {
-			primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
+			 && (((startIndex1 + count1) - 1) <= (slotSizeOf(array1, self))))) {
+			primitiveFailFor(PrimErrBadIndex, self);
 			goto l4;
 		}
-		bytesRead1 = sqFileReadIntoAt(file1, count1 * elementSize1, ((char *) (firstIndexableField(array1, interpreterProxy->interpreterState))), (startIndex1 - 1) * elementSize1);
-		if (!(((primitiveFailureCode(interpreterProxy->interpreterState)) == PrimErrObjectMayMove)
+		bytesRead1 = sqFileReadIntoAt(file1, count1 * elementSize1, ((char *) (firstIndexableField(array1, self))), (startIndex1 - 1) * elementSize1);
+		if (!(((primitiveFailureCode(self)) == PrimErrObjectMayMove)
 		 && (((retryCount += 1)) <= 2))) break;
-		tenuringIncrementalGC(interpreterProxy->interpreterState);
-		primitiveFailFor(PrimNoErr, interpreterProxy->interpreterState);
+		tenuringIncrementalGC(self);
+		primitiveFailFor(PrimNoErr, self);
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		methodReturnValue(integerObjectOf(bytesRead1 / elementSize1, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		methodReturnValue(integerObjectOf(bytesRead1 / elementSize1, self), self);
 	}
 	l4:	/* end primitiveFileReadWithoutPinning */;
 #  endif /* SPURVM */
@@ -1336,7 +1336,7 @@ primitiveFileRead(void)
 
 	/* FilePlugin>>#primitiveFileReadWithoutPinning */
 static sqInt
-primitiveFileReadWithoutPinning(void)
+primitiveFileReadWithoutPinning(struct foo * self)
 {
     sqInt array;
     sqInt bytesRead;
@@ -1348,39 +1348,39 @@ primitiveFileReadWithoutPinning(void)
     size_t startIndex;
 
 	retryCount = 0;
-	count = positive32BitValueOf(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	startIndex = positive32BitValueOf(stackValue(1, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	count = positive32BitValueOf(stackValue(0, self), self);
+	startIndex = positive32BitValueOf(stackValue(1, self), self);
 	while (1) {
-		array = stackValue(2, interpreterProxy->interpreterState);
+		array = stackValue(2, self);
 		/* begin fileValueOf: */
-		objectPointer = stackValue(3, interpreterProxy->interpreterState);
-		if (!((isBytes(objectPointer, interpreterProxy->interpreterState))
-			 && ((byteSizeOf(objectPointer, interpreterProxy->interpreterState)) == (sizeof(SQFile))))) {
-			primitiveFail(interpreterProxy->interpreterState);
+		objectPointer = stackValue(3, self);
+		if (!((isBytes(objectPointer, self))
+			 && ((byteSizeOf(objectPointer, self)) == (sizeof(SQFile))))) {
+			primitiveFail(self);
 			file = null;
 			goto l1;
 		}
-		file = firstIndexableField(objectPointer, interpreterProxy->interpreterState);
+		file = firstIndexableField(objectPointer, self);
 	l1:	/* end fileValueOf: */;
-		if ((failed(interpreterProxy->interpreterState))
-		 || (!(isWordsOrBytes(array, interpreterProxy->interpreterState)))) {
-			return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+		if ((failed(self))
+		 || (!(isWordsOrBytes(array, self)))) {
+			return primitiveFailFor(PrimErrBadArgument, self);
 		}
-		elementSize = (isWords(array, interpreterProxy->interpreterState)
+		elementSize = (isWords(array, self)
 			? 4
 			: 1);
 		if (!((startIndex >= 1)
-			 && (((startIndex + count) - 1) <= (slotSizeOf(array, interpreterProxy->interpreterState))))) {
-			return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
+			 && (((startIndex + count) - 1) <= (slotSizeOf(array, self))))) {
+			return primitiveFailFor(PrimErrBadIndex, self);
 		}
-		bytesRead = sqFileReadIntoAt(file, count * elementSize, ((char *) (firstIndexableField(array, interpreterProxy->interpreterState))), (startIndex - 1) * elementSize);
-		if (!(((primitiveFailureCode(interpreterProxy->interpreterState)) == PrimErrObjectMayMove)
+		bytesRead = sqFileReadIntoAt(file, count * elementSize, ((char *) (firstIndexableField(array, self))), (startIndex - 1) * elementSize, self);
+		if (!(((primitiveFailureCode(self)) == PrimErrObjectMayMove)
 		 && (((retryCount += 1)) <= 2))) break;
-		tenuringIncrementalGC(interpreterProxy->interpreterState);
-		primitiveFailFor(PrimNoErr, interpreterProxy->interpreterState);
+		tenuringIncrementalGC(self);
+		primitiveFailFor(PrimNoErr, self);
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		methodReturnValue(integerObjectOf(bytesRead / elementSize, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		methodReturnValue(integerObjectOf(bytesRead / elementSize, self), self);
 	}
 	return 0;
 }
@@ -1392,7 +1392,7 @@ primitiveFileReadWithoutPinning(void)
 
 	/* FilePlugin>>#primitiveFileReadWithPinning */
 static sqInt
-primitiveFileReadWithPinning(void)
+primitiveFileReadWithPinning(struct foo * self)
 {
     sqInt array;
     sqInt bytesRead;
@@ -1403,41 +1403,41 @@ primitiveFileReadWithPinning(void)
     size_t slotSize;
     size_t startIndex;
 
-	count = positiveMachineIntegerValueOf(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	startIndex = positiveMachineIntegerValueOf(stackValue(1, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	array = stackValue(2, interpreterProxy->interpreterState);
+	count = positiveMachineIntegerValueOf(stackValue(0, self), self);
+	startIndex = positiveMachineIntegerValueOf(stackValue(1, self), self);
+	array = stackValue(2, self);
 	/* begin fileValueOf: */
-	objectPointer = stackValue(3, interpreterProxy->interpreterState);
-	if (!((isBytes(objectPointer, interpreterProxy->interpreterState))
-		 && ((byteSizeOf(objectPointer, interpreterProxy->interpreterState)) == (sizeof(SQFile))))) {
-		primitiveFail(interpreterProxy->interpreterState);
+	objectPointer = stackValue(3, self);
+	if (!((isBytes(objectPointer, self))
+		 && ((byteSizeOf(objectPointer, self)) == (sizeof(SQFile))))) {
+		primitiveFail(self);
 		file = null;
 		goto l1;
 	}
-	file = firstIndexableField(objectPointer, interpreterProxy->interpreterState);
+	file = firstIndexableField(objectPointer, self);
 	l1:	/* end fileValueOf: */;
-	if ((failed(interpreterProxy->interpreterState))
-	 || (!(isWordsOrBytes(array, interpreterProxy->interpreterState)))) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	if ((failed(self))
+	 || (!(isWordsOrBytes(array, self)))) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	slotSize = slotSizeOf(array, interpreterProxy->interpreterState);
+	slotSize = slotSizeOf(array, self);
 	if (!((startIndex >= 1)
 		 && (((startIndex + count) - 1) <= slotSize))) {
-		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
+		return primitiveFailFor(PrimErrBadIndex, self);
 	}
 	elementSize = (slotSize == 0
 		? 1
-		: (byteSizeOf(array, interpreterProxy->interpreterState)) / slotSize);
-	bytesRead = sqFileReadIntoAt(file, count * elementSize, ((char *) (firstIndexableField(array, interpreterProxy->interpreterState))), (startIndex - 1) * elementSize);
-	if (!(failed(interpreterProxy->interpreterState))) {
-		methodReturnValue(integerObjectOf(bytesRead / elementSize, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+		: (byteSizeOf(array, self)) / slotSize);
+	bytesRead = sqFileReadIntoAt(file, count * elementSize, ((char *) (firstIndexableField(array, self))), (startIndex - 1) * elementSize, self);
+	if (!(failed(self))) {
+		methodReturnValue(integerObjectOf(bytesRead / elementSize, self), self);
 	}
 	return 0;
 }
 
 	/* FilePlugin>>#primitiveFileRename */
 EXPORT(sqInt)
-primitiveFileRename(void)
+primitiveFileRename(struct foo * self)
 {
     char *newNameIndex;
     sqInt newNamePointer;
@@ -1447,86 +1447,86 @@ primitiveFileRename(void)
     sqInt oldNamePointer;
     sqInt oldNameSize;
 
-	newNamePointer = stackValue(0, interpreterProxy->interpreterState);
-	oldNamePointer = stackValue(1, interpreterProxy->interpreterState);
-	if (!((isBytes(newNamePointer, interpreterProxy->interpreterState))
-		 && (isBytes(oldNamePointer, interpreterProxy->interpreterState)))) {
-		return primitiveFail(interpreterProxy->interpreterState);
+	newNamePointer = stackValue(0, self);
+	oldNamePointer = stackValue(1, self);
+	if (!((isBytes(newNamePointer, self))
+		 && (isBytes(oldNamePointer, self)))) {
+		return primitiveFail(self);
 	}
-	newNameIndex = firstIndexableField(newNamePointer, interpreterProxy->interpreterState);
-	newNameSize = byteSizeOf(newNamePointer, interpreterProxy->interpreterState);
-	oldNameIndex = firstIndexableField(oldNamePointer, interpreterProxy->interpreterState);
+	newNameIndex = firstIndexableField(newNamePointer, self);
+	newNameSize = byteSizeOf(newNamePointer, self);
+	oldNameIndex = firstIndexableField(oldNamePointer, self);
 
 	/* If the security plugin can be loaded, use it to check for rename permission.
 	   If not, assume it's ok */
-	oldNameSize = byteSizeOf(oldNamePointer, interpreterProxy->interpreterState);
+	oldNameSize = byteSizeOf(oldNamePointer, self);
 	if (sCRFfn != 0) {
 		okToRename =  ((sqInt (*)(char *, sqInt))sCRFfn)(oldNameIndex, oldNameSize);
 		if (!okToRename) {
-			return primitiveFail(interpreterProxy->interpreterState);
+			return primitiveFail(self);
 		}
 	}
-	sqFileRenameOldSizeNewSize(oldNameIndex, oldNameSize, newNameIndex, newNameSize);
-	if (!(failed(interpreterProxy->interpreterState))) {
-		pop(2, interpreterProxy->interpreterState);
+	sqFileRenameOldSizeNewSize(oldNameIndex, oldNameSize, newNameIndex, newNameSize, self);
+	if (!(failed(self))) {
+		pop(2, self);
 	}
 	return 0;
 }
 
 	/* FilePlugin>>#primitiveFileSetPosition */
 EXPORT(sqInt)
-primitiveFileSetPosition(void)
+primitiveFileSetPosition(struct foo * self)
 {
     SQFile *file;
     squeakFileOffsetType newPosition;
     sqInt objectPointer;
 
-	if ((byteSizeOf(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState)) > (sizeof(squeakFileOffsetType))) {
-		return primitiveFail(interpreterProxy->interpreterState);
+	if ((byteSizeOf(stackValue(0, self), self)) > (sizeof(squeakFileOffsetType))) {
+		return primitiveFail(self);
 	}
-	newPosition = positive64BitValueOf(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	newPosition = positive64BitValueOf(stackValue(0, self), self);
 	/* begin fileValueOf: */
-	objectPointer = stackValue(1, interpreterProxy->interpreterState);
-	if (!((isBytes(objectPointer, interpreterProxy->interpreterState))
-		 && ((byteSizeOf(objectPointer, interpreterProxy->interpreterState)) == (sizeof(SQFile))))) {
-		primitiveFail(interpreterProxy->interpreterState);
+	objectPointer = stackValue(1, self);
+	if (!((isBytes(objectPointer, self))
+		 && ((byteSizeOf(objectPointer, self)) == (sizeof(SQFile))))) {
+		primitiveFail(self);
 		file = null;
 		goto l1;
 	}
-	file = firstIndexableField(objectPointer, interpreterProxy->interpreterState);
+	file = firstIndexableField(objectPointer, self);
 	l1:	/* end fileValueOf: */;
-	if (!(failed(interpreterProxy->interpreterState))) {
-		sqFileSetPosition(file, newPosition);
+	if (!(failed(self))) {
+		sqFileSetPosition(file, newPosition, self);
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		pop(2, interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		pop(2, self);
 	}
 	return 0;
 }
 
 	/* FilePlugin>>#primitiveFileSize */
 EXPORT(sqInt)
-primitiveFileSize(void)
+primitiveFileSize(struct foo * self)
 {
     SQFile *file;
     sqInt objectPointer;
     squeakFileOffsetType size;
 
 	/* begin fileValueOf: */
-	objectPointer = stackValue(0, interpreterProxy->interpreterState);
-	if (!((isBytes(objectPointer, interpreterProxy->interpreterState))
-		 && ((byteSizeOf(objectPointer, interpreterProxy->interpreterState)) == (sizeof(SQFile))))) {
-		primitiveFail(interpreterProxy->interpreterState);
+	objectPointer = stackValue(0, self);
+	if (!((isBytes(objectPointer, self))
+		 && ((byteSizeOf(objectPointer, self)) == (sizeof(SQFile))))) {
+		primitiveFail(self);
 		file = null;
 		goto l1;
 	}
-	file = firstIndexableField(objectPointer, interpreterProxy->interpreterState);
+	file = firstIndexableField(objectPointer, self);
 	l1:	/* end fileValueOf: */;
-	if (!(failed(interpreterProxy->interpreterState))) {
-		size = sqFileSize(file);
+	if (!(failed(self))) {
+		size = sqFileSize(file, self);
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		methodReturnValue(positive64BitIntegerFor(size, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		methodReturnValue(positive64BitIntegerFor(size, self), self);
 	}
 	return 0;
 }
@@ -1540,7 +1540,7 @@ primitiveFileSize(void)
 
 	/* FilePlugin>>#primitiveFileStdioHandles */
 EXPORT(sqInt)
-primitiveFileStdioHandles(void)
+primitiveFileStdioHandles(struct foo * self)
 {
     SQFile fileRecords[3];
     sqInt index;
@@ -1549,27 +1549,27 @@ primitiveFileStdioHandles(void)
 
 	if (sHFAfn != 0) {
 		if (!( ((sqInt (*)(void))sHFAfn)())) {
-			return primitiveFailFor(PrimErrUnsupported, interpreterProxy->interpreterState);
+			return primitiveFailFor(PrimErrUnsupported, self);
 		}
 	}
 	validMask = sqFileStdioHandlesInto(fileRecords);
 	if (validMask < 0) {
-		return primitiveFailForOSError(validMask, interpreterProxy->interpreterState);
+		return primitiveFailForOSError(validMask, self);
 	}
-	result = instantiateClassindexableSize(classArray(interpreterProxy->interpreterState), 3, interpreterProxy->interpreterState);
+	result = instantiateClassindexableSize(classArray(self), 3, self);
 	if (result == null) {
-		return primitiveFailFor(PrimErrNoMemory, interpreterProxy->interpreterState);
+		return primitiveFailFor(PrimErrNoMemory, self);
 	}
-	pushRemappableOop(result, interpreterProxy->interpreterState);
+	pushRemappableOop(result, self);
 	for (index = 0; index <= 2; index += 1) {
 		if ((validMask & (1U << index)) != 0) {
-			result = instantiateClassindexableSize(classByteArray(interpreterProxy->interpreterState), sizeof(SQFile), interpreterProxy->interpreterState);
+			result = instantiateClassindexableSize(classByteArray(self), sizeof(SQFile), self);
 			if (result == null) {
-				popRemappableOop(interpreterProxy->interpreterState);
-				return primitiveFailFor(PrimErrNoMemory, interpreterProxy->interpreterState);
+				popRemappableOop(self);
+				return primitiveFailFor(PrimErrNoMemory, self);
 			}
-			storePointerofObjectwithValue(index, topRemappableOop(interpreterProxy->interpreterState), result, interpreterProxy->interpreterState);
-			memcpy(firstIndexableField(result, interpreterProxy->interpreterState), (&(fileRecords[index])), sizeof(SQFile));
+			storePointerofObjectwithValue(index, topRemappableOop(self), result, self);
+			memcpy(firstIndexableField(result, self), (&(fileRecords[index])), sizeof(SQFile));
 		}
 	}
 	
@@ -1577,36 +1577,36 @@ primitiveFileStdioHandles(void)
 	
 #  if SPURVM
 #  else /* SPURVM */
-	fullGC(interpreterProxy->interpreterState);
+	fullGC(self);
 #  endif /* SPURVM */
 #  endif /* COGMTVM */
-	result = popRemappableOop(interpreterProxy->interpreterState);
-	methodReturnValue(result, interpreterProxy->interpreterState);
+	result = popRemappableOop(self);
+	methodReturnValue(result, self);
 	return 0;
 }
 
 	/* FilePlugin>>#primitiveFileSync */
 EXPORT(sqInt)
-primitiveFileSync(void)
+primitiveFileSync(struct foo * self)
 {
     SQFile *file;
     sqInt objectPointer;
 
 	/* begin fileValueOf: */
-	objectPointer = stackValue(0, interpreterProxy->interpreterState);
-	if (!((isBytes(objectPointer, interpreterProxy->interpreterState))
-		 && ((byteSizeOf(objectPointer, interpreterProxy->interpreterState)) == (sizeof(SQFile))))) {
-		primitiveFail(interpreterProxy->interpreterState);
+	objectPointer = stackValue(0, self);
+	if (!((isBytes(objectPointer, self))
+		 && ((byteSizeOf(objectPointer, self)) == (sizeof(SQFile))))) {
+		primitiveFail(self);
 		file = null;
 		goto l1;
 	}
-	file = firstIndexableField(objectPointer, interpreterProxy->interpreterState);
+	file = firstIndexableField(objectPointer, self);
 	l1:	/* end fileValueOf: */;
-	if (!(failed(interpreterProxy->interpreterState))) {
-		sqFileSync(file);
+	if (!(failed(self))) {
+		sqFileSync(file, self);
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		pop(1, interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		pop(1, self);
 	}
 	return 0;
 }
@@ -1618,40 +1618,40 @@ primitiveFileSync(void)
 
 	/* FilePlugin>>#primitiveFileTruncate */
 EXPORT(sqInt)
-primitiveFileTruncate(void)
+primitiveFileTruncate(struct foo * self)
 {
     SQFile *file;
     sqInt objectPointer;
     squeakFileOffsetType truncatePosition;
 
-	if (!(isIntegerObject(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState))) {
-		if ((byteSizeOf(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState)) > (sizeof(squeakFileOffsetType))) {
-			return primitiveFail(interpreterProxy->interpreterState);
+	if (!(isIntegerObject(stackValue(0, self), self))) {
+		if ((byteSizeOf(stackValue(0, self), self)) > (sizeof(squeakFileOffsetType))) {
+			return primitiveFail(self);
 		}
 	}
-	truncatePosition = positive64BitValueOf(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	truncatePosition = positive64BitValueOf(stackValue(0, self), self);
 	/* begin fileValueOf: */
-	objectPointer = stackValue(1, interpreterProxy->interpreterState);
-	if (!((isBytes(objectPointer, interpreterProxy->interpreterState))
-		 && ((byteSizeOf(objectPointer, interpreterProxy->interpreterState)) == (sizeof(SQFile))))) {
-		primitiveFail(interpreterProxy->interpreterState);
+	objectPointer = stackValue(1, self);
+	if (!((isBytes(objectPointer, self))
+		 && ((byteSizeOf(objectPointer, self)) == (sizeof(SQFile))))) {
+		primitiveFail(self);
 		file = null;
 		goto l1;
 	}
-	file = firstIndexableField(objectPointer, interpreterProxy->interpreterState);
+	file = firstIndexableField(objectPointer, self);
 	l1:	/* end fileValueOf: */;
-	if (!(failed(interpreterProxy->interpreterState))) {
-		sqFileTruncate(file, truncatePosition);
+	if (!(failed(self))) {
+		sqFileTruncate(file, truncatePosition, self);
 	}
-	if (!(failed(interpreterProxy->interpreterState))) {
-		pop(2, interpreterProxy->interpreterState);
+	if (!(failed(self))) {
+		pop(2, self);
 	}
 	return 0;
 }
 
 	/* FilePlugin>>#primitiveFileWrite */
 EXPORT(sqInt)
-primitiveFileWrite(void)
+primitiveFileWrite(struct foo * self)
 {
     sqInt array;
     sqInt bytesWritten;
@@ -1662,41 +1662,41 @@ primitiveFileWrite(void)
     size_t slotSize;
     size_t startIndex;
 
-	count = positiveMachineIntegerValueOf(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	startIndex = positiveMachineIntegerValueOf(stackValue(1, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	array = stackValue(2, interpreterProxy->interpreterState);
+	count = positiveMachineIntegerValueOf(stackValue(0, self), self);
+	startIndex = positiveMachineIntegerValueOf(stackValue(1, self), self);
+	array = stackValue(2, self);
 	/* begin fileValueOf: */
-	objectPointer = stackValue(3, interpreterProxy->interpreterState);
-	if (!((isBytes(objectPointer, interpreterProxy->interpreterState))
-		 && ((byteSizeOf(objectPointer, interpreterProxy->interpreterState)) == (sizeof(SQFile))))) {
-		primitiveFail(interpreterProxy->interpreterState);
+	objectPointer = stackValue(3, self);
+	if (!((isBytes(objectPointer, self))
+		 && ((byteSizeOf(objectPointer, self)) == (sizeof(SQFile))))) {
+		primitiveFail(self);
 		file = null;
 		goto l1;
 	}
-	file = firstIndexableField(objectPointer, interpreterProxy->interpreterState);
+	file = firstIndexableField(objectPointer, self);
 	l1:	/* end fileValueOf: */;
-	if ((failed(interpreterProxy->interpreterState))
-	 || (!(isWordsOrBytes(array, interpreterProxy->interpreterState)))) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	if ((failed(self))
+	 || (!(isWordsOrBytes(array, self)))) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	slotSize = slotSizeOf(array, interpreterProxy->interpreterState);
+	slotSize = slotSizeOf(array, self);
 	if (!((startIndex >= 1)
 		 && (((startIndex + count) - 1) <= slotSize))) {
-		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
+		return primitiveFailFor(PrimErrBadIndex, self);
 	}
 	elementSize = (slotSize == 0
 		? 1
-		: (byteSizeOf(array, interpreterProxy->interpreterState)) / slotSize);
-	bytesWritten = sqFileWriteFromAt(file, count * elementSize, ((char *) (firstIndexableField(array, interpreterProxy->interpreterState))), (startIndex - 1) * elementSize);
-	if (!(failed(interpreterProxy->interpreterState))) {
-		methodReturnValue(integerObjectOf(bytesWritten / elementSize, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+		: (byteSizeOf(array, self)) / slotSize);
+	bytesWritten = sqFileWriteFromAt(file, count * elementSize, ((char *) (firstIndexableField(array, self))), (startIndex - 1) * elementSize, self);
+	if (!(failed(self))) {
+		methodReturnValue(integerObjectOf(bytesWritten / elementSize, self), self);
 	}
 	return 0;
 }
 
 	/* FilePlugin>>#primitiveHasFileAccess */
 EXPORT(sqInt)
-primitiveHasFileAccess(void)
+primitiveHasFileAccess(struct foo * self)
 {
     sqInt hasAccess;
 
@@ -1709,7 +1709,7 @@ primitiveHasFileAccess(void)
 	else {
 		hasAccess = 1;
 	}
-	methodReturnBool(hasAccess, interpreterProxy->interpreterState);
+	methodReturnBool(hasAccess, self);
 	return 0;
 }
 
@@ -1799,16 +1799,16 @@ setInterpreter(struct VirtualMachine *anInterpreter)
 
 	/* FilePlugin>>#setMacFile:Type:AndCreator: */
 EXPORT(sqInt)
-setMacFileTypeAndCreator(char *fileName, char *typeString, char *creatorString)
+setMacFileTypeAndCreator(char *fileName, char *typeString, char *creatorString, struct foo * self)
 {
 	return dir_SetMacFileTypeAndCreator(fileName, strlen(fileName), typeString, creatorString);
 }
 
 	/* FilePlugin>>#shutdownModule */
 EXPORT(sqInt)
-shutdownModule(void)
+shutdownModule(struct foo * self)
 {
-	return sqFileShutdown();
+	return sqFileShutdown(self);
 }
 
 

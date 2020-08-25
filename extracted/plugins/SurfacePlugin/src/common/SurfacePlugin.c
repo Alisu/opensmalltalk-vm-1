@@ -55,33 +55,34 @@ static const char *moduleName = "SurfacePlugin "__DATE__" (e)";
 #endif
 
 static VirtualMachine *interpreterProxy;
-#define FAIL { interpreterProxy->primitiveFail(interpreterProxy->interpreterState); return 0; }
+#define FAIL { interpreterProxy->primitiveFail(self); return 0; }
 
 #pragma export on
 /* module initialization/shutdown */
 EXPORT(long) setInterpreter(struct VirtualMachine *interpreterProxy);
 EXPORT(const char*) getModuleName(void);
-EXPORT(long) initialiseModule(void);
-EXPORT(long) shutdownModule(void);
+EXPORT(long) initialiseModule(struct foo * self);
+EXPORT(long) shutdownModule(struct foo * self);
 
 /* critical FXBlt entry points */
-EXPORT(int) ioGetSurfaceFormat (int surfaceID, int* width, int* height, int* depth, int* isMSB);
-EXPORT(sqIntptr_t) ioLockSurface (int surfaceID, int *pitch, int x, int y, int w, int h);
-EXPORT(int) ioUnlockSurface(int surfaceID, int x, int y, int w, int h);
+EXPORT(int) ioGetSurfaceFormat (int surfaceID, int* width, int* height, int* depth, int* isMSB, struct foo * self);
+EXPORT(sqIntptr_t) ioLockSurface (int surfaceID, int *pitch, int x, int y, int w, int h, struct foo * self);
+EXPORT(int) ioUnlockSurface(int surfaceID, int x, int y, int w, int h, struct foo * self);
 
 /* interpreter entry point */
-EXPORT(int) ioShowSurface(int surfaceID, int x, int y, int w, int h);
+EXPORT(int) ioShowSurface(int surfaceID, int x, int y, int w, int h, struct foo * self);
 
 /* client entry points */
 EXPORT(int) ioRegisterSurface(sqIntptr_t surfaceHandle, sqSurfaceDispatch *fn, int *surfaceID);
-EXPORT(int) ioUnregisterSurface(int surfaceID);
+EXPORT(int) ioUnregisterSurface(int surfaceID, struct foo * self);
 EXPORT(int) ioFindSurface(int surfaceID, sqSurfaceDispatch *fn, sqIntptr_t *surfaceHandle);
 #pragma export off
 
 /* ioGetSurfaceFormat:
 	Return information describing the given surface.
 	Return true if successful, false otherwise. */
-EXPORT(int) ioGetSurfaceFormat (int surfaceID, int* width, int* height, int* depth, int* isMSB)
+EXPORT(int) 
+ioGetSurfaceFormat (int surfaceID, int* width, int* height, int* depth, int* isMSB, struct foo * self)
 {
 	SqueakSurface *surface;
 	if(surfaceID < 0 || surfaceID >= maxSurfaces) FAIL;
@@ -97,7 +98,7 @@ EXPORT(int) ioGetSurfaceFormat (int surfaceID, int* width, int* height, int* dep
 	Lock the bits of the surface. 
 	Return a pointer to the actual surface bits,
 	or NULL on failure. */
-EXPORT(sqIntptr_t) ioLockSurface (int surfaceID, int *pitch, int x, int y, int w, int h)
+EXPORT(sqIntptr_t) ioLockSurface (int surfaceID, int *pitch, int x, int y, int w, int h, struct foo * self)
 {
 	SqueakSurface *surface;
 	if(surfaceID < 0 || surfaceID >= maxSurfaces) FAIL;
@@ -110,7 +111,8 @@ EXPORT(sqIntptr_t) ioLockSurface (int surfaceID, int *pitch, int x, int y, int w
 /* ioUnlockSurface:
 	Unlock the bits of the surface. 
 	The return value is ignored. */
-EXPORT(int) ioUnlockSurface(int surfaceID, int x, int y, int w, int h)
+EXPORT(int) 
+ioUnlockSurface(int surfaceID, int x, int y, int w, int h, struct foo * self)
 {
 	SqueakSurface *surface;
 	if(surfaceID < 0 || surfaceID >= maxSurfaces) FAIL;
@@ -124,7 +126,8 @@ EXPORT(int) ioUnlockSurface(int surfaceID, int x, int y, int w, int h)
 
 /* ioShowSurface:
 	Transfer the bits of a surface to the screen. */
-EXPORT(int) ioShowSurface(int surfaceID, int x, int y, int w, int h)
+EXPORT(int) 
+ioShowSurface(int surfaceID, int x, int y, int w, int h, struct foo * self)
 {
 	SqueakSurface *surface;
 	if(surfaceID < 0 || surfaceID >= maxSurfaces) FAIL;
@@ -171,7 +174,8 @@ EXPORT(int) ioRegisterSurface(sqIntptr_t surfaceHandle, sqSurfaceDispatch *fn, i
 /* ioUnregisterSurface:
 	Unregister the surface with the given ID.
 	Returns true if successful, false otherwise. */
-EXPORT(int) ioUnregisterSurface(int surfaceID)
+EXPORT(int) 
+ioUnregisterSurface(int surfaceID, struct foo * self)
 {
 	SqueakSurface *surface;
 	if(surfaceID < 0 || surfaceID >= maxSurfaces) return 0;
@@ -214,14 +218,16 @@ EXPORT(const char*) getModuleName(void) {
 	return moduleName;
 }
 
-EXPORT(long) initialiseModule() {
+EXPORT(long) 
+initialiseModule(struct foo * self) {
 	surfaceArray = NULL;
 	numSurfaces = 0;
 	maxSurfaces = 0;
 	return 1;
 }
 
-EXPORT(long) shutdownModule() {
+EXPORT(long) 
+shutdownModule(struct foo * self) {
 	/* This module can only be shut down if no surfaces are registered */
 	if(numSurfaces != 0) return 0;
 	free(surfaceArray);

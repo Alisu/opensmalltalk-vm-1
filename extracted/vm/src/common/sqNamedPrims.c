@@ -38,17 +38,20 @@ typedef struct ModuleEntry {
 } ModuleEntry;
 
 struct foo;
-static ModuleEntry *squeakModule = NULL;
-static ModuleEntry *firstModule = NULL;
 extern VirtualMachine *sqGetInterpreterProxy(struct foo * self);
 extern VirtualMachine * getInterpreterProxy(struct foo * self);
 
+extern ModuleEntry * getSqueakModule(struct foo * self);
+extern ModuleEntry * getFirstModule(struct foo * self);
+extern void setFirstModule(ModuleEntry * firstModule, struct foo * self);
+extern void setSqueakModule(ModuleEntry * squeakModule, struct foo * self);
+
 static void *
-findLoadedModule(char *pluginName)
+findLoadedModule(char *pluginName, struct foo * self)
 {
 	ModuleEntry *module;
-	if(!pluginName || !pluginName[0]) return squeakModule;
-	module = firstModule;
+	if(!pluginName || !pluginName[0]) return getSqueakModule(self);
+	module = getFirstModule(self);
 	while(module) {
 		if(strcmp(module->name, pluginName) == 0) return module;
 		module = module->next;
@@ -57,7 +60,7 @@ findLoadedModule(char *pluginName)
 }
 
 static ModuleEntry *
-addToModuleList(char *pluginName, void* handle, sqInt ffiFlag)
+addToModuleList(char *pluginName, void* handle, sqInt ffiFlag, struct foo * self)
 {
 	ModuleEntry *module;
 
@@ -65,9 +68,9 @@ addToModuleList(char *pluginName, void* handle, sqInt ffiFlag)
 	strcpy(module->name, pluginName);
 	module->handle = handle;
 	module->ffiLoaded = ffiFlag;
-	module->next = firstModule;
-	firstModule = module;
-	return firstModule;
+	module->next = getFirstModule(self);
+	setFirstModule(module, self);
+	return getFirstModule(self);
 }
 
 /*
@@ -76,15 +79,15 @@ addToModuleList(char *pluginName, void* handle, sqInt ffiFlag)
 	Do NOT free it yet.
 */
 static sqInt
-removeFromList(ModuleEntry *entry)
+removeFromList(ModuleEntry *entry, struct foo * self)
 {
 	ModuleEntry *prevModule;
 
 	/* Unlink the entry from the module chain */
-	if(entry == firstModule) {
-		firstModule = entry->next;
+	if(entry == getFirstModule(self)) {
+		setFirstModule(entry->next, self);
 	} else {
-		prevModule = firstModule;
+		prevModule = getFirstModule(self);
 		while(prevModule->next != entry)
 			prevModule = prevModule->next;
 		prevModule->next = entry->next;
@@ -184,7 +187,7 @@ static void *
 findFunctionAndAccessorDepthIn(char *functionName, ModuleEntry *module,
 								sqInt fnameLength, sqInt *accessorDepthPtr, struct foo * self)
 {
-	return module->handle == squeakModule->handle
+	return module->handle == getSqueakModule(self)->handle
 		? findInternalFunctionIn(functionName, module->name,
 								fnameLength, accessorDepthPtr, self)
 		: findExternalFunctionIn(functionName, module,
@@ -195,7 +198,7 @@ findFunctionAndAccessorDepthIn(char *functionName, ModuleEntry *module,
 static void *
 findFunctionIn(char *functionName, ModuleEntry *module, struct foo * self)
 {
-	return module->handle == squeakModule->handle
+	return module->handle == getSqueakModule(self)->handle
 		? findInternalFunctionIn(functionName, module->name NADA, self)
 		: findExternalFunctionIn(functionName, module NADA, self);
 }
@@ -294,24 +297,24 @@ findAndLoadModule(char *pluginName, sqInt ffiLoad, struct foo * self)
 	if(ffiLoad) {
 		/* When dealing with the FFI, don't attempt to mess around internally */
 		if(!handle) return NULL;
-		return addToModuleList(pluginName, handle, ffiLoad);
+		return addToModuleList(pluginName, handle, ffiLoad, self);
 	}
 	/* NOT ffiLoad */
 	if(!handle) {
 		/* might be internal, so go looking for setInterpreter() */
 		if(findInternalFunctionIn("setInterpreter", pluginName NADA, self))
-			handle = squeakModule->handle;
+			handle = getSqueakModule(self)->handle;
 		else
 			return NULL; /* PluginName_setInterpreter() not found */
 	}
-	module = addToModuleList(pluginName, handle, ffiLoad);
+	module = addToModuleList(pluginName, handle, ffiLoad, self);
 	if(!callInitializersIn(module, self)) {
 		/* Initializers failed */
-		if(handle != squeakModule->handle) {
+		if(handle != getSqueakModule(self)->handle) {
 			/* physically unload module */
 			ioFreeModule(handle);
 		}
-		removeFromList(module); /* remove list entry */
+		removeFromList(module, self); /* remove list entry */
 		free(module); /* give back space */
 		module = NULL;
 	}
@@ -327,14 +330,14 @@ findOrLoadModule(char *pluginName, sqInt ffiLoad, struct foo * self)
 {
 	ModuleEntry *module;
 
-	if(!squeakModule) {
+	if(!getSqueakModule(self)) {
 		/* Load intrinsics (if possible) */
-		squeakModule = addToModuleList("", NULL, 1);
-		firstModule = NULL; /* drop off module list - will never be unloaded */
+		setSqueakModule(addToModuleList("", NULL, 1, self), self);
+		setFirstModule(NULL, self); /* drop off module list - will never be unloaded */
 	}
 
 	/* see if the module was already loaded */
-	module = findLoadedModule(pluginName);
+	module = findLoadedModule(pluginName, self);
 	if(!module) {
 		/* if not try loading it */
 		module = findAndLoadModule(pluginName, ffiLoad, self);
@@ -511,7 +514,7 @@ sqInt
 ioShutdownAllModules(struct foo * self)
 {
 	ModuleEntry *entry;
-	entry = firstModule;
+	entry = getFirstModule(self);
 	while(entry) {
 		shutdownModule(entry, self);
 		entry = entry->next;
@@ -527,10 +530,10 @@ ioUnloadModule(char *moduleName, struct foo * self)
 {
 	ModuleEntry *entry, *temp;
 
-	if(!squeakModule) return 0; /* Nothing has been loaded */
+	if(!getSqueakModule(self)) return 0; /* Nothing has been loaded */
 	if(!moduleName || !moduleName[0]) return 0; /* nope */
 
-	entry = findLoadedModule(moduleName);
+	entry = findLoadedModule(moduleName, self);
 	if(!entry) return 1; /* module was never loaded */
 
 	/* Try to shutdown the module */
@@ -539,7 +542,7 @@ ioUnloadModule(char *moduleName, struct foo * self)
 		return 0;
 	}
 	/* Notify all interested parties about the fact */
-	temp = firstModule;
+	temp = getFirstModule(self);
 	while(temp) {
 		if(temp != entry) {
 			/* Lookup moduleUnloaded: from the plugin */
@@ -552,9 +555,9 @@ ioUnloadModule(char *moduleName, struct foo * self)
 		temp = temp->next;
 	}
 	/* And actually unload it if it isn't just the VM... */
-	if(entry->handle != squeakModule->handle)
+	if(entry->handle != getSqueakModule(self)->handle)
 		ioFreeModule(entry->handle);
-	removeFromList(entry);
+	removeFromList(entry, self);
 	free(entry); /* give back space */
 	return 1;
 }
@@ -620,7 +623,7 @@ ioListLoadedModule(sqInt moduleIndex, struct foo * self)
 	sqInt index = 1;
 
 	ModuleEntry *entry;
-	entry = firstModule;
+	entry = getFirstModule(self);
 
 	if ( moduleIndex < 1) return (char*)NULL;
 	while(entry && index < moduleIndex) {

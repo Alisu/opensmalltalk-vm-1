@@ -42,15 +42,15 @@ static char __buildInfo[] = "MiscPrimitivePlugin VMMaker.oscog-eem.2480 uuid: bb
 
 /*** Function Prototypes ***/
 EXPORT(const char*) getModuleName(void);
-EXPORT(sqInt) primitiveCompareString(void);
-EXPORT(sqInt) primitiveCompressToByteArray(void);
-EXPORT(sqInt) primitiveConvert8BitSigned(void);
-EXPORT(sqInt) primitiveDecompressFromByteArray(void);
-EXPORT(sqInt) primitiveFindFirstInString(void);
-EXPORT(sqInt) primitiveFindSubstring(void);
-EXPORT(sqInt) primitiveIndexOfAsciiInString(void);
-EXPORT(sqInt) primitiveStringHash(void);
-EXPORT(sqInt) primitiveTranslateStringWithTable(void);
+EXPORT(sqInt) primitiveCompareString(struct foo * self);
+EXPORT(sqInt) primitiveCompressToByteArray(struct foo * self);
+EXPORT(sqInt) primitiveConvert8BitSigned(struct foo * self);
+EXPORT(sqInt) primitiveDecompressFromByteArray(struct foo * self);
+EXPORT(sqInt) primitiveFindFirstInString(struct foo * self);
+EXPORT(sqInt) primitiveFindSubstring(struct foo * self);
+EXPORT(sqInt) primitiveIndexOfAsciiInString(struct foo * self);
+EXPORT(sqInt) primitiveStringHash(struct foo * self);
+EXPORT(sqInt) primitiveTranslateStringWithTable(struct foo * self);
 EXPORT(sqInt) setInterpreter(struct VirtualMachine *anInterpreter);
 
 
@@ -123,8 +123,7 @@ getModuleName(void)
 /*	ByteString (class) compare: string1 with: string2 collated: order */
 
 	/* MiscPrimitivePlugin>>#primitiveCompareString */
-EXPORT(sqInt)
-primitiveCompareString(void)
+EXPORT(sqInt)primitiveCompareString(struct foo * self)
 {
     unsigned char c1;
     unsigned char c2;
@@ -138,36 +137,36 @@ primitiveCompareString(void)
     unsigned char *string2;
     sqInt string2Oop;
 
-	orderOop = stackValue(0, interpreterProxy->interpreterState);
-	string2Oop = stackValue(1, interpreterProxy->interpreterState);
-	string1Oop = stackValue(2, interpreterProxy->interpreterState);
-	if (!((isBytes(orderOop, interpreterProxy->interpreterState))
-		 && ((isBytes(string2Oop, interpreterProxy->interpreterState))
-		 && (isBytes(string1Oop, interpreterProxy->interpreterState))))) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	orderOop = stackValue(0, self);
+	string2Oop = stackValue(1, self);
+	string1Oop = stackValue(2, self);
+	if (!((isBytes(orderOop, self))
+		 && ((isBytes(string2Oop, self))
+		 && (isBytes(string1Oop, self))))) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	order = firstIndexableField(orderOop, interpreterProxy->interpreterState);
-	if ((sizeOfSTArrayFromCPrimitive(order, interpreterProxy->interpreterState)) < 256) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	order = firstIndexableField(orderOop, self);
+	if ((sizeOfSTArrayFromCPrimitive(order, self)) < 256) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	string1 = firstIndexableField(string1Oop, interpreterProxy->interpreterState);
-	string2 = firstIndexableField(string2Oop, interpreterProxy->interpreterState);
-	len1 = sizeOfSTArrayFromCPrimitive(string1, interpreterProxy->interpreterState);
-	len2 = sizeOfSTArrayFromCPrimitive(string2, interpreterProxy->interpreterState);
+	string1 = firstIndexableField(string1Oop, self);
+	string2 = firstIndexableField(string2Oop, self);
+	len1 = sizeOfSTArrayFromCPrimitive(string1, self);
+	len2 = sizeOfSTArrayFromCPrimitive(string2, self);
 	for (i = 0; i < (((len1 < len2) ? len1 : len2)); i += 1) {
 		c1 = order[string1[i]];
 		c2 = order[string2[i]];
 		if (!(c1 == c2)) {
 			return methodReturnInteger((c1 < c2
 				? 1
-				: 3), interpreterProxy->interpreterState);
+				: 3), self);
 		}
 	}
 	methodReturnInteger((len1 == len2
 		? 2
 		: (len1 < len2
 				? 1
-				: 3)), interpreterProxy->interpreterState);
+				: 3)), self);
 	return 0;
 }
 
@@ -175,8 +174,7 @@ primitiveCompareString(void)
 /*	Bitmap compress: bm toByteArray: ba */
 
 	/* MiscPrimitivePlugin>>#primitiveCompressToByteArray */
-EXPORT(sqInt)
-primitiveCompressToByteArray(void)
+EXPORT(sqInt)primitiveCompressToByteArray(struct foo * self)
 {
     unsigned char *ba;
     int *bm;
@@ -197,21 +195,21 @@ primitiveCompressToByteArray(void)
     sqInt size;
     int word;
 
-	bm = arrayValueOf(stackValue(1, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	bm = arrayValueOf(stackValue(1, self), self);
+	if (failed(self)) {
 		return null;
 	}
-	if (!(isBytes(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState))) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	if (!(isBytes(stackValue(0, self), self))) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	if (isOopImmutable(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrNoModification, interpreterProxy->interpreterState);
+	if (isOopImmutable(stackValue(0, self), self)) {
+		return primitiveFailFor(PrimErrNoModification, self);
 	}
-	ba = firstIndexableField(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	size = sizeOfSTArrayFromCPrimitive(bm, interpreterProxy->interpreterState);
-	destSize = sizeOfSTArrayFromCPrimitive(ba, interpreterProxy->interpreterState);
+	ba = firstIndexableField(stackValue(0, self), self);
+	size = sizeOfSTArrayFromCPrimitive(bm, self);
+	destSize = sizeOfSTArrayFromCPrimitive(ba, self);
 	if (destSize < (((size * 4) + 7) + ((size / 0x7C0) * 3))) {
-		return primitiveFailFor(PrimErrUnsupported, interpreterProxy->interpreterState);
+		return primitiveFailFor(PrimErrUnsupported, self);
 	}
 	/* begin encodeInt:in:at: */
 	if (size <= 223) {
@@ -359,7 +357,7 @@ primitiveCompressToByteArray(void)
 			}
 		}
 	}
-	methodReturnInteger(i, interpreterProxy->interpreterState);
+	methodReturnInteger(i, self);
 	return 0;
 }
 
@@ -369,8 +367,7 @@ primitiveCompressToByteArray(void)
  */
 
 	/* MiscPrimitivePlugin>>#primitiveConvert8BitSigned */
-EXPORT(sqInt)
-primitiveConvert8BitSigned(void)
+EXPORT(sqInt)primitiveConvert8BitSigned(struct foo * self)
 {
     unsigned char *aByteArray;
     sqInt arraySize;
@@ -380,22 +377,22 @@ primitiveConvert8BitSigned(void)
     unsigned char s;
     sqInt soundBufferOop;
 
-	byteArrayOop = stackValue(1, interpreterProxy->interpreterState);
-	if (!(isBytes(byteArrayOop, interpreterProxy->interpreterState))) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	byteArrayOop = stackValue(1, self);
+	if (!(isBytes(byteArrayOop, self))) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	aByteArray = firstIndexableField(byteArrayOop, interpreterProxy->interpreterState);
-	soundBufferOop = stackValue(0, interpreterProxy->interpreterState);
-	aSoundBuffer = arrayValueOf(soundBufferOop, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	aByteArray = firstIndexableField(byteArrayOop, self);
+	soundBufferOop = stackValue(0, self);
+	aSoundBuffer = arrayValueOf(soundBufferOop, self);
+	if (failed(self)) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	if (isOopImmutable(soundBufferOop, interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrNoModification, interpreterProxy->interpreterState);
+	if (isOopImmutable(soundBufferOop, self)) {
+		return primitiveFailFor(PrimErrNoModification, self);
 	}
-	arraySize = sizeOfSTArrayFromCPrimitive(aByteArray, interpreterProxy->interpreterState);
-	if ((byteSizeOf(soundBufferOop, interpreterProxy->interpreterState)) < (2 * arraySize)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	arraySize = sizeOfSTArrayFromCPrimitive(aByteArray, self);
+	if ((byteSizeOf(soundBufferOop, self)) < (2 * arraySize)) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
 	for (i = 0; i < arraySize; i += 1) {
 		s = aByteArray[i];
@@ -403,7 +400,7 @@ primitiveConvert8BitSigned(void)
 	? ((usqInt) (s - 256) << 8)
 	: ((usqInt) s << 8)));
 	}
-	methodReturnReceiver(interpreterProxy->interpreterState);
+	methodReturnReceiver(self);
 	return 0;
 }
 
@@ -411,8 +408,7 @@ primitiveConvert8BitSigned(void)
 /*	Bitmap decompress: bm fromByteArray: ba at: index */
 
 	/* MiscPrimitivePlugin>>#primitiveDecompressFromByteArray */
-EXPORT(sqInt)
-primitiveDecompressFromByteArray(void)
+EXPORT(sqInt)primitiveDecompressFromByteArray(struct foo * self)
 {
     unsigned int anInt;
     unsigned char *ba;
@@ -428,22 +424,22 @@ primitiveDecompressFromByteArray(void)
     unsigned int n;
     sqInt pastEnd;
 
-	bm = arrayValueOf(stackValue(2, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	if (isOopImmutable(stackValue(2, interpreterProxy->interpreterState), interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrNoModification, interpreterProxy->interpreterState);
+	bm = arrayValueOf(stackValue(2, self), self);
+	if (isOopImmutable(stackValue(2, self), self)) {
+		return primitiveFailFor(PrimErrNoModification, self);
 	}
-	if (!(isBytes(stackValue(1, interpreterProxy->interpreterState), interpreterProxy->interpreterState))) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	if (!(isBytes(stackValue(1, self), self))) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	ba = firstIndexableField(stackValue(1, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	index = stackIntegerValue(0, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	ba = firstIndexableField(stackValue(1, self), self);
+	index = stackIntegerValue(0, self);
+	if (failed(self)) {
 		return null;
 	}
 	i = index - 1;
 	k = 0;
-	end = sizeOfSTArrayFromCPrimitive(ba, interpreterProxy->interpreterState);
-	pastEnd = sizeOfSTArrayFromCPrimitive(bm, interpreterProxy->interpreterState);
+	end = sizeOfSTArrayFromCPrimitive(ba, self);
+	pastEnd = sizeOfSTArrayFromCPrimitive(bm, self);
 	while (i < end) {
 		anInt = ba[i];
 		i += 1;
@@ -462,7 +458,7 @@ primitiveDecompressFromByteArray(void)
 		}
 		n = ((usqInt) anInt) >> 2;
 		if ((k + n) > pastEnd) {
-			return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
+			return primitiveFailFor(PrimErrBadIndex, self);
 		}
 
 		/* code = 0 ifTrue: [nil]. */
@@ -500,7 +496,7 @@ primitiveDecompressFromByteArray(void)
 			}
 		}
 	}
-	pop(methodArgumentCount(interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	pop(methodArgumentCount(self), self);
 	return 0;
 }
 
@@ -509,8 +505,7 @@ primitiveDecompressFromByteArray(void)
 	startingAt: start */
 
 	/* MiscPrimitivePlugin>>#primitiveFindFirstInString */
-EXPORT(sqInt)
-primitiveFindFirstInString(void)
+EXPORT(sqInt)primitiveFindFirstInString(struct foo * self)
 {
     unsigned char *aString;
     sqInt aStringOop;
@@ -519,37 +514,37 @@ primitiveFindFirstInString(void)
     sqInt inclusionMapOop;
     sqInt stringSize;
 
-	aStringOop = stackValue(2, interpreterProxy->interpreterState);
-	if (!(isBytes(aStringOop, interpreterProxy->interpreterState))) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	aStringOop = stackValue(2, self);
+	if (!(isBytes(aStringOop, self))) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	inclusionMapOop = stackValue(1, interpreterProxy->interpreterState);
-	if (!(isBytes(inclusionMapOop, interpreterProxy->interpreterState))) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	inclusionMapOop = stackValue(1, self);
+	if (!(isBytes(inclusionMapOop, self))) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	i = stackIntegerValue(0, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	i = stackIntegerValue(0, self);
+	if (failed(self)) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
 
 	/* Convert to 0-based index. */
 	i -= 1;
 	if (i < 0) {
-		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
+		return primitiveFailFor(PrimErrBadIndex, self);
 	}
-	inclusionMap = firstIndexableField(inclusionMapOop, interpreterProxy->interpreterState);
-	if ((sizeOfSTArrayFromCPrimitive(inclusionMap, interpreterProxy->interpreterState)) != 256) {
-		return methodReturnInteger(0, interpreterProxy->interpreterState);
+	inclusionMap = firstIndexableField(inclusionMapOop, self);
+	if ((sizeOfSTArrayFromCPrimitive(inclusionMap, self)) != 256) {
+		return methodReturnInteger(0, self);
 	}
-	aString = firstIndexableField(aStringOop, interpreterProxy->interpreterState);
-	stringSize = sizeOfSTArrayFromCPrimitive(aString, interpreterProxy->interpreterState);
+	aString = firstIndexableField(aStringOop, self);
+	stringSize = sizeOfSTArrayFromCPrimitive(aString, self);
 	while ((i < stringSize)
 	 && ((inclusionMap[aString[i]]) == 0)) {
 		i += 1;
 	}
 	methodReturnInteger((i >= stringSize
 		? 0
-		: i + 1), interpreterProxy->interpreterState);
+		: i + 1), self);
 	return 0;
 }
 
@@ -559,8 +554,7 @@ primitiveFindFirstInString(void)
  */
 
 	/* MiscPrimitivePlugin>>#primitiveFindSubstring */
-EXPORT(sqInt)
-primitiveFindSubstring(void)
+EXPORT(sqInt)primitiveFindSubstring(struct foo * self)
 {
     unsigned char *body;
     sqInt bodyOop;
@@ -574,54 +568,53 @@ primitiveFindSubstring(void)
     sqInt startIndex;
     sqInt startIndexLimiT;
 
-	keyOop = stackValue(3, interpreterProxy->interpreterState);
-	if (!(isBytes(keyOop, interpreterProxy->interpreterState))) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	keyOop = stackValue(3, self);
+	if (!(isBytes(keyOop, self))) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	bodyOop = stackValue(2, interpreterProxy->interpreterState);
-	if (!(isBytes(bodyOop, interpreterProxy->interpreterState))) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	bodyOop = stackValue(2, self);
+	if (!(isBytes(bodyOop, self))) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	start = stackIntegerValue(1, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	start = stackIntegerValue(1, self);
+	if (failed(self)) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	matchTableOop = stackValue(0, interpreterProxy->interpreterState);
-	if (!(isBytes(matchTableOop, interpreterProxy->interpreterState))) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	matchTableOop = stackValue(0, self);
+	if (!(isBytes(matchTableOop, self))) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	matchTable = firstIndexableField(matchTableOop, interpreterProxy->interpreterState);
-	if ((sizeOfSTArrayFromCPrimitive(matchTable, interpreterProxy->interpreterState)) < 256) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	matchTable = firstIndexableField(matchTableOop, self);
+	if ((sizeOfSTArrayFromCPrimitive(matchTable, self)) < 256) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	key = firstIndexableField(keyOop, interpreterProxy->interpreterState);
-	if (((keySize = sizeOfSTArrayFromCPrimitive(key, interpreterProxy->interpreterState))) > 0) {
+	key = firstIndexableField(keyOop, self);
+	if (((keySize = sizeOfSTArrayFromCPrimitive(key, self))) > 0) {
 
 		/* adjust for zero relative indexes */
 		keySize -= 1;
 
 		/* adjust for zero relative indexes */
 		start = (((start - 1) < 0) ? 0 : (start - 1));
-		body = firstIndexableField(bodyOop, interpreterProxy->interpreterState);
-		for (startIndex = start, startIndexLimiT = (((sizeOfSTArrayFromCPrimitive(body, interpreterProxy->interpreterState)) - 1) - keySize); startIndex <= startIndexLimiT; startIndex += 1) {
+		body = firstIndexableField(bodyOop, self);
+		for (startIndex = start, startIndexLimiT = (((sizeOfSTArrayFromCPrimitive(body, self)) - 1) - keySize); startIndex <= startIndexLimiT; startIndex += 1) {
 			index = 0;
 			while ((matchTable[body[startIndex + index]]) == (matchTable[key[index]])) {
 				if (index == keySize) {
-					return methodReturnInteger(startIndex + 1, interpreterProxy->interpreterState);
+					return methodReturnInteger(startIndex + 1, self);
 				}
 				index += 1;
 			}
 		}
 	}
-	return methodReturnInteger(0, interpreterProxy->interpreterState);
+	return methodReturnInteger(0, self);
 }
 
 
 /*	ByteString indexOfAscii: anInteger inString: aString startingAt: start */
 
 	/* MiscPrimitivePlugin>>#primitiveIndexOfAsciiInString */
-EXPORT(sqInt)
-primitiveIndexOfAsciiInString(void)
+EXPORT(sqInt)primitiveIndexOfAsciiInString(struct foo * self)
 {
     sqInt anInteger;
     unsigned char *aString;
@@ -630,37 +623,36 @@ primitiveIndexOfAsciiInString(void)
     sqInt start;
     sqInt stringSize;
 
-	anInteger = stackIntegerValue(2, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	anInteger = stackIntegerValue(2, self);
+	if (failed(self)) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	aStringOop = stackValue(1, interpreterProxy->interpreterState);
-	if (!(isBytes(aStringOop, interpreterProxy->interpreterState))) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	aStringOop = stackValue(1, self);
+	if (!(isBytes(aStringOop, self))) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	start = stackIntegerValue(0, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	start = stackIntegerValue(0, self);
+	if (failed(self)) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
 	if (!(start >= 1)) {
-		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
+		return primitiveFailFor(PrimErrBadIndex, self);
 	}
-	aString = firstIndexableField(aStringOop, interpreterProxy->interpreterState);
-	stringSize = sizeOfSTArrayFromCPrimitive(aString, interpreterProxy->interpreterState);
+	aString = firstIndexableField(aStringOop, self);
+	stringSize = sizeOfSTArrayFromCPrimitive(aString, self);
 	for (pos = (start - 1); pos < stringSize; pos += 1) {
 		if ((aString[pos]) == anInteger) {
-			return methodReturnInteger(pos + 1, interpreterProxy->interpreterState);
+			return methodReturnInteger(pos + 1, self);
 		}
 	}
-	return methodReturnInteger(0, interpreterProxy->interpreterState);
+	return methodReturnInteger(0, self);
 }
 
 
 /*	ByteArray (class) hashBytes: aByteArray startingWith: speciesHash */
 
 	/* MiscPrimitivePlugin>>#primitiveStringHash */
-EXPORT(sqInt)
-primitiveStringHash(void)
+EXPORT(sqInt)primitiveStringHash(struct foo * self)
 {
     unsigned char *aByteArray;
     sqInt byteArrayOop;
@@ -668,19 +660,19 @@ primitiveStringHash(void)
     sqInt pos;
     sqInt posLimiT;
 
-	hash = stackIntegerValue(0, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	hash = stackIntegerValue(0, self);
+	if (failed(self)) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	byteArrayOop = stackValue(1, interpreterProxy->interpreterState);
-	if (!(isBytes(byteArrayOop, interpreterProxy->interpreterState))) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	byteArrayOop = stackValue(1, self);
+	if (!(isBytes(byteArrayOop, self))) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	aByteArray = firstIndexableField(byteArrayOop, interpreterProxy->interpreterState);
-	for (pos = 0, posLimiT = ((sizeOfSTArrayFromCPrimitive(aByteArray, interpreterProxy->interpreterState)) - 1); pos <= posLimiT; pos += 1) {
+	aByteArray = firstIndexableField(byteArrayOop, self);
+	for (pos = 0, posLimiT = ((sizeOfSTArrayFromCPrimitive(aByteArray, self)) - 1); pos <= posLimiT; pos += 1) {
 		hash = (hash + (aByteArray[pos])) * 1664525;
 	}
-	methodReturnInteger(hash & 0xFFFFFFF, interpreterProxy->interpreterState);
+	methodReturnInteger(hash & 0xFFFFFFF, self);
 	return 0;
 }
 
@@ -688,8 +680,7 @@ primitiveStringHash(void)
 /*	ByteString (class) translate: aString from: start to: stop table: table */
 
 	/* MiscPrimitivePlugin>>#primitiveTranslateStringWithTable */
-EXPORT(sqInt)
-primitiveTranslateStringWithTable(void)
+EXPORT(sqInt)primitiveTranslateStringWithTable(struct foo * self)
 {
     unsigned char *aString;
     sqInt aStringOop;
@@ -699,38 +690,38 @@ primitiveTranslateStringWithTable(void)
     unsigned char *table;
     sqInt tableOop;
 
-	aStringOop = stackValue(3, interpreterProxy->interpreterState);
-	if (!(isBytes(aStringOop, interpreterProxy->interpreterState))) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	aStringOop = stackValue(3, self);
+	if (!(isBytes(aStringOop, self))) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	if (isOopImmutable(aStringOop, interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrNoModification, interpreterProxy->interpreterState);
+	if (isOopImmutable(aStringOop, self)) {
+		return primitiveFailFor(PrimErrNoModification, self);
 	}
-	start = stackIntegerValue(2, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	start = stackIntegerValue(2, self);
+	if (failed(self)) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	stop = stackIntegerValue(1, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	stop = stackIntegerValue(1, self);
+	if (failed(self)) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	tableOop = stackValue(0, interpreterProxy->interpreterState);
-	if (!(isBytes(tableOop, interpreterProxy->interpreterState))) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	tableOop = stackValue(0, self);
+	if (!(isBytes(tableOop, self))) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	aString = firstIndexableField(aStringOop, interpreterProxy->interpreterState);
+	aString = firstIndexableField(aStringOop, self);
 	if (!((start >= 1)
-		 && (stop <= (sizeOfSTArrayFromCPrimitive(aString, interpreterProxy->interpreterState))))) {
-		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
+		 && (stop <= (sizeOfSTArrayFromCPrimitive(aString, self))))) {
+		return primitiveFailFor(PrimErrBadIndex, self);
 	}
-	table = firstIndexableField(tableOop, interpreterProxy->interpreterState);
-	if ((sizeOfSTArrayFromCPrimitive(table, interpreterProxy->interpreterState)) < 256) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	table = firstIndexableField(tableOop, self);
+	if ((sizeOfSTArrayFromCPrimitive(table, self)) < 256) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
 	for (i = (start - 1); i < stop; i += 1) {
 		aString[i] = (table[aString[i]]);
 	}
-	methodReturnReceiver(interpreterProxy->interpreterState);
+	methodReturnReceiver(self);
 	return 0;
 }
 

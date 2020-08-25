@@ -66,57 +66,57 @@ typedef struct {
 
 /*** Function Prototypes ***/
 EXPORT(const char*) getModuleName(void);
-static sqInt indexlengthinRange(sqInt byteIndex, sqInt length, sqInt rcvr);
-EXPORT(sqInt) isAlien(sqInt anOop);
-EXPORT(sqInt) primAddressField(void);
-EXPORT(sqInt) primAddressFieldPut(void);
-EXPORT(sqInt) primAlienReplace(void);
-EXPORT(sqInt) primAllocateExecutablePage(void);
-EXPORT(sqInt) primBoxedFree(void);
-EXPORT(sqInt) primCallOutDoubleReturn(void);
-EXPORT(sqInt) primCallOutFloatReturn(void);
-EXPORT(sqInt) primCallOutIntegralReturn(void);
-EXPORT(sqInt) primCalloc(void);
-EXPORT(sqInt) primDoubleAt(void);
-EXPORT(sqInt) primDoubleAtPut(void);
-EXPORT(sqInt) primDrainOSEventQueue(void);
-EXPORT(sqInt) primFloatAt(void);
-EXPORT(sqInt) primFloatAtPut(void);
-EXPORT(sqInt) primFree(void);
-EXPORT(sqInt) primInIOProcessEventsFlagAddress(void);
-EXPORT(sqInt) primInLibraryFindSymbol(void);
-EXPORT(sqInt) primLoadLibrary(void);
-EXPORT(sqInt) primMalloc(void);
-EXPORT(sqInt) primReturnAsFromContextThrough(void);
-EXPORT(sqInt) primReturnFromContextThrough(void);
-EXPORT(sqInt) primSignedByteAt(void);
-EXPORT(sqInt) primSignedByteAtPut(void);
-EXPORT(sqInt) primSignedLongAt(void);
-EXPORT(sqInt) primSignedLongAtPut(void);
-EXPORT(sqInt) primSignedLongLongAt(void);
-EXPORT(sqInt) primSignedLongLongAtPut(void);
-EXPORT(sqInt) primSignedShortAt(void);
-EXPORT(sqInt) primSignedShortAtPut(void);
-EXPORT(sqInt) primSignedWordAt(void);
-EXPORT(sqInt) primSignedWordAtPut(void);
-EXPORT(sqInt) primSizeField(void);
-EXPORT(sqInt) primSizeFieldPut(void);
-EXPORT(sqInt) primStrlenFromStartIndex(void);
-EXPORT(sqInt) primStrlenThroughPointerAtIndex(void);
-EXPORT(sqInt) primThunkEntryAddress(void);
-EXPORT(sqInt) primUnsignedByteAt(void);
-EXPORT(sqInt) primUnsignedByteAtPut(void);
-EXPORT(sqInt) primUnsignedLongAt(void);
-EXPORT(sqInt) primUnsignedLongAtPut(void);
-EXPORT(sqInt) primUnsignedLongLongAt(void);
-EXPORT(sqInt) primUnsignedLongLongAtPut(void);
-EXPORT(sqInt) primUnsignedShortAt(void);
-EXPORT(sqInt) primUnsignedShortAtPut(void);
-EXPORT(sqInt) primUnsignedWordAt(void);
-EXPORT(sqInt) primUnsignedWordAtPut(void);
-EXPORT(sqInt) primVarArgsCallOutDoubleReturn(void);
-EXPORT(sqInt) primVarArgsCallOutFloatReturn(void);
-EXPORT(sqInt) primVarArgsCallOutIntegralReturn(void);
+static sqInt indexlengthinRange(sqInt byteIndex, sqInt length, sqInt rcvr, struct foo * self);
+EXPORT(sqInt) isAlien(sqInt anOop, struct foo * self);
+EXPORT(sqInt) primAddressField(struct foo * self);
+EXPORT(sqInt) primAddressFieldPut(struct foo * self);
+EXPORT(sqInt) primAlienReplace(struct foo * self);
+EXPORT(sqInt) primAllocateExecutablePage(struct foo * self);
+EXPORT(sqInt) primBoxedFree(struct foo * self);
+EXPORT(sqInt) primCallOutDoubleReturn(struct foo * self);
+EXPORT(sqInt) primCallOutFloatReturn(struct foo * self);
+EXPORT(sqInt) primCallOutIntegralReturn(struct foo * self);
+EXPORT(sqInt) primCalloc(struct foo * self);
+EXPORT(sqInt) primDoubleAt(struct foo * self);
+EXPORT(sqInt) primDoubleAtPut(struct foo * self);
+EXPORT(sqInt) primDrainOSEventQueue(struct foo * self);
+EXPORT(sqInt) primFloatAt(struct foo * self);
+EXPORT(sqInt) primFloatAtPut(struct foo * self);
+EXPORT(sqInt) primFree(struct foo * self);
+EXPORT(sqInt) primInIOProcessEventsFlagAddress(struct foo * self);
+EXPORT(sqInt) primInLibraryFindSymbol(struct foo * self);
+EXPORT(sqInt) primLoadLibrary(struct foo * self);
+EXPORT(sqInt) primMalloc(struct foo * self);
+EXPORT(sqInt) primReturnAsFromContextThrough(struct foo * self);
+EXPORT(sqInt) primReturnFromContextThrough(struct foo * self);
+EXPORT(sqInt) primSignedByteAt(struct foo * self);
+EXPORT(sqInt) primSignedByteAtPut(struct foo * self);
+EXPORT(sqInt) primSignedLongAt(struct foo * self);
+EXPORT(sqInt) primSignedLongAtPut(struct foo * self);
+EXPORT(sqInt) primSignedLongLongAt(struct foo * self);
+EXPORT(sqInt) primSignedLongLongAtPut(struct foo * self);
+EXPORT(sqInt) primSignedShortAt(struct foo * self);
+EXPORT(sqInt) primSignedShortAtPut(struct foo * self);
+EXPORT(sqInt) primSignedWordAt(struct foo * self);
+EXPORT(sqInt) primSignedWordAtPut(struct foo * self);
+EXPORT(sqInt) primSizeField(struct foo * self);
+EXPORT(sqInt) primSizeFieldPut(struct foo * self);
+EXPORT(sqInt) primStrlenFromStartIndex(struct foo * self);
+EXPORT(sqInt) primStrlenThroughPointerAtIndex(struct foo * self);
+EXPORT(sqInt) primThunkEntryAddress(struct foo * self);
+EXPORT(sqInt) primUnsignedByteAt(struct foo * self);
+EXPORT(sqInt) primUnsignedByteAtPut(struct foo * self);
+EXPORT(sqInt) primUnsignedLongAt(struct foo * self);
+EXPORT(sqInt) primUnsignedLongAtPut(struct foo * self);
+EXPORT(sqInt) primUnsignedLongLongAt(struct foo * self);
+EXPORT(sqInt) primUnsignedLongLongAtPut(struct foo * self);
+EXPORT(sqInt) primUnsignedShortAt(struct foo * self);
+EXPORT(sqInt) primUnsignedShortAtPut(struct foo * self);
+EXPORT(sqInt) primUnsignedWordAt(struct foo * self);
+EXPORT(sqInt) primUnsignedWordAtPut(struct foo * self);
+EXPORT(sqInt) primVarArgsCallOutDoubleReturn(struct foo * self);
+EXPORT(sqInt) primVarArgsCallOutFloatReturn(struct foo * self);
+EXPORT(sqInt) primVarArgsCallOutIntegralReturn(struct foo * self);
 EXPORT(sqInt) setInterpreter(struct VirtualMachine *anInterpreter);
 static sqInt sizeField(sqInt rcvr);
 static sqInt startOfByteData(sqInt rcvr);
@@ -125,6 +125,7 @@ static sqInt startOfDatawithSize(sqInt rcvr, sqInt sizeField);
 
 
 /*** Variables ***/
+static const int  andOpIndex = 0;
 
 #if defined(SQUEAK_BUILTIN_PLUGIN)
 
@@ -303,7 +304,7 @@ getModuleName(void)
 
 	/* IA32ABIPlugin>>#index:length:inRange: */
 static sqInt
-indexlengthinRange(sqInt byteIndex, sqInt length, sqInt rcvr)
+indexlengthinRange(sqInt byteIndex, sqInt length, sqInt rcvr, struct foo * self)
 {
     sqInt dataSize;
 
@@ -315,9 +316,9 @@ indexlengthinRange(sqInt byteIndex, sqInt length, sqInt rcvr)
 
 	/* IA32ABIPlugin>>#isAlien: */
 EXPORT(sqInt)
-isAlien(sqInt anOop)
+isAlien(sqInt anOop, struct foo * self)
 {
-	return includesBehaviorThatOf(fetchClassOf(anOop, interpreterProxy->interpreterState), classAlien(interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	return includesBehaviorThatOf(fetchClassOf(anOop, self), classAlien(self), self);
 }
 
 
@@ -329,19 +330,19 @@ isAlien(sqInt anOop)
 
 	/* IA32ABIPlugin>>#primAddressField */
 EXPORT(sqInt)
-primAddressField(void)
+primAddressField(struct foo * self)
 {
     sqInt rcvr;
     sqInt value;
     sqInt valueOop;
 
-	rcvr = stackValue(0, interpreterProxy->interpreterState);
+	rcvr = stackValue(0, self);
 	value = longAt((rcvr + BaseHeaderSize) + BytesPerOop);
 	/* begin positiveMachineIntegerFor: */
 	valueOop = (BytesPerWord == 8
-		? positive64BitIntegerFor(value, interpreterProxy->interpreterState)
-		: positive32BitIntegerFor(value, interpreterProxy->interpreterState));
-	return methodReturnValue(valueOop, interpreterProxy->interpreterState);
+		? positive64BitIntegerFor(value, self)
+		: positive32BitIntegerFor(value, self));
+	return methodReturnValue(valueOop, self);
 }
 
 
@@ -353,23 +354,23 @@ primAddressField(void)
 
 	/* IA32ABIPlugin>>#primAddressFieldPut */
 EXPORT(sqInt)
-primAddressFieldPut(void)
+primAddressFieldPut(struct foo * self)
 {
     sqInt rcvr;
     sqInt value;
     sqInt valueOop;
 
-	valueOop = stackValue(0, interpreterProxy->interpreterState);
-	rcvr = stackValue(1, interpreterProxy->interpreterState);
-	value = positiveMachineIntegerValueOf(valueOop, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	valueOop = stackValue(0, self);
+	rcvr = stackValue(1, self);
+	value = positiveMachineIntegerValueOf(valueOop, self);
+	if (failed(self)) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	if (isOopImmutable(rcvr, interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrNoModification, interpreterProxy->interpreterState);
+	if (isOopImmutable(rcvr, self)) {
+		return primitiveFailFor(PrimErrNoModification, self);
 	}
 	longAtput((rcvr + BaseHeaderSize) + BytesPerOop, value);
-	return methodReturnValue(valueOop, interpreterProxy->interpreterState);
+	return methodReturnValue(valueOop, self);
 }
 
 
@@ -395,7 +396,7 @@ primAddressFieldPut(void)
 
 	/* IA32ABIPlugin>>#primAlienReplace */
 EXPORT(sqInt)
-primAlienReplace(void)
+primAlienReplace(struct foo * self)
 {
     sqInt array;
     sqInt count;
@@ -407,16 +408,16 @@ primAlienReplace(void)
     sqInt stop;
     sqInt totalLength;
 
-	array = stackValue(4, interpreterProxy->interpreterState);
-	start = stackIntegerValue(3, interpreterProxy->interpreterState);
-	stop = stackIntegerValue(2, interpreterProxy->interpreterState);
-	repl = stackValue(1, interpreterProxy->interpreterState);
-	replStart = stackIntegerValue(0, interpreterProxy->interpreterState);
-	if ((failed(interpreterProxy->interpreterState))
-	 || (!(isWordsOrBytes(array, interpreterProxy->interpreterState)))) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	array = stackValue(4, self);
+	start = stackIntegerValue(3, self);
+	stop = stackIntegerValue(2, self);
+	repl = stackValue(1, self);
+	replStart = stackIntegerValue(0, self);
+	if ((failed(self))
+	 || (!(isWordsOrBytes(array, self)))) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	if (includesBehaviorThatOf(fetchClassOf(array, interpreterProxy->interpreterState), classAlien(interpreterProxy->interpreterState), interpreterProxy->interpreterState)) {
+	if (includesBehaviorThatOf(fetchClassOf(array, self), classAlien(self), self)) {
 		totalLength = longAt(array + BaseHeaderSize);
 		dest = (((totalLength > 0
 	? (array + BaseHeaderSize) + BytesPerOop
@@ -431,22 +432,22 @@ primAlienReplace(void)
 		}
 	}
 	else {
-		totalLength = byteSizeOf(array, interpreterProxy->interpreterState);
+		totalLength = byteSizeOf(array, self);
 		dest = ((array + BaseHeaderSize) + start) - 1;
 	}
 	if (!((start >= 1)
 		 && (((start - 1) <= stop)
 		 && (stop <= totalLength)))) {
-		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
+		return primitiveFailFor(PrimErrBadIndex, self);
 	}
-	if (isKindOfInteger(repl, interpreterProxy->interpreterState)) {
-		src = ((positiveMachineIntegerValueOf(repl, interpreterProxy->interpreterState)) + replStart) - 1;
-		if (failed(interpreterProxy->interpreterState)) {
-			return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	if (isKindOfInteger(repl, self)) {
+		src = ((positiveMachineIntegerValueOf(repl, self)) + replStart) - 1;
+		if (failed(self)) {
+			return primitiveFailFor(PrimErrBadArgument, self);
 		}
 	}
 	else {
-		if (includesBehaviorThatOf(fetchClassOf(repl, interpreterProxy->interpreterState), classAlien(interpreterProxy->interpreterState), interpreterProxy->interpreterState)) {
+		if (includesBehaviorThatOf(fetchClassOf(repl, self), classAlien(self), self)) {
 			totalLength = longAt(repl + BaseHeaderSize);
 			src = (((totalLength > 0
 	? (repl + BaseHeaderSize) + BytesPerOop
@@ -461,23 +462,23 @@ primAlienReplace(void)
 			}
 		}
 		else {
-			if (!(isWordsOrBytes(repl, interpreterProxy->interpreterState))) {
-				return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+			if (!(isWordsOrBytes(repl, self))) {
+				return primitiveFailFor(PrimErrBadArgument, self);
 			}
-			totalLength = byteSizeOf(repl, interpreterProxy->interpreterState);
+			totalLength = byteSizeOf(repl, self);
 			src = ((repl + BaseHeaderSize) + replStart) - 1;
 		}
 		if (!((replStart >= 1)
 			 && (((stop - start) + replStart) <= totalLength))) {
-			return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
+			return primitiveFailFor(PrimErrBadIndex, self);
 		}
 	}
-	if (isOopImmutable(array, interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrNoModification, interpreterProxy->interpreterState);
+	if (isOopImmutable(array, self)) {
+		return primitiveFailFor(PrimErrNoModification, self);
 	}
 	count = (stop - start) + 1;
 	memmove(((void *)dest), ((void *)src), count);
-	pop(methodArgumentCount(interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	pop(methodArgumentCount(self), self);
 	return 0;
 }
 
@@ -490,7 +491,7 @@ primAlienReplace(void)
 
 	/* IA32ABIPlugin>>#primAllocateExecutablePage */
 EXPORT(sqInt)
-primAllocateExecutablePage(void)
+primAllocateExecutablePage(struct foo * self)
 {
     sqInt alien;
     sqIntptr_t byteSize;
@@ -499,16 +500,16 @@ primAllocateExecutablePage(void)
 
 	mem = allocateExecutablePage(&byteSize);
 	if (mem == 0) {
-		return primitiveFailFor(PrimErrNoCMemory, interpreterProxy->interpreterState);
+		return primitiveFailFor(PrimErrNoCMemory, self);
 	}
-	alien = instantiateClassindexableSize(classAlien(interpreterProxy->interpreterState), 2 * BytesPerOop, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrNoMemory, interpreterProxy->interpreterState);
+	alien = instantiateClassindexableSize(classAlien(self), 2 * BytesPerOop, self);
+	if (failed(self)) {
+		return primitiveFailFor(PrimErrNoMemory, self);
 	}
-	ptr = firstIndexableField(alien, interpreterProxy->interpreterState);
+	ptr = firstIndexableField(alien, self);
 	ptr[0] = (0 - byteSize);
 	ptr[1] = (((sqIntptr_t) mem));
-	methodReturnValue(alien, interpreterProxy->interpreterState);
+	methodReturnValue(alien, self);
 	return 0;
 }
 
@@ -519,26 +520,26 @@ primAllocateExecutablePage(void)
 
 	/* IA32ABIPlugin>>#primBoxedFree */
 EXPORT(sqInt)
-primBoxedFree(void)
+primBoxedFree(struct foo * self)
 {
     sqIntptr_t addr;
     sqIntptr_t *ptr;
     sqInt rcvr;
     sqIntptr_t sizeField;
 
-	rcvr = stackValue(0, interpreterProxy->interpreterState);
-	if (!((byteSizeOf(rcvr, interpreterProxy->interpreterState)) >= (2 * BytesPerOop))) {
-		return primitiveFailFor(PrimErrBadReceiver, interpreterProxy->interpreterState);
+	rcvr = stackValue(0, self);
+	if (!((byteSizeOf(rcvr, self)) >= (2 * BytesPerOop))) {
+		return primitiveFailFor(PrimErrBadReceiver, self);
 	}
-	ptr = firstIndexableField(rcvr, interpreterProxy->interpreterState);
+	ptr = firstIndexableField(rcvr, self);
 	sizeField = ptr[0];
 
 	/* Don't you dare to free Squeak's memory! */
 	addr = ptr[1];
 	if ((sizeField >= 0)
 	 || ((addr == 0)
-	 || (isInMemory(addr, interpreterProxy->interpreterState)))) {
-		return primitiveFailFor(PrimErrInappropriate, interpreterProxy->interpreterState);
+	 || (isInMemory(addr, self)))) {
+		return primitiveFailFor(PrimErrInappropriate, self);
 	}
 	free((void *)addr);
 	ptr[0] = 0;
@@ -560,13 +561,13 @@ primBoxedFree(void)
 
 	/* IA32ABIPlugin>>#primCallOutDoubleReturn */
 EXPORT(sqInt)
-primCallOutDoubleReturn(void)
+primCallOutDoubleReturn(struct foo * self)
 {
     sqInt errCode;
     sqInt mac;
     sqInt result;
 
-	mac = methodArgumentCount(interpreterProxy->interpreterState);
+	mac = methodArgumentCount(self);
 	
 #  if STACKVM
 
@@ -576,20 +577,20 @@ primCallOutDoubleReturn(void)
 	/* nargs negated to imply stack direction */
 	/* funcOffset */
 	/* resultOffset */
-	errCode = callIA32DoubleReturn(((getStackPointer(interpreterProxy->interpreterState)) + mac) - 2, 1 - mac, mac, mac - 1);
+	errCode = callIA32DoubleReturn(((getStackPointer(self)) + mac) - 2, 1 - mac, mac, mac - 1, self);
 #  else /* STACKVM */
 
 	/* ptr to 0th arg */
 	/* nargs */
 	/* funcOffset */
 	/* resultOffset */
-	errCode = callIA32DoubleReturn(((getStackPointer(interpreterProxy->interpreterState)) - mac) + 2, mac - 1, mac, mac - 1);
+	errCode = callIA32DoubleReturn(((getStackPointer(self)) - mac) + 2, mac - 1, mac, mac - 1, self);
 #  endif /* STACKVM */
 	if (errCode != 0) {
-		return primitiveFailFor(errCode, interpreterProxy->interpreterState);
+		return primitiveFailFor(errCode, self);
 	}
-	result = stackValue(mac - 1, interpreterProxy->interpreterState);
-	popthenPush(mac + 1, result, interpreterProxy->interpreterState);
+	result = stackValue(mac - 1, self);
+	popthenPush(mac + 1, result, self);
 	return 0;
 }
 
@@ -607,13 +608,13 @@ primCallOutDoubleReturn(void)
 
 	/* IA32ABIPlugin>>#primCallOutFloatReturn */
 EXPORT(sqInt)
-primCallOutFloatReturn(void)
+primCallOutFloatReturn(struct foo * self)
 {
     sqInt errCode;
     sqInt mac;
     sqInt result;
 
-	mac = methodArgumentCount(interpreterProxy->interpreterState);
+	mac = methodArgumentCount(self);
 	
 #  if STACKVM
 
@@ -623,20 +624,20 @@ primCallOutFloatReturn(void)
 	/* nargs negated to imply stack direction */
 	/* funcOffset */
 	/* resultOffset */
-	errCode = callIA32FloatReturn(((getStackPointer(interpreterProxy->interpreterState)) + mac) - 2, 1 - mac, mac, mac - 1);
+	errCode = callIA32FloatReturn(((getStackPointer(self)) + mac) - 2, 1 - mac, mac, mac - 1, self);
 #  else /* STACKVM */
 
 	/* ptr to 0th arg */
 	/* nargs */
 	/* funcOffset */
 	/* resultOffset */
-	errCode = callIA32FloatReturn(((getStackPointer(interpreterProxy->interpreterState)) - mac) + 2, mac - 1, mac, mac - 1);
+	errCode = callIA32FloatReturn(((getStackPointer(self)) - mac) + 2, mac - 1, mac, mac - 1, self);
 #  endif /* STACKVM */
 	if (errCode != 0) {
-		return primitiveFailFor(errCode, interpreterProxy->interpreterState);
+		return primitiveFailFor(errCode, self);
 	}
-	result = stackValue(mac - 1, interpreterProxy->interpreterState);
-	popthenPush(mac + 1, result, interpreterProxy->interpreterState);
+	result = stackValue(mac - 1, self);
+	popthenPush(mac + 1, result, self);
 	return 0;
 }
 
@@ -654,13 +655,13 @@ primCallOutFloatReturn(void)
 
 	/* IA32ABIPlugin>>#primCallOutIntegralReturn */
 EXPORT(sqInt)
-primCallOutIntegralReturn(void)
+primCallOutIntegralReturn(struct foo * self)
 {
     sqInt errCode;
     sqInt mac;
     sqInt result;
 
-	mac = methodArgumentCount(interpreterProxy->interpreterState);
+	mac = methodArgumentCount(self);
 	
 #  if STACKVM
 
@@ -670,20 +671,20 @@ primCallOutIntegralReturn(void)
 	/* nargs negated to imply stack direction */
 	/* funcOffset */
 	/* resultOffset */
-	errCode = callIA32IntegralReturn(((getStackPointer(interpreterProxy->interpreterState)) + mac) - 2, 1 - mac, mac, mac - 1);
+	errCode = callIA32IntegralReturn(((getStackPointer(self)) + mac) - 2, 1 - mac, mac, mac - 1, self);
 #  else /* STACKVM */
 
 	/* ptr to 0th arg */
 	/* nargs */
 	/* funcOffset */
 	/* resultOffset */
-	errCode = callIA32IntegralReturn(((getStackPointer(interpreterProxy->interpreterState)) - mac) + 2, mac - 1, mac, mac - 1);
+	errCode = callIA32IntegralReturn(((getStackPointer(self)) - mac) + 2, mac - 1, mac, mac - 1, self);
 #  endif /* STACKVM */
 	if (errCode != 0) {
-		return primitiveFailFor(errCode, interpreterProxy->interpreterState);
+		return primitiveFailFor(errCode, self);
 	}
-	result = stackValue(mac - 1, interpreterProxy->interpreterState);
-	popthenPush(mac + 1, result, interpreterProxy->interpreterState);
+	result = stackValue(mac - 1, self);
+	popthenPush(mac + 1, result, self);
 	return 0;
 }
 
@@ -694,23 +695,23 @@ primCallOutIntegralReturn(void)
 
 	/* IA32ABIPlugin>>#primCalloc */
 EXPORT(sqInt)
-primCalloc(void)
+primCalloc(struct foo * self)
 {
     usqInt addr;
     sqInt byteSize;
 
-	byteSize = stackIntegerValue(0, interpreterProxy->interpreterState);
-	if ((failed(interpreterProxy->interpreterState))
+	byteSize = stackIntegerValue(0, self);
+	if ((failed(self))
 	 || (byteSize <= 0)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
 	addr = ((usqInt)(calloc(1, byteSize)));
 	if (addr == 0) {
-		return primitiveFailFor(PrimErrNoCMemory, interpreterProxy->interpreterState);
+		return primitiveFailFor(PrimErrNoCMemory, self);
 	}
 	methodReturnValue((BytesPerWord == 8
-		? positive64BitIntegerFor(addr, interpreterProxy->interpreterState)
-		: positive32BitIntegerFor(addr, interpreterProxy->interpreterState)), interpreterProxy->interpreterState);
+		? positive64BitIntegerFor(addr, self)
+		: positive32BitIntegerFor(addr, self)), self);
 	return 0;
 }
 
@@ -723,7 +724,7 @@ primCalloc(void)
 
 	/* IA32ABIPlugin>>#primDoubleAt */
 EXPORT(sqInt)
-primDoubleAt(void)
+primDoubleAt(struct foo * self)
 {
     sqInt addr;
     sqInt byteOffset;
@@ -731,23 +732,23 @@ primDoubleAt(void)
     sqInt rcvr;
     sqInt startAddr;
 
-	byteOffset = (stackPositiveMachineIntegerValue(0, interpreterProxy->interpreterState)) - 1;
-	rcvr = stackObjectValue(1, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	byteOffset = (stackPositiveMachineIntegerValue(0, self)) - 1;
+	rcvr = stackObjectValue(1, self);
+	if (failed(self)) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	if (!(indexlengthinRange(byteOffset, 8, rcvr))) {
-		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
+	if (!(indexlengthinRange(byteOffset, 8, rcvr, self))) {
+		return primitiveFailFor(PrimErrBadIndex, self);
 	}
 	if (((startAddr = ((longAt(rcvr + BaseHeaderSize)) > 0
 		? (rcvr + BaseHeaderSize) + BytesPerOop
 		: longAt((rcvr + BaseHeaderSize) + BytesPerOop)))) == 0) {
-		return primitiveFailFor(PrimErrBadReceiver, interpreterProxy->interpreterState);
+		return primitiveFailFor(PrimErrBadReceiver, self);
 	}
 	addr = startAddr + byteOffset;
 	memcpy((&floatValue), addr, sizeof(floatValue));
-	pop(2, interpreterProxy->interpreterState);
-	return pushFloat(floatValue, interpreterProxy->interpreterState);
+	pop(2, self);
+	return pushFloat(floatValue, self);
 }
 
 
@@ -759,7 +760,7 @@ primDoubleAt(void)
 
 	/* IA32ABIPlugin>>#primDoubleAtPut */
 EXPORT(sqInt)
-primDoubleAtPut(void)
+primDoubleAtPut(struct foo * self)
 {
     sqInt addr;
     sqInt byteOffset;
@@ -768,38 +769,38 @@ primDoubleAtPut(void)
     sqInt startAddr;
     sqInt valueOop;
 
-	valueOop = stackValue(0, interpreterProxy->interpreterState);
-	if (isIntegerObject(valueOop, interpreterProxy->interpreterState)) {
-		floatValue = ((double) (integerValueOf(valueOop, interpreterProxy->interpreterState)));
+	valueOop = stackValue(0, self);
+	if (isIntegerObject(valueOop, self)) {
+		floatValue = ((double) (integerValueOf(valueOop, self)));
 	}
 	else {
-		floatValue = ((double) (floatValueOf(valueOop, interpreterProxy->interpreterState)));
+		floatValue = ((double) (floatValueOf(valueOop, self)));
 	}
-	byteOffset = (stackPositiveMachineIntegerValue(1, interpreterProxy->interpreterState)) - 1;
-	rcvr = stackObjectValue(2, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	byteOffset = (stackPositiveMachineIntegerValue(1, self)) - 1;
+	rcvr = stackObjectValue(2, self);
+	if (failed(self)) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	if (!(indexlengthinRange(byteOffset, 8, rcvr))) {
-		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
+	if (!(indexlengthinRange(byteOffset, 8, rcvr, self))) {
+		return primitiveFailFor(PrimErrBadIndex, self);
 	}
-	if (isOopImmutable(rcvr, interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrNoModification, interpreterProxy->interpreterState);
+	if (isOopImmutable(rcvr, self)) {
+		return primitiveFailFor(PrimErrNoModification, self);
 	}
 	if (((startAddr = ((longAt(rcvr + BaseHeaderSize)) > 0
 		? (rcvr + BaseHeaderSize) + BytesPerOop
 		: longAt((rcvr + BaseHeaderSize) + BytesPerOop)))) == 0) {
-		return primitiveFailFor(PrimErrBadReceiver, interpreterProxy->interpreterState);
+		return primitiveFailFor(PrimErrBadReceiver, self);
 	}
 	addr = startAddr + byteOffset;
 	memcpy(addr, (&floatValue), sizeof(floatValue));
-	methodReturnValue(valueOop, interpreterProxy->interpreterState);
+	methodReturnValue(valueOop, self);
 	return 0;
 }
 
 	/* IA32ABIPlugin>>#primDrainOSEventQueue */
 EXPORT(sqInt)
-primDrainOSEventQueue(void)
+primDrainOSEventQueue(struct foo * self)
 {
 	
 #  if NewspeakVM
@@ -815,7 +816,7 @@ primDrainOSEventQueue(void)
 
 	/* IA32ABIPlugin>>#primFloatAt */
 EXPORT(sqInt)
-primFloatAt(void)
+primFloatAt(struct foo * self)
 {
     sqInt addr;
     sqInt byteOffset;
@@ -823,23 +824,23 @@ primFloatAt(void)
     sqInt rcvr;
     sqInt startAddr;
 
-	byteOffset = (stackPositiveMachineIntegerValue(0, interpreterProxy->interpreterState)) - 1;
-	rcvr = stackObjectValue(1, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	byteOffset = (stackPositiveMachineIntegerValue(0, self)) - 1;
+	rcvr = stackObjectValue(1, self);
+	if (failed(self)) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	if (!(indexlengthinRange(byteOffset, 4, rcvr))) {
-		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
+	if (!(indexlengthinRange(byteOffset, 4, rcvr, self))) {
+		return primitiveFailFor(PrimErrBadIndex, self);
 	}
 	if (((startAddr = ((longAt(rcvr + BaseHeaderSize)) > 0
 		? (rcvr + BaseHeaderSize) + BytesPerOop
 		: longAt((rcvr + BaseHeaderSize) + BytesPerOop)))) == 0) {
-		return primitiveFailFor(PrimErrBadReceiver, interpreterProxy->interpreterState);
+		return primitiveFailFor(PrimErrBadReceiver, self);
 	}
 	addr = startAddr + byteOffset;
 	memcpy((&floatValue), addr, sizeof(floatValue));
-	pop(2, interpreterProxy->interpreterState);
-	return pushFloat(floatValue, interpreterProxy->interpreterState);
+	pop(2, self);
+	return pushFloat(floatValue, self);
 }
 
 
@@ -851,7 +852,7 @@ primFloatAt(void)
 
 	/* IA32ABIPlugin>>#primFloatAtPut */
 EXPORT(sqInt)
-primFloatAtPut(void)
+primFloatAtPut(struct foo * self)
 {
     sqInt addr;
     sqInt byteOffset;
@@ -860,32 +861,32 @@ primFloatAtPut(void)
     sqInt startAddr;
     sqInt valueOop;
 
-	valueOop = stackValue(0, interpreterProxy->interpreterState);
-	if (isIntegerObject(valueOop, interpreterProxy->interpreterState)) {
-		floatValue = ((double) (integerValueOf(valueOop, interpreterProxy->interpreterState)));
+	valueOop = stackValue(0, self);
+	if (isIntegerObject(valueOop, self)) {
+		floatValue = ((double) (integerValueOf(valueOop, self)));
 	}
 	else {
-		floatValue = ((double) (floatValueOf(valueOop, interpreterProxy->interpreterState)));
+		floatValue = ((double) (floatValueOf(valueOop, self)));
 	}
-	byteOffset = (stackPositiveMachineIntegerValue(1, interpreterProxy->interpreterState)) - 1;
-	rcvr = stackObjectValue(2, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	byteOffset = (stackPositiveMachineIntegerValue(1, self)) - 1;
+	rcvr = stackObjectValue(2, self);
+	if (failed(self)) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	if (!(indexlengthinRange(byteOffset, 4, rcvr))) {
-		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
+	if (!(indexlengthinRange(byteOffset, 4, rcvr, self))) {
+		return primitiveFailFor(PrimErrBadIndex, self);
 	}
-	if (isOopImmutable(rcvr, interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrNoModification, interpreterProxy->interpreterState);
+	if (isOopImmutable(rcvr, self)) {
+		return primitiveFailFor(PrimErrNoModification, self);
 	}
 	if (((startAddr = ((longAt(rcvr + BaseHeaderSize)) > 0
 		? (rcvr + BaseHeaderSize) + BytesPerOop
 		: longAt((rcvr + BaseHeaderSize) + BytesPerOop)))) == 0) {
-		return primitiveFailFor(PrimErrBadReceiver, interpreterProxy->interpreterState);
+		return primitiveFailFor(PrimErrBadReceiver, self);
 	}
 	addr = startAddr + byteOffset;
 	memcpy(addr, (&floatValue), sizeof(floatValue));
-	methodReturnValue(valueOop, interpreterProxy->interpreterState);
+	methodReturnValue(valueOop, self);
 	return 0;
 }
 
@@ -896,20 +897,20 @@ primFloatAtPut(void)
 
 	/* IA32ABIPlugin>>#primFree */
 EXPORT(sqInt)
-primFree(void)
+primFree(struct foo * self)
 {
     sqInt addr;
 
-	addr = stackPositiveMachineIntegerValue(0, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	addr = stackPositiveMachineIntegerValue(0, self);
+	if (failed(self)) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
 	if ((addr == 0)
-	 || (isInMemory(addr, interpreterProxy->interpreterState))) {
-		return primitiveFailFor(PrimErrInappropriate, interpreterProxy->interpreterState);
+	 || (isInMemory(addr, self))) {
+		return primitiveFailFor(PrimErrInappropriate, self);
 	}
 	free((void *)addr);
-	pop(1, interpreterProxy->interpreterState);
+	pop(1, self);
 	return 0;
 }
 
@@ -920,13 +921,13 @@ primFree(void)
 
 	/* IA32ABIPlugin>>#primInIOProcessEventsFlagAddress */
 EXPORT(sqInt)
-primInIOProcessEventsFlagAddress(void)
+primInIOProcessEventsFlagAddress(struct foo * self)
 {
     extern int inIOProcessEvents;
 
 	methodReturnValue((BytesPerWord == 8
-		? positive64BitIntegerFor(((usqInt)((&inIOProcessEvents))), interpreterProxy->interpreterState)
-		: positive32BitIntegerFor(((usqInt)((&inIOProcessEvents))), interpreterProxy->interpreterState)), interpreterProxy->interpreterState);
+		? positive64BitIntegerFor(((usqInt)((&inIOProcessEvents))), self)
+		: positive32BitIntegerFor(((usqInt)((&inIOProcessEvents))), self)), self);
 	return 0;
 }
 
@@ -942,27 +943,27 @@ primInIOProcessEventsFlagAddress(void)
 
 	/* IA32ABIPlugin>>#primInLibraryFindSymbol */
 EXPORT(sqInt)
-primInLibraryFindSymbol(void)
+primInLibraryFindSymbol(struct foo * self)
 {
     void *address;
     sqInt functionName;
     sqInt libraryProxy;
 
-	functionName = stackValue(0, interpreterProxy->interpreterState);
-	libraryProxy = stackValue(1, interpreterProxy->interpreterState);
-	if (!((includesBehaviorThatOf(fetchClassOf(libraryProxy, interpreterProxy->interpreterState), classAlien(interpreterProxy->interpreterState), interpreterProxy->interpreterState))
-		 && (((byteSizeOf(libraryProxy, interpreterProxy->interpreterState)) >= (2 * BytesPerOop))
-		 && (isBytes(functionName, interpreterProxy->interpreterState))))) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	functionName = stackValue(0, self);
+	libraryProxy = stackValue(1, self);
+	if (!((includesBehaviorThatOf(fetchClassOf(libraryProxy, self), classAlien(self), self))
+		 && (((byteSizeOf(libraryProxy, self)) >= (2 * BytesPerOop))
+		 && (isBytes(functionName, self))))) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	address = ioLoadSymbolOfLengthFromModule(((sqInt) (firstIndexableField(functionName, interpreterProxy->interpreterState))), byteSizeOf(functionName, interpreterProxy->interpreterState), longAt((libraryProxy + BaseHeaderSize) + BytesPerOop));
-	if ((failed(interpreterProxy->interpreterState))
+	address = ioLoadSymbolOfLengthFromModule(((sqInt) (firstIndexableField(functionName, self))), byteSizeOf(functionName, self), longAt((libraryProxy + BaseHeaderSize) + BytesPerOop));
+	if ((failed(self))
 	 || (address == 0)) {
-		return primitiveFailFor(PrimErrNotFound, interpreterProxy->interpreterState);
+		return primitiveFailFor(PrimErrNotFound, self);
 	}
 	methodReturnValue((BytesPerWord == 8
-		? positive64BitIntegerFor(((usqInt)address), interpreterProxy->interpreterState)
-		: positive32BitIntegerFor(((usqInt)address), interpreterProxy->interpreterState)), interpreterProxy->interpreterState);
+		? positive64BitIntegerFor(((usqInt)address), self)
+		: positive32BitIntegerFor(((usqInt)address), self)), self);
 	return 0;
 }
 
@@ -974,22 +975,22 @@ primInLibraryFindSymbol(void)
 
 	/* IA32ABIPlugin>>#primLoadLibrary */
 EXPORT(sqInt)
-primLoadLibrary(void)
+primLoadLibrary(struct foo * self)
 {
     void *libraryHandle;
     sqInt libraryName;
 
-	libraryName = stackValue(0, interpreterProxy->interpreterState);
-	if (!(isBytes(libraryName, interpreterProxy->interpreterState))) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	libraryName = stackValue(0, self);
+	if (!(isBytes(libraryName, self))) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	libraryHandle = ioLoadModuleOfLength(((sqInt) (firstIndexableField(libraryName, interpreterProxy->interpreterState))), byteSizeOf(libraryName, interpreterProxy->interpreterState));
+	libraryHandle = ioLoadModuleOfLength(((sqInt) (firstIndexableField(libraryName, self))), byteSizeOf(libraryName, self));
 	if (libraryHandle == 0) {
-		return primitiveFailFor(PrimErrNotFound, interpreterProxy->interpreterState);
+		return primitiveFailFor(PrimErrNotFound, self);
 	}
 	methodReturnValue((BytesPerWord == 8
-		? positive64BitIntegerFor(((usqInt)libraryHandle), interpreterProxy->interpreterState)
-		: positive32BitIntegerFor(((usqInt)libraryHandle), interpreterProxy->interpreterState)), interpreterProxy->interpreterState);
+		? positive64BitIntegerFor(((usqInt)libraryHandle), self)
+		: positive32BitIntegerFor(((usqInt)libraryHandle), self)), self);
 	return 0;
 }
 
@@ -1000,23 +1001,23 @@ primLoadLibrary(void)
 
 	/* IA32ABIPlugin>>#primMalloc */
 EXPORT(sqInt)
-primMalloc(void)
+primMalloc(struct foo * self)
 {
     usqInt addr;
     sqInt byteSize;
 
-	byteSize = stackIntegerValue(0, interpreterProxy->interpreterState);
-	if ((failed(interpreterProxy->interpreterState))
+	byteSize = stackIntegerValue(0, self);
+	if ((failed(self))
 	 || (byteSize <= 0)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
 	addr = ((usqInt)(malloc(byteSize)));
 	if (addr == 0) {
-		return primitiveFailFor(PrimErrNoCMemory, interpreterProxy->interpreterState);
+		return primitiveFailFor(PrimErrNoCMemory, self);
 	}
 	methodReturnValue((BytesPerWord == 8
-		? positive64BitIntegerFor(addr, interpreterProxy->interpreterState)
-		: positive32BitIntegerFor(addr, interpreterProxy->interpreterState)), interpreterProxy->interpreterState);
+		? positive64BitIntegerFor(addr, self)
+		: positive32BitIntegerFor(addr, self)), self);
 	return 0;
 }
 
@@ -1037,36 +1038,36 @@ primMalloc(void)
 
 	/* IA32ABIPlugin>>#primReturnAsFromContextThrough */
 EXPORT(sqInt)
-primReturnAsFromContextThrough(void)
+primReturnAsFromContextThrough(struct foo * self)
 {
     int isMostRecent;
     VMCallbackContext *vmCallbackContext;
 
-	if ((methodArgumentCount(interpreterProxy->interpreterState)) == 3) {
-		assert(isNonImmediate(stackValue(3, interpreterProxy->interpreterState), interpreterProxy->interpreterState));
-		assert((fetchClassOf(stackValue(2, interpreterProxy->interpreterState), interpreterProxy->interpreterState)) == (classSemaphore(interpreterProxy->interpreterState)));
-		assert(isIntegerObject(stackValue(1, interpreterProxy->interpreterState), interpreterProxy->interpreterState));
-		assert(isNonImmediate(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState));
-		vmCallbackContext = ((VMCallbackContext *) (startOfData(stackValue(3, interpreterProxy->interpreterState))));
-		isMostRecent = vmCallbackContext == (getMostRecentCallbackContext());
+	if ((methodArgumentCount(self)) == 3) {
+		assert(isNonImmediate(stackValue(3, self), self));
+		assert((fetchClassOf(stackValue(2, self), self)) == (classSemaphore(self)));
+		assert(isIntegerObject(stackValue(1, self), self));
+		assert(isNonImmediate(stackValue(0, self), self));
+		vmCallbackContext = ((VMCallbackContext *) (startOfData(stackValue(3, self))));
+		isMostRecent = vmCallbackContext == (getMostRecentCallbackContext(self));
 		if (!isMostRecent) {
-			return methodReturnValue(falseObject(interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+			return methodReturnValue(falseObject(self), self);
 		}
-		if (!((fetchClassOf(stackValue(2, interpreterProxy->interpreterState), interpreterProxy->interpreterState)) == (classSemaphore(interpreterProxy->interpreterState)))) {
-			return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+		if (!((fetchClassOf(stackValue(2, self), self)) == (classSemaphore(self)))) {
+			return primitiveFailFor(PrimErrBadArgument, self);
 		}
-		while (!(signalNoResume(stackValue(2, interpreterProxy->interpreterState), interpreterProxy->interpreterState))) {
+		while (!(signalNoResume(stackValue(2, self), self))) {
 		}
 	}
 	else {
-		assert((methodArgumentCount(interpreterProxy->interpreterState)) == 2);
-		assert(isNonImmediate(stackValue(2, interpreterProxy->interpreterState), interpreterProxy->interpreterState));
-		assert(isIntegerObject(stackValue(1, interpreterProxy->interpreterState), interpreterProxy->interpreterState));
-		assert(isNonImmediate(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState));
-		vmCallbackContext = ((VMCallbackContext *) (startOfData(stackValue(2, interpreterProxy->interpreterState))));
+		assert((methodArgumentCount(self)) == 2);
+		assert(isNonImmediate(stackValue(2, self), self));
+		assert(isIntegerObject(stackValue(1, self), self));
+		assert(isNonImmediate(stackValue(0, self), self));
+		vmCallbackContext = ((VMCallbackContext *) (startOfData(stackValue(2, self))));
 	}
-	if (!(returnAsThroughCallbackContext(stackValue(1, interpreterProxy->interpreterState), vmCallbackContext, stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState))) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	if (!(returnAsThroughCallbackContext(stackValue(1, self), vmCallbackContext, stackValue(0, self), self))) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
 	return 0;
 }
@@ -1086,34 +1087,34 @@ primReturnAsFromContextThrough(void)
 
 	/* IA32ABIPlugin>>#primReturnFromContextThrough */
 EXPORT(sqInt)
-primReturnFromContextThrough(void)
+primReturnFromContextThrough(struct foo * self)
 {
     int isMostRecent;
     sqInt mac;
     VMCallbackContext *vmCallbackContext;
     VMCallbackReturnValue *vmCallbackReturnValue;
 
-	vmCallbackContext = ((VMCallbackContext *) (positiveMachineIntegerValueOf(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState)));
-	if ((failed(interpreterProxy->interpreterState))
+	vmCallbackContext = ((VMCallbackContext *) (positiveMachineIntegerValueOf(stackValue(0, self), self)));
+	if ((failed(self))
 	 || (vmCallbackContext == 0)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	if (((mac = methodArgumentCount(interpreterProxy->interpreterState))) == 3) {
-		isMostRecent = vmCallbackContext == (getMostRecentCallbackContext());
+	if (((mac = methodArgumentCount(self))) == 3) {
+		isMostRecent = vmCallbackContext == (getMostRecentCallbackContext(self));
 		if (!isMostRecent) {
-			methodReturnValue(trueObject(interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+			methodReturnValue(trueObject(self), self);
 			return null;
 		}
-		if (!((fetchClassOf(stackValue(2, interpreterProxy->interpreterState), interpreterProxy->interpreterState)) == (classSemaphore(interpreterProxy->interpreterState)))) {
-			return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+		if (!((fetchClassOf(stackValue(2, self), self)) == (classSemaphore(self)))) {
+			return primitiveFailFor(PrimErrBadArgument, self);
 		}
-		while (!(signalNoResume(stackValue(2, interpreterProxy->interpreterState), interpreterProxy->interpreterState))) {
+		while (!(signalNoResume(stackValue(2, self), self))) {
 		}
 	}
-	vmCallbackReturnValue = ((VMCallbackReturnValue *) (startOfData(stackValue(mac, interpreterProxy->interpreterState))));
+	vmCallbackReturnValue = ((VMCallbackReturnValue *) (startOfData(stackValue(mac, self))));
 	memcpy((&((vmCallbackContext->rvs))), (&((vmCallbackReturnValue->crvrvs))), sizeof((vmCallbackContext->rvs)));
-	if (!(returnAsThroughCallbackContext(integerObjectOf(((vmCallbackReturnValue->type)) + 1, interpreterProxy->interpreterState), vmCallbackContext, stackValue(1, interpreterProxy->interpreterState), interpreterProxy->interpreterState))) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	if (!(returnAsThroughCallbackContext(integerObjectOf(((vmCallbackReturnValue->type)) + 1, self), vmCallbackContext, stackValue(1, self), self))) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
 	return 0;
 }
@@ -1127,7 +1128,7 @@ primReturnFromContextThrough(void)
 
 	/* IA32ABIPlugin>>#primSignedByteAt */
 EXPORT(sqInt)
-primSignedByteAt(void)
+primSignedByteAt(struct foo * self)
 {
     sqInt addr;
     sqInt byteOffset;
@@ -1136,23 +1137,23 @@ primSignedByteAt(void)
     signed char value;
     sqInt valueOop;
 
-	byteOffset = (stackPositiveMachineIntegerValue(0, interpreterProxy->interpreterState)) - 1;
-	rcvr = stackObjectValue(1, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	byteOffset = (stackPositiveMachineIntegerValue(0, self)) - 1;
+	rcvr = stackObjectValue(1, self);
+	if (failed(self)) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	if (!(indexlengthinRange(byteOffset, 1, rcvr))) {
-		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
+	if (!(indexlengthinRange(byteOffset, 1, rcvr, self))) {
+		return primitiveFailFor(PrimErrBadIndex, self);
 	}
 	if (((startAddr = ((longAt(rcvr + BaseHeaderSize)) > 0
 		? (rcvr + BaseHeaderSize) + BytesPerOop
 		: longAt((rcvr + BaseHeaderSize) + BytesPerOop)))) == 0) {
-		return primitiveFailFor(PrimErrBadReceiver, interpreterProxy->interpreterState);
+		return primitiveFailFor(PrimErrBadReceiver, self);
 	}
 	addr = startAddr + byteOffset;
 	value = byteAt(addr);
-	valueOop = signed32BitIntegerFor(value, interpreterProxy->interpreterState);
-	return methodReturnValue(valueOop, interpreterProxy->interpreterState);
+	valueOop = signed32BitIntegerFor(value, self);
+	return methodReturnValue(valueOop, self);
 }
 
 
@@ -1164,7 +1165,7 @@ primSignedByteAt(void)
 
 	/* IA32ABIPlugin>>#primSignedByteAtPut */
 EXPORT(sqInt)
-primSignedByteAtPut(void)
+primSignedByteAtPut(struct foo * self)
 {
     sqInt addr;
     sqInt byteOffset;
@@ -1173,29 +1174,29 @@ primSignedByteAtPut(void)
     sqInt value;
     sqInt valueOop;
 
-	valueOop = stackValue(0, interpreterProxy->interpreterState);
-	byteOffset = (stackPositiveMachineIntegerValue(1, interpreterProxy->interpreterState)) - 1;
-	rcvr = stackObjectValue(2, interpreterProxy->interpreterState);
-	value = signed32BitValueOf(valueOop, interpreterProxy->interpreterState);
-	if ((failed(interpreterProxy->interpreterState))
+	valueOop = stackValue(0, self);
+	byteOffset = (stackPositiveMachineIntegerValue(1, self)) - 1;
+	rcvr = stackObjectValue(2, self);
+	value = signed32BitValueOf(valueOop, self);
+	if ((failed(self))
 	 || ((value < -128)
 	 || (value > 0x7F))) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	if (!(indexlengthinRange(byteOffset, 1, rcvr))) {
-		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
+	if (!(indexlengthinRange(byteOffset, 1, rcvr, self))) {
+		return primitiveFailFor(PrimErrBadIndex, self);
 	}
-	if (isOopImmutable(rcvr, interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrNoModification, interpreterProxy->interpreterState);
+	if (isOopImmutable(rcvr, self)) {
+		return primitiveFailFor(PrimErrNoModification, self);
 	}
 	if (((startAddr = ((longAt(rcvr + BaseHeaderSize)) > 0
 		? (rcvr + BaseHeaderSize) + BytesPerOop
 		: longAt((rcvr + BaseHeaderSize) + BytesPerOop)))) == 0) {
-		return primitiveFailFor(PrimErrBadReceiver, interpreterProxy->interpreterState);
+		return primitiveFailFor(PrimErrBadReceiver, self);
 	}
 	addr = startAddr + byteOffset;
 	byteAtput(addr, value);
-	return methodReturnValue(valueOop, interpreterProxy->interpreterState);
+	return methodReturnValue(valueOop, self);
 }
 
 
@@ -1207,7 +1208,7 @@ primSignedByteAtPut(void)
 
 	/* IA32ABIPlugin>>#primSignedLongAt */
 EXPORT(sqInt)
-primSignedLongAt(void)
+primSignedLongAt(struct foo * self)
 {
     sqInt addr;
     sqInt byteOffset;
@@ -1216,23 +1217,23 @@ primSignedLongAt(void)
     int value;
     sqInt valueOop;
 
-	byteOffset = (stackPositiveMachineIntegerValue(0, interpreterProxy->interpreterState)) - 1;
-	rcvr = stackObjectValue(1, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	byteOffset = (stackPositiveMachineIntegerValue(0, self)) - 1;
+	rcvr = stackObjectValue(1, self);
+	if (failed(self)) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	if (!(indexlengthinRange(byteOffset, 4, rcvr))) {
-		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
+	if (!(indexlengthinRange(byteOffset, 4, rcvr, self))) {
+		return primitiveFailFor(PrimErrBadIndex, self);
 	}
 	if (((startAddr = ((longAt(rcvr + BaseHeaderSize)) > 0
 		? (rcvr + BaseHeaderSize) + BytesPerOop
 		: longAt((rcvr + BaseHeaderSize) + BytesPerOop)))) == 0) {
-		return primitiveFailFor(PrimErrBadReceiver, interpreterProxy->interpreterState);
+		return primitiveFailFor(PrimErrBadReceiver, self);
 	}
 	addr = startAddr + byteOffset;
 	value = long32At(addr);
-	valueOop = signed32BitIntegerFor(value, interpreterProxy->interpreterState);
-	return methodReturnValue(valueOop, interpreterProxy->interpreterState);
+	valueOop = signed32BitIntegerFor(value, self);
+	return methodReturnValue(valueOop, self);
 }
 
 
@@ -1244,7 +1245,7 @@ primSignedLongAt(void)
 
 	/* IA32ABIPlugin>>#primSignedLongAtPut */
 EXPORT(sqInt)
-primSignedLongAtPut(void)
+primSignedLongAtPut(struct foo * self)
 {
     sqInt addr;
     sqInt byteOffset;
@@ -1253,27 +1254,27 @@ primSignedLongAtPut(void)
     sqInt value;
     sqInt valueOop;
 
-	valueOop = stackValue(0, interpreterProxy->interpreterState);
-	byteOffset = (stackPositiveMachineIntegerValue(1, interpreterProxy->interpreterState)) - 1;
-	rcvr = stackObjectValue(2, interpreterProxy->interpreterState);
-	value = signed32BitValueOf(valueOop, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	valueOop = stackValue(0, self);
+	byteOffset = (stackPositiveMachineIntegerValue(1, self)) - 1;
+	rcvr = stackObjectValue(2, self);
+	value = signed32BitValueOf(valueOop, self);
+	if (failed(self)) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	if (!(indexlengthinRange(byteOffset, 4, rcvr))) {
-		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
+	if (!(indexlengthinRange(byteOffset, 4, rcvr, self))) {
+		return primitiveFailFor(PrimErrBadIndex, self);
 	}
-	if (isOopImmutable(rcvr, interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrNoModification, interpreterProxy->interpreterState);
+	if (isOopImmutable(rcvr, self)) {
+		return primitiveFailFor(PrimErrNoModification, self);
 	}
 	if (((startAddr = ((longAt(rcvr + BaseHeaderSize)) > 0
 		? (rcvr + BaseHeaderSize) + BytesPerOop
 		: longAt((rcvr + BaseHeaderSize) + BytesPerOop)))) == 0) {
-		return primitiveFailFor(PrimErrBadReceiver, interpreterProxy->interpreterState);
+		return primitiveFailFor(PrimErrBadReceiver, self);
 	}
 	addr = startAddr + byteOffset;
 	long32Atput(addr, value);
-	return methodReturnValue(valueOop, interpreterProxy->interpreterState);
+	return methodReturnValue(valueOop, self);
 }
 
 
@@ -1285,7 +1286,7 @@ primSignedLongAtPut(void)
 
 	/* IA32ABIPlugin>>#primSignedLongLongAt */
 EXPORT(sqInt)
-primSignedLongLongAt(void)
+primSignedLongLongAt(struct foo * self)
 {
     sqInt addr;
     sqInt byteOffset;
@@ -1296,24 +1297,24 @@ primSignedLongLongAt(void)
     sqInt valueOop;
 
 	signedlonglongvaluePtr = 0;
-	byteOffset = (stackPositiveMachineIntegerValue(0, interpreterProxy->interpreterState)) - 1;
-	rcvr = stackObjectValue(1, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	byteOffset = (stackPositiveMachineIntegerValue(0, self)) - 1;
+	rcvr = stackObjectValue(1, self);
+	if (failed(self)) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	if (!(indexlengthinRange(byteOffset, 8, rcvr))) {
-		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
+	if (!(indexlengthinRange(byteOffset, 8, rcvr, self))) {
+		return primitiveFailFor(PrimErrBadIndex, self);
 	}
 	if (((startAddr = ((longAt(rcvr + BaseHeaderSize)) > 0
 		? (rcvr + BaseHeaderSize) + BytesPerOop
 		: longAt((rcvr + BaseHeaderSize) + BytesPerOop)))) == 0) {
-		return primitiveFailFor(PrimErrBadReceiver, interpreterProxy->interpreterState);
+		return primitiveFailFor(PrimErrBadReceiver, self);
 	}
 	addr = startAddr + byteOffset;
 	signedlonglongvaluePtr = ((long long*) addr);
 	signedlonglongvalue = *signedlonglongvaluePtr;
-	valueOop = signed64BitIntegerFor(signedlonglongvalue, interpreterProxy->interpreterState);
-	return methodReturnValue(valueOop, interpreterProxy->interpreterState);
+	valueOop = signed64BitIntegerFor(signedlonglongvalue, self);
+	return methodReturnValue(valueOop, self);
 }
 
 
@@ -1325,7 +1326,7 @@ primSignedLongLongAt(void)
 
 	/* IA32ABIPlugin>>#primSignedLongLongAtPut */
 EXPORT(sqInt)
-primSignedLongLongAtPut(void)
+primSignedLongLongAtPut(struct foo * self)
 {
     sqInt addr;
     sqInt byteOffset;
@@ -1336,28 +1337,28 @@ primSignedLongLongAtPut(void)
     sqInt valueOop;
 
 	signedlonglongvaluePtr = 0;
-	valueOop = stackValue(0, interpreterProxy->interpreterState);
-	byteOffset = (stackPositiveMachineIntegerValue(1, interpreterProxy->interpreterState)) - 1;
-	rcvr = stackObjectValue(2, interpreterProxy->interpreterState);
-	signedlonglongvalue = signed64BitValueOf(valueOop, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	valueOop = stackValue(0, self);
+	byteOffset = (stackPositiveMachineIntegerValue(1, self)) - 1;
+	rcvr = stackObjectValue(2, self);
+	signedlonglongvalue = signed64BitValueOf(valueOop, self);
+	if (failed(self)) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	if (!(indexlengthinRange(byteOffset, 8, rcvr))) {
-		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
+	if (!(indexlengthinRange(byteOffset, 8, rcvr, self))) {
+		return primitiveFailFor(PrimErrBadIndex, self);
 	}
-	if (isOopImmutable(rcvr, interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrNoModification, interpreterProxy->interpreterState);
+	if (isOopImmutable(rcvr, self)) {
+		return primitiveFailFor(PrimErrNoModification, self);
 	}
 	if (((startAddr = ((longAt(rcvr + BaseHeaderSize)) > 0
 		? (rcvr + BaseHeaderSize) + BytesPerOop
 		: longAt((rcvr + BaseHeaderSize) + BytesPerOop)))) == 0) {
-		return primitiveFailFor(PrimErrBadReceiver, interpreterProxy->interpreterState);
+		return primitiveFailFor(PrimErrBadReceiver, self);
 	}
 	addr = startAddr + byteOffset;
 	signedlonglongvaluePtr = ((long long*) addr);
 	*signedlonglongvaluePtr = signedlonglongvalue;
-	return methodReturnValue(valueOop, interpreterProxy->interpreterState);
+	return methodReturnValue(valueOop, self);
 }
 
 
@@ -1369,7 +1370,7 @@ primSignedLongLongAtPut(void)
 
 	/* IA32ABIPlugin>>#primSignedShortAt */
 EXPORT(sqInt)
-primSignedShortAt(void)
+primSignedShortAt(struct foo * self)
 {
     sqInt addr;
     sqInt byteOffset;
@@ -1378,23 +1379,23 @@ primSignedShortAt(void)
     short value;
     sqInt valueOop;
 
-	byteOffset = (stackPositiveMachineIntegerValue(0, interpreterProxy->interpreterState)) - 1;
-	rcvr = stackObjectValue(1, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	byteOffset = (stackPositiveMachineIntegerValue(0, self)) - 1;
+	rcvr = stackObjectValue(1, self);
+	if (failed(self)) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	if (!(indexlengthinRange(byteOffset, 2, rcvr))) {
-		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
+	if (!(indexlengthinRange(byteOffset, 2, rcvr, self))) {
+		return primitiveFailFor(PrimErrBadIndex, self);
 	}
 	if (((startAddr = ((longAt(rcvr + BaseHeaderSize)) > 0
 		? (rcvr + BaseHeaderSize) + BytesPerOop
 		: longAt((rcvr + BaseHeaderSize) + BytesPerOop)))) == 0) {
-		return primitiveFailFor(PrimErrBadReceiver, interpreterProxy->interpreterState);
+		return primitiveFailFor(PrimErrBadReceiver, self);
 	}
 	addr = startAddr + byteOffset;
 	value = shortAt(addr);
-	valueOop = signed32BitIntegerFor(value, interpreterProxy->interpreterState);
-	return methodReturnValue(valueOop, interpreterProxy->interpreterState);
+	valueOop = signed32BitIntegerFor(value, self);
+	return methodReturnValue(valueOop, self);
 }
 
 
@@ -1406,7 +1407,7 @@ primSignedShortAt(void)
 
 	/* IA32ABIPlugin>>#primSignedShortAtPut */
 EXPORT(sqInt)
-primSignedShortAtPut(void)
+primSignedShortAtPut(struct foo * self)
 {
     sqInt addr;
     sqInt byteOffset;
@@ -1415,29 +1416,29 @@ primSignedShortAtPut(void)
     sqInt value;
     sqInt valueOop;
 
-	valueOop = stackValue(0, interpreterProxy->interpreterState);
-	byteOffset = (stackPositiveMachineIntegerValue(1, interpreterProxy->interpreterState)) - 1;
-	rcvr = stackObjectValue(2, interpreterProxy->interpreterState);
-	value = signed32BitValueOf(valueOop, interpreterProxy->interpreterState);
-	if ((failed(interpreterProxy->interpreterState))
+	valueOop = stackValue(0, self);
+	byteOffset = (stackPositiveMachineIntegerValue(1, self)) - 1;
+	rcvr = stackObjectValue(2, self);
+	value = signed32BitValueOf(valueOop, self);
+	if ((failed(self))
 	 || ((value < -32768)
 	 || (value > 0x7FFF))) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	if (!(indexlengthinRange(byteOffset, 2, rcvr))) {
-		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
+	if (!(indexlengthinRange(byteOffset, 2, rcvr, self))) {
+		return primitiveFailFor(PrimErrBadIndex, self);
 	}
-	if (isOopImmutable(rcvr, interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrNoModification, interpreterProxy->interpreterState);
+	if (isOopImmutable(rcvr, self)) {
+		return primitiveFailFor(PrimErrNoModification, self);
 	}
 	if (((startAddr = ((longAt(rcvr + BaseHeaderSize)) > 0
 		? (rcvr + BaseHeaderSize) + BytesPerOop
 		: longAt((rcvr + BaseHeaderSize) + BytesPerOop)))) == 0) {
-		return primitiveFailFor(PrimErrBadReceiver, interpreterProxy->interpreterState);
+		return primitiveFailFor(PrimErrBadReceiver, self);
 	}
 	addr = startAddr + byteOffset;
 	shortAtput(addr, value);
-	return methodReturnValue(valueOop, interpreterProxy->interpreterState);
+	return methodReturnValue(valueOop, self);
 }
 
 
@@ -1447,7 +1448,7 @@ primSignedShortAtPut(void)
 
 	/* IA32ABIPlugin>>#primSignedWordAt */
 EXPORT(sqInt)
-primSignedWordAt(void)
+primSignedWordAt(struct foo * self)
 {
     sqInt addr;
     sqInt byteOffset;
@@ -1456,23 +1457,23 @@ primSignedWordAt(void)
     sqInt value;
     sqInt valueOop;
 
-	byteOffset = (stackPositiveMachineIntegerValue(0, interpreterProxy->interpreterState)) - 1;
-	rcvr = stackObjectValue(1, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	byteOffset = (stackPositiveMachineIntegerValue(0, self)) - 1;
+	rcvr = stackObjectValue(1, self);
+	if (failed(self)) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	if (!(indexlengthinRange(byteOffset, BytesPerOop, rcvr))) {
-		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
+	if (!(indexlengthinRange(byteOffset, BytesPerOop, rcvr, self))) {
+		return primitiveFailFor(PrimErrBadIndex, self);
 	}
 	if (((startAddr = ((longAt(rcvr + BaseHeaderSize)) > 0
 		? (rcvr + BaseHeaderSize) + BytesPerOop
 		: longAt((rcvr + BaseHeaderSize) + BytesPerOop)))) == 0) {
-		return primitiveFailFor(PrimErrBadReceiver, interpreterProxy->interpreterState);
+		return primitiveFailFor(PrimErrBadReceiver, self);
 	}
 	addr = startAddr + byteOffset;
 	value = longAt(addr);
-	valueOop = signedMachineIntegerValueOf(value, interpreterProxy->interpreterState);
-	return methodReturnValue(valueOop, interpreterProxy->interpreterState);
+	valueOop = signedMachineIntegerValueOf(value, self);
+	return methodReturnValue(valueOop, self);
 }
 
 
@@ -1484,7 +1485,7 @@ primSignedWordAt(void)
 
 	/* IA32ABIPlugin>>#primSignedWordAtPut */
 EXPORT(sqInt)
-primSignedWordAtPut(void)
+primSignedWordAtPut(struct foo * self)
 {
     sqInt addr;
     sqInt byteOffset;
@@ -1493,27 +1494,27 @@ primSignedWordAtPut(void)
     sqInt value;
     sqInt valueOop;
 
-	valueOop = stackValue(0, interpreterProxy->interpreterState);
-	byteOffset = (stackPositiveMachineIntegerValue(1, interpreterProxy->interpreterState)) - 1;
-	rcvr = stackObjectValue(2, interpreterProxy->interpreterState);
-	value = signedMachineIntegerValueOf(valueOop, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	valueOop = stackValue(0, self);
+	byteOffset = (stackPositiveMachineIntegerValue(1, self)) - 1;
+	rcvr = stackObjectValue(2, self);
+	value = signedMachineIntegerValueOf(valueOop, self);
+	if (failed(self)) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	if (!(indexlengthinRange(byteOffset, BytesPerOop, rcvr))) {
-		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
+	if (!(indexlengthinRange(byteOffset, BytesPerOop, rcvr, self))) {
+		return primitiveFailFor(PrimErrBadIndex, self);
 	}
-	if (isOopImmutable(rcvr, interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrNoModification, interpreterProxy->interpreterState);
+	if (isOopImmutable(rcvr, self)) {
+		return primitiveFailFor(PrimErrNoModification, self);
 	}
 	if (((startAddr = ((longAt(rcvr + BaseHeaderSize)) > 0
 		? (rcvr + BaseHeaderSize) + BytesPerOop
 		: longAt((rcvr + BaseHeaderSize) + BytesPerOop)))) == 0) {
-		return primitiveFailFor(PrimErrBadReceiver, interpreterProxy->interpreterState);
+		return primitiveFailFor(PrimErrBadReceiver, self);
 	}
 	addr = startAddr + byteOffset;
 	longAtput(addr, value);
-	return methodReturnValue(valueOop, interpreterProxy->interpreterState);
+	return methodReturnValue(valueOop, self);
 }
 
 
@@ -1525,13 +1526,13 @@ primSignedWordAtPut(void)
 
 	/* IA32ABIPlugin>>#primSizeField */
 EXPORT(sqInt)
-primSizeField(void)
+primSizeField(struct foo * self)
 {
     sqInt rcvr;
     sqInt value;
     sqInt valueOop;
 
-	rcvr = stackValue(0, interpreterProxy->interpreterState);
+	rcvr = stackValue(0, self);
 	value = 
 #  if BytesPerOop == 8
 		((sqLong) (longAt(rcvr + BaseHeaderSize)))
@@ -1540,9 +1541,9 @@ primSizeField(void)
 #  endif /* BytesPerOop == 8 */
 		;
 	valueOop = (BytesPerWord == 8
-		? signed64BitIntegerFor(value, interpreterProxy->interpreterState)
-		: signed32BitIntegerFor(value, interpreterProxy->interpreterState));
-	return methodReturnValue(valueOop, interpreterProxy->interpreterState);
+		? signed64BitIntegerFor(value, self)
+		: signed32BitIntegerFor(value, self));
+	return methodReturnValue(valueOop, self);
 }
 
 
@@ -1554,17 +1555,17 @@ primSizeField(void)
 
 	/* IA32ABIPlugin>>#primSizeFieldPut */
 EXPORT(sqInt)
-primSizeFieldPut(void)
+primSizeFieldPut(struct foo * self)
 {
     sqInt rcvr;
     sqInt value;
     sqInt valueOop;
 
-	valueOop = stackValue(0, interpreterProxy->interpreterState);
-	rcvr = stackValue(1, interpreterProxy->interpreterState);
-	value = signedMachineIntegerValueOf(valueOop, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	valueOop = stackValue(0, self);
+	rcvr = stackValue(1, self);
+	value = signedMachineIntegerValueOf(valueOop, self);
+	if (failed(self)) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
 	
 #  if BytesPerOop == 8
@@ -1572,7 +1573,7 @@ primSizeFieldPut(void)
 #  else /* BytesPerOop == 8 */
 	longAtput(rcvr + BaseHeaderSize, ((usqInt) value));
 #  endif /* BytesPerOop == 8 */
-	return methodReturnValue(valueOop, interpreterProxy->interpreterState);
+	return methodReturnValue(valueOop, self);
 }
 
 
@@ -1585,7 +1586,7 @@ primSizeFieldPut(void)
 
 	/* IA32ABIPlugin>>#primStrlenFromStartIndex */
 EXPORT(sqInt)
-primStrlenFromStartIndex(void)
+primStrlenFromStartIndex(struct foo * self)
 {
     sqInt byteOffset;
     sqInt index;
@@ -1593,13 +1594,13 @@ primStrlenFromStartIndex(void)
     char *ptr;
     sqInt rcvr;
 
-	byteOffset = (stackPositiveMachineIntegerValue(0, interpreterProxy->interpreterState)) - 1;
-	rcvr = stackObjectValue(1, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	byteOffset = (stackPositiveMachineIntegerValue(0, self)) - 1;
+	rcvr = stackObjectValue(1, self);
+	if (failed(self)) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	if (!(indexlengthinRange(byteOffset, 1, rcvr))) {
-		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
+	if (!(indexlengthinRange(byteOffset, 1, rcvr, self))) {
+		return primitiveFailFor(PrimErrBadIndex, self);
 	}
 	limit = longAt(rcvr + BaseHeaderSize);
 	ptr = ((char *) (((limit > 0
@@ -1616,7 +1617,7 @@ primStrlenFromStartIndex(void)
 			index += 1;
 		}
 	}
-	return methodReturnValue(positive32BitIntegerFor(index, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	return methodReturnValue(positive32BitIntegerFor(index, self), self);
 }
 
 
@@ -1629,26 +1630,26 @@ primStrlenFromStartIndex(void)
 
 	/* IA32ABIPlugin>>#primStrlenThroughPointerAtIndex */
 EXPORT(sqInt)
-primStrlenThroughPointerAtIndex(void)
+primStrlenThroughPointerAtIndex(struct foo * self)
 {
     sqInt addr;
     sqInt byteOffset;
     char *ptr;
     sqInt rcvr;
 
-	byteOffset = (stackPositiveMachineIntegerValue(0, interpreterProxy->interpreterState)) - 1;
-	rcvr = stackObjectValue(1, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	byteOffset = (stackPositiveMachineIntegerValue(0, self)) - 1;
+	rcvr = stackObjectValue(1, self);
+	if (failed(self)) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	if (!(indexlengthinRange(byteOffset, BytesPerOop, rcvr))) {
-		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
+	if (!(indexlengthinRange(byteOffset, BytesPerOop, rcvr, self))) {
+		return primitiveFailFor(PrimErrBadIndex, self);
 	}
 	addr = (((longAt(rcvr + BaseHeaderSize)) > 0
 	? (rcvr + BaseHeaderSize) + BytesPerOop
 	: longAt((rcvr + BaseHeaderSize) + BytesPerOop))) + byteOffset;
 	ptr = ((char *) (longAt(addr)));
-	return methodReturnValue(positive32BitIntegerFor(strlen(ptr), interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	return methodReturnValue(positive32BitIntegerFor(strlen(ptr), self), self);
 }
 
 
@@ -1659,14 +1660,14 @@ primStrlenThroughPointerAtIndex(void)
 
 	/* IA32ABIPlugin>>#primThunkEntryAddress */
 EXPORT(sqInt)
-primThunkEntryAddress(void)
+primThunkEntryAddress(struct foo * self)
 {
     sqIntptr_t address;
 
 	address = ((sqIntptr_t)thunkEntry);
 	methodReturnValue((BytesPerWord == 8
-		? positive64BitIntegerFor(address, interpreterProxy->interpreterState)
-		: positive32BitIntegerFor(address, interpreterProxy->interpreterState)), interpreterProxy->interpreterState);
+		? positive64BitIntegerFor(address, self)
+		: positive32BitIntegerFor(address, self)), self);
 	return 0;
 }
 
@@ -1679,7 +1680,7 @@ primThunkEntryAddress(void)
 
 	/* IA32ABIPlugin>>#primUnsignedByteAt */
 EXPORT(sqInt)
-primUnsignedByteAt(void)
+primUnsignedByteAt(struct foo * self)
 {
     sqInt addr;
     sqInt byteOffset;
@@ -1688,23 +1689,23 @@ primUnsignedByteAt(void)
     unsigned char value;
     sqInt valueOop;
 
-	byteOffset = (stackPositiveMachineIntegerValue(0, interpreterProxy->interpreterState)) - 1;
-	rcvr = stackObjectValue(1, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	byteOffset = (stackPositiveMachineIntegerValue(0, self)) - 1;
+	rcvr = stackObjectValue(1, self);
+	if (failed(self)) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	if (!(indexlengthinRange(byteOffset, 1, rcvr))) {
-		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
+	if (!(indexlengthinRange(byteOffset, 1, rcvr, self))) {
+		return primitiveFailFor(PrimErrBadIndex, self);
 	}
 	if (((startAddr = ((longAt(rcvr + BaseHeaderSize)) > 0
 		? (rcvr + BaseHeaderSize) + BytesPerOop
 		: longAt((rcvr + BaseHeaderSize) + BytesPerOop)))) == 0) {
-		return primitiveFailFor(PrimErrBadReceiver, interpreterProxy->interpreterState);
+		return primitiveFailFor(PrimErrBadReceiver, self);
 	}
 	addr = startAddr + byteOffset;
 	value = byteAt(addr);
-	valueOop = positive32BitIntegerFor(value, interpreterProxy->interpreterState);
-	return methodReturnValue(valueOop, interpreterProxy->interpreterState);
+	valueOop = positive32BitIntegerFor(value, self);
+	return methodReturnValue(valueOop, self);
 }
 
 
@@ -1716,7 +1717,7 @@ primUnsignedByteAt(void)
 
 	/* IA32ABIPlugin>>#primUnsignedByteAtPut */
 EXPORT(sqInt)
-primUnsignedByteAtPut(void)
+primUnsignedByteAtPut(struct foo * self)
 {
     sqInt addr;
     sqInt byteOffset;
@@ -1725,28 +1726,28 @@ primUnsignedByteAtPut(void)
     sqInt value;
     sqInt valueOop;
 
-	valueOop = stackValue(0, interpreterProxy->interpreterState);
-	byteOffset = (stackPositiveMachineIntegerValue(1, interpreterProxy->interpreterState)) - 1;
-	rcvr = stackObjectValue(2, interpreterProxy->interpreterState);
-	value = positive32BitValueOf(valueOop, interpreterProxy->interpreterState);
-	if ((failed(interpreterProxy->interpreterState))
+	valueOop = stackValue(0, self);
+	byteOffset = (stackPositiveMachineIntegerValue(1, self)) - 1;
+	rcvr = stackObjectValue(2, self);
+	value = positive32BitValueOf(valueOop, self);
+	if ((failed(self))
 	 || (value > 0xFF)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	if (!(indexlengthinRange(byteOffset, 1, rcvr))) {
-		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
+	if (!(indexlengthinRange(byteOffset, 1, rcvr, self))) {
+		return primitiveFailFor(PrimErrBadIndex, self);
 	}
-	if (isOopImmutable(rcvr, interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrNoModification, interpreterProxy->interpreterState);
+	if (isOopImmutable(rcvr, self)) {
+		return primitiveFailFor(PrimErrNoModification, self);
 	}
 	if (((startAddr = ((longAt(rcvr + BaseHeaderSize)) > 0
 		? (rcvr + BaseHeaderSize) + BytesPerOop
 		: longAt((rcvr + BaseHeaderSize) + BytesPerOop)))) == 0) {
-		return primitiveFailFor(PrimErrBadReceiver, interpreterProxy->interpreterState);
+		return primitiveFailFor(PrimErrBadReceiver, self);
 	}
 	addr = startAddr + byteOffset;
 	byteAtput(addr, value);
-	return methodReturnValue(valueOop, interpreterProxy->interpreterState);
+	return methodReturnValue(valueOop, self);
 }
 
 
@@ -1758,7 +1759,7 @@ primUnsignedByteAtPut(void)
 
 	/* IA32ABIPlugin>>#primUnsignedLongAt */
 EXPORT(sqInt)
-primUnsignedLongAt(void)
+primUnsignedLongAt(struct foo * self)
 {
     sqInt addr;
     sqInt byteOffset;
@@ -1767,23 +1768,23 @@ primUnsignedLongAt(void)
     int value;
     sqInt valueOop;
 
-	byteOffset = (stackPositiveMachineIntegerValue(0, interpreterProxy->interpreterState)) - 1;
-	rcvr = stackObjectValue(1, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	byteOffset = (stackPositiveMachineIntegerValue(0, self)) - 1;
+	rcvr = stackObjectValue(1, self);
+	if (failed(self)) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	if (!(indexlengthinRange(byteOffset, 4, rcvr))) {
-		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
+	if (!(indexlengthinRange(byteOffset, 4, rcvr, self))) {
+		return primitiveFailFor(PrimErrBadIndex, self);
 	}
 	if (((startAddr = ((longAt(rcvr + BaseHeaderSize)) > 0
 		? (rcvr + BaseHeaderSize) + BytesPerOop
 		: longAt((rcvr + BaseHeaderSize) + BytesPerOop)))) == 0) {
-		return primitiveFailFor(PrimErrBadReceiver, interpreterProxy->interpreterState);
+		return primitiveFailFor(PrimErrBadReceiver, self);
 	}
 	addr = startAddr + byteOffset;
 	value = long32At(addr);
-	valueOop = positive32BitIntegerFor(value, interpreterProxy->interpreterState);
-	return methodReturnValue(valueOop, interpreterProxy->interpreterState);
+	valueOop = positive32BitIntegerFor(value, self);
+	return methodReturnValue(valueOop, self);
 }
 
 
@@ -1795,7 +1796,7 @@ primUnsignedLongAt(void)
 
 	/* IA32ABIPlugin>>#primUnsignedLongAtPut */
 EXPORT(sqInt)
-primUnsignedLongAtPut(void)
+primUnsignedLongAtPut(struct foo * self)
 {
     sqInt addr;
     sqInt byteOffset;
@@ -1804,27 +1805,27 @@ primUnsignedLongAtPut(void)
     sqInt value;
     sqInt valueOop;
 
-	valueOop = stackValue(0, interpreterProxy->interpreterState);
-	byteOffset = (stackPositiveMachineIntegerValue(1, interpreterProxy->interpreterState)) - 1;
-	rcvr = stackObjectValue(2, interpreterProxy->interpreterState);
-	value = positive32BitValueOf(valueOop, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	valueOop = stackValue(0, self);
+	byteOffset = (stackPositiveMachineIntegerValue(1, self)) - 1;
+	rcvr = stackObjectValue(2, self);
+	value = positive32BitValueOf(valueOop, self);
+	if (failed(self)) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	if (!(indexlengthinRange(byteOffset, 4, rcvr))) {
-		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
+	if (!(indexlengthinRange(byteOffset, 4, rcvr, self))) {
+		return primitiveFailFor(PrimErrBadIndex, self);
 	}
-	if (isOopImmutable(rcvr, interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrNoModification, interpreterProxy->interpreterState);
+	if (isOopImmutable(rcvr, self)) {
+		return primitiveFailFor(PrimErrNoModification, self);
 	}
 	if (((startAddr = ((longAt(rcvr + BaseHeaderSize)) > 0
 		? (rcvr + BaseHeaderSize) + BytesPerOop
 		: longAt((rcvr + BaseHeaderSize) + BytesPerOop)))) == 0) {
-		return primitiveFailFor(PrimErrBadReceiver, interpreterProxy->interpreterState);
+		return primitiveFailFor(PrimErrBadReceiver, self);
 	}
 	addr = startAddr + byteOffset;
 	long32Atput(addr, value);
-	return methodReturnValue(valueOop, interpreterProxy->interpreterState);
+	return methodReturnValue(valueOop, self);
 }
 
 
@@ -1836,7 +1837,7 @@ primUnsignedLongAtPut(void)
 
 	/* IA32ABIPlugin>>#primUnsignedLongLongAt */
 EXPORT(sqInt)
-primUnsignedLongLongAt(void)
+primUnsignedLongLongAt(struct foo * self)
 {
     sqInt addr;
     sqInt byteOffset;
@@ -1847,24 +1848,24 @@ primUnsignedLongLongAt(void)
     sqInt valueOop;
 
 	unsignedlonglongvaluePtr = 0;
-	byteOffset = (stackPositiveMachineIntegerValue(0, interpreterProxy->interpreterState)) - 1;
-	rcvr = stackObjectValue(1, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	byteOffset = (stackPositiveMachineIntegerValue(0, self)) - 1;
+	rcvr = stackObjectValue(1, self);
+	if (failed(self)) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	if (!(indexlengthinRange(byteOffset, 8, rcvr))) {
-		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
+	if (!(indexlengthinRange(byteOffset, 8, rcvr, self))) {
+		return primitiveFailFor(PrimErrBadIndex, self);
 	}
 	if (((startAddr = ((longAt(rcvr + BaseHeaderSize)) > 0
 		? (rcvr + BaseHeaderSize) + BytesPerOop
 		: longAt((rcvr + BaseHeaderSize) + BytesPerOop)))) == 0) {
-		return primitiveFailFor(PrimErrBadReceiver, interpreterProxy->interpreterState);
+		return primitiveFailFor(PrimErrBadReceiver, self);
 	}
 	addr = startAddr + byteOffset;
 	unsignedlonglongvaluePtr = ((unsigned long long*) addr);
 	unsignedlonglongvalue = *unsignedlonglongvaluePtr;
-	valueOop = positive64BitIntegerFor(unsignedlonglongvalue, interpreterProxy->interpreterState);
-	return methodReturnValue(valueOop, interpreterProxy->interpreterState);
+	valueOop = positive64BitIntegerFor(unsignedlonglongvalue, self);
+	return methodReturnValue(valueOop, self);
 }
 
 
@@ -1877,7 +1878,7 @@ primUnsignedLongLongAt(void)
 
 	/* IA32ABIPlugin>>#primUnsignedLongLongAtPut */
 EXPORT(sqInt)
-primUnsignedLongLongAtPut(void)
+primUnsignedLongLongAtPut(struct foo * self)
 {
     sqInt addr;
     sqInt byteOffset;
@@ -1888,28 +1889,28 @@ primUnsignedLongLongAtPut(void)
     sqInt valueOop;
 
 	unsignedlonglongvaluePtr = 0;
-	valueOop = stackValue(0, interpreterProxy->interpreterState);
-	byteOffset = (stackPositiveMachineIntegerValue(1, interpreterProxy->interpreterState)) - 1;
-	rcvr = stackObjectValue(2, interpreterProxy->interpreterState);
-	unsignedlonglongvalue = positive64BitValueOf(valueOop, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	valueOop = stackValue(0, self);
+	byteOffset = (stackPositiveMachineIntegerValue(1, self)) - 1;
+	rcvr = stackObjectValue(2, self);
+	unsignedlonglongvalue = positive64BitValueOf(valueOop, self);
+	if (failed(self)) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	if (!(indexlengthinRange(byteOffset, 8, rcvr))) {
-		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
+	if (!(indexlengthinRange(byteOffset, 8, rcvr, self))) {
+		return primitiveFailFor(PrimErrBadIndex, self);
 	}
-	if (isOopImmutable(rcvr, interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrNoModification, interpreterProxy->interpreterState);
+	if (isOopImmutable(rcvr, self)) {
+		return primitiveFailFor(PrimErrNoModification, self);
 	}
 	if (((startAddr = ((longAt(rcvr + BaseHeaderSize)) > 0
 		? (rcvr + BaseHeaderSize) + BytesPerOop
 		: longAt((rcvr + BaseHeaderSize) + BytesPerOop)))) == 0) {
-		return primitiveFailFor(PrimErrBadReceiver, interpreterProxy->interpreterState);
+		return primitiveFailFor(PrimErrBadReceiver, self);
 	}
 	addr = startAddr + byteOffset;
 	unsignedlonglongvaluePtr = ((unsigned long long*) addr);
 	*unsignedlonglongvaluePtr = unsignedlonglongvalue;
-	return methodReturnValue(valueOop, interpreterProxy->interpreterState);
+	return methodReturnValue(valueOop, self);
 }
 
 
@@ -1921,7 +1922,7 @@ primUnsignedLongLongAtPut(void)
 
 	/* IA32ABIPlugin>>#primUnsignedShortAt */
 EXPORT(sqInt)
-primUnsignedShortAt(void)
+primUnsignedShortAt(struct foo * self)
 {
     sqInt addr;
     sqInt byteOffset;
@@ -1930,23 +1931,23 @@ primUnsignedShortAt(void)
     unsigned short value;
     sqInt valueOop;
 
-	byteOffset = (stackPositiveMachineIntegerValue(0, interpreterProxy->interpreterState)) - 1;
-	rcvr = stackObjectValue(1, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	byteOffset = (stackPositiveMachineIntegerValue(0, self)) - 1;
+	rcvr = stackObjectValue(1, self);
+	if (failed(self)) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	if (!(indexlengthinRange(byteOffset, 2, rcvr))) {
-		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
+	if (!(indexlengthinRange(byteOffset, 2, rcvr, self))) {
+		return primitiveFailFor(PrimErrBadIndex, self);
 	}
 	if (((startAddr = ((longAt(rcvr + BaseHeaderSize)) > 0
 		? (rcvr + BaseHeaderSize) + BytesPerOop
 		: longAt((rcvr + BaseHeaderSize) + BytesPerOop)))) == 0) {
-		return primitiveFailFor(PrimErrBadReceiver, interpreterProxy->interpreterState);
+		return primitiveFailFor(PrimErrBadReceiver, self);
 	}
 	addr = startAddr + byteOffset;
 	value = shortAt(addr);
-	valueOop = positive32BitIntegerFor(value, interpreterProxy->interpreterState);
-	return methodReturnValue(valueOop, interpreterProxy->interpreterState);
+	valueOop = positive32BitIntegerFor(value, self);
+	return methodReturnValue(valueOop, self);
 }
 
 
@@ -1958,7 +1959,7 @@ primUnsignedShortAt(void)
 
 	/* IA32ABIPlugin>>#primUnsignedShortAtPut */
 EXPORT(sqInt)
-primUnsignedShortAtPut(void)
+primUnsignedShortAtPut(struct foo * self)
 {
     sqInt addr;
     sqInt byteOffset;
@@ -1967,28 +1968,28 @@ primUnsignedShortAtPut(void)
     sqInt value;
     sqInt valueOop;
 
-	valueOop = stackValue(0, interpreterProxy->interpreterState);
-	byteOffset = (stackPositiveMachineIntegerValue(1, interpreterProxy->interpreterState)) - 1;
-	rcvr = stackObjectValue(2, interpreterProxy->interpreterState);
-	value = positive32BitValueOf(valueOop, interpreterProxy->interpreterState);
-	if ((failed(interpreterProxy->interpreterState))
+	valueOop = stackValue(0, self);
+	byteOffset = (stackPositiveMachineIntegerValue(1, self)) - 1;
+	rcvr = stackObjectValue(2, self);
+	value = positive32BitValueOf(valueOop, self);
+	if ((failed(self))
 	 || (value > 0xFFFF)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	if (!(indexlengthinRange(byteOffset, 2, rcvr))) {
-		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
+	if (!(indexlengthinRange(byteOffset, 2, rcvr, self))) {
+		return primitiveFailFor(PrimErrBadIndex, self);
 	}
-	if (isOopImmutable(rcvr, interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrNoModification, interpreterProxy->interpreterState);
+	if (isOopImmutable(rcvr, self)) {
+		return primitiveFailFor(PrimErrNoModification, self);
 	}
 	if (((startAddr = ((longAt(rcvr + BaseHeaderSize)) > 0
 		? (rcvr + BaseHeaderSize) + BytesPerOop
 		: longAt((rcvr + BaseHeaderSize) + BytesPerOop)))) == 0) {
-		return primitiveFailFor(PrimErrBadReceiver, interpreterProxy->interpreterState);
+		return primitiveFailFor(PrimErrBadReceiver, self);
 	}
 	addr = startAddr + byteOffset;
 	shortAtput(addr, value);
-	return methodReturnValue(valueOop, interpreterProxy->interpreterState);
+	return methodReturnValue(valueOop, self);
 }
 
 
@@ -2000,7 +2001,7 @@ primUnsignedShortAtPut(void)
 
 	/* IA32ABIPlugin>>#primUnsignedWordAt */
 EXPORT(sqInt)
-primUnsignedWordAt(void)
+primUnsignedWordAt(struct foo * self)
 {
     sqInt addr;
     sqInt byteOffset;
@@ -2009,26 +2010,26 @@ primUnsignedWordAt(void)
     sqInt value;
     sqInt valueOop;
 
-	byteOffset = (stackPositiveMachineIntegerValue(0, interpreterProxy->interpreterState)) - 1;
-	rcvr = stackObjectValue(1, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	byteOffset = (stackPositiveMachineIntegerValue(0, self)) - 1;
+	rcvr = stackObjectValue(1, self);
+	if (failed(self)) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	if (!(indexlengthinRange(byteOffset, BytesPerOop, rcvr))) {
-		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
+	if (!(indexlengthinRange(byteOffset, BytesPerOop, rcvr, self))) {
+		return primitiveFailFor(PrimErrBadIndex, self);
 	}
 	if (((startAddr = ((longAt(rcvr + BaseHeaderSize)) > 0
 		? (rcvr + BaseHeaderSize) + BytesPerOop
 		: longAt((rcvr + BaseHeaderSize) + BytesPerOop)))) == 0) {
-		return primitiveFailFor(PrimErrBadReceiver, interpreterProxy->interpreterState);
+		return primitiveFailFor(PrimErrBadReceiver, self);
 	}
 	addr = startAddr + byteOffset;
 	value = longAt(addr);
 	/* begin positiveMachineIntegerFor: */
 	valueOop = (BytesPerWord == 8
-		? positive64BitIntegerFor(value, interpreterProxy->interpreterState)
-		: positive32BitIntegerFor(value, interpreterProxy->interpreterState));
-	return methodReturnValue(valueOop, interpreterProxy->interpreterState);
+		? positive64BitIntegerFor(value, self)
+		: positive32BitIntegerFor(value, self));
+	return methodReturnValue(valueOop, self);
 }
 
 
@@ -2040,7 +2041,7 @@ primUnsignedWordAt(void)
 
 	/* IA32ABIPlugin>>#primUnsignedWordAtPut */
 EXPORT(sqInt)
-primUnsignedWordAtPut(void)
+primUnsignedWordAtPut(struct foo * self)
 {
     sqInt addr;
     sqInt byteOffset;
@@ -2049,27 +2050,27 @@ primUnsignedWordAtPut(void)
     sqInt value;
     sqInt valueOop;
 
-	valueOop = stackValue(0, interpreterProxy->interpreterState);
-	byteOffset = (stackPositiveMachineIntegerValue(1, interpreterProxy->interpreterState)) - 1;
-	rcvr = stackObjectValue(2, interpreterProxy->interpreterState);
-	value = positiveMachineIntegerValueOf(valueOop, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	valueOop = stackValue(0, self);
+	byteOffset = (stackPositiveMachineIntegerValue(1, self)) - 1;
+	rcvr = stackObjectValue(2, self);
+	value = positiveMachineIntegerValueOf(valueOop, self);
+	if (failed(self)) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	if (!(indexlengthinRange(byteOffset, BytesPerOop, rcvr))) {
-		return primitiveFailFor(PrimErrBadIndex, interpreterProxy->interpreterState);
+	if (!(indexlengthinRange(byteOffset, BytesPerOop, rcvr, self))) {
+		return primitiveFailFor(PrimErrBadIndex, self);
 	}
-	if (isOopImmutable(rcvr, interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrNoModification, interpreterProxy->interpreterState);
+	if (isOopImmutable(rcvr, self)) {
+		return primitiveFailFor(PrimErrNoModification, self);
 	}
 	if (((startAddr = ((longAt(rcvr + BaseHeaderSize)) > 0
 		? (rcvr + BaseHeaderSize) + BytesPerOop
 		: longAt((rcvr + BaseHeaderSize) + BytesPerOop)))) == 0) {
-		return primitiveFailFor(PrimErrBadReceiver, interpreterProxy->interpreterState);
+		return primitiveFailFor(PrimErrBadReceiver, self);
 	}
 	addr = startAddr + byteOffset;
 	longAtput(addr, value);
-	return methodReturnValue(valueOop, interpreterProxy->interpreterState);
+	return methodReturnValue(valueOop, self);
 }
 
 
@@ -2086,29 +2087,29 @@ primUnsignedWordAtPut(void)
 
 	/* IA32ABIPlugin>>#primVarArgsCallOutDoubleReturn */
 EXPORT(sqInt)
-primVarArgsCallOutDoubleReturn(void)
+primVarArgsCallOutDoubleReturn(struct foo * self)
 {
     sqInt array;
     sqInt errCode;
     sqInt mac;
     sqInt result;
 
-	array = stackValue(0, interpreterProxy->interpreterState);
-	if (!(isArray(array, interpreterProxy->interpreterState))) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	array = stackValue(0, self);
+	if (!(isArray(array, self))) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	mac = methodArgumentCount(interpreterProxy->interpreterState);
+	mac = methodArgumentCount(self);
 
 	/* ptr to 0th arg */
 	/* nargs */
 	/* func stackValue */
 	/* result stackValue */
-	errCode = callIA32DoubleReturn(firstIndexableField(array, interpreterProxy->interpreterState), stSizeOf(array, interpreterProxy->interpreterState), 2, 1);
+	errCode = callIA32DoubleReturn(firstIndexableField(array, self), stSizeOf(array, self), 2, 1, self);
 	if (errCode != 0) {
-		return primitiveFailFor(errCode, interpreterProxy->interpreterState);
+		return primitiveFailFor(errCode, self);
 	}
-	result = stackValue(1, interpreterProxy->interpreterState);
-	popthenPush(mac + 1, result, interpreterProxy->interpreterState);
+	result = stackValue(1, self);
+	popthenPush(mac + 1, result, self);
 	return 0;
 }
 
@@ -2126,29 +2127,29 @@ primVarArgsCallOutDoubleReturn(void)
 
 	/* IA32ABIPlugin>>#primVarArgsCallOutFloatReturn */
 EXPORT(sqInt)
-primVarArgsCallOutFloatReturn(void)
+primVarArgsCallOutFloatReturn(struct foo * self)
 {
     sqInt array;
     sqInt errCode;
     sqInt mac;
     sqInt result;
 
-	array = stackValue(0, interpreterProxy->interpreterState);
-	if (!(isArray(array, interpreterProxy->interpreterState))) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	array = stackValue(0, self);
+	if (!(isArray(array, self))) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	mac = methodArgumentCount(interpreterProxy->interpreterState);
+	mac = methodArgumentCount(self);
 
 	/* ptr to 0th arg */
 	/* nargs */
 	/* func stackValue */
 	/* result stackValue */
-	errCode = callIA32FloatReturn(firstIndexableField(array, interpreterProxy->interpreterState), stSizeOf(array, interpreterProxy->interpreterState), 2, 1);
+	errCode = callIA32FloatReturn(firstIndexableField(array, self), stSizeOf(array, self), 2, 1, self);
 	if (errCode != 0) {
-		return primitiveFailFor(errCode, interpreterProxy->interpreterState);
+		return primitiveFailFor(errCode, self);
 	}
-	result = stackValue(1, interpreterProxy->interpreterState);
-	popthenPush(mac + 1, result, interpreterProxy->interpreterState);
+	result = stackValue(1, self);
+	popthenPush(mac + 1, result, self);
 	return 0;
 }
 
@@ -2166,29 +2167,29 @@ primVarArgsCallOutFloatReturn(void)
 
 	/* IA32ABIPlugin>>#primVarArgsCallOutIntegralReturn */
 EXPORT(sqInt)
-primVarArgsCallOutIntegralReturn(void)
+primVarArgsCallOutIntegralReturn(struct foo * self)
 {
     sqInt array;
     sqInt errCode;
     sqInt mac;
     sqInt result;
 
-	array = stackValue(0, interpreterProxy->interpreterState);
-	if (!(isArray(array, interpreterProxy->interpreterState))) {
-		return primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	array = stackValue(0, self);
+	if (!(isArray(array, self))) {
+		return primitiveFailFor(PrimErrBadArgument, self);
 	}
-	mac = methodArgumentCount(interpreterProxy->interpreterState);
+	mac = methodArgumentCount(self);
 
 	/* ptr to 0th arg */
 	/* nargs */
 	/* func stackValue */
 	/* result stackValue */
-	errCode = callIA32IntegralReturn(firstIndexableField(array, interpreterProxy->interpreterState), stSizeOf(array, interpreterProxy->interpreterState), 2, 1);
+	errCode = callIA32IntegralReturn(firstIndexableField(array, self), stSizeOf(array, self), 2, 1, self);
 	if (errCode != 0) {
-		return primitiveFailFor(errCode, interpreterProxy->interpreterState);
+		return primitiveFailFor(errCode, self);
 	}
-	result = stackValue(1, interpreterProxy->interpreterState);
-	popthenPush(mac + 1, result, interpreterProxy->interpreterState);
+	result = stackValue(1, self);
+	popthenPush(mac + 1, result, self);
 	return 0;
 }
 

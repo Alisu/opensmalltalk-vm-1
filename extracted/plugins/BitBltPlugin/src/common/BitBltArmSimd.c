@@ -400,7 +400,7 @@ TEST_FAST_PATH(pixelMatch, 8, 8)
 TEST_FAST_PATH(notAnotB,   8, 8)
 TEST_FAST_PATH(notAmatchB, 8, 8)
 
-void addArmSimdFastPaths(void)
+void addArmSimdFastPaths(void)
 {
 	addFastPaths(fastPaths, sizeof fastPaths / sizeof *fastPaths);
 

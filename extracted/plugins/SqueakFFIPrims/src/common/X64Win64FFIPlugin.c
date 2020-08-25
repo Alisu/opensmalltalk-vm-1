@@ -115,8 +115,7 @@ static char __buildInfo[] = "ThreadedX64Win64FFIPlugin VMMaker.oscog-eem.2481 uu
 #define error(foo) 0
 #ifndef SQUEAK_BUILTIN_PLUGIN
 /* but print assert failures. */
-void
-warning(char *s) { /* Print an error message but don't exit. */
+voidwarning(char *s, struct foo * self) { /* Print an error message but don't exit. */
 	printf("\n%s\n", s);
 }
 #endif
@@ -221,77 +220,77 @@ typedef struct {
 
 
 /*** Function Prototypes ***/
-static sqInt atomicTypeOf(sqInt typeSpec);
-static void cleanupCalloutState(CalloutState *calloutState);
-static sqInt externalFunctionHasStackSizeSlot(void);
-static void * ffiAddressOfstartingAtsize(sqInt rcvr, sqInt byteOffset, sqInt byteSize);
-static sqInt ffiArgByValuein(sqInt oop, CalloutState *calloutState);
-static sqInt ffiArgumentSpecClassin(sqInt oop, sqInt argSpec, sqInt argClass, CalloutState *calloutState);
-static sqInt ffiAtomicArgByReferenceClassin(sqInt oop, sqInt oopClass, CalloutState *calloutState);
-static sqInt ffiAtomicStructByReferenceClassin(sqInt oop, sqInt oopClass, CalloutState *calloutState);
-static sqInt ffiCalloutToSpecOnStackin(void *procAddr, sqInt specOnStack, CalloutState *calloutState);
-static sqInt ffiCallArgArrayOrNilNumArgs(sqInt externalFunction, sqInt argArrayOrNil, sqInt nArgs);
-static sqInt ffiCheckReturnWithin(sqInt retSpec, sqInt retClass, CalloutState *calloutState);
-static sqInt ffiContentsOfHandleerrCode(sqInt oop, sqInt errCode);
-static sqInt ffiCreateIntegralResultOopofAtomicTypein(usqLong retVal, sqInt atomicType, CalloutState *calloutState);
-static sqInt ffiFail(sqInt reason);
-static double ffiFloatValueOf(sqInt oop);
-static sqInt ffiIntegerValueOf(sqInt oop);
-static sqInt ffiLoadCalloutAddressFrom(sqInt oop);
-static sqInt ffiLoadCalloutAddress(sqInt lit);
-static sqInt ffiLoadCalloutModule(sqInt module);
-static void ffiLogCallout(sqInt lit);
-EXPORT(sqInt) ffiLogCallsTo(char *fileName);
-static sqInt ffiPushPointerContentsOfin(sqInt oop, CalloutState *calloutState);
-static sqInt ffiPushPointerin(void *pointer, CalloutState *calloutState);
-static sqInt ffiPushSignedBytein(sqInt value, CalloutState *calloutState);
-static sqInt ffiPushSignedCharin(sqInt value, CalloutState *calloutState);
-static sqInt ffiPushSignedIntin(sqInt value, CalloutState *calloutState);
-static sqInt ffiPushSignedLongLongOopin(sqInt oop, CalloutState *calloutState);
-static sqInt ffiPushSignedLongLongin(sqLong value, CalloutState *calloutState);
-static sqInt ffiPushSignedShortin(sqInt value, CalloutState *calloutState);
-static sqInt ffiPushStringOfLengthin(char *pointer, sqInt length, CalloutState *calloutState);
-static sqInt ffiPushStructureContentsOfin(sqInt oop, CalloutState *calloutState);
-static sqInt ffiPushStructureofSizetypeSpecofLengthin(void *pointer, sqInt structSize, sqInt *argSpec, sqInt argSpecSize, CalloutState *calloutState);
-static sqInt ffiPushUnsignedBytein(sqInt value, CalloutState *calloutState);
-static sqInt ffiPushUnsignedCharin(sqInt value, CalloutState *calloutState);
-static sqInt ffiPushUnsignedIntin(sqInt value, CalloutState *calloutState);
-static sqInt ffiPushUnsignedLongLongOopin(sqInt oop, CalloutState *calloutState);
-static sqInt ffiPushUnsignedLongLongin(usqLong value, CalloutState *calloutState);
-static sqInt ffiPushUnsignedShortin(sqInt value, CalloutState *calloutState);
-static sqInt ffiPushVoidin(sqInt ignored, CalloutState *calloutState);
-static sqInt ffiReturnCStringFrom(sqInt cPointer);
-static sqInt ffiReturnPointerofTypein(usqLong retVal, sqInt retType, CalloutState *calloutState);
-static sqInt ffiReturnStructofTypein(usqLong intRet, sqInt ffiRetType, CalloutState *calloutState);
-static sqInt ffiReturnType(sqInt specOnStack);
-static sqInt ffiSupportsCallingConvention(sqInt aCallingConvention);
-static sqInt ffiValidateExternalDataAtomicType(sqInt oop, sqInt atomicType);
+static sqInt atomicTypeOf(sqInt typeSpec, struct foo * self);
+static void cleanupCalloutState(CalloutState *calloutState, struct foo * self);
+static sqInt externalFunctionHasStackSizeSlot(struct foo * self);
+static void * ffiAddressOfstartingAtsize(sqInt rcvr, sqInt byteOffset, sqInt byteSize, struct foo * self);
+static sqInt ffiArgByValuein(sqInt oop, CalloutState *calloutState, struct foo * self);
+static sqInt ffiArgumentSpecClassin(sqInt oop, sqInt argSpec, sqInt argClass, CalloutState *calloutState, struct foo * self);
+static sqInt ffiAtomicArgByReferenceClassin(sqInt oop, sqInt oopClass, CalloutState *calloutState, struct foo * self);
+static sqInt ffiAtomicStructByReferenceClassin(sqInt oop, sqInt oopClass, CalloutState *calloutState, struct foo * self);
+static sqInt ffiCalloutToSpecOnStackin(void *procAddr, sqInt specOnStack, CalloutState *calloutState, struct foo * self);
+static sqInt ffiCallArgArrayOrNilNumArgs(sqInt externalFunction, sqInt argArrayOrNil, sqInt nArgs, struct foo * self);
+static sqInt ffiCheckReturnWithin(sqInt retSpec, sqInt retClass, CalloutState *calloutState, struct foo * self);
+static sqInt ffiContentsOfHandleerrCode(sqInt oop, sqInt errCode, struct foo * self);
+static sqInt ffiCreateIntegralResultOopofAtomicTypein(usqLong retVal, sqInt atomicType, CalloutState *calloutState, struct foo * self);
+static sqInt ffiFail(sqInt reason, struct foo * self);
+static double ffiFloatValueOf(sqInt oop, struct foo * self);
+static sqInt ffiIntegerValueOf(sqInt oop, struct foo * self);
+static sqInt ffiLoadCalloutAddressFrom(sqInt oop, struct foo * self);
+static sqInt ffiLoadCalloutAddress(sqInt lit, struct foo * self);
+static sqInt ffiLoadCalloutModule(sqInt module, struct foo * self);
+static void ffiLogCallout(sqInt lit, struct foo * self);
+EXPORT(sqInt) ffiLogCallsTo(char *fileName, struct foo * self);
+static sqInt ffiPushPointerContentsOfin(sqInt oop, CalloutState *calloutState, struct foo * self);
+static sqInt ffiPushPointerin(void *pointer, CalloutState *calloutState, struct foo * self);
+static sqInt ffiPushSignedBytein(sqInt value, CalloutState *calloutState, struct foo * self);
+static sqInt ffiPushSignedCharin(sqInt value, CalloutState *calloutState, struct foo * self);
+static sqInt ffiPushSignedIntin(sqInt value, CalloutState *calloutState, struct foo * self);
+static sqInt ffiPushSignedLongLongOopin(sqInt oop, CalloutState *calloutState, struct foo * self);
+static sqInt ffiPushSignedLongLongin(sqLong value, CalloutState *calloutState, struct foo * self);
+static sqInt ffiPushSignedShortin(sqInt value, CalloutState *calloutState, struct foo * self);
+static sqInt ffiPushStringOfLengthin(char *pointer, sqInt length, CalloutState *calloutState, struct foo * self);
+static sqInt ffiPushStructureContentsOfin(sqInt oop, CalloutState *calloutState, struct foo * self);
+static sqInt ffiPushStructureofSizetypeSpecofLengthin(void *pointer, sqInt structSize, sqInt *argSpec, sqInt argSpecSize, CalloutState *calloutState, struct foo * self);
+static sqInt ffiPushUnsignedBytein(sqInt value, CalloutState *calloutState, struct foo * self);
+static sqInt ffiPushUnsignedCharin(sqInt value, CalloutState *calloutState, struct foo * self);
+static sqInt ffiPushUnsignedIntin(sqInt value, CalloutState *calloutState, struct foo * self);
+static sqInt ffiPushUnsignedLongLongOopin(sqInt oop, CalloutState *calloutState, struct foo * self);
+static sqInt ffiPushUnsignedLongLongin(usqLong value, CalloutState *calloutState, struct foo * self);
+static sqInt ffiPushUnsignedShortin(sqInt value, CalloutState *calloutState, struct foo * self);
+static sqInt ffiPushVoidin(sqInt ignored, CalloutState *calloutState, struct foo * self);
+static sqInt ffiReturnCStringFrom(sqInt cPointer, struct foo * self);
+static sqInt ffiReturnPointerofTypein(usqLong retVal, sqInt retType, CalloutState *calloutState, struct foo * self);
+static sqInt ffiReturnStructofTypein(usqLong intRet, sqInt ffiRetType, CalloutState *calloutState, struct foo * self);
+static sqInt ffiReturnType(sqInt specOnStack, struct foo * self);
+static sqInt ffiSupportsCallingConvention(sqInt aCallingConvention, struct foo * self);
+static sqInt ffiValidateExternalDataAtomicType(sqInt oop, sqInt atomicType, struct foo * self);
 EXPORT(const char *) getModuleName(void);
 static sqInt incrementFloatRegisterIndex(CalloutState * self_in_incrementFloatRegisterIndex);
 static sqInt incrementIntegerRegisterIndex(CalloutState * self_in_incrementIntegerRegisterIndex);
-EXPORT(sqInt) initialiseModule(void);
-static sqInt isAlien(sqInt anOop);
-static sqInt isAtomicType(sqInt typeSpec);
-static sqInt isDirectAlien(sqInt oop);
-static sqInt msg(char *s);
-static sqInt nonRegisterStructReturnIsViaImplicitFirstArgument(void);
-EXPORT(void) primitiveCallout(void);
-EXPORT(void) primitiveCalloutWithArgs(void);
-EXPORT(sqInt) primitiveCreateManualSurface(void);
-EXPORT(sqInt) primitiveDestroyManualSurface(void);
-EXPORT(sqInt) primitiveFFIAllocate(void);
-EXPORT(sqInt) primitiveFFIDoubleAt(void);
-EXPORT(sqInt) primitiveFFIDoubleAtPut(void);
-EXPORT(sqInt) primitiveFFIFloatAt(void);
-EXPORT(sqInt) primitiveFFIFloatAtPut(void);
-EXPORT(sqInt) primitiveFFIFree(void);
-EXPORT(sqInt) primitiveFFIGetLastError(void);
-EXPORT(sqInt) primitiveFFIIntegerAt(void);
-EXPORT(sqInt) primitiveFFIIntegerAtPut(void);
-EXPORT(sqInt) primitiveForceLoad(void);
-EXPORT(sqInt) primitiveLoadSymbolFromModule(void);
-EXPORT(sqInt) primitiveLogCallsTo(void);
-EXPORT(sqInt) primitiveSetManualSurfacePointer(void);
+EXPORT(sqInt) initialiseModule(struct foo * self);
+static sqInt isAlien(sqInt anOop, struct foo * self);
+static sqInt isAtomicType(sqInt typeSpec, struct foo * self);
+static sqInt isDirectAlien(sqInt oop, struct foo * self);
+static sqInt msg(char *s, struct foo * self);
+static sqInt nonRegisterStructReturnIsViaImplicitFirstArgument(struct foo * self);
+EXPORT(void) primitiveCallout(struct foo * self);
+EXPORT(void) primitiveCalloutWithArgs(struct foo * self);
+EXPORT(sqInt) primitiveCreateManualSurface(struct foo * self);
+EXPORT(sqInt) primitiveDestroyManualSurface(struct foo * self);
+EXPORT(sqInt) primitiveFFIAllocate(struct foo * self);
+EXPORT(sqInt) primitiveFFIDoubleAt(struct foo * self);
+EXPORT(sqInt) primitiveFFIDoubleAtPut(struct foo * self);
+EXPORT(sqInt) primitiveFFIFloatAt(struct foo * self);
+EXPORT(sqInt) primitiveFFIFloatAtPut(struct foo * self);
+EXPORT(sqInt) primitiveFFIFree(struct foo * self);
+EXPORT(sqInt) primitiveFFIGetLastError(struct foo * self);
+EXPORT(sqInt) primitiveFFIIntegerAt(struct foo * self);
+EXPORT(sqInt) primitiveFFIIntegerAtPut(struct foo * self);
+EXPORT(sqInt) primitiveForceLoad(struct foo * self);
+EXPORT(sqInt) primitiveLoadSymbolFromModule(struct foo * self);
+EXPORT(sqInt) primitiveLogCallsTo(struct foo * self);
+EXPORT(sqInt) primitiveSetManualSurfacePointer(struct foo * self);
 static sqInt returnStructInRegisters(sqInt returnStructSize);
 EXPORT(sqInt) setInterpreter(struct VirtualMachine *anInterpreter);
 static sqInt sizeField(sqInt oop);
@@ -525,8 +524,7 @@ static const char *moduleName =
 
 
 	/* ThreadedFFIPlugin>>#atomicTypeOf: */
-static sqInt
-atomicTypeOf(sqInt typeSpec)
+static sqIntatomicTypeOf(sqInt typeSpec, struct foo * self)
 {
 	return ((usqInt) (typeSpec & FFIAtomicTypeMask)) >> FFIAtomicTypeShift;
 }
@@ -535,8 +533,7 @@ atomicTypeOf(sqInt typeSpec)
 /*	Free any temporary arg strings. */
 
 	/* ThreadedFFIPlugin>>#cleanupCalloutState: */
-static void
-cleanupCalloutState(CalloutState *calloutState)
+static voidcleanupCalloutState(CalloutState *calloutState, struct foo * self)
 {
 	while (((calloutState->stringArgIndex)) > 0) {
 		free(((calloutState->stringArgs))[(calloutState->stringArgIndex = ((calloutState->stringArgIndex)) - 1)]);
@@ -544,8 +541,7 @@ cleanupCalloutState(CalloutState *calloutState)
 }
 
 	/* ThreadedFFIPlugin>>#externalFunctionHasStackSizeSlot */
-static sqInt
-externalFunctionHasStackSizeSlot(void)
+static sqIntexternalFunctionHasStackSizeSlot(struct foo * self)
 {
 	return externalFunctionInstSize > ExternalFunctionStackSizeIndex;
 }
@@ -558,29 +554,28 @@ externalFunctionHasStackSizeSlot(void)
 	reasons) with plain Byte or Word Arrays as well. Answer 0 on error. */
 
 	/* ThreadedFFIPlugin>>#ffiAddressOf:startingAt:size: */
-static void *
-ffiAddressOfstartingAtsize(sqInt rcvr, sqInt byteOffset, sqInt byteSize)
+static void *ffiAddressOfstartingAtsize(sqInt rcvr, sqInt byteOffset, sqInt byteSize, struct foo * self)
 {
     sqInt addr;
     sqInt rcvrClass;
     sqInt rcvrSize;
 
-	if (!(isBytes(rcvr, interpreterProxy->interpreterState))) {
+	if (!(isBytes(rcvr, self))) {
 		return 0;
 	}
 	if (!(byteOffset > 0)) {
 		return 0;
 	}
-	rcvrClass = fetchClassOf(rcvr, interpreterProxy->interpreterState);
-	rcvrSize = byteSizeOf(rcvr, interpreterProxy->interpreterState);
-	if (rcvrClass == (classExternalAddress(interpreterProxy->interpreterState))) {
+	rcvrClass = fetchClassOf(rcvr, self);
+	rcvrSize = byteSizeOf(rcvr, self);
+	if (rcvrClass == (classExternalAddress(self))) {
 		if (!(rcvrSize == BytesPerWord)) {
 			return 0;
 		}
 
 		/* Hack!! */
 		/* don't you dare to read from object memory (unless is pinned)! */
-		addr = fetchPointerofObject(0, rcvr, interpreterProxy->interpreterState);
+		addr = fetchPointerofObject(0, rcvr, self);
 		if (addr == 0) {
 
 			/* or: [(interpreterProxy isInMemory: addr) or: [(interpreterProxy isPinned: rcvr) not]] */
@@ -591,7 +586,7 @@ ffiAddressOfstartingAtsize(sqInt rcvr, sqInt byteOffset, sqInt byteSize)
 		if (!(((byteOffset + byteSize) - 1) <= rcvrSize)) {
 			return 0;
 		}
-		addr = ((sqIntptr_t) (firstIndexableField(rcvr, interpreterProxy->interpreterState)));
+		addr = ((sqIntptr_t) (firstIndexableField(rcvr, self)));
 	}
 	addr = (addr + byteOffset) - 1;
 	return ((void *)addr);
@@ -601,8 +596,7 @@ ffiAddressOfstartingAtsize(sqInt rcvr, sqInt byteOffset, sqInt byteSize)
 /*	Support for generic callout. Prepare an argument by value for a callout. */
 
 	/* ThreadedFFIPlugin>>#ffiArgByValue:in: */
-static sqInt
-ffiArgByValuein(sqInt oop, CalloutState *calloutState)
+static sqIntffiArgByValuein(sqInt oop, CalloutState *calloutState, struct foo * self)
 {
     sqInt atomicType;
     double floatValue;
@@ -627,22 +621,22 @@ ffiArgByValuein(sqInt oop, CalloutState *calloutState)
 		else {
 			/* begin ffiIntegerValueOf: */
 			if (oop & (BytesPerWord - 1)) {
-				if (isIntegerObject(oop, interpreterProxy->interpreterState)) {
-					intValue = integerValueOf(oop, interpreterProxy->interpreterState);
+				if (isIntegerObject(oop, self)) {
+					intValue = integerValueOf(oop, self);
 					goto l2;
 				}
 				
 #        if SPURVM
-				if (isCharacterObject(oop, interpreterProxy->interpreterState)) {
+				if (isCharacterObject(oop, self)) {
 
 					/* Immediate in Spur */
-					intValue = characterValueOf(oop, interpreterProxy->interpreterState);
+					intValue = characterValueOf(oop, self);
 					goto l2;
 				}
-				if (isFloatObject(oop, interpreterProxy->interpreterState)) {
+				if (isFloatObject(oop, self)) {
 
 					/* Immediate in 64-bit Spur */
-					intValue = floatValueOf(oop, interpreterProxy->interpreterState);
+					intValue = floatValueOf(oop, self);
 					goto l2;
 				}
 #        endif /* SPURVM */
@@ -653,44 +647,44 @@ ffiArgByValuein(sqInt oop, CalloutState *calloutState)
 
 				/* No non-immediate characters in Spur */
 #        else /* SPURVM */
-				if (isCharacterObject(oop, interpreterProxy->interpreterState)) {
-					intValue = characterValueOf(oop, interpreterProxy->interpreterState);
+				if (isCharacterObject(oop, self)) {
+					intValue = characterValueOf(oop, self);
 					goto l2;
 				}
 #        endif /* SPURVM */
-				if (isFloatObject(oop, interpreterProxy->interpreterState)) {
-					intValue = floatValueOf(oop, interpreterProxy->interpreterState);
+				if (isFloatObject(oop, self)) {
+					intValue = floatValueOf(oop, self);
 					goto l2;
 				}
-				if (oop == (nilObject(interpreterProxy->interpreterState))) {
+				if (oop == (nilObject(self))) {
 					intValue = 0;
 					goto l2;
 				}
-				if (oop == (falseObject(interpreterProxy->interpreterState))) {
+				if (oop == (falseObject(self))) {
 					intValue = 0;
 					goto l2;
 				}
-				if (oop == (trueObject(interpreterProxy->interpreterState))) {
+				if (oop == (trueObject(self))) {
 					intValue = 1;
 					goto l2;
 				}
-				if (isLargePositiveIntegerObject(oop, interpreterProxy->interpreterState)) {
+				if (isLargePositiveIntegerObject(oop, self)) {
 					
 #          if BytesPerWord == 8
 
 					/* Use cppIf: to get the return type of the function right.  Should be sqInt on 32-bits. */
-					intValue = positive64BitValueOf(oop, interpreterProxy->interpreterState);
+					intValue = positive64BitValueOf(oop, self);
 					goto l2;
 #          else /* BytesPerWord == 8 */
-					intValue = positive32BitValueOf(oop, interpreterProxy->interpreterState);
+					intValue = positive32BitValueOf(oop, self);
 					goto l2;
 #          endif /* BytesPerWord == 8 */
 				}
 			}
-			intValue = signedMachineIntegerValueOf(oop, interpreterProxy->interpreterState);
+			intValue = signedMachineIntegerValueOf(oop, self);
 	l2:	/* end ffiIntegerValueOf: */;
 		}
-		if (failed(interpreterProxy->interpreterState)) {
+		if (failed(self)) {
 			return FFIErrorCoercionFailed;
 		}
 		
@@ -698,27 +692,27 @@ ffiArgByValuein(sqInt oop, CalloutState *calloutState)
 		case 0:
 			return FFIErrorAttemptToPassVoid;
 		case 1:
-			return ffiPushUnsignedIntin(intValue, calloutState);
+			return ffiPushUnsignedIntin(intValue, calloutState, self);
 		case 2:
-			return ffiPushUnsignedBytein(intValue, calloutState);
+			return ffiPushUnsignedBytein(intValue, calloutState, self);
 		case 3:
-			return ffiPushSignedBytein(intValue, calloutState);
+			return ffiPushSignedBytein(intValue, calloutState, self);
 		case 4:
-			return ffiPushUnsignedShortin(intValue, calloutState);
+			return ffiPushUnsignedShortin(intValue, calloutState, self);
 		case 5:
-			return ffiPushSignedShortin(intValue, calloutState);
+			return ffiPushSignedShortin(intValue, calloutState, self);
 		case 6:
-			return ffiPushUnsignedIntin(intValue, calloutState);
+			return ffiPushUnsignedIntin(intValue, calloutState, self);
 		case 7:
-			return ffiPushSignedIntin(intValue, calloutState);
+			return ffiPushSignedIntin(intValue, calloutState, self);
 		case 8:
-			return ffiPushUnsignedLongLongOopin(intValue, calloutState);
+			return ffiPushUnsignedLongLongOopin(intValue, calloutState, self);
 		case 9:
-			return ffiPushSignedLongLongOopin(intValue, calloutState);
+			return ffiPushSignedLongLongOopin(intValue, calloutState, self);
 		case 10:
-			return ffiPushUnsignedCharin(intValue, calloutState);
+			return ffiPushUnsignedCharin(intValue, calloutState, self);
 		case 11:
-			return ffiPushSignedCharin(intValue, calloutState);
+			return ffiPushSignedCharin(intValue, calloutState, self);
 
 		default:
 			error("Case not found");
@@ -726,13 +720,13 @@ ffiArgByValuein(sqInt oop, CalloutState *calloutState)
 		}
 	}
 	/* begin ffiFloatValueOf: */
-	if (isFloatObject(oop, interpreterProxy->interpreterState)) {
-		floatValue = floatValueOf(oop, interpreterProxy->interpreterState);
+	if (isFloatObject(oop, self)) {
+		floatValue = floatValueOf(oop, self);
 		goto l3;
 	}
-	floatValue = ((double) (ffiIntegerValueOf(oop)) );
+	floatValue = ((double) (ffiIntegerValueOf(oop, self)) );
 	l3:	/* end ffiFloatValueOf: */;
-	if (failed(interpreterProxy->interpreterState)) {
+	if (failed(self)) {
 		return FFIErrorCoercionFailed;
 	}
 	if (atomicType == FFITypeSingleFloat) {
@@ -778,8 +772,7 @@ ffiArgByValuein(sqInt oop, CalloutState *calloutState)
 	argClass (if non-nil) defines the required (super)class for the argument. */
 
 	/* ThreadedFFIPlugin>>#ffiArgument:Spec:Class:in: */
-static sqInt
-ffiArgumentSpecClassin(sqInt oop, sqInt argSpec, sqInt argClass, CalloutState *calloutState)
+static sqIntffiArgumentSpecClassin(sqInt oop, sqInt argSpec, sqInt argClass, CalloutState *calloutState, struct foo * self)
 {
     usqLong arg;
     usqLong arg1;
@@ -825,47 +818,47 @@ ffiArgumentSpecClassin(sqInt oop, sqInt argSpec, sqInt argClass, CalloutState *c
 	arg1 = 0;
 
 	/* Prefetch class (we'll need it) */
-	oopClass = fetchClassOf(oop, interpreterProxy->interpreterState);
+	oopClass = fetchClassOf(oop, self);
 
 	/* Do the necessary type checks */
-	nilOop = nilObject(interpreterProxy->interpreterState);
+	nilOop = nilObject(self);
 	if (!(argClass == nilOop)) {
 
 		/* Type check 1:
 		   Is the required class of the argument a subclass of ExternalStructure? */
-		if (!(includesBehaviorThatOf(argClass, classExternalStructure(interpreterProxy->interpreterState), interpreterProxy->interpreterState))) {
+		if (!(includesBehaviorThatOf(argClass, classExternalStructure(self), self))) {
 			return FFIErrorWrongType;
 		}
 		if (!((nilOop == oop)
-			 || (includesBehaviorThatOf(oopClass, argClass, interpreterProxy->interpreterState)))) {
+			 || (includesBehaviorThatOf(oopClass, argClass, self)))) {
 			return FFIErrorCoercionFailed;
 		}
 	}
 	isStruct = 0;
 	if ((oop != nilOop)
-	 && (isPointers(oop, interpreterProxy->interpreterState))) {
+	 && (isPointers(oop, self))) {
 
 		/* #isPointers: will fail if oop is immediate so don't even attempt to use it */
-		isStruct = includesBehaviorThatOf(oopClass, classExternalStructure(interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+		isStruct = includesBehaviorThatOf(oopClass, classExternalStructure(self), self);
 		if (!((argClass == nilOop)
 			 || (isStruct))) {
 			return FFIErrorCoercionFailed;
 		}
 	}
 	if (isStruct) {
-		valueOop = fetchPointerofObject(0, oop, interpreterProxy->interpreterState);
+		valueOop = fetchPointerofObject(0, oop, self);
 	}
 	else {
 		valueOop = oop;
 	}
-	if (!(isWords(argSpec, interpreterProxy->interpreterState))) {
+	if (!(isWords(argSpec, self))) {
 		return FFIErrorWrongType;
 	}
-	(calloutState->ffiArgSpecSize = slotSizeOf(argSpec, interpreterProxy->interpreterState));
+	(calloutState->ffiArgSpecSize = slotSizeOf(argSpec, self));
 	if (((calloutState->ffiArgSpecSize)) == 0) {
 		return FFIErrorWrongType;
 	}
-	(calloutState->ffiArgSpec = firstIndexableField(argSpec, interpreterProxy->interpreterState));
+	(calloutState->ffiArgSpec = firstIndexableField(argSpec, self));
 	(calloutState->ffiArgHeader = longAt((calloutState->ffiArgSpec)));
 	if (((calloutState->ffiArgHeader)) & FFIFlagStructure) {
 
@@ -877,15 +870,15 @@ ffiArgumentSpecClassin(sqInt oop, sqInt argSpec, sqInt argClass, CalloutState *c
 			return FFIErrorWrongType;
 		}
 		/* begin ffiPushStructureContentsOf:in: */
-		ptrClass = fetchClassOf(valueOop, interpreterProxy->interpreterState);
-		if (ptrClass == (classExternalAddress(interpreterProxy->interpreterState))) {
+		ptrClass = fetchClassOf(valueOop, self);
+		if (ptrClass == (classExternalAddress(self))) {
 
 			/* ExternalAddress is bytes */
 
 			/* There is no way we can make sure the structure is valid.
 			   But we can at least check for attempts to pass pointers to ST memory. */
-			ptrAddress = ((void *)(fetchPointerofObject(0, valueOop, interpreterProxy->interpreterState)));
-			if (isInMemory(ptrAddress, interpreterProxy->interpreterState)) {
+			ptrAddress = ((void *)(fetchPointerofObject(0, valueOop, self)));
+			if (isInMemory(ptrAddress, self)) {
 				return FFIErrorInvalidPointer;
 			}
 			/* begin ffiPushStructure:ofSize:typeSpec:ofLength:in: */
@@ -927,13 +920,13 @@ ffiArgumentSpecClassin(sqInt oop, sqInt argSpec, sqInt argClass, CalloutState *c
 			}
 			return 0;
 		}
-		if (ptrClass == (classByteArray(interpreterProxy->interpreterState))) {
+		if (ptrClass == (classByteArray(self))) {
 
 			/* The following is a somewhat pessimistic test but I like being sure... */
-			if (!((byteSizeOf(valueOop, interpreterProxy->interpreterState)) == (((calloutState->ffiArgHeader)) & FFIStructSizeMask))) {
+			if (!((byteSizeOf(valueOop, self)) == (((calloutState->ffiArgHeader)) & FFIStructSizeMask))) {
 				return FFIErrorStructSize;
 			}
-			ptrAddress = firstIndexableField(valueOop, interpreterProxy->interpreterState);
+			ptrAddress = firstIndexableField(valueOop, self);
 			if (!(((calloutState->ffiArgHeader)) & FFIFlagPointer)) {
 
 				/* Since this involves passing the address of the first indexable field we need to fail
@@ -941,7 +934,7 @@ ffiArgumentSpecClassin(sqInt oop, sqInt argSpec, sqInt argClass, CalloutState *c
 				
 #        if COGMTVM
 				if ((((calloutState->callFlags)) & FFICallFlagThreaded)
-				 && (isYoung(valueOop, interpreterProxy->interpreterState))) {
+				 && (isYoung(valueOop, self))) {
 					return -PrimErrObjectMayMove;
 				}
 #        endif /* COGMTVM */
@@ -987,8 +980,8 @@ ffiArgumentSpecClassin(sqInt oop, sqInt argSpec, sqInt argClass, CalloutState *c
 			if (!((((calloutState->ffiArgHeader)) & FFIStructSizeMask) == BytesPerWord)) {
 				return FFIErrorStructSize;
 			}
-			ptrAddress = ((void *)(fetchPointerofObject(0, valueOop, interpreterProxy->interpreterState)));
-			if (isInMemory(ptrAddress, interpreterProxy->interpreterState)) {
+			ptrAddress = ((void *)(fetchPointerofObject(0, valueOop, self)));
+			if (isInMemory(ptrAddress, self)) {
 				return FFIErrorInvalidPointer;
 			}
 			/* begin ffiPushPointer:in: */
@@ -1010,7 +1003,7 @@ ffiArgumentSpecClassin(sqInt oop, sqInt argSpec, sqInt argClass, CalloutState *c
 	if (((calloutState->ffiArgHeader)) & FFIFlagPointer) {
 
 		/* no integers (or characters) for pointers please */
-		if (isImmediate(oop, interpreterProxy->interpreterState)) {
+		if (isImmediate(oop, self)) {
 			return FFIErrorIntAsPointer;
 		}
 		if (oop == nilOop) {
@@ -1033,7 +1026,7 @@ ffiArgumentSpecClassin(sqInt oop, sqInt argSpec, sqInt argClass, CalloutState *c
 			/* e.g., ExternalData */
 			if (isStruct) {
 				/* begin ffiAtomicStructByReference:Class:in: */
-				if (!(oopClass == (classExternalData(interpreterProxy->interpreterState)))) {
+				if (!(oopClass == (classExternalData(self)))) {
 					return FFIErrorCoercionFailed;
 				}
 				/* begin atomicTypeOf: */
@@ -1041,19 +1034,19 @@ ffiArgumentSpecClassin(sqInt oop, sqInt argSpec, sqInt argClass, CalloutState *c
 				atomicType = ((usqInt) (typeSpec & FFIAtomicTypeMask)) >> FFIAtomicTypeShift;
 				if (atomicType != FFITypeVoid) {
 					/* begin ffiValidateExternalData:AtomicType: */
-					ptrType = fetchPointerofObject(1, oop, interpreterProxy->interpreterState);
-					if (!((isPointers(ptrType, interpreterProxy->interpreterState))
-						 && ((slotSizeOf(ptrType, interpreterProxy->interpreterState)) >= 2))) {
+					ptrType = fetchPointerofObject(1, oop, self);
+					if (!((isPointers(ptrType, self))
+						 && ((slotSizeOf(ptrType, self)) >= 2))) {
 						err = FFIErrorWrongType;
 						goto l3;
 					}
-					specOop = fetchPointerofObject(0, ptrType, interpreterProxy->interpreterState);
-					if (!((isWords(specOop, interpreterProxy->interpreterState))
-						 && ((slotSizeOf(specOop, interpreterProxy->interpreterState)) > 0))) {
+					specOop = fetchPointerofObject(0, ptrType, self);
+					if (!((isWords(specOop, self))
+						 && ((slotSizeOf(specOop, self)) > 0))) {
 						err = FFIErrorWrongType;
 						goto l3;
 					}
-					spec = fetchPointerofObject(0, specOop, interpreterProxy->interpreterState);
+					spec = fetchPointerofObject(0, specOop, self);
 					if (!(spec & FFIFlagAtomic)) {
 						err = FFIErrorWrongType;
 						goto l3;
@@ -1077,8 +1070,8 @@ ffiArgumentSpecClassin(sqInt oop, sqInt argSpec, sqInt argClass, CalloutState *c
 						return err;
 					}
 				}
-				valueOop1 = fetchPointerofObject(0, oop, interpreterProxy->interpreterState);
-				return ffiPushPointerContentsOfin(valueOop1, calloutState);
+				valueOop1 = fetchPointerofObject(0, oop, self);
+				return ffiPushPointerContentsOfin(valueOop1, calloutState, self);
 			}
 			else {
 				/* begin ffiAtomicArgByReference:Class:in: */
@@ -1089,9 +1082,9 @@ ffiArgumentSpecClassin(sqInt oop, sqInt argSpec, sqInt argClass, CalloutState *c
 					/* No bools on input */
 					return FFIErrorCoercionFailed;
 				}
-				isAlien = ((isString = includesBehaviorThatOf(oopClass, classString(interpreterProxy->interpreterState), interpreterProxy->interpreterState))
+				isAlien = ((isString = includesBehaviorThatOf(oopClass, classString(self), self))
 					? 0
-					: includesBehaviorThatOf(oopClass, classAlien(interpreterProxy->interpreterState), interpreterProxy->interpreterState));
+					: includesBehaviorThatOf(oopClass, classAlien(self), self));
 				if ((((usqInt) atomicType1) >> 1) == (((usqInt) FFITypeSignedChar) >> 1)) {
 
 					/* string value (char*) */
@@ -1104,8 +1097,8 @@ ffiArgumentSpecClassin(sqInt oop, sqInt argSpec, sqInt argClass, CalloutState *c
 						/* String/Symbol */
 						/* Strings must be allocated by the ffi support code */
 						/* begin ffiPushString:OfLength:in: */
-						pointer = ((char *) (firstIndexableField(oop, interpreterProxy->interpreterState)));
-						length = byteSizeOf(oop, interpreterProxy->interpreterState);
+						pointer = ((char *) (firstIndexableField(oop, self)));
+						length = byteSizeOf(oop, self);
 						if (((calloutState->stringArgIndex)) >= MaxNumArgs) {
 							return -PrimErrBadNumArgs;
 						}
@@ -1140,9 +1133,9 @@ ffiArgumentSpecClassin(sqInt oop, sqInt argSpec, sqInt argClass, CalloutState *c
 				   the call if it is threaded and the object is young, since it may move during the call. */
 				if ((((calloutState->callFlags)) & FFICallFlagThreaded)
 				 && (((!isAlien)
-				 || ((assert(isAlien(oop)),
+				 || ((assert(isAlien(oop, self)),
 				(longAt(oop + BaseHeaderSize)) > 0)))
-				 && (isYoung(oop, interpreterProxy->interpreterState)))) {
+				 && (isYoung(oop, self)))) {
 					return -PrimErrObjectMayMove;
 				}
 #        endif /* COGMTVM */
@@ -1151,11 +1144,11 @@ ffiArgumentSpecClassin(sqInt oop, sqInt argSpec, sqInt argClass, CalloutState *c
 
 					/* byte* -- see comment on string above */
 					if (isString
-					 || (oopClass == (classByteArray(interpreterProxy->interpreterState)))) {
+					 || (oopClass == (classByteArray(self)))) {
 
 						/* String/Symbol/ByteArray */
 						/* begin ffiPushPointer:in: */
-						pointer1 = ((void *) (firstIndexableField(oop, interpreterProxy->interpreterState)));
+						pointer1 = ((void *) (firstIndexableField(oop, self)));
 						if (((calloutState->integerRegisterIndex)) < NumIntRegArgs) {
 							((calloutState->integerRegisters))[(calloutState->integerRegisterIndex)] = (((sqInt)pointer1));
 							(calloutState->floatRegisterIndex) = ((calloutState->integerRegisterIndex) = ((calloutState->integerRegisterIndex)) + 1);
@@ -1169,7 +1162,7 @@ ffiArgumentSpecClassin(sqInt oop, sqInt argSpec, sqInt argClass, CalloutState *c
 						}
 						return 0;
 					}
-					if (oopClass == (classExternalAddress(interpreterProxy->interpreterState))) {
+					if (oopClass == (classExternalAddress(self))) {
 						/* begin ffiPushPointer:in: */
 						pointer2 = ((void *) (longAt(oop + BaseHeaderSize)));
 						if (((calloutState->integerRegisterIndex)) < NumIntRegArgs) {
@@ -1208,10 +1201,10 @@ ffiArgumentSpecClassin(sqInt oop, sqInt argSpec, sqInt argClass, CalloutState *c
 					}
 				}
 				if (atomicType1 <= FFITypeDoubleFloat) {
-					if ((isWords(oop, interpreterProxy->interpreterState))
-					 || (oopClass == (classByteArray(interpreterProxy->interpreterState)))) {
+					if ((isWords(oop, self))
+					 || (oopClass == (classByteArray(self)))) {
 						/* begin ffiPushPointer:in: */
-						pointer4 = ((void *) (firstIndexableField(oop, interpreterProxy->interpreterState)));
+						pointer4 = ((void *) (firstIndexableField(oop, self)));
 						if (((calloutState->integerRegisterIndex)) < NumIntRegArgs) {
 							((calloutState->integerRegisters))[(calloutState->integerRegisterIndex)] = (((sqInt)pointer4));
 							(calloutState->floatRegisterIndex) = ((calloutState->integerRegisterIndex) = ((calloutState->integerRegisterIndex)) + 1);
@@ -1225,7 +1218,7 @@ ffiArgumentSpecClassin(sqInt oop, sqInt argSpec, sqInt argClass, CalloutState *c
 						}
 						return 0;
 					}
-					if (oopClass == (classExternalAddress(interpreterProxy->interpreterState))) {
+					if (oopClass == (classExternalAddress(self))) {
 						/* begin ffiPushPointer:in: */
 						pointer5 = ((void *) (longAt(oop + BaseHeaderSize)));
 						if (((calloutState->integerRegisterIndex)) < NumIntRegArgs) {
@@ -1266,7 +1259,7 @@ ffiArgumentSpecClassin(sqInt oop, sqInt argSpec, sqInt argClass, CalloutState *c
 		if (!isStruct) {
 			return FFIErrorCoercionFailed;
 		}
-		return ffiPushPointerContentsOfin(valueOop, calloutState);
+		return ffiPushPointerContentsOfin(valueOop, calloutState, self);
 	}
 	if (((calloutState->ffiArgHeader)) & FFIFlagAtomic) {
 
@@ -1289,22 +1282,22 @@ ffiArgumentSpecClassin(sqInt oop, sqInt argSpec, sqInt argClass, CalloutState *c
 			else {
 				/* begin ffiIntegerValueOf: */
 				if (valueOop & (BytesPerWord - 1)) {
-					if (isIntegerObject(valueOop, interpreterProxy->interpreterState)) {
-						intValue = integerValueOf(valueOop, interpreterProxy->interpreterState);
+					if (isIntegerObject(valueOop, self)) {
+						intValue = integerValueOf(valueOop, self);
 						goto l9;
 					}
 					
 #          if SPURVM
-					if (isCharacterObject(valueOop, interpreterProxy->interpreterState)) {
+					if (isCharacterObject(valueOop, self)) {
 
 						/* Immediate in Spur */
-						intValue = characterValueOf(valueOop, interpreterProxy->interpreterState);
+						intValue = characterValueOf(valueOop, self);
 						goto l9;
 					}
-					if (isFloatObject(valueOop, interpreterProxy->interpreterState)) {
+					if (isFloatObject(valueOop, self)) {
 
 						/* Immediate in 64-bit Spur */
-						intValue = floatValueOf(valueOop, interpreterProxy->interpreterState);
+						intValue = floatValueOf(valueOop, self);
 						goto l9;
 					}
 #          endif /* SPURVM */
@@ -1315,44 +1308,44 @@ ffiArgumentSpecClassin(sqInt oop, sqInt argSpec, sqInt argClass, CalloutState *c
 
 					/* No non-immediate characters in Spur */
 #          else /* SPURVM */
-					if (isCharacterObject(valueOop, interpreterProxy->interpreterState)) {
-						intValue = characterValueOf(valueOop, interpreterProxy->interpreterState);
+					if (isCharacterObject(valueOop, self)) {
+						intValue = characterValueOf(valueOop, self);
 						goto l9;
 					}
 #          endif /* SPURVM */
-					if (isFloatObject(valueOop, interpreterProxy->interpreterState)) {
-						intValue = floatValueOf(valueOop, interpreterProxy->interpreterState);
+					if (isFloatObject(valueOop, self)) {
+						intValue = floatValueOf(valueOop, self);
 						goto l9;
 					}
-					if (valueOop == (nilObject(interpreterProxy->interpreterState))) {
+					if (valueOop == (nilObject(self))) {
 						intValue = 0;
 						goto l9;
 					}
-					if (valueOop == (falseObject(interpreterProxy->interpreterState))) {
+					if (valueOop == (falseObject(self))) {
 						intValue = 0;
 						goto l9;
 					}
-					if (valueOop == (trueObject(interpreterProxy->interpreterState))) {
+					if (valueOop == (trueObject(self))) {
 						intValue = 1;
 						goto l9;
 					}
-					if (isLargePositiveIntegerObject(valueOop, interpreterProxy->interpreterState)) {
+					if (isLargePositiveIntegerObject(valueOop, self)) {
 						
 #            if BytesPerWord == 8
 
 						/* Use cppIf: to get the return type of the function right.  Should be sqInt on 32-bits. */
-						intValue = positive64BitValueOf(valueOop, interpreterProxy->interpreterState);
+						intValue = positive64BitValueOf(valueOop, self);
 						goto l9;
 #            else /* BytesPerWord == 8 */
-						intValue = positive32BitValueOf(valueOop, interpreterProxy->interpreterState);
+						intValue = positive32BitValueOf(valueOop, self);
 						goto l9;
 #            endif /* BytesPerWord == 8 */
 					}
 				}
-				intValue = signedMachineIntegerValueOf(valueOop, interpreterProxy->interpreterState);
+				intValue = signedMachineIntegerValueOf(valueOop, self);
 	l9:	/* end ffiIntegerValueOf: */;
 			}
-			if (failed(interpreterProxy->interpreterState)) {
+			if (failed(self)) {
 				return FFIErrorCoercionFailed;
 			}
 			
@@ -1360,27 +1353,27 @@ ffiArgumentSpecClassin(sqInt oop, sqInt argSpec, sqInt argClass, CalloutState *c
 			case 0:
 				return FFIErrorAttemptToPassVoid;
 			case 1:
-				return ffiPushUnsignedIntin(intValue, calloutState);
+				return ffiPushUnsignedIntin(intValue, calloutState, self);
 			case 2:
-				return ffiPushUnsignedBytein(intValue, calloutState);
+				return ffiPushUnsignedBytein(intValue, calloutState, self);
 			case 3:
-				return ffiPushSignedBytein(intValue, calloutState);
+				return ffiPushSignedBytein(intValue, calloutState, self);
 			case 4:
-				return ffiPushUnsignedShortin(intValue, calloutState);
+				return ffiPushUnsignedShortin(intValue, calloutState, self);
 			case 5:
-				return ffiPushSignedShortin(intValue, calloutState);
+				return ffiPushSignedShortin(intValue, calloutState, self);
 			case 6:
-				return ffiPushUnsignedIntin(intValue, calloutState);
+				return ffiPushUnsignedIntin(intValue, calloutState, self);
 			case 7:
-				return ffiPushSignedIntin(intValue, calloutState);
+				return ffiPushSignedIntin(intValue, calloutState, self);
 			case 8:
-				return ffiPushUnsignedLongLongOopin(intValue, calloutState);
+				return ffiPushUnsignedLongLongOopin(intValue, calloutState, self);
 			case 9:
-				return ffiPushSignedLongLongOopin(intValue, calloutState);
+				return ffiPushSignedLongLongOopin(intValue, calloutState, self);
 			case 10:
-				return ffiPushUnsignedCharin(intValue, calloutState);
+				return ffiPushUnsignedCharin(intValue, calloutState, self);
 			case 11:
-				return ffiPushSignedCharin(intValue, calloutState);
+				return ffiPushSignedCharin(intValue, calloutState, self);
 
 			default:
 				error("Case not found");
@@ -1388,13 +1381,13 @@ ffiArgumentSpecClassin(sqInt oop, sqInt argSpec, sqInt argClass, CalloutState *c
 			}
 		}
 		/* begin ffiFloatValueOf: */
-		if (isFloatObject(valueOop, interpreterProxy->interpreterState)) {
-			floatValue = floatValueOf(valueOop, interpreterProxy->interpreterState);
+		if (isFloatObject(valueOop, self)) {
+			floatValue = floatValueOf(valueOop, self);
 			goto l6;
 		}
-		floatValue = ((double) (ffiIntegerValueOf(valueOop)) );
+		floatValue = ((double) (ffiIntegerValueOf(valueOop, self)) );
 	l6:	/* end ffiFloatValueOf: */;
-		if (failed(interpreterProxy->interpreterState)) {
+		if (failed(self)) {
 			return FFIErrorCoercionFailed;
 		}
 		if (atomicType2 == FFITypeSingleFloat) {
@@ -1447,8 +1440,7 @@ ffiArgumentSpecClassin(sqInt oop, sqInt argSpec, sqInt argClass, CalloutState *c
  */
 
 	/* ThreadedFFIPlugin>>#ffiAtomicArgByReference:Class:in: */
-static sqInt
-ffiAtomicArgByReferenceClassin(sqInt oop, sqInt oopClass, CalloutState *calloutState)
+static sqIntffiAtomicArgByReferenceClassin(sqInt oop, sqInt oopClass, CalloutState *calloutState, struct foo * self)
 {
     sqInt atomicType;
     char *copy;
@@ -1472,9 +1464,9 @@ ffiAtomicArgByReferenceClassin(sqInt oop, sqInt oopClass, CalloutState *calloutS
 		/* No bools on input */
 		return FFIErrorCoercionFailed;
 	}
-	isAlien = ((isString = includesBehaviorThatOf(oopClass, classString(interpreterProxy->interpreterState), interpreterProxy->interpreterState))
+	isAlien = ((isString = includesBehaviorThatOf(oopClass, classString(self), self))
 		? 0
-		: includesBehaviorThatOf(oopClass, classAlien(interpreterProxy->interpreterState), interpreterProxy->interpreterState));
+		: includesBehaviorThatOf(oopClass, classAlien(self), self));
 	if ((((usqInt) atomicType) >> 1) == (((usqInt) FFITypeSignedChar) >> 1)) {
 
 		/* string value (char*) */
@@ -1487,8 +1479,8 @@ ffiAtomicArgByReferenceClassin(sqInt oop, sqInt oopClass, CalloutState *calloutS
 			/* String/Symbol */
 			/* Strings must be allocated by the ffi support code */
 			/* begin ffiPushString:OfLength:in: */
-			pointer = ((char *) (firstIndexableField(oop, interpreterProxy->interpreterState)));
-			length = byteSizeOf(oop, interpreterProxy->interpreterState);
+			pointer = ((char *) (firstIndexableField(oop, self)));
+			length = byteSizeOf(oop, self);
 			if (((calloutState->stringArgIndex)) >= MaxNumArgs) {
 				return -PrimErrBadNumArgs;
 			}
@@ -1523,9 +1515,9 @@ ffiAtomicArgByReferenceClassin(sqInt oop, sqInt oopClass, CalloutState *calloutS
 	   the call if it is threaded and the object is young, since it may move during the call. */
 	if ((((calloutState->callFlags)) & FFICallFlagThreaded)
 	 && (((!isAlien)
-	 || ((assert(isAlien(oop)),
+	 || ((assert(isAlien(oop, self)),
 	(longAt(oop + BaseHeaderSize)) > 0)))
-	 && (isYoung(oop, interpreterProxy->interpreterState)))) {
+	 && (isYoung(oop, self)))) {
 		return -PrimErrObjectMayMove;
 	}
 #  endif /* COGMTVM */
@@ -1534,11 +1526,11 @@ ffiAtomicArgByReferenceClassin(sqInt oop, sqInt oopClass, CalloutState *calloutS
 
 		/* byte* -- see comment on string above */
 		if (isString
-		 || (oopClass == (classByteArray(interpreterProxy->interpreterState)))) {
+		 || (oopClass == (classByteArray(self)))) {
 
 			/* String/Symbol/ByteArray */
 			/* begin ffiPushPointer:in: */
-			pointer1 = ((void *) (firstIndexableField(oop, interpreterProxy->interpreterState)));
+			pointer1 = ((void *) (firstIndexableField(oop, self)));
 			if (((calloutState->integerRegisterIndex)) < NumIntRegArgs) {
 				((calloutState->integerRegisters))[(calloutState->integerRegisterIndex)] = (((sqInt)pointer1));
 				(calloutState->floatRegisterIndex) = ((calloutState->integerRegisterIndex) = ((calloutState->integerRegisterIndex)) + 1);
@@ -1552,7 +1544,7 @@ ffiAtomicArgByReferenceClassin(sqInt oop, sqInt oopClass, CalloutState *calloutS
 			}
 			return 0;
 		}
-		if (oopClass == (classExternalAddress(interpreterProxy->interpreterState))) {
+		if (oopClass == (classExternalAddress(self))) {
 			/* begin ffiPushPointer:in: */
 			pointer2 = ((void *) (longAt(oop + BaseHeaderSize)));
 			if (((calloutState->integerRegisterIndex)) < NumIntRegArgs) {
@@ -1591,10 +1583,10 @@ ffiAtomicArgByReferenceClassin(sqInt oop, sqInt oopClass, CalloutState *calloutS
 		}
 	}
 	if (atomicType <= FFITypeDoubleFloat) {
-		if ((isWords(oop, interpreterProxy->interpreterState))
-		 || (oopClass == (classByteArray(interpreterProxy->interpreterState)))) {
+		if ((isWords(oop, self))
+		 || (oopClass == (classByteArray(self)))) {
 			/* begin ffiPushPointer:in: */
-			pointer4 = ((void *) (firstIndexableField(oop, interpreterProxy->interpreterState)));
+			pointer4 = ((void *) (firstIndexableField(oop, self)));
 			if (((calloutState->integerRegisterIndex)) < NumIntRegArgs) {
 				((calloutState->integerRegisters))[(calloutState->integerRegisterIndex)] = (((sqInt)pointer4));
 				(calloutState->floatRegisterIndex) = ((calloutState->integerRegisterIndex) = ((calloutState->integerRegisterIndex)) + 1);
@@ -1608,7 +1600,7 @@ ffiAtomicArgByReferenceClassin(sqInt oop, sqInt oopClass, CalloutState *calloutS
 			}
 			return 0;
 		}
-		if (oopClass == (classExternalAddress(interpreterProxy->interpreterState))) {
+		if (oopClass == (classExternalAddress(self))) {
 			/* begin ffiPushPointer:in: */
 			pointer5 = ((void *) (longAt(oop + BaseHeaderSize)));
 			if (((calloutState->integerRegisterIndex)) < NumIntRegArgs) {
@@ -1652,8 +1644,7 @@ ffiAtomicArgByReferenceClassin(sqInt oop, sqInt oopClass, CalloutState *calloutS
  */
 
 	/* ThreadedFFIPlugin>>#ffiAtomicStructByReference:Class:in: */
-static sqInt
-ffiAtomicStructByReferenceClassin(sqInt oop, sqInt oopClass, CalloutState *calloutState)
+static sqIntffiAtomicStructByReferenceClassin(sqInt oop, sqInt oopClass, CalloutState *calloutState, struct foo * self)
 {
     sqInt atomicType;
     sqInt err;
@@ -1666,7 +1657,7 @@ ffiAtomicStructByReferenceClassin(sqInt oop, sqInt oopClass, CalloutState *callo
 
 
 	/* must be external data to pass pointers to atomic type */
-	if (!(oopClass == (classExternalData(interpreterProxy->interpreterState)))) {
+	if (!(oopClass == (classExternalData(self)))) {
 		return FFIErrorCoercionFailed;
 	}
 	/* begin atomicTypeOf: */
@@ -1674,19 +1665,19 @@ ffiAtomicStructByReferenceClassin(sqInt oop, sqInt oopClass, CalloutState *callo
 	atomicType = ((usqInt) (typeSpec & FFIAtomicTypeMask)) >> FFIAtomicTypeShift;
 	if (atomicType != FFITypeVoid) {
 		/* begin ffiValidateExternalData:AtomicType: */
-		ptrType = fetchPointerofObject(1, oop, interpreterProxy->interpreterState);
-		if (!((isPointers(ptrType, interpreterProxy->interpreterState))
-			 && ((slotSizeOf(ptrType, interpreterProxy->interpreterState)) >= 2))) {
+		ptrType = fetchPointerofObject(1, oop, self);
+		if (!((isPointers(ptrType, self))
+			 && ((slotSizeOf(ptrType, self)) >= 2))) {
 			err = FFIErrorWrongType;
 			goto l3;
 		}
-		specOop = fetchPointerofObject(0, ptrType, interpreterProxy->interpreterState);
-		if (!((isWords(specOop, interpreterProxy->interpreterState))
-			 && ((slotSizeOf(specOop, interpreterProxy->interpreterState)) > 0))) {
+		specOop = fetchPointerofObject(0, ptrType, self);
+		if (!((isWords(specOop, self))
+			 && ((slotSizeOf(specOop, self)) > 0))) {
 			err = FFIErrorWrongType;
 			goto l3;
 		}
-		spec = fetchPointerofObject(0, specOop, interpreterProxy->interpreterState);
+		spec = fetchPointerofObject(0, specOop, self);
 		if (!(spec & FFIFlagAtomic)) {
 			err = FFIErrorWrongType;
 			goto l3;
@@ -1710,8 +1701,8 @@ ffiAtomicStructByReferenceClassin(sqInt oop, sqInt oopClass, CalloutState *callo
 			return err;
 		}
 	}
-	valueOop = fetchPointerofObject(0, oop, interpreterProxy->interpreterState);
-	return ffiPushPointerContentsOfin(valueOop, calloutState);
+	valueOop = fetchPointerofObject(0, oop, self);
+	return ffiPushPointerContentsOfin(valueOop, calloutState, self);
 }
 
 
@@ -1722,8 +1713,7 @@ ffiAtomicStructByReferenceClassin(sqInt oop, sqInt oopClass, CalloutState *callo
  */
 
 	/* ThreadedX64Win64FFIPlugin>>#ffiCalloutTo:SpecOnStack:in: */
-static sqInt
-ffiCalloutToSpecOnStackin(void *procAddr, sqInt specOnStack, CalloutState *calloutState)
+static sqIntffiCalloutToSpecOnStackin(void *procAddr, sqInt specOnStack, CalloutState *calloutState, struct foo * self)
 {
     sqInt argTypes;
     sqInt argTypes1;
@@ -1737,7 +1727,7 @@ ffiCalloutToSpecOnStackin(void *procAddr, sqInt specOnStack, CalloutState *callo
     double floatRet;
     sqInt i;
     usqLong intRet;
-    extern void loadFloatRegs(double, double, double, double);
+    extern void loadFloatRegs(double, double, double, double, struct foo * self);
     usqLong mask;
     sqInt myThreadIndex;
     sqInt oop;
@@ -1766,9 +1756,9 @@ ffiCalloutToSpecOnStackin(void *procAddr, sqInt specOnStack, CalloutState *callo
 #  else /* COGMTVM */
 		DisownVMForFFICall
 #  endif /* COGMTVM */
-		, interpreterProxy->interpreterState);
+		, self);
 	if (((calloutState->floatRegisterSignature)) > 0) {
-		loadFloatRegs(((calloutState->floatRegisters))[0], ((calloutState->floatRegisters))[1], ((calloutState->floatRegisters))[2], ((calloutState->floatRegisters))[3]);
+		loadFloatRegs(((calloutState->floatRegisters))[0], ((calloutState->floatRegisters))[1], ((calloutState->floatRegisters))[2], ((calloutState->floatRegisters))[3], self);
 	}
 	if ((allocaLiesSoSetSpBeforeCall())
 	 || (mustAlignStack())) {
@@ -1789,8 +1779,8 @@ ffiCalloutToSpecOnStackin(void *procAddr, sqInt specOnStack, CalloutState *callo
 		if (isCalleePopsConvention((calloutState->callFlags))) {
 			setsp((calloutState->argVector));
 		}
-		ownVM(myThreadIndex, interpreterProxy->interpreterState);
-		return floatObjectOf(floatRet, interpreterProxy->interpreterState);
+		ownVM(myThreadIndex, self);
+		return floatObjectOf(floatRet, self);
 	}
 
 	/* undo any callee argument pops because it may confuse stack management with the alloca. */
@@ -1798,7 +1788,7 @@ ffiCalloutToSpecOnStackin(void *procAddr, sqInt specOnStack, CalloutState *callo
 	if (isCalleePopsConvention((calloutState->callFlags))) {
 		setsp((calloutState->argVector));
 	}
-	ownVM(myThreadIndex, interpreterProxy->interpreterState);
+	ownVM(myThreadIndex, self);
 	if (((calloutState->ffiRetHeader)) & (FFIFlagPointer + FFIFlagStructure)) {
 
 		/* Note: Order is important here since FFIFlagPointer + FFIFlagStructure is used to represent
@@ -1806,12 +1796,12 @@ ffiCalloutToSpecOnStackin(void *procAddr, sqInt specOnStack, CalloutState *callo
 		if (((calloutState->ffiRetHeader)) & FFIFlagPointer) {
 			/* begin ffiReturnPointer:ofType:in: */
 			specLiteral = (specOnStack
-				? stackValue(1, interpreterProxy->interpreterState)
-				: literalofMethod(0, primitiveMethod(interpreterProxy->interpreterState), interpreterProxy->interpreterState));
-			argTypes = fetchPointerofObject(ExternalFunctionArgTypesIndex, specLiteral, interpreterProxy->interpreterState);
-			retType = fetchPointerofObject(0, argTypes, interpreterProxy->interpreterState);
-			retClass = fetchPointerofObject(1, retType, interpreterProxy->interpreterState);
-			if (retClass == (nilObject(interpreterProxy->interpreterState))) {
+				? stackValue(1, self)
+				: literalofMethod(0, primitiveMethod(self), self));
+			argTypes = fetchPointerofObject(ExternalFunctionArgTypesIndex, specLiteral, self);
+			retType = fetchPointerofObject(0, argTypes, self);
+			retClass = fetchPointerofObject(1, retType, self);
+			if (retClass == (nilObject(self))) {
 
 				/* Create ExternalData upon return */
 				/* begin atomicTypeOf: */
@@ -1823,7 +1813,7 @@ ffiCalloutToSpecOnStackin(void *procAddr, sqInt specOnStack, CalloutState *callo
 					/* begin ffiReturnCStringFrom: */
 					cPointer = ((usqInt) intRet);
 					if (!(cPointer)) {
-						retOop = nilObject(interpreterProxy->interpreterState);
+						retOop = nilObject(self);
 						goto l3;
 					}
 					cString = ((char *) cPointer);
@@ -1831,8 +1821,8 @@ ffiCalloutToSpecOnStackin(void *procAddr, sqInt specOnStack, CalloutState *callo
 					while (!((cString[strLen]) == 0)) {
 						strLen += 1;
 					}
-					strOop = instantiateClassindexableSize(classString(interpreterProxy->interpreterState), strLen, interpreterProxy->interpreterState);
-					strPtr = firstIndexableField(strOop, interpreterProxy->interpreterState);
+					strOop = instantiateClassindexableSize(classString(self), strLen, self);
+					strPtr = firstIndexableField(strOop, self);
 					for (i = 0; i < strLen; i += 1) {
 						strPtr[i] = (cString[i]);
 					}
@@ -1842,78 +1832,78 @@ ffiCalloutToSpecOnStackin(void *procAddr, sqInt specOnStack, CalloutState *callo
 				}
 				
 #if SPURVM
-				oop = instantiateClassindexableSize(classExternalAddress(interpreterProxy->interpreterState), BytesPerWord, interpreterProxy->interpreterState);
-				ptr = firstIndexableField(oop, interpreterProxy->interpreterState);
+				oop = instantiateClassindexableSize(classExternalAddress(self), BytesPerWord, self);
+				ptr = firstIndexableField(oop, self);
 				ptr[0] = (((sqInt) intRet));
-				retOop = instantiateClassindexableSize(classExternalData(interpreterProxy->interpreterState), 0, interpreterProxy->interpreterState);
-				storePointerofObjectwithValue(0, retOop, oop, interpreterProxy->interpreterState);
+				retOop = instantiateClassindexableSize(classExternalData(self), 0, self);
+				storePointerofObjectwithValue(0, retOop, oop, self);
 
 #else /* SPURVM */
-				pushRemappableOop(retType, interpreterProxy->interpreterState);
-				oop = instantiateClassindexableSize(classExternalAddress(interpreterProxy->interpreterState), BytesPerWord, interpreterProxy->interpreterState);
-				ptr = firstIndexableField(oop, interpreterProxy->interpreterState);
+				pushRemappableOop(retType, self);
+				oop = instantiateClassindexableSize(classExternalAddress(self), BytesPerWord, self);
+				ptr = firstIndexableField(oop, self);
 				ptr[0] = (((sqInt) intRet));
-								pushRemappableOop(oop, interpreterProxy->interpreterState);
-				retOop = instantiateClassindexableSize(classExternalData(interpreterProxy->interpreterState), 0, interpreterProxy->interpreterState);
-				oop = popRemappableOop(interpreterProxy->interpreterState);
-				storePointerofObjectwithValue(0, retOop, oop, interpreterProxy->interpreterState);
-				retType = popRemappableOop(interpreterProxy->interpreterState)
+								pushRemappableOop(oop, self);
+				retOop = instantiateClassindexableSize(classExternalData(self), 0, self);
+				oop = popRemappableOop(self);
+				storePointerofObjectwithValue(0, retOop, oop, self);
+				retType = popRemappableOop(self)
 #endif /* SPURVM */
 ;
-				storePointerofObjectwithValue(1, retOop, retType, interpreterProxy->interpreterState);
+				storePointerofObjectwithValue(1, retOop, retType, self);
 				return retOop;
 			}
 			classOop = (((calloutState->ffiRetHeader)) & FFIFlagStructure
-				? classByteArray(interpreterProxy->interpreterState)
-				: classExternalAddress(interpreterProxy->interpreterState));
+				? classByteArray(self)
+				: classExternalAddress(self));
 			
 #if SPURVM
-			oop = instantiateClassindexableSize(classOop, BytesPerWord, interpreterProxy->interpreterState);
+			oop = instantiateClassindexableSize(classOop, BytesPerWord, self);
 
 #else /* SPURVM */
-			pushRemappableOop(retClass, interpreterProxy->interpreterState);
-			oop = instantiateClassindexableSize(classOop, BytesPerWord, interpreterProxy->interpreterState);
-			retClass = popRemappableOop(interpreterProxy->interpreterState)
+			pushRemappableOop(retClass, self);
+			oop = instantiateClassindexableSize(classOop, BytesPerWord, self);
+			retClass = popRemappableOop(self)
 #endif /* SPURVM */
 ;
-			ptr = firstIndexableField(oop, interpreterProxy->interpreterState);
+			ptr = firstIndexableField(oop, self);
 			ptr[0] = (((sqInt) intRet));
 			
 #if SPURVM
-			retOop = instantiateClassindexableSize(retClass, 0, interpreterProxy->interpreterState);
+			retOop = instantiateClassindexableSize(retClass, 0, self);
 
 #else /* SPURVM */
-			pushRemappableOop(oop, interpreterProxy->interpreterState);
-			retOop = instantiateClassindexableSize(retClass, 0, interpreterProxy->interpreterState);
-			oop = popRemappableOop(interpreterProxy->interpreterState)
+			pushRemappableOop(oop, self);
+			retOop = instantiateClassindexableSize(retClass, 0, self);
+			oop = popRemappableOop(self)
 #endif /* SPURVM */
 ;
-			storePointerofObjectwithValue(0, retOop, oop, interpreterProxy->interpreterState);
+			storePointerofObjectwithValue(0, retOop, oop, self);
 			return retOop;
 		}
 		/* begin ffiReturnStruct:ofType:in: */
 		specLiteral1 = (specOnStack
-			? stackValue(1, interpreterProxy->interpreterState)
-			: literalofMethod(0, primitiveMethod(interpreterProxy->interpreterState), interpreterProxy->interpreterState));
-		argTypes1 = fetchPointerofObject(ExternalFunctionArgTypesIndex, specLiteral1, interpreterProxy->interpreterState);
-		ffiRetType = fetchPointerofObject(0, argTypes1, interpreterProxy->interpreterState);
-		retClass1 = fetchPointerofObject(1, ffiRetType, interpreterProxy->interpreterState);
-		retOop1 = instantiateClassindexableSize(retClass1, 0, interpreterProxy->interpreterState);
+			? stackValue(1, self)
+			: literalofMethod(0, primitiveMethod(self), self));
+		argTypes1 = fetchPointerofObject(ExternalFunctionArgTypesIndex, specLiteral1, self);
+		ffiRetType = fetchPointerofObject(0, argTypes1, self);
+		retClass1 = fetchPointerofObject(1, ffiRetType, self);
+		retOop1 = instantiateClassindexableSize(retClass1, 0, self);
 		
 #if SPURVM
-		oop1 = instantiateClassindexableSize(classByteArray(interpreterProxy->interpreterState), (calloutState->structReturnSize), interpreterProxy->interpreterState);
+		oop1 = instantiateClassindexableSize(classByteArray(self), (calloutState->structReturnSize), self);
 
 #else /* SPURVM */
-		pushRemappableOop(retOop1, interpreterProxy->interpreterState);
-		oop1 = instantiateClassindexableSize(classByteArray(interpreterProxy->interpreterState), (calloutState->structReturnSize), interpreterProxy->interpreterState);
-		retOop1 = popRemappableOop(interpreterProxy->interpreterState)
+		pushRemappableOop(retOop1, self);
+		oop1 = instantiateClassindexableSize(classByteArray(self), (calloutState->structReturnSize), self);
+		retOop1 = popRemappableOop(self)
 #endif /* SPURVM */
 ;
-		memcpy(firstIndexableField(oop1, interpreterProxy->interpreterState), ((((calloutState->structReturnSize)) <= WordSize)
+		memcpy(firstIndexableField(oop1, self), ((((calloutState->structReturnSize)) <= WordSize)
 		 && ((((calloutState->structReturnSize)) & (((calloutState->structReturnSize)) - 1)) == 0)
 			? (&intRet)
 			: (calloutState->limit)), (calloutState->structReturnSize));
-		storePointerofObjectwithValue(0, retOop1, oop1, interpreterProxy->interpreterState);
+		storePointerofObjectwithValue(0, retOop1, oop1, self);
 		return retOop1;
 	}
 	/* begin ffiCreateIntegralResultOop:ofAtomicType:in: */
@@ -1926,8 +1916,8 @@ ffiCalloutToSpecOnStackin(void *procAddr, sqInt specOnStack, CalloutState *callo
 			? intRet
 			: intRet & (((((unsigned long long)1)) << (byteSize * 8)) - 1));
 		return (value == 0
-			? falseObject(interpreterProxy->interpreterState)
-			: trueObject(interpreterProxy->interpreterState));
+			? falseObject(self)
+			: trueObject(self));
 	}
 	if (atomicType <= FFITypeSignedInt) {
 
@@ -1950,21 +1940,21 @@ ffiCalloutToSpecOnStackin(void *procAddr, sqInt specOnStack, CalloutState *callo
 				mask = (((unsigned long long)1)) << (shift - 1);
 				value = (value & (mask - 1)) - (value & mask);
 			}
-			return integerObjectOf(value, interpreterProxy->interpreterState);
+			return integerObjectOf(value, self);
 		}
 		return (atomicType & 1
 			? (BytesPerWord == 8
-					? signed64BitIntegerFor(intRet, interpreterProxy->interpreterState)
-					: signed32BitIntegerFor(intRet, interpreterProxy->interpreterState))
+					? signed64BitIntegerFor(intRet, self)
+					: signed32BitIntegerFor(intRet, self))
 			: (BytesPerWord == 8
-					? positive64BitIntegerFor(intRet, interpreterProxy->interpreterState)
-					: positive32BitIntegerFor(intRet, interpreterProxy->interpreterState)));
+					? positive64BitIntegerFor(intRet, self)
+					: positive32BitIntegerFor(intRet, self)));
 	}
 	return ((((usqInt) atomicType) >> 1) == (((usqInt) FFITypeSignedLongLong) >> 1)
 		? (atomicType & 1
-				? signed64BitIntegerFor(intRet, interpreterProxy->interpreterState)
-				: positive64BitIntegerFor(intRet, interpreterProxy->interpreterState))
-		: characterObjectOf(intRet & 0xFF, interpreterProxy->interpreterState));
+				? signed64BitIntegerFor(intRet, self)
+				: positive64BitIntegerFor(intRet, self))
+		: characterObjectOf(intRet & 0xFF, self));
 }
 
 
@@ -1974,8 +1964,7 @@ ffiCalloutToSpecOnStackin(void *procAddr, sqInt specOnStack, CalloutState *callo
 	argArrayOrNil and the spec from the receiver. */
 
 	/* ThreadedFFIPlugin>>#ffiCall:ArgArrayOrNil:NumArgs: */
-static sqInt
-ffiCallArgArrayOrNilNumArgs(sqInt externalFunction, sqInt argArrayOrNil, sqInt nArgs)
+static sqIntffiCallArgArrayOrNilNumArgs(sqInt externalFunction, sqInt argArrayOrNil, sqInt nArgs, struct foo * self)
 {
     sqInt address;
     sqInt address1;
@@ -2002,7 +1991,7 @@ ffiCallArgArrayOrNilNumArgs(sqInt externalFunction, sqInt argArrayOrNil, sqInt n
     sqInt i;
     sqInt i1;
     usqLong intRet;
-    extern void loadFloatRegs(double, double, double, double);
+    extern void loadFloatRegs(double, double, double, double, struct foo * self);
     usqLong mask;
     sqInt myThreadIndex;
     sqInt oop;
@@ -2031,26 +2020,26 @@ ffiCallArgArrayOrNilNumArgs(sqInt externalFunction, sqInt argArrayOrNil, sqInt n
     sqInt typeSpec1;
     usqLong value;
 
-	primNumArgs = methodArgumentCount(interpreterProxy->interpreterState);
-	if (!(isKindOfClass(externalFunction, classExternalFunction(interpreterProxy->interpreterState), interpreterProxy->interpreterState))) {
-		return ffiFail(FFIErrorNotFunction);
+	primNumArgs = methodArgumentCount(self);
+	if (!(isKindOfClass(externalFunction, classExternalFunction(self), self))) {
+		return ffiFail(FFIErrorNotFunction, self);
 	}
-	flags = fetchIntegerofObject(ExternalFunctionFlagsIndex, externalFunction, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
-		return ffiFail(FFIErrorBadArgs);
+	flags = fetchIntegerofObject(ExternalFunctionFlagsIndex, externalFunction, self);
+	if (failed(self)) {
+		return ffiFail(FFIErrorBadArgs, self);
 	}
 	/* begin ffiLoadCalloutAddress: */
 
 	/* Make sure it's an external handle */
-	addressPtr = fetchPointerofObject(0, externalFunction, interpreterProxy->interpreterState);
-	if (!((isBytes(addressPtr, interpreterProxy->interpreterState))
-		 && ((byteSizeOf(addressPtr, interpreterProxy->interpreterState)) == (sizeof(sqInt))))) {
-		address1 = ffiFail(FFIErrorBadAddress);
+	addressPtr = fetchPointerofObject(0, externalFunction, self);
+	if (!((isBytes(addressPtr, self))
+		 && ((byteSizeOf(addressPtr, self)) == (sizeof(sqInt))))) {
+		address1 = ffiFail(FFIErrorBadAddress, self);
 		goto l1;
 	}
-	address1 = fetchPointerofObject(0, addressPtr, interpreterProxy->interpreterState);
+	address1 = fetchPointerofObject(0, addressPtr, self);
 	l1:	/* end ffiContentsOfHandle:errCode: */;
-	if (failed(interpreterProxy->interpreterState)) {
+	if (failed(self)) {
 		address = 0;
 		goto l2;
 	}
@@ -2058,53 +2047,53 @@ ffiCallArgArrayOrNilNumArgs(sqInt externalFunction, sqInt argArrayOrNil, sqInt n
 
 		/* Go look it up in the module */
 		if (externalFunctionInstSize > ExternalFunctionStackSizeIndex) {
-			storePointerofObjectwithValue(ExternalFunctionStackSizeIndex, externalFunction, integerObjectOf(-1, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+			storePointerofObjectwithValue(ExternalFunctionStackSizeIndex, externalFunction, integerObjectOf(-1, self), self);
 		}
-		if ((slotSizeOf(externalFunction, interpreterProxy->interpreterState)) < 5) {
-			address = ffiFail(FFIErrorNoModule);
+		if ((slotSizeOf(externalFunction, self)) < 5) {
+			address = ffiFail(FFIErrorNoModule, self);
 			goto l2;
 		}
-		address1 = ffiLoadCalloutAddressFrom(externalFunction);
-		if (failed(interpreterProxy->interpreterState)) {
+		address1 = ffiLoadCalloutAddressFrom(externalFunction, self);
+		if (failed(self)) {
 			address = 0;
 			goto l2;
 		}
-		ptr = firstIndexableField(addressPtr, interpreterProxy->interpreterState);
+		ptr = firstIndexableField(addressPtr, self);
 		ptr[0] = address1;
 	}
 	address = address1;
 	l2:	/* end ffiLoadCalloutAddress: */;
-	if (failed(interpreterProxy->interpreterState)) {
+	if (failed(self)) {
 		return 0;
 	}
 
 	/* must be array of arg types */
-	argTypeArray = fetchPointerofObject(ExternalFunctionArgTypesIndex, externalFunction, interpreterProxy->interpreterState);
-	if (!((isArray(argTypeArray, interpreterProxy->interpreterState))
-		 && ((slotSizeOf(argTypeArray, interpreterProxy->interpreterState)) == (nArgs + 1)))) {
-		return ffiFail(FFIErrorBadArgs);
+	argTypeArray = fetchPointerofObject(ExternalFunctionArgTypesIndex, externalFunction, self);
+	if (!((isArray(argTypeArray, self))
+		 && ((slotSizeOf(argTypeArray, self)) == (nArgs + 1)))) {
+		return ffiFail(FFIErrorBadArgs, self);
 	}
 	
 #  if COGMTVM
 	if (!(((flags & FFICallTypesMask) == FFICallTypeCDecl)
 		 || ((flags & FFICallTypesMask) == FFICallTypeApi))) {
-		return ffiFail(FFIErrorCallType);
+		return ffiFail(FFIErrorCallType, self);
 	}
 #  else /* COGMTVM */
 
 	/* not masking causes threaded calls to fail, which is as they should if the plugin is not threaded. */
 	if (!((flags == FFICallTypeCDecl)
 		 || (flags == FFICallTypeApi))) {
-		return ffiFail(FFIErrorCallType);
+		return ffiFail(FFIErrorCallType, self);
 	}
 #  endif /* COGMTVM */
 	requiredStackSize = (externalFunctionInstSize > ExternalFunctionStackSizeIndex
-		? fetchIntegerofObject(ExternalFunctionStackSizeIndex, externalFunction, interpreterProxy->interpreterState)
+		? fetchIntegerofObject(ExternalFunctionStackSizeIndex, externalFunction, self)
 		: -1);
-	if (failed(interpreterProxy->interpreterState)) {
+	if (failed(self)) {
 		return primitiveFailFor((argArrayOrNil == null
 			? PrimErrBadMethod
-			: PrimErrBadReceiver), interpreterProxy->interpreterState);
+			: PrimErrBadReceiver), self);
 	}
 	stackSize = (requiredStackSize < 0
 		? DefaultMaxStackSize
@@ -2112,11 +2101,11 @@ ffiCallArgArrayOrNilNumArgs(sqInt externalFunction, sqInt argArrayOrNil, sqInt n
 	calloutState = (&theCalloutState);
 	memset(calloutState, 0, sizeof(CalloutState));
 	(calloutState->callFlags = flags);
-	argType = fetchPointerofObject(0, argTypeArray, interpreterProxy->interpreterState);
-	argSpec = fetchPointerofObject(0, argType, interpreterProxy->interpreterState);
-	argClass = fetchPointerofObject(1, argType, interpreterProxy->interpreterState);
-	if (((err = ffiCheckReturnWithin(argSpec, argClass, calloutState))) != 0) {
-		return ffiFail(err);
+	argType = fetchPointerofObject(0, argTypeArray, self);
+	argSpec = fetchPointerofObject(0, argType, self);
+	argClass = fetchPointerofObject(1, argType, self);
+	if (((err = ffiCheckReturnWithin(argSpec, argClass, calloutState, self))) != 0) {
+		return ffiFail(err, self);
 	}
 	allocation = alloca((stackSize + ((calloutState->structReturnSize))) + (cStackAlignment()));
 	if (mustAlignStack()) {
@@ -2156,17 +2145,17 @@ ffiCallArgArrayOrNilNumArgs(sqInt externalFunction, sqInt argArrayOrNil, sqInt n
 				return PrimErrObjectMayMove;
 			}
 #      endif /* COGMTVM */
-			return ffiFail(err);
+			return ffiFail(err, self);
 		}
 	}
 	for (i = 1; i <= nArgs; i += 1) {
-		argType = fetchPointerofObject(i, argTypeArray, interpreterProxy->interpreterState);
-		argSpec = fetchPointerofObject(0, argType, interpreterProxy->interpreterState);
-		argClass = fetchPointerofObject(1, argType, interpreterProxy->interpreterState);
+		argType = fetchPointerofObject(i, argTypeArray, self);
+		argSpec = fetchPointerofObject(0, argType, self);
+		argClass = fetchPointerofObject(1, argType, self);
 		oop = (argArrayOrNil == null
-			? stackValue(nArgs - i, interpreterProxy->interpreterState)
-			: fetchPointerofObject(i - 1, argArrayOrNil, interpreterProxy->interpreterState));
-		err = ffiArgumentSpecClassin(oop, argSpec, argClass, calloutState);
+			? stackValue(nArgs - i, self)
+			: fetchPointerofObject(i - 1, argArrayOrNil, self));
+		err = ffiArgumentSpecClassin(oop, argSpec, argClass, calloutState, self);
 		if (err != 0) {
 			/* begin cleanupCalloutState: */
 			while (((calloutState->stringArgIndex)) > 0) {
@@ -2178,23 +2167,23 @@ ffiCallArgArrayOrNilNumArgs(sqInt externalFunction, sqInt argArrayOrNil, sqInt n
 				return PrimErrObjectMayMove;
 			}
 #      endif /* COGMTVM */
-			return ffiFail(err);
+			return ffiFail(err, self);
 		}
 	}
-	assert(!(failed(interpreterProxy->interpreterState)));
+	assert(!(failed(self)));
 	/* begin ffiLogCallout: */
 	if (ffiLogEnabled) {
-		functionName = fetchPointerofObject(externalFunctionInstSize, externalFunction, interpreterProxy->interpreterState);
-		if (!(isBytes(functionName, interpreterProxy->interpreterState))) {
+		functionName = fetchPointerofObject(externalFunctionInstSize, externalFunction, self);
+		if (!(isBytes(functionName, self))) {
 			goto l3;
 		}
-		ffiLogCallOfLength(firstIndexableField(functionName, interpreterProxy->interpreterState), byteSizeOf(functionName, interpreterProxy->interpreterState));
+		ffiLogCallOfLength(firstIndexableField(functionName, self), byteSizeOf(functionName, self), self);
 	}
 	l3:	/* end ffiLogCallout: */;
 	if ((requiredStackSize < 0)
 	 && (externalFunctionInstSize > ExternalFunctionStackSizeIndex)) {
 		stackSize = ((calloutState->currentArg)) - ((calloutState->argVector));
-		storeIntegerofObjectwithValue(ExternalFunctionStackSizeIndex, externalFunction, stackSize, interpreterProxy->interpreterState);
+		storeIntegerofObjectwithValue(ExternalFunctionStackSizeIndex, externalFunction, stackSize, self);
 	}
 	/* begin ffiCalloutTo:SpecOnStack:in: */
 	myThreadIndex = disownVM(
@@ -2205,9 +2194,9 @@ ffiCallArgArrayOrNilNumArgs(sqInt externalFunction, sqInt argArrayOrNil, sqInt n
 #  else /* COGMTVM */
 		DisownVMForFFICall
 #  endif /* COGMTVM */
-		, interpreterProxy->interpreterState);
+		, self);
 	if (((calloutState->floatRegisterSignature)) > 0) {
-		loadFloatRegs(((calloutState->floatRegisters))[0], ((calloutState->floatRegisters))[1], ((calloutState->floatRegisters))[2], ((calloutState->floatRegisters))[3]);
+		loadFloatRegs(((calloutState->floatRegisters))[0], ((calloutState->floatRegisters))[1], ((calloutState->floatRegisters))[2], ((calloutState->floatRegisters))[3], self);
 	}
 	if ((allocaLiesSoSetSpBeforeCall())
 	 || (mustAlignStack())) {
@@ -2228,8 +2217,8 @@ ffiCallArgArrayOrNilNumArgs(sqInt externalFunction, sqInt argArrayOrNil, sqInt n
 		if (isCalleePopsConvention((calloutState->callFlags))) {
 			setsp((calloutState->argVector));
 		}
-		ownVM(myThreadIndex, interpreterProxy->interpreterState);
-		result = floatObjectOf(floatRet, interpreterProxy->interpreterState);
+		ownVM(myThreadIndex, self);
+		result = floatObjectOf(floatRet, self);
 		goto l9;
 	}
 
@@ -2238,7 +2227,7 @@ ffiCallArgArrayOrNilNumArgs(sqInt externalFunction, sqInt argArrayOrNil, sqInt n
 	if (isCalleePopsConvention((calloutState->callFlags))) {
 		setsp((calloutState->argVector));
 	}
-	ownVM(myThreadIndex, interpreterProxy->interpreterState);
+	ownVM(myThreadIndex, self);
 	if (((calloutState->ffiRetHeader)) & (FFIFlagPointer + FFIFlagStructure)) {
 
 		/* Note: Order is important here since FFIFlagPointer + FFIFlagStructure is used to represent
@@ -2246,12 +2235,12 @@ ffiCallArgArrayOrNilNumArgs(sqInt externalFunction, sqInt argArrayOrNil, sqInt n
 		if (((calloutState->ffiRetHeader)) & FFIFlagPointer) {
 			/* begin ffiReturnPointer:ofType:in: */
 			specLiteral = (argArrayOrNil != null
-				? stackValue(1, interpreterProxy->interpreterState)
-				: literalofMethod(0, primitiveMethod(interpreterProxy->interpreterState), interpreterProxy->interpreterState));
-			argTypes = fetchPointerofObject(ExternalFunctionArgTypesIndex, specLiteral, interpreterProxy->interpreterState);
-			retType = fetchPointerofObject(0, argTypes, interpreterProxy->interpreterState);
-			retClass = fetchPointerofObject(1, retType, interpreterProxy->interpreterState);
-			if (retClass == (nilObject(interpreterProxy->interpreterState))) {
+				? stackValue(1, self)
+				: literalofMethod(0, primitiveMethod(self), self));
+			argTypes = fetchPointerofObject(ExternalFunctionArgTypesIndex, specLiteral, self);
+			retType = fetchPointerofObject(0, argTypes, self);
+			retClass = fetchPointerofObject(1, retType, self);
+			if (retClass == (nilObject(self))) {
 
 				/* Create ExternalData upon return */
 				/* begin atomicTypeOf: */
@@ -2263,7 +2252,7 @@ ffiCallArgArrayOrNilNumArgs(sqInt externalFunction, sqInt argArrayOrNil, sqInt n
 					/* begin ffiReturnCStringFrom: */
 					cPointer = ((usqInt) intRet);
 					if (!(cPointer)) {
-						retOop = nilObject(interpreterProxy->interpreterState);
+						retOop = nilObject(self);
 						goto l5;
 					}
 					cString = ((char *) cPointer);
@@ -2271,8 +2260,8 @@ ffiCallArgArrayOrNilNumArgs(sqInt externalFunction, sqInt argArrayOrNil, sqInt n
 					while (!((cString[strLen]) == 0)) {
 						strLen += 1;
 					}
-					strOop = instantiateClassindexableSize(classString(interpreterProxy->interpreterState), strLen, interpreterProxy->interpreterState);
-					strPtr = firstIndexableField(strOop, interpreterProxy->interpreterState);
+					strOop = instantiateClassindexableSize(classString(self), strLen, self);
+					strPtr = firstIndexableField(strOop, self);
 					for (i1 = 0; i1 < strLen; i1 += 1) {
 						strPtr[i1] = (cString[i1]);
 					}
@@ -2283,80 +2272,80 @@ ffiCallArgArrayOrNilNumArgs(sqInt externalFunction, sqInt argArrayOrNil, sqInt n
 				}
 				
 #if SPURVM
-				oop2 = instantiateClassindexableSize(classExternalAddress(interpreterProxy->interpreterState), BytesPerWord, interpreterProxy->interpreterState);
-				ptr1 = firstIndexableField(oop2, interpreterProxy->interpreterState);
+				oop2 = instantiateClassindexableSize(classExternalAddress(self), BytesPerWord, self);
+				ptr1 = firstIndexableField(oop2, self);
 				ptr1[0] = (((sqInt) intRet));
-				retOop = instantiateClassindexableSize(classExternalData(interpreterProxy->interpreterState), 0, interpreterProxy->interpreterState);
-				storePointerofObjectwithValue(0, retOop, oop2, interpreterProxy->interpreterState);
+				retOop = instantiateClassindexableSize(classExternalData(self), 0, self);
+				storePointerofObjectwithValue(0, retOop, oop2, self);
 
 #else /* SPURVM */
-				pushRemappableOop(retType, interpreterProxy->interpreterState);
-				oop2 = instantiateClassindexableSize(classExternalAddress(interpreterProxy->interpreterState), BytesPerWord, interpreterProxy->interpreterState);
-				ptr1 = firstIndexableField(oop2, interpreterProxy->interpreterState);
+				pushRemappableOop(retType, self);
+				oop2 = instantiateClassindexableSize(classExternalAddress(self), BytesPerWord, self);
+				ptr1 = firstIndexableField(oop2, self);
 				ptr1[0] = (((sqInt) intRet));
-								pushRemappableOop(oop2, interpreterProxy->interpreterState);
-				retOop = instantiateClassindexableSize(classExternalData(interpreterProxy->interpreterState), 0, interpreterProxy->interpreterState);
-				oop2 = popRemappableOop(interpreterProxy->interpreterState);
-				storePointerofObjectwithValue(0, retOop, oop2, interpreterProxy->interpreterState);
-				retType = popRemappableOop(interpreterProxy->interpreterState)
+								pushRemappableOop(oop2, self);
+				retOop = instantiateClassindexableSize(classExternalData(self), 0, self);
+				oop2 = popRemappableOop(self);
+				storePointerofObjectwithValue(0, retOop, oop2, self);
+				retType = popRemappableOop(self)
 #endif /* SPURVM */
 ;
-				storePointerofObjectwithValue(1, retOop, retType, interpreterProxy->interpreterState);
+				storePointerofObjectwithValue(1, retOop, retType, self);
 				result = retOop;
 				goto l9;
 			}
 			classOop = (((calloutState->ffiRetHeader)) & FFIFlagStructure
-				? classByteArray(interpreterProxy->interpreterState)
-				: classExternalAddress(interpreterProxy->interpreterState));
+				? classByteArray(self)
+				: classExternalAddress(self));
 			
 #if SPURVM
-			oop2 = instantiateClassindexableSize(classOop, BytesPerWord, interpreterProxy->interpreterState);
+			oop2 = instantiateClassindexableSize(classOop, BytesPerWord, self);
 
 #else /* SPURVM */
-			pushRemappableOop(retClass, interpreterProxy->interpreterState);
-			oop2 = instantiateClassindexableSize(classOop, BytesPerWord, interpreterProxy->interpreterState);
-			retClass = popRemappableOop(interpreterProxy->interpreterState)
+			pushRemappableOop(retClass, self);
+			oop2 = instantiateClassindexableSize(classOop, BytesPerWord, self);
+			retClass = popRemappableOop(self)
 #endif /* SPURVM */
 ;
-			ptr1 = firstIndexableField(oop2, interpreterProxy->interpreterState);
+			ptr1 = firstIndexableField(oop2, self);
 			ptr1[0] = (((sqInt) intRet));
 			
 #if SPURVM
-			retOop = instantiateClassindexableSize(retClass, 0, interpreterProxy->interpreterState);
+			retOop = instantiateClassindexableSize(retClass, 0, self);
 
 #else /* SPURVM */
-			pushRemappableOop(oop2, interpreterProxy->interpreterState);
-			retOop = instantiateClassindexableSize(retClass, 0, interpreterProxy->interpreterState);
-			oop2 = popRemappableOop(interpreterProxy->interpreterState)
+			pushRemappableOop(oop2, self);
+			retOop = instantiateClassindexableSize(retClass, 0, self);
+			oop2 = popRemappableOop(self)
 #endif /* SPURVM */
 ;
-			storePointerofObjectwithValue(0, retOop, oop2, interpreterProxy->interpreterState);
+			storePointerofObjectwithValue(0, retOop, oop2, self);
 			result = retOop;
 			goto l9;
 		}
 		/* begin ffiReturnStruct:ofType:in: */
 		specLiteral1 = (argArrayOrNil != null
-			? stackValue(1, interpreterProxy->interpreterState)
-			: literalofMethod(0, primitiveMethod(interpreterProxy->interpreterState), interpreterProxy->interpreterState));
-		argTypes1 = fetchPointerofObject(ExternalFunctionArgTypesIndex, specLiteral1, interpreterProxy->interpreterState);
-		ffiRetType = fetchPointerofObject(0, argTypes1, interpreterProxy->interpreterState);
-		retClass1 = fetchPointerofObject(1, ffiRetType, interpreterProxy->interpreterState);
-		retOop1 = instantiateClassindexableSize(retClass1, 0, interpreterProxy->interpreterState);
+			? stackValue(1, self)
+			: literalofMethod(0, primitiveMethod(self), self));
+		argTypes1 = fetchPointerofObject(ExternalFunctionArgTypesIndex, specLiteral1, self);
+		ffiRetType = fetchPointerofObject(0, argTypes1, self);
+		retClass1 = fetchPointerofObject(1, ffiRetType, self);
+		retOop1 = instantiateClassindexableSize(retClass1, 0, self);
 		
 #if SPURVM
-		oop1 = instantiateClassindexableSize(classByteArray(interpreterProxy->interpreterState), (calloutState->structReturnSize), interpreterProxy->interpreterState);
+		oop1 = instantiateClassindexableSize(classByteArray(self), (calloutState->structReturnSize), self);
 
 #else /* SPURVM */
-		pushRemappableOop(retOop1, interpreterProxy->interpreterState);
-		oop1 = instantiateClassindexableSize(classByteArray(interpreterProxy->interpreterState), (calloutState->structReturnSize), interpreterProxy->interpreterState);
-		retOop1 = popRemappableOop(interpreterProxy->interpreterState)
+		pushRemappableOop(retOop1, self);
+		oop1 = instantiateClassindexableSize(classByteArray(self), (calloutState->structReturnSize), self);
+		retOop1 = popRemappableOop(self)
 #endif /* SPURVM */
 ;
-		memcpy(firstIndexableField(oop1, interpreterProxy->interpreterState), ((((calloutState->structReturnSize)) <= WordSize)
+		memcpy(firstIndexableField(oop1, self), ((((calloutState->structReturnSize)) <= WordSize)
 		 && ((((calloutState->structReturnSize)) & (((calloutState->structReturnSize)) - 1)) == 0)
 			? (&intRet)
 			: (calloutState->limit)), (calloutState->structReturnSize));
-		storePointerofObjectwithValue(0, retOop1, oop1, interpreterProxy->interpreterState);
+		storePointerofObjectwithValue(0, retOop1, oop1, self);
 		result = retOop1;
 		goto l9;
 	}
@@ -2370,8 +2359,8 @@ ffiCallArgArrayOrNilNumArgs(sqInt externalFunction, sqInt argArrayOrNil, sqInt n
 			? intRet
 			: intRet & (((((unsigned long long)1)) << (byteSize * 8)) - 1));
 		result = (value == 0
-			? falseObject(interpreterProxy->interpreterState)
-			: trueObject(interpreterProxy->interpreterState));
+			? falseObject(self)
+			: trueObject(self));
 		goto l9;
 	}
 	if (atomicType <= FFITypeSignedInt) {
@@ -2395,29 +2384,29 @@ ffiCallArgArrayOrNilNumArgs(sqInt externalFunction, sqInt argArrayOrNil, sqInt n
 				mask = (((unsigned long long)1)) << (shift - 1);
 				value = (value & (mask - 1)) - (value & mask);
 			}
-			result = integerObjectOf(value, interpreterProxy->interpreterState);
+			result = integerObjectOf(value, self);
 			goto l9;
 		}
 		result = (atomicType & 1
 			? (BytesPerWord == 8
-					? signed64BitIntegerFor(intRet, interpreterProxy->interpreterState)
-					: signed32BitIntegerFor(intRet, interpreterProxy->interpreterState))
+					? signed64BitIntegerFor(intRet, self)
+					: signed32BitIntegerFor(intRet, self))
 			: (BytesPerWord == 8
-					? positive64BitIntegerFor(intRet, interpreterProxy->interpreterState)
-					: positive32BitIntegerFor(intRet, interpreterProxy->interpreterState)));
+					? positive64BitIntegerFor(intRet, self)
+					: positive32BitIntegerFor(intRet, self)));
 		goto l9;
 	}
 	result = ((((usqInt) atomicType) >> 1) == (((usqInt) FFITypeSignedLongLong) >> 1)
 		? (atomicType & 1
-				? signed64BitIntegerFor(intRet, interpreterProxy->interpreterState)
-				: positive64BitIntegerFor(intRet, interpreterProxy->interpreterState))
-		: characterObjectOf(intRet & 0xFF, interpreterProxy->interpreterState));
+				? signed64BitIntegerFor(intRet, self)
+				: positive64BitIntegerFor(intRet, self))
+		: characterObjectOf(intRet & 0xFF, self));
 	l9:	/* end ffiCalloutTo:SpecOnStack:in: */;
 	/* begin cleanupCalloutState: */
 	while (((calloutState->stringArgIndex)) > 0) {
 		free(((calloutState->stringArgs))[(calloutState->stringArgIndex = ((calloutState->stringArgIndex)) - 1)]);
 	}
-	popthenPush(primNumArgs + 1, result, interpreterProxy->interpreterState);
+	popthenPush(primNumArgs + 1, result, self);
 	return result;
 }
 
@@ -2425,21 +2414,20 @@ ffiCallArgArrayOrNilNumArgs(sqInt externalFunction, sqInt argArrayOrNil, sqInt n
 /*	Make sure we can return an object of the given type */
 
 	/* ThreadedFFIPlugin>>#ffiCheckReturn:With:in: */
-static sqInt
-ffiCheckReturnWithin(sqInt retSpec, sqInt retClass, CalloutState *calloutState)
+static sqIntffiCheckReturnWithin(sqInt retSpec, sqInt retClass, CalloutState *calloutState, struct foo * self)
 {
-	if (!(retClass == (nilObject(interpreterProxy->interpreterState)))) {
-		if (!(includesBehaviorThatOf(retClass, classExternalStructure(interpreterProxy->interpreterState), interpreterProxy->interpreterState))) {
+	if (!(retClass == (nilObject(self)))) {
+		if (!(includesBehaviorThatOf(retClass, classExternalStructure(self), self))) {
 			return FFIErrorBadReturn;
 		}
 	}
-	if (!((isWords(retSpec, interpreterProxy->interpreterState))
-		 && ((slotSizeOf(retSpec, interpreterProxy->interpreterState)) > 0))) {
+	if (!((isWords(retSpec, self))
+		 && ((slotSizeOf(retSpec, self)) > 0))) {
 		return FFIErrorWrongType;
 	}
-	(calloutState->ffiRetHeader = fetchLong32ofObject(0, retSpec, interpreterProxy->interpreterState));
+	(calloutState->ffiRetHeader = fetchLong32ofObject(0, retSpec, self));
 	if (!(((calloutState->ffiRetHeader)) & FFIFlagAtomic)) {
-		if (retClass == (nilObject(interpreterProxy->interpreterState))) {
+		if (retClass == (nilObject(self))) {
 			return FFIErrorBadReturn;
 		}
 	}
@@ -2453,22 +2441,20 @@ ffiCheckReturnWithin(sqInt retSpec, sqInt retClass, CalloutState *calloutState)
 /*	Make sure that the given oop is a valid external handle */
 
 	/* ThreadedFFIPlugin>>#ffiContentsOfHandle:errCode: */
-static sqInt
-ffiContentsOfHandleerrCode(sqInt oop, sqInt errCode)
+static sqIntffiContentsOfHandleerrCode(sqInt oop, sqInt errCode, struct foo * self)
 {
-	if (!((isBytes(oop, interpreterProxy->interpreterState))
-		 && ((byteSizeOf(oop, interpreterProxy->interpreterState)) == (sizeof(sqInt))))) {
-		return ffiFail(errCode);
+	if (!((isBytes(oop, self))
+		 && ((byteSizeOf(oop, self)) == (sizeof(sqInt))))) {
+		return ffiFail(errCode, self);
 	}
-	return fetchPointerofObject(0, oop, interpreterProxy->interpreterState);
+	return fetchPointerofObject(0, oop, self);
 }
 
 
 /*	Callout support. Return the appropriate oop for the given atomic type */
 
 	/* ThreadedFFIPlugin>>#ffiCreateIntegralResultOop:ofAtomicType:in: */
-static sqInt
-ffiCreateIntegralResultOopofAtomicTypein(usqLong retVal, sqInt atomicType, CalloutState *calloutState)
+static sqIntffiCreateIntegralResultOopofAtomicTypein(usqLong retVal, sqInt atomicType, CalloutState *calloutState, struct foo * self)
 {
     sqInt byteSize;
     usqLong mask;
@@ -2484,8 +2470,8 @@ ffiCreateIntegralResultOopofAtomicTypein(usqLong retVal, sqInt atomicType, Callo
 			? retVal
 			: retVal & (((((unsigned long long)1)) << (byteSize * 8)) - 1));
 		return (value == 0
-			? falseObject(interpreterProxy->interpreterState)
-			: trueObject(interpreterProxy->interpreterState));
+			? falseObject(self)
+			: trueObject(self));
 	}
 	if (atomicType <= FFITypeSignedInt) {
 
@@ -2508,21 +2494,21 @@ ffiCreateIntegralResultOopofAtomicTypein(usqLong retVal, sqInt atomicType, Callo
 				mask = (((unsigned long long)1)) << (shift - 1);
 				value = (value & (mask - 1)) - (value & mask);
 			}
-			return integerObjectOf(value, interpreterProxy->interpreterState);
+			return integerObjectOf(value, self);
 		}
 		return (atomicType & 1
 			? (BytesPerWord == 8
-					? signed64BitIntegerFor(retVal, interpreterProxy->interpreterState)
-					: signed32BitIntegerFor(retVal, interpreterProxy->interpreterState))
+					? signed64BitIntegerFor(retVal, self)
+					: signed32BitIntegerFor(retVal, self))
 			: (BytesPerWord == 8
-					? positive64BitIntegerFor(retVal, interpreterProxy->interpreterState)
-					: positive32BitIntegerFor(retVal, interpreterProxy->interpreterState)));
+					? positive64BitIntegerFor(retVal, self)
+					: positive32BitIntegerFor(retVal, self)));
 	}
 	return ((((usqInt) atomicType) >> 1) == (((usqInt) FFITypeSignedLongLong) >> 1)
 		? (atomicType & 1
-				? signed64BitIntegerFor(retVal, interpreterProxy->interpreterState)
-				: positive64BitIntegerFor(retVal, interpreterProxy->interpreterState))
-		: characterObjectOf(retVal & 0xFF, interpreterProxy->interpreterState));
+				? signed64BitIntegerFor(retVal, self)
+				: positive64BitIntegerFor(retVal, self))
+		: characterObjectOf(retVal & 0xFF, self));
 }
 
 
@@ -2539,13 +2525,12 @@ ffiCreateIntegralResultOopofAtomicTypein(usqLong retVal, sqInt atomicType, Callo
 	PrimErr.. and FFIError codes. Complex but necessary. */
 
 	/* ThreadedFFIPlugin>>#ffiFail: */
-static sqInt
-ffiFail(sqInt reason)
+static sqIntffiFail(sqInt reason, struct foo * self)
 {
 	ffiLastError = reason;
 	return primitiveFailFor((reason >= FFINoCalloutAvailable
-		? (reason + 2) + (slotSizeOf(primitiveErrorTable(interpreterProxy->interpreterState), interpreterProxy->interpreterState))
-		: -reason), interpreterProxy->interpreterState);
+		? (reason + 2) + (slotSizeOf(primitiveErrorTable(self), self))
+		: -reason), self);
 }
 
 
@@ -2554,13 +2539,12 @@ ffiFail(sqInt reason)
  */
 
 	/* ThreadedFFIPlugin>>#ffiFloatValueOf: */
-static double
-ffiFloatValueOf(sqInt oop)
+static doubleffiFloatValueOf(sqInt oop, struct foo * self)
 {
-	if (isFloatObject(oop, interpreterProxy->interpreterState)) {
-		return floatValueOf(oop, interpreterProxy->interpreterState);
+	if (isFloatObject(oop, self)) {
+		return floatValueOf(oop, self);
 	}
-	return ((double) (ffiIntegerValueOf(oop)) );
+	return ((double) (ffiIntegerValueOf(oop, self)) );
 }
 
 
@@ -2570,24 +2554,23 @@ ffiFloatValueOf(sqInt oop)
 /*	Cheat with a tag test */
 
 	/* ThreadedFFIPlugin>>#ffiIntegerValueOf: */
-static sqInt
-ffiIntegerValueOf(sqInt oop)
+static sqIntffiIntegerValueOf(sqInt oop, struct foo * self)
 {
 	if (oop & (BytesPerWord - 1)) {
-		if (isIntegerObject(oop, interpreterProxy->interpreterState)) {
-			return integerValueOf(oop, interpreterProxy->interpreterState);
+		if (isIntegerObject(oop, self)) {
+			return integerValueOf(oop, self);
 		}
 		
 #    if SPURVM
-		if (isCharacterObject(oop, interpreterProxy->interpreterState)) {
+		if (isCharacterObject(oop, self)) {
 
 			/* Immediate in Spur */
-			return characterValueOf(oop, interpreterProxy->interpreterState);
+			return characterValueOf(oop, self);
 		}
-		if (isFloatObject(oop, interpreterProxy->interpreterState)) {
+		if (isFloatObject(oop, self)) {
 
 			/* Immediate in 64-bit Spur */
-			return floatValueOf(oop, interpreterProxy->interpreterState);
+			return floatValueOf(oop, self);
 		}
 #    endif /* SPURVM */
 	}
@@ -2597,42 +2580,41 @@ ffiIntegerValueOf(sqInt oop)
 
 		/* No non-immediate characters in Spur */
 #    else /* SPURVM */
-		if (isCharacterObject(oop, interpreterProxy->interpreterState)) {
-			return characterValueOf(oop, interpreterProxy->interpreterState);
+		if (isCharacterObject(oop, self)) {
+			return characterValueOf(oop, self);
 		}
 #    endif /* SPURVM */
-		if (isFloatObject(oop, interpreterProxy->interpreterState)) {
-			return floatValueOf(oop, interpreterProxy->interpreterState);
+		if (isFloatObject(oop, self)) {
+			return floatValueOf(oop, self);
 		}
-		if (oop == (nilObject(interpreterProxy->interpreterState))) {
+		if (oop == (nilObject(self))) {
 			return 0;
 		}
-		if (oop == (falseObject(interpreterProxy->interpreterState))) {
+		if (oop == (falseObject(self))) {
 			return 0;
 		}
-		if (oop == (trueObject(interpreterProxy->interpreterState))) {
+		if (oop == (trueObject(self))) {
 			return 1;
 		}
-		if (isLargePositiveIntegerObject(oop, interpreterProxy->interpreterState)) {
+		if (isLargePositiveIntegerObject(oop, self)) {
 			
 #      if BytesPerWord == 8
 
 			/* Use cppIf: to get the return type of the function right.  Should be sqInt on 32-bits. */
-			return positive64BitValueOf(oop, interpreterProxy->interpreterState);
+			return positive64BitValueOf(oop, self);
 #      else /* BytesPerWord == 8 */
-			return positive32BitValueOf(oop, interpreterProxy->interpreterState);
+			return positive32BitValueOf(oop, self);
 #      endif /* BytesPerWord == 8 */
 		}
 	}
-	return signedMachineIntegerValueOf(oop, interpreterProxy->interpreterState);
+	return signedMachineIntegerValueOf(oop, self);
 }
 
 
 /*	Load the function address for a call out to an external function */
 
 	/* ThreadedFFIPlugin>>#ffiLoadCalloutAddressFrom: */
-static sqInt
-ffiLoadCalloutAddressFrom(sqInt oop)
+static sqIntffiLoadCalloutAddressFrom(sqInt oop, struct foo * self)
 {
     sqInt address;
     sqInt functionName;
@@ -2641,19 +2623,19 @@ ffiLoadCalloutAddressFrom(sqInt oop)
 
 
 	/* First find and load the module */
-	module = fetchPointerofObject(externalFunctionInstSize + 1, oop, interpreterProxy->interpreterState);
-	moduleHandle = ffiLoadCalloutModule(module);
-	if (failed(interpreterProxy->interpreterState)) {
+	module = fetchPointerofObject(externalFunctionInstSize + 1, oop, self);
+	moduleHandle = ffiLoadCalloutModule(module, self);
+	if (failed(self)) {
 		return 0;
 	}
-	functionName = fetchPointerofObject(externalFunctionInstSize, oop, interpreterProxy->interpreterState);
-	if (!(isBytes(functionName, interpreterProxy->interpreterState))) {
-		return ffiFail(FFIErrorBadExternalFunction);
+	functionName = fetchPointerofObject(externalFunctionInstSize, oop, self);
+	if (!(isBytes(functionName, self))) {
+		return ffiFail(FFIErrorBadExternalFunction, self);
 	}
-	address = ((sqInt)(ioLoadSymbolOfLengthFromModule(((sqInt)(firstIndexableField(functionName, interpreterProxy->interpreterState))), byteSizeOf(functionName, interpreterProxy->interpreterState), moduleHandle)));
-	if ((failed(interpreterProxy->interpreterState))
+	address = ((sqInt)(ioLoadSymbolOfLengthFromModule(((sqInt)(firstIndexableField(functionName, self))), byteSizeOf(functionName, self), moduleHandle)));
+	if ((failed(self))
 	 || (address == 0)) {
-		return ffiFail(FFIErrorAddressNotFound);
+		return ffiFail(FFIErrorAddressNotFound, self);
 	}
 	return address;
 }
@@ -2662,8 +2644,7 @@ ffiLoadCalloutAddressFrom(sqInt oop)
 /*	Load the address of the foreign function from the given object */
 
 	/* ThreadedFFIPlugin>>#ffiLoadCalloutAddress: */
-static sqInt
-ffiLoadCalloutAddress(sqInt lit)
+static sqIntffiLoadCalloutAddress(sqInt lit, struct foo * self)
 {
     sqInt address;
     sqInt addressPtr;
@@ -2673,32 +2654,32 @@ ffiLoadCalloutAddress(sqInt lit)
 	/* Lookup the address */
 
 	/* Make sure it's an external handle */
-	addressPtr = fetchPointerofObject(0, lit, interpreterProxy->interpreterState);
+	addressPtr = fetchPointerofObject(0, lit, self);
 	/* begin ffiContentsOfHandle:errCode: */
-	if (!((isBytes(addressPtr, interpreterProxy->interpreterState))
-		 && ((byteSizeOf(addressPtr, interpreterProxy->interpreterState)) == (sizeof(sqInt))))) {
-		address = ffiFail(FFIErrorBadAddress);
+	if (!((isBytes(addressPtr, self))
+		 && ((byteSizeOf(addressPtr, self)) == (sizeof(sqInt))))) {
+		address = ffiFail(FFIErrorBadAddress, self);
 		goto l1;
 	}
-	address = fetchPointerofObject(0, addressPtr, interpreterProxy->interpreterState);
+	address = fetchPointerofObject(0, addressPtr, self);
 	l1:	/* end ffiContentsOfHandle:errCode: */;
-	if (failed(interpreterProxy->interpreterState)) {
+	if (failed(self)) {
 		return 0;
 	}
 	if (address == 0) {
 
 		/* Go look it up in the module */
 		if (externalFunctionInstSize > ExternalFunctionStackSizeIndex) {
-			storePointerofObjectwithValue(ExternalFunctionStackSizeIndex, lit, integerObjectOf(-1, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+			storePointerofObjectwithValue(ExternalFunctionStackSizeIndex, lit, integerObjectOf(-1, self), self);
 		}
-		if ((slotSizeOf(lit, interpreterProxy->interpreterState)) < 5) {
-			return ffiFail(FFIErrorNoModule);
+		if ((slotSizeOf(lit, self)) < 5) {
+			return ffiFail(FFIErrorNoModule, self);
 		}
-		address = ffiLoadCalloutAddressFrom(lit);
-		if (failed(interpreterProxy->interpreterState)) {
+		address = ffiLoadCalloutAddressFrom(lit, self);
+		if (failed(self)) {
 			return 0;
 		}
-		ptr = firstIndexableField(addressPtr, interpreterProxy->interpreterState);
+		ptr = firstIndexableField(addressPtr, self);
 		ptr[0] = address;
 	}
 	return address;
@@ -2708,8 +2689,7 @@ ffiLoadCalloutAddress(sqInt lit)
 /*	Load the given module and return its handle */
 
 	/* ThreadedFFIPlugin>>#ffiLoadCalloutModule: */
-static sqInt
-ffiLoadCalloutModule(sqInt module)
+static sqIntffiLoadCalloutModule(sqInt module, struct foo * self)
 {
     sqInt ffiModuleName;
     sqInt moduleHandle;
@@ -2718,48 +2698,48 @@ ffiLoadCalloutModule(sqInt module)
     sqInt *ptr;
     sqInt rcvr;
 
-	if (isBytes(module, interpreterProxy->interpreterState)) {
+	if (isBytes(module, self)) {
 
 		/* plain module name */
 		ffiModuleName = module;
-		moduleLength = byteSizeOf(ffiModuleName, interpreterProxy->interpreterState);
-		moduleHandle = ((sqInt)(ioLoadModuleOfLength(((sqInt)(firstIndexableField(ffiModuleName, interpreterProxy->interpreterState))), moduleLength)));
-		if ((failed(interpreterProxy->interpreterState))
+		moduleLength = byteSizeOf(ffiModuleName, self);
+		moduleHandle = ((sqInt)(ioLoadModuleOfLength(((sqInt)(firstIndexableField(ffiModuleName, self))), moduleLength)));
+		if ((failed(self))
 		 || (moduleHandle == 0)) {
-			return ffiFail(FFIErrorModuleNotFound);
+			return ffiFail(FFIErrorModuleNotFound, self);
 		}
 		return moduleHandle;
 	}
-	rcvr = stackValue(methodArgumentCount(interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	if (!(isKindOfClass(rcvr, classExternalLibrary(interpreterProxy->interpreterState), interpreterProxy->interpreterState))) {
-		return ffiFail(FFIErrorNoModule);
+	rcvr = stackValue(methodArgumentCount(self), self);
+	if (!(isKindOfClass(rcvr, classExternalLibrary(self), self))) {
+		return ffiFail(FFIErrorNoModule, self);
 	}
-	moduleHandlePtr = fetchPointerofObject(0, rcvr, interpreterProxy->interpreterState);
+	moduleHandlePtr = fetchPointerofObject(0, rcvr, self);
 	/* begin ffiContentsOfHandle:errCode: */
-	if (!((isBytes(moduleHandlePtr, interpreterProxy->interpreterState))
-		 && ((byteSizeOf(moduleHandlePtr, interpreterProxy->interpreterState)) == (sizeof(sqInt))))) {
-		moduleHandle = ffiFail(FFIErrorBadExternalLibrary);
+	if (!((isBytes(moduleHandlePtr, self))
+		 && ((byteSizeOf(moduleHandlePtr, self)) == (sizeof(sqInt))))) {
+		moduleHandle = ffiFail(FFIErrorBadExternalLibrary, self);
 		goto l1;
 	}
-	moduleHandle = fetchPointerofObject(0, moduleHandlePtr, interpreterProxy->interpreterState);
+	moduleHandle = fetchPointerofObject(0, moduleHandlePtr, self);
 	l1:	/* end ffiContentsOfHandle:errCode: */;
-	if (failed(interpreterProxy->interpreterState)) {
+	if (failed(self)) {
 		return 0;
 	}
 	if (moduleHandle == 0) {
 
 		/* need to reload module */
-		ffiModuleName = fetchPointerofObject(1, rcvr, interpreterProxy->interpreterState);
-		if (!(isBytes(ffiModuleName, interpreterProxy->interpreterState))) {
-			return ffiFail(FFIErrorBadExternalLibrary);
+		ffiModuleName = fetchPointerofObject(1, rcvr, self);
+		if (!(isBytes(ffiModuleName, self))) {
+			return ffiFail(FFIErrorBadExternalLibrary, self);
 		}
-		moduleLength = byteSizeOf(ffiModuleName, interpreterProxy->interpreterState);
-		moduleHandle = ((sqInt)(ioLoadModuleOfLength(((sqInt)(firstIndexableField(ffiModuleName, interpreterProxy->interpreterState))), moduleLength)));
-		if ((failed(interpreterProxy->interpreterState))
+		moduleLength = byteSizeOf(ffiModuleName, self);
+		moduleHandle = ((sqInt)(ioLoadModuleOfLength(((sqInt)(firstIndexableField(ffiModuleName, self))), moduleLength)));
+		if ((failed(self))
 		 || (moduleHandle == 0)) {
-			return ffiFail(FFIErrorModuleNotFound);
+			return ffiFail(FFIErrorModuleNotFound, self);
 		}
-		ptr = firstIndexableField(moduleHandlePtr, interpreterProxy->interpreterState);
+		ptr = firstIndexableField(moduleHandlePtr, self);
 		ptr[0] = moduleHandle;
 	}
 	return moduleHandle;
@@ -2769,17 +2749,16 @@ ffiLoadCalloutModule(sqInt module)
 /*	fetch the function name */
 
 	/* ThreadedFFIPlugin>>#ffiLogCallout: */
-static void
-ffiLogCallout(sqInt lit)
+static voidffiLogCallout(sqInt lit, struct foo * self)
 {
     sqInt functionName;
 
 	if (ffiLogEnabled) {
-		functionName = fetchPointerofObject(externalFunctionInstSize, lit, interpreterProxy->interpreterState);
-		if (!(isBytes(functionName, interpreterProxy->interpreterState))) {
+		functionName = fetchPointerofObject(externalFunctionInstSize, lit, self);
+		if (!(isBytes(functionName, self))) {
 			return;
 		}
-		ffiLogCallOfLength(firstIndexableField(functionName, interpreterProxy->interpreterState), byteSizeOf(functionName, interpreterProxy->interpreterState));
+		ffiLogCallOfLength(firstIndexableField(functionName, self), byteSizeOf(functionName, self), self);
 	}
 }
 
@@ -2788,15 +2767,14 @@ ffiLogCallout(sqInt lit)
 	enable and disable logging of FFI calls. */
 
 	/* ThreadedFFIPlugin>>#ffiLogCallsTo: */
-EXPORT(sqInt)
-ffiLogCallsTo(char *fileName)
+EXPORT(sqInt)ffiLogCallsTo(char *fileName, struct foo * self)
 {
     sqInt ok;
 
 	if (fileName == null) {
 
 		/* disable logging */
-		ok = ffiLogFileNameOfLength(null, 0);
+		ok = ffiLogFileNameOfLength(null, 0, self);
 		if (!ok) {
 			return 0;
 		}
@@ -2805,7 +2783,7 @@ ffiLogCallsTo(char *fileName)
 	else {
 
 		/* enable logging */
-		ok = ffiLogFileNameOfLength(fileName, strlen(fileName));
+		ok = ffiLogFileNameOfLength(fileName, strlen(fileName, self), self);
 		if (!ok) {
 			return 0;
 		}
@@ -2818,18 +2796,17 @@ ffiLogCallsTo(char *fileName)
 /*	Push the contents of the given external structure */
 
 	/* ThreadedFFIPlugin>>#ffiPushPointerContentsOf:in: */
-static sqInt
-ffiPushPointerContentsOfin(sqInt oop, CalloutState *calloutState)
+static sqIntffiPushPointerContentsOfin(sqInt oop, CalloutState *calloutState, struct foo * self)
 {
     void * ptrAddress;
     sqInt ptrClass;
 
-	ptrClass = fetchClassOf(oop, interpreterProxy->interpreterState);
-	if (ptrClass == (classExternalAddress(interpreterProxy->interpreterState))) {
+	ptrClass = fetchClassOf(oop, self);
+	if (ptrClass == (classExternalAddress(self))) {
 
 		/* Don't you dare to pass pointers into object memory */
-		ptrAddress = ((void *)(fetchPointerofObject(0, oop, interpreterProxy->interpreterState)));
-		if (isInMemory(ptrAddress, interpreterProxy->interpreterState)) {
+		ptrAddress = ((void *)(fetchPointerofObject(0, oop, self)));
+		if (isInMemory(ptrAddress, self)) {
 			return FFIErrorInvalidPointer;
 		}
 		/* begin ffiPushPointer:in: */
@@ -2846,18 +2823,18 @@ ffiPushPointerContentsOfin(sqInt oop, CalloutState *calloutState)
 		}
 		return 0;
 	}
-	if (ptrClass == (classByteArray(interpreterProxy->interpreterState))) {
+	if (ptrClass == (classByteArray(self))) {
 
 		/* Since this involves passing the address of the first indexable field we need to fail
 		   the call if it is threaded and the object is young, since it may move during the call. */
 		
 #    if COGMTVM
 		if ((((calloutState->callFlags)) & FFICallFlagThreaded)
-		 && (isYoung(oop, interpreterProxy->interpreterState))) {
+		 && (isYoung(oop, self))) {
 			return -PrimErrObjectMayMove;
 		}
 #    endif /* COGMTVM */
-		ptrAddress = firstIndexableField(oop, interpreterProxy->interpreterState);
+		ptrAddress = firstIndexableField(oop, self);
 		/* begin ffiPushPointer:in: */
 		if (((calloutState->integerRegisterIndex)) < NumIntRegArgs) {
 			((calloutState->integerRegisters))[(calloutState->integerRegisterIndex)] = (((sqInt)ptrAddress));
@@ -2872,13 +2849,13 @@ ffiPushPointerContentsOfin(sqInt oop, CalloutState *calloutState)
 		}
 		return 0;
 	}
-	if (includesBehaviorThatOf(ptrClass, classAlien(interpreterProxy->interpreterState), interpreterProxy->interpreterState)) {
+	if (includesBehaviorThatOf(ptrClass, classAlien(self), self)) {
 		
 #    if COGMTVM
 		if ((((calloutState->callFlags)) & FFICallFlagThreaded)
-		 && (((assert(isAlien(oop)),
+		 && (((assert(isAlien(oop, self)),
 		(longAt(oop + BaseHeaderSize)) > 0))
-		 && (isYoung(oop, interpreterProxy->interpreterState)))) {
+		 && (isYoung(oop, self)))) {
 			return -PrimErrObjectMayMove;
 		}
 #    endif /* COGMTVM */
@@ -2903,8 +2880,7 @@ ffiPushPointerContentsOfin(sqInt oop, CalloutState *calloutState)
 }
 
 	/* ThreadedX64FFIPlugin>>#ffiPushPointer:in: */
-static sqInt
-ffiPushPointerin(void *pointer, CalloutState *calloutState)
+static sqIntffiPushPointerin(void *pointer, CalloutState *calloutState, struct foo * self)
 {
 	if (((calloutState->integerRegisterIndex)) < NumIntRegArgs) {
 		((calloutState->integerRegisters))[(calloutState->integerRegisterIndex)] = (((sqInt)pointer));
@@ -2921,8 +2897,7 @@ ffiPushPointerin(void *pointer, CalloutState *calloutState)
 }
 
 	/* ThreadedX64FFIPlugin>>#ffiPushSignedByte:in: */
-static sqInt
-ffiPushSignedBytein(sqInt value, CalloutState *calloutState)
+static sqIntffiPushSignedBytein(sqInt value, CalloutState *calloutState, struct foo * self)
 {
 	if (((calloutState->integerRegisterIndex)) < NumIntRegArgs) {
 		((calloutState->integerRegisters))[(calloutState->integerRegisterIndex)] = (((signed char) value));
@@ -2939,8 +2914,7 @@ ffiPushSignedBytein(sqInt value, CalloutState *calloutState)
 }
 
 	/* ThreadedX64FFIPlugin>>#ffiPushSignedChar:in: */
-static sqInt
-ffiPushSignedCharin(sqInt value, CalloutState *calloutState)
+static sqIntffiPushSignedCharin(sqInt value, CalloutState *calloutState, struct foo * self)
 {
 	if (((calloutState->integerRegisterIndex)) < NumIntRegArgs) {
 		((calloutState->integerRegisters))[(calloutState->integerRegisterIndex)] = (((signed char) value));
@@ -2957,8 +2931,7 @@ ffiPushSignedCharin(sqInt value, CalloutState *calloutState)
 }
 
 	/* ThreadedX64FFIPlugin>>#ffiPushSignedInt:in: */
-static sqInt
-ffiPushSignedIntin(sqInt value, CalloutState *calloutState)
+static sqIntffiPushSignedIntin(sqInt value, CalloutState *calloutState, struct foo * self)
 {
 	if (((calloutState->integerRegisterIndex)) < NumIntRegArgs) {
 		((calloutState->integerRegisters))[(calloutState->integerRegisterIndex)] = value;
@@ -2979,22 +2952,21 @@ ffiPushSignedIntin(sqInt value, CalloutState *calloutState)
 	Note: Coercions from float are *not* supported. */
 
 	/* ThreadedFFIPlugin>>#ffiPushSignedLongLongOop:in: */
-static sqInt
-ffiPushSignedLongLongOopin(sqInt oop, CalloutState *calloutState)
+static sqIntffiPushSignedLongLongOopin(sqInt oop, CalloutState *calloutState, struct foo * self)
 {
     sqLong value;
 
-	if ((oop == (nilObject(interpreterProxy->interpreterState)))
-	 || (oop == (falseObject(interpreterProxy->interpreterState)))) {
+	if ((oop == (nilObject(self)))
+	 || (oop == (falseObject(self)))) {
 		value = 0;
 	}
 	else {
-		if (oop == (trueObject(interpreterProxy->interpreterState))) {
+		if (oop == (trueObject(self))) {
 			value = 1;
 		}
 		else {
-			value = signed64BitValueOf(oop, interpreterProxy->interpreterState);
-			if (failed(interpreterProxy->interpreterState)) {
+			value = signed64BitValueOf(oop, self);
+			if (failed(self)) {
 				return FFIErrorCoercionFailed;
 			}
 		}
@@ -3015,8 +2987,7 @@ ffiPushSignedLongLongOopin(sqInt oop, CalloutState *calloutState)
 }
 
 	/* ThreadedX64FFIPlugin>>#ffiPushSignedLongLong:in: */
-static sqInt
-ffiPushSignedLongLongin(sqLong value, CalloutState *calloutState)
+static sqIntffiPushSignedLongLongin(sqLong value, CalloutState *calloutState, struct foo * self)
 {
 	if (((calloutState->integerRegisterIndex)) < NumIntRegArgs) {
 		((calloutState->integerRegisters))[(calloutState->integerRegisterIndex)] = (((usqInt) value));
@@ -3033,8 +3004,7 @@ ffiPushSignedLongLongin(sqLong value, CalloutState *calloutState)
 }
 
 	/* ThreadedX64FFIPlugin>>#ffiPushSignedShort:in: */
-static sqInt
-ffiPushSignedShortin(sqInt value, CalloutState *calloutState)
+static sqIntffiPushSignedShortin(sqInt value, CalloutState *calloutState, struct foo * self)
 {
 	if (((calloutState->integerRegisterIndex)) < NumIntRegArgs) {
 		((calloutState->integerRegisters))[(calloutState->integerRegisterIndex)] = (((signed short) value));
@@ -3051,8 +3021,7 @@ ffiPushSignedShortin(sqInt value, CalloutState *calloutState)
 }
 
 	/* ThreadedFFIPlugin>>#ffiPushString:OfLength:in: */
-static sqInt
-ffiPushStringOfLengthin(char *pointer, sqInt length, CalloutState *calloutState)
+static sqIntffiPushStringOfLengthin(char *pointer, sqInt length, CalloutState *calloutState, struct foo * self)
 {
     char *copy;
 
@@ -3086,8 +3055,7 @@ ffiPushStringOfLengthin(char *pointer, sqInt length, CalloutState *calloutState)
 /*	Push the contents of the given external structure */
 
 	/* ThreadedFFIPlugin>>#ffiPushStructureContentsOf:in: */
-static sqInt
-ffiPushStructureContentsOfin(sqInt oop, CalloutState *calloutState)
+static sqIntffiPushStructureContentsOfin(sqInt oop, CalloutState *calloutState, struct foo * self)
 {
     usqLong arg;
     usqLong arg1;
@@ -3102,15 +3070,15 @@ ffiPushStructureContentsOfin(sqInt oop, CalloutState *calloutState)
 
 	arg = 0;
 	arg1 = 0;
-	ptrClass = fetchClassOf(oop, interpreterProxy->interpreterState);
-	if (ptrClass == (classExternalAddress(interpreterProxy->interpreterState))) {
+	ptrClass = fetchClassOf(oop, self);
+	if (ptrClass == (classExternalAddress(self))) {
 
 		/* ExternalAddress is bytes */
 
 		/* There is no way we can make sure the structure is valid.
 		   But we can at least check for attempts to pass pointers to ST memory. */
-		ptrAddress = ((void *)(fetchPointerofObject(0, oop, interpreterProxy->interpreterState)));
-		if (isInMemory(ptrAddress, interpreterProxy->interpreterState)) {
+		ptrAddress = ((void *)(fetchPointerofObject(0, oop, self)));
+		if (isInMemory(ptrAddress, self)) {
 			return FFIErrorInvalidPointer;
 		}
 		/* begin ffiPushStructure:ofSize:typeSpec:ofLength:in: */
@@ -3152,13 +3120,13 @@ ffiPushStructureContentsOfin(sqInt oop, CalloutState *calloutState)
 		}
 		return 0;
 	}
-	if (ptrClass == (classByteArray(interpreterProxy->interpreterState))) {
+	if (ptrClass == (classByteArray(self))) {
 
 		/* The following is a somewhat pessimistic test but I like being sure... */
-		if (!((byteSizeOf(oop, interpreterProxy->interpreterState)) == (((calloutState->ffiArgHeader)) & FFIStructSizeMask))) {
+		if (!((byteSizeOf(oop, self)) == (((calloutState->ffiArgHeader)) & FFIStructSizeMask))) {
 			return FFIErrorStructSize;
 		}
-		ptrAddress = firstIndexableField(oop, interpreterProxy->interpreterState);
+		ptrAddress = firstIndexableField(oop, self);
 		if (!(((calloutState->ffiArgHeader)) & FFIFlagPointer)) {
 
 			/* Since this involves passing the address of the first indexable field we need to fail
@@ -3166,7 +3134,7 @@ ffiPushStructureContentsOfin(sqInt oop, CalloutState *calloutState)
 			
 #      if COGMTVM
 			if ((((calloutState->callFlags)) & FFICallFlagThreaded)
-			 && (isYoung(oop, interpreterProxy->interpreterState))) {
+			 && (isYoung(oop, self))) {
 				return -PrimErrObjectMayMove;
 			}
 #      endif /* COGMTVM */
@@ -3212,8 +3180,8 @@ ffiPushStructureContentsOfin(sqInt oop, CalloutState *calloutState)
 		if (!((((calloutState->ffiArgHeader)) & FFIStructSizeMask) == BytesPerWord)) {
 			return FFIErrorStructSize;
 		}
-		ptrAddress = ((void *)(fetchPointerofObject(0, oop, interpreterProxy->interpreterState)));
-		if (isInMemory(ptrAddress, interpreterProxy->interpreterState)) {
+		ptrAddress = ((void *)(fetchPointerofObject(0, oop, self)));
+		if (isInMemory(ptrAddress, self)) {
 			return FFIErrorInvalidPointer;
 		}
 		/* begin ffiPushPointer:in: */
@@ -3234,8 +3202,7 @@ ffiPushStructureContentsOfin(sqInt oop, CalloutState *calloutState)
 }
 
 	/* ThreadedX64Win64FFIPlugin>>#ffiPushStructure:ofSize:typeSpec:ofLength:in: */
-static sqInt
-ffiPushStructureofSizetypeSpecofLengthin(void *pointer, sqInt structSize, sqInt *argSpec, sqInt argSpecSize, CalloutState *calloutState)
+static sqIntffiPushStructureofSizetypeSpecofLengthin(void *pointer, sqInt structSize, sqInt *argSpec, sqInt argSpecSize, CalloutState *calloutState, struct foo * self)
 {
     usqLong arg;
 
@@ -3277,8 +3244,7 @@ ffiPushStructureofSizetypeSpecofLengthin(void *pointer, sqInt structSize, sqInt 
 }
 
 	/* ThreadedX64FFIPlugin>>#ffiPushUnsignedByte:in: */
-static sqInt
-ffiPushUnsignedBytein(sqInt value, CalloutState *calloutState)
+static sqIntffiPushUnsignedBytein(sqInt value, CalloutState *calloutState, struct foo * self)
 {
 	if (((calloutState->integerRegisterIndex)) < NumIntRegArgs) {
 		((calloutState->integerRegisters))[(calloutState->integerRegisterIndex)] = (((unsigned char) value));
@@ -3295,8 +3261,7 @@ ffiPushUnsignedBytein(sqInt value, CalloutState *calloutState)
 }
 
 	/* ThreadedX64FFIPlugin>>#ffiPushUnsignedChar:in: */
-static sqInt
-ffiPushUnsignedCharin(sqInt value, CalloutState *calloutState)
+static sqIntffiPushUnsignedCharin(sqInt value, CalloutState *calloutState, struct foo * self)
 {
 	if (((calloutState->integerRegisterIndex)) < NumIntRegArgs) {
 		((calloutState->integerRegisters))[(calloutState->integerRegisterIndex)] = (((unsigned char) value));
@@ -3313,8 +3278,7 @@ ffiPushUnsignedCharin(sqInt value, CalloutState *calloutState)
 }
 
 	/* ThreadedX64FFIPlugin>>#ffiPushUnsignedInt:in: */
-static sqInt
-ffiPushUnsignedIntin(sqInt value, CalloutState *calloutState)
+static sqIntffiPushUnsignedIntin(sqInt value, CalloutState *calloutState, struct foo * self)
 {
 	if (((calloutState->integerRegisterIndex)) < NumIntRegArgs) {
 		((calloutState->integerRegisters))[(calloutState->integerRegisterIndex)] = value;
@@ -3335,22 +3299,21 @@ ffiPushUnsignedIntin(sqInt value, CalloutState *calloutState)
 	Note: Coercions from float are *not* supported. */
 
 	/* ThreadedFFIPlugin>>#ffiPushUnsignedLongLongOop:in: */
-static sqInt
-ffiPushUnsignedLongLongOopin(sqInt oop, CalloutState *calloutState)
+static sqIntffiPushUnsignedLongLongOopin(sqInt oop, CalloutState *calloutState, struct foo * self)
 {
     usqLong value;
 
-	if ((oop == (nilObject(interpreterProxy->interpreterState)))
-	 || (oop == (falseObject(interpreterProxy->interpreterState)))) {
+	if ((oop == (nilObject(self)))
+	 || (oop == (falseObject(self)))) {
 		value = 0;
 	}
 	else {
-		if (oop == (trueObject(interpreterProxy->interpreterState))) {
+		if (oop == (trueObject(self))) {
 			value = 1;
 		}
 		else {
-			value = positive64BitValueOf(oop, interpreterProxy->interpreterState);
-			if (failed(interpreterProxy->interpreterState)) {
+			value = positive64BitValueOf(oop, self);
+			if (failed(self)) {
 				return FFIErrorCoercionFailed;
 			}
 		}
@@ -3371,8 +3334,7 @@ ffiPushUnsignedLongLongOopin(sqInt oop, CalloutState *calloutState)
 }
 
 	/* ThreadedX64FFIPlugin>>#ffiPushUnsignedLongLong:in: */
-static sqInt
-ffiPushUnsignedLongLongin(usqLong value, CalloutState *calloutState)
+static sqIntffiPushUnsignedLongLongin(usqLong value, CalloutState *calloutState, struct foo * self)
 {
 	if (((calloutState->integerRegisterIndex)) < NumIntRegArgs) {
 		((calloutState->integerRegisters))[(calloutState->integerRegisterIndex)] = value;
@@ -3389,8 +3351,7 @@ ffiPushUnsignedLongLongin(usqLong value, CalloutState *calloutState)
 }
 
 	/* ThreadedX64FFIPlugin>>#ffiPushUnsignedShort:in: */
-static sqInt
-ffiPushUnsignedShortin(sqInt value, CalloutState *calloutState)
+static sqIntffiPushUnsignedShortin(sqInt value, CalloutState *calloutState, struct foo * self)
 {
 	if (((calloutState->integerRegisterIndex)) < NumIntRegArgs) {
 		((calloutState->integerRegisters))[(calloutState->integerRegisterIndex)] = (((unsigned short) value));
@@ -3412,8 +3373,7 @@ ffiPushUnsignedShortin(sqInt value, CalloutState *calloutState)
 	the caller know what he did */
 
 	/* ThreadedFFIPlugin>>#ffiPushVoid:in: */
-static sqInt
-ffiPushVoidin(sqInt ignored, CalloutState *calloutState)
+static sqIntffiPushVoidin(sqInt ignored, CalloutState *calloutState, struct foo * self)
 {
 	return FFIErrorAttemptToPassVoid;
 }
@@ -3422,8 +3382,7 @@ ffiPushVoidin(sqInt ignored, CalloutState *calloutState)
 /*	Create a Smalltalk string from a zero terminated C string */
 
 	/* ThreadedFFIPlugin>>#ffiReturnCStringFrom: */
-static sqInt
-ffiReturnCStringFrom(sqInt cPointer)
+static sqIntffiReturnCStringFrom(sqInt cPointer, struct foo * self)
 {
     char *cString;
     sqInt i;
@@ -3432,15 +3391,15 @@ ffiReturnCStringFrom(sqInt cPointer)
     char *strPtr;
 
 	if (!(cPointer)) {
-		return nilObject(interpreterProxy->interpreterState);
+		return nilObject(self);
 	}
 	cString = ((char *) cPointer);
 	strLen = 0;
 	while (!((cString[strLen]) == 0)) {
 		strLen += 1;
 	}
-	strOop = instantiateClassindexableSize(classString(interpreterProxy->interpreterState), strLen, interpreterProxy->interpreterState);
-	strPtr = firstIndexableField(strOop, interpreterProxy->interpreterState);
+	strOop = instantiateClassindexableSize(classString(self), strLen, self);
+	strPtr = firstIndexableField(strOop, self);
 	for (i = 0; i < strLen; i += 1) {
 		strPtr[i] = (cString[i]);
 	}
@@ -3453,8 +3412,7 @@ ffiReturnCStringFrom(sqInt cPointer)
  */
 
 	/* ThreadedFFIPlugin>>#ffiReturnPointer:ofType:in: */
-static sqInt
-ffiReturnPointerofTypein(usqLong retVal, sqInt retType, CalloutState *calloutState)
+static sqIntffiReturnPointerofTypein(usqLong retVal, sqInt retType, CalloutState *calloutState, struct foo * self)
 {
     sqInt atomicType;
     sqInt classOop;
@@ -3470,8 +3428,8 @@ ffiReturnPointerofTypein(usqLong retVal, sqInt retType, CalloutState *calloutSta
     char *strPtr;
     sqInt typeSpec;
 
-	retClass = fetchPointerofObject(1, retType, interpreterProxy->interpreterState);
-	if (retClass == (nilObject(interpreterProxy->interpreterState))) {
+	retClass = fetchPointerofObject(1, retType, self);
+	if (retClass == (nilObject(self))) {
 
 		/* Create ExternalData upon return */
 		/* begin atomicTypeOf: */
@@ -3483,7 +3441,7 @@ ffiReturnPointerofTypein(usqLong retVal, sqInt retType, CalloutState *calloutSta
 			/* begin ffiReturnCStringFrom: */
 			cPointer = ((usqInt) retVal);
 			if (!(cPointer)) {
-				retOop = nilObject(interpreterProxy->interpreterState);
+				retOop = nilObject(self);
 				goto l1;
 			}
 			cString = ((char *) cPointer);
@@ -3491,8 +3449,8 @@ ffiReturnPointerofTypein(usqLong retVal, sqInt retType, CalloutState *calloutSta
 			while (!((cString[strLen]) == 0)) {
 				strLen += 1;
 			}
-			strOop = instantiateClassindexableSize(classString(interpreterProxy->interpreterState), strLen, interpreterProxy->interpreterState);
-			strPtr = firstIndexableField(strOop, interpreterProxy->interpreterState);
+			strOop = instantiateClassindexableSize(classString(self), strLen, self);
+			strPtr = firstIndexableField(strOop, self);
 			for (i = 0; i < strLen; i += 1) {
 				strPtr[i] = (cString[i]);
 			}
@@ -3502,53 +3460,53 @@ ffiReturnPointerofTypein(usqLong retVal, sqInt retType, CalloutState *calloutSta
 		}
 		
 #if SPURVM
-		oop = instantiateClassindexableSize(classExternalAddress(interpreterProxy->interpreterState), BytesPerWord, interpreterProxy->interpreterState);
-		ptr = firstIndexableField(oop, interpreterProxy->interpreterState);
+		oop = instantiateClassindexableSize(classExternalAddress(self), BytesPerWord, self);
+		ptr = firstIndexableField(oop, self);
 		ptr[0] = (((sqInt) retVal));
-		retOop = instantiateClassindexableSize(classExternalData(interpreterProxy->interpreterState), 0, interpreterProxy->interpreterState);
-		storePointerofObjectwithValue(0, retOop, oop, interpreterProxy->interpreterState);
+		retOop = instantiateClassindexableSize(classExternalData(self), 0, self);
+		storePointerofObjectwithValue(0, retOop, oop, self);
 
 #else /* SPURVM */
-		pushRemappableOop(retType, interpreterProxy->interpreterState);
-		oop = instantiateClassindexableSize(classExternalAddress(interpreterProxy->interpreterState), BytesPerWord, interpreterProxy->interpreterState);
-		ptr = firstIndexableField(oop, interpreterProxy->interpreterState);
+		pushRemappableOop(retType, self);
+		oop = instantiateClassindexableSize(classExternalAddress(self), BytesPerWord, self);
+		ptr = firstIndexableField(oop, self);
 		ptr[0] = (((sqInt) retVal));
-				pushRemappableOop(oop, interpreterProxy->interpreterState);
-		retOop = instantiateClassindexableSize(classExternalData(interpreterProxy->interpreterState), 0, interpreterProxy->interpreterState);
-		oop = popRemappableOop(interpreterProxy->interpreterState);
-		storePointerofObjectwithValue(0, retOop, oop, interpreterProxy->interpreterState);
-		retType = popRemappableOop(interpreterProxy->interpreterState)
+				pushRemappableOop(oop, self);
+		retOop = instantiateClassindexableSize(classExternalData(self), 0, self);
+		oop = popRemappableOop(self);
+		storePointerofObjectwithValue(0, retOop, oop, self);
+		retType = popRemappableOop(self)
 #endif /* SPURVM */
 ;
-		storePointerofObjectwithValue(1, retOop, retType, interpreterProxy->interpreterState);
+		storePointerofObjectwithValue(1, retOop, retType, self);
 		return retOop;
 	}
 	classOop = (((calloutState->ffiRetHeader)) & FFIFlagStructure
-		? classByteArray(interpreterProxy->interpreterState)
-		: classExternalAddress(interpreterProxy->interpreterState));
+		? classByteArray(self)
+		: classExternalAddress(self));
 	
 #if SPURVM
-	oop = instantiateClassindexableSize(classOop, BytesPerWord, interpreterProxy->interpreterState);
+	oop = instantiateClassindexableSize(classOop, BytesPerWord, self);
 
 #else /* SPURVM */
-	pushRemappableOop(retClass, interpreterProxy->interpreterState);
-	oop = instantiateClassindexableSize(classOop, BytesPerWord, interpreterProxy->interpreterState);
-	retClass = popRemappableOop(interpreterProxy->interpreterState)
+	pushRemappableOop(retClass, self);
+	oop = instantiateClassindexableSize(classOop, BytesPerWord, self);
+	retClass = popRemappableOop(self)
 #endif /* SPURVM */
 ;
-	ptr = firstIndexableField(oop, interpreterProxy->interpreterState);
+	ptr = firstIndexableField(oop, self);
 	ptr[0] = (((sqInt) retVal));
 	
 #if SPURVM
-	retOop = instantiateClassindexableSize(retClass, 0, interpreterProxy->interpreterState);
+	retOop = instantiateClassindexableSize(retClass, 0, self);
 
 #else /* SPURVM */
-	pushRemappableOop(oop, interpreterProxy->interpreterState);
-	retOop = instantiateClassindexableSize(retClass, 0, interpreterProxy->interpreterState);
-	oop = popRemappableOop(interpreterProxy->interpreterState)
+	pushRemappableOop(oop, self);
+	retOop = instantiateClassindexableSize(retClass, 0, self);
+	oop = popRemappableOop(self)
 #endif /* SPURVM */
 ;
-	storePointerofObjectwithValue(0, retOop, oop, interpreterProxy->interpreterState);
+	storePointerofObjectwithValue(0, retOop, oop, self);
 	return retOop;
 }
 
@@ -3558,30 +3516,29 @@ ffiReturnPointerofTypein(usqLong retVal, sqInt retType, CalloutState *calloutSta
 	alloca'ed space pointed to by the calloutState or in the return value. */
 
 	/* ThreadedX64Win64FFIPlugin>>#ffiReturnStruct:ofType:in: */
-static sqInt
-ffiReturnStructofTypein(usqLong intRet, sqInt ffiRetType, CalloutState *calloutState)
+static sqIntffiReturnStructofTypein(usqLong intRet, sqInt ffiRetType, CalloutState *calloutState, struct foo * self)
 {
     sqInt oop;
     sqInt retClass;
     sqInt retOop;
 
-	retClass = fetchPointerofObject(1, ffiRetType, interpreterProxy->interpreterState);
-	retOop = instantiateClassindexableSize(retClass, 0, interpreterProxy->interpreterState);
+	retClass = fetchPointerofObject(1, ffiRetType, self);
+	retOop = instantiateClassindexableSize(retClass, 0, self);
 	
 #if SPURVM
-	oop = instantiateClassindexableSize(classByteArray(interpreterProxy->interpreterState), (calloutState->structReturnSize), interpreterProxy->interpreterState);
+	oop = instantiateClassindexableSize(classByteArray(self), (calloutState->structReturnSize), self);
 
 #else /* SPURVM */
-	pushRemappableOop(retOop, interpreterProxy->interpreterState);
-	oop = instantiateClassindexableSize(classByteArray(interpreterProxy->interpreterState), (calloutState->structReturnSize), interpreterProxy->interpreterState);
-	retOop = popRemappableOop(interpreterProxy->interpreterState)
+	pushRemappableOop(retOop, self);
+	oop = instantiateClassindexableSize(classByteArray(self), (calloutState->structReturnSize), self);
+	retOop = popRemappableOop(self)
 #endif /* SPURVM */
 ;
-	memcpy(firstIndexableField(oop, interpreterProxy->interpreterState), ((((calloutState->structReturnSize)) <= WordSize)
+	memcpy(firstIndexableField(oop, self), ((((calloutState->structReturnSize)) <= WordSize)
 	 && ((((calloutState->structReturnSize)) & (((calloutState->structReturnSize)) - 1)) == 0)
 		? (&intRet)
 		: (calloutState->limit)), (calloutState->structReturnSize));
-	storePointerofObjectwithValue(0, retOop, oop, interpreterProxy->interpreterState);
+	storePointerofObjectwithValue(0, retOop, oop, self);
 	return retOop;
 }
 
@@ -3589,17 +3546,16 @@ ffiReturnStructofTypein(usqLong intRet, sqInt ffiRetType, CalloutState *calloutS
 /*	Answer the return type object for the current invocation */
 
 	/* ThreadedFFIPlugin>>#ffiReturnType: */
-static sqInt
-ffiReturnType(sqInt specOnStack)
+static sqIntffiReturnType(sqInt specOnStack, struct foo * self)
 {
     sqInt argTypes;
     sqInt specLiteral;
 
 	specLiteral = (specOnStack
-		? stackValue(1, interpreterProxy->interpreterState)
-		: literalofMethod(0, primitiveMethod(interpreterProxy->interpreterState), interpreterProxy->interpreterState));
-	argTypes = fetchPointerofObject(ExternalFunctionArgTypesIndex, specLiteral, interpreterProxy->interpreterState);
-	return fetchPointerofObject(0, argTypes, interpreterProxy->interpreterState);
+		? stackValue(1, self)
+		: literalofMethod(0, primitiveMethod(self), self));
+	argTypes = fetchPointerofObject(ExternalFunctionArgTypesIndex, specLiteral, self);
+	return fetchPointerofObject(0, argTypes, self);
 }
 
 
@@ -3607,8 +3563,7 @@ ffiReturnType(sqInt specOnStack)
 	attempts to do a threaded call in the non-threaded VM/plugin combinatioin. */
 
 	/* ThreadedFFIPlugin>>#ffiSupportsCallingConvention: */
-static sqInt
-ffiSupportsCallingConvention(sqInt aCallingConvention)
+static sqIntffiSupportsCallingConvention(sqInt aCallingConvention, struct foo * self)
 {
 	return (aCallingConvention == FFICallTypeCDecl)
 	 || (aCallingConvention == FFICallTypeApi);
@@ -3620,25 +3575,24 @@ ffiSupportsCallingConvention(sqInt aCallingConvention)
  */
 
 	/* ThreadedFFIPlugin>>#ffiValidateExternalData:AtomicType: */
-static sqInt
-ffiValidateExternalDataAtomicType(sqInt oop, sqInt atomicType)
+static sqIntffiValidateExternalDataAtomicType(sqInt oop, sqInt atomicType, struct foo * self)
 {
     sqInt ptrType;
     sqInt spec;
     sqInt specOop;
     sqInt specType;
 
-	ptrType = fetchPointerofObject(1, oop, interpreterProxy->interpreterState);
-	if (!((isPointers(ptrType, interpreterProxy->interpreterState))
-		 && ((slotSizeOf(ptrType, interpreterProxy->interpreterState)) >= 2))) {
+	ptrType = fetchPointerofObject(1, oop, self);
+	if (!((isPointers(ptrType, self))
+		 && ((slotSizeOf(ptrType, self)) >= 2))) {
 		return FFIErrorWrongType;
 	}
-	specOop = fetchPointerofObject(0, ptrType, interpreterProxy->interpreterState);
-	if (!((isWords(specOop, interpreterProxy->interpreterState))
-		 && ((slotSizeOf(specOop, interpreterProxy->interpreterState)) > 0))) {
+	specOop = fetchPointerofObject(0, ptrType, self);
+	if (!((isWords(specOop, self))
+		 && ((slotSizeOf(specOop, self)) > 0))) {
 		return FFIErrorWrongType;
 	}
-	spec = fetchPointerofObject(0, specOop, interpreterProxy->interpreterState);
+	spec = fetchPointerofObject(0, specOop, self);
 	if (!(spec & FFIFlagAtomic)) {
 		return FFIErrorWrongType;
 	}
@@ -3712,8 +3666,7 @@ incrementIntegerRegisterIndex(CalloutState * self_in_incrementIntegerRegisterInd
 }
 
 	/* ThreadedFFIPlugin>>#initialiseModule */
-EXPORT(sqInt)
-initialiseModule(void)
+EXPORT(sqInt)initialiseModule(struct foo * self)
 {
 
 	/* By default, disable logging */
@@ -3722,36 +3675,32 @@ initialiseModule(void)
 	/* Get the instSize of ExternalFunction to know whether it contains a cache of the stackSize,
 	   and what the offset of ExternalLibraryFunction's functionName and moduleName slots are. */
 	ffiLogEnabled = 0;
-	externalFunctionInstSize = instanceSizeOf(classExternalFunction(interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	initSurfacePluginFunctionPointers();
+	externalFunctionInstSize = instanceSizeOf(classExternalFunction(self), self);
+	initSurfacePluginFunctionPointers(self);
 	return 1;
 }
 
 	/* ThreadedFFIPlugin>>#isAlien: */
-static sqInt
-isAlien(sqInt anOop)
+static sqIntisAlien(sqInt anOop, struct foo * self)
 {
-	return includesBehaviorThatOf(fetchClassOf(anOop, interpreterProxy->interpreterState), classAlien(interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+	return includesBehaviorThatOf(fetchClassOf(anOop, self), classAlien(self), self);
 }
 
 	/* ThreadedFFIPlugin>>#isAtomicType: */
-static sqInt
-isAtomicType(sqInt typeSpec)
+static sqIntisAtomicType(sqInt typeSpec, struct foo * self)
 {
 	return typeSpec & FFIFlagAtomic;
 }
 
 	/* ThreadedFFIPlugin>>#isDirectAlien: */
-static sqInt
-isDirectAlien(sqInt oop)
+static sqIntisDirectAlien(sqInt oop, struct foo * self)
 {
-	assert(isAlien(oop));
+	assert(isAlien(oop, self));
 	return (longAt(oop + BaseHeaderSize)) > 0;
 }
 
 	/* ThreadedFFIPlugin>>#msg: */
-static sqInt
-msg(char *s)
+static sqIntmsg(char *s, struct foo * self)
 {
 	fprintf(stderr, "\n%s: %s", getModuleName(), s);
 	return 0;
@@ -3763,8 +3712,7 @@ msg(char *s)
 	It almost always is. Subclasses can override if not. */
 
 	/* ThreadedFFIPlugin>>#nonRegisterStructReturnIsViaImplicitFirstArgument */
-static sqInt
-nonRegisterStructReturnIsViaImplicitFirstArgument(void)
+static sqIntnonRegisterStructReturnIsViaImplicitFirstArgument(struct foo * self)
 {
 	return 1;
 }
@@ -3777,8 +3725,7 @@ nonRegisterStructReturnIsViaImplicitFirstArgument(void)
 	Only invoked from method containing explicit external call spec. */
 
 	/* ThreadedFFIPlugin>>#primitiveCallout */
-EXPORT(void)
-primitiveCallout(void)
+EXPORT(void)primitiveCallout(struct foo * self)
 {
     sqInt address;
     sqInt address1;
@@ -3831,7 +3778,7 @@ primitiveCallout(void)
     sqInt i2;
     usqLong intRet;
     usqLong intRet1;
-    extern void loadFloatRegs(double, double, double, double);
+    extern void loadFloatRegs(double, double, double, double, struct foo * self);
     usqLong mask;
     usqLong mask1;
     sqInt meth;
@@ -3892,40 +3839,40 @@ primitiveCallout(void)
     usqLong value;
     usqLong value1;
 
-	meth = primitiveMethod(interpreterProxy->interpreterState);
-	if (!((literalCountOf(meth, interpreterProxy->interpreterState)) > 0)) {
-		primitiveFailFor(PrimErrBadMethod, interpreterProxy->interpreterState);
+	meth = primitiveMethod(self);
+	if (!((literalCountOf(meth, self)) > 0)) {
+		primitiveFailFor(PrimErrBadMethod, self);
 		return;
 	}
-	externalFunction = literalofMethod(0, meth, interpreterProxy->interpreterState);
+	externalFunction = literalofMethod(0, meth, self);
 	
 #  if COGMTVM
-	nArgs = methodArgumentCount(interpreterProxy->interpreterState);
+	nArgs = methodArgumentCount(self);
 	retryCount = 0;
 	while (1) {
 		/* begin ffiCall:ArgArrayOrNil:NumArgs: */
-		primNumArgs = methodArgumentCount(interpreterProxy->interpreterState);
-		if (!(isKindOfClass(externalFunction, classExternalFunction(interpreterProxy->interpreterState), interpreterProxy->interpreterState))) {
-			result = ffiFail(FFIErrorNotFunction);
+		primNumArgs = methodArgumentCount(self);
+		if (!(isKindOfClass(externalFunction, classExternalFunction(self), self))) {
+			result = ffiFail(FFIErrorNotFunction, self);
 			goto l10;
 		}
-		flags = fetchIntegerofObject(ExternalFunctionFlagsIndex, externalFunction, interpreterProxy->interpreterState);
-		if (failed(interpreterProxy->interpreterState)) {
-			result = ffiFail(FFIErrorBadArgs);
+		flags = fetchIntegerofObject(ExternalFunctionFlagsIndex, externalFunction, self);
+		if (failed(self)) {
+			result = ffiFail(FFIErrorBadArgs, self);
 			goto l10;
 		}
 		/* begin ffiLoadCalloutAddress: */
 
 		/* Make sure it's an external handle */
-		addressPtr = fetchPointerofObject(0, externalFunction, interpreterProxy->interpreterState);
-		if (!((isBytes(addressPtr, interpreterProxy->interpreterState))
-			 && ((byteSizeOf(addressPtr, interpreterProxy->interpreterState)) == (sizeof(sqInt))))) {
-			address1 = ffiFail(FFIErrorBadAddress);
+		addressPtr = fetchPointerofObject(0, externalFunction, self);
+		if (!((isBytes(addressPtr, self))
+			 && ((byteSizeOf(addressPtr, self)) == (sizeof(sqInt))))) {
+			address1 = ffiFail(FFIErrorBadAddress, self);
 			goto l1;
 		}
-		address1 = fetchPointerofObject(0, addressPtr, interpreterProxy->interpreterState);
+		address1 = fetchPointerofObject(0, addressPtr, self);
 	l1:	/* end ffiContentsOfHandle:errCode: */;
-		if (failed(interpreterProxy->interpreterState)) {
+		if (failed(self)) {
 			address = 0;
 			goto l2;
 		}
@@ -3933,39 +3880,39 @@ primitiveCallout(void)
 
 			/* Go look it up in the module */
 			if (externalFunctionInstSize > ExternalFunctionStackSizeIndex) {
-				storePointerofObjectwithValue(ExternalFunctionStackSizeIndex, externalFunction, integerObjectOf(-1, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+				storePointerofObjectwithValue(ExternalFunctionStackSizeIndex, externalFunction, integerObjectOf(-1, self), self);
 			}
-			if ((slotSizeOf(externalFunction, interpreterProxy->interpreterState)) < 5) {
-				address = ffiFail(FFIErrorNoModule);
+			if ((slotSizeOf(externalFunction, self)) < 5) {
+				address = ffiFail(FFIErrorNoModule, self);
 				goto l2;
 			}
-			address1 = ffiLoadCalloutAddressFrom(externalFunction);
-			if (failed(interpreterProxy->interpreterState)) {
+			address1 = ffiLoadCalloutAddressFrom(externalFunction, self);
+			if (failed(self)) {
 				address = 0;
 				goto l2;
 			}
-			ptr = firstIndexableField(addressPtr, interpreterProxy->interpreterState);
+			ptr = firstIndexableField(addressPtr, self);
 			ptr[0] = address1;
 		}
 		address = address1;
 	l2:	/* end ffiLoadCalloutAddress: */;
-		if (failed(interpreterProxy->interpreterState)) {
+		if (failed(self)) {
 			result = 0;
 			goto l10;
 		}
 
 		/* must be array of arg types */
-		argTypeArray = fetchPointerofObject(ExternalFunctionArgTypesIndex, externalFunction, interpreterProxy->interpreterState);
-		if (!((isArray(argTypeArray, interpreterProxy->interpreterState))
-			 && ((slotSizeOf(argTypeArray, interpreterProxy->interpreterState)) == (nArgs + 1)))) {
-			result = ffiFail(FFIErrorBadArgs);
+		argTypeArray = fetchPointerofObject(ExternalFunctionArgTypesIndex, externalFunction, self);
+		if (!((isArray(argTypeArray, self))
+			 && ((slotSizeOf(argTypeArray, self)) == (nArgs + 1)))) {
+			result = ffiFail(FFIErrorBadArgs, self);
 			goto l10;
 		}
 		
 #    if COGMTVM
 		if (!(((flags & FFICallTypesMask) == FFICallTypeCDecl)
 			 || ((flags & FFICallTypesMask) == FFICallTypeApi))) {
-			result = ffiFail(FFIErrorCallType);
+			result = ffiFail(FFIErrorCallType, self);
 			goto l10;
 		}
 #    else /* COGMTVM */
@@ -3973,17 +3920,17 @@ primitiveCallout(void)
 		/* not masking causes threaded calls to fail, which is as they should if the plugin is not threaded. */
 		if (!((flags == FFICallTypeCDecl)
 			 || (flags == FFICallTypeApi))) {
-			result = ffiFail(FFIErrorCallType);
+			result = ffiFail(FFIErrorCallType, self);
 			goto l10;
 		}
 #    endif /* COGMTVM */
 		requiredStackSize = (externalFunctionInstSize > ExternalFunctionStackSizeIndex
-			? fetchIntegerofObject(ExternalFunctionStackSizeIndex, externalFunction, interpreterProxy->interpreterState)
+			? fetchIntegerofObject(ExternalFunctionStackSizeIndex, externalFunction, self)
 			: -1);
-		if (failed(interpreterProxy->interpreterState)) {
+		if (failed(self)) {
 			result = primitiveFailFor((null == null
 				? PrimErrBadMethod
-				: PrimErrBadReceiver), interpreterProxy->interpreterState);
+				: PrimErrBadReceiver), self);
 			goto l10;
 		}
 		stackSize = (requiredStackSize < 0
@@ -3992,11 +3939,11 @@ primitiveCallout(void)
 		calloutState = (&theCalloutState);
 		memset(calloutState, 0, sizeof(CalloutState));
 		(calloutState->callFlags = flags);
-		argType = fetchPointerofObject(0, argTypeArray, interpreterProxy->interpreterState);
-		argSpec = fetchPointerofObject(0, argType, interpreterProxy->interpreterState);
-		argClass = fetchPointerofObject(1, argType, interpreterProxy->interpreterState);
-		if (((err = ffiCheckReturnWithin(argSpec, argClass, calloutState))) != 0) {
-			result = ffiFail(err);
+		argType = fetchPointerofObject(0, argTypeArray, self);
+		argSpec = fetchPointerofObject(0, argType, self);
+		argClass = fetchPointerofObject(1, argType, self);
+		if (((err = ffiCheckReturnWithin(argSpec, argClass, calloutState, self))) != 0) {
+			result = ffiFail(err, self);
 			goto l10;
 		}
 		allocation = alloca((stackSize + ((calloutState->structReturnSize))) + (cStackAlignment()));
@@ -4038,18 +3985,18 @@ primitiveCallout(void)
 					goto l10;
 				}
 #        endif /* COGMTVM */
-				result = ffiFail(err);
+				result = ffiFail(err, self);
 				goto l10;
 			}
 		}
 		for (i = 1; i <= nArgs; i += 1) {
-			argType = fetchPointerofObject(i, argTypeArray, interpreterProxy->interpreterState);
-			argSpec = fetchPointerofObject(0, argType, interpreterProxy->interpreterState);
-			argClass = fetchPointerofObject(1, argType, interpreterProxy->interpreterState);
+			argType = fetchPointerofObject(i, argTypeArray, self);
+			argSpec = fetchPointerofObject(0, argType, self);
+			argClass = fetchPointerofObject(1, argType, self);
 			oop = (null == null
-				? stackValue(nArgs - i, interpreterProxy->interpreterState)
-				: fetchPointerofObject(i - 1, null, interpreterProxy->interpreterState));
-			err = ffiArgumentSpecClassin(oop, argSpec, argClass, calloutState);
+				? stackValue(nArgs - i, self)
+				: fetchPointerofObject(i - 1, null, self));
+			err = ffiArgumentSpecClassin(oop, argSpec, argClass, calloutState, self);
 			if (err != 0) {
 				/* begin cleanupCalloutState: */
 				while (((calloutState->stringArgIndex)) > 0) {
@@ -4062,24 +4009,24 @@ primitiveCallout(void)
 					goto l10;
 				}
 #        endif /* COGMTVM */
-				result = ffiFail(err);
+				result = ffiFail(err, self);
 				goto l10;
 			}
 		}
-		assert(!(failed(interpreterProxy->interpreterState)));
+		assert(!(failed(self)));
 		/* begin ffiLogCallout: */
 		if (ffiLogEnabled) {
-			functionName = fetchPointerofObject(externalFunctionInstSize, externalFunction, interpreterProxy->interpreterState);
-			if (!(isBytes(functionName, interpreterProxy->interpreterState))) {
+			functionName = fetchPointerofObject(externalFunctionInstSize, externalFunction, self);
+			if (!(isBytes(functionName, self))) {
 				goto l3;
 			}
-			ffiLogCallOfLength(firstIndexableField(functionName, interpreterProxy->interpreterState), byteSizeOf(functionName, interpreterProxy->interpreterState));
+			ffiLogCallOfLength(firstIndexableField(functionName, self), byteSizeOf(functionName, self), self);
 		}
 	l3:	/* end ffiLogCallout: */;
 		if ((requiredStackSize < 0)
 		 && (externalFunctionInstSize > ExternalFunctionStackSizeIndex)) {
 			stackSize = ((calloutState->currentArg)) - ((calloutState->argVector));
-			storeIntegerofObjectwithValue(ExternalFunctionStackSizeIndex, externalFunction, stackSize, interpreterProxy->interpreterState);
+			storeIntegerofObjectwithValue(ExternalFunctionStackSizeIndex, externalFunction, stackSize, self);
 		}
 		/* begin ffiCalloutTo:SpecOnStack:in: */
 		myThreadIndex = disownVM(
@@ -4090,9 +4037,9 @@ primitiveCallout(void)
 #    else /* COGMTVM */
 			DisownVMForFFICall
 #    endif /* COGMTVM */
-			, interpreterProxy->interpreterState);
+			, self);
 		if (((calloutState->floatRegisterSignature)) > 0) {
-			loadFloatRegs(((calloutState->floatRegisters))[0], ((calloutState->floatRegisters))[1], ((calloutState->floatRegisters))[2], ((calloutState->floatRegisters))[3]);
+			loadFloatRegs(((calloutState->floatRegisters))[0], ((calloutState->floatRegisters))[1], ((calloutState->floatRegisters))[2], ((calloutState->floatRegisters))[3], self);
 		}
 		if ((allocaLiesSoSetSpBeforeCall())
 		 || (mustAlignStack())) {
@@ -4113,8 +4060,8 @@ primitiveCallout(void)
 			if (isCalleePopsConvention((calloutState->callFlags))) {
 				setsp((calloutState->argVector));
 			}
-			ownVM(myThreadIndex, interpreterProxy->interpreterState);
-			result1 = floatObjectOf(floatRet, interpreterProxy->interpreterState);
+			ownVM(myThreadIndex, self);
+			result1 = floatObjectOf(floatRet, self);
 			goto l9;
 		}
 
@@ -4123,7 +4070,7 @@ primitiveCallout(void)
 		if (isCalleePopsConvention((calloutState->callFlags))) {
 			setsp((calloutState->argVector));
 		}
-		ownVM(myThreadIndex, interpreterProxy->interpreterState);
+		ownVM(myThreadIndex, self);
 		if (((calloutState->ffiRetHeader)) & (FFIFlagPointer + FFIFlagStructure)) {
 
 			/* Note: Order is important here since FFIFlagPointer + FFIFlagStructure is used to represent
@@ -4131,12 +4078,12 @@ primitiveCallout(void)
 			if (((calloutState->ffiRetHeader)) & FFIFlagPointer) {
 				/* begin ffiReturnPointer:ofType:in: */
 				specLiteral = (null != null
-					? stackValue(1, interpreterProxy->interpreterState)
-					: literalofMethod(0, primitiveMethod(interpreterProxy->interpreterState), interpreterProxy->interpreterState));
-				argTypes = fetchPointerofObject(ExternalFunctionArgTypesIndex, specLiteral, interpreterProxy->interpreterState);
-				retType = fetchPointerofObject(0, argTypes, interpreterProxy->interpreterState);
-				retClass = fetchPointerofObject(1, retType, interpreterProxy->interpreterState);
-				if (retClass == (nilObject(interpreterProxy->interpreterState))) {
+					? stackValue(1, self)
+					: literalofMethod(0, primitiveMethod(self), self));
+				argTypes = fetchPointerofObject(ExternalFunctionArgTypesIndex, specLiteral, self);
+				retType = fetchPointerofObject(0, argTypes, self);
+				retClass = fetchPointerofObject(1, retType, self);
+				if (retClass == (nilObject(self))) {
 
 					/* Create ExternalData upon return */
 					/* begin atomicTypeOf: */
@@ -4148,7 +4095,7 @@ primitiveCallout(void)
 						/* begin ffiReturnCStringFrom: */
 						cPointer = ((usqInt) intRet);
 						if (!(cPointer)) {
-							retOop = nilObject(interpreterProxy->interpreterState);
+							retOop = nilObject(self);
 							goto l5;
 						}
 						cString = ((char *) cPointer);
@@ -4156,8 +4103,8 @@ primitiveCallout(void)
 						while (!((cString[strLen]) == 0)) {
 							strLen += 1;
 						}
-						strOop = instantiateClassindexableSize(classString(interpreterProxy->interpreterState), strLen, interpreterProxy->interpreterState);
-						strPtr = firstIndexableField(strOop, interpreterProxy->interpreterState);
+						strOop = instantiateClassindexableSize(classString(self), strLen, self);
+						strPtr = firstIndexableField(strOop, self);
 						for (i1 = 0; i1 < strLen; i1 += 1) {
 							strPtr[i1] = (cString[i1]);
 						}
@@ -4168,80 +4115,80 @@ primitiveCallout(void)
 					}
 					
 #if SPURVM
-					oop2 = instantiateClassindexableSize(classExternalAddress(interpreterProxy->interpreterState), BytesPerWord, interpreterProxy->interpreterState);
-					ptr1 = firstIndexableField(oop2, interpreterProxy->interpreterState);
+					oop2 = instantiateClassindexableSize(classExternalAddress(self), BytesPerWord, self);
+					ptr1 = firstIndexableField(oop2, self);
 					ptr1[0] = (((sqInt) intRet));
-					retOop = instantiateClassindexableSize(classExternalData(interpreterProxy->interpreterState), 0, interpreterProxy->interpreterState);
-					storePointerofObjectwithValue(0, retOop, oop2, interpreterProxy->interpreterState);
+					retOop = instantiateClassindexableSize(classExternalData(self), 0, self);
+					storePointerofObjectwithValue(0, retOop, oop2, self);
 
 #else /* SPURVM */
-					pushRemappableOop(retType, interpreterProxy->interpreterState);
-					oop2 = instantiateClassindexableSize(classExternalAddress(interpreterProxy->interpreterState), BytesPerWord, interpreterProxy->interpreterState);
-					ptr1 = firstIndexableField(oop2, interpreterProxy->interpreterState);
+					pushRemappableOop(retType, self);
+					oop2 = instantiateClassindexableSize(classExternalAddress(self), BytesPerWord, self);
+					ptr1 = firstIndexableField(oop2, self);
 					ptr1[0] = (((sqInt) intRet));
-										pushRemappableOop(oop2, interpreterProxy->interpreterState);
-					retOop = instantiateClassindexableSize(classExternalData(interpreterProxy->interpreterState), 0, interpreterProxy->interpreterState);
-					oop2 = popRemappableOop(interpreterProxy->interpreterState);
-					storePointerofObjectwithValue(0, retOop, oop2, interpreterProxy->interpreterState);
-					retType = popRemappableOop(interpreterProxy->interpreterState)
+										pushRemappableOop(oop2, self);
+					retOop = instantiateClassindexableSize(classExternalData(self), 0, self);
+					oop2 = popRemappableOop(self);
+					storePointerofObjectwithValue(0, retOop, oop2, self);
+					retType = popRemappableOop(self)
 #endif /* SPURVM */
 ;
-					storePointerofObjectwithValue(1, retOop, retType, interpreterProxy->interpreterState);
+					storePointerofObjectwithValue(1, retOop, retType, self);
 					result1 = retOop;
 					goto l9;
 				}
 				classOop = (((calloutState->ffiRetHeader)) & FFIFlagStructure
-					? classByteArray(interpreterProxy->interpreterState)
-					: classExternalAddress(interpreterProxy->interpreterState));
+					? classByteArray(self)
+					: classExternalAddress(self));
 				
 #if SPURVM
-				oop2 = instantiateClassindexableSize(classOop, BytesPerWord, interpreterProxy->interpreterState);
+				oop2 = instantiateClassindexableSize(classOop, BytesPerWord, self);
 
 #else /* SPURVM */
-				pushRemappableOop(retClass, interpreterProxy->interpreterState);
-				oop2 = instantiateClassindexableSize(classOop, BytesPerWord, interpreterProxy->interpreterState);
-				retClass = popRemappableOop(interpreterProxy->interpreterState)
+				pushRemappableOop(retClass, self);
+				oop2 = instantiateClassindexableSize(classOop, BytesPerWord, self);
+				retClass = popRemappableOop(self)
 #endif /* SPURVM */
 ;
-				ptr1 = firstIndexableField(oop2, interpreterProxy->interpreterState);
+				ptr1 = firstIndexableField(oop2, self);
 				ptr1[0] = (((sqInt) intRet));
 				
 #if SPURVM
-				retOop = instantiateClassindexableSize(retClass, 0, interpreterProxy->interpreterState);
+				retOop = instantiateClassindexableSize(retClass, 0, self);
 
 #else /* SPURVM */
-				pushRemappableOop(oop2, interpreterProxy->interpreterState);
-				retOop = instantiateClassindexableSize(retClass, 0, interpreterProxy->interpreterState);
-				oop2 = popRemappableOop(interpreterProxy->interpreterState)
+				pushRemappableOop(oop2, self);
+				retOop = instantiateClassindexableSize(retClass, 0, self);
+				oop2 = popRemappableOop(self)
 #endif /* SPURVM */
 ;
-				storePointerofObjectwithValue(0, retOop, oop2, interpreterProxy->interpreterState);
+				storePointerofObjectwithValue(0, retOop, oop2, self);
 				result1 = retOop;
 				goto l9;
 			}
 			/* begin ffiReturnStruct:ofType:in: */
 			specLiteral2 = (null != null
-				? stackValue(1, interpreterProxy->interpreterState)
-				: literalofMethod(0, primitiveMethod(interpreterProxy->interpreterState), interpreterProxy->interpreterState));
-			argTypes2 = fetchPointerofObject(ExternalFunctionArgTypesIndex, specLiteral2, interpreterProxy->interpreterState);
-			ffiRetType = fetchPointerofObject(0, argTypes2, interpreterProxy->interpreterState);
-			retClass1 = fetchPointerofObject(1, ffiRetType, interpreterProxy->interpreterState);
-			retOop1 = instantiateClassindexableSize(retClass1, 0, interpreterProxy->interpreterState);
+				? stackValue(1, self)
+				: literalofMethod(0, primitiveMethod(self), self));
+			argTypes2 = fetchPointerofObject(ExternalFunctionArgTypesIndex, specLiteral2, self);
+			ffiRetType = fetchPointerofObject(0, argTypes2, self);
+			retClass1 = fetchPointerofObject(1, ffiRetType, self);
+			retOop1 = instantiateClassindexableSize(retClass1, 0, self);
 			
 #if SPURVM
-			oop1 = instantiateClassindexableSize(classByteArray(interpreterProxy->interpreterState), (calloutState->structReturnSize), interpreterProxy->interpreterState);
+			oop1 = instantiateClassindexableSize(classByteArray(self), (calloutState->structReturnSize), self);
 
 #else /* SPURVM */
-			pushRemappableOop(retOop1, interpreterProxy->interpreterState);
-			oop1 = instantiateClassindexableSize(classByteArray(interpreterProxy->interpreterState), (calloutState->structReturnSize), interpreterProxy->interpreterState);
-			retOop1 = popRemappableOop(interpreterProxy->interpreterState)
+			pushRemappableOop(retOop1, self);
+			oop1 = instantiateClassindexableSize(classByteArray(self), (calloutState->structReturnSize), self);
+			retOop1 = popRemappableOop(self)
 #endif /* SPURVM */
 ;
-			memcpy(firstIndexableField(oop1, interpreterProxy->interpreterState), ((((calloutState->structReturnSize)) <= WordSize)
+			memcpy(firstIndexableField(oop1, self), ((((calloutState->structReturnSize)) <= WordSize)
 			 && ((((calloutState->structReturnSize)) & (((calloutState->structReturnSize)) - 1)) == 0)
 				? (&intRet)
 				: (calloutState->limit)), (calloutState->structReturnSize));
-			storePointerofObjectwithValue(0, retOop1, oop1, interpreterProxy->interpreterState);
+			storePointerofObjectwithValue(0, retOop1, oop1, self);
 			result1 = retOop1;
 			goto l9;
 		}
@@ -4255,8 +4202,8 @@ primitiveCallout(void)
 				? intRet
 				: intRet & (((((unsigned long long)1)) << (byteSize * 8)) - 1));
 			result1 = (value == 0
-				? falseObject(interpreterProxy->interpreterState)
-				: trueObject(interpreterProxy->interpreterState));
+				? falseObject(self)
+				: trueObject(self));
 			goto l9;
 		}
 		if (atomicType <= FFITypeSignedInt) {
@@ -4280,60 +4227,60 @@ primitiveCallout(void)
 					mask = (((unsigned long long)1)) << (shift - 1);
 					value = (value & (mask - 1)) - (value & mask);
 				}
-				result1 = integerObjectOf(value, interpreterProxy->interpreterState);
+				result1 = integerObjectOf(value, self);
 				goto l9;
 			}
 			result1 = (atomicType & 1
 				? (BytesPerWord == 8
-						? signed64BitIntegerFor(intRet, interpreterProxy->interpreterState)
-						: signed32BitIntegerFor(intRet, interpreterProxy->interpreterState))
+						? signed64BitIntegerFor(intRet, self)
+						: signed32BitIntegerFor(intRet, self))
 				: (BytesPerWord == 8
-						? positive64BitIntegerFor(intRet, interpreterProxy->interpreterState)
-						: positive32BitIntegerFor(intRet, interpreterProxy->interpreterState)));
+						? positive64BitIntegerFor(intRet, self)
+						: positive32BitIntegerFor(intRet, self)));
 			goto l9;
 		}
 		result1 = ((((usqInt) atomicType) >> 1) == (((usqInt) FFITypeSignedLongLong) >> 1)
 			? (atomicType & 1
-					? signed64BitIntegerFor(intRet, interpreterProxy->interpreterState)
-					: positive64BitIntegerFor(intRet, interpreterProxy->interpreterState))
-			: characterObjectOf(intRet & 0xFF, interpreterProxy->interpreterState));
+					? signed64BitIntegerFor(intRet, self)
+					: positive64BitIntegerFor(intRet, self))
+			: characterObjectOf(intRet & 0xFF, self));
 	l9:	/* end ffiCalloutTo:SpecOnStack:in: */;
 		/* begin cleanupCalloutState: */
 		while (((calloutState->stringArgIndex)) > 0) {
 			free(((calloutState->stringArgs))[(calloutState->stringArgIndex = ((calloutState->stringArgIndex)) - 1)]);
 		}
-		popthenPush(primNumArgs + 1, result1, interpreterProxy->interpreterState);
+		popthenPush(primNumArgs + 1, result1, self);
 		result = result1;
 	l10:	/* end ffiCall:ArgArrayOrNil:NumArgs: */;
 		if (!((result == PrimErrObjectMayMove)
 		 && (((retryCount += 1)) <= (nArgs + 1)))) break;
-		tenuringIncrementalGC(interpreterProxy->interpreterState);
+		tenuringIncrementalGC(self);
 	}
 #  else /* COGMTVM */
 	/* begin ffiCall:ArgArrayOrNil:NumArgs: */
-	nArgs1 = methodArgumentCount(interpreterProxy->interpreterState);
-	primNumArgs1 = methodArgumentCount(interpreterProxy->interpreterState);
-	if (!(isKindOfClass(externalFunction, classExternalFunction(interpreterProxy->interpreterState), interpreterProxy->interpreterState))) {
-		ffiFail(FFIErrorNotFunction);
+	nArgs1 = methodArgumentCount(self);
+	primNumArgs1 = methodArgumentCount(self);
+	if (!(isKindOfClass(externalFunction, classExternalFunction(self), self))) {
+		ffiFail(FFIErrorNotFunction, self);
 		goto l20;
 	}
-	flags1 = fetchIntegerofObject(ExternalFunctionFlagsIndex, externalFunction, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
-		ffiFail(FFIErrorBadArgs);
+	flags1 = fetchIntegerofObject(ExternalFunctionFlagsIndex, externalFunction, self);
+	if (failed(self)) {
+		ffiFail(FFIErrorBadArgs, self);
 		goto l20;
 	}
 	/* begin ffiLoadCalloutAddress: */
 
 	/* Make sure it's an external handle */
-	addressPtr1 = fetchPointerofObject(0, externalFunction, interpreterProxy->interpreterState);
-	if (!((isBytes(addressPtr1, interpreterProxy->interpreterState))
-		 && ((byteSizeOf(addressPtr1, interpreterProxy->interpreterState)) == (sizeof(sqInt))))) {
-		address11 = ffiFail(FFIErrorBadAddress);
+	addressPtr1 = fetchPointerofObject(0, externalFunction, self);
+	if (!((isBytes(addressPtr1, self))
+		 && ((byteSizeOf(addressPtr1, self)) == (sizeof(sqInt))))) {
+		address11 = ffiFail(FFIErrorBadAddress, self);
 		goto l13;
 	}
-	address11 = fetchPointerofObject(0, addressPtr1, interpreterProxy->interpreterState);
+	address11 = fetchPointerofObject(0, addressPtr1, self);
 	l13:	/* end ffiContentsOfHandle:errCode: */;
-	if (failed(interpreterProxy->interpreterState)) {
+	if (failed(self)) {
 		address2 = 0;
 		goto l19;
 	}
@@ -4341,38 +4288,38 @@ primitiveCallout(void)
 
 		/* Go look it up in the module */
 		if (externalFunctionInstSize > ExternalFunctionStackSizeIndex) {
-			storePointerofObjectwithValue(ExternalFunctionStackSizeIndex, externalFunction, integerObjectOf(-1, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+			storePointerofObjectwithValue(ExternalFunctionStackSizeIndex, externalFunction, integerObjectOf(-1, self), self);
 		}
-		if ((slotSizeOf(externalFunction, interpreterProxy->interpreterState)) < 5) {
-			address2 = ffiFail(FFIErrorNoModule);
+		if ((slotSizeOf(externalFunction, self)) < 5) {
+			address2 = ffiFail(FFIErrorNoModule, self);
 			goto l19;
 		}
-		address11 = ffiLoadCalloutAddressFrom(externalFunction);
-		if (failed(interpreterProxy->interpreterState)) {
+		address11 = ffiLoadCalloutAddressFrom(externalFunction, self);
+		if (failed(self)) {
 			address2 = 0;
 			goto l19;
 		}
-		ptr2 = firstIndexableField(addressPtr1, interpreterProxy->interpreterState);
+		ptr2 = firstIndexableField(addressPtr1, self);
 		ptr2[0] = address11;
 	}
 	address2 = address11;
 	l19:	/* end ffiLoadCalloutAddress: */;
-	if (failed(interpreterProxy->interpreterState)) {
+	if (failed(self)) {
 		goto l20;
 	}
 
 	/* must be array of arg types */
-	argTypeArray1 = fetchPointerofObject(ExternalFunctionArgTypesIndex, externalFunction, interpreterProxy->interpreterState);
-	if (!((isArray(argTypeArray1, interpreterProxy->interpreterState))
-		 && ((slotSizeOf(argTypeArray1, interpreterProxy->interpreterState)) == (nArgs1 + 1)))) {
-		ffiFail(FFIErrorBadArgs);
+	argTypeArray1 = fetchPointerofObject(ExternalFunctionArgTypesIndex, externalFunction, self);
+	if (!((isArray(argTypeArray1, self))
+		 && ((slotSizeOf(argTypeArray1, self)) == (nArgs1 + 1)))) {
+		ffiFail(FFIErrorBadArgs, self);
 		goto l20;
 	}
 	
 #  if COGMTVM
 	if (!(((flags1 & FFICallTypesMask) == FFICallTypeCDecl)
 		 || ((flags1 & FFICallTypesMask) == FFICallTypeApi))) {
-		ffiFail(FFIErrorCallType);
+		ffiFail(FFIErrorCallType, self);
 		goto l20;
 	}
 #  else /* COGMTVM */
@@ -4380,17 +4327,17 @@ primitiveCallout(void)
 	/* not masking causes threaded calls to fail, which is as they should if the plugin is not threaded. */
 	if (!((flags1 == FFICallTypeCDecl)
 		 || (flags1 == FFICallTypeApi))) {
-		ffiFail(FFIErrorCallType);
+		ffiFail(FFIErrorCallType, self);
 		goto l20;
 	}
 #  endif /* COGMTVM */
 	requiredStackSize1 = (externalFunctionInstSize > ExternalFunctionStackSizeIndex
-		? fetchIntegerofObject(ExternalFunctionStackSizeIndex, externalFunction, interpreterProxy->interpreterState)
+		? fetchIntegerofObject(ExternalFunctionStackSizeIndex, externalFunction, self)
 		: -1);
-	if (failed(interpreterProxy->interpreterState)) {
+	if (failed(self)) {
 		primitiveFailFor((null == null
 			? PrimErrBadMethod
-			: PrimErrBadReceiver), interpreterProxy->interpreterState);
+			: PrimErrBadReceiver), self);
 		goto l20;
 	}
 	stackSize1 = (requiredStackSize1 < 0
@@ -4399,11 +4346,11 @@ primitiveCallout(void)
 	calloutState1 = (&theCalloutState1);
 	memset(calloutState1, 0, sizeof(CalloutState));
 	(calloutState1->callFlags = flags1);
-	argType1 = fetchPointerofObject(0, argTypeArray1, interpreterProxy->interpreterState);
-	argSpec1 = fetchPointerofObject(0, argType1, interpreterProxy->interpreterState);
-	argClass1 = fetchPointerofObject(1, argType1, interpreterProxy->interpreterState);
-	if (((err1 = ffiCheckReturnWithin(argSpec1, argClass1, calloutState1))) != 0) {
-		ffiFail(err1);
+	argType1 = fetchPointerofObject(0, argTypeArray1, self);
+	argSpec1 = fetchPointerofObject(0, argType1, self);
+	argClass1 = fetchPointerofObject(1, argType1, self);
+	if (((err1 = ffiCheckReturnWithin(argSpec1, argClass1, calloutState1, self))) != 0) {
+		ffiFail(err1, self);
 		goto l20;
 	}
 	allocation1 = alloca((stackSize1 + ((calloutState1->structReturnSize))) + (cStackAlignment()));
@@ -4444,18 +4391,18 @@ primitiveCallout(void)
 				goto l20;
 			}
 #      endif /* COGMTVM */
-			ffiFail(err1);
+			ffiFail(err1, self);
 			goto l20;
 		}
 	}
 	for (i2 = 1; i2 <= nArgs1; i2 += 1) {
-		argType1 = fetchPointerofObject(i2, argTypeArray1, interpreterProxy->interpreterState);
-		argSpec1 = fetchPointerofObject(0, argType1, interpreterProxy->interpreterState);
-		argClass1 = fetchPointerofObject(1, argType1, interpreterProxy->interpreterState);
+		argType1 = fetchPointerofObject(i2, argTypeArray1, self);
+		argSpec1 = fetchPointerofObject(0, argType1, self);
+		argClass1 = fetchPointerofObject(1, argType1, self);
 		oop3 = (null == null
-			? stackValue(nArgs1 - i2, interpreterProxy->interpreterState)
-			: fetchPointerofObject(i2 - 1, null, interpreterProxy->interpreterState));
-		err1 = ffiArgumentSpecClassin(oop3, argSpec1, argClass1, calloutState1);
+			? stackValue(nArgs1 - i2, self)
+			: fetchPointerofObject(i2 - 1, null, self));
+		err1 = ffiArgumentSpecClassin(oop3, argSpec1, argClass1, calloutState1, self);
 		if (err1 != 0) {
 			/* begin cleanupCalloutState: */
 			while (((calloutState1->stringArgIndex)) > 0) {
@@ -4467,24 +4414,24 @@ primitiveCallout(void)
 				goto l20;
 			}
 #      endif /* COGMTVM */
-			ffiFail(err1);
+			ffiFail(err1, self);
 			goto l20;
 		}
 	}
-	assert(!(failed(interpreterProxy->interpreterState)));
+	assert(!(failed(self)));
 	/* begin ffiLogCallout: */
 	if (ffiLogEnabled) {
-		functionName1 = fetchPointerofObject(externalFunctionInstSize, externalFunction, interpreterProxy->interpreterState);
-		if (!(isBytes(functionName1, interpreterProxy->interpreterState))) {
+		functionName1 = fetchPointerofObject(externalFunctionInstSize, externalFunction, self);
+		if (!(isBytes(functionName1, self))) {
 			goto l16;
 		}
-		ffiLogCallOfLength(firstIndexableField(functionName1, interpreterProxy->interpreterState), byteSizeOf(functionName1, interpreterProxy->interpreterState));
+		ffiLogCallOfLength(firstIndexableField(functionName1, self), byteSizeOf(functionName1, self), self);
 	}
 	l16:	/* end ffiLogCallout: */;
 	if ((requiredStackSize1 < 0)
 	 && (externalFunctionInstSize > ExternalFunctionStackSizeIndex)) {
 		stackSize1 = ((calloutState1->currentArg)) - ((calloutState1->argVector));
-		storeIntegerofObjectwithValue(ExternalFunctionStackSizeIndex, externalFunction, stackSize1, interpreterProxy->interpreterState);
+		storeIntegerofObjectwithValue(ExternalFunctionStackSizeIndex, externalFunction, stackSize1, self);
 	}
 	/* begin ffiCalloutTo:SpecOnStack:in: */
 	myThreadIndex1 = disownVM(
@@ -4495,9 +4442,9 @@ primitiveCallout(void)
 #  else /* COGMTVM */
 		DisownVMForFFICall
 #  endif /* COGMTVM */
-		, interpreterProxy->interpreterState);
+		, self);
 	if (((calloutState1->floatRegisterSignature)) > 0) {
-		loadFloatRegs(((calloutState1->floatRegisters))[0], ((calloutState1->floatRegisters))[1], ((calloutState1->floatRegisters))[2], ((calloutState1->floatRegisters))[3]);
+		loadFloatRegs(((calloutState1->floatRegisters))[0], ((calloutState1->floatRegisters))[1], ((calloutState1->floatRegisters))[2], ((calloutState1->floatRegisters))[3], self);
 	}
 	if ((allocaLiesSoSetSpBeforeCall())
 	 || (mustAlignStack())) {
@@ -4518,8 +4465,8 @@ primitiveCallout(void)
 		if (isCalleePopsConvention((calloutState1->callFlags))) {
 			setsp((calloutState1->argVector));
 		}
-		ownVM(myThreadIndex1, interpreterProxy->interpreterState);
-		result2 = floatObjectOf(floatRet1, interpreterProxy->interpreterState);
+		ownVM(myThreadIndex1, self);
+		result2 = floatObjectOf(floatRet1, self);
 		goto l14;
 	}
 
@@ -4528,7 +4475,7 @@ primitiveCallout(void)
 	if (isCalleePopsConvention((calloutState1->callFlags))) {
 		setsp((calloutState1->argVector));
 	}
-	ownVM(myThreadIndex1, interpreterProxy->interpreterState);
+	ownVM(myThreadIndex1, self);
 	if (((calloutState1->ffiRetHeader)) & (FFIFlagPointer + FFIFlagStructure)) {
 
 		/* Note: Order is important here since FFIFlagPointer + FFIFlagStructure is used to represent
@@ -4536,12 +4483,12 @@ primitiveCallout(void)
 		if (((calloutState1->ffiRetHeader)) & FFIFlagPointer) {
 			/* begin ffiReturnPointer:ofType:in: */
 			specLiteral1 = (null != null
-				? stackValue(1, interpreterProxy->interpreterState)
-				: literalofMethod(0, primitiveMethod(interpreterProxy->interpreterState), interpreterProxy->interpreterState));
-			argTypes1 = fetchPointerofObject(ExternalFunctionArgTypesIndex, specLiteral1, interpreterProxy->interpreterState);
-			retType1 = fetchPointerofObject(0, argTypes1, interpreterProxy->interpreterState);
-			retClass2 = fetchPointerofObject(1, retType1, interpreterProxy->interpreterState);
-			if (retClass2 == (nilObject(interpreterProxy->interpreterState))) {
+				? stackValue(1, self)
+				: literalofMethod(0, primitiveMethod(self), self));
+			argTypes1 = fetchPointerofObject(ExternalFunctionArgTypesIndex, specLiteral1, self);
+			retType1 = fetchPointerofObject(0, argTypes1, self);
+			retClass2 = fetchPointerofObject(1, retType1, self);
+			if (retClass2 == (nilObject(self))) {
 
 				/* Create ExternalData upon return */
 				/* begin atomicTypeOf: */
@@ -4553,7 +4500,7 @@ primitiveCallout(void)
 					/* begin ffiReturnCStringFrom: */
 					cPointer1 = ((usqInt) intRet1);
 					if (!(cPointer1)) {
-						retOop2 = nilObject(interpreterProxy->interpreterState);
+						retOop2 = nilObject(self);
 						goto l18;
 					}
 					cString1 = ((char *) cPointer1);
@@ -4561,8 +4508,8 @@ primitiveCallout(void)
 					while (!((cString1[strLen1]) == 0)) {
 						strLen1 += 1;
 					}
-					strOop1 = instantiateClassindexableSize(classString(interpreterProxy->interpreterState), strLen1, interpreterProxy->interpreterState);
-					strPtr1 = firstIndexableField(strOop1, interpreterProxy->interpreterState);
+					strOop1 = instantiateClassindexableSize(classString(self), strLen1, self);
+					strPtr1 = firstIndexableField(strOop1, self);
 					for (i11 = 0; i11 < strLen1; i11 += 1) {
 						strPtr1[i11] = (cString1[i11]);
 					}
@@ -4573,80 +4520,80 @@ primitiveCallout(void)
 				}
 				
 #if SPURVM
-				oop21 = instantiateClassindexableSize(classExternalAddress(interpreterProxy->interpreterState), BytesPerWord, interpreterProxy->interpreterState);
-				ptr11 = firstIndexableField(oop21, interpreterProxy->interpreterState);
+				oop21 = instantiateClassindexableSize(classExternalAddress(self), BytesPerWord, self);
+				ptr11 = firstIndexableField(oop21, self);
 				ptr11[0] = (((sqInt) intRet1));
-				retOop2 = instantiateClassindexableSize(classExternalData(interpreterProxy->interpreterState), 0, interpreterProxy->interpreterState);
-				storePointerofObjectwithValue(0, retOop2, oop21, interpreterProxy->interpreterState);
+				retOop2 = instantiateClassindexableSize(classExternalData(self), 0, self);
+				storePointerofObjectwithValue(0, retOop2, oop21, self);
 
 #else /* SPURVM */
-				pushRemappableOop(retType1, interpreterProxy->interpreterState);
-				oop21 = instantiateClassindexableSize(classExternalAddress(interpreterProxy->interpreterState), BytesPerWord, interpreterProxy->interpreterState);
-				ptr11 = firstIndexableField(oop21, interpreterProxy->interpreterState);
+				pushRemappableOop(retType1, self);
+				oop21 = instantiateClassindexableSize(classExternalAddress(self), BytesPerWord, self);
+				ptr11 = firstIndexableField(oop21, self);
 				ptr11[0] = (((sqInt) intRet1));
-								pushRemappableOop(oop21, interpreterProxy->interpreterState);
-				retOop2 = instantiateClassindexableSize(classExternalData(interpreterProxy->interpreterState), 0, interpreterProxy->interpreterState);
-				oop21 = popRemappableOop(interpreterProxy->interpreterState);
-				storePointerofObjectwithValue(0, retOop2, oop21, interpreterProxy->interpreterState);
-				retType1 = popRemappableOop(interpreterProxy->interpreterState)
+								pushRemappableOop(oop21, self);
+				retOop2 = instantiateClassindexableSize(classExternalData(self), 0, self);
+				oop21 = popRemappableOop(self);
+				storePointerofObjectwithValue(0, retOop2, oop21, self);
+				retType1 = popRemappableOop(self)
 #endif /* SPURVM */
 ;
-				storePointerofObjectwithValue(1, retOop2, retType1, interpreterProxy->interpreterState);
+				storePointerofObjectwithValue(1, retOop2, retType1, self);
 				result2 = retOop2;
 				goto l14;
 			}
 			classOop1 = (((calloutState1->ffiRetHeader)) & FFIFlagStructure
-				? classByteArray(interpreterProxy->interpreterState)
-				: classExternalAddress(interpreterProxy->interpreterState));
+				? classByteArray(self)
+				: classExternalAddress(self));
 			
 #if SPURVM
-			oop21 = instantiateClassindexableSize(classOop1, BytesPerWord, interpreterProxy->interpreterState);
+			oop21 = instantiateClassindexableSize(classOop1, BytesPerWord, self);
 
 #else /* SPURVM */
-			pushRemappableOop(retClass2, interpreterProxy->interpreterState);
-			oop21 = instantiateClassindexableSize(classOop1, BytesPerWord, interpreterProxy->interpreterState);
-			retClass2 = popRemappableOop(interpreterProxy->interpreterState)
+			pushRemappableOop(retClass2, self);
+			oop21 = instantiateClassindexableSize(classOop1, BytesPerWord, self);
+			retClass2 = popRemappableOop(self)
 #endif /* SPURVM */
 ;
-			ptr11 = firstIndexableField(oop21, interpreterProxy->interpreterState);
+			ptr11 = firstIndexableField(oop21, self);
 			ptr11[0] = (((sqInt) intRet1));
 			
 #if SPURVM
-			retOop2 = instantiateClassindexableSize(retClass2, 0, interpreterProxy->interpreterState);
+			retOop2 = instantiateClassindexableSize(retClass2, 0, self);
 
 #else /* SPURVM */
-			pushRemappableOop(oop21, interpreterProxy->interpreterState);
-			retOop2 = instantiateClassindexableSize(retClass2, 0, interpreterProxy->interpreterState);
-			oop21 = popRemappableOop(interpreterProxy->interpreterState)
+			pushRemappableOop(oop21, self);
+			retOop2 = instantiateClassindexableSize(retClass2, 0, self);
+			oop21 = popRemappableOop(self)
 #endif /* SPURVM */
 ;
-			storePointerofObjectwithValue(0, retOop2, oop21, interpreterProxy->interpreterState);
+			storePointerofObjectwithValue(0, retOop2, oop21, self);
 			result2 = retOop2;
 			goto l14;
 		}
 		/* begin ffiReturnStruct:ofType:in: */
 		specLiteral3 = (null != null
-			? stackValue(1, interpreterProxy->interpreterState)
-			: literalofMethod(0, primitiveMethod(interpreterProxy->interpreterState), interpreterProxy->interpreterState));
-		argTypes3 = fetchPointerofObject(ExternalFunctionArgTypesIndex, specLiteral3, interpreterProxy->interpreterState);
-		ffiRetType1 = fetchPointerofObject(0, argTypes3, interpreterProxy->interpreterState);
-		retClass11 = fetchPointerofObject(1, ffiRetType1, interpreterProxy->interpreterState);
-		retOop11 = instantiateClassindexableSize(retClass11, 0, interpreterProxy->interpreterState);
+			? stackValue(1, self)
+			: literalofMethod(0, primitiveMethod(self), self));
+		argTypes3 = fetchPointerofObject(ExternalFunctionArgTypesIndex, specLiteral3, self);
+		ffiRetType1 = fetchPointerofObject(0, argTypes3, self);
+		retClass11 = fetchPointerofObject(1, ffiRetType1, self);
+		retOop11 = instantiateClassindexableSize(retClass11, 0, self);
 		
 #if SPURVM
-		oop11 = instantiateClassindexableSize(classByteArray(interpreterProxy->interpreterState), (calloutState1->structReturnSize), interpreterProxy->interpreterState);
+		oop11 = instantiateClassindexableSize(classByteArray(self), (calloutState1->structReturnSize), self);
 
 #else /* SPURVM */
-		pushRemappableOop(retOop11, interpreterProxy->interpreterState);
-		oop11 = instantiateClassindexableSize(classByteArray(interpreterProxy->interpreterState), (calloutState1->structReturnSize), interpreterProxy->interpreterState);
-		retOop11 = popRemappableOop(interpreterProxy->interpreterState)
+		pushRemappableOop(retOop11, self);
+		oop11 = instantiateClassindexableSize(classByteArray(self), (calloutState1->structReturnSize), self);
+		retOop11 = popRemappableOop(self)
 #endif /* SPURVM */
 ;
-		memcpy(firstIndexableField(oop11, interpreterProxy->interpreterState), ((((calloutState1->structReturnSize)) <= WordSize)
+		memcpy(firstIndexableField(oop11, self), ((((calloutState1->structReturnSize)) <= WordSize)
 		 && ((((calloutState1->structReturnSize)) & (((calloutState1->structReturnSize)) - 1)) == 0)
 			? (&intRet1)
 			: (calloutState1->limit)), (calloutState1->structReturnSize));
-		storePointerofObjectwithValue(0, retOop11, oop11, interpreterProxy->interpreterState);
+		storePointerofObjectwithValue(0, retOop11, oop11, self);
 		result2 = retOop11;
 		goto l14;
 	}
@@ -4660,8 +4607,8 @@ primitiveCallout(void)
 			? intRet1
 			: intRet1 & (((((unsigned long long)1)) << (byteSize1 * 8)) - 1));
 		result2 = (value1 == 0
-			? falseObject(interpreterProxy->interpreterState)
-			: trueObject(interpreterProxy->interpreterState));
+			? falseObject(self)
+			: trueObject(self));
 		goto l14;
 	}
 	if (atomicType2 <= FFITypeSignedInt) {
@@ -4685,29 +4632,29 @@ primitiveCallout(void)
 				mask1 = (((unsigned long long)1)) << (shift1 - 1);
 				value1 = (value1 & (mask1 - 1)) - (value1 & mask1);
 			}
-			result2 = integerObjectOf(value1, interpreterProxy->interpreterState);
+			result2 = integerObjectOf(value1, self);
 			goto l14;
 		}
 		result2 = (atomicType2 & 1
 			? (BytesPerWord == 8
-					? signed64BitIntegerFor(intRet1, interpreterProxy->interpreterState)
-					: signed32BitIntegerFor(intRet1, interpreterProxy->interpreterState))
+					? signed64BitIntegerFor(intRet1, self)
+					: signed32BitIntegerFor(intRet1, self))
 			: (BytesPerWord == 8
-					? positive64BitIntegerFor(intRet1, interpreterProxy->interpreterState)
-					: positive32BitIntegerFor(intRet1, interpreterProxy->interpreterState)));
+					? positive64BitIntegerFor(intRet1, self)
+					: positive32BitIntegerFor(intRet1, self)));
 		goto l14;
 	}
 	result2 = ((((usqInt) atomicType2) >> 1) == (((usqInt) FFITypeSignedLongLong) >> 1)
 		? (atomicType2 & 1
-				? signed64BitIntegerFor(intRet1, interpreterProxy->interpreterState)
-				: positive64BitIntegerFor(intRet1, interpreterProxy->interpreterState))
-		: characterObjectOf(intRet1 & 0xFF, interpreterProxy->interpreterState));
+				? signed64BitIntegerFor(intRet1, self)
+				: positive64BitIntegerFor(intRet1, self))
+		: characterObjectOf(intRet1 & 0xFF, self));
 	l14:	/* end ffiCalloutTo:SpecOnStack:in: */;
 	/* begin cleanupCalloutState: */
 	while (((calloutState1->stringArgIndex)) > 0) {
 		free(((calloutState1->stringArgs))[(calloutState1->stringArgIndex = ((calloutState1->stringArgIndex)) - 1)]);
 	}
-	popthenPush(primNumArgs1 + 1, result2, interpreterProxy->interpreterState);
+	popthenPush(primNumArgs1 + 1, result2, self);
 	l20:	/* end ffiCall:ArgArrayOrNil:NumArgs: */;
 #  endif /* COGMTVM */
 	return;
@@ -4718,8 +4665,7 @@ primitiveCallout(void)
 	Only invoked from ExternalFunction>>invokeWithArguments: */
 
 	/* ThreadedFFIPlugin>>#primitiveCalloutWithArgs */
-EXPORT(void)
-primitiveCalloutWithArgs(void)
+EXPORT(void)primitiveCalloutWithArgs(struct foo * self)
 {
     sqInt address;
     sqInt address1;
@@ -4773,7 +4719,7 @@ primitiveCalloutWithArgs(void)
     sqInt i2;
     usqLong intRet;
     usqLong intRet1;
-    extern void loadFloatRegs(double, double, double, double);
+    extern void loadFloatRegs(double, double, double, double, struct foo * self);
     usqLong mask;
     usqLong mask1;
     sqInt myThreadIndex;
@@ -4832,44 +4778,44 @@ primitiveCalloutWithArgs(void)
     usqLong value;
     usqLong value1;
 
-	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 1)) {
-		primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
+	if (!((methodArgumentCount(self)) == 1)) {
+		primitiveFailFor(PrimErrBadNumArgs, self);
 		return;
 	}
 	
 #  if COGMTVM
 	retryCount = 0;
 	while (1) {
-		externalFunction = stackValue(1, interpreterProxy->interpreterState);
-		argArray = stackValue(0, interpreterProxy->interpreterState);
-		if (!(isArray(argArray, interpreterProxy->interpreterState))) {
-			primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+		externalFunction = stackValue(1, self);
+		argArray = stackValue(0, self);
+		if (!(isArray(argArray, self))) {
+			primitiveFailFor(PrimErrBadArgument, self);
 			return;
 		}
-		nArgs = slotSizeOf(argArray, interpreterProxy->interpreterState);
+		nArgs = slotSizeOf(argArray, self);
 		/* begin ffiCall:ArgArrayOrNil:NumArgs: */
-		primNumArgs = methodArgumentCount(interpreterProxy->interpreterState);
-		if (!(isKindOfClass(externalFunction, classExternalFunction(interpreterProxy->interpreterState), interpreterProxy->interpreterState))) {
-			result = ffiFail(FFIErrorNotFunction);
+		primNumArgs = methodArgumentCount(self);
+		if (!(isKindOfClass(externalFunction, classExternalFunction(self), self))) {
+			result = ffiFail(FFIErrorNotFunction, self);
 			goto l10;
 		}
-		flags = fetchIntegerofObject(ExternalFunctionFlagsIndex, externalFunction, interpreterProxy->interpreterState);
-		if (failed(interpreterProxy->interpreterState)) {
-			result = ffiFail(FFIErrorBadArgs);
+		flags = fetchIntegerofObject(ExternalFunctionFlagsIndex, externalFunction, self);
+		if (failed(self)) {
+			result = ffiFail(FFIErrorBadArgs, self);
 			goto l10;
 		}
 		/* begin ffiLoadCalloutAddress: */
 
 		/* Make sure it's an external handle */
-		addressPtr = fetchPointerofObject(0, externalFunction, interpreterProxy->interpreterState);
-		if (!((isBytes(addressPtr, interpreterProxy->interpreterState))
-			 && ((byteSizeOf(addressPtr, interpreterProxy->interpreterState)) == (sizeof(sqInt))))) {
-			address1 = ffiFail(FFIErrorBadAddress);
+		addressPtr = fetchPointerofObject(0, externalFunction, self);
+		if (!((isBytes(addressPtr, self))
+			 && ((byteSizeOf(addressPtr, self)) == (sizeof(sqInt))))) {
+			address1 = ffiFail(FFIErrorBadAddress, self);
 			goto l1;
 		}
-		address1 = fetchPointerofObject(0, addressPtr, interpreterProxy->interpreterState);
+		address1 = fetchPointerofObject(0, addressPtr, self);
 	l1:	/* end ffiContentsOfHandle:errCode: */;
-		if (failed(interpreterProxy->interpreterState)) {
+		if (failed(self)) {
 			address = 0;
 			goto l2;
 		}
@@ -4877,39 +4823,39 @@ primitiveCalloutWithArgs(void)
 
 			/* Go look it up in the module */
 			if (externalFunctionInstSize > ExternalFunctionStackSizeIndex) {
-				storePointerofObjectwithValue(ExternalFunctionStackSizeIndex, externalFunction, integerObjectOf(-1, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+				storePointerofObjectwithValue(ExternalFunctionStackSizeIndex, externalFunction, integerObjectOf(-1, self), self);
 			}
-			if ((slotSizeOf(externalFunction, interpreterProxy->interpreterState)) < 5) {
-				address = ffiFail(FFIErrorNoModule);
+			if ((slotSizeOf(externalFunction, self)) < 5) {
+				address = ffiFail(FFIErrorNoModule, self);
 				goto l2;
 			}
-			address1 = ffiLoadCalloutAddressFrom(externalFunction);
-			if (failed(interpreterProxy->interpreterState)) {
+			address1 = ffiLoadCalloutAddressFrom(externalFunction, self);
+			if (failed(self)) {
 				address = 0;
 				goto l2;
 			}
-			ptr = firstIndexableField(addressPtr, interpreterProxy->interpreterState);
+			ptr = firstIndexableField(addressPtr, self);
 			ptr[0] = address1;
 		}
 		address = address1;
 	l2:	/* end ffiLoadCalloutAddress: */;
-		if (failed(interpreterProxy->interpreterState)) {
+		if (failed(self)) {
 			result = 0;
 			goto l10;
 		}
 
 		/* must be array of arg types */
-		argTypeArray = fetchPointerofObject(ExternalFunctionArgTypesIndex, externalFunction, interpreterProxy->interpreterState);
-		if (!((isArray(argTypeArray, interpreterProxy->interpreterState))
-			 && ((slotSizeOf(argTypeArray, interpreterProxy->interpreterState)) == (nArgs + 1)))) {
-			result = ffiFail(FFIErrorBadArgs);
+		argTypeArray = fetchPointerofObject(ExternalFunctionArgTypesIndex, externalFunction, self);
+		if (!((isArray(argTypeArray, self))
+			 && ((slotSizeOf(argTypeArray, self)) == (nArgs + 1)))) {
+			result = ffiFail(FFIErrorBadArgs, self);
 			goto l10;
 		}
 		
 #    if COGMTVM
 		if (!(((flags & FFICallTypesMask) == FFICallTypeCDecl)
 			 || ((flags & FFICallTypesMask) == FFICallTypeApi))) {
-			result = ffiFail(FFIErrorCallType);
+			result = ffiFail(FFIErrorCallType, self);
 			goto l10;
 		}
 #    else /* COGMTVM */
@@ -4917,17 +4863,17 @@ primitiveCalloutWithArgs(void)
 		/* not masking causes threaded calls to fail, which is as they should if the plugin is not threaded. */
 		if (!((flags == FFICallTypeCDecl)
 			 || (flags == FFICallTypeApi))) {
-			result = ffiFail(FFIErrorCallType);
+			result = ffiFail(FFIErrorCallType, self);
 			goto l10;
 		}
 #    endif /* COGMTVM */
 		requiredStackSize = (externalFunctionInstSize > ExternalFunctionStackSizeIndex
-			? fetchIntegerofObject(ExternalFunctionStackSizeIndex, externalFunction, interpreterProxy->interpreterState)
+			? fetchIntegerofObject(ExternalFunctionStackSizeIndex, externalFunction, self)
 			: -1);
-		if (failed(interpreterProxy->interpreterState)) {
+		if (failed(self)) {
 			result = primitiveFailFor((argArray == null
 				? PrimErrBadMethod
-				: PrimErrBadReceiver), interpreterProxy->interpreterState);
+				: PrimErrBadReceiver), self);
 			goto l10;
 		}
 		stackSize = (requiredStackSize < 0
@@ -4936,11 +4882,11 @@ primitiveCalloutWithArgs(void)
 		calloutState = (&theCalloutState);
 		memset(calloutState, 0, sizeof(CalloutState));
 		(calloutState->callFlags = flags);
-		argType = fetchPointerofObject(0, argTypeArray, interpreterProxy->interpreterState);
-		argSpec = fetchPointerofObject(0, argType, interpreterProxy->interpreterState);
-		argClass = fetchPointerofObject(1, argType, interpreterProxy->interpreterState);
-		if (((err = ffiCheckReturnWithin(argSpec, argClass, calloutState))) != 0) {
-			result = ffiFail(err);
+		argType = fetchPointerofObject(0, argTypeArray, self);
+		argSpec = fetchPointerofObject(0, argType, self);
+		argClass = fetchPointerofObject(1, argType, self);
+		if (((err = ffiCheckReturnWithin(argSpec, argClass, calloutState, self))) != 0) {
+			result = ffiFail(err, self);
 			goto l10;
 		}
 		allocation = alloca((stackSize + ((calloutState->structReturnSize))) + (cStackAlignment()));
@@ -4982,18 +4928,18 @@ primitiveCalloutWithArgs(void)
 					goto l10;
 				}
 #        endif /* COGMTVM */
-				result = ffiFail(err);
+				result = ffiFail(err, self);
 				goto l10;
 			}
 		}
 		for (i = 1; i <= nArgs; i += 1) {
-			argType = fetchPointerofObject(i, argTypeArray, interpreterProxy->interpreterState);
-			argSpec = fetchPointerofObject(0, argType, interpreterProxy->interpreterState);
-			argClass = fetchPointerofObject(1, argType, interpreterProxy->interpreterState);
+			argType = fetchPointerofObject(i, argTypeArray, self);
+			argSpec = fetchPointerofObject(0, argType, self);
+			argClass = fetchPointerofObject(1, argType, self);
 			oop = (argArray == null
-				? stackValue(nArgs - i, interpreterProxy->interpreterState)
-				: fetchPointerofObject(i - 1, argArray, interpreterProxy->interpreterState));
-			err = ffiArgumentSpecClassin(oop, argSpec, argClass, calloutState);
+				? stackValue(nArgs - i, self)
+				: fetchPointerofObject(i - 1, argArray, self));
+			err = ffiArgumentSpecClassin(oop, argSpec, argClass, calloutState, self);
 			if (err != 0) {
 				/* begin cleanupCalloutState: */
 				while (((calloutState->stringArgIndex)) > 0) {
@@ -5006,24 +4952,24 @@ primitiveCalloutWithArgs(void)
 					goto l10;
 				}
 #        endif /* COGMTVM */
-				result = ffiFail(err);
+				result = ffiFail(err, self);
 				goto l10;
 			}
 		}
-		assert(!(failed(interpreterProxy->interpreterState)));
+		assert(!(failed(self)));
 		/* begin ffiLogCallout: */
 		if (ffiLogEnabled) {
-			functionName = fetchPointerofObject(externalFunctionInstSize, externalFunction, interpreterProxy->interpreterState);
-			if (!(isBytes(functionName, interpreterProxy->interpreterState))) {
+			functionName = fetchPointerofObject(externalFunctionInstSize, externalFunction, self);
+			if (!(isBytes(functionName, self))) {
 				goto l3;
 			}
-			ffiLogCallOfLength(firstIndexableField(functionName, interpreterProxy->interpreterState), byteSizeOf(functionName, interpreterProxy->interpreterState));
+			ffiLogCallOfLength(firstIndexableField(functionName, self), byteSizeOf(functionName, self), self);
 		}
 	l3:	/* end ffiLogCallout: */;
 		if ((requiredStackSize < 0)
 		 && (externalFunctionInstSize > ExternalFunctionStackSizeIndex)) {
 			stackSize = ((calloutState->currentArg)) - ((calloutState->argVector));
-			storeIntegerofObjectwithValue(ExternalFunctionStackSizeIndex, externalFunction, stackSize, interpreterProxy->interpreterState);
+			storeIntegerofObjectwithValue(ExternalFunctionStackSizeIndex, externalFunction, stackSize, self);
 		}
 		/* begin ffiCalloutTo:SpecOnStack:in: */
 		myThreadIndex = disownVM(
@@ -5034,9 +4980,9 @@ primitiveCalloutWithArgs(void)
 #    else /* COGMTVM */
 			DisownVMForFFICall
 #    endif /* COGMTVM */
-			, interpreterProxy->interpreterState);
+			, self);
 		if (((calloutState->floatRegisterSignature)) > 0) {
-			loadFloatRegs(((calloutState->floatRegisters))[0], ((calloutState->floatRegisters))[1], ((calloutState->floatRegisters))[2], ((calloutState->floatRegisters))[3]);
+			loadFloatRegs(((calloutState->floatRegisters))[0], ((calloutState->floatRegisters))[1], ((calloutState->floatRegisters))[2], ((calloutState->floatRegisters))[3], self);
 		}
 		if ((allocaLiesSoSetSpBeforeCall())
 		 || (mustAlignStack())) {
@@ -5057,8 +5003,8 @@ primitiveCalloutWithArgs(void)
 			if (isCalleePopsConvention((calloutState->callFlags))) {
 				setsp((calloutState->argVector));
 			}
-			ownVM(myThreadIndex, interpreterProxy->interpreterState);
-			result1 = floatObjectOf(floatRet, interpreterProxy->interpreterState);
+			ownVM(myThreadIndex, self);
+			result1 = floatObjectOf(floatRet, self);
 			goto l9;
 		}
 
@@ -5067,7 +5013,7 @@ primitiveCalloutWithArgs(void)
 		if (isCalleePopsConvention((calloutState->callFlags))) {
 			setsp((calloutState->argVector));
 		}
-		ownVM(myThreadIndex, interpreterProxy->interpreterState);
+		ownVM(myThreadIndex, self);
 		if (((calloutState->ffiRetHeader)) & (FFIFlagPointer + FFIFlagStructure)) {
 
 			/* Note: Order is important here since FFIFlagPointer + FFIFlagStructure is used to represent
@@ -5075,12 +5021,12 @@ primitiveCalloutWithArgs(void)
 			if (((calloutState->ffiRetHeader)) & FFIFlagPointer) {
 				/* begin ffiReturnPointer:ofType:in: */
 				specLiteral = (argArray != null
-					? stackValue(1, interpreterProxy->interpreterState)
-					: literalofMethod(0, primitiveMethod(interpreterProxy->interpreterState), interpreterProxy->interpreterState));
-				argTypes = fetchPointerofObject(ExternalFunctionArgTypesIndex, specLiteral, interpreterProxy->interpreterState);
-				retType = fetchPointerofObject(0, argTypes, interpreterProxy->interpreterState);
-				retClass = fetchPointerofObject(1, retType, interpreterProxy->interpreterState);
-				if (retClass == (nilObject(interpreterProxy->interpreterState))) {
+					? stackValue(1, self)
+					: literalofMethod(0, primitiveMethod(self), self));
+				argTypes = fetchPointerofObject(ExternalFunctionArgTypesIndex, specLiteral, self);
+				retType = fetchPointerofObject(0, argTypes, self);
+				retClass = fetchPointerofObject(1, retType, self);
+				if (retClass == (nilObject(self))) {
 
 					/* Create ExternalData upon return */
 					/* begin atomicTypeOf: */
@@ -5092,7 +5038,7 @@ primitiveCalloutWithArgs(void)
 						/* begin ffiReturnCStringFrom: */
 						cPointer = ((usqInt) intRet);
 						if (!(cPointer)) {
-							retOop = nilObject(interpreterProxy->interpreterState);
+							retOop = nilObject(self);
 							goto l5;
 						}
 						cString = ((char *) cPointer);
@@ -5100,8 +5046,8 @@ primitiveCalloutWithArgs(void)
 						while (!((cString[strLen]) == 0)) {
 							strLen += 1;
 						}
-						strOop = instantiateClassindexableSize(classString(interpreterProxy->interpreterState), strLen, interpreterProxy->interpreterState);
-						strPtr = firstIndexableField(strOop, interpreterProxy->interpreterState);
+						strOop = instantiateClassindexableSize(classString(self), strLen, self);
+						strPtr = firstIndexableField(strOop, self);
 						for (i1 = 0; i1 < strLen; i1 += 1) {
 							strPtr[i1] = (cString[i1]);
 						}
@@ -5112,80 +5058,80 @@ primitiveCalloutWithArgs(void)
 					}
 					
 #if SPURVM
-					oop2 = instantiateClassindexableSize(classExternalAddress(interpreterProxy->interpreterState), BytesPerWord, interpreterProxy->interpreterState);
-					ptr1 = firstIndexableField(oop2, interpreterProxy->interpreterState);
+					oop2 = instantiateClassindexableSize(classExternalAddress(self), BytesPerWord, self);
+					ptr1 = firstIndexableField(oop2, self);
 					ptr1[0] = (((sqInt) intRet));
-					retOop = instantiateClassindexableSize(classExternalData(interpreterProxy->interpreterState), 0, interpreterProxy->interpreterState);
-					storePointerofObjectwithValue(0, retOop, oop2, interpreterProxy->interpreterState);
+					retOop = instantiateClassindexableSize(classExternalData(self), 0, self);
+					storePointerofObjectwithValue(0, retOop, oop2, self);
 
 #else /* SPURVM */
-					pushRemappableOop(retType, interpreterProxy->interpreterState);
-					oop2 = instantiateClassindexableSize(classExternalAddress(interpreterProxy->interpreterState), BytesPerWord, interpreterProxy->interpreterState);
-					ptr1 = firstIndexableField(oop2, interpreterProxy->interpreterState);
+					pushRemappableOop(retType, self);
+					oop2 = instantiateClassindexableSize(classExternalAddress(self), BytesPerWord, self);
+					ptr1 = firstIndexableField(oop2, self);
 					ptr1[0] = (((sqInt) intRet));
-										pushRemappableOop(oop2, interpreterProxy->interpreterState);
-					retOop = instantiateClassindexableSize(classExternalData(interpreterProxy->interpreterState), 0, interpreterProxy->interpreterState);
-					oop2 = popRemappableOop(interpreterProxy->interpreterState);
-					storePointerofObjectwithValue(0, retOop, oop2, interpreterProxy->interpreterState);
-					retType = popRemappableOop(interpreterProxy->interpreterState)
+										pushRemappableOop(oop2, self);
+					retOop = instantiateClassindexableSize(classExternalData(self), 0, self);
+					oop2 = popRemappableOop(self);
+					storePointerofObjectwithValue(0, retOop, oop2, self);
+					retType = popRemappableOop(self)
 #endif /* SPURVM */
 ;
-					storePointerofObjectwithValue(1, retOop, retType, interpreterProxy->interpreterState);
+					storePointerofObjectwithValue(1, retOop, retType, self);
 					result1 = retOop;
 					goto l9;
 				}
 				classOop = (((calloutState->ffiRetHeader)) & FFIFlagStructure
-					? classByteArray(interpreterProxy->interpreterState)
-					: classExternalAddress(interpreterProxy->interpreterState));
+					? classByteArray(self)
+					: classExternalAddress(self));
 				
 #if SPURVM
-				oop2 = instantiateClassindexableSize(classOop, BytesPerWord, interpreterProxy->interpreterState);
+				oop2 = instantiateClassindexableSize(classOop, BytesPerWord, self);
 
 #else /* SPURVM */
-				pushRemappableOop(retClass, interpreterProxy->interpreterState);
-				oop2 = instantiateClassindexableSize(classOop, BytesPerWord, interpreterProxy->interpreterState);
-				retClass = popRemappableOop(interpreterProxy->interpreterState)
+				pushRemappableOop(retClass, self);
+				oop2 = instantiateClassindexableSize(classOop, BytesPerWord, self);
+				retClass = popRemappableOop(self)
 #endif /* SPURVM */
 ;
-				ptr1 = firstIndexableField(oop2, interpreterProxy->interpreterState);
+				ptr1 = firstIndexableField(oop2, self);
 				ptr1[0] = (((sqInt) intRet));
 				
 #if SPURVM
-				retOop = instantiateClassindexableSize(retClass, 0, interpreterProxy->interpreterState);
+				retOop = instantiateClassindexableSize(retClass, 0, self);
 
 #else /* SPURVM */
-				pushRemappableOop(oop2, interpreterProxy->interpreterState);
-				retOop = instantiateClassindexableSize(retClass, 0, interpreterProxy->interpreterState);
-				oop2 = popRemappableOop(interpreterProxy->interpreterState)
+				pushRemappableOop(oop2, self);
+				retOop = instantiateClassindexableSize(retClass, 0, self);
+				oop2 = popRemappableOop(self)
 #endif /* SPURVM */
 ;
-				storePointerofObjectwithValue(0, retOop, oop2, interpreterProxy->interpreterState);
+				storePointerofObjectwithValue(0, retOop, oop2, self);
 				result1 = retOop;
 				goto l9;
 			}
 			/* begin ffiReturnStruct:ofType:in: */
 			specLiteral2 = (argArray != null
-				? stackValue(1, interpreterProxy->interpreterState)
-				: literalofMethod(0, primitiveMethod(interpreterProxy->interpreterState), interpreterProxy->interpreterState));
-			argTypes2 = fetchPointerofObject(ExternalFunctionArgTypesIndex, specLiteral2, interpreterProxy->interpreterState);
-			ffiRetType = fetchPointerofObject(0, argTypes2, interpreterProxy->interpreterState);
-			retClass1 = fetchPointerofObject(1, ffiRetType, interpreterProxy->interpreterState);
-			retOop1 = instantiateClassindexableSize(retClass1, 0, interpreterProxy->interpreterState);
+				? stackValue(1, self)
+				: literalofMethod(0, primitiveMethod(self), self));
+			argTypes2 = fetchPointerofObject(ExternalFunctionArgTypesIndex, specLiteral2, self);
+			ffiRetType = fetchPointerofObject(0, argTypes2, self);
+			retClass1 = fetchPointerofObject(1, ffiRetType, self);
+			retOop1 = instantiateClassindexableSize(retClass1, 0, self);
 			
 #if SPURVM
-			oop1 = instantiateClassindexableSize(classByteArray(interpreterProxy->interpreterState), (calloutState->structReturnSize), interpreterProxy->interpreterState);
+			oop1 = instantiateClassindexableSize(classByteArray(self), (calloutState->structReturnSize), self);
 
 #else /* SPURVM */
-			pushRemappableOop(retOop1, interpreterProxy->interpreterState);
-			oop1 = instantiateClassindexableSize(classByteArray(interpreterProxy->interpreterState), (calloutState->structReturnSize), interpreterProxy->interpreterState);
-			retOop1 = popRemappableOop(interpreterProxy->interpreterState)
+			pushRemappableOop(retOop1, self);
+			oop1 = instantiateClassindexableSize(classByteArray(self), (calloutState->structReturnSize), self);
+			retOop1 = popRemappableOop(self)
 #endif /* SPURVM */
 ;
-			memcpy(firstIndexableField(oop1, interpreterProxy->interpreterState), ((((calloutState->structReturnSize)) <= WordSize)
+			memcpy(firstIndexableField(oop1, self), ((((calloutState->structReturnSize)) <= WordSize)
 			 && ((((calloutState->structReturnSize)) & (((calloutState->structReturnSize)) - 1)) == 0)
 				? (&intRet)
 				: (calloutState->limit)), (calloutState->structReturnSize));
-			storePointerofObjectwithValue(0, retOop1, oop1, interpreterProxy->interpreterState);
+			storePointerofObjectwithValue(0, retOop1, oop1, self);
 			result1 = retOop1;
 			goto l9;
 		}
@@ -5199,8 +5145,8 @@ primitiveCalloutWithArgs(void)
 				? intRet
 				: intRet & (((((unsigned long long)1)) << (byteSize * 8)) - 1));
 			result1 = (value == 0
-				? falseObject(interpreterProxy->interpreterState)
-				: trueObject(interpreterProxy->interpreterState));
+				? falseObject(self)
+				: trueObject(self));
 			goto l9;
 		}
 		if (atomicType <= FFITypeSignedInt) {
@@ -5224,66 +5170,66 @@ primitiveCalloutWithArgs(void)
 					mask = (((unsigned long long)1)) << (shift - 1);
 					value = (value & (mask - 1)) - (value & mask);
 				}
-				result1 = integerObjectOf(value, interpreterProxy->interpreterState);
+				result1 = integerObjectOf(value, self);
 				goto l9;
 			}
 			result1 = (atomicType & 1
 				? (BytesPerWord == 8
-						? signed64BitIntegerFor(intRet, interpreterProxy->interpreterState)
-						: signed32BitIntegerFor(intRet, interpreterProxy->interpreterState))
+						? signed64BitIntegerFor(intRet, self)
+						: signed32BitIntegerFor(intRet, self))
 				: (BytesPerWord == 8
-						? positive64BitIntegerFor(intRet, interpreterProxy->interpreterState)
-						: positive32BitIntegerFor(intRet, interpreterProxy->interpreterState)));
+						? positive64BitIntegerFor(intRet, self)
+						: positive32BitIntegerFor(intRet, self)));
 			goto l9;
 		}
 		result1 = ((((usqInt) atomicType) >> 1) == (((usqInt) FFITypeSignedLongLong) >> 1)
 			? (atomicType & 1
-					? signed64BitIntegerFor(intRet, interpreterProxy->interpreterState)
-					: positive64BitIntegerFor(intRet, interpreterProxy->interpreterState))
-			: characterObjectOf(intRet & 0xFF, interpreterProxy->interpreterState));
+					? signed64BitIntegerFor(intRet, self)
+					: positive64BitIntegerFor(intRet, self))
+			: characterObjectOf(intRet & 0xFF, self));
 	l9:	/* end ffiCalloutTo:SpecOnStack:in: */;
 		/* begin cleanupCalloutState: */
 		while (((calloutState->stringArgIndex)) > 0) {
 			free(((calloutState->stringArgs))[(calloutState->stringArgIndex = ((calloutState->stringArgIndex)) - 1)]);
 		}
-		popthenPush(primNumArgs + 1, result1, interpreterProxy->interpreterState);
+		popthenPush(primNumArgs + 1, result1, self);
 		result = result1;
 	l10:	/* end ffiCall:ArgArrayOrNil:NumArgs: */;
 		if (!((result == PrimErrObjectMayMove)
 		 && (((retryCount += 1)) <= (nArgs + 1)))) break;
-		tenuringIncrementalGC(interpreterProxy->interpreterState);
+		tenuringIncrementalGC(self);
 	}
 #  else /* COGMTVM */
-	externalFunction = stackValue(1, interpreterProxy->interpreterState);
-	argArray = stackValue(0, interpreterProxy->interpreterState);
-	if (!(isArray(argArray, interpreterProxy->interpreterState))) {
-		primitiveFailFor(PrimErrBadArgument, interpreterProxy->interpreterState);
+	externalFunction = stackValue(1, self);
+	argArray = stackValue(0, self);
+	if (!(isArray(argArray, self))) {
+		primitiveFailFor(PrimErrBadArgument, self);
 		return;
 	}
-	nArgs = slotSizeOf(argArray, interpreterProxy->interpreterState);
+	nArgs = slotSizeOf(argArray, self);
 	/* begin ffiCall:ArgArrayOrNil:NumArgs: */
-	primNumArgs1 = methodArgumentCount(interpreterProxy->interpreterState);
-	if (!(isKindOfClass(externalFunction, classExternalFunction(interpreterProxy->interpreterState), interpreterProxy->interpreterState))) {
-		ffiFail(FFIErrorNotFunction);
+	primNumArgs1 = methodArgumentCount(self);
+	if (!(isKindOfClass(externalFunction, classExternalFunction(self), self))) {
+		ffiFail(FFIErrorNotFunction, self);
 		goto l20;
 	}
-	flags1 = fetchIntegerofObject(ExternalFunctionFlagsIndex, externalFunction, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
-		ffiFail(FFIErrorBadArgs);
+	flags1 = fetchIntegerofObject(ExternalFunctionFlagsIndex, externalFunction, self);
+	if (failed(self)) {
+		ffiFail(FFIErrorBadArgs, self);
 		goto l20;
 	}
 	/* begin ffiLoadCalloutAddress: */
 
 	/* Make sure it's an external handle */
-	addressPtr1 = fetchPointerofObject(0, externalFunction, interpreterProxy->interpreterState);
-	if (!((isBytes(addressPtr1, interpreterProxy->interpreterState))
-		 && ((byteSizeOf(addressPtr1, interpreterProxy->interpreterState)) == (sizeof(sqInt))))) {
-		address11 = ffiFail(FFIErrorBadAddress);
+	addressPtr1 = fetchPointerofObject(0, externalFunction, self);
+	if (!((isBytes(addressPtr1, self))
+		 && ((byteSizeOf(addressPtr1, self)) == (sizeof(sqInt))))) {
+		address11 = ffiFail(FFIErrorBadAddress, self);
 		goto l13;
 	}
-	address11 = fetchPointerofObject(0, addressPtr1, interpreterProxy->interpreterState);
+	address11 = fetchPointerofObject(0, addressPtr1, self);
 	l13:	/* end ffiContentsOfHandle:errCode: */;
-	if (failed(interpreterProxy->interpreterState)) {
+	if (failed(self)) {
 		address2 = 0;
 		goto l19;
 	}
@@ -5291,38 +5237,38 @@ primitiveCalloutWithArgs(void)
 
 		/* Go look it up in the module */
 		if (externalFunctionInstSize > ExternalFunctionStackSizeIndex) {
-			storePointerofObjectwithValue(ExternalFunctionStackSizeIndex, externalFunction, integerObjectOf(-1, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
+			storePointerofObjectwithValue(ExternalFunctionStackSizeIndex, externalFunction, integerObjectOf(-1, self), self);
 		}
-		if ((slotSizeOf(externalFunction, interpreterProxy->interpreterState)) < 5) {
-			address2 = ffiFail(FFIErrorNoModule);
+		if ((slotSizeOf(externalFunction, self)) < 5) {
+			address2 = ffiFail(FFIErrorNoModule, self);
 			goto l19;
 		}
-		address11 = ffiLoadCalloutAddressFrom(externalFunction);
-		if (failed(interpreterProxy->interpreterState)) {
+		address11 = ffiLoadCalloutAddressFrom(externalFunction, self);
+		if (failed(self)) {
 			address2 = 0;
 			goto l19;
 		}
-		ptr2 = firstIndexableField(addressPtr1, interpreterProxy->interpreterState);
+		ptr2 = firstIndexableField(addressPtr1, self);
 		ptr2[0] = address11;
 	}
 	address2 = address11;
 	l19:	/* end ffiLoadCalloutAddress: */;
-	if (failed(interpreterProxy->interpreterState)) {
+	if (failed(self)) {
 		goto l20;
 	}
 
 	/* must be array of arg types */
-	argTypeArray1 = fetchPointerofObject(ExternalFunctionArgTypesIndex, externalFunction, interpreterProxy->interpreterState);
-	if (!((isArray(argTypeArray1, interpreterProxy->interpreterState))
-		 && ((slotSizeOf(argTypeArray1, interpreterProxy->interpreterState)) == (nArgs + 1)))) {
-		ffiFail(FFIErrorBadArgs);
+	argTypeArray1 = fetchPointerofObject(ExternalFunctionArgTypesIndex, externalFunction, self);
+	if (!((isArray(argTypeArray1, self))
+		 && ((slotSizeOf(argTypeArray1, self)) == (nArgs + 1)))) {
+		ffiFail(FFIErrorBadArgs, self);
 		goto l20;
 	}
 	
 #  if COGMTVM
 	if (!(((flags1 & FFICallTypesMask) == FFICallTypeCDecl)
 		 || ((flags1 & FFICallTypesMask) == FFICallTypeApi))) {
-		ffiFail(FFIErrorCallType);
+		ffiFail(FFIErrorCallType, self);
 		goto l20;
 	}
 #  else /* COGMTVM */
@@ -5330,17 +5276,17 @@ primitiveCalloutWithArgs(void)
 	/* not masking causes threaded calls to fail, which is as they should if the plugin is not threaded. */
 	if (!((flags1 == FFICallTypeCDecl)
 		 || (flags1 == FFICallTypeApi))) {
-		ffiFail(FFIErrorCallType);
+		ffiFail(FFIErrorCallType, self);
 		goto l20;
 	}
 #  endif /* COGMTVM */
 	requiredStackSize1 = (externalFunctionInstSize > ExternalFunctionStackSizeIndex
-		? fetchIntegerofObject(ExternalFunctionStackSizeIndex, externalFunction, interpreterProxy->interpreterState)
+		? fetchIntegerofObject(ExternalFunctionStackSizeIndex, externalFunction, self)
 		: -1);
-	if (failed(interpreterProxy->interpreterState)) {
+	if (failed(self)) {
 		primitiveFailFor((argArray == null
 			? PrimErrBadMethod
-			: PrimErrBadReceiver), interpreterProxy->interpreterState);
+			: PrimErrBadReceiver), self);
 		goto l20;
 	}
 	stackSize1 = (requiredStackSize1 < 0
@@ -5349,11 +5295,11 @@ primitiveCalloutWithArgs(void)
 	calloutState1 = (&theCalloutState1);
 	memset(calloutState1, 0, sizeof(CalloutState));
 	(calloutState1->callFlags = flags1);
-	argType1 = fetchPointerofObject(0, argTypeArray1, interpreterProxy->interpreterState);
-	argSpec1 = fetchPointerofObject(0, argType1, interpreterProxy->interpreterState);
-	argClass1 = fetchPointerofObject(1, argType1, interpreterProxy->interpreterState);
-	if (((err1 = ffiCheckReturnWithin(argSpec1, argClass1, calloutState1))) != 0) {
-		ffiFail(err1);
+	argType1 = fetchPointerofObject(0, argTypeArray1, self);
+	argSpec1 = fetchPointerofObject(0, argType1, self);
+	argClass1 = fetchPointerofObject(1, argType1, self);
+	if (((err1 = ffiCheckReturnWithin(argSpec1, argClass1, calloutState1, self))) != 0) {
+		ffiFail(err1, self);
 		goto l20;
 	}
 	allocation1 = alloca((stackSize1 + ((calloutState1->structReturnSize))) + (cStackAlignment()));
@@ -5394,18 +5340,18 @@ primitiveCalloutWithArgs(void)
 				goto l20;
 			}
 #      endif /* COGMTVM */
-			ffiFail(err1);
+			ffiFail(err1, self);
 			goto l20;
 		}
 	}
 	for (i2 = 1; i2 <= nArgs; i2 += 1) {
-		argType1 = fetchPointerofObject(i2, argTypeArray1, interpreterProxy->interpreterState);
-		argSpec1 = fetchPointerofObject(0, argType1, interpreterProxy->interpreterState);
-		argClass1 = fetchPointerofObject(1, argType1, interpreterProxy->interpreterState);
+		argType1 = fetchPointerofObject(i2, argTypeArray1, self);
+		argSpec1 = fetchPointerofObject(0, argType1, self);
+		argClass1 = fetchPointerofObject(1, argType1, self);
 		oop3 = (argArray == null
-			? stackValue(nArgs - i2, interpreterProxy->interpreterState)
-			: fetchPointerofObject(i2 - 1, argArray, interpreterProxy->interpreterState));
-		err1 = ffiArgumentSpecClassin(oop3, argSpec1, argClass1, calloutState1);
+			? stackValue(nArgs - i2, self)
+			: fetchPointerofObject(i2 - 1, argArray, self));
+		err1 = ffiArgumentSpecClassin(oop3, argSpec1, argClass1, calloutState1, self);
 		if (err1 != 0) {
 			/* begin cleanupCalloutState: */
 			while (((calloutState1->stringArgIndex)) > 0) {
@@ -5417,24 +5363,24 @@ primitiveCalloutWithArgs(void)
 				goto l20;
 			}
 #      endif /* COGMTVM */
-			ffiFail(err1);
+			ffiFail(err1, self);
 			goto l20;
 		}
 	}
-	assert(!(failed(interpreterProxy->interpreterState)));
+	assert(!(failed(self)));
 	/* begin ffiLogCallout: */
 	if (ffiLogEnabled) {
-		functionName1 = fetchPointerofObject(externalFunctionInstSize, externalFunction, interpreterProxy->interpreterState);
-		if (!(isBytes(functionName1, interpreterProxy->interpreterState))) {
+		functionName1 = fetchPointerofObject(externalFunctionInstSize, externalFunction, self);
+		if (!(isBytes(functionName1, self))) {
 			goto l16;
 		}
-		ffiLogCallOfLength(firstIndexableField(functionName1, interpreterProxy->interpreterState), byteSizeOf(functionName1, interpreterProxy->interpreterState));
+		ffiLogCallOfLength(firstIndexableField(functionName1, self), byteSizeOf(functionName1, self), self);
 	}
 	l16:	/* end ffiLogCallout: */;
 	if ((requiredStackSize1 < 0)
 	 && (externalFunctionInstSize > ExternalFunctionStackSizeIndex)) {
 		stackSize1 = ((calloutState1->currentArg)) - ((calloutState1->argVector));
-		storeIntegerofObjectwithValue(ExternalFunctionStackSizeIndex, externalFunction, stackSize1, interpreterProxy->interpreterState);
+		storeIntegerofObjectwithValue(ExternalFunctionStackSizeIndex, externalFunction, stackSize1, self);
 	}
 	/* begin ffiCalloutTo:SpecOnStack:in: */
 	myThreadIndex1 = disownVM(
@@ -5445,9 +5391,9 @@ primitiveCalloutWithArgs(void)
 #  else /* COGMTVM */
 		DisownVMForFFICall
 #  endif /* COGMTVM */
-		, interpreterProxy->interpreterState);
+		, self);
 	if (((calloutState1->floatRegisterSignature)) > 0) {
-		loadFloatRegs(((calloutState1->floatRegisters))[0], ((calloutState1->floatRegisters))[1], ((calloutState1->floatRegisters))[2], ((calloutState1->floatRegisters))[3]);
+		loadFloatRegs(((calloutState1->floatRegisters))[0], ((calloutState1->floatRegisters))[1], ((calloutState1->floatRegisters))[2], ((calloutState1->floatRegisters))[3], self);
 	}
 	if ((allocaLiesSoSetSpBeforeCall())
 	 || (mustAlignStack())) {
@@ -5468,8 +5414,8 @@ primitiveCalloutWithArgs(void)
 		if (isCalleePopsConvention((calloutState1->callFlags))) {
 			setsp((calloutState1->argVector));
 		}
-		ownVM(myThreadIndex1, interpreterProxy->interpreterState);
-		result2 = floatObjectOf(floatRet1, interpreterProxy->interpreterState);
+		ownVM(myThreadIndex1, self);
+		result2 = floatObjectOf(floatRet1, self);
 		goto l14;
 	}
 
@@ -5478,7 +5424,7 @@ primitiveCalloutWithArgs(void)
 	if (isCalleePopsConvention((calloutState1->callFlags))) {
 		setsp((calloutState1->argVector));
 	}
-	ownVM(myThreadIndex1, interpreterProxy->interpreterState);
+	ownVM(myThreadIndex1, self);
 	if (((calloutState1->ffiRetHeader)) & (FFIFlagPointer + FFIFlagStructure)) {
 
 		/* Note: Order is important here since FFIFlagPointer + FFIFlagStructure is used to represent
@@ -5486,12 +5432,12 @@ primitiveCalloutWithArgs(void)
 		if (((calloutState1->ffiRetHeader)) & FFIFlagPointer) {
 			/* begin ffiReturnPointer:ofType:in: */
 			specLiteral1 = (argArray != null
-				? stackValue(1, interpreterProxy->interpreterState)
-				: literalofMethod(0, primitiveMethod(interpreterProxy->interpreterState), interpreterProxy->interpreterState));
-			argTypes1 = fetchPointerofObject(ExternalFunctionArgTypesIndex, specLiteral1, interpreterProxy->interpreterState);
-			retType1 = fetchPointerofObject(0, argTypes1, interpreterProxy->interpreterState);
-			retClass2 = fetchPointerofObject(1, retType1, interpreterProxy->interpreterState);
-			if (retClass2 == (nilObject(interpreterProxy->interpreterState))) {
+				? stackValue(1, self)
+				: literalofMethod(0, primitiveMethod(self), self));
+			argTypes1 = fetchPointerofObject(ExternalFunctionArgTypesIndex, specLiteral1, self);
+			retType1 = fetchPointerofObject(0, argTypes1, self);
+			retClass2 = fetchPointerofObject(1, retType1, self);
+			if (retClass2 == (nilObject(self))) {
 
 				/* Create ExternalData upon return */
 				/* begin atomicTypeOf: */
@@ -5503,7 +5449,7 @@ primitiveCalloutWithArgs(void)
 					/* begin ffiReturnCStringFrom: */
 					cPointer1 = ((usqInt) intRet1);
 					if (!(cPointer1)) {
-						retOop2 = nilObject(interpreterProxy->interpreterState);
+						retOop2 = nilObject(self);
 						goto l18;
 					}
 					cString1 = ((char *) cPointer1);
@@ -5511,8 +5457,8 @@ primitiveCalloutWithArgs(void)
 					while (!((cString1[strLen1]) == 0)) {
 						strLen1 += 1;
 					}
-					strOop1 = instantiateClassindexableSize(classString(interpreterProxy->interpreterState), strLen1, interpreterProxy->interpreterState);
-					strPtr1 = firstIndexableField(strOop1, interpreterProxy->interpreterState);
+					strOop1 = instantiateClassindexableSize(classString(self), strLen1, self);
+					strPtr1 = firstIndexableField(strOop1, self);
 					for (i11 = 0; i11 < strLen1; i11 += 1) {
 						strPtr1[i11] = (cString1[i11]);
 					}
@@ -5523,80 +5469,80 @@ primitiveCalloutWithArgs(void)
 				}
 				
 #if SPURVM
-				oop21 = instantiateClassindexableSize(classExternalAddress(interpreterProxy->interpreterState), BytesPerWord, interpreterProxy->interpreterState);
-				ptr11 = firstIndexableField(oop21, interpreterProxy->interpreterState);
+				oop21 = instantiateClassindexableSize(classExternalAddress(self), BytesPerWord, self);
+				ptr11 = firstIndexableField(oop21, self);
 				ptr11[0] = (((sqInt) intRet1));
-				retOop2 = instantiateClassindexableSize(classExternalData(interpreterProxy->interpreterState), 0, interpreterProxy->interpreterState);
-				storePointerofObjectwithValue(0, retOop2, oop21, interpreterProxy->interpreterState);
+				retOop2 = instantiateClassindexableSize(classExternalData(self), 0, self);
+				storePointerofObjectwithValue(0, retOop2, oop21, self);
 
 #else /* SPURVM */
-				pushRemappableOop(retType1, interpreterProxy->interpreterState);
-				oop21 = instantiateClassindexableSize(classExternalAddress(interpreterProxy->interpreterState), BytesPerWord, interpreterProxy->interpreterState);
-				ptr11 = firstIndexableField(oop21, interpreterProxy->interpreterState);
+				pushRemappableOop(retType1, self);
+				oop21 = instantiateClassindexableSize(classExternalAddress(self), BytesPerWord, self);
+				ptr11 = firstIndexableField(oop21, self);
 				ptr11[0] = (((sqInt) intRet1));
-								pushRemappableOop(oop21, interpreterProxy->interpreterState);
-				retOop2 = instantiateClassindexableSize(classExternalData(interpreterProxy->interpreterState), 0, interpreterProxy->interpreterState);
-				oop21 = popRemappableOop(interpreterProxy->interpreterState);
-				storePointerofObjectwithValue(0, retOop2, oop21, interpreterProxy->interpreterState);
-				retType1 = popRemappableOop(interpreterProxy->interpreterState)
+								pushRemappableOop(oop21, self);
+				retOop2 = instantiateClassindexableSize(classExternalData(self), 0, self);
+				oop21 = popRemappableOop(self);
+				storePointerofObjectwithValue(0, retOop2, oop21, self);
+				retType1 = popRemappableOop(self)
 #endif /* SPURVM */
 ;
-				storePointerofObjectwithValue(1, retOop2, retType1, interpreterProxy->interpreterState);
+				storePointerofObjectwithValue(1, retOop2, retType1, self);
 				result2 = retOop2;
 				goto l14;
 			}
 			classOop1 = (((calloutState1->ffiRetHeader)) & FFIFlagStructure
-				? classByteArray(interpreterProxy->interpreterState)
-				: classExternalAddress(interpreterProxy->interpreterState));
+				? classByteArray(self)
+				: classExternalAddress(self));
 			
 #if SPURVM
-			oop21 = instantiateClassindexableSize(classOop1, BytesPerWord, interpreterProxy->interpreterState);
+			oop21 = instantiateClassindexableSize(classOop1, BytesPerWord, self);
 
 #else /* SPURVM */
-			pushRemappableOop(retClass2, interpreterProxy->interpreterState);
-			oop21 = instantiateClassindexableSize(classOop1, BytesPerWord, interpreterProxy->interpreterState);
-			retClass2 = popRemappableOop(interpreterProxy->interpreterState)
+			pushRemappableOop(retClass2, self);
+			oop21 = instantiateClassindexableSize(classOop1, BytesPerWord, self);
+			retClass2 = popRemappableOop(self)
 #endif /* SPURVM */
 ;
-			ptr11 = firstIndexableField(oop21, interpreterProxy->interpreterState);
+			ptr11 = firstIndexableField(oop21, self);
 			ptr11[0] = (((sqInt) intRet1));
 			
 #if SPURVM
-			retOop2 = instantiateClassindexableSize(retClass2, 0, interpreterProxy->interpreterState);
+			retOop2 = instantiateClassindexableSize(retClass2, 0, self);
 
 #else /* SPURVM */
-			pushRemappableOop(oop21, interpreterProxy->interpreterState);
-			retOop2 = instantiateClassindexableSize(retClass2, 0, interpreterProxy->interpreterState);
-			oop21 = popRemappableOop(interpreterProxy->interpreterState)
+			pushRemappableOop(oop21, self);
+			retOop2 = instantiateClassindexableSize(retClass2, 0, self);
+			oop21 = popRemappableOop(self)
 #endif /* SPURVM */
 ;
-			storePointerofObjectwithValue(0, retOop2, oop21, interpreterProxy->interpreterState);
+			storePointerofObjectwithValue(0, retOop2, oop21, self);
 			result2 = retOop2;
 			goto l14;
 		}
 		/* begin ffiReturnStruct:ofType:in: */
 		specLiteral3 = (argArray != null
-			? stackValue(1, interpreterProxy->interpreterState)
-			: literalofMethod(0, primitiveMethod(interpreterProxy->interpreterState), interpreterProxy->interpreterState));
-		argTypes3 = fetchPointerofObject(ExternalFunctionArgTypesIndex, specLiteral3, interpreterProxy->interpreterState);
-		ffiRetType1 = fetchPointerofObject(0, argTypes3, interpreterProxy->interpreterState);
-		retClass11 = fetchPointerofObject(1, ffiRetType1, interpreterProxy->interpreterState);
-		retOop11 = instantiateClassindexableSize(retClass11, 0, interpreterProxy->interpreterState);
+			? stackValue(1, self)
+			: literalofMethod(0, primitiveMethod(self), self));
+		argTypes3 = fetchPointerofObject(ExternalFunctionArgTypesIndex, specLiteral3, self);
+		ffiRetType1 = fetchPointerofObject(0, argTypes3, self);
+		retClass11 = fetchPointerofObject(1, ffiRetType1, self);
+		retOop11 = instantiateClassindexableSize(retClass11, 0, self);
 		
 #if SPURVM
-		oop11 = instantiateClassindexableSize(classByteArray(interpreterProxy->interpreterState), (calloutState1->structReturnSize), interpreterProxy->interpreterState);
+		oop11 = instantiateClassindexableSize(classByteArray(self), (calloutState1->structReturnSize), self);
 
 #else /* SPURVM */
-		pushRemappableOop(retOop11, interpreterProxy->interpreterState);
-		oop11 = instantiateClassindexableSize(classByteArray(interpreterProxy->interpreterState), (calloutState1->structReturnSize), interpreterProxy->interpreterState);
-		retOop11 = popRemappableOop(interpreterProxy->interpreterState)
+		pushRemappableOop(retOop11, self);
+		oop11 = instantiateClassindexableSize(classByteArray(self), (calloutState1->structReturnSize), self);
+		retOop11 = popRemappableOop(self)
 #endif /* SPURVM */
 ;
-		memcpy(firstIndexableField(oop11, interpreterProxy->interpreterState), ((((calloutState1->structReturnSize)) <= WordSize)
+		memcpy(firstIndexableField(oop11, self), ((((calloutState1->structReturnSize)) <= WordSize)
 		 && ((((calloutState1->structReturnSize)) & (((calloutState1->structReturnSize)) - 1)) == 0)
 			? (&intRet1)
 			: (calloutState1->limit)), (calloutState1->structReturnSize));
-		storePointerofObjectwithValue(0, retOop11, oop11, interpreterProxy->interpreterState);
+		storePointerofObjectwithValue(0, retOop11, oop11, self);
 		result2 = retOop11;
 		goto l14;
 	}
@@ -5610,8 +5556,8 @@ primitiveCalloutWithArgs(void)
 			? intRet1
 			: intRet1 & (((((unsigned long long)1)) << (byteSize1 * 8)) - 1));
 		result2 = (value1 == 0
-			? falseObject(interpreterProxy->interpreterState)
-			: trueObject(interpreterProxy->interpreterState));
+			? falseObject(self)
+			: trueObject(self));
 		goto l14;
 	}
 	if (atomicType2 <= FFITypeSignedInt) {
@@ -5635,29 +5581,29 @@ primitiveCalloutWithArgs(void)
 				mask1 = (((unsigned long long)1)) << (shift1 - 1);
 				value1 = (value1 & (mask1 - 1)) - (value1 & mask1);
 			}
-			result2 = integerObjectOf(value1, interpreterProxy->interpreterState);
+			result2 = integerObjectOf(value1, self);
 			goto l14;
 		}
 		result2 = (atomicType2 & 1
 			? (BytesPerWord == 8
-					? signed64BitIntegerFor(intRet1, interpreterProxy->interpreterState)
-					: signed32BitIntegerFor(intRet1, interpreterProxy->interpreterState))
+					? signed64BitIntegerFor(intRet1, self)
+					: signed32BitIntegerFor(intRet1, self))
 			: (BytesPerWord == 8
-					? positive64BitIntegerFor(intRet1, interpreterProxy->interpreterState)
-					: positive32BitIntegerFor(intRet1, interpreterProxy->interpreterState)));
+					? positive64BitIntegerFor(intRet1, self)
+					: positive32BitIntegerFor(intRet1, self)));
 		goto l14;
 	}
 	result2 = ((((usqInt) atomicType2) >> 1) == (((usqInt) FFITypeSignedLongLong) >> 1)
 		? (atomicType2 & 1
-				? signed64BitIntegerFor(intRet1, interpreterProxy->interpreterState)
-				: positive64BitIntegerFor(intRet1, interpreterProxy->interpreterState))
-		: characterObjectOf(intRet1 & 0xFF, interpreterProxy->interpreterState));
+				? signed64BitIntegerFor(intRet1, self)
+				: positive64BitIntegerFor(intRet1, self))
+		: characterObjectOf(intRet1 & 0xFF, self));
 	l14:	/* end ffiCalloutTo:SpecOnStack:in: */;
 	/* begin cleanupCalloutState: */
 	while (((calloutState1->stringArgIndex)) > 0) {
 		free(((calloutState1->stringArgs))[(calloutState1->stringArgIndex = ((calloutState1->stringArgIndex)) - 1)]);
 	}
-	popthenPush(primNumArgs1 + 1, result2, interpreterProxy->interpreterState);
+	popthenPush(primNumArgs1 + 1, result2, self);
 	l20:	/* end ffiCall:ArgArrayOrNil:NumArgs: */;
 #  endif /* COGMTVM */
 	return;
@@ -5672,8 +5618,7 @@ primitiveCalloutWithArgs(void)
 	isMSB(Boolean, 0) */
 
 	/* ThreadedFFIPlugin>>#primitiveCreateManualSurface */
-EXPORT(sqInt)
-primitiveCreateManualSurface(void)
+EXPORT(sqInt)primitiveCreateManualSurface(struct foo * self)
 {
     sqInt depth;
     sqInt height;
@@ -5682,42 +5627,41 @@ primitiveCreateManualSurface(void)
     sqInt rowPitch;
     sqInt width;
 
-	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 5)) {
-		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
+	if (!((methodArgumentCount(self)) == 5)) {
+		return primitiveFailFor(PrimErrBadNumArgs, self);
 	}
-	width = stackIntegerValue(4, interpreterProxy->interpreterState);
-	height = stackIntegerValue(3, interpreterProxy->interpreterState);
-	rowPitch = stackIntegerValue(2, interpreterProxy->interpreterState);
-	depth = stackIntegerValue(1, interpreterProxy->interpreterState);
-	isMSB = stackObjectValue(0, interpreterProxy->interpreterState);
-	isMSB = booleanValueOf(isMSB, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	width = stackIntegerValue(4, self);
+	height = stackIntegerValue(3, self);
+	rowPitch = stackIntegerValue(2, self);
+	depth = stackIntegerValue(1, self);
+	isMSB = stackObjectValue(0, self);
+	isMSB = booleanValueOf(isMSB, self);
+	if (failed(self)) {
 		return null;
 	}
 	result = createManualSurface(width, height, rowPitch, depth, isMSB);
 	if (result < 0) {
-		return primitiveFail(interpreterProxy->interpreterState);
+		return primitiveFail(self);
 	}
-	result = signed32BitIntegerFor(result, interpreterProxy->interpreterState);
-	return popthenPush(6, result, interpreterProxy->interpreterState);
+	result = signed32BitIntegerFor(result, self);
+	return popthenPush(6, result, self);
 }
 
 	/* ThreadedFFIPlugin>>#primitiveDestroyManualSurface */
-EXPORT(sqInt)
-primitiveDestroyManualSurface(void)
+EXPORT(sqInt)primitiveDestroyManualSurface(struct foo * self)
 {
     sqInt surfaceID;
 
-	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 1)) {
-		return primitiveFail(interpreterProxy->interpreterState);
+	if (!((methodArgumentCount(self)) == 1)) {
+		return primitiveFail(self);
 	}
-	surfaceID = stackIntegerValue(0, interpreterProxy->interpreterState);
-	if (!(failed(interpreterProxy->interpreterState))) {
+	surfaceID = stackIntegerValue(0, self);
+	if (!(failed(self))) {
 		if ((destroyManualSurface(surfaceID)) == 0) {
-			primitiveFail(interpreterProxy->interpreterState);
+			primitiveFail(self);
 		}
 		else {
-			pop(1, interpreterProxy->interpreterState);
+			pop(1, self);
 		}
 	}
 	return 0;
@@ -5727,60 +5671,57 @@ primitiveDestroyManualSurface(void)
 /*	Primitive. Allocate an object on the external heap. */
 
 	/* ThreadedFFIPlugin>>#primitiveFFIAllocate */
-EXPORT(sqInt)
-primitiveFFIAllocate(void)
+EXPORT(sqInt)primitiveFFIAllocate(struct foo * self)
 {
     sqInt addr;
     sqInt byteSize;
     sqInt oop;
     sqIntptr_t *ptr;
 
-	byteSize = stackIntegerValue(0, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	byteSize = stackIntegerValue(0, self);
+	if (failed(self)) {
 		return null;
 	}
-	addr = ffiAlloc(byteSize);
+	addr = ffiAlloc(byteSize, self);
 	if (addr == 0) {
-		return primitiveFail(interpreterProxy->interpreterState);
+		return primitiveFail(self);
 	}
-	oop = instantiateClassindexableSize(classExternalAddress(interpreterProxy->interpreterState), sizeof(sqIntptr_t), interpreterProxy->interpreterState);
-	ptr = firstIndexableField(oop, interpreterProxy->interpreterState);
+	oop = instantiateClassindexableSize(classExternalAddress(self), sizeof(sqIntptr_t), self);
+	ptr = firstIndexableField(oop, self);
 	ptr[0] = addr;
-	return popthenPush(2, oop, interpreterProxy->interpreterState);
+	return popthenPush(2, oop, self);
 }
 
 
 /*	Return a (signed or unsigned) n byte integer from the given byte offset. */
 
 	/* ThreadedFFIPlugin>>#primitiveFFIDoubleAt */
-EXPORT(sqInt)
-primitiveFFIDoubleAt(void)
+EXPORT(sqInt)primitiveFFIDoubleAt(struct foo * self)
 {
     void * addr;
     sqInt byteOffset;
     double floatValue;
     sqInt rcvr;
 
-	byteOffset = stackIntegerValue(0, interpreterProxy->interpreterState);
-	rcvr = stackObjectValue(1, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	byteOffset = stackIntegerValue(0, self);
+	rcvr = stackObjectValue(1, self);
+	if (failed(self)) {
 		return 0;
 	}
-	addr = ffiAddressOfstartingAtsize(rcvr, byteOffset, 8);
+	addr = ffiAddressOfstartingAtsize(rcvr, byteOffset, 8, self);
 	if (addr == 0) {
-		return primitiveFail(interpreterProxy->interpreterState);
+		return primitiveFail(self);
 	}
 	memcpy((&floatValue), addr, sizeof(floatValue));
-	pop(2, interpreterProxy->interpreterState);
-	return pushFloat(floatValue, interpreterProxy->interpreterState);
+	pop(2, self);
+	return pushFloat(floatValue, self);
 }
 
 
 /*	Return a (signed or unsigned) n byte integer from the given byte offset. */
 
 	/* ThreadedFFIPlugin>>#primitiveFFIDoubleAtPut */
-EXPORT(sqInt)
-primitiveFFIDoubleAtPut(void)
+EXPORT(sqInt)primitiveFFIDoubleAtPut(struct foo * self)
 {
     void * addr;
     sqInt byteOffset;
@@ -5788,58 +5729,56 @@ primitiveFFIDoubleAtPut(void)
     double floatValue;
     sqInt rcvr;
 
-	floatOop = stackValue(0, interpreterProxy->interpreterState);
-	if (isIntegerObject(floatOop, interpreterProxy->interpreterState)) {
-		floatValue = ((double) (integerValueOf(floatOop, interpreterProxy->interpreterState)));
+	floatOop = stackValue(0, self);
+	if (isIntegerObject(floatOop, self)) {
+		floatValue = ((double) (integerValueOf(floatOop, self)));
 	}
 	else {
-		floatValue = ((double) (floatValueOf(floatOop, interpreterProxy->interpreterState)));
+		floatValue = ((double) (floatValueOf(floatOop, self)));
 	}
-	byteOffset = stackIntegerValue(1, interpreterProxy->interpreterState);
-	rcvr = stackObjectValue(2, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	byteOffset = stackIntegerValue(1, self);
+	rcvr = stackObjectValue(2, self);
+	if (failed(self)) {
 		return 0;
 	}
-	addr = ffiAddressOfstartingAtsize(rcvr, byteOffset, 8);
+	addr = ffiAddressOfstartingAtsize(rcvr, byteOffset, 8, self);
 	if (addr == 0) {
-		return primitiveFail(interpreterProxy->interpreterState);
+		return primitiveFail(self);
 	}
 	memcpy(addr, (&floatValue), sizeof(floatValue));
-	return popthenPush(3, floatOop, interpreterProxy->interpreterState);
+	return popthenPush(3, floatOop, self);
 }
 
 
 /*	Return a (signed or unsigned) n byte integer from the given byte offset. */
 
 	/* ThreadedFFIPlugin>>#primitiveFFIFloatAt */
-EXPORT(sqInt)
-primitiveFFIFloatAt(void)
+EXPORT(sqInt)primitiveFFIFloatAt(struct foo * self)
 {
     void * addr;
     sqInt byteOffset;
     float floatValue;
     sqInt rcvr;
 
-	byteOffset = stackIntegerValue(0, interpreterProxy->interpreterState);
-	rcvr = stackObjectValue(1, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	byteOffset = stackIntegerValue(0, self);
+	rcvr = stackObjectValue(1, self);
+	if (failed(self)) {
 		return 0;
 	}
-	addr = ffiAddressOfstartingAtsize(rcvr, byteOffset, 4);
+	addr = ffiAddressOfstartingAtsize(rcvr, byteOffset, 4, self);
 	if (addr == 0) {
-		return primitiveFail(interpreterProxy->interpreterState);
+		return primitiveFail(self);
 	}
 	memcpy((&floatValue), addr, sizeof(floatValue));
-	pop(2, interpreterProxy->interpreterState);
-	return pushFloat(floatValue, interpreterProxy->interpreterState);
+	pop(2, self);
+	return pushFloat(floatValue, self);
 }
 
 
 /*	Return a (signed or unsigned) n byte integer from the given byte offset. */
 
 	/* ThreadedFFIPlugin>>#primitiveFFIFloatAtPut */
-EXPORT(sqInt)
-primitiveFFIFloatAtPut(void)
+EXPORT(sqInt)primitiveFFIFloatAtPut(struct foo * self)
 {
     void * addr;
     sqInt byteOffset;
@@ -5847,50 +5786,49 @@ primitiveFFIFloatAtPut(void)
     float floatValue;
     sqInt rcvr;
 
-	floatOop = stackValue(0, interpreterProxy->interpreterState);
-	if (isIntegerObject(floatOop, interpreterProxy->interpreterState)) {
-		floatValue = ((float) (integerValueOf(floatOop, interpreterProxy->interpreterState)));
+	floatOop = stackValue(0, self);
+	if (isIntegerObject(floatOop, self)) {
+		floatValue = ((float) (integerValueOf(floatOop, self)));
 	}
 	else {
-		floatValue = ((float) (floatValueOf(floatOop, interpreterProxy->interpreterState)));
+		floatValue = ((float) (floatValueOf(floatOop, self)));
 	}
-	byteOffset = stackIntegerValue(1, interpreterProxy->interpreterState);
-	rcvr = stackObjectValue(2, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	byteOffset = stackIntegerValue(1, self);
+	rcvr = stackObjectValue(2, self);
+	if (failed(self)) {
 		return 0;
 	}
-	addr = ffiAddressOfstartingAtsize(rcvr, byteOffset, 4);
+	addr = ffiAddressOfstartingAtsize(rcvr, byteOffset, 4, self);
 	if (addr == 0) {
-		return primitiveFail(interpreterProxy->interpreterState);
+		return primitiveFail(self);
 	}
 	memcpy(addr, (&floatValue), sizeof(floatValue));
-	return popthenPush(3, floatOop, interpreterProxy->interpreterState);
+	return popthenPush(3, floatOop, self);
 }
 
 
 /*	Primitive. Free the object pointed to on the external heap. */
 
 	/* ThreadedFFIPlugin>>#primitiveFFIFree */
-EXPORT(sqInt)
-primitiveFFIFree(void)
+EXPORT(sqInt)primitiveFFIFree(struct foo * self)
 {
     sqIntptr_t addr;
     sqInt oop;
     sqIntptr_t *ptr;
 
-	oop = stackObjectValue(0, interpreterProxy->interpreterState);
-	if (!(((fetchClassOf(oop, interpreterProxy->interpreterState)) == (classExternalAddress(interpreterProxy->interpreterState)))
-		 && ((byteSizeOf(oop, interpreterProxy->interpreterState)) == (sizeof(sqIntptr_t))))) {
-		return primitiveFail(interpreterProxy->interpreterState);
+	oop = stackObjectValue(0, self);
+	if (!(((fetchClassOf(oop, self)) == (classExternalAddress(self)))
+		 && ((byteSizeOf(oop, self)) == (sizeof(sqIntptr_t))))) {
+		return primitiveFail(self);
 	}
-	ptr = firstIndexableField(oop, interpreterProxy->interpreterState);
+	ptr = firstIndexableField(oop, self);
 
 	/* Don't you dare to free Squeak's memory! */
 	addr = ptr[0];
 	if ((addr == 0)
 	 || ((((((usqIntptr_t)addr)) & ((sizeof(sqIntptr_t)) - 1)) != 0)
-	 || (isInMemory(addr, interpreterProxy->interpreterState)))) {
-		return primitiveFail(interpreterProxy->interpreterState);
+	 || (isInMemory(addr, self)))) {
+		return primitiveFail(self);
 	}
 	ffiFree(addr);
 	return ptr[0] = 0;
@@ -5904,10 +5842,9 @@ primitiveFFIFree(void)
 	primitive error code. */
 
 	/* ThreadedFFIPlugin>>#primitiveFFIGetLastError */
-EXPORT(sqInt)
-primitiveFFIGetLastError(void)
+EXPORT(sqInt)primitiveFFIGetLastError(struct foo * self)
 {
-	methodReturnInteger(ffiLastError, interpreterProxy->interpreterState);
+	methodReturnInteger(ffiLastError, self);
 	return 0;
 }
 
@@ -5916,8 +5853,7 @@ primitiveFFIGetLastError(void)
 	in the receiver, using the platform's endianness. */
 
 	/* ThreadedFFIPlugin>>#primitiveFFIIntegerAt */
-EXPORT(sqInt)
-primitiveFFIIntegerAt(void)
+EXPORT(sqInt)primitiveFFIIntegerAt(struct foo * self)
 {
     void * addr;
     sqInt byteOffset;
@@ -5928,21 +5864,21 @@ primitiveFFIIntegerAt(void)
     usqLong value;
     sqInt valueOop;
 
-	isSigned = booleanValueOf(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	byteSize = stackIntegerValue(1, interpreterProxy->interpreterState);
-	byteOffset = stackIntegerValue(2, interpreterProxy->interpreterState);
-	rcvr = stackObjectValue(3, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	isSigned = booleanValueOf(stackValue(0, self), self);
+	byteSize = stackIntegerValue(1, self);
+	byteOffset = stackIntegerValue(2, self);
+	rcvr = stackObjectValue(3, self);
+	if (failed(self)) {
 		return 0;
 	}
 	if (!((byteOffset > 0)
 		 && ((((byteSize >= 1) && (byteSize <= 8)))
 		 && ((byteSize & (byteSize - 1)) == 0)))) {
-		return primitiveFail(interpreterProxy->interpreterState);
+		return primitiveFail(self);
 	}
-	addr = ffiAddressOfstartingAtsize(rcvr, byteOffset, byteSize);
+	addr = ffiAddressOfstartingAtsize(rcvr, byteOffset, byteSize, self);
 	if (addr == 0) {
-		return primitiveFail(interpreterProxy->interpreterState);
+		return primitiveFail(self);
 	}
 	if (byteSize <= 2) {
 		if (byteSize == 1) {
@@ -5967,7 +5903,7 @@ primitiveFFIIntegerAt(void)
 			mask = (((unsigned long long)1)) << ((byteSize * 8) - 1);
 			value = (value & (mask - 1)) - (value & mask);
 		}
-		valueOop = integerObjectOf(value, interpreterProxy->interpreterState);
+		valueOop = integerObjectOf(value, self);
 	}
 	else {
 
@@ -5979,13 +5915,13 @@ primitiveFFIIntegerAt(void)
 				mask = (((unsigned long long)1)) << ((byteSize * 8) - 1);
 				value = (value & (mask - 1)) - (value & mask);
 			}
-			valueOop = signed64BitIntegerFor(value, interpreterProxy->interpreterState);
+			valueOop = signed64BitIntegerFor(value, self);
 		}
 		else {
-			valueOop = positive64BitIntegerFor(value, interpreterProxy->interpreterState);
+			valueOop = positive64BitIntegerFor(value, self);
 		}
 	}
-	return popthenPush(4, valueOop, interpreterProxy->interpreterState);
+	return popthenPush(4, valueOop, self);
 }
 
 
@@ -5993,8 +5929,7 @@ primitiveFFIIntegerAt(void)
 	in the receiver, using the platform's endianness. */
 
 	/* ThreadedFFIPlugin>>#primitiveFFIIntegerAtPut */
-EXPORT(sqInt)
-primitiveFFIIntegerAtPut(void)
+EXPORT(sqInt)primitiveFFIIntegerAtPut(struct foo * self)
 {
     void * addr;
     sqInt byteOffset;
@@ -6005,30 +5940,30 @@ primitiveFFIIntegerAtPut(void)
     sqLong value;
     sqInt valueOop;
 
-	isSigned = booleanValueOf(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	byteSize = stackIntegerValue(1, interpreterProxy->interpreterState);
-	valueOop = stackValue(2, interpreterProxy->interpreterState);
-	byteOffset = stackIntegerValue(3, interpreterProxy->interpreterState);
-	rcvr = stackObjectValue(4, interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	isSigned = booleanValueOf(stackValue(0, self), self);
+	byteSize = stackIntegerValue(1, self);
+	valueOop = stackValue(2, self);
+	byteOffset = stackIntegerValue(3, self);
+	rcvr = stackObjectValue(4, self);
+	if (failed(self)) {
 		return 0;
 	}
 	if (!((byteOffset > 0)
 		 && ((((byteSize >= 1) && (byteSize <= 8)))
 		 && ((byteSize & (byteSize - 1)) == 0)))) {
-		return primitiveFail(interpreterProxy->interpreterState);
+		return primitiveFail(self);
 	}
-	addr = ffiAddressOfstartingAtsize(rcvr, byteOffset, byteSize);
+	addr = ffiAddressOfstartingAtsize(rcvr, byteOffset, byteSize, self);
 	if (addr == 0) {
-		return primitiveFail(interpreterProxy->interpreterState);
+		return primitiveFail(self);
 	}
 	if (isSigned) {
-		value = signed64BitValueOf(valueOop, interpreterProxy->interpreterState);
+		value = signed64BitValueOf(valueOop, self);
 	}
 	else {
-		value = positive64BitValueOf(valueOop, interpreterProxy->interpreterState);
+		value = positive64BitValueOf(valueOop, self);
 	}
-	if (failed(interpreterProxy->interpreterState)) {
+	if (failed(self)) {
 		return 0;
 	}
 	if (byteSize < 8) {
@@ -6036,12 +5971,12 @@ primitiveFFIIntegerAtPut(void)
 			max = (((unsigned long long)1)) << ((8 * byteSize) - 1);
 			if (!((value >= (0 - max))
 				 && (value < max))) {
-				return primitiveFail(interpreterProxy->interpreterState);
+				return primitiveFail(self);
 			}
 		}
 		else {
 			if (!((((unsigned long long)value)) < ((((unsigned long long)1)) << (8 * byteSize)))) {
-				return primitiveFail(interpreterProxy->interpreterState);
+				return primitiveFail(self);
 			}
 		}
 	}
@@ -6061,15 +5996,14 @@ primitiveFFIIntegerAtPut(void)
 			unalignedLong64Atput(addr, value);
 		}
 	}
-	return popthenPush(5, valueOop, interpreterProxy->interpreterState);
+	return popthenPush(5, valueOop, self);
 }
 
 
 /*	Primitive. Force loading the receiver (an instance of ExternalLibrary). */
 
 	/* ThreadedFFIPlugin>>#primitiveForceLoad */
-EXPORT(sqInt)
-primitiveForceLoad(void)
+EXPORT(sqInt)primitiveForceLoad(struct foo * self)
 {
     sqInt ffiModuleName;
     sqInt moduleHandle;
@@ -6077,34 +6011,34 @@ primitiveForceLoad(void)
     sqInt *ptr;
     sqInt rcvr;
 
-	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 0)) {
-		return primitiveFail(interpreterProxy->interpreterState);
+	if (!((methodArgumentCount(self)) == 0)) {
+		return primitiveFail(self);
 	}
-	rcvr = stackValue(0, interpreterProxy->interpreterState);
-	if (!(isKindOfClass(rcvr, classExternalLibrary(interpreterProxy->interpreterState), interpreterProxy->interpreterState))) {
-		return ffiFail(FFIErrorBadExternalLibrary);
+	rcvr = stackValue(0, self);
+	if (!(isKindOfClass(rcvr, classExternalLibrary(self), self))) {
+		return ffiFail(FFIErrorBadExternalLibrary, self);
 	}
-	moduleHandlePtr = fetchPointerofObject(0, rcvr, interpreterProxy->interpreterState);
+	moduleHandlePtr = fetchPointerofObject(0, rcvr, self);
 	/* begin ffiContentsOfHandle:errCode: */
-	if (!((isBytes(moduleHandlePtr, interpreterProxy->interpreterState))
-		 && ((byteSizeOf(moduleHandlePtr, interpreterProxy->interpreterState)) == (sizeof(sqInt))))) {
-		moduleHandle = ffiFail(FFIErrorBadExternalLibrary);
+	if (!((isBytes(moduleHandlePtr, self))
+		 && ((byteSizeOf(moduleHandlePtr, self)) == (sizeof(sqInt))))) {
+		moduleHandle = ffiFail(FFIErrorBadExternalLibrary, self);
 		goto l1;
 	}
-	moduleHandle = fetchPointerofObject(0, moduleHandlePtr, interpreterProxy->interpreterState);
+	moduleHandle = fetchPointerofObject(0, moduleHandlePtr, self);
 	l1:	/* end ffiContentsOfHandle:errCode: */;
-	if (failed(interpreterProxy->interpreterState)) {
+	if (failed(self)) {
 		return 0;
 	}
-	ffiModuleName = fetchPointerofObject(1, rcvr, interpreterProxy->interpreterState);
-	if (!(isBytes(ffiModuleName, interpreterProxy->interpreterState))) {
-		return ffiFail(FFIErrorBadExternalLibrary);
+	ffiModuleName = fetchPointerofObject(1, rcvr, self);
+	if (!(isBytes(ffiModuleName, self))) {
+		return ffiFail(FFIErrorBadExternalLibrary, self);
 	}
-	moduleHandle = ((sqInt)(ioLoadModuleOfLength(((sqInt)(firstIndexableField(ffiModuleName, interpreterProxy->interpreterState))), byteSizeOf(ffiModuleName, interpreterProxy->interpreterState))));
-	if (failed(interpreterProxy->interpreterState)) {
-		return ffiFail(FFIErrorModuleNotFound);
+	moduleHandle = ((sqInt)(ioLoadModuleOfLength(((sqInt)(firstIndexableField(ffiModuleName, self))), byteSizeOf(ffiModuleName, self))));
+	if (failed(self)) {
+		return ffiFail(FFIErrorModuleNotFound, self);
 	}
-	ptr = firstIndexableField(moduleHandlePtr, interpreterProxy->interpreterState);
+	ptr = firstIndexableField(moduleHandlePtr, self);
 	ptr[0] = moduleHandle;
 	return 0;
 }
@@ -6116,8 +6050,7 @@ primitiveForceLoad(void)
 	'SqueakFFIPrims'>  */
 
 	/* ThreadedFFIPlugin>>#primitiveLoadSymbolFromModule */
-EXPORT(sqInt)
-primitiveLoadSymbolFromModule(void)
+EXPORT(sqInt)primitiveLoadSymbolFromModule(struct foo * self)
 {
     void *address;
     sqInt module;
@@ -6126,64 +6059,63 @@ primitiveLoadSymbolFromModule(void)
     void **ptr;
     sqInt symbol;
 
-	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 2)) {
-		return primitiveFailFor(PrimErrBadNumArgs, interpreterProxy->interpreterState);
+	if (!((methodArgumentCount(self)) == 2)) {
+		return primitiveFailFor(PrimErrBadNumArgs, self);
 	}
-	module = stackValue(0, interpreterProxy->interpreterState);
-	symbol = stackValue(1, interpreterProxy->interpreterState);
-	moduleHandle = (module != (nilObject(interpreterProxy->interpreterState))
-		? ffiLoadCalloutModule(module)
+	module = stackValue(0, self);
+	symbol = stackValue(1, self);
+	moduleHandle = (module != (nilObject(self))
+		? ffiLoadCalloutModule(module, self)
 		: 0);
-	if (failed(interpreterProxy->interpreterState)) {
-		return primitiveFailFor(PrimErrNotFound, interpreterProxy->interpreterState);
+	if (failed(self)) {
+		return primitiveFailFor(PrimErrNotFound, self);
 	}
-	address = ioLoadSymbolOfLengthFromModule(((sqInt) (firstIndexableField(symbol, interpreterProxy->interpreterState))), byteSizeOf(symbol, interpreterProxy->interpreterState), moduleHandle);
-	if ((failed(interpreterProxy->interpreterState))
+	address = ioLoadSymbolOfLengthFromModule(((sqInt) (firstIndexableField(symbol, self))), byteSizeOf(symbol, self), moduleHandle);
+	if ((failed(self))
 	 || (address == 0)) {
-		return primitiveFailFor(PrimErrNotFound, interpreterProxy->interpreterState);
+		return primitiveFailFor(PrimErrNotFound, self);
 	}
-	oop = instantiateClassindexableSize(classExternalAddress(interpreterProxy->interpreterState), sizeof(void *), interpreterProxy->interpreterState);
-	ptr = firstIndexableField(oop, interpreterProxy->interpreterState);
+	oop = instantiateClassindexableSize(classExternalAddress(self), sizeof(void *), self);
+	ptr = firstIndexableField(oop, self);
 	ptr[0] = address;
-	return methodReturnValue(oop, interpreterProxy->interpreterState);
+	return methodReturnValue(oop, self);
 }
 
 
 /*	Enable logging of FFI calls by providing it with a log file name. */
 
 	/* ThreadedFFIPlugin>>#primitiveLogCallsTo */
-EXPORT(sqInt)
-primitiveLogCallsTo(void)
+EXPORT(sqInt)primitiveLogCallsTo(struct foo * self)
 {
     sqInt logFile;
     sqInt ok;
 
-	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 1)) {
-		return primitiveFail(interpreterProxy->interpreterState);
+	if (!((methodArgumentCount(self)) == 1)) {
+		return primitiveFail(self);
 	}
-	logFile = stackValue(0, interpreterProxy->interpreterState);
-	if (logFile == (nilObject(interpreterProxy->interpreterState))) {
+	logFile = stackValue(0, self);
+	if (logFile == (nilObject(self))) {
 
 		/* disable logging */
-		ok = ffiLogFileNameOfLength(null, 0);
+		ok = ffiLogFileNameOfLength(null, 0, self);
 		if (!ok) {
-			return primitiveFail(interpreterProxy->interpreterState);
+			return primitiveFail(self);
 		}
 		ffiLogEnabled = 0;
 	}
 	else {
 
 		/* enable logging */
-		if (!(isBytes(logFile, interpreterProxy->interpreterState))) {
-			return primitiveFail(interpreterProxy->interpreterState);
+		if (!(isBytes(logFile, self))) {
+			return primitiveFail(self);
 		}
-		ok = ffiLogFileNameOfLength(firstIndexableField(logFile, interpreterProxy->interpreterState), byteSizeOf(logFile, interpreterProxy->interpreterState));
+		ok = ffiLogFileNameOfLength(firstIndexableField(logFile, self), byteSizeOf(logFile, self), self);
 		if (!ok) {
-			return primitiveFail(interpreterProxy->interpreterState);
+			return primitiveFail(self);
 		}
 		ffiLogEnabled = 1;
 	}
-	return pop(1, interpreterProxy->interpreterState);
+	return pop(1, self);
 }
 
 
@@ -6194,34 +6126,32 @@ primitiveLogCallsTo(void)
 	ptr(uint32/uint64, 0) */
 
 	/* ThreadedFFIPlugin>>#primitiveSetManualSurfacePointer */
-EXPORT(sqInt)
-primitiveSetManualSurfacePointer(void)
+EXPORT(sqInt)primitiveSetManualSurfacePointer(struct foo * self)
 {
     usqIntptr_t ptr;
     sqInt result;
     sqInt surfaceID;
 
-	if (!((methodArgumentCount(interpreterProxy->interpreterState)) == 2)) {
-		return primitiveFail(interpreterProxy->interpreterState);
+	if (!((methodArgumentCount(self)) == 2)) {
+		return primitiveFail(self);
 	}
-	surfaceID = stackIntegerValue(1, interpreterProxy->interpreterState);
-	ptr = positiveMachineIntegerValueOf(stackValue(0, interpreterProxy->interpreterState), interpreterProxy->interpreterState);
-	if (failed(interpreterProxy->interpreterState)) {
+	surfaceID = stackIntegerValue(1, self);
+	ptr = positiveMachineIntegerValueOf(stackValue(0, self), self);
+	if (failed(self)) {
 		return null;
 	}
 	result = setManualSurfacePointer(surfaceID, ((void *)ptr));
 	if (result == 0) {
-		return primitiveFail(interpreterProxy->interpreterState);
+		return primitiveFail(self);
 	}
-	return pop(2, interpreterProxy->interpreterState);
+	return pop(2, self);
 }
 
 
 /*	Answer if a struct result of a given size is returned in memory or not. */
 
 	/* ThreadedX64Win64FFIPlugin>>#returnStructInRegisters: */
-static sqInt
-returnStructInRegisters(sqInt returnStructSize)
+static sqIntreturnStructInRegisters(sqInt returnStructSize)
 {
 	return (returnStructSize <= WordSize)
 	 && ((returnStructSize & (returnStructSize - 1)) == 0);
@@ -6353,8 +6283,7 @@ setInterpreter(struct VirtualMachine *anInterpreter)
  */
 
 	/* ThreadedFFIPlugin>>#sizeField: */
-static sqInt
-sizeField(sqInt oop)
+static sqIntsizeField(sqInt oop)
 {
 	return longAt(oop + BaseHeaderSize);
 }
@@ -6366,8 +6295,7 @@ sizeField(sqInt oop)
 	field points to. */
 
 	/* ThreadedFFIPlugin>>#startOfData: */
-static sqInt
-startOfData(sqInt oop)
+static sqIntstartOfData(sqInt oop)
 {
 	return ((longAt(oop + BaseHeaderSize)) > 0
 		? (oop + BaseHeaderSize) + BytesPerOop

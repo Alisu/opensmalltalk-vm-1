@@ -107,7 +107,7 @@ sqInt faSetPlatFile(fapath *aFaPath, WCHAR *pathName);
 sqInt faOpenDirectory(fapath *aFaPath);
 sqInt faReadDirectory(fapath *aFaPath);
 sqInt faCloseDirectory(fapath *aFaPath);
-sqInt faRewindDirectory(fapath *aFaPath);
+sqInt faRewindDirectory(fapath *aFaPath, struct foo * self);
 sqInt faFileAttribute(fapath *aFaPath, sqInt attributeNumber);
 sqInt faFileStatAttributes(fapath *aFaPath, int lStat, sqInt attributeArray);
 sqInt faExists(fapath *aFaPath);

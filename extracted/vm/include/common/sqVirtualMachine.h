@@ -56,7 +56,6 @@ struct foo;
 
 typedef struct VirtualMachine {
 
-
 	struct foo* interpreterState;
 	sqInt (*minorVersion)(void);
 	sqInt (*majorVersion)(void);

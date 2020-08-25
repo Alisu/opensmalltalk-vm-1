@@ -23,10 +23,10 @@ typedef struct fapathptrstruct {
 
 
 sqInt faInitialiseModule();
-sqInt faInitSessionId(int *sessionId);
-sqInt faValidateSessionId(int sessionId);
-sqInt faInvalidateSessionId(int *sessionId);
-sqInt faSetStDirOop(fapath *aFaPath, sqInt pathNameOop);
-sqInt faSetStPathOop(fapath *aFaPath, sqInt pathNameOop);
-sqInt faCharToByteArray(const char *cBuf, sqInt *byteArrayOop);
+sqInt faInitSessionId(int *sessionId, struct foo * self);
+sqInt faValidateSessionId(int sessionId, struct foo * self);
+sqInt faInvalidateSessionId(int *sessionId, struct foo * self);
+sqInt faSetStDirOop(fapath *aFaPath, sqInt pathNameOop, struct foo * self);
+sqInt faSetStPathOop(fapath *aFaPath, sqInt pathNameOop, struct foo * self);
+sqInt faCharToByteArray(const char *cBuf, sqInt *byteArrayOop, struct foo * self);
 

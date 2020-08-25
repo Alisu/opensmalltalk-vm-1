@@ -22,18 +22,16 @@
 /* this is a stub through which floating-point register arguments can be loaded
  * prior to an FFI call proper.  e.g. on the PowerPC this would be declared as
  *	extern void loadFloatRegs(double, double, double, double,
- *	                          double, double, double, double);
+ *	                          double, double, double, double, self);
  * and called with the appropriate values necessary to load the floating-point
  * argument registers.  Immediately after the actual call is made, using the
  * undisturbed register contents created by the call of loadFloatRegs.
  */
-void
-loadFloatRegs(void) { return; }
+voidloadFloatRegs(struct foo * self) { return; }
 
 static FILE *ffiLogFile = NULL;
 
-int
-ffiLogFileNameOfLength(void *nameIndex, int nameLength)
+intffiLogFileNameOfLength(void *nameIndex, int nameLength, struct foo * self)
 {
 	if (nameIndex && nameLength) {
 		char *fileName;
@@ -61,8 +59,7 @@ ffiLogFileNameOfLength(void *nameIndex, int nameLength)
 	return 1;
 }
 
-int
-ffiLogCallOfLength(void *nameIndex, int nameLength)
+intffiLogCallOfLength(void *nameIndex, int nameLength, struct foo * self)
 {
     if (!ffiLogFile)
 		return 0;

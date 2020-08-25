@@ -138,8 +138,8 @@ double ffiReturnFloatValue(void);
 #endif /* !ThreadedFFIPlugin */
 
 /* Set the log file name for logging call-outs */
-int ffiLogFileNameOfLength(void *nameIndex, int nameLength);
-int ffiLogCallOfLength(void *nameIndex, int nameLength);
+int ffiLogFileNameOfLength(void *nameIndex, int nameLength, struct foo * self);
+int ffiLogCallOfLength(void *nameIndex, int nameLength, struct foo * self);
 
 /* The following are for creating, manipulating, and destroying
  * "manual surfaces".  These are surfaces that are managed by Squeak code,

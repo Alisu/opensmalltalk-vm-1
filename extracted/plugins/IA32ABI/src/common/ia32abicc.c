@@ -20,8 +20,8 @@
 
 struct objc_class *baz;
 
-void setbaz(void *p) { baz = p; }
-void *getbaz() { return baz; }
+void setbaz(void *p, struct foo * self) { baz = p; }
+void *getbaz(struct foo * self) { return baz; }
 # endif
 # include <stdlib.h> /* for valloc */
 # include <sys/mman.h> /* for mprotect */
@@ -102,8 +102,7 @@ struct VirtualMachine* interpreterProxy;
  * Call a foreign function that answers an integral result in %eax (and
  * possibly %edx) according to IA32-ish ABI rules.
  */
-sqInt
-callIA32IntegralReturn(SIGNATURE) {
+sqIntcallIA32IntegralReturn(SIGNATURE, struct foo * self) {
 #ifdef _MSC_VER
 __int64 (*f)(), r;
 #else
@@ -116,8 +115,7 @@ long long (*f)(), r;
  * Call a foreign function that answers a single-precision floating-point
  * result in %f0 according to IA32-ish ABI rules.
  */
-sqInt
-callIA32FloatReturn(SIGNATURE) { float (*f)(), r;
+sqIntcallIA32FloatReturn(SIGNATURE, struct foo * self) { float (*f)(), r;
 #include "dabusiness.h"
 }
 
@@ -125,8 +123,7 @@ callIA32FloatReturn(SIGNATURE) { float (*f)(), r;
  * Call a foreign function that answers a double-precision floating-point
  * result in %f0 according to IA32-ish ABI rules.
  */
-sqInt
-callIA32DoubleReturn(SIGNATURE) { double (*f)(), r;
+sqIntcallIA32DoubleReturn(SIGNATURE, struct foo * self) { double (*f)(), r;
 #include "dabusiness.h"
 }
 
@@ -138,8 +135,7 @@ callIA32DoubleReturn(SIGNATURE) { double (*f)(), r;
  */
 static VMCallbackContext *mostRecentCallbackContext = 0;
 
-VMCallbackContext *
-getMostRecentCallbackContext() { return mostRecentCallbackContext; }
+VMCallbackContext *getMostRecentCallbackContext(struct foo * self) { return mostRecentCallbackContext; }
 
 #define getMRCC()   mostRecentCallbackContext
 #define setMRCC(t) (mostRecentCallbackContext = (void *)(t))
@@ -203,7 +199,7 @@ thunkEntry(void *thunkp, sqIntptr_t *stackp)
   }
 #endif /* STACK_ALIGN_HACK */
 
-	if ((flags = interpreterProxy->ownVM(0, interpreterProxy->interpreterState)) < 0) {
+	if ((flags = interpreterProxy->ownVM(0, self)) < 0) {
 		fprintf(stderr,"Warning; callback failed to own the VM\n");
 		return -1;
 	}
@@ -215,14 +211,14 @@ thunkEntry(void *thunkp, sqIntptr_t *stackp)
 		vmcc.stackp = stackp + 2; /* skip address of retpc & retpc (thunk) */
 		vmcc.intregargsp = 0;
 		vmcc.floatregargsp = 0;
-		interpreterProxy->sendInvokeCallbackContext(&vmcc, interpreterProxy->interpreterState);
+		interpreterProxy->sendInvokeCallbackContext(&vmcc, self);
 		fprintf(stderr,"Warning; callback failed to invoke\n");
 		setMRCC(previousCallbackContext);
-		interpreterProxy->disownVM(flags, interpreterProxy->interpreterState);
+		interpreterProxy->disownVM(flags, self);
 		return -1;
 	}
 	setMRCC(previousCallbackContext);
-	interpreterProxy->disownVM(flags, interpreterProxy->interpreterState);
+	interpreterProxy->disownVM(flags, self);
 
 	switch (returnType) {
 
@@ -276,8 +272,7 @@ thunkEntry(void *thunkp, sqIntptr_t *stackp)
 static unsigned long pagesize = 0;
 #endif
 
-void *
-allocateExecutablePage(long *size)
+void *allocateExecutablePage(long *size)
 {
 	void *mem;
 

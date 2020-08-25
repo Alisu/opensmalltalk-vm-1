@@ -53,12 +53,12 @@ static char* emptyString = "";
 /********************************************************************/
 
 /* sslFromHandle: Maps a handle to an SSL */
-static sqSSL *sslFromHandle(sqInt handle) {
+static sqSSL *sslFromHandle(sqInt handle) {
 	return handle < handleMax ? handleBuf[handle] : NULL;
 }
 
 /* sqCopyBioSSL: Copies data from a BIO into an out buffer */
-sqInt sqCopyBioSSL(sqSSL *ssl, BIO *bio, char *dstBuf, sqInt dstLen) {
+sqInt sqCopyBioSSL(sqSSL *ssl, BIO *bio, char *dstBuf, sqInt dstLen) {
 	int nbytes = BIO_ctrl_pending(bio);
 
 	if(ssl->loglevel) printf("sqCopyBioSSL: %d bytes pending; buffer size %ld\n",
@@ -228,7 +228,7 @@ sqInt sqVerifySAN(sqSSL* ssl, const GENERAL_NAME* sAN, const void* data, const s
 }
 
 /* sqSetupSSL: Common SSL setup tasks */
-sqInt sqSetupSSL(sqSSL *ssl, int server) {
+sqInt sqSetupSSL(sqSSL *ssl, int server) {
 	/* Fixme. Needs to use specified version */
 	if(ssl->loglevel) printf("sqSetupSSL: setting method\n");
 
@@ -276,7 +276,7 @@ sqInt sqSetupSSL(sqSSL *ssl, int server) {
 	Arguments: None.
 	Returns: SSL handle.
 */
-sqInt sqCreateSSL(void) {
+sqInt sqCreateSSL(void) {
 	sqInt handle = 0;
 	sqSSL *ssl = NULL;
 
@@ -307,7 +307,7 @@ sqInt sqCreateSSL(void) {
 		handle - the SSL handle
 	Returns: Non-zero if successful.
 */
-sqInt sqDestroySSL(sqInt handle) {
+sqInt sqDestroySSL(sqInt handle) {
 	sqSSL *ssl = sslFromHandle(handle);
 	if(ssl == NULL) return 0;
 
@@ -339,7 +339,7 @@ sqInt sqDestroySSL(sqInt handle) {
 		dstLen - the size of the output buffer
 	Returns: The size of the output token or an error code.
 */
-sqInt sqConnectSSL(sqInt handle, char* srcBuf, sqInt srcLen, char *dstBuf, sqInt dstLen) {
+sqInt sqConnectSSL(sqInt handle, char* srcBuf, sqInt srcLen, char *dstBuf, sqInt dstLen) {
 	int result;
 	char peerName[MAX_HOSTNAME_LENGTH + 1];
 	X509 *cert;
@@ -484,7 +484,7 @@ sqInt sqConnectSSL(sqInt handle, char* srcBuf, sqInt srcLen, char *dstBuf, sqInt
 		dstLen - the size of the output buffer
 	Returns: The size of the output token or an error code.
 */
-sqInt sqAcceptSSL(sqInt handle, char* srcBuf, sqInt srcLen, char *dstBuf, sqInt dstLen) {
+sqInt sqAcceptSSL(sqInt handle, char* srcBuf, sqInt srcLen, char *dstBuf, sqInt dstLen) {
 	int result;
 	char peerName[MAX_HOSTNAME_LENGTH + 1];
 	X509 *cert;
@@ -570,7 +570,7 @@ sqInt sqAcceptSSL(sqInt handle, char* srcBuf, sqInt srcLen, char *dstBuf, sqInt 
 		dstLen - the size of the output buffer
 	Returns: The size of the output generated or an error code.
 */
-sqInt sqEncryptSSL(sqInt handle, char* srcBuf, sqInt srcLen, char *dstBuf, sqInt dstLen) {
+sqInt sqEncryptSSL(sqInt handle, char* srcBuf, sqInt srcLen, char *dstBuf, sqInt dstLen) {
 	int nbytes;
 	sqSSL *ssl = sslFromHandle(handle);
 
@@ -592,7 +592,7 @@ sqInt sqEncryptSSL(sqInt handle, char* srcBuf, sqInt srcLen, char *dstBuf, sqInt
 		dstLen - the size of the output buffer
 	Returns: The size of the output generated or an error code.
 */
-sqInt sqDecryptSSL(sqInt handle, char* srcBuf, sqInt srcLen, char *dstBuf, sqInt dstLen) {
+sqInt sqDecryptSSL(sqInt handle, char* srcBuf, sqInt srcLen, char *dstBuf, sqInt dstLen) {
 	int nbytes;
 	sqSSL *ssl = sslFromHandle(handle);
 
@@ -629,7 +629,7 @@ sqInt sqDecryptSSL(sqInt handle, char* srcBuf, sqInt srcLen, char *dstBuf, sqInt
 		propID - the property id to retrieve
 	Returns: The string value of the property.
 */
-char* sqGetStringPropertySSL(sqInt handle, int propID) {
+char* sqGetStringPropertySSL(sqInt handle, int propID) {
 	sqSSL *ssl = sslFromHandle(handle);
 
 	if(ssl == NULL) return NULL;
@@ -652,7 +652,7 @@ char* sqGetStringPropertySSL(sqInt handle, int propID) {
 		propLen - the length of the property string
 	Returns: Non-zero if successful.
 */
-sqInt sqSetStringPropertySSL(sqInt handle, int propID, char *propName, sqInt propLen) {
+sqInt sqSetStringPropertySSL(sqInt handle, int propID, char *propName, sqInt propLen) {
 	sqSSL *ssl = sslFromHandle(handle);
 	char *property = NULL;
 
@@ -687,7 +687,7 @@ sqInt sqSetStringPropertySSL(sqInt handle, int propID, char *propName, sqInt pro
 		propID - the property id to retrieve
 	Returns: The integer value of the property.
 */
-sqInt sqGetIntPropertySSL(sqInt handle, sqInt propID) {
+sqInt sqGetIntPropertySSL(sqInt handle, sqInt propID) {
 	sqSSL *ssl = sslFromHandle(handle);
 
 	if(ssl == NULL) return 0;
@@ -710,7 +710,7 @@ sqInt sqGetIntPropertySSL(sqInt handle, sqInt propID) {
 		propValue - the property value
 	Returns: Non-zero if successful.
 */
-sqInt sqSetIntPropertySSL(sqInt handle, sqInt propID, sqInt propValue) {
+sqInt sqSetIntPropertySSL(sqInt handle, sqInt propID, sqInt propValue) {
 	sqSSL *ssl = sslFromHandle(handle);
 	if(ssl == NULL) return 0;
 

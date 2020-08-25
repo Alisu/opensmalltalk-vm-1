@@ -88,8 +88,7 @@ DIR *openDir= 0;
 extern time_t convertToSqueakTime(time_t unixTime);
 
 
-void 
-sqCloseDir()
+void sqCloseDir()
 {
   /* Ensure that the cached open directory is closed */
   if (lastPathValid)
@@ -101,7 +100,7 @@ sqCloseDir()
 
 
 
-sqInt dir_Create(char *pathString, sqInt pathStringLength)
+sqInt dir_Create(char *pathString, sqInt pathStringLength)
 {
   /* Create a new directory with the given path. By default, this
      directory is created relative to the cwd. */
@@ -114,7 +113,7 @@ sqInt dir_Create(char *pathString, sqInt pathStringLength)
 }
 
 
-sqInt dir_Delete(char *pathString, sqInt pathStringLength)
+sqInt dir_Delete(char *pathString, sqInt pathStringLength)
 {
   /* Delete the existing directory with the given path. */
   char name[MAXPATHLEN+1];
@@ -128,13 +127,13 @@ sqInt dir_Delete(char *pathString, sqInt pathStringLength)
 }
 
 
-sqInt dir_Delimitor(void)
+sqInt dir_Delimitor(void)
 {
   return DELIMITER;
 }
 
 
-static int maybeOpenDir(char *unixPath)
+static int maybeOpenDir(char *unixPath)
 {
   /* if the last opendir was to the same directory, re-use the directory
      pointer from last time.  Otherwise close the previous directory,
@@ -329,12 +328,12 @@ sqInt dir_EntryLookup(char *pathString, sqInt pathStringLength, char* nameString
 /* unix files are untyped, and the creator is correct by default */
 
 
-sqInt dir_SetMacFileTypeAndCreator(char *filename, sqInt filenameSize, char *fType, char *fCreator)
+sqInt dir_SetMacFileTypeAndCreator(char *filename, sqInt filenameSize, char *fType, char *fCreator)
 {
   return true;
 }
 
-sqInt dir_GetMacFileTypeAndCreator(char *filename, sqInt filenameSize, char *fType, char *fCreator)
+sqInt dir_GetMacFileTypeAndCreator(char *filename, sqInt filenameSize, char *fType, char *fCreator)
 {
   return true;
 }
@@ -345,8 +344,7 @@ sqInt dir_GetMacFileTypeAndCreator(char *filename, sqInt filenameSize, char *fTy
  * directed to a log file.  It binds stdout to /dev/tty, arranging that output
  * of debugging print routines such as printOop appear on stdout.
  */
-void
-sqStdoutToDevTTY()
+voidsqStdoutToDevTTY()
 {
 	if (!freopen("/dev/tty","w",stdout))
 		perror("sqStdoutToDevTTY freopen(\"/dev/tty\",\"w\",stdout):");

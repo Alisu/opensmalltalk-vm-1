@@ -30,9 +30,9 @@
 					int funcOffset, /* stack offset of func Alien   */ \
 					int resultOffset/* stack offset of result Alien */
 
-extern sqInt callIA32IntegralReturn(SIGNATURE);
-extern sqInt callIA32FloatReturn   (SIGNATURE);
-extern sqInt callIA32DoubleReturn  (SIGNATURE);
+extern sqInt callIA32IntegralReturn(SIGNATURE, struct foo * self);
+extern sqInt callIA32FloatReturn   (SIGNATURE, struct foo * self);
+extern sqInt callIA32DoubleReturn  (SIGNATURE, struct foo * self);
 
 #define thunkEntryType long
 #if defined(i386) || defined(__i386) || defined(__i386__) || (defined(_WIN32) && !defined(_WIN64)) || defined(_M_IX86)
@@ -60,9 +60,9 @@ extern sqInt callIA32DoubleReturn  (SIGNATURE);
 # define INT_REG_ARGS long,long,long,long,
 # define DBL_REG_ARGS double,double,double,double,double,double,double,double,
 #endif
-extern thunkEntryType  thunkEntry (INT_REG_ARGS DBL_REG_ARGS void *,sqIntptr_t *);
+extern thunkEntryType  thunkEntry (INT_REG_ARGS DBL_REG_ARGS void *,sqIntptr_t *, struct foo * self);
 extern void *allocateExecutablePage(long *pagesize);
-extern VMCallbackContext *getMostRecentCallbackContext(void);
+extern VMCallbackContext *getMostRecentCallbackContext(struct foo * self);
 #undef thunkEntryType
 
 /* Use the most minimal setjmp/longjmp pair available; no signal handling

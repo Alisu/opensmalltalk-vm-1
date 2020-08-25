@@ -56,12 +56,12 @@ typedef struct fapathstruct {
 	DIR	*platformDir;
 	} fapath;
 
-sqInt faSetStDir(fapath *aFaPath, char *pathName, int len);
-sqInt faSetStPath(fapath *aFaPath, char *pathName, int len);
-sqInt faSetStFile(fapath *aFaPath, char *pathName);
-sqInt faSetPlatPath(fapath *aFaPath, char *pathName);
-sqInt faSetPlatPathOop(fapath *aFaPath, sqInt pathNameOop);
-sqInt faSetPlatFile(fapath *aFaPath, char *pathName);
+sqInt faSetStDir(fapath *aFaPath, char *pathName, int len, struct foo * self);
+sqInt faSetStPath(fapath *aFaPath, char *pathName, int len, struct foo * self);
+sqInt faSetStFile(fapath *aFaPath, char *pathName, struct foo * self);
+sqInt faSetPlatPath(fapath *aFaPath, char *pathName, struct foo * self);
+sqInt faSetPlatPathOop(fapath *aFaPath, sqInt pathNameOop, struct foo * self);
+sqInt faSetPlatFile(fapath *aFaPath, char *pathName, struct foo * self);
 #define	faGetStPath(aFaPath)		aFaPath->path
 #define faGetStPathLen(aFaPath)		aFaPath->path_len
 #define	faGetStFile(aFaPath)		aFaPath->path_file
@@ -71,12 +71,12 @@ sqInt faSetPlatFile(fapath *aFaPath, char *pathName);
 
 sqLong faConvertUnixToLongSqueakTime(time_t unixTime);
 
-sqInt faOpenDirectory(fapath *aFaPath);
-sqInt faReadDirectory(fapath *aFaPath);
-sqInt faCloseDirectory(fapath *aFaPath);
-sqInt faRewindDirectory(fapath *aFaPath);
-sqInt faFileAttribute(fapath *aFaPath, sqInt attributeNumber);
-sqInt faFileStatAttributes(fapath *aFaPath, int lStat, sqInt attributeArray);
-sqInt faExists(fapath *aFaPath);
-sqInt faAccessAttributes(fapath *aFaPath, sqInt attributeArray, sqInt offset);
+sqInt faOpenDirectory(fapath *aFaPath, struct foo * self);
+sqInt faReadDirectory(fapath *aFaPath, struct foo * self);
+sqInt faCloseDirectory(fapath *aFaPath, struct foo * self);
+sqInt faRewindDirectory(fapath *aFaPath, struct foo * self);
+sqInt faFileAttribute(fapath *aFaPath, sqInt attributeNumber, struct foo * self);
+sqInt faFileStatAttributes(fapath *aFaPath, int lStat, sqInt attributeArray, struct foo *self);
+sqInt faExists(fapath *aFaPath, struct foo * self);
+sqInt faAccessAttributes(fapath *aFaPath, sqInt attributeArray, sqInt offset, struct foo * self);
 

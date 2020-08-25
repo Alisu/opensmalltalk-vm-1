@@ -30,11 +30,11 @@ extern struct VirtualMachine* interpreterProxy;
 static fn_ioRegisterSurface registerSurface = NULL;
 static fn_ioUnregisterSurface unregisterSurface = NULL;
 static fn_ioFindSurface findSurface = NULL;
-void initSurfacePluginFunctionPointers()
+void initSurfacePluginFunctionPointers(struct foo * self)
 {
-	registerSurface = (fn_ioRegisterSurface) interpreterProxy->ioLoadFunctionFrom("ioRegisterSurface","SurfacePlugin", interpreterProxy->interpreterState);
-	unregisterSurface = (fn_ioUnregisterSurface) interpreterProxy->ioLoadFunctionFrom("ioUnregisterSurface","SurfacePlugin", interpreterProxy->interpreterState);
-	findSurface = (fn_ioFindSurface) interpreterProxy->ioLoadFunctionFrom("ioFindSurface","SurfacePlugin", interpreterProxy->interpreterState);
+	registerSurface = (fn_ioRegisterSurface) interpreterProxy->ioLoadFunctionFrom("ioRegisterSurface","SurfacePlugin", self);
+	unregisterSurface = (fn_ioUnregisterSurface) interpreterProxy->ioLoadFunctionFrom("ioUnregisterSurface","SurfacePlugin", self);
+	findSurface = (fn_ioFindSurface) interpreterProxy->ioLoadFunctionFrom("ioFindSurface","SurfacePlugin", self);
 }
 
 /* This is the structure that represents a "manual surface".  These are 
@@ -115,7 +115,7 @@ int manualSurfaceShow(sqIntptr_t surfaceArg, int x, int y, int w, int h) {
 /* primitive interface functions (i.e. called from Squeak) *********************************************/
 
 /* Answer non-negative surfaceID if successful, and -1 for failure. */
-int createManualSurface(int width, int height, int rowPitch, int depth, int isMSB) {
+int createManualSurface(int width, int height, int rowPitch, int depth, int isMSB) {
 	ManualSurface* newSurface;
 	int surfaceID, result;
 	
@@ -144,12 +144,12 @@ int createManualSurface(int width, int height, int rowPitch, int depth, int isMS
 	return surfaceID;
 }
 
-int destroyManualSurface(int surfaceID) {
+int destroyManualSurface(int surfaceID) {
 	if (!unregisterSurface) return 0; /* failure... couldn't init function-pointer */
 	return unregisterSurface(surfaceID);
 }
 
-int setManualSurfacePointer(int surfaceID, void* ptr) {
+int setManualSurfacePointer(int surfaceID, void* ptr) {
 	sqIntptr_t surfaceHandle;
 	ManualSurface *surface;
 	int result;

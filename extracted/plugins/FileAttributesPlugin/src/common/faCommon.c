@@ -18,12 +18,13 @@ int	vmSessionId = 0;
  *
  * This function must be called only once each each time the VM is run.
  */
-sqInt faInitialiseModule()
+sqInt 
+faInitialiseModule(struct foo * self)
 {
 	if (vmSessionId == 0)
-		return interpreterProxy->falseObject(interpreterProxy->interpreterState);
-	vmSessionId = interpreterProxy->getThisSessionID(interpreterProxy->interpreterState);
-	return interpreterProxy->trueObject(interpreterProxy->interpreterState);
+		return interpreterProxy->falseObject(self);
+	vmSessionId = interpreterProxy->getThisSessionID(self);
+	return interpreterProxy->trueObject(self);
 }
 
 
@@ -33,7 +34,8 @@ sqInt faInitialiseModule()
  *
  * Initialise the supplied session.
  */
-sqInt faInitSessionId(int *sessionId)
+sqInt 
+faInitSessionId(int *sessionId, struct foo * self)
 {
 	*sessionId = vmSessionId;
 	return FA_SUCCESS;
@@ -48,7 +50,8 @@ sqInt faInitSessionId(int *sessionId)
  *
  * Currently this is just checking that the sessionId is correct.
  */
-sqInt faValidateSessionId(int sessionId)
+sqInt 
+faValidateSessionId(int sessionId, struct foo * self)
 {
 	return sessionId == vmSessionId;
 }
@@ -60,7 +63,8 @@ sqInt faValidateSessionId(int sessionId)
  *
  * Mark the supplied faPath structure as invalid.
  */
-sqInt faInvalidateSessionId(int *sessionId)
+sqInt 
+faInvalidateSessionId(int *sessionId, struct foo * self)
 {
 	*sessionId = 0;
 	return FA_SUCCESS;
@@ -68,28 +72,30 @@ sqInt faInvalidateSessionId(int *sessionId)
 
 
 
-sqInt faSetStDirOop(fapath *aFaPath, sqInt pathNameOop)
+sqInt 
+faSetStDirOop(fapath *aFaPath, sqInt pathNameOop, struct foo * self)
 {
 int	len;
 char	*pathName;
 
 
-	len = interpreterProxy->stSizeOf(pathNameOop, interpreterProxy->interpreterState);
-	pathName = interpreterProxy->arrayValueOf(pathNameOop, interpreterProxy->interpreterState);
-	return faSetStDir(aFaPath, pathName, len);
+	len = interpreterProxy->stSizeOf(pathNameOop, self);
+	pathName = interpreterProxy->arrayValueOf(pathNameOop, self);
+	return faSetStDir(aFaPath, pathName, len, self);
 }
 
 
 
-sqInt faSetStPathOop(fapath *aFaPath, sqInt pathNameOop)
+sqInt 
+faSetStPathOop(fapath *aFaPath, sqInt pathNameOop, struct foo * self)
 {
 int		len;
 char	*pathName;
 
 
-	len = interpreterProxy->stSizeOf(pathNameOop, interpreterProxy->interpreterState);
-	pathName = interpreterProxy->arrayValueOf(pathNameOop, interpreterProxy->interpreterState);
-	return faSetStPath(aFaPath, pathName, len);
+	len = interpreterProxy->stSizeOf(pathNameOop, self);
+	pathName = interpreterProxy->arrayValueOf(pathNameOop, self);
+	return faSetStPath(aFaPath, pathName, len, self);
 }
 
 
@@ -99,7 +105,7 @@ char	*pathName;
  *
  * Copy the supplied C string to a newly allocated ByteArray
  */
-sqInt faCharToByteArray(const char *cBuf, sqInt *byteArrayOop)
+sqInt faCharToByteArray(const char *cBuf, sqInt *byteArrayOop, struct foo * self)
 {
 unsigned char *byteArrayPtr;
 sqInt len;
@@ -111,11 +117,11 @@ sqInt newByteArray;
 	if (len >= FA_PATH_MAX) {
 		return -1 /* stringTooLong */;
 	}
-	newByteArray = interpreterProxy->instantiateClassindexableSize(interpreterProxy->classByteArray(interpreterProxy->interpreterState), len, interpreterProxy->interpreterState);
+	newByteArray = interpreterProxy->instantiateClassindexableSize(interpreterProxy->classByteArray(self), len, self);
 	if (!(newByteArray)) {
-		return interpreterProxy->primitiveFailFor(PrimErrNoMemory, interpreterProxy->interpreterState);
+		return interpreterProxy->primitiveFailFor(PrimErrNoMemory, self);
 	}
-	byteArrayPtr = interpreterProxy->arrayValueOf(newByteArray, interpreterProxy->interpreterState);
+	byteArrayPtr = interpreterProxy->arrayValueOf(newByteArray, self);
 	memcpy(byteArrayPtr, cBuf, len);
 	byteArrayOop[0] = newByteArray;
 	return 0;

@@ -9,7 +9,7 @@
 *   RCSID:   $Id$
 *
 *	2018-03-06 AKG Rename sqFileFileOpen() & sqFileFdOpen() to 
-*	               sqConnectToFile() and sqConnectToFileDescriptor()
+*	               sqConnectToFile(self) and sqConnectToFileDescriptor(self)
 *	2018-03-01 AKG add sqFileFileOpen() & sqFileFdOpen()
 *	2009-05-15 EEM add stdio flag; reorder SQFile to make it more compact
 *	2005-03-26 IKP fix unaligned accesses to file member
@@ -46,28 +46,28 @@ typedef struct {
 
 /* file i/o */
 
-sqInt   sqFileAtEnd(SQFile *f);
-sqInt   sqFileClose(SQFile *f);
-sqInt   sqFileDeleteNameSize(char *sqFileName, sqInt sqFileNameSize);
-squeakFileOffsetType sqFileGetPosition(SQFile *f);
-sqInt   sqFileInit(void);
-sqInt   sqFileShutdown(void);
-sqInt   sqFileOpen(SQFile *f, char *sqFileName, sqInt sqFileNameSize, sqInt writeFlag);
-sqInt   sqFileOpenNew(SQFile *f, char *sqFileName, sqInt sqFileNameSize, sqInt *exists);
-sqInt   sqConnectToFileDescriptor(SQFile *f, int fd, sqInt writeFlag);
-sqInt   sqConnectToFile(SQFile *f, void *file, sqInt writeFlag);
-size_t  sqFileReadIntoAt(SQFile *f, size_t count, char *byteArrayIndex, size_t startIndex);
-sqInt   sqFileRenameOldSizeNewSize(char *sqOldName, sqInt sqOldNameSize, char *sqNewName, sqInt sqNewNameSize);
-sqInt   sqFileSetPosition(SQFile *f, squeakFileOffsetType position);
-squeakFileOffsetType sqFileSize(SQFile *f);
-sqInt   sqFileValid(SQFile *f);
-size_t  sqFileWriteFromAt(SQFile *f, size_t count, char *byteArrayIndex, size_t startIndex);
-sqInt   sqFileFlush(SQFile *f);
-sqInt   sqFileSync(SQFile *f);
-sqInt   sqFileTruncate(SQFile *f,squeakFileOffsetType offset);
-sqInt   sqFileThisSession(void);
+sqInt   sqFileAtEnd(SQFile *f, struct foo * self);
+sqInt   sqFileClose(SQFile *f, struct foo * self);
+sqInt   sqFileDeleteNameSize(char *sqFileName, sqInt sqFileNameSize, struct foo * self);
+squeakFileOffsetType sqFileGetPosition(SQFile *f, struct foo * self);
+sqInt   sqFileInit(struct foo * self);
+sqInt   sqFileShutdown(struct foo * self);
+sqInt   sqFileOpen(SQFile *f, char *sqFileName, sqInt sqFileNameSize, sqInt writeFlag, struct foo * self);
+sqInt   sqFileOpenNew(SQFile *f, char *sqFileName, sqInt sqFileNameSize, sqInt *exists, struct foo * self);
+sqInt   sqConnectToFileDescriptor(SQFile *f, int fd, sqInt writeFlag, struct foo * self);
+sqInt   sqConnectToFile(SQFile *f, void *file, sqInt writeFlag, struct foo * self);
+size_t  sqFileReadIntoAt(SQFile *f, size_t count, char *byteArrayIndex, size_t startIndex, struct foo * self);
+sqInt   sqFileRenameOldSizeNewSize(char *sqOldName, sqInt sqOldNameSize, char *sqNewName, sqInt sqNewNameSize, struct foo * self);
+sqInt   sqFileSetPosition(SQFile *f, squeakFileOffsetType position, struct foo * self);
+squeakFileOffsetType sqFileSize(SQFile *f, struct foo * self);
+sqInt   sqFileValid(SQFile *f, struct foo * self);
+size_t  sqFileWriteFromAt(SQFile *f, size_t count, char *byteArrayIndex, size_t startIndex, struct foo * self);
+sqInt   sqFileFlush(SQFile *f, struct foo * self);
+sqInt   sqFileSync(SQFile *f, struct foo * self);
+sqInt   sqFileTruncate(SQFile *f,squeakFileOffsetType offset, struct foo * self);
+sqInt   sqFileThisSession(struct foo * self);
 sqInt   sqFileStdioHandlesInto(SQFile files[3]);
-sqInt   sqFileDescriptorType(int fdNum);
+sqInt   sqFileDescriptorType(int fdNum, struct foo * self);
 
 /* directories */
 

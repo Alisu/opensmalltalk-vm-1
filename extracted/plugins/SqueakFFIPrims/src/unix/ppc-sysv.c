@@ -80,7 +80,7 @@
 #endif
 
 #if defined(FFI_TEST)
-  static int primitiveFail(void, interpreterProxy->interpreterState) { puts("primitive fail"); exit(1); return 0; }
+  static int primitiveFail(struct foo * self) { puts("primitive fail"); exit(1); return 0; }
 #else
   extern struct VirtualMachine *interpreterProxy;
 # define primitiveFail() interpreterProxy->primitiveFail()
@@ -114,7 +114,7 @@ static int	*structReturnValue= 0;
 extern int ffiCallAddressOf(void *addr, int nGPR, int nFPR, int nStack);
 
 
-int ffiInitialize(void)
+int ffiInitialize(struct foo * self)
 {
   stackIndex= gprCount= fprCount= structCount= 0;
   ffiFloatReturnValue= 0.0;
@@ -122,14 +122,14 @@ int ffiInitialize(void)
 }
 
 
-int ffiSupportsCallingConvention(int callType)
+int ffiSupportsCallingConvention(int callType, struct foo * self)
 {
   return (callType == FFICallTypeCDecl)
     ||   (callType == FFICallTypeApi);
 }
 
 
-int ffiAlloc(int byteSize)
+int ffiAlloc(int byteSize, struct foo * self)
 {
   return (int)malloc(byteSize);
 }
@@ -144,11 +144,11 @@ int ffiFree(sqIntptr_t ptr)
 
 #define checkStack()				\
   if (stackIndex >= ARG_MAX)		\
-    return primitiveFail(interpreterProxy->interpreterState)
+    return primitiveFail(self)
 
 #define checkGPR()						\
   if ((gprCount >= GPR_MAX) && (stackIndex >= ARG_MAX))	\
-    return primitiveFail(interpreterProxy->interpreterState)
+    return primitiveFail(self)
 
 #define qalignStack()	stackIndex += (stackIndex & 1)
 
@@ -162,7 +162,7 @@ int ffiFree(sqIntptr_t ptr)
 #define qalignGPR()	gprCount += (gprCount & 1)
 
 
-int ffiPushSignedChar(int value)
+int ffiPushSignedChar(int value, struct foo * self)
 { 
   DPRINTF(("ffiPushSignedChar %d\n", value));
   pushGPR(value);
@@ -170,7 +170,7 @@ int ffiPushSignedChar(int value)
 }
 
 
-int ffiPushUnsignedChar(int value) 
+int ffiPushUnsignedChar(int value, struct foo * self) 
 { 
   DPRINTF(("ffiPushUnsignedChar %d\n", value));
   pushGPR(value);
@@ -178,7 +178,7 @@ int ffiPushUnsignedChar(int value)
 }
 
 
-int ffiPushSignedByte(int value) 
+int ffiPushSignedByte(int value, struct foo * self) 
 { 
   DPRINTF(("ffiPushSignedByte %d\n", value));
   pushGPR(value);
@@ -186,7 +186,7 @@ int ffiPushSignedByte(int value)
 }
 
 
-int ffiPushUnsignedByte(int value)
+int ffiPushUnsignedByte(int value, struct foo * self)
 { 
   DPRINTF(("ffiPushUnsignedByte %d\n", value));
   pushGPR(value);
@@ -194,7 +194,7 @@ int ffiPushUnsignedByte(int value)
 }
 
 
-int ffiPushSignedShort(int value)
+int ffiPushSignedShort(int value, struct foo * self)
 { 
   DPRINTF(("ffiPushSignedShort %d\n", value));
   pushGPR(value); 
@@ -202,7 +202,7 @@ int ffiPushSignedShort(int value)
 }
 
 
-int ffiPushUnsignedShort(int value) 
+int ffiPushUnsignedShort(int value, struct foo * self) 
 { 
   DPRINTF(("ffiPushUnsignedShort %d\n", value));
   pushGPR(value); 
@@ -210,7 +210,7 @@ int ffiPushUnsignedShort(int value)
 }
 
 
-int ffiPushSignedInt(int value) 
+int ffiPushSignedInt(int value, struct foo * self) 
 { 
   DPRINTF(("ffiPushSignedInt %d\n", value));
   pushGPR(value); 
@@ -218,7 +218,7 @@ int ffiPushSignedInt(int value)
 }
 
 
-int ffiPushUnsignedInt(int value) 
+int ffiPushUnsignedInt(int value, struct foo * self) 
 { 
   DPRINTF(("ffiPushUnsignedInt %d\n", value));
   pushGPR(value);
@@ -226,7 +226,7 @@ int ffiPushUnsignedInt(int value)
 }
 
 
-int ffiPushSignedLongLong(int low, int high)
+int ffiPushSignedLongLong(int low, int high, struct foo * self)
 {
   DPRINTF(("ffiPushSignedLongLong %d %d\n", low, high));
   qalignGPR();
@@ -237,7 +237,7 @@ int ffiPushSignedLongLong(int low, int high)
 }
 
 
-int ffiPushUnsignedLongLong(int low, int high)
+int ffiPushUnsignedLongLong(int low, int high, struct foo * self)
 { 
   DPRINTF(("ffiPushUnsignedLongLong %d %d\n", low, high));
   qalignGPR();
@@ -248,7 +248,7 @@ int ffiPushUnsignedLongLong(int low, int high)
 }
 
 
-int ffiPushPointer(int pointer)
+int ffiPushPointer(int pointer, struct foo * self)
 {
   DPRINTF(("ffiPushPointer %d\n", pointer));
   pushGPR(pointer);
@@ -258,12 +258,12 @@ int ffiPushPointer(int pointer)
 
 #define checkFPR()					\
   if ((fprCount >= FPR_MAX) && (stackIndex >= ARG_MAX))	\
-    return primitiveFail(interpreterProxy->interpreterState)
+    return primitiveFail(self)
 
 #define dalignStack()	stackIndex += (stackIndex & 1)
 
 
-int ffiPushSingleFloat(double value)
+int ffiPushSingleFloat(double value, struct foo * self)
 {
   DPRINTF(("ffiPushSingleFloat %f\n", (float)value));
   if (fprCount < FPR_MAX)
@@ -278,7 +278,7 @@ int ffiPushSingleFloat(double value)
 }
 
 
-int ffiPushDoubleFloat(double value)
+int ffiPushDoubleFloat(double value, struct foo * self)
 {
   DPRINTF(("ffiPushDoubleFloat %f\n", (float)value));
   if (fprCount < FPR_MAX)
@@ -295,14 +295,14 @@ int ffiPushDoubleFloat(double value)
 }
 
 
-int ffiPushStringOfLength(int srcIndex, int length)
+int ffiPushStringOfLength(int srcIndex, int length, struct foo * self)
 {
   char *ptr;
   DPRINTF(("ffiPushStringOfLength %d\n", length));
   checkGPR();
   ptr= (char *)malloc(length + 1);
   if (!ptr)
-    return primitiveFail(interpreterProxy->interpreterState);
+    return primitiveFail(self);
   memcpy(ptr, (void *)srcIndex, length);
   ptr[length]= '\0';
   strings[stringCount++]= ptr;
@@ -318,20 +318,20 @@ int ffiPushStringOfLength(int srcIndex, int length)
 {							\
   DPRINTF(("  ++ "#type"\n"));				\
   if ((structCount + sizeof(type)) > sizeof(structs))	\
-    return primitiveFail(interpreterProxy->interpreterState);				\
+    return primitiveFail(self);				\
   *(type *)(structs + structCount)= value;		\
   structCount += sizeof(type);				\
 }
 
 
-int ffiPushStructureOfLength(int pointer, int *structSpec, int specSize)
+int ffiPushStructureOfLength(int pointer, int *structSpec, int specSize, struct foo * self)
 {
   int size= *structSpec & FFIStructSizeMask;
   DPRINTF(("ffiPushStructureOfLength %d (%db)\n", specSize, size));
   salign(16);
   if (structCount + size > sizeof(structs))
-    return primitiveFail(interpreterProxy->interpreterState);
-  ffiPushPointer((int)(structs + structCount));
+    return primitiveFail(self);
+  ffiPushPointer((int)(structs + structCount), self);
   memcpy((void *)(structs + structCount), (void *)pointer, size);
   structCount += size;
   return 1;
@@ -340,7 +340,7 @@ int ffiPushStructureOfLength(int pointer, int *structSpec, int specSize)
 
 /* answer true if the support code can return the given type.
  */
-int ffiCanReturn(int *structSpec, int specSize)
+int ffiCanReturn(int *structSpec, int specSize, struct foo * self)
 {
   int header= *structSpec;
   if (header & FFIFlagPointer)
@@ -358,19 +358,19 @@ int ffiCanReturn(int *structSpec, int specSize)
 }
 
 
-double ffiReturnFloatValue(void)	{ return ffiFloatReturnValue; }
-int    ffiLongLongResultLow(void)	{ return ((int *)&ffiLongReturnValue)[1]; }
-int    ffiLongLongResultHigh(void)	{ return ((int *)&ffiLongReturnValue)[0]; }
+double ffiReturnFloatValue(struct foo * self)	{ return ffiFloatReturnValue; }
+int    ffiLongLongResultLow(struct foo * self)	{ return ((int *)&ffiLongReturnValue)[1]; }
+int    ffiLongLongResultHigh(struct foo * self)	{ return ((int *)&ffiLongReturnValue)[0]; }
 
 
-int ffiStoreStructure(int address, int structSize)
+int ffiStoreStructure(int address, int structSize, struct foo * self)
 {
   memcpy((void *)address, (void *)structReturnValue, structSize);
   return 1;
 }
 
 
-int ffiCleanup(void)
+int ffiCleanup(struct foo * self)
 {
   int i;
   for (i= 0;  i < stringCount;  ++i)
@@ -385,19 +385,19 @@ int ffiCleanup(void)
 }
 
 
-int ffiCallAddressOfWithPointerReturn(int fn, int callType)
+int ffiCallAddressOfWithPointerReturn(int fn, int callType, struct foo * self)
 {
   return ffiCallAddressOf((void *)fn, gprCount, fprCount, stackIndex);
 }
 
 
-int ffiCallAddressOfWithStructReturn(int fn, int callType, int* structSpec, int specSize)
+int ffiCallAddressOfWithStructReturn(int fn, int callType, int* structSpec, int specSize, struct foo * self)
 {
   return ffiCallAddressOf((void *)fn, gprCount, fprCount, stackIndex);
 }
 
 
-int ffiCallAddressOfWithReturnType(int fn, int callType, int typeSpec)
+int ffiCallAddressOfWithReturnType(int fn, int callType, int typeSpec, struct foo * self)
 {
   return ffiCallAddressOf((void *)fn, gprCount, fprCount, stackIndex);
 }
@@ -405,7 +405,7 @@ int ffiCallAddressOfWithReturnType(int fn, int callType, int typeSpec)
 
 #if defined(FFI_TEST)
 
-void ffiDoAssertions(void)
+void ffiDoAssertions(void)
 {
 }
 

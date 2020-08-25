@@ -48,13 +48,13 @@ struct VirtualMachine* interpreterProxy;
 
 #define objIsAlien(anOop)                                                      \
     (interpreterProxy->includesBehaviorThatOf(                                 \
-      interpreterProxy->fetchClassOf(anOop, interpreterProxy->interpreterState),                                   \
-      interpreterProxy->classAlien(interpreterProxy->interpreterState), interpreterProxy->interpreterState))
+      interpreterProxy->fetchClassOf(anOop, self),                                   \
+      interpreterProxy->classAlien(self), self))
 
 #define objIsUnsafeAlien(anOop)                                                \
     (interpreterProxy->includesBehaviorThatOf(                                 \
-      interpreterProxy->fetchClassOf(anOop, interpreterProxy->interpreterState),                                   \
-      interpreterProxy->classUnsafeAlien(interpreterProxy->interpreterState), interpreterProxy->interpreterState))
+      interpreterProxy->fetchClassOf(anOop, self),                                   \
+      interpreterProxy->classUnsafeAlien(self), self))
 
 #define sizeField(alien)                                                       \
     (*(long*)pointerForOop((sqInt)(alien) + BaseHeaderSize))
@@ -86,7 +86,7 @@ struct VirtualMachine* interpreterProxy;
  * Call a foreign function that answers an integral result in r0 according to
  * ARM EABI rules.
  */
-sqInt callIA32IntegralReturn(SIGNATURE) {
+sqInt callIA32IntegralReturn(SIGNATURE, struct foo * self) {
   long (*f)(long r0, long r1, long r2, long r3,
             double d0, double d1, double d2, double d3,
             double d4, double d5, double d6, double d7);
@@ -98,7 +98,7 @@ sqInt callIA32IntegralReturn(SIGNATURE) {
  * Call a foreign function that answers a single-precision floating-point
  * result in VFP's s0 according to ARM EABI rules.
  */
-sqInt callIA32FloatReturn(SIGNATURE) {
+sqInt callIA32FloatReturn(SIGNATURE, struct foo * self) {
   float (*f)(long r0, long r1, long r2, long r3,
              double d0, double d1, double d2, double d3,
              double d4, double d5, double d6, double d7);
@@ -110,8 +110,7 @@ sqInt callIA32FloatReturn(SIGNATURE) {
  * Call a foreign function that answers a double-precision floating-point
  * result in VFP's d0 according to ARM EABI rules.
  */
-sqInt
-callIA32DoubleReturn(SIGNATURE) {
+sqIntcallIA32DoubleReturn(SIGNATURE, struct foo * self) {
   double (*f)(long r0, long r1, long r2, long r3,
               double d0, double d1, double d2, double d3,
               double d4, double d5, double d6, double d7);
@@ -127,8 +126,7 @@ callIA32DoubleReturn(SIGNATURE) {
  */
 static VMCallbackContext *mostRecentCallbackContext = 0;
 
-VMCallbackContext *
-getMostRecentCallbackContext() { return mostRecentCallbackContext; }
+VMCallbackContext *getMostRecentCallbackContext(struct foo * self) { return mostRecentCallbackContext; }
 
 #define getMRCC()   mostRecentCallbackContext
 #define setMRCC(t) (mostRecentCallbackContext = (void *)(t))
@@ -174,7 +172,7 @@ thunkEntry(long r0, long r1, long r2, long r3,
   dregArgs[6] = d6;
   dregArgs[7] = d7;
 
-  flags = interpreterProxy->ownVM(0, interpreterProxy->interpreterState);
+  flags = interpreterProxy->ownVM(0, self);
   if (flags < 0) {
     fprintf(stderr,"Warning; callback failed to own the VM\n");
     return -1;
@@ -187,15 +185,15 @@ thunkEntry(long r0, long r1, long r2, long r3,
     vmcc.stackp = stackp;
     vmcc.intregargsp = regArgs;
     vmcc.floatregargsp = dregArgs;
-    interpreterProxy->sendInvokeCallbackContext(&vmcc, interpreterProxy->interpreterState);
+    interpreterProxy->sendInvokeCallbackContext(&vmcc, self);
     fprintf(stderr,"Warning; callback failed to invoke\n");
     setMRCC(previousCallbackContext);
-    interpreterProxy->disownVM(flags, interpreterProxy->interpreterState);
+    interpreterProxy->disownVM(flags, self);
     return -1;
   }
 
   setMRCC(previousCallbackContext);
-  interpreterProxy->disownVM(flags, interpreterProxy->interpreterState);
+  interpreterProxy->disownVM(flags, self);
 
   switch (returnType) {
   case retword:
@@ -227,8 +225,7 @@ thunkEntry(long r0, long r1, long r2, long r3,
 static unsigned long pagesize = 0;
 #endif
 
-void *
-allocateExecutablePage(long *size)
+void *allocateExecutablePage(long *size)
 {
 	void *mem;
 
