@@ -212,6 +212,59 @@ StackInterpreterPrimitives >> pathTo: goal using: stack followWeak: followWeak [
 		 stackp := stackp - 2] repeat
 ]
 
+{ #category : #toto }
+StackInterpreterPrimitives >> primitiveAdaptOnReceiveForChannel [
+	|   receiver objectOop usedIndex arrayProxy expectedClassName smalltalk systemDictionary classOop |
+	
+	receiver := self stackValue: 1.
+	objectOop := self stackTop.
+	
+	(self isImmediate: objectOop) ifTrue:["Nothing to do"^self].
+	
+	usedIndex :=objectMemory fetchClassTagOf: objectOop.
+	(objectMemory fetchPointer: usedIndex ofObject: objectMemory classTableFirstPage)= objectMemory nilObject ifFalse:[^self "Already an entry, even if this is not the right class we return"].
+	
+	arrayProxy := objectMemory fetchPointer: 4 ofObject: receiver.
+	expectedClassName := objectMemory fetchPointer:  (usedIndex - objectMemory firstClassIndexTrans) ofObject: arrayProxy.
+	
+	smalltalk := self splObj: 8.
+	systemDictionary := objectMemory fetchPointer: 0 ofObject: smalltalk.
+
+	classOop := objectMemory dichotomicSearchClassNamed: expectedClassName in: systemDictionary.
+	
+	objectMemory
+		storePointer: usedIndex 
+		ofObject: objectMemory classTableFirstPage
+		withValue: classOop.
+
+]
+
+{ #category : #toto }
+StackInterpreterPrimitives >> primitiveAdaptOnSendForChannel [
+	| receiver objectOop classOop arrayProxy firstEntry |
+	
+	receiver := self stackValue: 1.
+	objectOop := self stackTop.
+	
+	(self isImmediate: objectOop) ifTrue:["Nothing to do"^self].
+	
+	classOop := objectMemory
+		classForClassTag: (objectMemory fetchClassTagOf: objectOop).
+	(objectMemory isInTransferredClassTable: classOop) ifTrue: ["already in there, nothing to do"^self].
+	arrayProxy := objectMemory fetchPointer: 4 ofObject: receiver.
+	firstEntry := objectMemory classTableCommonEntryFor: arrayProxy.
+	
+	objectMemory
+		storePointer: firstEntry - objectMemory firstClassIndexTrans
+		ofObject: arrayProxy
+		withValue: (objectMemory fetchPointer: 6 ofObject: classOop).
+	objectMemory
+		storePointer: firstEntry
+		ofObject: objectMemory classTableFirstPage
+		withValue: classOop.
+	objectMemory setClassIndexOf: objectOop to: firstEntry
+]
+
 { #category : #'system control primitives' }
 StackInterpreterPrimitives >> primitiveAllVMParameters: paramsArraySize [
 	"See primitiveVMParameter method comment"
@@ -323,6 +376,8 @@ StackInterpreterPrimitives >> primitiveAllVMParameters: paramsArraySize [
 
 { #category : #toto }
 StackInterpreterPrimitives >> primitiveChannelBootstrap [
+
+"retrieve the channel from an image"
 	| anExternalAddress externalAddressClass interpreterState aChannel |
 	anExternalAddress := self stackTop.
 	externalAddressClass := objectMemory fetchClassOf: anExternalAddress.
@@ -1895,22 +1950,31 @@ StackInterpreterPrimitives >> primitiveTerminateTo [
 ]
 
 { #category : #toto }
-StackInterpreterPrimitives >> primitiveTopFrameInInterpreter [
-	<var:'interpreterState' type:'struct foo *' >
-	<var: #ptr type: #'sqInt *'>
-	|   externalAddressOop  receiver anExternalAddress interpreterState ptr |
-	receiver := self stackTop.
-	anExternalAddress := objectMemory fetchPointer: 0 ofObject: receiver.
-	interpreterState := objectMemory fetchPointer: 0 ofObject: anExternalAddress.
-	"We return and ExternalAddress object containing our frame pointer"
-	externalAddressOop := objectMemory 
-			instantiateClass: objectMemory classExternalAddress 
-			indexableSize: BytesPerWord.
-	ptr := objectMemory firstIndexableField: externalAddressOop.
-	ptr at: 0 put: (self cCoerceSimple: (self cCode:'interpreterState->framePointer') to: #sqInt).
-	self pop: 1 thenPush: externalAddressOop.
+StackInterpreterPrimitives >> primitiveTrylock [
+	<var: #cmutexAndCond type: 'CMutexAndCond *'>
+	<var: #lock type: 'pthread_mutex_t *'>
+	| lock anExternalAddress cmutexAndCond |
+	anExternalAddress := self stackTop.
+	cmutexAndCond := objectMemory fetchPointer: 0 ofObject: anExternalAddress.	
+	lock := self addressOf: cmutexAndCond mutex.
 	
-	 
+	self trylock: lock
+]
+
+{ #category : #toto }
+StackInterpreterPrimitives >> primitiveUnlock [
+	<var: #cmutexAndCond type: 'CMutexAndCond *'>
+	<var: #lock type: 'pthread_mutex_t * '>
+	<var: #cond type: 'pthread_cond_t ** '>
+	| lock anExternalAddress cmutexAndCond cond |
+	anExternalAddress := self stackTop.
+	cmutexAndCond := objectMemory fetchPointer: 0 ofObject: anExternalAddress.
+	lock := self addressOf: cmutexAndCond mutex. 
+	cond := self addressOf: cmutexAndCond condition.
+	
+	self condBroadcast: cond.
+	self mutexUnlock: lock.
+	
 ]
 
 { #category : #'system control primitives' }
@@ -2028,6 +2092,29 @@ StackInterpreterPrimitives >> primitiveVoidVMState [
 	self push: instructionPointer.
 	activeContext := self voidVMStateForSnapshotFlushingExternalPrimitivesIf: false.
 	self marryContextInNewStackPageAndInitializeInterpreterRegisters: activeContext
+]
+
+{ #category : #toto }
+StackInterpreterPrimitives >> primitiveWaitForItem [
+	<var: #cmutexAndCond type: 'CMutexAndCond *'>
+	<var: #lock type: 'pthread_mutex_t *'>
+	<var: #cond type: 'pthread_cond_t *'>
+	| receiver firstIndex lastIndex size cmutexAndCond cond lock anExternalAddress |
+	receiver := self stackValue: 1.
+	anExternalAddress := self stackTop.
+	firstIndex := objectMemory integerValueOf: (objectMemory fetchPointer: 1 ofObject: receiver).
+	lastIndex := objectMemory integerValueOf: (objectMemory fetchPointer: 2 ofObject: receiver).
+	cmutexAndCond := objectMemory fetchPointer: 0 ofObject: anExternalAddress.
+	lock := self addressOf: cmutexAndCond mutex.
+	cond := self addressOf: cmutexAndCond condition.
+	size := lastIndex - firstIndex + 1.
+	[size = 0] whileTrue:[
+		self mutexLock: lock andCond: cond.
+		"firstIndex and lastIndex should have changed since we broadcast after adding an element"
+		firstIndex := objectMemory integerValueOf: (objectMemory fetchPointer: 1 ofObject: receiver).
+		lastIndex := objectMemory integerValueOf: (objectMemory fetchPointer: 2 ofObject: receiver).
+		size := lastIndex - firstIndex + 1.
+		]
 ]
 
 { #category : #'object access primitives' }

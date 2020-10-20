@@ -7,7 +7,7 @@ Class {
 { #category : #translation }
 TheoStackInterpreter class >> ancilliaryClasses [
 	"Answer any extra classes to be included in the translation."
-	^super ancilliaryClasses, { ThreadInterpreterParameter }
+	^super ancilliaryClasses, { ThreadInterpreterParameter. CMutexAndCond  }
 ]
 
 { #category : #initialization }
@@ -196,21 +196,22 @@ TheoStackInterpreter class >> initializePrimitiveTable [
 		(145 primitiveConstantFill)
 		"NOTE: When removing the obsolete indexed primitives,
 		the following two should go become #primitiveIntegerAt / atPut"
-		(146 primitiveFail)	"primitiveReadJoystick"
-		(147 primitiveFail)	"primitiveWarpBits"
+		(146 primitiveAdaptOnSendForChannel)	"primitiveReadJoystick"
+		(147 primitiveAdaptOnReceiveForChannel)	"primitiveWarpBits"
 		(148 primitiveClone)
 		(149 primitiveGetAttribute)
 
 		"Were File Primitives (150-169) - NO LONGER INDEXED"
-		"Queue primitive"
+		"Théo primitives"
 		(150 primitiveNextInInterpreter)
-		(151 primitiveChannelBootstrap)
-		(152 primitiveTopFrameInInterpreter)
-		(153 primitiveGIVElementOfInterpreter)
+		(151 primitiveWaitForItem) "should be grouped with 156 and 157 but don't want to change all the image side for now"
+		(152 primitiveGIVElementOfInterpreter)
+		(153 primitiveAdaptOnSendForChannel)
 		(154 primitiveHaltInterpreter)
 		(155 primitiveOwnInterpreterState)
-		(156 primitiveFail)
-		(157 primitiveFail)
+		(156 primitiveTrylock)
+		(157 primitiveUnlock)
+		
 		(158 primitiveCompareWith)
 		(159 primitiveHashMultiply)
 		(160 primitiveAdoptInstance)
@@ -483,6 +484,17 @@ TheoStackInterpreter class >> requiredMethodNames: options [
 ]
 
 { #category : #'interpreter shell' }
+TheoStackInterpreter >> CFork [
+	<returnType: 'pid_t'>
+	^ self cCode: 'fork();'
+]
+
+{ #category : #channel }
+TheoStackInterpreter >> channelSize [
+ ^128
+]
+
+{ #category : #'interpreter shell' }
 TheoStackInterpreter >> fetchNextBytecode [
 	"This method fetches the next instruction (bytecode). Each bytecode method is responsible for fetching the next bytecode, preferably as early as possible to allow the memory system time to process the request before the next dispatch."
 
@@ -529,6 +541,25 @@ TheoStackInterpreter >> getSqueakModule [
 ]
 
 { #category : #thInterCom }
+TheoStackInterpreter >> initMutex: aMutex andCond: aCond [
+	<var: #aMutex type: 'pthread_mutex_t *'>
+	<var: #aCond type: 'pthread_cond_t **'>
+
+	self cCode: '
+	if(pthread_mutex_init(aMutex, NULL) != 0){
+		printf("Mutex init error: %s\n", strerror(errno));
+		exit(1);
+	}
+	
+	* aCond = malloc(sizeof(pthread_cond_t));
+	if(pthread_cond_init(* aCond, NULL) != 0){
+		printf("Cond init error: %s\n", strerror(errno));
+		abort();
+	}'
+	inSmalltalk: [ self initMutex: aMutex andCond: aCond]
+]
+
+{ #category : #thInterCom }
 TheoStackInterpreter >> initMutexForFetchNextBytecode: aMutex andCond: aCond [
 	<var: #aMutex type: 'pthread_mutex_t *'>
 	<var: #aCond type: 'pthread_cond_t **'>
@@ -556,22 +587,28 @@ TheoStackInterpreter >> initMutexForFetchNextBytecode: aMutex andCond: aCond [
 	inSmalltalk: [ self initMutexForFetchNextBytecode: aMutex andCond: aCond]
 ]
 
-{ #category : #accessing }
+{ #category : #channel }
 TheoStackInterpreter >> initializeBootstrapChannel [
-	| channelOop channelClassOop nilOop anArray index1 index2 |
-	
+"This method should be push in the startup of an image"
+	<var: #mutAndCond declareC: 'CMutexAndCond * mutAndCond = malloc(sizeof(CMutexAndCond))'>
+	<var: #onlySlot type: 'CMutexAndCond **'>
+	| channelOop channelClassOop nilOop anArray index1 index2 lock onlySlot mutAndCond transferredArrayClassOop |
 	nilOop := objectMemory nilObject.
 	channelOop := objectMemory splObj: SpecialChannel.
 	nilOop == channelOop
 		ifTrue: [ "We don't have a channel"
 			channelClassOop := objectMemory splObj: ClassChannelQueue.
 			nilOop = channelClassOop
-				ifTrue: [ "We don't have the class neither there is nothing we can do" channelOop := nilOop ]
-				ifFalse: [ "We check that the class is at the fix index in order for other memory to look at this specific place"
-					(objectMemory
-						knownClassAtIndex: ClassChannelQueueCompactIndex) = channelClassOop
+				ifTrue:
+					[ "We don't have the class neither there is nothing we can do" channelOop := nilOop ]
+				ifFalse:
+					[ "We prepare the transferredArrayClass which is in the classPOll of the class"
+					transferredArrayClassOop := self prepareChannelQueueClass: channelClassOop.
+					"We check that the class is at the fix index in order for other memory to look at this specific place"
+					(objectMemory knownClassAtIndex: ClassChannelQueueCompactIndex)
+						= channelClassOop
 						ifFalse:
-							[ "our class exist but is not in the classTable at the expected index. We remove the entry and enter our class a the fix index."
+							[ "our class exist but is not in the classTable at the expected index. We remove the entry and enter our class at the fix index."
 							objectMemory expungeFromClassTable: channelClassOop.
 							objectMemory
 								setHashBitsOf: channelClassOop
@@ -581,27 +618,46 @@ TheoStackInterpreter >> initializeBootstrapChannel [
 								ofObject: objectMemory classTableFirstPage
 								withValue: channelClassOop ].
 					"We now have the class setup correctly, we create a new channel we initialize it"
-					channelOop := objectMemory instantiateClass: channelClassOop indexableSize: 0.
+					channelOop := objectMemory
+						instantiateClass: channelClassOop
+						indexableSize: 0.
 					"for now it is a subclass of OrderedCollection, we need to initialize an array of size 10 and 2 index"
-					anArray := objectMemory allocateSlots: 10 format: 2 classIndex: objectMemory arrayClassIndexPun.
+					anArray := objectMemory
+						allocateSlots: 10
+						format: 2
+						classIndex: objectMemory arrayClassIndexPun.
 					objectMemory fillObj: anArray numSlots: 10 with: nilOop.
 					index1 := objectMemory integerObjectOf: 1.
 					index2 := objectMemory integerObjectOf: 0.
+					self initMutex: (self cCode:'&mutAndCond->mutex') andCond: (self cCode:'&mutAndCond->condition') .
+					lock := objectMemory
+						instantiateClass: objectMemory classByteArray 
+						indexableSize: BytesPerWord.
+					onlySlot := objectMemory firstIndexableField: lock.
+					onlySlot at: 0 put: mutAndCond.
 					objectMemory
-								storePointer: 0
-								ofObject: channelOop
-								withValue: anArray.
+						storePointer: 0
+						ofObject: channelOop
+						withValue: anArray.
 					objectMemory
-								storePointer: 1
-								ofObject: channelOop
-								withValue: index1.
+						storePointer: 1
+						ofObject: channelOop
+						withValue: index1.
 					objectMemory
-								storePointer: 2
-								ofObject: channelOop 
-								withValue: index2.	
-					objectMemory splObj: SpecialChannel put: channelOop.					
-					 ] ].		
-	channel := channelOop
+						storePointer: 2
+						ofObject: channelOop
+						withValue: index2.
+					objectMemory
+						storePointer: 3
+						ofObject: channelOop
+						withValue: lock.
+					objectMemory
+						storePointer: 4
+						ofObject: channelOop
+						withValue: transferredArrayClassOop.
+					
+					objectMemory splObj: SpecialChannel put: channelOop ] ].
+
 ]
 
 { #category : #'interpreter shell' }
@@ -640,6 +696,30 @@ TheoStackInterpreter >> mutexLock: aMutex andCond: aCond [
 			abort();
 		}
 		pthread_mutex_unlock(aMutex);' inSmalltalk: [ self mutexLock: aMutex andCond: aCond ]
+]
+
+{ #category : #channel }
+TheoStackInterpreter >> prepareChannelQueueClass: aChannelClassOop [
+	|   sizeOfArray arrayProxy classPoolDictionary arrayInPoolDictionary |
+	
+	"We prepare the array"
+	sizeOfArray := objectMemory lastClassIndexTrans - objectMemory firstClassIndexTrans.
+	arrayProxy := objectMemory
+						allocateSlots: sizeOfArray
+						format: 2
+						classIndex: objectMemory arrayClassIndexPun.
+	objectMemory fillObj: arrayProxy numSlots: sizeOfArray with: (objectMemory integerObjectOf: 0).
+					
+	"We look where the array should be, it is now harcoded"
+	classPoolDictionary := objectMemory fetchPointer: 7 ofObject: aChannelClassOop.
+	arrayInPoolDictionary := objectMemory fetchPointer: 1 ofObject: classPoolDictionary.
+	
+	objectMemory
+						storePointer: 1
+						ofObject: (objectMemory  fetchPointer: 3 ofObject: arrayInPoolDictionary)
+						withValue: arrayProxy.
+										
+	^ arrayProxy
 ]
 
 { #category : #'debug printing' }

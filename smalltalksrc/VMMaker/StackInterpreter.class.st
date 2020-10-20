@@ -420,7 +420,9 @@ Class {
 		'isStepable',
 		'step',
 		'forStepping',
-		'channel'
+		'channel',
+		'firstModule',
+		'squeakModule'
 	],
 	#classVars : [
 		'AccessModifierPrivate',
@@ -468,9 +470,7 @@ Class {
 		'StackPageTraceInvalid',
 		'StackPageTraced',
 		'StackPageUnreached',
-		'V3PrimitiveBitsMask',
-		'firstModule',
-		'squeakModule'
+		'V3PrimitiveBitsMask'
 	],
 	#pools : [
 		'VMBasicConstants',
@@ -2530,9 +2530,11 @@ StackInterpreter >> addressOf: GIVElement inGIV: interpreterState [
 "It could be a caseOf but at the time i was even worst than a caseOf"
 	(GIVElement strcmp: 'method') = 0 ifTrue:[ptr at: 0 put:  (self cCode:'interpreterState->method'). ^externalAddress].
 	(GIVElement strcmp: 'nilObj') = 0 ifTrue:[ptr at: 0 put:  (self cCode:'interpreterState->nilObj'). ^externalAddress].
+	(GIVElement strcmp: 'framePointer') = 0 ifTrue:[ptr at: 0 put:  (self cCode:'interpreterState->framePointer'). ^externalAddress].
 	(GIVElement strcmp: 'instructionPointer') = 0 ifTrue:[ptr at: 0 put:  (self cCode:'interpreterState->instructionPointer'). ^externalAddress].
 	(GIVElement strcmp: 'specialObjectsOop') = 0 ifTrue:[ptr at: 0 put:  (self cCode:'interpreterState->specialObjectsOop'). ^externalAddress].
-	(GIVElement strcmp: 'oldSpaceStart') = 0 ifTrue:[ptr at: 0 put:  (self cCode:'interpreterState->oldSpaceStart'). ^externalAddress].		
+	(GIVElement strcmp: 'oldSpaceStart') = 0 ifTrue:[ptr at: 0 put:  (self cCode:'interpreterState->oldSpaceStart'). ^externalAddress].
+	(GIVElement strcmp: 'channel') = 0 ifTrue:[^self channelIn: interpreterState].	
 	^nil
 ]
 
@@ -4282,9 +4284,12 @@ StackInterpreter >> capturePendingFinalizationSignals [
 
 { #category : #thInterCom }
 StackInterpreter >> channelIn: anInterpreterState [
-<var: #anInterpreterState type:#'struct foo *'>
-<returnTypeC: 'sqInt'>
-	self cCode: 'return anInterpreterState->channel'
+	<var: #anInterpreterState type: #'struct foo *'>
+	<var: #spl type: #'sqInt'>
+	<returnTypeC: 'sqInt'>
+	| spl |
+	self cCode: 'spl = anInterpreterState->specialObjectsOop;'.
+	^ objectMemory fetchPointer: SpecialChannel ofObject: spl. 
 ]
 
 { #category : #'indexing primitive support' }
@@ -5464,6 +5469,20 @@ StackInterpreter >> computeStackZoneSize [
 			[stackPages := self stackPagesClass new setInterpreter: self]].
 	^numStackPages * ((self sizeof: CogStackPage) + self stackPageByteSize)
 	 + stackPages extraStackBytes
+]
+
+{ #category : #thInterCom }
+StackInterpreter >> condBroadcast: cond [
+	<var: #cond type: 'pthread_cond_t **'>
+	
+	self cCode: '
+	int broadcastRet = pthread_cond_broadcast(*cond);
+	if(broadcastRet == EINVAL){
+		printf("Cond broadcast error: %s\n", strerror(errno));
+		exit(1);
+		}
+		' inSmalltalk: [ self condBroadcast: cond ]
+	
 ]
 
 { #category : #'internal interpreter access' }
@@ -7684,36 +7703,6 @@ StackInterpreter >> forceInterruptCheckFromHeartbeatV2: GIVNumber [
 	}'
 ]
 
-{ #category : #thInter }
-StackInterpreter >> forceInterruptCheckV2: GIVNumber [
-	<var: #GIVNumber type: 'int'>
-	<returnTypeC: #int>
-	| thePage iccFunc |
-	<inline: false>
-	<var: #thePage type: #'StackPage *'>
-	<var: #iccFunc declareC: 'void (*iccFunc)()'>
-	
-	self
-		cCode:
-			'	
-	if (returnGlobalStructFor(GIVNumber)->stackLimit == 0) {
-		return null;
-	}
-	thePage = returnGlobalStructFor(GIVNumber)->stackPage;
-	if ((thePage != null)
-	 && (thePage != 0)) {
-		(thePage->stackLimit = ((char *) (((usqInt) -1))));
-	}
-	/* begin allOnesAsCharStar */
-	returnGlobalStructFor(GIVNumber)->stackLimit = ((char *) (((usqInt) -1)));
-	sqLowLevelMFence();
-	if (((iccFunc = interruptCheckChain)) != null) {
-		iccFunc();
-	}
-	returnGlobalStructFor(GIVNumber)->statForceInterruptCheck += 1;
-	return 0;'
-]
-
 { #category : #'frame access' }
 StackInterpreter >> frameCallerContext: theFP [
 	<inline: true>
@@ -8243,7 +8232,13 @@ StackInterpreter >> growAllGlobalsStruct: numberImages [
 StackInterpreter >> haltIn: interpreterState [
 	<returnTypeC: #sqInt>
 	<var: #interpreterState type: 'struct foo *'>
-	self cCode: 'interpreterState->isStepable = 1;'
+	self cCode: '
+	if(interpreterState->isStepable == 0){
+	interpreterState->isStepable = 1;
+	}else{
+	interpreterState->isStepable = 0;
+	}
+	'
 ]
 
 { #category : #'message sending' }
@@ -8690,7 +8685,7 @@ StackInterpreter >> initStackPagesAndInterpret [
 	self loadInitialContext.
 	"We're ready for the heartbeat (poll interrupt)"
 	"self cCode: 'setIOHeartbeatGIVToUse(returnGIVNumberForCurrentThread());'."
-	self cCode: 'initMutexForFetchNextBytecodeandCond(&GIV(mutexForFetchBytecode), &GIV(step), self);'.
+	self initMutexForFetchNextBytecode: (self addressOf: mutexForFetchBytecode) andCond:(self addressOf: step).
 	self initializeBootstrapChannel.
 	self ioInitHeartbeat.
 	self initialEnterSmalltalkExecutive.
@@ -10426,9 +10421,7 @@ StackInterpreter >> loadInitialContext [
 { #category : #thInterCom }
 StackInterpreter >> lockFetchNextBytecode [
 "localSP and localFP are in the scope of interpret not in GIV"
-	self cCode: '
-	mutexLockandCond(&GIV(mutexForFetchBytecode), &GIV(step));
-	' inSmalltalk: [ self lockFetchNextBytecode.  ]
+	self mutexLock: (self addressOf: mutexForFetchBytecode) andCond: (self addressOf: step).
 ]
 
 { #category : #'debug printing' }
@@ -17091,9 +17084,10 @@ StackInterpreter >> mutexLock: aMutex andCond: aCond [
 
 { #category : #thInterCom }
 StackInterpreter >> mutexUnlock: aMutex [
-	<var: #aMutex type: 'pthread_mutex_t'>
+	<var: #aMutex type: 'pthread_mutex_t *'>
+	
 	self
-		cCode: 'pthread_mutex_unlock(&aMutex);'
+		cCode: 'pthread_mutex_unlock(aMutex);'
 		inSmalltalk: [ self mutexUnlock: aMutex ]
 ]
 
@@ -22660,6 +22654,25 @@ StackInterpreter >> tryLoadNewPlugin: pluginString pluginEntries: pluginEntries 
 									cg accessorDepthForSelector: fnSymbol}].
 		 self transcript show: '...done'].
 	^pluginString asString -> plugin
+]
+
+{ #category : #thInterCom }
+StackInterpreter >> trylock: aMutex [
+	<var: #aMutex type: 'pthread_mutex_t * '>
+	self
+		cCode:
+			'int lockret = pthread_mutex_trylock(aMutex);
+		if(lockret != 0){
+			if(lockret==EBUSY){
+				/* begin primitiveFail */
+				if (!GIV(primFailCode)) {
+					GIV(primFailCode) = 1;
+				}
+			}else{
+				abort();
+			}
+		};'
+		inSmalltalk: [ self trylock: aMutex ]
 ]
 
 { #category : #'debug printing' }

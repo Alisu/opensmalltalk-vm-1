@@ -3588,6 +3588,23 @@ SpurMemoryManager >> classString [
 	^self splObj: ClassByteString
 ]
 
+{ #category : #'class table transferred' }
+SpurMemoryManager >> classTableCommonEntryFor: anArray [
+	"This method find the 1 common entry between the classtable transferred object space and the array which is a 'proxy' of another classTable.
+We could stock the last found but may be for a nother time"
+
+	self firstClassIndexTrans to: self lastClassIndexTrans do: [ :j | 
+		| classOrNil |
+		classOrNil := self
+			fetchPointer: j
+			ofObject: self classTableFirstPage.
+		classOrNil = nilObj
+			ifTrue: [ (self fetchPointer: (j - self firstClassIndexPun) ofObject: anArray) = (self integerObjectOf: 0)
+					ifTrue: [ ^ j ] ] ].
+	self error: 'No index avaible left (overflow)'.
+	^ nil
+]
+
 { #category : #'class table' }
 SpurMemoryManager >> classTableEntriesDo: binaryBlock [
 	"Evaluate binaryBlock with all non-nil entries in the classTable and their index."
@@ -4152,6 +4169,29 @@ SpurMemoryManager >> detachFreeObject: freeChunk [
 	chunkBytes := self bytesInObject: freeChunk.
 	totalFreeOldSpace := totalFreeOldSpace - chunkBytes.
 	self unlinkFreeChunk: freeChunk chunkBytes: chunkBytes
+]
+
+{ #category : #'class table transferred' }
+SpurMemoryManager >> dichotomicSearchClassNamed: expectedClassName in: systemDictionary [
+	
+	| firstIndex lastIndex size classNameCollection arrayOfClassName foundIndex classCollection arrayOfClass |
+	foundIndex := -1.
+	classNameCollection := self fetchPointer: 2 ofObject: systemDictionary.
+	arrayOfClassName :=  self fetchPointer: 0 ofObject: classNameCollection.
+	firstIndex := self
+		integerValueOf: (self fetchPointer: 1 ofObject: classNameCollection).
+	lastIndex := self
+		integerValueOf: (self fetchPointer: 2 ofObject: classNameCollection).
+	size := lastIndex - firstIndex + 1.
+	"Non dichotomic for now and non optimized"
+	0 to: size do: [:index ||classNameOop|
+		classNameOop := self fetchPointer: index ofObject: arrayOfClassName.
+		(self fetchPointer: 0 ofObject: classNameOop) = (self fetchPointer: 0 ofObject: expectedClassName) ifTrue:[foundIndex := index].
+		 ].
+	(foundIndex = -1) ifTrue:[self error: 'Pls throw a real error'].
+	classCollection := self fetchPointer: 4 ofObject: systemDictionary.
+	arrayOfClass :=  self fetchPointer: 0 ofObject: classCollection.
+	^self fetchPointer: (foundIndex * 2) ofObject: arrayOfClass
 ]
 
 { #category : #'simulation only' }
@@ -4811,6 +4851,32 @@ SpurMemoryManager >> firstAccessibleObject [
 	^nilObj
 ]
 
+{ #category : #'class table transferred' }
+SpurMemoryManager >> firstAvaibleTransferredClassIndex [
+	self firstClassIndexTrans to: self lastClassIndexTrans do: [ :j | 
+		| classOrNil |
+		classOrNil := self
+			fetchPointer: j
+			ofObject: self classTableFirstPage.
+		classOrNil = nilObj
+			ifTrue: [ ^ j ] ].
+		self error: 'Not index avaible left (overflow)'.
+		^nil
+]
+
+{ #category : #'class table transferred' }
+SpurMemoryManager >> firstAvaibleTransferredClassIndex: aNilObj [
+	self firstClassIndexTrans to: self lastClassIndexTrans do: [ :j | 
+		| classOrNil |
+		classOrNil := self
+			fetchPointer: j
+			ofObject: self classTableFirstPage.
+		classOrNil = aNilObj
+			ifTrue: [ ^ j ] ].
+		self error: 'Not index avaible left (overflow)'.
+		^nil
+]
+
 { #category : #'header formats' }
 SpurMemoryManager >> firstByteFormat [
 	<api>
@@ -4827,6 +4893,12 @@ SpurMemoryManager >> firstClassIndexPun [
 	 The puns occupy indices 16 through 31."
 	<cmacro>
 	^16
+]
+
+{ #category : #'class table transferred' }
+SpurMemoryManager >> firstClassIndexTrans [
+
+	^128
 ]
 
 { #category : #'header formats' }
@@ -6118,6 +6190,18 @@ SpurMemoryManager >> indexOf: anElement in: anObject [
 	^-1
 ]
 
+{ #category : #'class table transferred' }
+SpurMemoryManager >> indexOfTransferredClass: aClass [
+	self firstClassIndexTrans to: self lastClassIndexTrans do: [ :j | 
+		| classOrNil |
+		classOrNil := self
+			fetchPointer: j
+			ofObject: self classTableFirstPage.
+		classOrNil = aClass
+			ifTrue: [ ^ j ] ].
+		^nil
+]
+
 { #category : #'header formats' }
 SpurMemoryManager >> indexablePointersFormat [
 	<api>
@@ -6191,6 +6275,7 @@ SpurMemoryManager >> initialInstanceOf: classObj [
 SpurMemoryManager >> initialize [
 	"We can put all initializations that set something to 0 or to false here.
 	 In C all global variables are initialized to 0, and 0 is false."
+	firstTransferredClassFreeIndex := self firstClassIndexTrans.
 	remapBuffer := Array new: RemapBufferSize.
 	remapBufferCount := extraRootCount := 0. "see below"
 	freeListsMask := totalFreeOldSpace := lowSpaceThreshold := 0.
@@ -6686,7 +6771,7 @@ SpurMemoryManager >> isClassAtUniqueIndex: aClass [
 		[:entry :index|
 		 (entry = aClass
 		  and: [index ~= expectedIndex
-		  and: [index > self lastClassIndexPun]]) ifTrue:
+		  and: [index > self lastClassIndexTrans]]) ifTrue:
 			[^false]].
 	^true
 ]
@@ -6976,6 +7061,21 @@ SpurMemoryManager >> isInRangeCharacterCode: characterCode [
 	^characterCode between: 0 and: (1 << 30) - 1
 ]
 
+{ #category : #'class table transferred' }
+SpurMemoryManager >> isInTransferredClassTable: aClass [
+	| expectedIndex |
+	expectedIndex := self rawHashBitsOf: aClass.
+	(expectedIndex
+		between: self firstClassIndexTrans
+		and: self lastClassIndexTrans)
+		ifTrue: [ ^ true ]
+		ifFalse: [ self
+				transferredClassTableEntriesDo: [ :entry :index | 
+					entry = aClass
+						ifTrue: [ ^ true ] ] ].
+	^ false
+]
+
 { #category : #'object testing' }
 SpurMemoryManager >> isIndexable: objOop [
 	| fmt |
@@ -7131,7 +7231,7 @@ SpurMemoryManager >> isNonIntegerObject: oop [
 
 { #category : #'object enumeration' }
 SpurMemoryManager >> isNormalObject: objOop [
-	^(self classIndexOf: objOop) > self lastClassIndexPun
+	^(self classIndexOf: objOop) > self lastClassIndexTrans
 ]
 
 { #category : #'object testing' }
@@ -7292,6 +7392,11 @@ SpurMemoryManager >> isShortsNonImm: objOop [
 	"Answer if the argument contains only indexable 16-bit half words (no oops). See comment in formatOf:"
 
 	^(self formatOf: objOop) between: self firstShortFormat and: self firstByteFormat - 1
+]
+
+{ #category : #'object enumeration' }
+SpurMemoryManager >> isTransferredObject: objOop [
+	^(self classIndexOf: objOop) > self lastClassIndexPun and: [ (self classIndexOf: objOop) < self lastClassIndexTrans ]
 ]
 
 { #category : #'object testing' }
@@ -7565,6 +7670,12 @@ SpurMemoryManager >> lastClassIndexPun [
 	 The puns occupy indices 16 through 31."
 	<cmacro>
 	^31
+]
+
+{ #category : #'class table transferred' }
+SpurMemoryManager >> lastClassIndexTrans [
+
+	^1023
 ]
 
 { #category : #accessing }
@@ -8892,6 +9003,19 @@ SpurMemoryManager >> newSpaceSize [
 { #category : #accessing }
 SpurMemoryManager >> newSpaceStart [
 	^newSpaceStart
+]
+
+{ #category : #'class table transferred' }
+SpurMemoryManager >> nextAvaibleTransferredClassIndex: anIndex [
+	self anIndex to: self lastClassIndexTrans do: [ :j | 
+		| classOrNil |
+		classOrNil := self
+			fetchPointer: j
+			ofObject: self classTableFirstPage.
+		classOrNil = nilObj
+			ifTrue: [ ^ j ] ].
+		self error: 'No index avaible left (overflow)'.
+		^nil
 ]
 
 { #category : #'primitive support' }
@@ -10429,7 +10553,7 @@ SpurMemoryManager >> purgeDuplicateClassTableEntriesFor: aClass [
 		[:entry :index|
 		 (entry = aClass
 		  and: [index ~= expectedIndex
-		  and: [index > self lastClassIndexPun]]) ifTrue:
+		  and: [index > self lastClassIndexTrans]]) ifTrue:
 			[self classAtIndex: index put: nilObj.
 			 index < classTableIndex ifTrue:
 				[classTableIndex := index]]].
@@ -12395,6 +12519,18 @@ SpurMemoryManager >> transcript [
 	"hack around the CoInterpreter/ObjectMemory split refactoring"
 	<doNotGenerate>
 	^coInterpreter transcript
+]
+
+{ #category : #'class table transferred' }
+SpurMemoryManager >> transferredClassTableEntriesDo: binaryBlock [
+
+self firstClassIndexTrans to: self lastClassIndexTrans do:
+			[:j| | classOrNil |
+			classOrNil := self fetchPointer: j ofObject: self classTableFirstPage.
+			classOrNil ~= nilObj ifTrue:
+				[binaryBlock
+					value: classOrNil
+					value: 1 << self classTableMajorIndexShift + j]]
 ]
 
 { #category : #accessing }
