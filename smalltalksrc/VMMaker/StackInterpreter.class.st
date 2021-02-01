@@ -356,6 +356,7 @@ Class {
 		'interpreterProxy',
 		'showSurfaceFn',
 		'primitiveTable',
+		'defaultPrimitiveTable',
 		'primitiveAccessorDepthTable',
 		'externalPrimitiveTable',
 		'externalPrimitiveTableFirstFreeIndex',
@@ -1812,7 +1813,9 @@ StackInterpreter class >> mustBeGlobal: var [
 			'desiredNumStackPages' 'desiredEdenBytes'
 			'breakLookupClassTag' 'breakSelector' 'breakSelectorLength' 'sendTrace' 'checkedPluginName'
 			'reenterInterpreter' 'suppressHeartbeatFlag' 'ffiExceptionResponse'
-			'debugCallbackInvokes' 'debugCallbackPath' 'debugCallbackReturns' 'forStepping') includes: var)
+			'debugCallbackInvokes' 'debugCallbackPath' 'debugCallbackReturns' 'forStepping'
+			'defaultPrimitiveTable'
+			) includes: var)
 	   or: [ "This allows slow machines to define bytecodeSetSelector as 0
 			to avoid the interpretation overhead."
 			MULTIPLEBYTECODESETS not and: [var = 'bytecodeSetSelector']]]]
@@ -2534,6 +2537,8 @@ StackInterpreter >> addressOf: GIVElement inGIV: interpreterState [
 	(GIVElement strcmp: 'instructionPointer') = 0 ifTrue:[ptr at: 0 put:  (self cCode:'interpreterState->instructionPointer'). ^externalAddress].
 	(GIVElement strcmp: 'specialObjectsOop') = 0 ifTrue:[ptr at: 0 put:  (self cCode:'interpreterState->specialObjectsOop'). ^externalAddress].
 	(GIVElement strcmp: 'oldSpaceStart') = 0 ifTrue:[ptr at: 0 put:  (self cCode:'interpreterState->oldSpaceStart'). ^externalAddress].
+	(GIVElement strcmp: 'memory') = 0 ifTrue:[ptr at: 0 put:  (self cCode:'interpreterState->memory'). ^externalAddress].
+	(GIVElement strcmp: 'endOfMemory') = 0 ifTrue:[ptr at: 0 put:  (self cCode:'interpreterState->endOfMemory'). ^externalAddress].
 	(GIVElement strcmp: 'channel') = 0 ifTrue:[^self channelIn: interpreterState].	
 	^nil
 ]
@@ -8684,7 +8689,7 @@ StackInterpreter >> initStackPagesAndInterpret [
 	"Once the stack pages are initialized we can continue to bootstrap the system."
 	self loadInitialContext.
 	"We're ready for the heartbeat (poll interrupt)"
-	"self cCode: 'setIOHeartbeatGIVToUse(returnGIVNumberForCurrentThread());'."
+	self initialiseToDefaultPrimitiveTable.
 	self initMutexForFetchNextBytecode: (self addressOf: mutexForFetchBytecode) andCond:(self addressOf: step).
 	self initializeBootstrapChannel.
 	self ioInitHeartbeat.

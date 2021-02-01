@@ -282,12 +282,12 @@ CCodeGeneratorTheoGlobalStructure >> placeInStructure: var [
 	| check |
 	check := variableDeclarations at: var ifAbsent: [''].
 	(var includesSubstring: 'primitiveFunctionPointer') ifTrue: [^false].
-	(var includesSubstring: 'externalPrimitiveTable') ifTrue: [^true].
+	(var includesSubstring: 'primitiveTable') ifTrue: [^true].
+	(var includesSubstring: 'externalPrimitiveTable') ifTrue: [^true]. "externalPrimitiveTable"
 	(check includes: $=) ifTrue: [^false].
 	(check includes: $() ifTrue: [^false].
 	(check includesSubstring: 'static') ifTrue: [^false].
 	(check includesSubstring: 'volatile') ifTrue: [^false].
-	(var includesSubstring: 'primitiveFunctionPointer') ifTrue: [^true].
 
 	^(vmClass mustBeGlobal: var) not
 ]

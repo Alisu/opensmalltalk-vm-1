@@ -213,6 +213,15 @@ StackInterpreterPrimitives >> pathTo: goal using: stack followWeak: followWeak [
 ]
 
 { #category : #toto }
+StackInterpreterPrimitives >> primitiveActivatePrimitive [
+	| primitiveNumber |
+	primitiveNumber := objectMemory integerValueOf: self stackTop.
+	primitiveTable at: primitiveNumber put: (defaultPrimitiveTable at: primitiveNumber).
+	^ objectMemory trueObject
+
+]
+
+{ #category : #toto }
 StackInterpreterPrimitives >> primitiveAdaptOnReceiveForChannel [
 	|   receiver objectOop usedIndex arrayProxy expectedClassName smalltalk systemDictionary classOop |
 	
@@ -553,6 +562,14 @@ StackInterpreterPrimitives >> primitiveContextXray [
 		ifFalse:
 			[flags := 0].
 	self pop: 1 thenPush: (objectMemory integerObjectOf: flags)
+]
+
+{ #category : #toto }
+StackInterpreterPrimitives >> primitiveDeactivatePrimitive [
+	| primitiveNumber |
+	primitiveNumber := objectMemory integerValueOf: self stackTop.
+	primitiveTable at: primitiveNumber put: 0.
+	^ objectMemory trueObject
 ]
 
 { #category : #'I/O primitives' }
@@ -1227,6 +1244,26 @@ StackInterpreterPrimitives >> primitiveLongRunningPrimitiveSemaphore [
 			 longRunningPrimitiveCheckSemaphore := sema].
 	self voidLongRunningPrimitive: 'install'.
 	self pop: 1
+]
+
+{ #category : #toto }
+StackInterpreterPrimitives >> primitiveMProtect [
+
+	| memori endOfMemori protectChosen protect contiguousMemori |
+	memori := objectMemory
+		fetchPointer: 0
+		ofObject: (self stackValue: 2).
+	endOfMemori := objectMemory
+		fetchPointer: 0
+		ofObject:(self stackValue: 1).
+	protectChosen := self cStringOrNullFor: (self stackTop).
+	'read' = protectChosen ifTrue:[protect := #PROT_READ].
+	'write' = protectChosen ifTrue:[protect := #PROT_WRITE].
+	'none' = protectChosen ifTrue:[protect := #PROT_NONE].
+	
+	contiguousMemori := endOfMemori - memori.
+	
+	self mprotect: memori _: contiguousMemori _: protect.
 ]
 
 { #category : #toto }
